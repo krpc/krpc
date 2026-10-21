@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -51,7 +51,7 @@ Communications
 
 .. class:: CommLink
 
-   Represents a communication node in the network. For example, a vessel or the KSC.
+   Represents a communication link between two nodes in the network.
 
    .. property:: CommLinkType Type { get; }
 
@@ -73,7 +73,7 @@ Communications
 
    .. property:: CommNode End { get; }
 
-      Start point of the link.
+      End point of the link.
 
       :Game Scenes: All
 
@@ -85,52 +85,47 @@ Communications
    See :prop:`CommLink.Type`.
 
 
-   .. value:: Home
+   .. enumerator:: Home
 
       Link is to a base station on Kerbin.
 
 
-   .. value:: Control
+   .. enumerator:: Control
 
       Link is to a control source, for example a manned spacecraft.
 
 
-   .. value:: Relay
+   .. enumerator:: Relay
 
       Link is to a relay satellite.
 
 
 
-.. class:: CommNode
+.. struct:: CommNode
 
    Represents a communication node in the network. For example, a vessel or the KSC.
+
+   .. function:: CommNode(string name, bool isHome, bool isControlPoint, bool isVessel, Vessel vessel)
+
+      Construct a CommNode from the values of its fields.
+
 
    .. property:: string Name { get; }
 
       Name of the communication node.
 
-      :Game Scenes: All
-
    .. property:: bool IsHome { get; }
 
       Whether the communication node is on Kerbin.
-
-      :Game Scenes: All
 
    .. property:: bool IsControlPoint { get; }
 
       Whether the communication node is a control point, for example a manned vessel.
 
-      :Game Scenes: All
-
    .. property:: bool IsVessel { get; }
 
       Whether the communication node is a vessel.
 
-      :Game Scenes: All
-
    .. property:: Vessel Vessel { get; }
 
-      The vessel for this communication node.
-
-      :Game Scenes: All
+      The vessel for this communication node, or null if the node is not a vessel.

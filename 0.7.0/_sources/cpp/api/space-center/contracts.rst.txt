@@ -1,0 +1,356 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::SpaceCenter
+
+Contracts
+=========
+
+
+.. class:: ContractManager
+
+   Contracts manager.
+   Obtained by calling :func:`contract_manager`.
+
+   .. function:: std::set<std::string> types()
+
+      A list of all contract types.
+
+   
+
+   .. function:: std::vector<Contract> all_contracts()
+
+      A list of all contracts.
+
+   
+
+   .. function:: std::vector<Contract> active_contracts()
+
+      A list of all active contracts.
+
+   
+
+   .. function:: std::vector<Contract> offered_contracts()
+
+      A list of all offered, but unaccepted, contracts.
+
+   
+
+   .. function:: std::vector<Contract> completed_contracts()
+
+      A list of all completed contracts.
+
+   
+
+   .. function:: std::vector<Contract> failed_contracts()
+
+      A list of all failed contracts.
+
+   
+
+
+
+.. class:: Contract
+
+   A contract. Can be accessed using :func:`contract_manager`.
+
+   .. function:: std::string type()
+
+      Type of the contract.
+
+   
+
+   .. function:: std::string title()
+
+      Title of the contract.
+
+   
+
+   .. function:: std::string description()
+
+      Description of the contract.
+
+   
+
+   .. function:: std::string notes()
+
+      Notes for the contract.
+
+   
+
+   .. function:: std::string synopsis()
+
+      Synopsis for the contract.
+
+   
+
+   .. function:: std::vector<std::string> keywords()
+
+      Keywords for the contract.
+
+   
+
+   .. function:: ContractState state()
+
+      State of the contract.
+
+   
+
+   .. function:: bool seen()
+
+      Whether the contract has been seen.
+
+   
+
+   .. function:: bool read()
+
+      Whether the contract has been read.
+
+   
+
+   .. function:: bool active()
+
+      Whether the contract is active.
+
+   
+
+   .. function:: bool failed()
+
+      Whether the contract has been failed.
+
+   
+
+   .. function:: bool can_be_canceled()
+
+      Whether the contract can be canceled.
+
+   
+
+   .. function:: bool can_be_declined()
+
+      Whether the contract can be declined.
+
+   
+
+   .. function:: bool can_be_failed()
+
+      Whether the contract can be failed.
+
+   
+
+   .. function:: void accept()
+
+      Accept an offered contract.
+
+
+   
+
+   .. function:: void cancel()
+
+      Cancel an active contract.
+
+
+   
+
+   .. function:: void decline()
+
+      Decline an offered contract.
+
+
+   
+
+   .. function:: double funds_advance()
+
+      Funds received when accepting the contract.
+
+   
+
+   .. function:: double funds_completion()
+
+      Funds received on completion of the contract.
+
+   
+
+   .. function:: double funds_failure()
+
+      Funds lost if the contract is failed.
+
+   
+
+   .. function:: double reputation_completion()
+
+      Reputation gained on completion of the contract.
+
+   
+
+   .. function:: double reputation_failure()
+
+      Reputation lost if the contract is failed.
+
+   
+
+   .. function:: double science_completion()
+
+      Science gained on completion of the contract.
+
+   
+
+   .. function:: std::vector<ContractParameter> parameters()
+
+      Parameters for the contract.
+
+   
+
+   .. function:: double date_accepted()
+
+      Universal time at which the contract was accepted, in seconds.
+      Zero if the contract has not been accepted.
+
+   
+
+   .. function:: double date_deadline()
+
+      Universal time by which the contract must be completed, in seconds.
+      Zero if the contract has no deadline.
+
+   
+
+   .. function:: double date_expire()
+
+      Universal time at which the contract offer expires, in seconds.
+      Zero if the contract has no expiry date.
+
+   
+
+   .. function:: double date_finished()
+
+      Universal time at which the contract was completed or failed, in seconds.
+      Zero if the contract has not finished or KSP did not record a finish time.
+
+   
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: ContractState
+
+   The state of a contract. See :func:`Contract::state`.
+
+
+   .. enumerator:: active
+
+      The contract is active.
+
+
+   .. enumerator:: canceled
+
+      The contract has been canceled.
+
+
+   .. enumerator:: completed
+
+      The contract has been completed.
+
+
+   .. enumerator:: deadline_expired
+
+      The deadline for the contract has expired.
+
+
+   .. enumerator:: declined
+
+      The contract has been declined.
+
+
+   .. enumerator:: failed
+
+      The contract has been failed.
+
+
+   .. enumerator:: generated
+
+      The contract has been generated.
+
+
+   .. enumerator:: offered
+
+      The contract has been offered to the player.
+
+
+   .. enumerator:: offer_expired
+
+      The contract was offered to the player, but the offer expired.
+
+
+   .. enumerator:: withdrawn
+
+      The contract has been withdrawn.
+
+
+
+.. class:: ContractParameter
+
+   A contract parameter. See :func:`Contract::parameters`.
+
+   .. function:: std::string title()
+
+      Title of the parameter.
+
+   
+
+   .. function:: std::string notes()
+
+      Notes for the parameter.
+
+   
+
+   .. function:: std::vector<ContractParameter> children()
+
+      Child contract parameters.
+
+   
+
+   .. function:: bool completed()
+
+      Whether the parameter has been completed.
+
+   
+
+   .. function:: bool failed()
+
+      Whether the parameter has been failed.
+
+   
+
+   .. function:: bool optional()
+
+      Whether the contract parameter is optional.
+
+   
+
+   .. function:: double funds_completion()
+
+      Funds received on completion of the contract parameter.
+
+   
+
+   .. function:: double funds_failure()
+
+      Funds lost if the contract parameter is failed.
+
+   
+
+   .. function:: double reputation_completion()
+
+      Reputation gained on completion of the contract parameter.
+
+   
+
+   .. function:: double reputation_failure()
+
+      Reputation lost if the contract parameter is failed.
+
+   
+
+   .. function:: double science_completion()
+
+      Science gained on completion of the contract parameter.

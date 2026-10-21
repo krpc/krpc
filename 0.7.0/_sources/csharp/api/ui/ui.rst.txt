@@ -1,0 +1,91 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.UI
+
+UI
+==
+
+
+.. class:: UI
+
+   Provides functionality for drawing and interacting with in-game user interface elements.
+
+   .. note::
+
+      For drawing 3D objects in the flight scene, see the Drawing service.
+      User interface elements created by a client are removed when that client
+      disconnects, and when the game scene changes. A client that needs its
+      interface in more than one scene must create it again in each of them.
+
+   .. property:: Canvas StockCanvas { get; }
+
+      The stock UI canvas.
+
+      :Game Scenes: All
+
+   .. function:: Canvas AddCanvas()
+
+      Add a new canvas.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         If you want to add UI elements to KSPs stock UI canvas, use :prop:`UI.StockCanvas <UI.UI.StockCanvas>`.
+
+   .. function:: void Message(string content, float duration = 1.0f, MessagePosition position = MessagePosition.TopCenter, StdLib.ColorRGBA? color = null, float size = 2e+01f)
+
+      Display a message on the screen.
+
+      :parameters:
+
+       * **content** -- Message content.
+       * **duration** -- Duration before the message disappears, in seconds.
+       * **position** -- Position to display the message.
+       * **color** -- The color of the message. If null, defaults to ``new StdLib.ColorRGBA(1.0f, 0.92f, 0.016f, 1.0f)``.
+       * **size** -- Size of the message, differs per position.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The message appears just like a stock message, for example quicksave or quickload messages.
+
+   .. function:: void Clear(bool clientOnly = false)
+
+      Remove all user interface elements.
+
+      :parameters:
+
+       * **clientOnly** -- If true, only remove objects created by the calling client.
+
+      :Game Scenes: All
+
+
+
+.. enum:: MessagePosition
+
+   Message position.
+
+
+   .. enumerator:: TopLeft
+
+      Top left.
+
+
+   .. enumerator:: TopCenter
+
+      Top center.
+
+
+   .. enumerator:: TopRight
+
+      Top right.
+
+
+   .. enumerator:: BottomCenter
+
+      Bottom center.

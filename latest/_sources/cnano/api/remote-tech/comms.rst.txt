@@ -10,49 +10,49 @@ Comms
 
    Communications for a vessel.
 
-   .. function:: krpc_error_t krpc_RemoteTech_Comms_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+   .. function:: krpc_error_t krpc_RemoteTech_Comms_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * returnValue, krpc_RemoteTech_Comms_t instance)
 
       Get the vessel.
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Comms_HasLocalControl(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_RemoteTech_Comms_HasLocalControl(krpc_connection_t connection, bool * returnValue, krpc_RemoteTech_Comms_t instance)
 
       Whether the vessel can be controlled locally.
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Comms_HasFlightComputer(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_RemoteTech_Comms_HasFlightComputer(krpc_connection_t connection, bool * returnValue, krpc_RemoteTech_Comms_t instance)
 
       Whether the vessel has a flight computer on board.
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Comms_HasConnection(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_RemoteTech_Comms_HasConnection(krpc_connection_t connection, bool * returnValue, krpc_RemoteTech_Comms_t instance)
 
       Whether the vessel has any connection.
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Comms_HasConnectionToGroundStation(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_RemoteTech_Comms_HasConnectionToGroundStation(krpc_connection_t connection, bool * returnValue, krpc_RemoteTech_Comms_t instance)
 
       Whether the vessel has a connection to a ground station.
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Comms_SignalDelay(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_RemoteTech_Comms_SignalDelay(krpc_connection_t connection, double * returnValue, krpc_RemoteTech_Comms_t instance)
 
       The shortest signal delay to the vessel, in seconds.
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Comms_SignalDelayToGroundStation(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_RemoteTech_Comms_SignalDelayToGroundStation(krpc_connection_t connection, double * returnValue, krpc_RemoteTech_Comms_t instance)
 
       The signal delay between the vessel and the closest ground station, in seconds.
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Comms_SignalDelayToVessel(krpc_connection_t connection, double * result, krpc_SpaceCenter_Vessel_t other)
+   .. function:: krpc_error_t krpc_RemoteTech_Comms_SignalDelayToVessel(krpc_connection_t connection, double * returnValue, krpc_RemoteTech_Comms_t instance, krpc_SpaceCenter_Vessel_t other)
 
       The signal delay between the this vessel and another vessel, in seconds.
 
@@ -62,6 +62,6 @@ Comms
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Comms_Antennas(krpc_connection_t connection, krpc_list_object_t * result)
+   .. function:: krpc_error_t krpc_RemoteTech_Comms_Antennas(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_RemoteTech_Comms_t instance)
 
       The antennas for this vessel.

@@ -1,0 +1,87 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::RemoteTech
+
+Antenna
+=======
+
+
+.. class:: Antenna
+
+   A RemoteTech antenna. Obtained by calling :func:`Comms::antennas` or :func:`antenna`.
+
+   .. function:: SpaceCenter::Part part()
+
+      Get the part containing this antenna.
+
+   
+
+   .. function:: bool has_connection()
+
+      Whether the antenna has a connection.
+
+   
+
+   .. function:: Target target()
+   .. function:: void set_target(Target value)
+
+      The object that the antenna is targetting.
+      This property can be used to set the target to :enumerator:`Target::none` or :enumerator:`Target::active_vessel`.
+      To set the target to a celestial body, ground station or vessel see :func:`Antenna::target_body`,
+      :func:`Antenna::target_ground_station` and :func:`Antenna::target_vessel`.
+
+   
+
+   .. function:: SpaceCenter::CelestialBody target_body()
+   .. function:: void set_target_body(SpaceCenter::CelestialBody value)
+
+      The celestial body the antenna is targetting.
+
+   
+
+   .. function:: std::string target_ground_station()
+   .. function:: void set_target_ground_station(std::string value)
+
+      The ground station the antenna is targetting.
+
+   
+
+   .. function:: SpaceCenter::Vessel target_vessel()
+   .. function:: void set_target_vessel(SpaceCenter::Vessel value)
+
+      The vessel the antenna is targetting.
+
+   
+
+
+
+.. namespace:: krpc::services::RemoteTech
+.. enum-struct:: Target
+
+   The type of object an antenna is targetting.
+   See :func:`Antenna::target`.
+
+
+   .. enumerator:: active_vessel
+
+      The active vessel.
+
+
+   .. enumerator:: celestial_body
+
+      A celestial body.
+
+
+   .. enumerator:: ground_station
+
+      A ground station.
+
+
+   .. enumerator:: vessel
+
+      A specific vessel.
+
+
+   .. enumerator:: none
+
+      No target.

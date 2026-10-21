@@ -51,7 +51,7 @@ Communications
 
 .. class:: CommLink
 
-   Represents a communication node in the network. For example, a vessel or the KSC.
+   Represents a communication link between two nodes in the network.
 
    .. function:: CommLinkType type()
 
@@ -73,7 +73,7 @@ Communications
 
    .. function:: CommNode end()
 
-      Start point of the link.
+      End point of the link.
 
    
 
@@ -102,34 +102,28 @@ Communications
 
 
 
-.. class:: CommNode
+.. namespace:: krpc::services::SpaceCenter
+.. struct:: CommNode
 
    Represents a communication node in the network. For example, a vessel or the KSC.
 
-   .. function:: std::string name()
+
+   .. member:: std::string name
 
       Name of the communication node.
 
-   
-
-   .. function:: bool is_home()
+   .. member:: bool is_home
 
       Whether the communication node is on Kerbin.
 
-   
-
-   .. function:: bool is_control_point()
+   .. member:: bool is_control_point
 
       Whether the communication node is a control point, for example a manned vessel.
 
-   
-
-   .. function:: bool is_vessel()
+   .. member:: bool is_vessel
 
       Whether the communication node is a vessel.
 
-   
+   .. member:: std::optional<Vessel> vessel
 
-   .. function:: Vessel vessel()
-
-      The vessel for this communication node.
+      The vessel for this communication node, or null if the node is not a vessel.

@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -34,21 +34,18 @@ Stage
 
       :Game Scenes: All
 
-   .. method:: Resources Resources(bool cumulative = true)
+   .. function:: Resources Resources(bool cumulative = true)
 
       Returns a :meth:`Stage.Resources` object for this stage.
 
       :parameters:
 
-       * **cumulative** -- When ``false``, only resources assigned to this stage. When ``true``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Defaults to ``true`` so decouple-stage calls match the legacy ``Vessel.ResourcesInDecoupleStage`` RPC.
+       * **cumulative** -- When ``false``, only resources assigned to this stage. When ``true``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached.
 
       :Game Scenes: All
 
 
       .. note:: This is an RPC method: call ``resources()`` (optional ``cumulative`` argument).
-                The default ``cumulative=true`` matches the legacy
-                :meth:`Vessel.ResourcesInDecoupleStage` RPC.
-                For decouple stages, grouping is the same as that deprecated method.
                 For activation stages, unstaged resource containers (for example fuel tanks)
                 are grouped with the first higher activation stage before they detach, matching
                 the C# ``Resources()`` documentation.
@@ -137,24 +134,35 @@ Stage
 
    .. property:: float StartMass { get; }
 
-      Start mass for this stage, in kg.
+      The mass of the vessel after the stage activates, in kg.
 
       :Game Scenes: All
 
    .. property:: float EndMass { get; }
 
-      End mass for this stage, in kg.
+      The mass of the vessel when the stage burns out, in kg.
 
       :Game Scenes: All
 
    .. property:: float DryMass { get; }
 
-      Dry mass for this stage, in kg.
+      The dry mass of the vessel after the stage activates, in kg.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Includes the parts of all later stages.
 
    .. property:: float FuelMass { get; }
 
-      Fuel mass for this stage, in kg.
+      The fuel mass of the vessel when the stage activates, in kg.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Includes the fuel of all later stages, and the fuel left in the parts the stage
+         decouples. The stage burns :prop:`Stage.StartMass` minus :prop:`Stage.EndMass`.

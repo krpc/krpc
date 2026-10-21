@@ -27,7 +27,7 @@ Alarms
 
    
 
-   .. function:: Alarm alarm_with_name(std::string name)
+   .. function:: std::optional<Alarm> alarm_with_name(std::string name)
 
       Returns the first alarm with the given title, or ``NULL`` if no such
       alarm exists. Alarm titles are not guaranteed to be unique; if more than
@@ -193,7 +193,12 @@ Alarms
 
    
 
-   .. function:: Vessel vessel()
+      .. note::
+
+         For a maneuver alarm that includes the burn time, setting this sets the margin
+         before the start of the burn, and the value read back includes half the burn time.
+
+   .. function:: std::optional<Vessel> vessel()
 
       Vessel the alarm references. ``NULL`` if it does not reference a vessel.
 
@@ -285,6 +290,10 @@ Alarms
 
 
    
+
+      .. note::
+
+         Any further use of this object throws an exception.
 
 
 

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Drawing &#8212; kRPC v0.6.0 documentation</title>
+    <title>Drawing &#8212; kRPC v0.7.0 documentation</title>
   
   
   
@@ -27,41 +26,42 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+    <script src="../../../_static/documentation_options.js?v=fe7df9b0"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'lua/api/drawing/drawing';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.6.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/external-links.js?v=e8892020"></script>
     <script src="../../../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/0.6.0/lua/api/drawing/drawing.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/lua/api/drawing/drawing.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Line" href="line.html" />
+    <link rel="next" title="Arc" href="arc.html" />
     <link rel="prev" title="Drawing API" href="../drawing.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.6.0" />
+  <meta name="docsearch:version" content="0.7.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -109,7 +109,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -152,7 +152,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -261,7 +261,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -292,15 +292,15 @@
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -326,7 +326,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -335,7 +335,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -374,7 +374,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -495,15 +495,15 @@
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -527,7 +527,7 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
   <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
   </svg>
@@ -546,10 +546,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../stdlib.html">Standard Library</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../space-center/space-center.html">SpaceCenter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../space-center/vessel.html">Vessel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../space-center/stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/editor.html">Editor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../space-center/celestial-body.html">CelestialBody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../space-center/flight.html">Flight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../space-center/orbit.html">Orbit</a></li>
@@ -569,9 +571,19 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Drawing</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="map-marker.html">MapMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 </ul>
 </details></li>
@@ -582,6 +594,15 @@
 <li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -604,14 +625,18 @@
 <li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LIDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LIDAR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../debug.html">Debug API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../debug/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
@@ -679,7 +704,8 @@
                   
   <section id="drawing">
 <h1>Drawing<a class="headerlink" href="#drawing" title="Link to this heading">#</a></h1>
-<p id="module-Drawing">Provides functionality for drawing objects in the flight scene.</p>
+<p id="module-Drawing">Provides functionality for drawing objects in the flight scene, the map view, the editor
+and the tracking station.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For drawing and interacting with the user interface, see the UI service.
@@ -687,7 +713,7 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </div>
 <dl class="lua staticmethod">
 <dt class="sig sig-object lua" id="Drawing.add_line">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">start</span></em>, <em class="sig-param"><span class="pre">end</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_line" title="Link to this definition">#</a></dt>
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">start</span></em>, <em class="sig-param"><span class="pre">end</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_line" title="Link to this definition">#</a></dt>
 <dd><p>Draw a line in the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -706,7 +732,7 @@ Objects drawn by a client are removed when that client disconnects.</p>
 
 <dl class="lua staticmethod">
 <dt class="sig sig-object lua" id="Drawing.add_direction">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">direction</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">length</span> <span class="pre">=</span> <span class="pre">10.0</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_direction" title="Link to this definition">#</a></dt>
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">direction</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">length</span> <span class="pre">=</span> <span class="pre">1e+01</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_direction" title="Link to this definition">#</a></dt>
 <dd><p>Draw a direction vector in the scene, starting from the origin of the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -725,7 +751,7 @@ Objects drawn by a client are removed when that client disconnects.</p>
 
 <dl class="lua staticmethod">
 <dt class="sig sig-object lua" id="Drawing.add_direction_from_com">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_direction_from_com</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">direction</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">length</span> <span class="pre">=</span> <span class="pre">10.0</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_direction_from_com" title="Link to this definition">#</a></dt>
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_direction_from_com</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">direction</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">length</span> <span class="pre">=</span> <span class="pre">1e+01</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_direction_from_com" title="Link to this definition">#</a></dt>
 <dd><p>Draw a direction vector in the scene, from the center of mass of the active vessel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -743,8 +769,29 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Drawing.add_axes">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_axes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">length</span> <span class="pre">=</span> <span class="pre">1e+01</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_axes" title="Link to this definition">#</a></dt>
+<dd><p>Draw the axes of a reference frame in the scene, as arrows from its origin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – The reference frame.</p></li>
+<li><p><strong>length</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The length of each axis.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the axes are visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The lines for the x, y and z axes, colored red, green and blue.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
 <dt class="sig sig-object lua" id="Drawing.add_polygon">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vertices</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_polygon" title="Link to this definition">#</a></dt>
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vertices</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_polygon" title="Link to this definition">#</a></dt>
 <dd><p>Draw a polygon in the scene, defined by a list of vertices.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -761,8 +808,156 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Drawing.add_polyline">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_polyline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vertices</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_polyline" title="Link to this definition">#</a></dt>
+<dd><p>Draw an open line through a list of vertices in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertices</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span>) – Vertices of the line.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the vertices are in.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the line is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="polyline.html#Drawing.Polyline" title="Drawing.Polyline"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Polyline</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Drawing.add_circle">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_circle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">center</span></em>, <em class="sig-param"><span class="pre">normal</span></em>, <em class="sig-param"><span class="pre">radius</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_circle" title="Link to this definition">#</a></dt>
+<dd><p>Draw a circle in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the center of the circle.</p></li>
+<li><p><strong>normal</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Normal of the plane of the circle.</p></li>
+<li><p><strong>radius</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Radius of the circle, in meters.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position and normal are in.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the circle is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="circle.html#Drawing.Circle" title="Drawing.Circle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Circle</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the normal is zero.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Drawing.add_arc">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_arc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">center</span></em>, <em class="sig-param"><span class="pre">normal</span></em>, <em class="sig-param"><span class="pre">start_direction</span></em>, <em class="sig-param"><span class="pre">angle</span></em>, <em class="sig-param"><span class="pre">radius</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_arc" title="Link to this definition">#</a></dt>
+<dd><p>Draw an arc of a circle in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the center of the arc.</p></li>
+<li><p><strong>normal</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Normal of the plane of the arc.</p></li>
+<li><p><strong>start_direction</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Direction from the center to the start of the arc.</p></li>
+<li><p><strong>angle</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Angle of the arc, in radians.</p></li>
+<li><p><strong>radius</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Radius of the arc, in meters.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position and directions are in.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the arc is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="arc.html#Drawing.Arc" title="Drawing.Arc"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Arc</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The arc turns counterclockwise about the normal, seen from the side it points to.
+Throws an exception if the normal is zero, or the start direction is parallel to it.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Drawing.add_orbit">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_orbit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">orbit</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_orbit" title="Link to this definition">#</a></dt>
+<dd><p>Draw the path of an orbit in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>orbit</strong> (<span><a class="reference internal" href="../space-center/orbit.html#SpaceCenter.Orbit" title="SpaceCenter.Orbit"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Orbit</span></code></a></span>) – The orbit.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the path is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="orbit-path.html#Drawing.OrbitPath" title="Drawing.OrbitPath"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.OrbitPath</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The path follows the orbit as it changes, and ends where the orbit leaves the
+sphere of influence of its body.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Drawing.add_point">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_point" title="Link to this definition">#</a></dt>
+<dd><p>Draw a point in the scene, as a dot that keeps its size on screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the point.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position is in.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the point is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="point.html#Drawing.Point" title="Drawing.Point"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Point</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Drawing.add_box">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">center</span></em>, <em class="sig-param"><span class="pre">size</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">rotation</span> <span class="pre">=</span> <span class="pre">{0.0</span></em>, <em class="sig-param"><span class="pre">0.0</span></em>, <em class="sig-param"><span class="pre">0.0</span></em>, <em class="sig-param"><span class="pre">1.0}</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_box" title="Link to this definition">#</a></dt>
+<dd><p>Draw the edges of a box in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the center of the box.</p></li>
+<li><p><strong>size</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Lengths of the sides of the box along its x, y and z axes, in meters.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position and rotation are in.</p></li>
+<li><p><strong>rotation</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Rotation of the box, as a quaternion.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the box is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="box.html#Drawing.Box" title="Drawing.Box"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Box</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Drawing.add_sphere">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">center</span></em>, <em class="sig-param"><span class="pre">radius</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_sphere" title="Link to this definition">#</a></dt>
+<dd><p>Draw a solid sphere in the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the center of the sphere.</p></li>
+<li><p><strong>radius</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Radius of the sphere, in meters.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position is in.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the sphere is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="sphere.html#Drawing.Sphere" title="Drawing.Sphere"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Sphere</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
 <dt class="sig sig-object lua" id="Drawing.add_text">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">text</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em>, <em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">rotation</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_text" title="Link to this definition">#</a></dt>
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">text</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em>, <em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">rotation</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_text" title="Link to this definition">#</a></dt>
 <dd><p>Draw text in the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -781,8 +976,65 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </dd></dl>
 
 <dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Drawing.add_navball_marker">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_navball_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">direction</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_navball_marker" title="Link to this definition">#</a></dt>
+<dd><p>Draw a marker on the navball, pointing in the given direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>direction</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Direction that the marker points in.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the direction is in.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the marker is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="navball-marker.html#Drawing.NavballMarker" title="Drawing.NavballMarker"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.NavballMarker</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Drawing.add_map_marker">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_map_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">icon</span> <span class="pre">=</span> <span class="pre">Drawing.MapMarkerIcon.generic</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">caption</span> <span class="pre">=</span> <span class="pre">''</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">true</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_map_marker" title="Link to this definition">#</a></dt>
+<dd><p>Draw a marker in the map view, with one of the game’s own map icons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Position of the marker.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the position is in.</p></li>
+<li><p><strong>icon</strong> (<span><a class="reference internal" href="map-marker.html#Drawing.MapMarkerIcon" title="Drawing.MapMarkerIcon"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.MapMarkerIcon</span></code></a></span>) – The icon that the marker is drawn with.</p></li>
+<li><p><strong>caption</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The caption shown when the mouse is over the marker.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the marker is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="map-marker.html#Drawing.MapMarker" title="Drawing.MapMarker"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.MapMarker</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Drawing.add_image">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_image" title="Link to this definition">#</a></dt>
+<dd><p>Load an image that markers can be drawn with, from the contents of a PNG or JPEG
+file. The transparency of a PNG image is kept.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The contents of the image file.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="image.html#Drawing.Image" title="Drawing.Image"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Image</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the data is not a PNG or JPEG image.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
 <dt class="sig sig-object lua" id="Drawing.clear">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">client_only</span> <span class="pre">=</span> <span class="pre">False</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.clear" title="Link to this definition">#</a></dt>
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">client_only</span> <span class="pre">=</span> <span class="pre">false</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.clear" title="Link to this definition">#</a></dt>
 <dd><p>Remove all objects being drawn.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -813,11 +1065,11 @@ Objects drawn by a client are removed when that client disconnects.</p>
       </div>
     </a>
     <a class="right-next"
-       href="line.html"
+       href="arc.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Line</p>
+        <p class="prev-next-title">Arc</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -854,8 +1106,8 @@ Objects drawn by a client are removed when that client disconnects.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -875,8 +1127,7 @@ Objects drawn by a client are removed when that client disconnects.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    <br/>
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
   </p>
 </div>
       
@@ -889,7 +1140,7 @@ Objects drawn by a client are removed when that client disconnects.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
 </p></div>
       
     </div>

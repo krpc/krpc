@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.DockingCamera
 
@@ -16,7 +16,7 @@ DockingCamera
 
       :Game Scenes: All
 
-   .. method:: Camera Camera(SpaceCenter.Part part)
+   .. function:: Camera Camera(SpaceCenter.Part part)
 
       Get a Camera part.
 

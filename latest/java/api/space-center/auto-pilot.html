@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>AutoPilot &#8212; kRPC v0.6.0 documentation</title>
+    <title>AutoPilot &#8212; kRPC v0.7.0 documentation</title>
   
   
   
@@ -27,41 +26,42 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+    <script src="../../../_static/documentation_options.js?v=fe7df9b0"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'java/api/space-center/auto-pilot';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.6.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/external-links.js?v=e8892020"></script>
     <script src="../../../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/0.6.0/java/api/space-center/auto-pilot.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/java/api/space-center/auto-pilot.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Camera" href="camera.html" />
     <link rel="prev" title="ReferenceFrame" href="reference-frame.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.6.0" />
+  <meta name="docsearch:version" content="0.7.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -109,7 +109,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -152,7 +152,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -261,7 +261,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -292,15 +292,15 @@
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -326,7 +326,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -335,7 +335,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -374,7 +374,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -495,15 +495,15 @@
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -527,7 +527,7 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
   <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
   </svg>
@@ -546,10 +546,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../stdlib.html">Standard Library</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="editor.html">Editor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
@@ -560,7 +562,7 @@
 <li class="toctree-l2"><a class="reference internal" href="resources.html">Resources</a></li>
 <li class="toctree-l2"><a class="reference internal" href="node.html">Node</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reference-frame.html">ReferenceFrame</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">AutoPilot</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">AutoPilot</a></li>
 <li class="toctree-l2"><a class="reference internal" href="camera.html">Camera</a></li>
 <li class="toctree-l2"><a class="reference internal" href="waypoints.html">Waypoints</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
@@ -570,8 +572,18 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
 </ul>
 </details></li>
@@ -582,6 +594,15 @@
 <li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -604,14 +625,18 @@
 <li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LIDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LIDAR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../debug.html">Debug API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../debug/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
@@ -751,6 +776,52 @@ Setting to <code class="docutils literal notranslate"><span class="pre">true</sp
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getUpdateMode()">
+ <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode"><span class="pre">AutoPilotUpdateMode</span></a> <span class="sig-name descname"><span class="pre">getUpdateMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpdateMode()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setUpdateMode(AutoPilotUpdateMode)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setUpdateMode</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode"><span class="pre">AutoPilotUpdateMode</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setUpdateMode(AutoPilotUpdateMode)" title="Link to this definition">#</a></dt>
+<dd><p>When the auto-pilot’s control loop runs within a server update, relative to the
+calls the update executes. Defaults to
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode.AFTER_CALLS" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode.AFTER_CALLS"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilotUpdateMode.AFTER_CALLS</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The loop runs once per physics tick; this chooses where in the tick that is.
+Together with <code class="docutils literal notranslate"><span class="pre">KRPC.HoldTick</span></code> it lets a program place the loop exactly within
+its own read, compute and write. When no server is running the loop runs at the
+point the game takes control inputs at, whatever the mode, so a vessel is never left
+without control input.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.update()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.update()" title="Link to this definition">#</a></dt>
+<dd><p>Run one tick of the auto-pilot’s control loop now. Does nothing if it has already run
+on this physics tick. Throws an exception if the auto-pilot is not engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode.MANUAL" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode.MANUAL"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilotUpdateMode.MANUAL</span></code></a>, where the loop runs only when this is
+called. In the other modes this runs it early; either way it runs once per tick. On a
+tick it is not called for, the vessel keeps the control output of the last tick it did
+run on, and after a tenth of a second of that the auto-pilot stops contributing any
+control input at all.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getShowInfoUI()">
  <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getShowInfoUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getShowInfoUI()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -774,7 +845,7 @@ hidden when the game is restarted.</p>
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.reset()" title="Link to this definition">#</a></dt>
 <dd><p>Disengages the auto-pilot and resets all configuration parameters to their defaults.
 Also resets the target pitch, heading and roll, and clears all internal controller
-state, including the oscillation detector’s structural level — which otherwise
+state, including the oscillation detector’s structural level, which otherwise
 persists across engagements so that a craft known to be flexible re-latches quickly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -802,6 +873,10 @@ persists across engagements so that a craft known to be flexible re-latches quic
 <p>An error will be thrown if this property is set to a reference frame that rotates with
 the vessel being controlled, as it is impossible to rotate the vessel in such a
 reference frame.</p>
+<p>The target and the <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a> are held as vectors in this frame, so
+changing it re-interprets them in the new frame rather than converting them: the
+orientation the vessel is held in, and what a given <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetRoll()</span></code></a> means,
+both change. Set the frame first, then the target.</p>
 </div>
 </dd></dl>
 
@@ -822,7 +897,7 @@ reference frame.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
-the nose is near vertical (pitch → ±90°); near the vertical prefer
+the nose is near vertical (a pitch near -90° or +90°). Near the vertical prefer
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetDirection()</span></code></a> or <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)" title="krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.setDirectionAndUp(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">float)</span></code></a>. The setter preserves the
 current roll relative to <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>.</p>
 </div>
@@ -845,7 +920,8 @@ current roll relative to <a class="reference internal" href="#krpc.client.servic
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
-(pitch → ±90°) — see <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetPitch()</span></code></a>. The setter preserves the current roll
+(a pitch near -90° or +90°). See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetPitch()</span></code></a>. The setter preserves the
+current roll
 relative to <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>.</p>
 </div>
 </dd></dl>
@@ -868,25 +944,25 @@ positive roll banks right). <code class="docutils literal notranslate"><span cla
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When left unset (<code class="docutils literal notranslate"><span class="pre">NaN</span></code>) the auto-pilot suppresses roll rotation — it drives the roll
-rate to zero rather than holding a specific roll angle. Setting a value re-rolls the
+<p>When left unset (<code class="docutils literal notranslate"><span class="pre">NaN</span></code>) the auto-pilot suppresses roll rotation, driving the roll
+rate to zero instead of holding a specific roll angle. Setting a value re-rolls the
 current target to that angle relative to the up reference while keeping the nose direction.
-With the default reference (the frame’s up) this reproduces the historical roll away from
-the vertical, and is ill-defined only when the nose points along the reference (near
-straight up or down). To hold a well-defined roll through the vertical — for example a
-gravity turn — set the up reference off the flight path (see
+With the default reference (the frame’s up) this is the roll away from the vertical, and
+is ill-defined only when the nose points along the reference (near straight up or down).
+To hold a well-defined roll through the vertical, such as through a gravity turn, set
+the up reference off the flight path (see
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)" title="krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.setDirectionAndUp(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">float)</span></code></a> / <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>).</p>
 </div>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getUpReference</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getUpReference</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setUpReference(org.javatuples.Triplet)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setUpReference</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setUpReference(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setUpReference</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setUpReference(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
 <dd><p>The reference direction, in the reference frame specified by <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getReferenceFrame()" title="krpc.client.services.SpaceCenter.AutoPilot.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getReferenceFrame()</span></code></a>,
 that <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetRoll()</span></code></a> is measured against: at roll 0 the vessel’s dorsal (roof)
 axis is aligned with this vector’s component perpendicular to the nose. Defaults to the
@@ -904,6 +980,10 @@ the reference can be set once and then rolls commanded against it with
 effect of <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)" title="krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.setDirectionAndUp(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">float)</span></code></a>. Setting the target rotation, target direction,
 or the scalar pitch/heading leaves it unchanged. Choosing a reference off the flight path
 keeps roll well-defined through the vertical.</p>
+<p>Because roll is measured against this reference, changing it changes the angle that
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetRoll()</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetRoll()" title="krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetRoll()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getCurrentTargetRoll()</span></code></a> report, even though the
+vessel is still being held in exactly the same orientation. Set the reference first and
+the roll afterwards, or set both at once with <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)" title="krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.setDirectionAndUp(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">float)</span></code></a>.</p>
 </div>
 </dd></dl>
 
@@ -925,7 +1005,8 @@ keeps roll well-defined through the vertical.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
-vertical (pitch → ±90°), so near the vertical prefer <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetDirection()</span></code></a> or
+vertical (a pitch near -90° or +90°), so near the vertical prefer
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetDirection()</span></code></a> or
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)" title="krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.setDirectionAndUp(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">float)</span></code></a>. Preserves the current roll relative to
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>.</p>
 </div>
@@ -933,12 +1014,12 @@ vertical (pitch → ±90°), so near the vertical prefer <a class="reference int
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getTargetDirection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getTargetDirection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setTargetDirection(org.javatuples.Triplet)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetDirection</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setTargetDirection(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetDirection</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setTargetDirection(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
 <dd><p>Direction vector corresponding to the target pitch and heading.
 This is in the reference frame specified by <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getReferenceFrame()" title="krpc.client.services.SpaceCenter.AutoPilot.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getReferenceFrame()</span></code></a>.</p>
 <dl class="field-list simple">
@@ -946,16 +1027,23 @@ This is in the reference frame specified by <a class="reference internal" href="
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The setter re-aims the nose and nothing else: it preserves the current
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetRoll()</span></code></a> relative to <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>, and leaves roll
+suppressed if no target roll is set. Point the nose repeatedly and a commanded roll is
+held throughout.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getTargetRotation()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getTargetRotation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetRotation()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getTargetRotation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetRotation()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setTargetRotation(org.javatuples.Quartet)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetRotation</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setTargetRotation(org.javatuples.Quartet)" title="Link to this definition">#</a></dt>
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetRotation</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setTargetRotation(org.javatuples.Quartet)" title="Link to this definition">#</a></dt>
 <dd><p>The target rotation quaternion. Setting this also sets the target roll.
 This is in the reference frame specified by <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getReferenceFrame()" title="krpc.client.services.SpaceCenter.AutoPilot.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getReferenceFrame()</span></code></a>.</p>
 <dl class="field-list simple">
@@ -967,7 +1055,7 @@ This is in the reference frame specified by <a class="reference internal" href="
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDirectionAndUp</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">direction</span></em>, <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">up</span></em>, <span class="pre">float</span><em> <span class="pre">roll</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)" title="Link to this definition">#</a></dt>
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDirectionAndUp</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">direction</span></em>, <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">up</span></em>, <span class="pre">float</span><em> <span class="pre">roll</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)" title="Link to this definition">#</a></dt>
 <dd><p>Set the target attitude from a nose direction and an up vector: point the nose along
 <em>direction</em> and roll so the vessel’s dorsal (roof) axis aligns with
 <em>up</em> (its component perpendicular to the nose), then apply an optional
@@ -977,7 +1065,7 @@ specified by <a class="reference internal" href="#krpc.client.services.SpaceCent
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>direction</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – The direction to point the nose in.</p></li>
-<li><p><strong>up</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em> — its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>.</p></li>
+<li><p><strong>up</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em>, as its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>.</p></li>
 <li><p><strong>roll</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – An additional roll about the nose, in degrees (positive banks right). Defaults to 0.</p></li>
 </ul>
 </dd>
@@ -987,7 +1075,7 @@ specified by <a class="reference internal" href="#krpc.client.services.SpaceCent
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is the way to hold a well-defined orientation through a maneuver — for example a
+<p>This is the way to hold a well-defined orientation through a maneuver such as a
 gravity turn: pass a fixed <em>up</em> (say north) and the roll stays defined the
 whole way, with no singularity at the vertical. It is well-defined for every nose direction
 except <em>up</em> parallel to <em>direction</em> (asking the roof to
@@ -1004,7 +1092,7 @@ Equivalent to setting <a class="reference internal" href="#krpc.client.services.
 <dd><p>The current target pitch the auto-pilot is tracking, in degrees. When
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetSmoothingTime()</span></code></a> is non-zero this lags the commanded
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetPitch()</span></code></a> while a change is slewed in; otherwise the two are equal.
-A convenience scalar, ill-defined near the vertical — see <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetPitch()</span></code></a>.</p>
+A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetPitch()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1018,7 +1106,7 @@ A convenience scalar, ill-defined near the vertical — see <a class="reference 
 <dd><p>The current target heading the auto-pilot is tracking, in degrees. When
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetSmoothingTime()</span></code></a> is non-zero this lags the commanded
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetHeading()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetHeading()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetHeading()</span></code></a> while a change is slewed in; otherwise the two are equal.
-A convenience scalar, ill-defined near the vertical — see <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetHeading()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetHeading()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetHeading()</span></code></a>.</p>
+A convenience scalar, ill-defined near the vertical. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetHeading()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetHeading()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetHeading()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1042,7 +1130,7 @@ A convenience scalar, ill-defined near the vertical — see <a class="reference 
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetDirection()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCurrentTargetDirection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetDirection()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCurrentTargetDirection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetDirection()" title="Link to this definition">#</a></dt>
 <dd><p>Direction vector corresponding to the current target pitch and heading
 (see <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetPitch()" title="krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetPitch()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getCurrentTargetPitch()</span></code></a>), in the reference frame specified by
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getReferenceFrame()" title="krpc.client.services.SpaceCenter.AutoPilot.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getReferenceFrame()</span></code></a>. Lags <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetDirection()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetDirection()</span></code></a> while a change is
@@ -1056,7 +1144,7 @@ slewed in when <a class="reference internal" href="#krpc.client.services.SpaceCe
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetRotation()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCurrentTargetRotation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetRotation()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCurrentTargetRotation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetRotation()" title="Link to this definition">#</a></dt>
 <dd><p>The current target rotation quaternion the auto-pilot is tracking, in the reference frame
 specified by <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getReferenceFrame()" title="krpc.client.services.SpaceCenter.AutoPilot.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getReferenceFrame()</span></code></a>. Lags <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetRotation()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetRotation()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetRotation()</span></code></a> while a
 change is slewed in when <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetSmoothingTime()</span></code></a> is non-zero.</p>
@@ -1140,7 +1228,7 @@ error relative to the target the auto-pilot is currently tracking.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getAttitudeError</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getAttitudeError</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="Link to this definition">#</a></dt>
 <dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
 attitude and the commanded target. All three components come from one singularity-free
 residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
@@ -1167,8 +1255,8 @@ Throws an exception if the auto-pilot has not been engaged.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The pitch component of <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAttitudeError()</span></code></a> — the pitch part of the direction error
-resolved in the roll-invariant frame, well-defined near the vertical.</p>
+<p>The pitch component of <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAttitudeError()</span></code></a>, the pitch part of the direction
+error resolved in the roll-invariant frame, well-defined near the vertical.</p>
 </div>
 </dd></dl>
 
@@ -1184,9 +1272,9 @@ Throws an exception if the auto-pilot has not been engaged.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The yaw component of <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAttitudeError()</span></code></a> — the yaw part of the direction error
-resolved in the roll-invariant frame, well-defined near the vertical (unlike the absolute
-heading, which is undefined at the pole).</p>
+<p>The yaw component of <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAttitudeError()</span></code></a>, the yaw part of the direction error
+resolved in the roll-invariant frame, well-defined near the vertical, where the absolute
+heading is undefined at the pole.</p>
 </div>
 </dd></dl>
 
@@ -1203,7 +1291,7 @@ Throws an exception if the auto-pilot has not been engaged or no target roll is 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
-singularity — unlike a subtraction of pitch/heading/roll angles, whose roll term is
+singularity. A subtraction of pitch, heading and roll angles has a roll term that is
 ill-conditioned when the vessel points close to straight up or down.</p>
 </div>
 </dd></dl>
@@ -1226,9 +1314,9 @@ auto-pilot has not been engaged.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getCurrentAttitudeError()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCurrentAttitudeError</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getCurrentAttitudeError()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getCurrentAttitudeError</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getCurrentAttitudeError()" title="Link to this definition">#</a></dt>
 <dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
-attitude and the target the auto-pilot is currently tracking (the slewed target — see
+attitude and the target the auto-pilot is currently tracking (the slewed target, see
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetRotation()" title="krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetRotation()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getCurrentTargetRotation()</span></code></a>). Like <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAttitudeError()</span></code></a> but relative to the
 current target, so it stays small while a smoothed change (see
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetSmoothingTime()</span></code></a>) is fed in; equal to <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()" title="krpc.client.services.SpaceCenter.AutoPilot.getAttitudeError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getAttitudeError()</span></code></a> when
@@ -1288,7 +1376,7 @@ auto-pilot has not been engaged or no target roll is set.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Measured about the vessel’s nose axis, so it stays well-defined near the vertical
-singularity — see <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getRollError()" title="krpc.client.services.SpaceCenter.AutoPilot.getRollError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getRollError()</span></code></a>.</p>
+singularity. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getRollError()" title="krpc.client.services.SpaceCenter.AutoPilot.getRollError()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getRollError()</span></code></a>.</p>
 </div>
 </dd></dl>
 
@@ -1329,12 +1417,12 @@ Defaults to 15 degrees.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getMaxAngularVelocity()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getMaxAngularVelocity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getMaxAngularVelocity()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getMaxAngularVelocity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getMaxAngularVelocity()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setMaxAngularVelocity(org.javatuples.Triplet)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMaxAngularVelocity</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setMaxAngularVelocity(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMaxAngularVelocity</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setMaxAngularVelocity(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
 <dd><p>The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
 and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
 that vessels with very high torque availability do not spin faster than desired.
@@ -1405,12 +1493,12 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPi
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getTimeToPeak()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getTimeToPeak</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getTimeToPeak()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getTimeToPeak</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getTimeToPeak()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setTimeToPeak(org.javatuples.Triplet)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTimeToPeak</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setTimeToPeak(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTimeToPeak</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setTimeToPeak(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
 <dd><p>The target time to peak used to autotune the PID controllers.
 A vector of three times, in seconds, for each of the pitch, roll and yaw axes.
 Defaults to 1 second for each axis.</p>
@@ -1465,12 +1553,12 @@ turn) without inducing oscillation from stepwise target changes. Defaults to 0
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getOvershoot()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getOvershoot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getOvershoot()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getOvershoot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getOvershoot()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setOvershoot(org.javatuples.Triplet)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setOvershoot</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setOvershoot(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setOvershoot</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setOvershoot(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
 <dd><p>The target overshoot percentage used to autotune the PID controllers.
 A vector of three values, between 0 and 1, for each of the pitch, roll and yaw axes.
 Defaults to 0.01 for each axis.</p>
@@ -1483,12 +1571,12 @@ Defaults to 0.01 for each axis.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getPitchPIDGains()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getPitchPIDGains</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getPitchPIDGains()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getPitchPIDGains</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getPitchPIDGains()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setPitchPIDGains(org.javatuples.Triplet)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPitchPIDGains</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setPitchPIDGains(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPitchPIDGains</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setPitchPIDGains(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
 <dd><p>Gains for the pitch PID controller.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1504,12 +1592,12 @@ which will overwrite any manual changes.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getRollPIDGains()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getRollPIDGains</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getRollPIDGains()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getRollPIDGains</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getRollPIDGains()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setRollPIDGains(org.javatuples.Triplet)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRollPIDGains</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setRollPIDGains(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRollPIDGains</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setRollPIDGains(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
 <dd><p>Gains for the roll PID controller.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1525,12 +1613,12 @@ which will overwrite any manual changes.</p>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getYawPIDGains()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getYawPIDGains</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getYawPIDGains()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getYawPIDGains</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getYawPIDGains()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setYawPIDGains(org.javatuples.Triplet)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setYawPIDGains</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setYawPIDGains(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setYawPIDGains</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setYawPIDGains(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
 <dd><p>Gains for the yaw PID controller.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1557,8 +1645,8 @@ angular velocity) for the pitch and yaw axes of a structurally flexible vessel. 
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.RateFilterMode.AUTOMATIC" title="krpc.client.services.SpaceCenter.RateFilterMode.AUTOMATIC"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RateFilterMode.AUTOMATIC</span></code></a> (the default) the auto-pilot detects the
 oscillation at runtime, estimates its frequency and routes it to the appropriate tool
 (a notch filter for a low-frequency mode near the control band, a low-pass for a
-high-frequency mode). <a class="reference internal" href="#krpc.client.services.SpaceCenter.RateFilterMode.OFF" title="krpc.client.services.SpaceCenter.RateFilterMode.OFF"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RateFilterMode.OFF</span></code></a> disables rate filtering only —
-the other oscillation mitigations are unaffected. <a class="reference internal" href="#krpc.client.services.SpaceCenter.RateFilterMode.NOTCH" title="krpc.client.services.SpaceCenter.RateFilterMode.NOTCH"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RateFilterMode.NOTCH</span></code></a>
+high-frequency mode). <a class="reference internal" href="#krpc.client.services.SpaceCenter.RateFilterMode.OFF" title="krpc.client.services.SpaceCenter.RateFilterMode.OFF"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RateFilterMode.OFF</span></code></a> disables rate filtering only,
+leaving the other oscillation mitigations unaffected. <a class="reference internal" href="#krpc.client.services.SpaceCenter.RateFilterMode.NOTCH" title="krpc.client.services.SpaceCenter.RateFilterMode.NOTCH"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RateFilterMode.NOTCH</span></code></a>
 and <a class="reference internal" href="#krpc.client.services.SpaceCenter.RateFilterMode.LOW_PASS" title="krpc.client.services.SpaceCenter.RateFilterMode.LOW_PASS"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RateFilterMode.LOW_PASS</span></code></a> force the respective tool unconditionally at
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getPitchYawOscillationFrequency()" title="krpc.client.services.SpaceCenter.AutoPilot.getPitchYawOscillationFrequency()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getPitchYawOscillationFrequency()</span></code></a>, for a vessel known in advance to be
 flexible.</p>
@@ -1652,7 +1740,7 @@ advanced tuning parameter.</p>
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setOscillationBandwidthFloorMode(MitigationMode)">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setOscillationBandwidthFloorMode</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.MitigationMode" title="krpc.client.services.SpaceCenter.MitigationMode"><span class="pre">MitigationMode</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setOscillationBandwidthFloorMode(MitigationMode)" title="Link to this definition">#</a></dt>
 <dd><p>Controls the bandwidth-floor mitigation: the reduction of the inner control loop
-bandwidth on a structurally flexible axis — the primary oscillation stabilizer. When
+bandwidth on a structurally flexible axis, the primary oscillation stabilizer. When
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.MitigationMode.AUTOMATIC" title="krpc.client.services.SpaceCenter.MitigationMode.AUTOMATIC"><code class="xref java java-meth docutils literal notranslate"><span class="pre">MitigationMode.AUTOMATIC</span></code></a> (the default) it engages on a latched axis
 while holding (and during a detected limit cycle). <a class="reference internal" href="#krpc.client.services.SpaceCenter.MitigationMode.OFF" title="krpc.client.services.SpaceCenter.MitigationMode.OFF"><code class="xref java java-meth docutils literal notranslate"><span class="pre">MitigationMode.OFF</span></code></a>
 never reduces the bandwidth; <a class="reference internal" href="#krpc.client.services.SpaceCenter.MitigationMode.FORCED" title="krpc.client.services.SpaceCenter.MitigationMode.FORCED"><code class="xref java java-meth docutils literal notranslate"><span class="pre">MitigationMode.FORCED</span></code></a> keeps it fully
@@ -1752,7 +1840,7 @@ deviation of the delivered control about its slowly-varying trim. Read-only. See
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getOscillationLevel()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getOscillationLevel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getOscillationLevel()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getOscillationLevel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getOscillationLevel()" title="Link to this definition">#</a></dt>
 <dd><p>A measure, between 0 and 1 for each of the pitch, roll and yaw axes, of how strongly the
 auto-pilot currently detects structural oscillation (wobble) on that axis. 0 means none
 detected; values approaching 1 mean a sustained structural oscillation. Read-only.</p>
@@ -1858,9 +1946,37 @@ not been enabled or no ticks have occurred.</p>
 </dd></dl>
 
 <dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilotUpdateMode">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">AutoPilotUpdateMode</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode" title="Link to this definition">#</a></dt>
+<dd><p>When the auto-pilot’s control loop runs within a server update, relative to the calls
+the update executes. See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpdateMode()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpdateMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpdateMode()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilotUpdateMode.AFTER_CALLS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode"><span class="pre">AutoPilotUpdateMode</span></a> <span class="sig-name descname"><span class="pre">AFTER_CALLS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode.AFTER_CALLS" title="Link to this definition">#</a></dt>
+<dd><p>The default. The control loop runs once the update has executed the calls it
+received, so a target set during a tick is flown on that tick.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilotUpdateMode.BEFORE_CALLS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode"><span class="pre">AutoPilotUpdateMode</span></a> <span class="sig-name descname"><span class="pre">BEFORE_CALLS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode.BEFORE_CALLS" title="Link to this definition">#</a></dt>
+<dd><p>The control loop runs before the update executes any calls, so calls made during a
+tick see the attitude error and control output it computed for that tick.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilotUpdateMode.MANUAL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode" title="krpc.client.services.SpaceCenter.AutoPilotUpdateMode"><span class="pre">AutoPilotUpdateMode</span></a> <span class="sig-name descname"><span class="pre">MANUAL</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilotUpdateMode.MANUAL" title="Link to this definition">#</a></dt>
+<dd><p>The control loop runs only when <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.update()" title="krpc.client.services.SpaceCenter.AutoPilot.update()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.update()</span></code></a> is called, so a
+program chooses where among its own calls it runs.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RateFilterMode">
 <span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">RateFilterMode</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RateFilterMode" title="Link to this definition">#</a></dt>
-<dd><p>Controls the auto-pilot’s rate-feedback filtering for an axis group — the mitigation that
+<dd><p>Controls the auto-pilot’s rate-feedback filtering for an axis group, the mitigation that
 removes a structural oscillation (wobble) from the measured angular velocity before the
 control loops consume it.
 See <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getPitchYawRateFilterMode()" title="krpc.client.services.SpaceCenter.AutoPilot.getPitchYawRateFilterMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getPitchYawRateFilterMode()</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getRollRateFilterMode()" title="krpc.client.services.SpaceCenter.AutoPilot.getRollRateFilterMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getRollRateFilterMode()</span></code></a>.</p>
@@ -1988,8 +2104,8 @@ detector reports.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2009,8 +2125,7 @@ detector reports.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    <br/>
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
   </p>
 </div>
       
@@ -2023,7 +2138,7 @@ detector reports.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
 </p></div>
       
     </div>

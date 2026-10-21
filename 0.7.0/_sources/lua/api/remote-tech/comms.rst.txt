@@ -1,0 +1,74 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: RemoteTech
+
+Comms
+=====
+
+
+.. class:: Comms
+
+   Communications for a vessel.
+
+   .. attribute:: vessel: SpaceCenter.Vessel
+
+      Get the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Vessel`
+
+   .. attribute:: has_local_control: boolean
+
+      Whether the vessel can be controlled locally.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: has_flight_computer: boolean
+
+      Whether the vessel has a flight computer on board.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: has_connection: boolean
+
+      Whether the vessel has any connection.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: has_connection_to_ground_station: boolean
+
+      Whether the vessel has a connection to a ground station.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: signal_delay: number
+
+      The shortest signal delay to the vessel, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: signal_delay_to_ground_station: number
+
+      The signal delay between the vessel and the closest ground station, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. method:: signal_delay_to_vessel(other)
+
+      The signal delay between the this vessel and another vessel, in seconds.
+
+      :param SpaceCenter.Vessel other:
+      :rtype: number
+
+   .. attribute:: antennas: List
+
+      The antennas for this vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List

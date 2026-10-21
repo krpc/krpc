@@ -19,6 +19,13 @@ ServoGroup
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Renaming a group renames it for every servo in it. This object identifies the
+         group by its name, so a rename destroys every object for the group, including the
+         one the rename was made through. Obtain the group again under the new name.
+
    .. function:: std::string forward_key()
    .. function:: void set_forward_key(std::string value)
 
@@ -49,7 +56,7 @@ ServoGroup
 
    .. function:: SpaceCenter::Vessel vessel()
 
-      The vessel the group belongs to, or ``NULL`` if it is not available.
+      The vessel the group belongs to.
 
       :Game Scenes: Flight
 
@@ -94,7 +101,7 @@ ServoGroup
 
       :Game Scenes: Flight
 
-   .. function:: Servo servo_with_name(std::string name)
+   .. function:: std::optional<Servo> servo_with_name(std::string name)
 
       Returns the servo with the given *name* from this group,
       or ``NULL`` if none exists.

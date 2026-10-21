@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Flight &#8212; kRPC v0.6.0 documentation</title>
+    <title>Flight &#8212; kRPC v0.7.0 documentation</title>
   
   
   
@@ -27,42 +26,43 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+    <script src="../../../_static/documentation_options.js?v=fe7df9b0"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cpp/api/space-center/flight';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.6.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/external-links.js?v=e8892020"></script>
     <script src="../../../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/0.6.0/cpp/api/space-center/flight.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/cpp/api/space-center/flight.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Orbit" href="orbit.html" />
     <link rel="prev" title="CelestialBody" href="celestial-body.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.6.0" />
+  <meta name="docsearch:version" content="0.7.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -110,7 +110,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -153,7 +153,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -262,7 +262,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -293,15 +293,15 @@
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -327,7 +327,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -336,7 +336,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -375,7 +375,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -496,15 +496,15 @@
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -528,7 +528,7 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
   <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
   </svg>
@@ -547,12 +547,14 @@
 <li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../stdlib.html">Standard Library</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="editor.html">Editor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Flight</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Flight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
 <li class="toctree-l2"><a class="reference internal" href="closest-approach.html">Closest Approach</a></li>
 <li class="toctree-l2"><a class="reference internal" href="control.html">Control</a></li>
@@ -571,8 +573,18 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
 </ul>
 </details></li>
@@ -583,6 +595,15 @@
 <li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -605,14 +626,18 @@
 <li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LIDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LIDAR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../debug.html">Debug API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../debug/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
@@ -683,10 +708,10 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6FlightE">
 <span id="_CPPv3N4krpc8services11SpaceCenter6FlightE"></span><span id="_CPPv2N4krpc8services11SpaceCenter6FlightE"></span><span id="krpc::services::SpaceCenter::Flight"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flight</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6FlightE" title="Link to this definition">#</a><br /></dt>
-<dd><p>Used to get flight telemetry for a vessel, by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel6flightE14ReferenceFrame" title="krpc::services::SpaceCenter::Vessel::flight"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::flight()</span></code></a>.
+<dd><p>Used to get flight telemetry for a vessel, by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel6flightENSt8optionalI14ReferenceFrameEE" title="krpc::services::SpaceCenter::Vessel::flight"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::flight()</span></code></a>.
 All of the information returned by this class is given in the reference frame
 passed to that method.
-Obtained by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel6flightE14ReferenceFrame" title="krpc::services::SpaceCenter::Vessel::flight"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::flight()</span></code></a>.</p>
+Obtained by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel6flightENSt8optionalI14ReferenceFrameEE" title="krpc::services::SpaceCenter::Vessel::flight"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::flight()</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>To get orbital information, such as the apoapsis or inclination, see <a class="reference internal" href="orbit.html#_CPPv4N4krpc8services11SpaceCenter5OrbitE" title="krpc::services::SpaceCenter::Orbit"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Orbit</span></code></a>.</p>
@@ -768,6 +793,22 @@ and is negative when the vessel is over the sea.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight14surface_normalEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight14surface_normalEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight14surface_normalEv"></span><span id="krpc::services::SpaceCenter::Flight::surface_normal"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">surface_normal</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight14surface_normalEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The normal to the surface under the vessel, in the reference frame
+<a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>. This describes the slope of the terrain,
+and points straight up when the vessel is over water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The normal as a unit vector.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
 </dd>
 </dl>
 </dd></dl>
@@ -894,8 +935,9 @@ A value between -90° and +90°.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>An absolute Euler angle, ill-conditioned when the vessel points near vertical (pitch →
-±90°), where heading and roll become ambiguous. For an always-defined attitude use
+<p>An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+near -90° or +90°), where heading and roll become ambiguous. For an always-defined
+attitude use
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight8rotationEv" title="krpc::services::SpaceCenter::Flight::rotation"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::rotation()</span></code></a> or <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight9directionEv" title="krpc::services::SpaceCenter::Flight::direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::direction()</span></code></a>.</p>
 </div>
 </dd></dl>
@@ -912,8 +954,9 @@ A value between 0° and 360°.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>An absolute Euler angle, undefined when the vessel points near vertical (pitch → ±90°).
-For an always-defined attitude use <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight8rotationEv" title="krpc::services::SpaceCenter::Flight::rotation"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::rotation()</span></code></a> or <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight9directionEv" title="krpc::services::SpaceCenter::Flight::direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::direction()</span></code></a>.</p>
+<p>An absolute Euler angle, undefined when the vessel points near vertical (a pitch near
+-90° or +90°). For an always-defined attitude use <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight8rotationEv" title="krpc::services::SpaceCenter::Flight::rotation"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::rotation()</span></code></a> or
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight9directionEv" title="krpc::services::SpaceCenter::Flight::direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::direction()</span></code></a>.</p>
 </div>
 </dd></dl>
 
@@ -929,8 +972,9 @@ A value between -180° and +180°.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>An absolute Euler angle, ill-conditioned when the vessel points near vertical (pitch →
-±90°), where the vertical-plane reference vanishes. For an always-defined attitude use
+<p>An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+near -90° or +90°), where the vertical-plane reference vanishes. For an always-defined
+attitude use
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight8rotationEv" title="krpc::services::SpaceCenter::Flight::rotation"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::rotation()</span></code></a>; for a well-defined roll use the auto-pilot’s
 <code class="docutils literal notranslate"><span class="pre">TargetRoll</span></code> / <code class="docutils literal notranslate"><span class="pre">RollError</span></code> against a chosen up reference.</p>
 </div>
@@ -1082,7 +1126,7 @@ in the reference frame <a class="reference internal" href="reference-frame.html#
 <span id="_CPPv3N4krpc8services11SpaceCenter6Flight16dynamic_pressureEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight16dynamic_pressureEv"></span><span id="krpc::services::SpaceCenter::Flight::dynamic_pressure"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dynamic_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight16dynamic_pressureEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The dynamic pressure acting on the vessel, in Pascals. This is a measure of the
 strength of the aerodynamic forces. It is equal to
-½ · air density · velocity².
+<span class="math notranslate nohighlight">\(\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2\)</span>.
 It is commonly denoted <span class="math notranslate nohighlight">\(Q\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1094,7 +1138,23 @@ It is commonly denoted <span class="math notranslate nohighlight">\(Q\)</span>.<
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight15static_pressureEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter6Flight15static_pressureEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight15static_pressureEv"></span><span id="krpc::services::SpaceCenter::Flight::static_pressure"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">static_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight15static_pressureEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The static atmospheric pressure acting on the vessel, in Pascals.</p>
+<dd><p>The static pressure acting on the vessel, in Pascals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Below the waterline this includes the pressure of the water above the vessel’s
+center of mass.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight22static_pressure_at_mslEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight22static_pressure_at_mslEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight22static_pressure_at_mslEv"></span><span id="krpc::services::SpaceCenter::Flight::static_pressure_at_msl"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">static_pressure_at_msl</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight22static_pressure_at_mslEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The static atmospheric pressure at mean sea level, in Pascals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1103,9 +1163,190 @@ It is commonly denoted <span class="math notranslate nohighlight">\(Q\)</span>.<
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight22static_pressure_at_mslEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Flight22static_pressure_at_mslEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight22static_pressure_at_mslEv"></span><span id="krpc::services::SpaceCenter::Flight::static_pressure_at_msl"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">static_pressure_at_msl</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight22static_pressure_at_mslEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The static atmospheric pressure at mean sea level, in Pascals.</p>
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight12displacementEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight12displacementEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight12displacementEv"></span><span id="krpc::services::SpaceCenter::Flight::displacement"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">displacement</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight12displacementEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The volume of water the vessel displaces when fully submerged, in
+<span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight16displaced_volumeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight16displaced_volumeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight16displaced_volumeEv"></span><span id="krpc::services::SpaceCenter::Flight::displaced_volume"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">displaced_volume</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight16displaced_volumeEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The volume of water the vessel is displacing, in <span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight17submerged_portionEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight17submerged_portionEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight17submerged_portionEv"></span><span id="krpc::services::SpaceCenter::Flight::submerged_portion"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submerged_portion</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight17submerged_portionEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The fraction of the vessel below the waterline, between 0 and 1. This is
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight16displaced_volumeEv" title="krpc::services::SpaceCenter::Flight::displaced_volume"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::displaced_volume()</span></code></a> over <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight12displacementEv" title="krpc::services::SpaceCenter::Flight::displacement"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::displacement()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight18center_of_buoyancyEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight18center_of_buoyancyEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight18center_of_buoyancyEv"></span><span id="krpc::services::SpaceCenter::Flight::center_of_buoyancy"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">center_of_buoyancy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight18center_of_buoyancyEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The point the total buoyant force on the vessel acts through, in reference frame
+<a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>. Returns <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if no part of the vessel is in
+the water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The position as a vector.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A hull at rest carries this on the same vertical line as
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight14center_of_massEv" title="krpc::services::SpaceCenter::Flight::center_of_mass"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::center_of_mass()</span></code></a>. A horizontal offset between the two turns the weight
+and the buoyancy into a couple that rolls or pitches the vessel.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight13buoyant_forceEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight13buoyant_forceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight13buoyant_forceEv"></span><span id="krpc::services::SpaceCenter::Flight::buoyant_force"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buoyant_force</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight13buoyant_forceEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The total buoyant force acting on the vessel, in reference frame
+<a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A vessel floating at rest carries a buoyant force equal to its weight.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight20buoyant_accelerationEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight20buoyant_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight20buoyant_accelerationEv"></span><span id="krpc::services::SpaceCenter::Flight::buoyant_acceleration"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buoyant_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight20buoyant_accelerationEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The acceleration of the vessel due to the buoyant force acting on it
+(<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight13buoyant_forceEv" title="krpc::services::SpaceCenter::Flight::buoyant_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::buoyant_force()</span></code></a> divided by the vessel’s mass),
+in reference frame <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight14buoyant_torqueEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight14buoyant_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight14buoyant_torqueEv"></span><span id="krpc::services::SpaceCenter::Flight::buoyant_torque"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buoyant_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight14buoyant_torqueEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The torque the buoyant force exerts on the vessel about its center of mass,
+in reference frame <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight34fully_submerged_center_of_buoyancyEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight34fully_submerged_center_of_buoyancyEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight34fully_submerged_center_of_buoyancyEv"></span><span id="krpc::services::SpaceCenter::Flight::fully_submerged_center_of_buoyancy"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fully_submerged_center_of_buoyancy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight34fully_submerged_center_of_buoyancyEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The point the buoyant force acts through with the vessel fully submerged, in
+reference frame <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>. Returns <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if no part of
+the vessel displaces any water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The position as a vector.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The point is fixed relative to the hull. <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight18center_of_buoyancyEv" title="krpc::services::SpaceCenter::Flight::center_of_buoyancy"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::center_of_buoyancy()</span></code></a> moves as
+the vessel rides the waves.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight16buoyant_force_atEdd">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight16buoyant_force_atEdd"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight16buoyant_force_atEdd"></span><span id="krpc::services::SpaceCenter::Flight::buoyant_force_at__double.double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buoyant_force_at</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">density</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gravity</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight16buoyant_force_atEdd" title="Link to this definition">#</a><br /></dt>
+<dd><p>The buoyant force on the vessel when fully submerged in a fluid of the given
+density, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight17buoyant_torque_atEdd">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight17buoyant_torque_atEdd"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight17buoyant_torque_atEdd"></span><span id="krpc::services::SpaceCenter::Flight::buoyant_torque_at__double.double"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buoyant_torque_at</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">density</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gravity</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight17buoyant_torque_atEdd" title="Link to this definition">#</a><br /></dt>
+<dd><p>The torque the buoyant force exerts about the vessel’s center of mass when fully
+submerged in a fluid of the given density, in reference frame
+<a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>. Gravity acts towards the center of the body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight5depthEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight5depthEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight5depthEv"></span><span id="krpc::services::SpaceCenter::Flight::depth"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">depth</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight5depthEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The depth of the center of mass of the vessel below the waterline, in meters.
+Negative above the waterline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight26submerged_dynamic_pressureEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight26submerged_dynamic_pressureEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight26submerged_dynamic_pressureEv"></span><span id="krpc::services::SpaceCenter::Flight::submerged_dynamic_pressure"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">submerged_dynamic_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight26submerged_dynamic_pressureEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The dynamic pressure of the water acting on the vessel, in Pascals.
+Returns zero if no part of the vessel is below the waterline.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1126,6 +1367,13 @@ in reference frame <a class="reference internal" href="reference-frame.html#_CPP
 <dd class="field-even"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the force the aerodynamics model actually applied to the vessel on the
+last physics frame, summed over its parts, so it points where the air pushes the
+vessel whatever the vessel’s orientation. It equals <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight4liftEv" title="krpc::services::SpaceCenter::Flight::lift"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::lift()</span></code></a> plus
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight10side_forceEv" title="krpc::services::SpaceCenter::Flight::side_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::side_force()</span></code></a> plus <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight4dragEv" title="krpc::services::SpaceCenter::Flight::drag"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::drag()</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1144,14 +1392,11 @@ newton-meters.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is the live counterpart to <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight17aerodynamic_forceEv" title="krpc::services::SpaceCenter::Flight::aerodynamic_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::aerodynamic_force()</span></code></a>: it reconstructs
-the per-part aerodynamic forces and application points that the game applied on
-the current physics frame and levers them about the center of mass, rather than
-re-simulating them for hypothetical conditions the way
+<p>This is the live counterpart to <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight17aerodynamic_forceEv" title="krpc::services::SpaceCenter::Flight::aerodynamic_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::aerodynamic_force()</span></code></a>: it is the torque
+the aerodynamics model applied on the current physics frame, taken about the
+center of mass, rather than one re-simulated for hypothetical conditions the way
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight30simulate_aerodynamic_torque_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEE" title="krpc::services::SpaceCenter::Flight::simulate_aerodynamic_torque_at"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::simulate_aerodynamic_torque_at()</span></code></a> does. It is intended for validating the
-simulator against the live game state. Not available when
-<a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
-is installed, as FAR does not expose a live per-frame torque.</p>
+simulator against the live game state.</p>
 </div>
 </dd></dl>
 
@@ -1216,7 +1461,7 @@ celestial body.</p>
 <p class="admonition-title">Note</p>
 <p>The position, velocity, rotation and angular velocity arguments, and the returned
 torque, are all expressed in reference frame <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>. When
-<a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
+<a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>
 is installed the angular velocity argument is ignored.
 Atmospheric temperature and density are evaluated at the current universal time.</p>
 <p>This is the ideal rigid-body aerodynamic torque, summed from the per-part forces
@@ -1229,7 +1474,7 @@ rather than to the vessel as a rigid body.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight30simulate_aerodynamic_wrench_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEEd">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Flight30simulate_aerodynamic_wrench_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEEd"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight30simulate_aerodynamic_wrench_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEEd"></span><span id="krpc::services::SpaceCenter::Flight::simulate_aerodynamic_wrench_at__CelestialBody.std::tuple:double.double.double:.std::tuple:double.double.double:.std::tuple:double.double.double.double:.std::tuple:double.double.double:.double"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">simulate_aerodynamic_wrench_at</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBodyE" title="krpc::services::SpaceCenter::CelestialBody"><span class="n"><span class="pre">CelestialBody</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">body</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">position</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">velocity</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rotation</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">angular_velocity</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight30simulate_aerodynamic_wrench_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEEd" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight30simulate_aerodynamic_wrench_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEEd"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight30simulate_aerodynamic_wrench_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEEd"></span><span id="krpc::services::SpaceCenter::Flight::simulate_aerodynamic_wrench_at__CelestialBody.std::tuple:double.double.double:.std::tuple:double.double.double:.std::tuple:double.double.double.double:.std::tuple:double.double.double:.double"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6WrenchE" title="krpc::services::SpaceCenter::Wrench"><span class="n"><span class="pre">Wrench</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">simulate_aerodynamic_wrench_at</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBodyE" title="krpc::services::SpaceCenter::CelestialBody"><span class="n"><span class="pre">CelestialBody</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">body</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">position</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">velocity</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rotation</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">angular_velocity</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight30simulate_aerodynamic_wrench_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEEd" title="Link to this definition">#</a><br /></dt>
 <dd><p>Simulate and return the total aerodynamic force and torque acting on the vessel,
 if its center of mass were traveling with the given velocity, at the given position,
 orientation and angular velocity, in the atmosphere of the given celestial body.</p>
@@ -1245,7 +1490,7 @@ orientation and angular velocity, in the atmosphere of the given celestial body.
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A pair containing the aerodynamic force in newtons followed by the aerodynamic torque in newton-meters about the vessel’s center of mass. Both are vectors in reference frame <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>.</p>
+<dd class="field-even"><p>The aerodynamic force, and the aerodynamic torque about the vessel’s center of mass. Both are vectors in reference frame <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1260,7 +1505,7 @@ For future-state prediction, <a class="reference internal" href="celestial-body.
 is recommended so that the spatial state has unambiguous inertial semantics.</p>
 <p>This is an instantaneous rigid-body result based on the vessel’s current parts,
 drag cubes and control-surface state. When
-<a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
+<a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>
 is installed the angular velocity and <em>ut</em> arguments are ignored.</p>
 </div>
 </dd></dl>
@@ -1278,6 +1523,35 @@ currently acting on the vessel.</p>
 <dd class="field-even"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The part of <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight17aerodynamic_forceEv" title="krpc::services::SpaceCenter::Flight::aerodynamic_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::aerodynamic_force()</span></code></a> that acts across the air stream and
+towards the top of the vessel: perpendicular to the air stream, in the plane the
+vessel’s nose and its top sit in. A vessel flying with sideslip is also pushed out
+of that plane, and that part of the force is <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight10side_forceEv" title="krpc::services::SpaceCenter::Flight::side_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::side_force()</span></code></a>. Zero for a
+vessel flying exactly sideways, which has no such plane to speak of.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Flight10side_forceEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Flight10side_forceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Flight10side_forceEv"></span><span id="krpc::services::SpaceCenter::Flight::side_force"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">side_force</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Flight10side_forceEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The aerodynamic side force currently acting on the vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The part of <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight17aerodynamic_forceEv" title="krpc::services::SpaceCenter::Flight::aerodynamic_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::aerodynamic_force()</span></code></a> that acts across the air stream and out
+of the vessel’s side, which is what the air does to a vessel flying with sideslip.
+It is perpendicular to both <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight4liftEv" title="krpc::services::SpaceCenter::Flight::lift"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::lift()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight4dragEv" title="krpc::services::SpaceCenter::Flight::drag"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::drag()</span></code></a>, and the
+three of them sum to <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight17aerodynamic_forceEv" title="krpc::services::SpaceCenter::Flight::aerodynamic_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::aerodynamic_force()</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1292,6 +1566,11 @@ currently acting on the vessel.</p>
 <dd class="field-even"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The part of <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Flight17aerodynamic_forceEv" title="krpc::services::SpaceCenter::Flight::aerodynamic_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::aerodynamic_force()</span></code></a> along the air stream, opposing the
+vessel’s motion through the air.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1375,7 +1654,7 @@ in reference frame <a class="reference internal" href="reference-frame.html#_CPP
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.</p>
+<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>.</p>
 </div>
 </dd></dl>
 
@@ -1474,7 +1753,7 @@ a minor stall and a value greater than 0.5 indicates a large-scale stall.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.</p>
+<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>.</p>
 </div>
 </dd></dl>
 
@@ -1490,7 +1769,7 @@ It depends on air speed, air density and wing area.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.</p>
+<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>.</p>
 </div>
 </dd></dl>
 
@@ -1506,7 +1785,7 @@ depends on air speed, air density and wing area.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.</p>
+<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>.</p>
 </div>
 </dd></dl>
 
@@ -1521,7 +1800,7 @@ depends on air speed, air density and wing area.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.</p>
+<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>.</p>
 </div>
 </dd></dl>
 
@@ -1539,8 +1818,26 @@ per hour, to produce one newton of thrust.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.</p>
+<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/">Ferram Aerospace Research</a>.</p>
 </div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6WrenchE">
+<span id="_CPPv3N4krpc8services11SpaceCenter6WrenchE"></span><span id="_CPPv2N4krpc8services11SpaceCenter6WrenchE"></span><span id="krpc::services::SpaceCenter::Wrench"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Wrench</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6WrenchE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A force and a torque that act together.</p>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Wrench5forceE">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Wrench5forceE"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Wrench5forceE"></span><span id="krpc::services::SpaceCenter::Wrench::force__std::tuple:double.double.double:"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">force</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Wrench5forceE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force, in Newtons.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Wrench6torqueE">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Wrench6torqueE"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Wrench6torqueE"></span><span id="krpc::services::SpaceCenter::Wrench::torque__std::tuple:double.double.double:"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">torque</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Wrench6torqueE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The torque, in Newton meters.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1608,8 +1905,8 @@ per hour, to produce one newton of thrust.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1629,8 +1926,7 @@ per hour, to produce one newton of thrust.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    <br/>
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
   </p>
 </div>
       
@@ -1643,7 +1939,7 @@ per hour, to produce one newton of thrust.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
 </p></div>
       
     </div>

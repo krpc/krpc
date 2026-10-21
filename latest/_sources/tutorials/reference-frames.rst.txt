@@ -1,4 +1,4 @@
-.. csharp:namespace:: KRPC.Client.Services.SpaceCenter
+.. cs:namespace:: KRPC.Client.Services.SpaceCenter
 .. cpp:namespace:: krpc::services::SpaceCenter
 .. java:package:: krpc.client.services.SpaceCenter
 .. lua:currentmodule:: SpaceCenter
@@ -176,19 +176,24 @@ kRPC provides the following reference frames:
 
    .. tab:: C#
 
-      * :csharp:prop:`Vessel.ReferenceFrame`
-      * :csharp:prop:`Vessel.OrbitalReferenceFrame`
-      * :csharp:prop:`Vessel.SurfaceReferenceFrame`
-      * :csharp:prop:`Vessel.SurfaceVelocityReferenceFrame`
-      * :csharp:prop:`CelestialBody.ReferenceFrame`
-      * :csharp:prop:`CelestialBody.NonRotatingReferenceFrame`
-      * :csharp:prop:`CelestialBody.OrbitalReferenceFrame`
-      * :csharp:prop:`Node.ReferenceFrame`
-      * :csharp:prop:`Node.OrbitalReferenceFrame`
-      * :csharp:prop:`Part.ReferenceFrame`
-      * :csharp:prop:`Part.CenterOfMassReferenceFrame`
-      * :csharp:prop:`DockingPort.ReferenceFrame`
-      * :csharp:prop:`Thruster.ThrustReferenceFrame`
+      * :cs:prop:`Vessel.ReferenceFrame`
+      * :cs:prop:`Vessel.OrbitalReferenceFrame`
+      * :cs:prop:`Vessel.SurfaceReferenceFrame`
+      * :cs:prop:`Vessel.SurfaceVelocityReferenceFrame`
+      * :cs:prop:`Vessel.OrbitSpeedReferenceFrame`
+      * :cs:prop:`Vessel.SurfaceSpeedReferenceFrame`
+      * :cs:prop:`Vessel.TargetSpeedReferenceFrame`
+      * :cs:prop:`CelestialBody.ReferenceFrame`
+      * :cs:prop:`CelestialBody.NonRotatingReferenceFrame`
+      * :cs:prop:`CelestialBody.OrbitalReferenceFrame`
+      * :cs:prop:`Orbit.ReferenceFrame`
+      * :cs:prop:`Orbit.OrbitalReferenceFrame`
+      * :cs:prop:`Node.ReferenceFrame`
+      * :cs:prop:`Node.OrbitalReferenceFrame`
+      * :cs:prop:`Part.ReferenceFrame`
+      * :cs:prop:`Part.CenterOfMassReferenceFrame`
+      * :cs:prop:`DockingPort.ReferenceFrame`
+      * :cs:prop:`Thruster.ThrustReferenceFrame`
 
    .. tab:: C++
 
@@ -196,9 +201,14 @@ kRPC provides the following reference frames:
       * :cpp:func:`Vessel::orbital_reference_frame`
       * :cpp:func:`Vessel::surface_reference_frame`
       * :cpp:func:`Vessel::surface_velocity_reference_frame`
+      * :cpp:func:`Vessel::orbit_speed_reference_frame`
+      * :cpp:func:`Vessel::surface_speed_reference_frame`
+      * :cpp:func:`Vessel::target_speed_reference_frame`
       * :cpp:func:`CelestialBody::reference_frame`
       * :cpp:func:`CelestialBody::non_rotating_reference_frame`
       * :cpp:func:`CelestialBody::orbital_reference_frame`
+      * :cpp:func:`Orbit::reference_frame`
+      * :cpp:func:`Orbit::orbital_reference_frame`
       * :cpp:func:`Node::reference_frame`
       * :cpp:func:`Node::orbital_reference_frame`
       * :cpp:func:`Part::reference_frame`
@@ -212,9 +222,14 @@ kRPC provides the following reference frames:
       * :c:func:`krpc_SpaceCenter_Vessel_OrbitalReferenceFrame`
       * :c:func:`krpc_SpaceCenter_Vessel_SurfaceReferenceFrame`
       * :c:func:`krpc_SpaceCenter_Vessel_SurfaceVelocityReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Vessel_OrbitSpeedReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Vessel_SurfaceSpeedReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Vessel_TargetSpeedReferenceFrame`
       * :c:func:`krpc_SpaceCenter_CelestialBody_ReferenceFrame`
       * :c:func:`krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame`
       * :c:func:`krpc_SpaceCenter_CelestialBody_OrbitalReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Orbit_ReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Orbit_OrbitalReferenceFrame`
       * :c:func:`krpc_SpaceCenter_Node_ReferenceFrame`
       * :c:func:`krpc_SpaceCenter_Node_OrbitalReferenceFrame`
       * :c:func:`krpc_SpaceCenter_Part_ReferenceFrame`
@@ -228,9 +243,14 @@ kRPC provides the following reference frames:
       * :java:meth:`Vessel.getOrbitalReferenceFrame`
       * :java:meth:`Vessel.getSurfaceReferenceFrame`
       * :java:meth:`Vessel.getSurfaceVelocityReferenceFrame`
+      * :java:meth:`Vessel.getOrbitSpeedReferenceFrame`
+      * :java:meth:`Vessel.getSurfaceSpeedReferenceFrame`
+      * :java:meth:`Vessel.getTargetSpeedReferenceFrame`
       * :java:meth:`CelestialBody.getReferenceFrame`
       * :java:meth:`CelestialBody.getNonRotatingReferenceFrame`
       * :java:meth:`CelestialBody.getOrbitalReferenceFrame`
+      * :java:meth:`Orbit.getReferenceFrame`
+      * :java:meth:`Orbit.getOrbitalReferenceFrame`
       * :java:meth:`Node.getReferenceFrame`
       * :java:meth:`Node.getOrbitalReferenceFrame`
       * :java:meth:`Part.getReferenceFrame`
@@ -244,9 +264,14 @@ kRPC provides the following reference frames:
       * :lua:attr:`SpaceCenter.Vessel.orbital_reference_frame`
       * :lua:attr:`SpaceCenter.Vessel.surface_reference_frame`
       * :lua:attr:`SpaceCenter.Vessel.surface_velocity_reference_frame`
+      * :lua:attr:`SpaceCenter.Vessel.orbit_speed_reference_frame`
+      * :lua:attr:`SpaceCenter.Vessel.surface_speed_reference_frame`
+      * :lua:attr:`SpaceCenter.Vessel.target_speed_reference_frame`
       * :lua:attr:`SpaceCenter.CelestialBody.reference_frame`
       * :lua:attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame`
       * :lua:attr:`SpaceCenter.CelestialBody.orbital_reference_frame`
+      * :lua:attr:`SpaceCenter.Orbit.reference_frame`
+      * :lua:attr:`SpaceCenter.Orbit.orbital_reference_frame`
       * :lua:attr:`SpaceCenter.Node.reference_frame`
       * :lua:attr:`SpaceCenter.Node.orbital_reference_frame`
       * :lua:attr:`SpaceCenter.Part.reference_frame`
@@ -260,9 +285,14 @@ kRPC provides the following reference frames:
       * :py:attr:`Vessel.orbital_reference_frame`
       * :py:attr:`Vessel.surface_reference_frame`
       * :py:attr:`Vessel.surface_velocity_reference_frame`
+      * :py:attr:`Vessel.orbit_speed_reference_frame`
+      * :py:attr:`Vessel.surface_speed_reference_frame`
+      * :py:attr:`Vessel.target_speed_reference_frame`
       * :py:attr:`CelestialBody.reference_frame`
       * :py:attr:`CelestialBody.non_rotating_reference_frame`
       * :py:attr:`CelestialBody.orbital_reference_frame`
+      * :py:attr:`Orbit.reference_frame`
+      * :py:attr:`Orbit.orbital_reference_frame`
       * :py:attr:`Node.reference_frame`
       * :py:attr:`Node.orbital_reference_frame`
       * :py:attr:`Part.reference_frame`
@@ -294,6 +324,13 @@ orbited (inherited from :attr:`CelestialBody.reference_frame`). Hybrid
 reference frames can be constructed by calling
 :meth:`ReferenceFrame.create_hybrid`.
 
+Each call returns a new frame, and the server holds it until the client removes
+it or disconnects. Call :meth:`ReferenceFrame.remove` on a frame once you are
+done with it.
+
+A frame that follows a moving object inherits that component from the frame of
+the object itself, instead of being constructed again on every update.
+
 The parent reference frame(s) of a custom reference frame can also be other
 custom reference frames. For example, you could combine the two example frames
 from above: construct a hybrid reference frame, centered on the vessel and
@@ -313,10 +350,10 @@ velocities between the different reference frames:
 
    .. tab:: C#
 
-      * :csharp:meth:`SpaceCenter.TransformPosition`
-      * :csharp:meth:`SpaceCenter.TransformDirection`
-      * :csharp:meth:`SpaceCenter.TransformRotation`
-      * :csharp:meth:`SpaceCenter.TransformVelocity`
+      * :cs:meth:`SpaceCenter.TransformPosition`
+      * :cs:meth:`SpaceCenter.TransformDirection`
+      * :cs:meth:`SpaceCenter.TransformRotation`
+      * :cs:meth:`SpaceCenter.TransformVelocity`
 
    .. tab:: C++
 
@@ -360,10 +397,11 @@ References frames can be confusing, and choosing the correct one is a challenge
 in itself. To aid debugging, kRPCs drawing functionality can be used to
 visualize direction vectors in-game.
 
-:meth:`Drawing.add_direction_from_com` will draw a direction vector, starting from the
-center of mass of the active vessel. For example, the following code draws the
-direction of the current vessels velocity relative to the surface of the body it
-is orbiting:
+:meth:`Drawing.add_axes` draws the axes of a reference frame as red, green and blue
+arrows, for the x, y and z axes. :meth:`Drawing.add_direction_from_com` draws a
+direction vector, starting from the center of mass of the active vessel. The
+following code draws the axes of :attr:`Vessel.surface_reference_frame`, and a
+labeled arrow in the direction of the vessel's velocity relative to the surface:
 
 .. tabs::
 
@@ -612,6 +650,11 @@ rotates with the body.
       .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.py
          :language: python
 
+.. seealso:: :attr:`Vessel.orbit_speed_reference_frame` and
+   :attr:`Vessel.surface_speed_reference_frame` give the same two speeds
+   directly, in frames centered on the vessel and oriented like the navball is in
+   each mode. See :ref:`tutorial-reference-frames-navball-speed`.
+
 .. _tutorial-reference-frames-vessel-velocity:
 
 Vessel Velocity
@@ -661,6 +704,77 @@ the body.
 
       .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.py
          :language: python
+
+.. seealso:: :attr:`Vessel.surface_speed_reference_frame` gives the same velocity
+   without constructing a frame, although in its own prograde/normal/radial axes
+   rather than as upwards, north and east components. See
+   :ref:`tutorial-reference-frames-navball-speed`.
+
+.. _tutorial-reference-frames-navball-speed:
+
+Navball speed modes
+^^^^^^^^^^^^^^^^^^^
+
+The navball measures speed against one of three things, depending on the speed
+mode it is in: the body being orbited ('orbit' mode), the surface of that body
+('surface' mode) or the vessel's target ('target' mode).
+:attr:`Vessel.orbit_speed_reference_frame`,
+:attr:`Vessel.surface_speed_reference_frame` and
+:attr:`Vessel.target_speed_reference_frame` are reference frames that move with
+each of these in turn.
+
+The velocity of the vessel in one of them is therefore the velocity the navball
+shows in that mode, and :attr:`Flight.speed` is the speed it displays.
+
+Each frame is also oriented like the navball is in that mode, in the same
+arrangement as :attr:`Vessel.orbital_reference_frame`: the y-axis points where
+the prograde marker does, the z-axis where the normal marker does and the x-axis
+in the anti-radial direction, towards the body. A direction of
+``(0,1,0)`` in the frame is therefore prograde and ``(0,-1,0)`` is
+retrograde, whichever mode the frame is for, and the velocity of the vessel in
+the frame points along its y-axis.
+
+Because the velocity gives these frames their orientation, they are singular
+when it is zero: the surface speed frame cannot be used by a vessel that is
+stationary on the ground, nor the target speed frame by one that has matched
+velocity with its target.
+
+This example prints the speeds the navball shows in orbit and surface modes:
+
+.. tabs::
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.cs
+         :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.cpp
+         :language: cpp
+
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.c
+         :language: c
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.java
+         :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.lua
+         :language: lua
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.py
+         :language: python
+
+.. note:: :attr:`Vessel.target_speed_reference_frame` requires a target to be
+   set, and raises an error otherwise.
 
 Angle of attack
 ^^^^^^^^^^^^^^^
@@ -716,8 +830,10 @@ which is the signed angle of attack in the vessel's pitch plane, in the range
 Landing Site
 ^^^^^^^^^^^^
 
-This example computes a reference frame that is located on the surface of a body
+This example creates a reference frame that is located on the surface of a body
 at a given altitude, which could be used as the target for a landing auto pilot.
+:meth:`CelestialBody.surface_reference_frame` creates the frame, and
+:meth:`Drawing.add_axes` draws it.
 
 .. tabs::
 

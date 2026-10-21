@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Java Client &#8212; kRPC v0.7.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../_static/documentation_options.js?v=fe7df9b0"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'java/client';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <script src="../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/java/client.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="KRPC API" href="api/krpc.html" />
+    <link rel="prev" title="Java" href="../java.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.7.0" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Java Client</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/krpc/krpc.html">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="api/stdlib.html">Standard Library</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/space-center.html">SpaceCenter API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/space-center.html">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/editor.html">Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/flight.html">Flight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/control.html">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/point.html">Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/sphere.html">Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/size-fitter.html">Size Fitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/lidar.html">LIDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/lidar/lidar.html">LIDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/debug.html">Debug API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/debug/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../java.html" class="nav-link">Java</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Java Client</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="java-client">
+<h1>Java Client<a class="headerlink" href="#java-client" title="Link to this heading">#</a></h1>
+<p>This client provides a Java API for interacting with a kRPC server. A jar containing the
+<code class="docutils literal notranslate"><span class="pre">krpc.client</span></code> package can be <a class="reference external" href="https://github.com/krpc/krpc/releases">downloaded from GitHub</a>.
+It requires Java 17 or later.</p>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
+<p>The kRPC client library depends on the <a class="reference external" href="https://github.com/protocolbuffers/protobuf/tree/main/java">protobuf</a> and <a class="reference external" href="https://github.com/arxila/javatuples">javatuples</a> libraries. A prebuilt jar for protobuf is available via <a class="reference external" href="https://central.sonatype.com/artifact/com.google.protobuf/protobuf-java">Maven</a>.</p>
+<p>The following example program connects to the server, queries it for its version and prints it out:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Basic</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">KRPC</span><span class="w"> </span><span class="n">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KRPC</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Connected to kRPC version "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="na">getStatus</span><span class="p">().</span><span class="na">getVersion</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To compile this program using javac on the command line, save the source as <code class="docutils literal notranslate"><span class="pre">Example.java</span></code> and run
+the following:</p>
+<pre class="literal-block">javac -cp krpc-java-0.7.0.jar:protobuf-java-4.36.2.jar:javatuples-1.2.jar Example.java</pre>
+<p>Note that you may need to change the paths to the JAR files.</p>
+<section id="connecting-to-the-server">
+<h3>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h3>
+<p>To connect to a server, call <a class="reference internal" href="#krpc.client.Connection.newInstance()" title="krpc.client.Connection.newInstance()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.newInstance()</span></code></a> which returns a connection object. All
+interaction with the server is done via this object. When constructed without any arguments, it will
+connect to the local machine on the default port numbers. You can specify different connection
+settings, and also a descriptive name for the connection, as follows:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Connecting</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">"Remote example"</span><span class="p">,</span><span class="w"> </span><span class="s">"my.domain.name"</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1001</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">KRPC</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">).</span><span class="na">getStatus</span><span class="p">().</span><span class="na">getVersion</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="calling-remote-procedures">
+<h2>Calling Remote Procedures<a class="headerlink" href="#calling-remote-procedures" title="Link to this heading">#</a></h2>
+<p>The kRPC server provides <em>procedures</em> that a client can run. These procedures are arranged in groups
+called <em>services</em> to keep things organized. The functionality for the services are defined in the
+package <code class="docutils literal notranslate"><span class="pre">krpc.client.services</span></code>. For example, all of the functionality provided by the
+<code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code> service is contained in the class <code class="docutils literal notranslate"><span class="pre">krpc.client.services.SpaceCenter</span></code>.</p>
+<p>To interact with a service, you must first instantiate it. You can then call its methods and
+properties to invoke remote procedures. The following example demonstrates how to do this. It
+instantiates the <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code> service and calls
+<a class="reference internal" href="api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getActiveVessel()" title="krpc.client.services.SpaceCenter.SpaceCenter.getActiveVessel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">krpc.client.services.SpaceCenter.SpaceCenter.getActiveVessel()</span></code></a> to get an object representing
+the active vessel (of type <a class="reference internal" href="api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><code class="xref java java-type docutils literal notranslate"><span class="pre">krpc.client.services.SpaceCenter.Vessel</span></code></a>). It sets the name of the
+vessel and then prints out its altitude:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Vessel</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RemoteProcedures</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">"Vessel Name"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">();</span>
+<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getName</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Many procedures return an object identifying something in the game, such as a vessel or
+a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for how such an object
+behaves when a game is loaded or what it identifies is destroyed.</p>
+</section>
+<section id="server-side-functions">
+<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
+<p>A server side function is code that runs inside the game, on the server. <a class="reference internal" href="#krpc.client.Connection.run(KRPC.Expression, Object)" title="krpc.client.Connection.run(KRPC.Expression, Object)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.run</span></code></a>
+evaluates one once and returns its value. Every value it reads comes from the same physics tick. For
+example, the following reads the vessel’s altitude and speed together:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Arrays</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Flight</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Vessel</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.schema.KRPC.ProcedureCall</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.javatuples.Pair</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">RunFunction</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">).</span><span class="na">getActiveVessel</span><span class="p">();</span>
+<span class="w">      </span><span class="n">Flight</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">flight</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getOrbit</span><span class="p">().</span><span class="na">getBody</span><span class="p">().</span><span class="na">getReferenceFrame</span><span class="p">());</span>
+
+<span class="w">      </span><span class="c1">// Get the remote procedure calls as message objects,</span>
+<span class="w">      </span><span class="c1">// so they can be passed to the server</span>
+<span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getMeanAltitude"</span><span class="p">);</span>
+<span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getSpeed"</span><span class="p">);</span>
+
+<span class="w">      </span><span class="c1">// Build a function that reads the altitude and the speed</span>
+<span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">createTuple</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">Arrays</span><span class="p">.</span><span class="na">asList</span><span class="p">(</span>
+<span class="w">          </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">meanAltitude</span><span class="p">),</span>
+<span class="w">          </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">speed</span><span class="p">)));</span>
+
+<span class="w">      </span><span class="c1">// Run the function once, so both values come from the same physics tick</span>
+<span class="w">      </span><span class="n">Pair</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="w"> </span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">run</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span>
+<span class="w">          </span><span class="s">"Altitude: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="na">getValue0</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" m, speed: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">result</span><span class="p">.</span><span class="na">getValue1</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" m/s"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">run</span></code> for a function with effects, such as setting a property. An event or a function stream
+evaluates its function on every update, repeating the effects.</p>
+<p>The <a class="reference internal" href="../tutorials/server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">server side functions tutorial</span></a> shows how to build
+larger functions.</p>
+</section>
+<section id="streaming-data">
+<span id="java-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
+<p>A common use case for kRPC is to continuously extract data from the game. The naive approach to do
+this would be to repeatedly call a remote procedure, such as in the following which repeatedly
+prints the position of the active vessel:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.ReferenceFrame</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Vessel</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Streaming1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">();</span>
+<span class="w">      </span><span class="n">ReferenceFrame</span><span class="w"> </span><span class="n">refframe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getOrbit</span><span class="p">().</span><span class="na">getBody</span><span class="p">().</span><span class="na">getReferenceFrame</span><span class="p">();</span>
+<span class="w">      </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">position</span><span class="p">(</span><span class="n">refframe</span><span class="p">));</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This approach requires significant communication overhead as request/response messages are
+repeatedly sent between the client and server. kRPC provides a more efficient mechanism to achieve
+this, called <em>streams</em>.</p>
+<p>A stream repeatedly executes a procedure on the server (with a fixed set of argument values) and
+sends the result to the client. It only requires a single message to be sent to the server to
+establish the stream, which will then continuously send data to the client until the stream is
+closed.</p>
+<p>The following example does the same thing as above using streams:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Stream</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.ReferenceFrame</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Vessel</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">org.javatuples.Triplet</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Streaming2</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="p">,</span><span class="w"> </span><span class="n">StreamException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">();</span>
+<span class="w">      </span><span class="n">ReferenceFrame</span><span class="w"> </span><span class="n">refframe</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getOrbit</span><span class="p">().</span><span class="na">getBody</span><span class="p">().</span><span class="na">getReferenceFrame</span><span class="p">();</span>
+<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Triplet</span><span class="o">&lt;</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="p">,</span><span class="n">Double</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">vesselStream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="s">"position"</span><span class="p">,</span><span class="w"> </span><span class="n">refframe</span><span class="p">);</span>
+<span class="w">      </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">vesselStream</span><span class="p">.</span><span class="na">get</span><span class="p">());</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It calls <a class="reference internal" href="#krpc.client.Connection.addStream(KRPC.Expression)" title="krpc.client.Connection.addStream(KRPC.Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a> once at the start of the program to create the stream, and
+then repeatedly prints the position returned by the stream. The stream is automatically closed when
+the client disconnects.</p>
+<p>A stream can be created for any method call by calling <a class="reference internal" href="#krpc.client.Connection.addStream(KRPC.Expression)" title="krpc.client.Connection.addStream(KRPC.Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a> and passing it
+information about which method to stream. The example above passes a remote object, the name of the
+method to call, followed by the arguments to pass to the method (if
+any). <a class="reference internal" href="#krpc.client.Connection.addStream(KRPC.Expression)" title="krpc.client.Connection.addStream(KRPC.Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a> returns a stream object of type <a class="reference internal" href="#krpc.client.Stream" title="krpc.client.Stream"><code class="xref java java-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. The most recent
+value of the stream can be obtained by calling <a class="reference internal" href="#krpc.client.Stream.get()" title="krpc.client.Stream.get()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Stream.get</span></code></a>. A stream can be stopped and
+removed from the server by calling <a class="reference internal" href="#krpc.client.Stream.remove()" title="krpc.client.Stream.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Stream.remove</span></code></a> on the stream object. All of a clients
+streams are automatically stopped when it disconnects.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A stream runs on the server until you remove it or the connection closes, even once the stream
+object is garbage collected. Each call to <code class="docutils literal notranslate"><span class="pre">addStream</span></code> adds another stream.</p>
+</div>
+<section id="synchronizing-with-stream-updates">
+<h3>Synchronizing with Stream Updates<a class="headerlink" href="#synchronizing-with-stream-updates" title="Link to this heading">#</a></h3>
+<p>A common use case for kRPC is to wait until the value returned by a method or attribute changes, and
+then take some action. kRPC provides two mechanisms to do this efficiently: <em>condition variables</em>
+and <em>callbacks</em>.</p>
+<section id="condition-variables">
+<h4>Condition Variables<a class="headerlink" href="#condition-variables" title="Link to this heading">#</a></h4>
+<p>Each stream has a condition variable that is notified whenever the value of the stream changes, and
+when the stream ends. You can wait on it to block the current thread until one of these happens.</p>
+<p>The following example waits until the abort button is pressed in game, by waiting for the value of
+<a class="reference internal" href="api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getAbort()" title="krpc.client.services.SpaceCenter.Control.getAbort()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">krpc.client.services.SpaceCenter.Control.getAbort()</span></code></a> to change to true:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Stream</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Control</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ConditionVariables</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="p">,</span><span class="w"> </span><span class="n">StreamException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Control</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">getControl</span><span class="p">();</span>
+<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">abort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="s">"getAbort"</span><span class="p">);</span>
+<span class="w">      </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">abort</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">abort</span><span class="p">.</span><span class="na">get</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">abort</span><span class="p">.</span><span class="na">waitForUpdate</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This code creates a stream, acquires a lock on the streams condition variable (by using a
+<code class="docutils literal notranslate"><span class="pre">synchronized</span></code> block) and then repeatedly checks the value of <code class="docutils literal notranslate"><span class="pre">getAbort</span></code>. It leaves the loop
+when it changes to true.</p>
+<p>The body of the loop calls <code class="docutils literal notranslate"><span class="pre">waitForUpdate</span></code> on the stream, which causes the program to block until
+the value changes. This prevents the loop from ‘spinning’ and so it does not consume processing
+resources whilst waiting.</p>
+</section>
+<section id="callbacks">
+<h4>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading">#</a></h4>
+<p>Streams allow you to register callback functions that are called whenever the value of the stream
+changes. Callback functions should take a single argument, which is the new value of the stream, and
+should return nothing.</p>
+<p>For example the following program registers two callbacks that are invoked when the value of
+<a class="reference internal" href="api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getAbort()" title="krpc.client.services.SpaceCenter.Control.getAbort()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">krpc.client.services.SpaceCenter.Control.getAbort()</span></code></a> changes:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Stream</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Control</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Callbacks</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="p">,</span><span class="w"> </span><span class="n">StreamException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Control</span><span class="w"> </span><span class="n">control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">getControl</span><span class="p">();</span>
+<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">abort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="s">"getAbort"</span><span class="p">);</span>
+<span class="w">      </span><span class="n">abort</span><span class="p">.</span><span class="na">addCallback</span><span class="p">(</span>
+<span class="w">        </span><span class="p">(</span><span class="n">Boolean</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Abort 1 called with a value of "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+<span class="w">        </span><span class="p">});</span>
+<span class="w">      </span><span class="n">abort</span><span class="p">.</span><span class="na">addCallback</span><span class="p">(</span>
+<span class="w">        </span><span class="p">(</span><span class="n">Boolean</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Abort 2 called with a value of "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+<span class="w">        </span><span class="p">});</span>
+
+<span class="w">      </span><span class="c1">// Keep the program running...</span>
+<span class="w">      </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A callback added to a stream that already has a value is called with that value straight away.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The callback function may be called from a different thread than the one that created the
+stream. Any changes to shared state must therefore be protected with appropriate
+synchronization.</p>
+</div>
+</section>
+</section>
+<section id="stream-endings">
+<h3>Stream Endings<a class="headerlink" href="#stream-endings" title="Link to this heading">#</a></h3>
+<p>The following example streams the temperature of a part until the part is destroyed:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Stream</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Part</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">StreamEnd</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="p">,</span><span class="w"> </span><span class="n">StreamException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">getParts</span><span class="p">().</span><span class="na">getRoot</span><span class="p">();</span>
+<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">temperature</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">part</span><span class="p">,</span><span class="w"> </span><span class="s">"getTemperature"</span><span class="p">);</span>
+<span class="w">      </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">temperature</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">temperature</span><span class="p">.</span><span class="na">waitForUpdate</span><span class="p">();</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Temperature "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">temperature</span><span class="p">.</span><span class="na">get</span><span class="p">());</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">KRPC</span><span class="p">.</span><span class="na">ObjectDestroyedException</span><span class="w"> </span><span class="n">exn</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"The part was destroyed"</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Once a stream ends, getting its value or waiting on it throws the exception that ended it. A stream
+ends when its procedure throws an exception, when the server removes it, when you remove it, or when
+the connection closes.</p>
+<p>A stream that the server removes, such as an event that has finished, ends with
+<code class="docutils literal notranslate"><span class="pre">KRPC.StreamRemovedException</span></code>. A stream you remove ends with a <code class="docutils literal notranslate"><span class="pre">StreamException</span></code>. A closed
+connection ends it with a <code class="docutils literal notranslate"><span class="pre">StreamException</span></code> whose cause is a <code class="docutils literal notranslate"><span class="pre">ConnectionException</span></code>.</p>
+<p>An exception for an object that is not loaded, or a procedure not available in the game scene,
+holds the stream instead. It resumes once the object or scene is available.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a></p>
+</div>
+<p>To handle an ending in a callback, add an end callback with <a class="reference internal" href="#krpc.client.Stream.addEndCallback(java.util.function.Consumer)" title="krpc.client.Stream.addEndCallback(java.util.function.Consumer)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Stream.addEndCallback</span></code></a>. It is
+called once, with the exception.</p>
+</section>
+<section id="streaming-server-side-functions">
+<h3>Streaming Server Side Functions<a class="headerlink" href="#streaming-server-side-functions" title="Link to this heading">#</a></h3>
+<p>Pass a server side function to <a class="reference internal" href="#krpc.client.Connection.addStream(KRPC.Expression)" title="krpc.client.Connection.addStream(KRPC.Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a> to stream its value. The server
+evaluates the function on each stream update, within one physics tick. The value can be any type
+the server can send, including collections and objects. For example, the following streams the
+vessel’s altitude in kilometers:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Stream</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Flight</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">FunctionStream</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span>
+<span class="w">      </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="p">,</span><span class="w"> </span><span class="n">StreamException</span><span class="p">,</span><span class="w"> </span><span class="n">InterruptedException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Flight</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+
+<span class="w">      </span><span class="c1">// Build a function that computes</span>
+<span class="w">      </span><span class="c1">// the vessel's altitude in kilometers</span>
+<span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">divide</span><span class="p">(</span>
+<span class="w">          </span><span class="n">connection</span><span class="p">,</span>
+<span class="w">          </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getMeanAltitude"</span><span class="p">)),</span>
+<span class="w">          </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
+
+<span class="w">      </span><span class="c1">// Stream the value of the function</span>
+<span class="w">      </span><span class="n">Stream</span><span class="o">&lt;</span><span class="n">Double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addStream</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">      </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Altitude: "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">stream</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" km"</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The type parameter must be able to hold the function’s value. Otherwise the assignment of a value
+throws a <code class="docutils literal notranslate"><span class="pre">ClassCastException</span></code>.</p>
+<p>A function stream or event ends on any exception its function throws. This includes
+<code class="docutils literal notranslate"><span class="pre">KRPC.ObjectNotLoadedException</span></code>, which a game load or an unloaded vessel causes. To keep running
+through a load, the function catches that exception with <code class="docutils literal notranslate"><span class="pre">Expression.tryCatch</span></code>.</p>
+</section>
+</section>
+<section id="events">
+<span id="java-client-events"></span><h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
+<p>Some procedures return event objects of type <a class="reference internal" href="#krpc.client.Event" title="krpc.client.Event"><code class="xref java java-type docutils literal notranslate"><span class="pre">Event</span></code></a>. These allow you to wait
+until an event occurs, by calling <a class="reference internal" href="#krpc.client.Event.waitFor()" title="krpc.client.Event.waitFor()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Event.waitFor</span></code></a>. Under the hood, these are
+implemented using streams and condition variables.</p>
+<p>A call to <code class="docutils literal notranslate"><span class="pre">waitFor</span></code> returns straight away if the event has fired since the previous call on the
+same event object, so no firing is missed between two calls. Several firings between two calls make
+<code class="docutils literal notranslate"><span class="pre">waitFor</span></code> return once.</p>
+<p>You can also create a custom event from a server side function. The following builds the function
+<code class="docutils literal notranslate"><span class="pre">MeanAltitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code>, and creates an event that triggers when the function returns true:</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Event</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Flight</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.schema.KRPC.ProcedureCall</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CustomEvent</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="p">,</span><span class="w"> </span><span class="n">StreamException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Flight</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">().</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+
+<span class="w">      </span><span class="c1">// Get the remote procedure call as a message object,</span>
+<span class="w">      </span><span class="c1">// so it can be passed to the server</span>
+<span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getMeanAltitude"</span><span class="p">);</span>
+
+<span class="w">      </span><span class="c1">// Build the function on the server</span>
+<span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">greaterThan</span><span class="p">(</span>
+<span class="w">        </span><span class="n">connection</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">meanAltitude</span><span class="p">),</span>
+<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
+
+<span class="w">      </span><span class="n">Event</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">      </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">event</span><span class="p">.</span><span class="na">waitFor</span><span class="p">();</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Altitude reached 1000m"</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="client-api-reference">
+<h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
+<dl class="java type" id="package-krpc.client">
+<dt class="sig sig-object java" id="krpc.client.Connection">
+ <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Connection</span></span><a class="headerlink" href="#krpc.client.Connection" title="Link to this definition">#</a></dt>
+<dd><p>A connection to the kRPC server. All interaction with kRPC is performed via an instance of this
+class.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newInstance()">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newInstance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newInstance()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newInstance(String)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newInstance(String)" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newInstance(String, String)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">address</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newInstance(String, String)" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newInstance(String, String, int, int)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">address</span></em>, <span class="pre">int</span><em> <span class="pre">rpcPort</span></em>, <span class="pre">int</span><em> <span class="pre">streamPort</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newInstance(String, String, int, int)" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newInstance(String, java.net.InetAddress)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/net/package-summary.html" title="java.net.package-summary"><span class="pre">net</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/net/InetAddress.html" title="java.net.InetAddress"><span class="pre">InetAddress</span></a><em> <span class="pre">address</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newInstance(String, java.net.InetAddress)" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newInstance(String, java.net.InetAddress, int, int)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/net/package-summary.html" title="java.net.package-summary"><span class="pre">net</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/net/InetAddress.html" title="java.net.InetAddress"><span class="pre">InetAddress</span></a><em> <span class="pre">address</span></em>, <span class="pre">int</span><em> <span class="pre">rpcPort</span></em>, <span class="pre">int</span><em> <span class="pre">streamPort</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newInstance(String, java.net.InetAddress, int, int)" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newInstance(String, String, int, int, java.time.Duration)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">address</span></em>, <span class="pre">int</span><em> <span class="pre">rpcPort</span></em>, <span class="pre">int</span><em> <span class="pre">streamPort</span></em>, <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html" title="java.time.package-summary"><span class="pre">time</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html" title="java.time.Duration"><span class="pre">Duration</span></a><em> <span class="pre">timeout</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newInstance(String, String, int, int, java.time.Duration)" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newInstance(String, java.net.InetAddress, int, int, java.time.Duration)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/net/package-summary.html" title="java.net.package-summary"><span class="pre">net</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/net/InetAddress.html" title="java.net.InetAddress"><span class="pre">InetAddress</span></a><em> <span class="pre">address</span></em>, <span class="pre">int</span><em> <span class="pre">rpcPort</span></em>, <span class="pre">int</span><em> <span class="pre">streamPort</span></em>, <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html" title="java.time.package-summary"><span class="pre">time</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html" title="java.time.Duration"><span class="pre">Duration</span></a><em> <span class="pre">timeout</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newInstance(String, java.net.InetAddress, int, int, java.time.Duration)" title="Link to this definition">#</a></dt>
+<dd><p>Create a connection to the server, using the given connection details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – A descriptive name for the connection. This is passed to the server and
+appears in the in-game server window.</p></li>
+<li><p><strong>address</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The address of the server to connect to. Can either be a hostname, an
+IP address as a string or a <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/net/InetAddress.html" title="java.net.InetAddress"><code class="xref java java-ref docutils literal notranslate"><span class="pre">java.net.InetAddress</span></code></a>
+object. Defaults to 127.0.0.1.</p></li>
+<li><p><strong>rpc_port</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The port number of the RPC Server. Defaults to 50000. This should match
+the RPC port number of the server you want to connect to.</p></li>
+<li><p><strong>stream_port</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The port number of the Stream Server. Defaults to 50001. This should
+match the stream port number of the server you want to connect to.</p></li>
+<li><p><strong>timeout</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html" title="java.time.Duration"><code class="xref java java-type docutils literal notranslate"><span class="pre">java.time.Duration</span></code></a></span>) – How long to wait for a connection before giving up.
+Defaults to zero, which waits indefinitely. A network
+that drops a connection attempt rather than refusing it
+otherwise leaves the client waiting.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newLocalInstance()">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newLocalInstance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newLocalInstance()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newLocalInstance(String)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newLocalInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newLocalInstance(String)" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newLocalInstance(String, String, String)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newLocalInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">rpcPath</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">streamPath</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newLocalInstance(String, String, String)" title="Link to this definition">#</a></dt>
+<dd><p>Create a connection to a server running on the same machine, over unix domain sockets rather
+than TCP/IP. The connection behaves identically once established.</p>
+<p>Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows
+Server 2019 or later.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – A descriptive name for the connection. This is passed to the server and
+appears in the in-game server window.</p></li>
+<li><p><strong>rpcPath</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The path of the socket the RPC Server is listening on. This should
+match the RPC socket path shown in the in-game server window.</p></li>
+<li><p><strong>streamPath</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The path of the socket the Stream Server is listening on. This
+should match the stream socket path shown in the in-game server
+window.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.addStream(Class, String, Object)">
+ <a class="reference internal" href="#krpc.client.Stream" title="krpc.client.Stream"><span class="pre">Stream</span></a><span class="pre">&lt;</span><span class="pre">T</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">addStream</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="java.lang.Class"><span class="pre">Class</span></a><span class="pre">&lt;</span><span class="pre">?</span><span class="pre">&gt;</span><em> <span class="pre">clazz</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">method</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="java.lang.Object"><span class="pre">Object</span></a><span class="pre">...</span><em> <span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.addStream(Class, String, Object)" title="Link to this definition">#</a></dt>
+<dd><p>Create a stream for a static method call to the given class.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.addStream(RemoteObject, String, Object)">
+ <a class="reference internal" href="#krpc.client.Stream" title="krpc.client.Stream"><span class="pre">Stream</span></a><span class="pre">&lt;</span><span class="pre">T</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">addStream</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.RemoteObject" title="krpc.client.RemoteObject"><span class="pre">RemoteObject</span></a><em> <span class="pre">instance</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">method</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="java.lang.Object"><span class="pre">Object</span></a><span class="pre">...</span><em> <span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.addStream(RemoteObject, String, Object)" title="Link to this definition">#</a></dt>
+<dd><p>Create a stream for a method call to the given remote object.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.addStream(KRPC.Expression)">
+ <a class="reference internal" href="#krpc.client.Stream" title="krpc.client.Stream"><span class="pre">Stream</span></a><span class="pre">&lt;</span><span class="pre">T</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">addStream</span></span><span class="sig-paren">(</span><a class="reference internal" href="api/krpc/krpc.html#krpc.client.services.KRPC" title="krpc.client.services.KRPC"><span class="pre">KRPC</span></a><span class="pre">.</span><a class="reference internal" href="api/krpc/expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.addStream(KRPC.Expression)" title="Link to this definition">#</a></dt>
+<dd><p>Create a stream from a server side function. Each call creates a new stream. Throws a
+<code class="docutils literal notranslate"><span class="pre">StreamException</span></code> if the function has no value, and an <code class="docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code> if it
+has parameters.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.run(KRPC.Expression, Object)">
+ <span class="pre">T</span> <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><a class="reference internal" href="api/krpc/krpc.html#krpc.client.services.KRPC" title="krpc.client.services.KRPC"><span class="pre">KRPC</span></a><span class="pre">.</span><a class="reference internal" href="api/krpc/expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">function</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="java.lang.Object"><span class="pre">Object</span></a><span class="pre">...</span><em> <span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.run(KRPC.Expression, Object)" title="Link to this definition">#</a></dt>
+<dd><p>Run a server side function within a single physics tick, and return its value. The value
+is null for a function with no value. The arguments are passed to the function’s
+parameters, with a number widened as Java widens it. An <code class="docutils literal notranslate"><span class="pre">int</span></code> passes to an unsigned
+parameter bit for bit, and a <code class="docutils literal notranslate"><span class="pre">long</span></code> to an unsigned 64-bit parameter, as the client holds
+unsigned values. A <code class="docutils literal notranslate"><span class="pre">byte</span></code> or <code class="docutils literal notranslate"><span class="pre">short</span></code> that is not negative converts to an unsigned
+parameter, and an <code class="docutils literal notranslate"><span class="pre">int</span></code> that is not negative to an unsigned 64-bit parameter. Throws an
+<code class="docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code> if the number of arguments differs from the number of
+parameters, or if a parameter cannot take its argument. The server checks a null for a
+parameter that is not nullable, and an object of another class, and these also throw an
+<code class="docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code>.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.addEvent(KRPC.Expression)">
+ <a class="reference internal" href="#krpc.client.Event" title="krpc.client.Event"><span class="pre">Event</span></a> <span class="sig-name descname"><span class="pre">addEvent</span></span><span class="sig-paren">(</span><a class="reference internal" href="api/krpc/krpc.html#krpc.client.services.KRPC" title="krpc.client.services.KRPC"><span class="pre">KRPC</span></a><span class="pre">.</span><a class="reference internal" href="api/krpc/expressions.html#krpc.client.services.KRPC.Expression" title="krpc.client.services.KRPC.Expression"><span class="pre">Expression</span></a><em> <span class="pre">function</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.addEvent(KRPC.Expression)" title="Link to this definition">#</a></dt>
+<dd><p>Create an event from a server side function that evaluates to a boolean value. Each call
+creates a new event. Throws an <code class="docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code> if the function does not
+evaluate to a boolean value, or has parameters.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.getCall(Class, String, Object)">
+ <span class="pre">krpc</span><span class="pre">.</span><span class="pre">schema</span><span class="pre">.</span><span class="pre">KRPC</span><span class="pre">.</span><span class="pre">ProcedureCall</span> <span class="sig-name descname"><span class="pre">getCall</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Class.html" title="java.lang.Class"><span class="pre">Class</span></a><span class="pre">&lt;</span><span class="pre">?</span><span class="pre">&gt;</span><em> <span class="pre">clazz</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">method</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="java.lang.Object"><span class="pre">Object</span></a><span class="pre">...</span><em> <span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.getCall(Class, String, Object)" title="Link to this definition">#</a></dt>
+<dd><p>Returns a procedure call message for the given static method call. This allows descriptions of
+procedure calls to be passed to the server, for example when constructing custom events. See
+<a class="reference internal" href="#java-client-events"><span class="std std-ref">Events</span></a>.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.getCall(RemoteObject, String, Object)">
+ <span class="pre">krpc</span><span class="pre">.</span><span class="pre">schema</span><span class="pre">.</span><span class="pre">KRPC</span><span class="pre">.</span><span class="pre">ProcedureCall</span> <span class="sig-name descname"><span class="pre">getCall</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.RemoteObject" title="krpc.client.RemoteObject"><span class="pre">RemoteObject</span></a><em> <span class="pre">instance</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">method</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="java.lang.Object"><span class="pre">Object</span></a><span class="pre">...</span><em> <span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.getCall(RemoteObject, String, Object)" title="Link to this definition">#</a></dt>
+<dd><p>Returns a procedure call message for the given method call. This allows descriptions of
+procedure calls to be passed to the server, for example when constructing custom events. See
+<a class="reference internal" href="#java-client-events"><span class="std std-ref">Events</span></a>.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.close()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.close()" title="Link to this definition">#</a></dt>
+<dd><p>Close the connection.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.Stream">
+ <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Stream</span></span><span class="pre">&lt;T&gt;</span><a class="headerlink" href="#krpc.client.Stream" title="Link to this definition">#</a></dt>
+<dd><p>This class represents a stream. See <a class="reference internal" href="#java-client-streams"><span class="std std-ref">Streaming Data</span></a>.</p>
+<p>Stream objects implement <code class="docutils literal notranslate"><span class="pre">hashCode</span></code> and <code class="docutils literal notranslate"><span class="pre">equals</span></code> such that two stream objects are equal if
+they are bound to the same stream on the server. Each call to <a class="reference internal" href="#krpc.client.Connection.addStream(KRPC.Expression)" title="krpc.client.Connection.addStream(KRPC.Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Connection.addStream</span></code></a>
+creates a new stream, so two streams added for the same call are not equal.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Stream.getRate()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Stream.getRate()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Stream.setRate(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRate</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">rate</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Stream.setRate(float)" title="Link to this definition">#</a></dt>
+<dd><p>The update rate of the stream in Hertz. When set to zero, the rate is unlimited.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Stream.get()">
+ <span class="pre">T</span> <span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Stream.get()" title="Link to this definition">#</a></dt>
+<dd><p>Returns the most recent value for the stream, waiting for the first value if none has
+arrived yet. Throws the exception that ended the stream, if it has ended, such as an
+exception thrown by the remote procedure.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Stream.getCondition()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="java.lang.Object"><span class="pre">Object</span></a> <span class="sig-name descname"><span class="pre">getCondition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Stream.getCondition()" title="Link to this definition">#</a></dt>
+<dd><p>A condition variable that is notified (using <code class="docutils literal notranslate"><span class="pre">notifyAll</span></code>) whenever the value of the stream
+changes, and when the stream ends.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Stream.waitForUpdate()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">waitForUpdate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Stream.waitForUpdate()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Stream.waitForUpdateWithTimeout(double)">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">waitForUpdateWithTimeout</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">timeout</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Stream.waitForUpdateWithTimeout(double)" title="Link to this definition">#</a></dt>
+<dd><p>These methods block until the value of the stream changes or the operation times out.
+<code class="docutils literal notranslate"><span class="pre">waitForUpdateWithTimeout</span></code> returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the value changed, and <code class="docutils literal notranslate"><span class="pre">false</span></code> on a
+timeout.</p>
+<p>The streams condition variable must be locked before calling this method.</p>
+<p>If <em>timeout</em> is specified it is the timeout in seconds for the operation.</p>
+<p>Throws the exception that ended the stream, if it ends before or during the wait.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Stream.addCallback(java.util.function.Consumer)">
+ <span class="pre">int</span> <span class="sig-name descname"><span class="pre">addCallback</span></span><span class="sig-paren">(</span><span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html" title="java.util.function.package-summary"><span class="pre">function</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html" title="java.util.function.Consumer"><span class="pre">Consumer</span></a><span class="pre">&lt;</span><span class="pre">T</span><span class="pre">&gt;</span><em> <span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Stream.addCallback(java.util.function.Consumer)" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback function that is invoked whenever the value of the stream changes. The
+callback function should take one argument, which is passed the new value of the
+stream. If the stream already has a value, the callback is invoked with it straight away.
+An error ends the stream and does not invoke the callback. Calling <code class="docutils literal notranslate"><span class="pre">get()</span></code> throws it.
+Returns a unique identifier for the callback which can be used to remove it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The callback function may be called from a different thread than the one that created the
+stream. Any changes to shared state must therefore be protected with appropriate
+synchronization.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Stream.removeCallback(int)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">removeCallback</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Stream.removeCallback(int)" title="Link to this definition">#</a></dt>
+<dd><p>Removes a callback function from the stream. The tag is the identifier returned when the
+callback was added.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Stream.addEndCallback(java.util.function.Consumer)">
+ <span class="pre">int</span> <span class="sig-name descname"><span class="pre">addEndCallback</span></span><span class="sig-paren">(</span><span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html" title="java.util.function.package-summary"><span class="pre">function</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html" title="java.util.function.Consumer"><span class="pre">Consumer</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="java.lang.Exception"><span class="pre">Exception</span></a><span class="pre">&gt;</span><em> <span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Stream.addEndCallback(java.util.function.Consumer)" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback function that is invoked once when the stream ends. The callback function
+should take one argument, which is passed the exception that ended the stream. It is invoked
+straight away if the stream has already ended. Returns a unique identifier for the callback
+which can be used to remove it.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Stream.removeEndCallback(int)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">removeEndCallback</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Stream.removeEndCallback(int)" title="Link to this definition">#</a></dt>
+<dd><p>Removes an end callback function from the stream. The tag is the identifier returned when
+the callback was added.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Stream.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Stream.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the stream from the server. Other streams added for the same call keep running.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.Event">
+ <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Event</span></span><a class="headerlink" href="#krpc.client.Event" title="Link to this definition">#</a></dt>
+<dd><p>This class represents an event. See <a class="reference internal" href="#java-client-events"><span class="std std-ref">Events</span></a>. It is wrapper around a
+<a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html" title="java.lang.Boolean"><code class="xref java java-type docutils literal notranslate"><span class="pre">Stream</span></code></a> that indicates when the event occurs.</p>
+<p>Event objects implement <code class="docutils literal notranslate"><span class="pre">hashCode</span></code> and <code class="docutils literal notranslate"><span class="pre">equals</span></code> such that two event objects are equal if they
+are bound to the same underlying stream on the server.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Event.getCondition()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Object.html" title="java.lang.Object"><span class="pre">Object</span></a> <span class="sig-name descname"><span class="pre">getCondition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.getCondition()" title="Link to this definition">#</a></dt>
+<dd><p>The condition variable that is notified (using <code class="docutils literal notranslate"><span class="pre">notifyAll</span></code>) whenever the event occurs, and
+when the event ends.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Event.waitFor()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">waitFor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.waitFor()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Event.waitForWithTimeout(double)">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">waitForWithTimeout</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">timeout</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.waitForWithTimeout(double)" title="Link to this definition">#</a></dt>
+<dd><p>These methods block until the event occurs or the operation times out. They return straight
+away if the event has occurred since the previous call on this event object.
+<code class="docutils literal notranslate"><span class="pre">waitForWithTimeout</span></code> returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the event occurred, and <code class="docutils literal notranslate"><span class="pre">false</span></code> on a timeout.</p>
+<p>The events condition variable must be locked before calling this method.</p>
+<p>If <em>timeout</em> is specified it is the timeout in seconds for the operation.</p>
+<p>Throws the exception that ended the event, if it ends before or during the wait.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Event.addCallback(java.lang.Runnable)">
+ <span class="pre">int</span> <span class="sig-name descname"><span class="pre">addCallback</span></span><span class="sig-paren">(</span><span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/package-summary.html" title="java.lang.package-summary"><span class="pre">lang</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html" title="java.lang.Runnable"><span class="pre">Runnable</span></a><em> <span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.addCallback(java.lang.Runnable)" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback function that is invoked whenever the event occurs. The callback function
+should be a function that takes zero arguments. If the event has occurred since the
+last wait on this event object, and no callback has been invoked for it, the callback is
+invoked straight away. A callback added after the event has ended is not invoked for an
+earlier firing. An error ends the event and does not invoke the callback. Returns an integer
+tag identifying the callback which can be used to remove it later.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Event.removeCallback(int)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">removeCallback</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.removeCallback(int)" title="Link to this definition">#</a></dt>
+<dd><p>Removes a callback function from the event.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Event.addEndCallback(java.util.function.Consumer)">
+ <span class="pre">int</span> <span class="sig-name descname"><span class="pre">addEndCallback</span></span><span class="sig-paren">(</span><span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html" title="java.util.function.package-summary"><span class="pre">function</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/function/Consumer.html" title="java.util.function.Consumer"><span class="pre">Consumer</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Exception.html" title="java.lang.Exception"><span class="pre">Exception</span></a><span class="pre">&gt;</span><em> <span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.addEndCallback(java.util.function.Consumer)" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback function that is invoked once when the event ends, with the exception that
+ended it. It is invoked straight away if the event has already ended. Returns an integer tag
+identifying the callback which can be used to remove it later.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Event.removeEndCallback(int)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">removeEndCallback</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">tag</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.removeEndCallback(int)" title="Link to this definition">#</a></dt>
+<dd><p>Removes an end callback function from the event. The tag is the identifier returned when
+the callback was added.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Event.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Removes the event from the server.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Event.getStream()">
+ <a class="reference internal" href="#krpc.client.Stream" title="krpc.client.Stream"><span class="pre">Stream</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html" title="java.lang.Boolean"><span class="pre">Boolean</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getStream</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.getStream()" title="Link to this definition">#</a></dt>
+<dd><p>Returns the underlying stream for the event.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.RemoteObject">
+<span class="pre">abstract</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">RemoteObject</span></span><a class="headerlink" href="#krpc.client.RemoteObject" title="Link to this definition">#</a></dt>
+<dd><p>The abstract base class for all remote objects.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.RemoteObject.getObjectId(RemoteObject)">
+<span class="pre">static</span> <span class="pre">long</span> <span class="sig-name descname"><span class="pre">getObjectId</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.RemoteObject" title="krpc.client.RemoteObject"><span class="pre">RemoteObject</span></a><em> <span class="pre">obj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.RemoteObject.getObjectId(RemoteObject)" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of a remote object on the server, e.g. to pass to
+<a class="reference internal" href="api/krpc/expressions.html#krpc.client.services.KRPC.Expression.constantObject(Connection, long)" title="krpc.client.services.KRPC.Expression.constantObject(Connection, long)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">krpc.client.services.KRPC.Expression.constantObject(Connection,</span> <span class="pre">long)</span></code></a>.
+Throws a <code class="docutils literal notranslate"><span class="pre">NullPointerException</span></code> if the object is null.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../java.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Java</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="api/krpc.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">KRPC API</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-endings">Stream Endings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-server-side-functions">Streaming Server Side Functions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/java/client.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

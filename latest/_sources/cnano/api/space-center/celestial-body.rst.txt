@@ -11,76 +11,76 @@ CelestialBody
    Represents a celestial body (such as a planet or moon).
    See :func:`krpc_SpaceCenter_Bodies`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Name(krpc_connection_t connection, char * * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The name of the body.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Satellites(krpc_connection_t connection, krpc_list_object_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Satellites(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       A list of celestial bodies that are in orbit around this celestial body.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Orbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Orbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The orbit of the body.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Mass(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Mass(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The mass of the body, in kilograms.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_GravitationalParameter(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_GravitationalParameter(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The `standard gravitational parameter <https://en.wikipedia.org/wiki/Standard_gravitational_parameter>`_ of the body in :math:`m^3s^{-2}`.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SurfaceGravity(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SurfaceGravity(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The acceleration due to gravity at sea level (mean altitude) on the body,
       in :math:`m/s^2`.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_RotationalPeriod(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_RotationalPeriod(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The sidereal rotational period of the body, in seconds.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_RotationalSpeed(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_RotationalSpeed(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The rotational speed of the body, in radians per second.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_RotationAngle(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_RotationAngle(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The current rotation angle of the body, in radians.
-      A value between 0 and 2·pi
+      A value between 0 and 2 pi.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_InitialRotation(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_InitialRotation(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The initial rotation angle of the body (at UT 0), in radians.
-      A value between 0 and 2·pi
+      A value between 0 and 2 pi.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_EquatorialRadius(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_EquatorialRadius(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The equatorial radius of the body, in meters.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SurfaceHeight(krpc_connection_t connection, double * result, double latitude, double longitude)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SurfaceHeight(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double latitude, double longitude)
 
       The height of the surface relative to mean sea level, in meters,
       at the given position. When over water this is equal to 0.
@@ -92,7 +92,7 @@ CelestialBody
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_BedrockHeight(krpc_connection_t connection, double * result, double latitude, double longitude)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_BedrockHeight(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double latitude, double longitude)
 
       The height of the surface relative to mean sea level, in meters,
       at the given position. When over water, this is the height
@@ -105,7 +105,7 @@ CelestialBody
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_MSLPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, double latitude, double longitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_MSLPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double latitude, double longitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The position at mean sea level at the given latitude and longitude,
       in the given reference frame.
@@ -119,7 +119,7 @@ CelestialBody
       :returns: Position as a vector.
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SurfacePosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, double latitude, double longitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SurfacePosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double latitude, double longitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The position of the surface at the given latitude and longitude, in the given
       reference frame. When over water, this is the position of the surface of the water.
@@ -133,7 +133,7 @@ CelestialBody
       :returns: Position as a vector.
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_BedrockPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, double latitude, double longitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_BedrockPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double latitude, double longitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The position of the surface at the given latitude and longitude, in the given
       reference frame. When over water, this is the position at the bottom of the sea-bed.
@@ -147,7 +147,7 @@ CelestialBody
       :returns: Position as a vector.
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_PositionAtAltitude(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, double latitude, double longitude, double altitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_PositionAtAltitude(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double latitude, double longitude, double altitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The position at the given latitude, longitude and altitude, in the given reference frame.
 
@@ -161,7 +161,75 @@ CelestialBody
       :returns: Position as a vector.
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_AltitudeAtPosition(krpc_connection_t connection, double * result, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SurfaceReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double latitude, double longitude, double altitude)
+
+      Create a reference frame fixed to the surface at the given latitude and longitude.
+
+      * The origin is the given altitude above the surface, at the
+        given latitude and longitude.
+      * The axes rotate with the body.
+      * The x-axis points out from the center of the body.
+      * The y-axis points north.
+      * The z-axis points east.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **altitude** -- Altitude of the origin above the surface, in meters.
+
+   
+
+      .. note::
+
+         Each call returns a new frame, as for :func:`krpc_SpaceCenter_ReferenceFrame_CreateRelative`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_MSLNormal(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double latitude, double longitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The normal to the sphere at mean sea level, at the given latitude and longitude,
+      in the given reference frame. This points straight up, away from the center of
+      the body, and takes no account of the shape of the terrain.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **referenceFrame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SurfaceNormal(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double latitude, double longitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the surface of
+      the water when over water.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **referenceFrame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_BedrockNormal(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double latitude, double longitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the sea-bed
+      when over water.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **referenceFrame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_AltitudeAtPosition(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The altitude, in meters, of the given position in the given reference frame.
 
@@ -172,7 +240,7 @@ CelestialBody
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_LatitudeAtPosition(krpc_connection_t connection, double * result, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_LatitudeAtPosition(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The latitude of the given position, in the given reference frame.
 
@@ -183,7 +251,7 @@ CelestialBody
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_LongitudeAtPosition(krpc_connection_t connection, double * result, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_LongitudeAtPosition(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The longitude of the given position, in the given reference frame.
 
@@ -194,37 +262,50 @@ CelestialBody
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SphereOfInfluence(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SphereOfInfluence(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The radius of the sphere of influence of the body, in meters.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_IsStar(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_IsStar(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       Whether or not the body is a star.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_HasSolidSurface(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_HasSolidSurface(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       Whether or not the body has a solid surface.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_HasAtmosphere(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_HasAtmosphere(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       ``true`` if the body has an atmosphere.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_AtmosphereDepth(krpc_connection_t connection, double * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_AtmosphereDepth(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The depth of the atmosphere, in meters.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_AtmosphericDensityAtPosition(krpc_connection_t connection, double * result, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_HasOcean(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
+
+      ``true`` if the body has an ocean.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_OceanDensity(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
+
+      The density of the body's ocean, in :math:`kg/m^3`.
+      Returns zero if the body has no ocean.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_AtmosphericDensityAtPosition(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The atmospheric density at the given position, in :math:`kg/m^3`,
       in the given reference frame.
@@ -236,13 +317,13 @@ CelestialBody
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_HasAtmosphericOxygen(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_HasAtmosphericOxygen(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       ``true`` if there is oxygen in the atmosphere, required for air-breathing engines.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_TemperatureAt(krpc_connection_t connection, double * result, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_TemperatureAt(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The temperature on the body at the given position, in the given reference frame.
 
@@ -257,7 +338,7 @@ CelestialBody
 
          The atmospheric ephemeris is evaluated at the current universal time.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_DensityAt(krpc_connection_t connection, double * result, double altitude)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_DensityAt(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double altitude)
 
       Gets the air density, in :math:`kg/m^3`, for the specified
       altitude above sea level, in meters.
@@ -276,9 +357,9 @@ CelestialBody
          However, the difference is small for high altitudes, so it makes very little difference
          for trajectory prediction.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_PressureAt(krpc_connection_t connection, double * result, double altitude)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_PressureAt(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double altitude)
 
-      Gets the air pressure, in Pascals, for the specified
+      Gets the static pressure, in Pascals, for the specified
       altitude above sea level, in meters.
 
       :Parameters:
@@ -287,13 +368,17 @@ CelestialBody
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Biomes(krpc_connection_t connection, krpc_set_string_t * result)
+      .. note::
+
+         Below sea level on a body with an ocean, this includes the pressure of the water.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Biomes(krpc_connection_t connection, krpc_set_string_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The biomes present on this body.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_BiomeAt(krpc_connection_t connection, char * * result, double latitude, double longitude)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_BiomeAt(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_CelestialBody_t instance, double latitude, double longitude)
 
       The biome at the given latitude and longitude, in degrees.
 
@@ -304,21 +389,21 @@ CelestialBody
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_FlyingHighAltitudeThreshold(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_FlyingHighAltitudeThreshold(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The altitude, in meters, above which a vessel is considered to be
       flying "high" when doing science.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SpaceHighAltitudeThreshold(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SpaceHighAltitudeThreshold(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The altitude, in meters, above which a vessel is considered to be
       in "high" space when doing science.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The reference frame that is fixed relative to the celestial body.
 
@@ -340,7 +425,7 @@ CelestialBody
          Celestial body reference frame origin and axes. The equator is shown in
          blue, and the prime meridian in red.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The reference frame that is fixed relative to this celestial body, and
       orientated in a fixed direction (it does not rotate with the body).
@@ -356,7 +441,7 @@ CelestialBody
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_OrbitalReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_OrbitalReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance)
 
       The reference frame that is fixed relative to this celestial body, but
       orientated with the body's orbital prograde/normal/radial directions.
@@ -370,7 +455,7 @@ CelestialBody
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The position of the center of the body, in the specified reference frame.
 
@@ -381,7 +466,7 @@ CelestialBody
       :returns: The position as a vector.
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The linear velocity of the body, in the specified reference frame.
 
@@ -392,7 +477,7 @@ CelestialBody
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The rotation of the body, in the specified reference frame.
 
@@ -403,7 +488,7 @@ CelestialBody
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The direction in which the north pole of the celestial body is pointing,
       in the specified reference frame.
@@ -415,7 +500,7 @@ CelestialBody
       :returns: The direction as a unit vector.
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_AngularVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_AngularVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_CelestialBody_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The angular velocity of the body in the specified reference frame.
 

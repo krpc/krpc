@@ -1,0 +1,86 @@
+/* Site-specific tweaks on top of pydata-sphinx-theme. */
+
+.clearer {
+    clear: both !important;
+}
+
+/* pydata-sphinx-theme's heading scale is subtle and puts no rule under section
+   headings, so h2 sections and h3 subsections read almost the same. Rule off
+   each section heading and widen the size/weight/spacing gap between the levels
+   so the section -> subsection boundary is clear. */
+.bd-article h2 {
+    margin-top: 2.5rem;
+    padding-bottom: 0.3rem;
+    font-size: 1.9rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--pst-color-border);
+}
+
+.bd-article h3 {
+    margin-top: 2rem;
+    font-size: 1.35rem;
+    font-weight: 600;
+}
+
+/* Changelog entries that are breaking changes or deprecations lead with a small
+   label, sized to sit inside the bullet's line without breaking its rhythm.
+   Red for breaking and amber for deprecated puts the more severe of the two
+   first while both stay quieter than an admonition. Each pairs the theme's
+   severity color with the matching -text foreground the theme defines for it,
+   so both the fill and the text on it follow the light/dark mode toggle and
+   stay legible in either. */
+.changelog-marker {
+    margin-right: 0.4em;
+    padding: 0.05em 0.45em;
+    border-radius: 0.25rem;
+    font-size: 0.8em;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.changelog-marker.breaking {
+    color: var(--pst-color-danger-text);
+    background-color: var(--pst-color-danger);
+}
+
+.changelog-marker.deprecated {
+    color: var(--pst-color-warning-text);
+    background-color: var(--pst-color-warning);
+}
+
+/* In light mode the theme's warning color is a mid orange that is too dark for
+   its near-black text and too light for white, so neither pairing is legible.
+   Deepen the fill to an amber that carries white text at the same strength as
+   the breaking label, while staying far enough from its red to read as a
+   distinct severity. Dark mode keeps the theme's pale amber and dark text. */
+html[data-theme="light"] .changelog-marker.deprecated {
+    color: #fff;
+    background-color: #b45309;
+}
+
+/* Key sphinx-tabs' colors to the theme's light/dark mode. Its stock tabs.css
+   only reacts to body[data-theme], but pydata-sphinx-theme sets data-theme on
+   the html element, so its dark styling never applies; restyle the tabs with
+   the theme's CSS variables, which track the mode toggle in both directions. */
+[role="tablist"] {
+    border-bottom-color: var(--pst-color-border);
+}
+
+.sphinx-tabs-tab {
+    color: var(--pst-color-primary);
+    background-color: transparent;
+}
+
+.sphinx-tabs-tab[aria-selected="true"] {
+    border-color: var(--pst-color-border);
+    border-bottom-color: var(--pst-color-on-background);
+    background-color: var(--pst-color-on-background);
+}
+
+.sphinx-tabs-panel {
+    color: var(--pst-color-text-base);
+    border-color: var(--pst-color-border);
+    background: var(--pst-color-on-background);
+}

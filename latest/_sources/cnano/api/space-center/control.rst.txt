@@ -20,20 +20,35 @@ Control
       these inputs are no longer connected. The throttle is an exception: it keeps
       its value when clients disconnect.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Source(krpc_connection_t connection, krpc_SpaceCenter_ControlSource_t * result)
+      A kerbal on EVA is a vessel, and is driven by these same controls. The
+      translation inputs move it: :func:`krpc_SpaceCenter_Control_Forward` and :func:`krpc_SpaceCenter_Control_Right` walk
+      it about, relative to the direction it is facing, and all three translate its
+      jetpack once that is deployed. Walking is not throttled by the size of the
+      input, only started by it. The rotation inputs turn it, at a rate proportional
+      to the input: :func:`krpc_SpaceCenter_Control_Yaw` steers it as it walks, and all three turn its
+      jetpack. Turning the jetpack releases the kerbal from the orientation it was
+      holding; it stops and holds its new orientation once the input returns to zero.
+      :func:`krpc_SpaceCenter_Control_RCS` deploys and stows the jetpack and :func:`krpc_SpaceCenter_Control_Lights`
+      switches the helmet lamp. The remaining controls do nothing for a kerbal.
+      A kerbal is also sent out and brought back in from here: with
+      :func:`krpc_SpaceCenter_CrewMember_EVA` and :func:`krpc_SpaceCenter_Control_Board`, and
+      :func:`krpc_SpaceCenter_Control_GrabLadder` and :func:`krpc_SpaceCenter_Control_ReleaseLadder` for the ladders it
+      passes on the way.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Source(krpc_connection_t connection, krpc_SpaceCenter_ControlSource_t * returnValue, krpc_SpaceCenter_Control_t instance)
 
       The source of the vessels control, for example by a kerbal or a probe core.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_State(krpc_connection_t connection, krpc_SpaceCenter_ControlState_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_State(krpc_connection_t connection, krpc_SpaceCenter_ControlState_t * returnValue, krpc_SpaceCenter_Control_t instance)
 
       The control state of the vessel.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_SAS(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_SAS(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_SAS(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_SAS(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       The state of SAS.
 
@@ -46,8 +61,8 @@ Control
          Throws an exception if set to ``true`` while the auto-pilot is engaged, as the
          auto-pilot holds SAS off for as long as it is flying the vessel.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_SASMode(krpc_connection_t connection, krpc_SpaceCenter_SASMode_t * result)
-   .. function:: void krpc_SpaceCenter_Control_set_SASMode(krpc_SpaceCenter_SASMode_t value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_SASMode(krpc_connection_t connection, krpc_SpaceCenter_SASMode_t * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_SASMode(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, krpc_SpaceCenter_SASMode_t value)
 
       The current :func:`krpc_SpaceCenter_Control_SASMode`.
       These modes are equivalent to the mode buttons to
@@ -60,16 +75,16 @@ Control
 
          Equivalent to :func:`krpc_SpaceCenter_AutoPilot_SASMode`
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_SpeedMode(krpc_connection_t connection, krpc_SpaceCenter_SpeedMode_t * result)
-   .. function:: void krpc_SpaceCenter_Control_set_SpeedMode(krpc_SpaceCenter_SpeedMode_t value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_SpeedMode(krpc_connection_t connection, krpc_SpaceCenter_SpeedMode_t * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_SpeedMode(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, krpc_SpaceCenter_SpeedMode_t value)
 
       The current :func:`krpc_SpaceCenter_Control_SpeedMode` of the navball.
       This is the mode displayed next to the speed at the top of the navball.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_EngineGimbals(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_EngineGimbals(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_EngineGimbals(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_EngineGimbals(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether all gimballed engines on the vessel have gimbal enabled,
       and sets the gimbal enabled state of all gimballed engines.
@@ -77,8 +92,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_ThrustReversers(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_ThrustReversers(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ThrustReversers(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_ThrustReversers(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether all engines with a thrust reverser on the vessel have
       their thrust reverser engaged, and sets the thrust reverser state of all
@@ -87,8 +102,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_AeroSurfaces(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_AeroSurfaces(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_AeroSurfaces(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_AeroSurfaces(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
       and sets the pitch, yaw and roll enabled state of all control surfaces.
@@ -98,15 +113,22 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_RCS(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_RCS(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_RCS(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_RCS(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       The state of RCS.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_ReactionWheels(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_ReactionWheels(bool value)
+
+      .. note::
+
+         For a kerbal on EVA this is whether its jetpack is deployed. Deploying it
+         requires the kerbal to have one and to be the active vessel; otherwise
+         setting this does nothing.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ReactionWheels(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_ReactionWheels(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether all reactive wheels on the vessel are active,
       and sets the active state of all reaction wheels.
@@ -114,15 +136,15 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Gear(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Gear(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Gear(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Gear(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       The state of the landing gear/legs.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Legs(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Legs(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Legs(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Legs(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether all landing legs on the vessel are deployed,
       and sets the deployment state of all landing legs.
@@ -131,8 +153,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Wheels(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Wheels(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Wheels(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Wheels(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether all wheels on the vessel are deployed,
       and sets the deployment state of all wheels.
@@ -141,22 +163,28 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Lights(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Lights(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Lights(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Lights(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       The state of the lights.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Brakes(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Brakes(bool value)
+
+      .. note::
+
+         For a kerbal on EVA this is its helmet lamp. Switching it requires the
+         kerbal to be the active vessel; otherwise setting this does nothing.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Brakes(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Brakes(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       The state of the wheel brakes.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Antennas(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Antennas(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Antennas(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Antennas(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether all antennas on the vessel are deployed,
       and sets the deployment state of all antennas.
@@ -164,8 +192,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_CargoBays(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_CargoBays(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_CargoBays(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_CargoBays(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether any of the cargo bays on the vessel are open,
       and sets the open state of all cargo bays.
@@ -173,8 +201,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Intakes(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Intakes(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Intakes(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Intakes(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether all of the air intakes on the vessel are open,
       and sets the open state of all air intakes.
@@ -182,8 +210,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Parachutes(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Parachutes(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Parachutes(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Parachutes(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether all parachutes on the vessel are deployed,
       and sets the deployment state of all parachutes.
@@ -192,8 +220,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Radiators(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Radiators(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Radiators(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Radiators(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether all radiators on the vessel are deployed,
       and sets the deployment state of all radiators.
@@ -201,8 +229,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_ResourceHarvesters(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_ResourceHarvesters(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ResourceHarvesters(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_ResourceHarvesters(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether all of the resource harvesters on the vessel are deployed,
       and sets the deployment state of all resource harvesters.
@@ -210,8 +238,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_ResourceHarvestersActive(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_ResourceHarvestersActive(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ResourceHarvestersActive(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_ResourceHarvestersActive(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether any of the resource harvesters on the vessel are active,
       and sets the active state of all resource harvesters.
@@ -219,8 +247,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_SolarPanels(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_SolarPanels(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_SolarPanels(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_SolarPanels(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Returns whether all solar panels on the vessel are deployed,
       and sets the deployment state of all solar panels.
@@ -228,15 +256,15 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Abort(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Abort(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Abort(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Abort(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       The state of the abort action group.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Throttle(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Throttle(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Throttle(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Throttle(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of the throttle. A value between 0 and 1.
       Unlike the other control inputs, the throttle is not zeroed when the
@@ -252,8 +280,8 @@ Control
          It refreshes one physics tick after a set, so a read immediately after
          a set returns the previously applied value rather than the value just set.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_InputMode(krpc_connection_t connection, krpc_SpaceCenter_ControlInputMode_t * result)
-   .. function:: void krpc_SpaceCenter_Control_set_InputMode(krpc_SpaceCenter_ControlInputMode_t value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_InputMode(krpc_connection_t connection, krpc_SpaceCenter_ControlInputMode_t * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_InputMode(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, krpc_SpaceCenter_ControlInputMode_t value)
 
       Sets the behavior of the pitch, yaw, roll and translation control inputs.
       When set to additive, these inputs are added to the vessels current inputs.
@@ -264,8 +292,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Pitch(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Pitch(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Pitch(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Pitch(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of the pitch control.
       A value between -1 and 1.
@@ -281,8 +309,8 @@ Control
          It refreshes one physics tick after a set, so a read immediately after
          a set returns the previously applied value rather than the value just set.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Yaw(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Yaw(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Yaw(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Yaw(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of the yaw control.
       A value between -1 and 1.
@@ -298,8 +326,8 @@ Control
          It refreshes one physics tick after a set, so a read immediately after
          a set returns the previously applied value rather than the value just set.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Roll(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Roll(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Roll(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Roll(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of the roll control.
       A value between -1 and 1.
@@ -315,8 +343,8 @@ Control
          It refreshes one physics tick after a set, so a read immediately after
          a set returns the previously applied value rather than the value just set.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_PitchTrim(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_PitchTrim(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_PitchTrim(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_PitchTrim(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of the pitch trim.
       A value between -1 and 1.
@@ -328,8 +356,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_YawTrim(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_YawTrim(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_YawTrim(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_YawTrim(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of the yaw trim.
       A value between -1 and 1.
@@ -341,8 +369,8 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_RollTrim(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_RollTrim(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_RollTrim(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_RollTrim(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of the roll trim.
       A value between -1 and 1.
@@ -354,8 +382,26 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Forward(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Forward(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_PrecisionMode(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_PrecisionMode(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
+
+      Whether precision control mode is enabled.
+      Equivalent to the Caps Lock key.
+      This is a game setting rather than a vessel setting,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, precision mode is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the RCS thrust that the control inputs produce. A block
+         driven by :func:`krpc_SpaceCenter_RCS_InputOverride` is exempt.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Forward(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Forward(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of the forward translational control.
       A value between -1 and 1.
@@ -371,8 +417,8 @@ Control
          It refreshes one physics tick after a set, so a read immediately after
          a set returns the previously applied value rather than the value just set.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Up(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Up(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Up(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Up(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of the up translational control.
       A value between -1 and 1.
@@ -388,8 +434,8 @@ Control
          It refreshes one physics tick after a set, so a read immediately after
          a set returns the previously applied value rather than the value just set.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Right(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_Right(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Right(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_Right(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of the right translational control.
       A value between -1 and 1.
@@ -405,8 +451,8 @@ Control
          It refreshes one physics tick after a set, so a read immediately after
          a set returns the previously applied value rather than the value just set.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_WheelThrottle(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_WheelThrottle(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_WheelThrottle(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_WheelThrottle(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of the wheel throttle.
       A value between -1 and 1.
@@ -423,8 +469,8 @@ Control
          It refreshes one physics tick after a set, so a read immediately after
          a set returns the previously applied value rather than the value just set.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_WheelSteering(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_WheelSteering(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_WheelSteering(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_WheelSteering(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of the wheel steering.
       A value between -1 and 1.
@@ -440,46 +486,46 @@ Control
          It refreshes one physics tick after a set, so a read immediately after
          a set returns the previously applied value rather than the value just set.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis01(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_CustomAxis01(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis01(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_CustomAxis01(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of CustomAxis01.
       A value between -1 and 1.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis02(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_CustomAxis02(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis02(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_CustomAxis02(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of CustomAxis02.
       A value between -1 and 1.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis03(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_CustomAxis03(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis03(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_CustomAxis03(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of CustomAxis03.
       A value between -1 and 1.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis04(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Control_set_CustomAxis04(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis04(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_CustomAxis04(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, float value)
 
       The state of CustomAxis04.
       A value between -1 and 1.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_CurrentStage(krpc_connection_t connection, int32_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_CurrentStage(krpc_connection_t connection, int32_t * returnValue, krpc_SpaceCenter_Control_t instance)
 
       The current stage of the vessel. Corresponds to the stage number in
       the in-game UI.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_ActivateNextStage(krpc_connection_t connection, krpc_list_object_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ActivateNextStage(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Control_t instance)
 
       Activates the next stage. Equivalent to pressing the space bar in-game.
 
@@ -495,8 +541,8 @@ Control
          :func:`krpc_SpaceCenter_ActiveVessel` no longer refer to the active vessel.
          Throws an exception if staging is locked.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_StageLock(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Control_set_StageLock(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_StageLock(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_set_StageLock(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, bool value)
 
       Whether staging is locked on the vessel.
 
@@ -507,38 +553,38 @@ Control
 
          This is equivalent to locking the staging using Alt+L
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_GetActionGroup(krpc_connection_t connection, bool * result, uint32_t group)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_GetActionGroup(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Control_t instance, uint32_t group)
 
       Returns ``true`` if the given action group is enabled.
 
       :Parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_SetActionGroup(krpc_connection_t connection, uint32_t group, bool state)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_SetActionGroup(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, uint32_t group, bool state)
 
       Sets the state of the given action group.
 
       :Parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_ToggleActionGroup(krpc_connection_t connection, uint32_t group)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ToggleActionGroup(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance, uint32_t group)
 
       Toggles the state of the given action group.
 
       :Parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_GetActionGroupActions(krpc_connection_t connection, krpc_list_object_t * result, uint32_t group)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_GetActionGroupActions(krpc_connection_t connection, krpc_list_SpaceCenter_ActionGroupAction_t * returnValue, krpc_SpaceCenter_Control_t instance, uint32_t group)
 
       Returns a list of all the part actions that are assigned to the given action group.
       Each entry identifies the part, the part module, and the action's name and identifier.
@@ -546,7 +592,7 @@ Control
 
       :Parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
       :Game Scenes: Flight
 
@@ -557,7 +603,7 @@ Control
          When the Extended Action Groups mod is installed, the assignments are queried from
          the mod instead, so that actions assigned to its additional groups are included.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_AddNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * result, double ut, float prograde, float normal, float radial)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_AddNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * returnValue, krpc_SpaceCenter_Control_t instance, double ut, float prograde, float normal, float radial)
 
       Creates a maneuver node at the given universal time, and returns a
       :type:`krpc_SpaceCenter_Node_t` object that can be used to modify it.
@@ -573,18 +619,81 @@ Control
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_Nodes(krpc_connection_t connection, krpc_list_object_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Nodes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Control_t instance)
 
       Returns a list of all existing maneuver nodes, ordered by time from first to last.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Control_RemoveNodes(krpc_connection_t connection)
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_RemoveNodes(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance)
 
       Remove all maneuver nodes.
 
 
       :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Airlock(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Control_t instance)
+
+      The part whose hatch the kerbal is standing at, and so the one
+      :func:`krpc_SpaceCenter_Control_Board` would put it in. ``nullptr`` if it is not at a hatch or the
+      vessel is not a kerbal on EVA.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Board(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance)
+
+      Climb into the part whose hatch the kerbal is standing at, ending the EVA. The
+      kerbal takes a seat in that part and its own vessel ceases to exist. If the
+      kerbal was the active vessel, the game switches to the vessel it boarded.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A kerbal can only board through a hatch it is already at, which
+         :func:`krpc_SpaceCenter_Control_Airlock` reports; it does not walk to one. Throws an exception if
+         the vessel is not a kerbal on EVA, if the kerbal is not at a hatch, if boarding
+         is disabled for the game, if the part has no free seat, or if the kerbal is
+         carrying science data that the part cannot store, as the game asks what to do
+         with it in that case.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Ladder(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Control_t instance)
+
+      The ladder the kerbal is holding on to, or ``nullptr`` if it is not holding one
+      or the vessel is not a kerbal on EVA.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_GrabLadder(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance)
+
+      Take hold of the ladder the kerbal is standing at, as pressing the grab key
+      in-game does. A kerbal can only take hold of a ladder it is already alongside;
+      it does not walk to one. :func:`krpc_SpaceCenter_Control_Ladder` reports the one it ends up
+      holding. Does nothing if the kerbal is already holding a ladder.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vessel is not a kerbal on EVA, if there is no ladder
+         within reach, or if the kerbal is doing something it cannot grab a ladder from.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ReleaseLadder(krpc_connection_t connection, krpc_SpaceCenter_Control_t instance)
+
+      Let go of the ladder the kerbal is holding, as pressing the jump key in-game
+      does. Does nothing if it is not holding one.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vessel is not a kerbal on EVA.
 
 
 
@@ -593,33 +702,25 @@ Control
    An action, belonging to a part module, that is assigned to an action group.
    Obtained by calling :func:`krpc_SpaceCenter_Control_GetActionGroupActions`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_ActionGroupAction_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+   .. member:: krpc_SpaceCenter_Part_t part
 
       The part that the action acts on.
 
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_ActionGroupAction_Module(krpc_connection_t connection, krpc_SpaceCenter_Module_t * result)
+   .. member:: krpc_nullable_object_t module
 
       The part module that the action belongs to. Returns ``nullptr`` for a
       part-level action that is not associated with a module. This only occurs when
       the Extended Action Groups mod is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_ActionGroupAction_Name(krpc_connection_t connection, char * * result)
+   .. member:: char * name
 
       The human-readable name of the action, as shown in the action group editor.
 
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_ActionGroupAction_Id(krpc_connection_t connection, char * * result)
+   .. member:: char * id
 
       The non-localized identifier for the action.
-
-   
-
 
 
 .. type:: krpc_SpaceCenter_ControlState_t

@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.InfernalRobotics
 
@@ -17,6 +17,13 @@ ServoGroup
       The name of the group.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Renaming a group renames it for every servo in it. This object identifies the
+         group by its name, so a rename destroys every object for the group, including the
+         one the rename was made through. Obtain the group again under the new name.
 
    .. property:: string ForwardKey { get; set; }
 
@@ -44,7 +51,7 @@ ServoGroup
 
    .. property:: SpaceCenter.Vessel Vessel { get; }
 
-      The vessel the group belongs to, or ``null`` if it is not available.
+      The vessel the group belongs to.
 
       :Game Scenes: Flight
 
@@ -86,7 +93,7 @@ ServoGroup
 
       :Game Scenes: Flight
 
-   .. method:: Servo ServoWithName(string name)
+   .. function:: Servo ServoWithName(string name)
 
       Returns the servo with the given *name* from this group,
       or ``null`` if none exists.
@@ -103,42 +110,42 @@ ServoGroup
 
       :Game Scenes: Flight
 
-   .. method:: void MoveRight()
+   .. function:: void MoveRight()
 
       Moves all of the servos in the group to the right.
 
 
       :Game Scenes: Flight
 
-   .. method:: void MoveLeft()
+   .. function:: void MoveLeft()
 
       Moves all of the servos in the group to the left.
 
 
       :Game Scenes: Flight
 
-   .. method:: void MoveCenter()
+   .. function:: void MoveCenter()
 
       Moves all of the servos in the group to the center.
 
 
       :Game Scenes: Flight
 
-   .. method:: void MoveNextPreset()
+   .. function:: void MoveNextPreset()
 
       Moves all of the servos in the group to the next preset.
 
 
       :Game Scenes: Flight
 
-   .. method:: void MovePrevPreset()
+   .. function:: void MovePrevPreset()
 
       Moves all of the servos in the group to the previous preset.
 
 
       :Game Scenes: Flight
 
-   .. method:: void Stop()
+   .. function:: void Stop()
 
       Stops the servos in the group.
 

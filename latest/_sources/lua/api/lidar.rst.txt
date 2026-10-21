@@ -1,7 +1,7 @@
 .. default-domain:: lua
 .. highlight:: lua
 
-LiDAR API
+LIDAR API
 =========
 
 Provides RPCs to interact with the `LaserDist <https://github.com/nullprofile/LaserDist>`_ mod.

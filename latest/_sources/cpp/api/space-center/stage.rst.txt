@@ -40,14 +40,11 @@ Stage
 
       :Parameters:
 
-       * **cumulative** -- When ``false``, only resources assigned to this stage. When ``true``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Defaults to ``true`` so decouple-stage calls match the legacy ``Vessel.ResourcesInDecoupleStage`` RPC.
+       * **cumulative** -- When ``false``, only resources assigned to this stage. When ``true``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached.
 
    
 
       .. note:: This is an RPC method: call ``resources()`` (optional ``cumulative`` argument).
-                The default ``cumulative=true`` matches the legacy
-                :func:`Vessel::resources_in_decouple_stage` RPC.
-                For decouple stages, grouping is the same as that deprecated method.
                 For activation stages, unstaged resource containers (for example fuel tanks)
                 are grouped with the first higher activation stage before they detach, matching
                 the C# ``Resources()`` documentation.
@@ -135,22 +132,33 @@ Stage
 
    .. function:: float start_mass()
 
-      Start mass for this stage, in kg.
+      The mass of the vessel after the stage activates, in kg.
 
    
 
    .. function:: float end_mass()
 
-      End mass for this stage, in kg.
+      The mass of the vessel when the stage burns out, in kg.
 
    
 
    .. function:: float dry_mass()
 
-      Dry mass for this stage, in kg.
+      The dry mass of the vessel after the stage activates, in kg.
 
    
 
+      .. note::
+
+         Includes the parts of all later stages.
+
    .. function:: float fuel_mass()
 
-      Fuel mass for this stage, in kg.
+      The fuel mass of the vessel when the stage activates, in kg.
+
+   
+
+      .. note::
+
+         Includes the fuel of all later stages, and the fuel left in the parts the stage
+         decouples. The stage burns :func:`Stage::start_mass` minus :func:`Stage::end_mass`.

@@ -1,7 +1,9 @@
 import krpc.client.Connection;
+import krpc.client.Event;
 import krpc.client.RPCException;
 import krpc.client.Stream;
 import krpc.client.StreamException;
+import krpc.client.services.KRPC.Expression;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.Flight;
 import krpc.client.services.SpaceCenter.Node;
@@ -91,14 +93,32 @@ public class LaunchIntoOrbit {
 
         // Disable engines when target apoapsis is reached
         vessel.getControl().setThrottle(0.25f);
-        while (apoapsis.get() < targetAltitude) {
+        {
+          Expression expr = Expression.greaterThanOrEqual(
+            connection,
+            Expression.call(
+              connection, connection.getCall(vessel.getOrbit(), "getApoapsisAltitude")),
+            Expression.constantDouble(connection, targetAltitude));
+          Event event = connection.addEvent(expr);
+          synchronized (event.getCondition()) {
+            event.waitFor();
+          }
         }
         System.out.println("Target apoapsis reached");
         vessel.getControl().setThrottle(0);
 
         // Wait until out of atmosphere
         System.out.println("Coasting out of atmosphere");
-        while (altitude.get() < 70500) {
+        {
+          Expression expr = Expression.greaterThanOrEqual(
+            connection,
+            Expression.call(
+              connection, connection.getCall(vessel.flight(null), "getMeanAltitude")),
+            Expression.constantDouble(connection, 70500));
+          Event event = connection.addEvent(expr);
+          synchronized (event.getCondition()) {
+            event.waitFor();
+          }
         }
 
         // Plan circularization burn (using vis-viva equation)
@@ -137,19 +157,34 @@ public class LaunchIntoOrbit {
 
         // Execute burn
         System.out.println("Ready to execute burn");
-        Stream<Double> timeToApoapsis =
-          connection.addStream(vessel.getOrbit(), "getTimeToApoapsis");
-        while (timeToApoapsis.get() - (burnTime / 2.0) > 0) {
+        {
+          Expression expr = Expression.lessThanOrEqual(
+            connection,
+            Expression.call(
+              connection, connection.getCall(vessel.getOrbit(), "getTimeToApoapsis")),
+            Expression.constantDouble(connection, burnTime / 2.0));
+          Event event = connection.addEvent(expr);
+          synchronized (event.getCondition()) {
+            event.waitFor();
+          }
         }
         System.out.println("Executing burn");
         vessel.getControl().setThrottle(1);
         Thread.sleep((int)((burnTime - 0.1) * 1000));
         System.out.println("Fine tuning");
         vessel.getControl().setThrottle(0.05f);
-        Stream<Triplet<Double,Double,Double>> remainingBurn =
-          connection.addStream(
-            node, "remainingBurnVector", node.getReferenceFrame());
-        while (remainingBurn.get().getValue1() > 0) {
+        {
+          Expression remainingBurn = Expression.call(
+            connection,
+            connection.getCall(node, "remainingBurnVector", node.getReferenceFrame()));
+          Expression expr = Expression.lessThanOrEqual(
+            connection,
+            Expression.get(connection, remainingBurn, Expression.constantInt(connection, 1)),
+            Expression.constantDouble(connection, 0));
+          Event event = connection.addEvent(expr);
+          synchronized (event.getCondition()) {
+            event.waitFor();
+          }
         }
         vessel.getControl().setThrottle(0);
         node.remove();

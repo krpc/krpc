@@ -32,12 +32,12 @@ game, looking for classes, methods and properties with these attributes.
 The following example implements a service that can control the throttle and staging of the active
 vessel. To add this to the server, compile the code and place the DLL in your GameData directory.
 
-.. literalinclude:: /scripts/ServiceAPIExample.lib.cs
+.. literalinclude:: /scripts/extending/ServiceAPIExample.lib.cs
    :language: csharp
 
 The following example shows how this service can then be used from a python client:
 
-.. literalinclude:: /scripts/ServiceAPIExample.py
+.. literalinclude:: /scripts/extending/ServiceAPIExample.py
    :language: python
 
 Some of the client libraries automatically pick up changes to the functionality provided by the
@@ -53,7 +53,7 @@ Attributes
 The following `C# attributes <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ can be used
 to add functionality to the kRPC server.
 
-.. csharp:attribute:: KRPCService (string Name, uint Id = 0, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.All)
+.. cs:attribute:: KRPCService (string Name, uint Id = 0, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.All)
 
    :parameters:
 
@@ -65,7 +65,7 @@ to add functionality to the kRPC server.
       the service name.
 
     * **GameScene** -- The game scenes in which the services procedures are available. Defaults to
-      all game scenes. If this is set to :csharp:enum:`KRPC.Service.GameScene.Inherit` the service
+      all game scenes. If this is set to :cs:value:`KRPC.Service.GameScene.Inherit` the service
       will be available in all game scenes.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to a static
@@ -86,7 +86,7 @@ to add functionality to the kRPC server.
    * The name of the class, or the ``Name`` parameter if specified, must be a valid :ref:`kRPC
      identifier <service-api-identifiers>`.
 
-   * The class must not be declared within another class that has the :csharp:attr:`KRPCService`
+   * The class must not be declared within another class that has the :cs:attr:`KRPCService`
      attribute. Nesting of services is not permitted.
 
    Services are configured to be available in specific :ref:`game scenes <service-api-game-scenes>`
@@ -98,33 +98,30 @@ to add functionality to the kRPC server.
 
    * Declare a service called ``EVA``:
 
-     .. code-block:: csharp
-
-        [KRPCService]
-        public static class EVA {
-            ...
-        }
+     .. literalinclude:: /scripts/extending/ServiceAttribute.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
 
    * Declare a service called ``MyEVAService`` (different to the name of the class):
 
-     .. code-block:: csharp
-
-        [KRPCService (Name = "MyEVAService")]
-        public static class EVA {
-            ...
-        }
+     .. literalinclude:: /scripts/extending/ServiceName.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
 
    * Declare a service called ``FlightTools`` that is only available during the ``Flight`` game
      scene:
 
-     .. code-block:: csharp
+     .. literalinclude:: /scripts/extending/ServiceGameScene.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
 
-        [KRPCService (GameScene = GameScene.Flight)]
-        public static class FlightTools {
-            ...
-        }
-
-.. csharp:attribute:: KRPCProcedure (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
+.. cs:attribute:: KRPCProcedure (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
 
    :parameters:
 
@@ -142,7 +139,7 @@ to add functionality to the kRPC server.
 
    * The name of the method must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
 
-   * The method must be declared inside a class that is a :csharp:attr:`KRPCService`.
+   * The method must be declared inside a class that is a :cs:attr:`KRPCService`.
 
    * The parameter types and return type must be :ref:`types that kRPC knows how to serialize
      <service-api-serializable-types>`.
@@ -150,33 +147,28 @@ to add functionality to the kRPC server.
    * Parameters can have default arguments.
 
    If the procedure might return a null value, the ``Nullable`` parameter of the attribute must be
-   set to true.
+   set to true. A parameter that may be ``null`` must likewise be made nullable. See
+   :ref:`service-api-null-values`.
 
    **Example**
 
    The following defines a service called ``EVA`` with a ``PlantFlag`` procedure that takes a name
    and an optional description, and returns a ``Flag`` object.
 
-   .. code-block:: csharp
-
-      [KRPCService]
-      public static class EVA {
-          [KRPCProcedure]
-          public static Flag PlantFlag (string name, string description = "")
-          {
-              ...
-          }
-      }
+   .. literalinclude:: /scripts/extending/PlantFlag.lib.cs
+      :language: csharp
+      :start-after: [docs]
+      :end-before: [/docs]
+      :dedent:
 
    This can be called from a python client as follows:
 
-   .. code-block:: python
+   .. literalinclude:: /scripts/extending/PlantFlag.py
+      :language: python
+      :start-after: [docs]
+      :end-before: [/docs]
 
-      import krpc
-      conn = krpc.connect()
-      flag = conn.eva.plant_flag('Landing Site', 'One small step for Kerbal-kind')
-
-.. csharp:attribute:: KRPCClass (string Service, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
+.. cs:attribute:: KRPCClass (string Service, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
 
    :parameters:
 
@@ -190,10 +182,10 @@ to add functionality to the kRPC server.
    non-static classes. It adds the class to the server, so that references to instances of the class
    can be passed between client and server.
 
-   A :csharp:attr:`KRPCClass` must be part of a service, just like a
-   :csharp:attr:`KRPCProcedure`. However, it would be restrictive if the class had to be declared as
-   a nested class inside a class with the :csharp:attr:`KRPCService` attribute. Therefore, a
-   :csharp:attr:`KRPCClass` can be declared outside of any service if it has the ``Service``
+   A :cs:attr:`KRPCClass` must be part of a service, just like a
+   :cs:attr:`KRPCProcedure`. However, it would be restrictive if the class had to be declared as
+   a nested class inside a class with the :cs:attr:`KRPCService` attribute. Therefore, a
+   :cs:attr:`KRPCClass` can be declared outside of any service if it has the ``Service``
    parameter set to the name of the service that it is part of. Also, the service that the
    ``Service`` parameter refers to does not have to exist. If it does not exist, a service with the
    given name is created.
@@ -210,33 +202,28 @@ to add functionality to the kRPC server.
 
    * The name of the class must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
 
-   * The class must either be declared inside a class that is a :csharp:attr:`KRPCService`, or have
+   * The class must either be declared inside a class that is a :cs:attr:`KRPCService`, or have
      its ``Service`` parameter set to the name of the service it is part of.
 
    **Examples**
 
    * Declare a class called ``Flag`` in the ``EVA`` service:
 
-     .. code-block:: csharp
-
-        [KRPCService]
-        public static class EVA {
-            [KRPCClass]
-            public class Flag {
-                ...
-            }
-        }
+     .. literalinclude:: /scripts/extending/NestedClass.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
 
    * Declare a class called ``Flag``, without nesting the class definition in a service class:
 
-     .. code-block:: csharp
+     .. literalinclude:: /scripts/extending/ClassAttribute.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
 
-        [KRPCClass (Service = "EVA")]
-        public class Flag {
-            ...
-        }
-
-.. csharp:attribute:: KRPCMethod (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
+.. cs:attribute:: KRPCMethod (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
 
    :parameters:
 
@@ -246,8 +233,9 @@ to add functionality to the kRPC server.
       setting from the class the method is defined in.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to methods
-   inside a :csharp:attr:`KRPCClass`. This allows a client to call methods on an instance, or static
-   methods in the class.
+   inside a :cs:attr:`KRPCClass`. This allows a client to call methods on an instance, or static
+   methods in the class. It can also be applied to a C# extension method, adding a method to a
+   class belonging to another service; see :ref:`service-api-extension-members`.
 
    The method to which this attribute is applied must satisfy the following criteria:
 
@@ -255,7 +243,8 @@ to add functionality to the kRPC server.
 
    * The name of the method must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
 
-   * The method must be declared in a :csharp:attr:`KRPCClass`.
+   * The method must be declared in a :cs:attr:`KRPCClass`, or be a ``public static`` extension
+     method of one.
 
    * The parameter types and return type must be :ref:`types that kRPC can serialize
      <service-api-serializable-types>`.
@@ -263,45 +252,43 @@ to add functionality to the kRPC server.
    * Parameters can have default arguments.
 
    If the method might return a null value, the ``Nullable`` parameter of the attribute must be set
-   to true.
+   to true. A parameter that may be ``null`` must likewise be made nullable. See
+   :ref:`service-api-null-values`.
 
    **Example**
 
    Declare a ``Remove`` method in the ``Flag`` class:
 
-   .. code-block:: csharp
+   .. literalinclude:: /scripts/extending/ClassMethod.lib.cs
+      :language: csharp
+      :start-after: [docs]
+      :end-before: [/docs]
+      :dedent:
 
-      [KRPCClass (Service = "EVA")]
-      public class Flag {
-          [KRPCMethod]
-          public void Remove()
-          {
-              ...
-          }
-      }
-
-.. csharp:attribute:: KRPCProperty (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
+.. cs:attribute:: KRPCProperty (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
 
    :parameters:
 
-    * **Nullable** -- Whether the return value of the procedure can be null. Defaults to false.
+    * **Nullable** -- Whether the property can be null. This makes both the getter's return value
+      and the setter's argument nullable, and on a field of a :cs:attr:`KRPCStruct` it makes
+      the field nullable. Defaults to false.
 
     * **GameScene** -- The game scenes in which the property is available. Defaults to inherit this
       setting from the class the property is defined in.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to class
-   properties, and comes in two flavors:
+   properties, and comes in three flavors:
 
-   1. Applied to static properties in a :csharp:attr:`KRPCService`. In this case, the property must
+   1. Applied to static properties in a :cs:attr:`KRPCService`. In this case, the property must
       satisfy the following criteria:
 
       * Must be ``public static`` and have at least one publicly accessible getter or setter.
 
       * The name of the property must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
 
-      * Must be declared inside a :csharp:attr:`KRPCService`.
+      * Must be declared inside a :cs:attr:`KRPCService`.
 
-   2. Applied to non-static properties in a :csharp:attr:`KRPCClass`. In this case, the property
+   2. Applied to non-static properties in a :cs:attr:`KRPCClass`. In this case, the property
       must satisfy the following criteria:
 
       * Must be ``public`` and *not* ``static``, and have at least one publicly accessible getter or
@@ -309,48 +296,42 @@ to add functionality to the kRPC server.
 
       * The name of the property must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
 
-      * Must be declared inside a :csharp:attr:`KRPCClass`.
+      * Must be declared inside a :cs:attr:`KRPCClass`.
 
-   If the property getter might return a null value, the ``Nullable`` parameter of the attribute
-   must be set to true.
+   3. Applied to a ``public static`` extension method of a :cs:attr:`KRPCClass`, adding a
+      property to a class belonging to another service. C# has no extension properties, so the
+      getter and setter are a pair of methods; see :ref:`service-api-extension-members`.
+
+   If the property getter might return a null value, or the setter should accept ``null``, the
+   ``Nullable`` parameter of the attribute must be set to true. A ``null`` write to a property that
+   is not nullable fails with an error. See :ref:`service-api-null-values`.
 
    **Examples**
 
    * Applied to a static property in a service:
 
-     .. code-block:: csharp
-
-        [KRPCService]
-        public static class EVA {
-            [KRPCProperty]
-            public static Flag LastFlag
-            {
-                get { ... }
-            }
-        }
+     .. literalinclude:: /scripts/extending/ServiceProperty.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
 
      This property can be accessed from a python client as follows:
 
-     .. code-block:: python
-
-        import krpc
-        conn = krpc.connect()
-        flag = conn.eva.last_flag
+     .. literalinclude:: /scripts/extending/ServiceProperty.py
+        :language: python
+        :start-after: [docs]
+        :end-before: [/docs]
 
    * Applied to a non-static property in a class:
 
-     .. code-block:: csharp
+     .. literalinclude:: /scripts/extending/ClassProperty.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
 
-        [KRPCClass (Service = "EVA")]
-        public class Flag {
-            [KRPCProperty]
-            public string Name { get; set; }
-
-            [KRPCProperty]
-            public string Description { get; set; }
-        }
-
-.. csharp:attribute:: KRPCEnum (string Service)
+.. cs:attribute:: KRPCEnum (string Service)
 
    :parameters:
 
@@ -359,10 +340,10 @@ to add functionality to the kRPC server.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to
    enumeration types. It adds the enumeration and its permissible values to the server. This
-   attribute works similarly to :csharp:attr:`KRPCClass`, but is applied to enumeration types.
+   attribute works similarly to :cs:attr:`KRPCClass`, but is applied to enumeration types.
 
-   A :csharp:attr:`KRPCEnum` must be part of a service, just like a
-   :csharp:attr:`KRPCClass`. Similarly, a :csharp:attr:`KRPCEnum` can be declared outside of a
+   A :cs:attr:`KRPCEnum` must be part of a service, just like a
+   :cs:attr:`KRPCClass`. Similarly, a :cs:attr:`KRPCEnum` can be declared outside of a
    service if it has its ``Service`` parameter set to the name of the service that it is part of.
 
    The enumeration type to which this attribute is applied must satisfy the following criteria:
@@ -371,7 +352,7 @@ to add functionality to the kRPC server.
 
    * The name of the enumeration must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
 
-   * The enumeration must either be declared inside a :csharp:attr:`KRPCService`, or have it's
+   * The enumeration must either be declared inside a :cs:attr:`KRPCService`, or have it's
      ``Service`` parameter set to the name of the service it is part of.
 
    * The `underlying C# type
@@ -382,23 +363,98 @@ to add functionality to the kRPC server.
 
    * Declare an enumeration type with two values:
 
-     .. code-block:: csharp
-
-        [KRPCEnum (Service = "EVA")]
-        public enum FlagState {
-            Raised,
-            Lowered
-        }
+     .. literalinclude:: /scripts/extending/Enumeration.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
 
      This can be used from a python client as follows:
 
-     .. code-block:: python
+     .. literalinclude:: /scripts/extending/Enumeration.py
+        :language: python
+        :start-after: [docs]
+        :end-before: [/docs]
 
-        import krpc
-        conn = krpc.connect()
-        state = conn.eva.FlagState.lowered
+.. cs:attribute:: KRPCStruct (string Service)
 
-.. csharp:attribute:: KRPCException (string Service, Type MappedException)
+   :parameters:
+
+    * **Service** -- Optional name of the service to add this structure to. If omitted, the
+      structure is added to the service that contains its definition.
+
+   This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to a
+   ``struct``. It adds the structure and its fields to the server. A structure is a compound value
+   with named fields. Its value is sent to the client in full, where a class sends a reference to
+   an object held on the server.
+
+   The fields of the structure are its ``public`` instance properties that are annotated with
+   :cs:attr:`KRPCProperty` and have both a getter and a setter, in the order they are declared.
+   An unannotated property is invisible to a client.
+
+   A :cs:attr:`KRPCStruct` must be part of a service, just like a
+   :cs:attr:`KRPCClass`. Similarly, a :cs:attr:`KRPCStruct` can be declared outside of a
+   service if it has its ``Service`` parameter set to the name of the service that it is part of.
+
+   The struct type to which this attribute is applied must satisfy the following criteria:
+
+   * The struct must be ``public`` and must not be generic.
+
+   * The name of the struct must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
+
+   * The struct must either be declared inside a :cs:attr:`KRPCService`, or have its ``Service``
+     parameter set to the name of the service it is part of.
+
+   * It must have at least one field, and the type of every field must be a :ref:`serializable type
+     <service-api-serializable-types>`.
+
+   * A field must not restrict the game scenes it is available in, so the ``GameScene`` parameter
+     of its :cs:attr:`KRPCProperty` attribute must not be set.
+
+   * A field may be nullable. See :ref:`service-api-null-values`.
+
+   * The structure must not contain itself, whether directly or through the fields of another
+     structure that it contains.
+
+   Fields may only be **appended** to a structure. A structure's value is sent as the values of its
+   fields in order, so reordering them, removing one, or changing the type of one breaks clients
+   generated against the previous definition.
+
+   **Choosing between a structure and a class.** A structure sends the values of all of its fields
+   in a single procedure call. Use one for compound data whose fields are almost always wanted
+   together, such as a position and a velocity. Use a :cs:attr:`KRPCClass` for something with
+   mutable state, or whose members are expensive enough to read one at a time.
+
+   **Examples**
+
+   * Declare a structure with three fields:
+
+     .. literalinclude:: /scripts/extending/Structure.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
+
+     This can be used from a python client as follows:
+
+     .. literalinclude:: /scripts/extending/Structure.py
+        :language: python
+        :start-after: [docs]
+        :end-before: [/docs]
+
+   * Declare a structure with two nullable fields:
+
+     .. literalinclude:: /scripts/extending/NullableStructure.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
+
+     A reference-typed field is made nullable by the ``Nullable`` parameter of its
+     :cs:attr:`KRPCProperty` attribute. A field whose type is ``Nullable<T>`` needs no
+     annotation.
+
+.. cs:attribute:: KRPCException (string Service, Type MappedException)
 
    :parameters:
 
@@ -410,8 +466,8 @@ to add functionality to the kRPC server.
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to
    an exception class type.
 
-   A :csharp:attr:`KRPCException` must be part of a service, just like a
-   :csharp:attr:`KRPCClass`. Similarly, a :csharp:attr:`KRPCException` can be declared outside of a
+   A :cs:attr:`KRPCException` must be part of a service, just like a
+   :cs:attr:`KRPCClass`. Similarly, a :cs:attr:`KRPCException` can be declared outside of a
    service if it has its ``Service`` parameter set to the name of the service that it is part of.
 
    The class type to which this attribute is applied must satisfy the following criteria:
@@ -420,10 +476,10 @@ to add functionality to the kRPC server.
 
    * The name of the class must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
 
-   * The class must either be declared inside a :csharp:attr:`KRPCService`, or have it's ``Service``
+   * The class must either be declared inside a :cs:attr:`KRPCService`, or have it's ``Service``
      parameter set to the name of the service it is part of.
 
-.. csharp:attribute:: KRPCDefaultValue (Type ValueConstructor)
+.. cs:attribute:: KRPCDefaultValue (Type ValueConstructor)
 
    :parameters:
 
@@ -445,58 +501,97 @@ to add functionality to the kRPC server.
 
    * Set the default value to a list:
 
-     .. code-block:: csharp
-
-        public static class DefaultKerbals
-        {
-            public static IList<string> Create ()
-            {
-                return new List<string> { "Jeb", "Bill", "Bob" };
-            }
-        }
-
-        [KRPCProcedure]
-        public static void HireKerbals (
-            [KRPCDefaultValue (typeof(DefaultKerbals))] IList<string> names)
-        {
-            ...
-        }
+     .. literalinclude:: /scripts/extending/DefaultValue.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
 
    * Set the default value to a compile time constant, which does not require the
      ``KRPCDefaultValue`` attribute:
 
-     .. code-block:: csharp
+     .. literalinclude:: /scripts/extending/DefaultConstant.lib.cs
+        :language: csharp
+        :start-after: [docs]
+        :end-before: [/docs]
+        :dedent:
 
-        [KRPCProcedure]
-        public static void HireKerbal (string name = "Jeb")
-        {
-            ...
-        }
+.. cs:attribute:: KRPCNullable (params KRPC.Service.Attributes.Position[] Path)
 
-.. csharp:attribute:: KRPCNullable
+   :parameters:
 
-   This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ can be applied to a
-   kRPC procedure/class method parameter that has a class type. It indicates that the parameter
-   is permitted to be ``null``. Without this attribute, a client can assume that the parameter
-   should never be null.
+    * **Path** -- Optional positions to step through to reach the nullable one, outermost first.
+      An empty path, the usual case, is the value itself.
 
-   Note: the server does not check if a value passed to an RPC is ``null``. This needs to be
-   explicitly checked in the RPC's code (if desired) and an appropriate exception thrown.
-   This attribute is only used as a hint to the client that the parameter is nullable.
+   This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to a
+   kRPC procedure or class method parameter to indicate that the parameter is permitted to be
+   ``null``. It can be applied to a parameter of any serializable type, not only class types.
+   Applied to a method it marks the return value instead. Applied to a property it marks both
+   the getter's return value and the setter's argument, as ``Nullable`` on
+   :cs:attr:`KRPCProperty` does.
+
+   The server enforces nullability: a call that passes ``null`` for a parameter that is not
+   nullable fails with an error. A parameter is nullable if it is marked with ``KRPCNullable``,
+   is assigned a default value of ``null``, or has a ``Nullable<T>`` type. See
+   :ref:`service-api-null-values`.
 
    **Example**
 
-   .. code-block:: csharp
+   .. literalinclude:: /scripts/extending/NullableParameter.lib.cs
+      :language: csharp
+      :start-after: [docs]
+      :end-before: [/docs]
+      :dedent:
 
-      [KRPCService]
-      public static class EVA {
-          [KRPCProcedure]
-          public static void DestroyVessel ([KRPCNullable] Vessel vessel)
-          {
-              // don't do anything if vessel is null
-              ...
-          }
-      }
+.. _service-api-nullable-positions:
+
+Nullable Positions
+""""""""""""""""""
+
+Giving :cs:attr:`KRPCNullable` a path marks a position nested inside a value, rather than the
+value itself. Each step names a position of the type the step before it reached, outermost first:
+
+.. literalinclude:: /scripts/extending/NullablePositions.lib.cs
+   :language: csharp
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
+
+Without the ``using static`` each position is written ``Position.Element``, as ``GameScene``
+already is on :cs:attr:`KRPCProcedure`.
+
+A path step that names no position of the type it is applied to is an error, which the server
+reports when it loads the service. A dictionary key and a set element have no name here, and so
+cannot be made nullable. The positions are:
+
+.. cs:enum:: KRPC.Service.Attributes.Position
+
+   .. cs:enumerator:: Element
+
+      The element of a list.
+
+   .. cs:enumerator:: Value
+
+      The value of a dictionary.
+
+   .. cs:enumerator:: Item1
+
+      The first item of a tuple. ``Item2`` to ``Item7`` name the ones after it.
+
+The attribute may be applied more than once, for a type with several nullable positions:
+
+.. literalinclude:: /scripts/extending/NullablePositionsRepeated.lib.cs
+   :language: csharp
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
+
+A nested position whose type is ``Nullable<T>`` needs no attribute, exactly as a parameter of that
+type does. ``IList<int?>``, ``IDictionary<string, double?>`` and ``Tuple<int?, string>`` are all
+nullable at the position ``Nullable<T>`` marks.
+
+A path that reaches a value-typed position is an error. An ``int``, an ``enum`` and a structure
+hold a null only as ``Nullable<T>``, so ``IList<int>`` must be written ``IList<int?>``.
 
 .. _service-api-identifiers:
 
@@ -517,9 +612,11 @@ following types are serializable:
 * The C# types ``double``, ``float``, ``int``, ``long``, ``uint``, ``ulong``, ``bool``, ``string``
   and ``byte[]``
 
-* Any type annotated with :csharp:attr:`KRPCClass`
+* Any type annotated with :cs:attr:`KRPCClass`
 
-* Any type annotated with :csharp:attr:`KRPCEnum`
+* Any type annotated with :cs:attr:`KRPCEnum`
+
+* Any type annotated with :cs:attr:`KRPCStruct`
 
 * Collections of serializable types:
 
@@ -535,6 +632,63 @@ following types are serializable:
 * Return types can be ``void``
 
 * Protocol buffer message types from namespace ``KRPC.Service.Messages``
+
+.. _service-api-null-values:
+
+Null Values
+^^^^^^^^^^^
+
+A parameter, a return value, a structure field or a position nested inside one of them may be
+``null`` only when it is declared *nullable*. This applies uniformly to every serializable
+type -- class types, ``string``, collections and value types alike. The server enforces it:
+
+* Passing ``null`` as an argument for a parameter that is not nullable fails the call with an
+  error.
+
+* Returning ``null`` from a procedure, method or property getter that is not nullable fails the
+  call with an error.
+
+* A ``null`` in a structure field that is not nullable fails the call with an error, naming the
+  field.
+
+A **parameter** is nullable if any of the following hold:
+
+* It is annotated with :cs:attr:`KRPCNullable`.
+
+* It has a default value of ``null`` (for example ``Vessel target = null``). A null default is
+  itself a declaration that ``null`` is a valid value, so no further annotation is needed.
+
+* Its type is a nullable value type, ``Nullable<T>`` (for example ``int?``); see below.
+
+A **return value** is nullable if the ``Nullable`` parameter of its :cs:attr:`KRPCProcedure`,
+:cs:attr:`KRPCMethod` or :cs:attr:`KRPCProperty` attribute is set to true, or if its type
+is ``Nullable<T>``. For a property, ``Nullable = true`` makes the getter's return value *and* the
+setter's argument nullable.
+
+Return nullability is always declared, as kRPC reads the attribute rather than the method body.
+
+A **structure field** is nullable if the ``Nullable`` parameter of its
+:cs:attr:`KRPCProperty` attribute is set, or if its type is ``Nullable<T>``. Setting
+``Nullable`` on a value-typed field is an error. Write the field as ``Nullable<T>`` instead.
+
+.. _service-api-nullable-value-types:
+
+Nullable Value Types
+""""""""""""""""""""
+
+A parameter, return value or structure field of type ``Nullable<T>`` -- ``int?``, ``float?``,
+``bool?``, an ``enum?`` and so on -- is automatically nullable; it needs neither
+:cs:attr:`KRPCNullable` nor ``Nullable = true``. To clients it appears as an ordinary value of
+type ``T`` that may be null.
+
+Only value types can be ``Nullable<T>``. A `nullable reference type
+<https://learn.microsoft.com/en-us/dotnet/csharp/nullable-references>`_ annotation such as
+``string?`` or ``IList<int>?`` is a compile-time annotation, and the ``?`` is erased before kRPC
+reads the type. Such a parameter or return value is treated as non-nullable.
+
+Use :cs:attr:`KRPCNullable` or ``Nullable = true`` to make a reference-typed parameter,
+return value or structure field nullable, and a path on :cs:attr:`KRPCNullable` to make a
+reference-typed position nested inside one nullable. See :ref:`service-api-nullable-positions`.
 
 Events
 ^^^^^^
@@ -552,25 +706,11 @@ is created by calling the default constructor for type ``KRPC.Service.Event``.
 For example, the following example is a procedure that returns an event that triggers after a given
 number of milliseconds. When the event triggers it is removed.
 
-.. code-block:: csharp
-
-   [KRPCProcedure]
-   public static KRPC.Service.Messages.Event OnTimer(uint milliseconds) {
-       // Create the event
-       var evnt = new KRPC.Service.Event ();
-
-       // Set up a timer that will trigger the event
-       var timer = new System.Timers.Timer (milliseconds);
-       timer.Elapsed += (s, e) => {
-           evnt.Trigger ();
-           evnt.Remove ();
-           timer.Enabled = false;
-       };
-       timer.Start();
-
-       // Return the message describing the event to the client
-       return evnt.Message;
-   }
+.. literalinclude:: /scripts/extending/ManualEvent.lib.cs
+   :language: csharp
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
 
 Actively Polled Events
 """"""""""""""""""""""
@@ -582,21 +722,11 @@ manipulate it as desired.
 For example the following creates an event that triggers when the active vessel reaches the given
 altitude. The event is removed the first time it triggers.
 
-.. code-block:: csharp
-
-   [KRPCProcedure]
-   public static KRPC.Service.Messages.Event OnAltitudeReached(uint altitude) {
-       // Create the event
-       var evnt = new KRPC.Service.Event ((KRPC.Service.Event e) => {
-           bool result = FlightGlobals.ActiveVessel.terrainAltitude > altitude;
-           if (result)
-               e.Remove();
-           return result;
-       });
-
-       // Return the message describing the event to the client
-       return evnt.Message;
-   }
+.. literalinclude:: /scripts/extending/PolledEvent.lib.cs
+   :language: csharp
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
 
 .. _service-api-multi-tick:
 
@@ -612,7 +742,7 @@ The continuation can itself throw another ``YieldException`` to yield again, for
 client blocks throughout and receives the final return value (or exception) once the chain
 completes.
 
-.. csharp:class:: KRPC.Service.YieldException<T>
+.. cs:class:: KRPC.Service.YieldException<T>
 
    Thrown by a procedure or method to suspend execution until the next physics tick. ``T`` must be
    a delegate type. kRPC invokes the delegate on the following ``FixedUpdate`` and uses its return
@@ -629,15 +759,11 @@ Examples
 
 **Simple retry** — re-invoke the same method on each tick until a condition is met:
 
-.. code-block:: csharp
-
-   [KRPCMethod]
-   public void Wait()
-   {
-       if (!IsReady)
-           throw new YieldException<Action>(Wait);
-       // proceed once the condition is satisfied
-   }
+.. literalinclude:: /scripts/extending/YieldRetry.lib.cs
+   :language: csharp
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
 
 Each physics tick kRPC calls ``Wait`` again. As long as the condition is not met, the method
 yields again by passing itself as the next continuation. Once the condition is satisfied the method
@@ -645,22 +771,11 @@ returns normally and the client receives its response.
 
 **Two-phase with closure** — trigger an action, then poll a helper until the result is available:
 
-.. code-block:: csharp
-
-   [KRPCMethod]
-   public Vessel Decouple()
-   {
-       var preVesselIds = FlightGlobals.Vessels.Select(v => v.id).ToList();
-       decoupler.Decouple();
-       return PostDecouple(preVesselIds);
-   }
-
-   Vessel PostDecouple(IList<Guid> preVesselIds, int wait = 0)
-   {
-       if (wait < 10 || !Decoupled)
-           throw new YieldException<Func<Vessel>>(() => PostDecouple(preVesselIds, wait + 1));
-       return new Vessel(FlightGlobals.Vessels.Select(v => v.id).Except(preVesselIds).First());
-   }
+.. literalinclude:: /scripts/extending/YieldDecouple.lib.cs
+   :language: csharp
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
 
 ``Decouple`` fires the decoupler and immediately calls ``PostDecouple``. ``PostDecouple`` yields
 for at least 10 ticks (to let KSP settle the new vessel list) and until the ``Decoupled`` flag
@@ -676,118 +791,108 @@ Anything that can be called is configured to be available from a particular game
 scenes. This includes service procedures and properties, and class methods and properties. This is
 controlled by the following enumeration:
 
-.. csharp:enum:: KRPC.Service.GameScene
+.. cs:enum:: KRPC.Service.GameScene
 
-   .. csharp:value:: Inherit
+   .. cs:enumerator:: Inherit
 
       Inherit the game scene from the containing service or class. This is the default.
 
-   .. csharp:value:: All
+   .. cs:enumerator:: All
 
       All game scenes.
 
-   .. csharp:value:: SpaceCenter
+   .. cs:enumerator:: SpaceCenter
 
       The game scene showing the Kerbal Space Center buildings.
 
-   .. csharp:value:: Flight
+   .. cs:enumerator:: Flight
 
       The game scene showing a vessel in flight (or on the launchpad/runway).
 
-   .. csharp:value:: TrackingStation
+   .. cs:enumerator:: TrackingStation
 
       The tracking station.
 
-   .. csharp:value:: EditorVAB
+   .. cs:enumerator:: EditorVAB
 
       The Vehicle Assembly Building.
 
-   .. csharp:value:: EditorSPH
+   .. cs:enumerator:: EditorSPH
 
       The Space Plane Hangar.
 
-   .. csharp:value:: Editor
+   .. cs:enumerator:: Editor
 
       Either the VAB or the SPH.
 
-   .. csharp:value:: MissionBuilder
+   .. cs:enumerator:: MissionBuilder
 
       The mission builder.
 
-   .. csharp:value:: AstronautComplex
+   .. cs:enumerator:: AstronautComplex
 
       The astronaut complex facility, open within the space center scene.
 
-   .. csharp:value:: MissionControl
+   .. cs:enumerator:: MissionControl
 
       The mission control facility, open within the space center scene.
 
-   .. csharp:value:: ResearchAndDevelopment
+   .. cs:enumerator:: ResearchAndDevelopment
 
       The research and development facility, open within the space center scene.
 
-   .. csharp:value:: Administration
+   .. cs:enumerator:: Administration
 
       The administration facility, open within the space center scene.
 
-The special enumeration value :csharp:enum:`KRPC.Service.GameScene.Inherit` can be used to inherit
+The special enumeration value :cs:value:`KRPC.Service.GameScene.Inherit` can be used to inherit
 the game scene setting from the containing service or class. Game scene inheritance works as
 follows:
 
-* A service set to :csharp:enum:`KRPC.Service.GameScene.Inherit` will be available in all game
-  scenes. This is equivalent to setting it to :csharp:enum:`KRPC.Service.GameScene.All`.
+* A service set to :cs:value:`KRPC.Service.GameScene.Inherit` will be available in all game
+  scenes. This is equivalent to setting it to :cs:value:`KRPC.Service.GameScene.All`.
 
-* A service procedure or property set to :csharp:enum:`KRPC.Service.GameScene.Inherit` will be
+* A service procedure or property set to :cs:value:`KRPC.Service.GameScene.Inherit` will be
   available in the same game scenes as the containing service.
 
-* A class set to :csharp:enum:`KRPC.Service.GameScene.Inherit` will be available in the same game
+* A class set to :cs:value:`KRPC.Service.GameScene.Inherit` will be available in the same game
   scenes as the containing service.
 
-* A class method or property set to :csharp:enum:`KRPC.Service.GameScene.Inherit` will be available
+* A class method or property set to :cs:value:`KRPC.Service.GameScene.Inherit` will be available
   in the same game scenes as the containing class. If the containing class is set to
-  :csharp:enum:`KRPC.Service.GameScene.Inherit` the class method or property will be available in
+  :cs:value:`KRPC.Service.GameScene.Inherit` the class method or property will be available in
   the same game scenes as the containing service.
 
 **Examples**
 
 * Declare a service whose procedures are available in the
-  :csharp:enum:`KRPC.Service.GameScene.Flight` game scene:
+  :cs:value:`KRPC.Service.GameScene.Flight` game scene:
 
-  .. code-block:: csharp
-
-     [KRPCService (GameScene = GameScene.Flight)]
-     public static class MyService {
-        ...
-     }
+  .. literalinclude:: /scripts/extending/ServiceInScene.lib.cs
+     :language: csharp
+     :start-after: [docs]
+     :end-before: [/docs]
+     :dedent:
 
 * Declare a service whose procedures are available in the
-  :csharp:enum:`KRPC.Service.GameScene.Flight` and :csharp:enum:`KRPC.Service.GameScene.Editor` game
+  :cs:value:`KRPC.Service.GameScene.Flight` and :cs:value:`KRPC.Service.GameScene.Editor` game
   scenes:
 
-  .. code-block:: csharp
-
-     [KRPCService (GameScene = (GameScene.Flight | GameScene.Editor))]
-     public static class MyService {
-        ...
-     }
+  .. literalinclude:: /scripts/extending/ServiceInScenes.lib.cs
+     :language: csharp
+     :start-after: [docs]
+     :end-before: [/docs]
+     :dedent:
 
 * Declare a service whose procedures are available in the
-  :csharp:enum:`KRPC.Service.GameScene.Flight` game scene by default, and declare a procedure which
+  :cs:value:`KRPC.Service.GameScene.Flight` game scene by default, and declare a procedure which
   overrides this and is available in all game scenes:
 
-  .. code-block:: csharp
-
-     [KRPCService (GameScene = GameScene.Flight)]
-     public static class MyService {
-        ...
-
-        [KRPCProcedure (GameScene = GameScene.All)]
-        public static string MyProcedure() {
-           ...
-        }
-
-        ...
-     }
+  .. literalinclude:: /scripts/extending/ProcedureInScenes.lib.cs
+     :language: csharp
+     :start-after: [docs]
+     :end-before: [/docs]
+     :dedent:
 
 Deprecating Service Members
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -796,13 +901,11 @@ To deprecate part of a service's API, annotate it with the standard C# ``System.
 attribute. This can be applied to services, procedures, properties, classes, methods and
 enumerations. For example:
 
-.. code-block:: csharp
-
-   [KRPCProcedure]
-   [Obsolete ("Use <see cref='Flag.Remove'/> instead.")]
-   public static void RemoveFlag(Flag flag) {
-       ...
-   }
+.. literalinclude:: /scripts/extending/Deprecated.lib.cs
+   :language: csharp
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
 
 The deprecation, along with the message from the attribute, is included in the service definition
 and sent to clients over the wire, as the ``deprecated`` and ``deprecated_reason`` fields returned
@@ -811,6 +914,91 @@ name of the referenced member; unqualified names are resolved against the declar
 mechanism: for example, the Python client emits a ``DeprecationWarning`` when a deprecated member
 is called, and the generated C#, C++, Java and C-nano client code marks deprecated members with
 ``[Obsolete]``, ``[[deprecated]]``, ``@Deprecated`` and ``KRPC_DEPRECATED`` respectively.
+
+.. _service-api-extension-members:
+
+Extending Other Services
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+A mod can add methods and properties to a class belonging to another service, as
+:cs:attr:`KRPCClass` lets it add a class to one. A ``TestFlight`` mod can add
+``vessel.parts.with_failure(...)`` to ``SpaceCenter.Parts``. The member is written as a C# extension
+method, and joins the service that owns the type being extended:
+
+.. literalinclude:: /scripts/extending/ExtensionMethod.lib.cs
+   :language: csharp
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
+
+The containing class needs no kRPC attribute, only ``public static``. A dynamic client, such as
+Python or Lua, exposes the member as an ordinary member of the class it extends. A static client,
+such as C#, C++, Java or C-nano, reaches it once its code is regenerated from the mod's assembly
+and the assembly declaring the service being extended; see :ref:`service-api-clientgen`.
+
+C# has no extension properties, so a property is a pair of extension methods named ``GetX`` and
+``SetX``, each carrying :cs:attr:`KRPCProperty`. The getter takes only the instance and returns
+a value. The setter takes the instance and the value to set, and returns nothing. Either one on its
+own gives a read-only or a write-only property.
+
+.. literalinclude:: /scripts/extending/ExtensionProperty.lib.cs
+   :language: csharp
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
+
+An extension member must satisfy the following criteria:
+
+* The method must be a ``public static`` C# extension method, declared in a ``public static`` class
+  outside any :cs:attr:`KRPCService`. A class that is not public puts its members out of reach,
+  and the server names it in a warning in the log.
+
+* The type it extends must be a :cs:attr:`KRPCClass`. A :cs:attr:`KRPCStruct` is a value
+  with a fixed set of fields, and cannot be extended.
+
+* The name of the member must be a valid :ref:`kRPC identifier <service-api-identifiers>`, and must
+  not clash with a member the class already has, or with another extension member. The getter and
+  the setter of an extension property must be declared in the same class.
+
+* The parameter types and return type must be :ref:`types that kRPC can serialize
+  <service-api-serializable-types>`, and may name types from any service.
+
+Deprecation and the ``Nullable`` parameter of the attribute work as they do for a member declared
+in the class. A setter's value is an ordinary parameter, so mark it nullable with
+:cs:attr:`KRPCNullable`. The ``GameScene`` parameter defaults to the game scenes of the class
+being extended.
+
+Exposing a Part Module as a Class
+"""""""""""""""""""""""""""""""""
+
+A mod that adds a ``PartModule`` to a part can expose it as a class of its own, in place of the
+string-keyed ``SpaceCenter.Module`` API. Declare a :cs:attr:`KRPCClass` wrapping the module, and
+add a nullable extension property on ``SpaceCenter.Part`` that returns it. The wrapper names the
+module with a ``KRPC.SpaceCenter.ModuleRef``, as ``SpaceCenter.Module`` does:
+
+.. literalinclude:: /scripts/extending/PartModuleClass.lib.cs
+   :language: csharp
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
+
+The server keeps the object in a store keyed on the object itself, so the rules the ``SpaceCenter``
+classes follow apply here too. A ``ModuleRef`` names one of a part's modules by its class and its
+position among the part's modules of that class, which outlives any one of them. The wrapper holds
+the part and the reference, and finds the module again on each access.
+
+``Equals`` and ``GetHashCode`` read that identity alone, never a resolved game object, and build the
+hash with ``KRPC.Utils.Hash``. The extension property builds a wrapper on each call, so value
+identity is what keeps the store to one entry for the module.
+
+``ModuleRef.Get`` raises ``KRPC.Service.KRPC.ObjectDestroyedException`` once the part no longer has
+the module. ``ModuleRef.StateOn`` gives the module the state of its part, which is what lets the
+store drop the object once the game destroys the part.
+
+The reference records where it last found the module, so the field holding one is declared without
+``readonly``. A ``readonly`` field is copied on each access, and the record is written to the copy.
+
+Clients reach the module as ``part.failure_module.failed``.
 
 Documentation
 -------------
@@ -851,18 +1039,20 @@ You can then run the script from the command line:
    $ krpc-clientgen --help
 
    usage: krpc-clientgen [-h] [-v] [-o OUTPUT] [--ksp KSP]
-                         [--output-defs OUTPUT_DEFS]
-                         {cpp,csharp,java} service input [input ...]
+                         [--include SERVICE=PATH] [--output-defs OUTPUT_DEFS]
+                         language service input [input ...]
 
    Generate client source code for kRPC services.
 
    positional arguments:
-     {cpp,csharp,java}     Language to generate
+     language              Language to generate (cnano, cpp, csharp, java,
+                           python) or path to generator
      service               Name of service to generate
-     input                 Path to service definition JSON file or assembly
-                           DLL(s)
+     input                 Path to service definition JSON file(s) or assembly
+                           DLL(s). JSON files can give the definitions of the
+                           services whose types a DLL's service uses.
 
-   optional arguments:
+   options:
      -h, --help            show this help message and exit
      -v, --version         show program's version number and exit
      -o OUTPUT, --output OUTPUT
@@ -870,13 +1060,27 @@ You can then run the script from the command line:
                            source code to standard output.
      --ksp KSP             Path to Kerbal Space Program directory. Required when
                            reading from an assembly DLL(s)
+     --include SERVICE=PATH
+                           Include the generated code of another service, whose
+                           types the service uses, from the given path. Required
+                           by the C++ and C nano generators for each such
+                           service.
      --output-defs OUTPUT_DEFS
-                           When generting client code from a DLL, output the
+                           When generating client code from a DLL, output the
                            service definitions to the given JSON file
 
 Client code can be generated either directly from an assembly DLL containing the service, or from a
 JSON file that has previously been generated from an assembly DLL (using the ``--output-defs``
 flag).
+
+.. note::
+
+   Pass every assembly that declares part of the service. A mod adding an extension member to
+   another service's class is generated alongside that service's assembly; see
+   :ref:`service-api-extension-members`.
+
+A service that uses a structure from another service also needs the definitions of that service.
+Pass its JSON file from ``GameData/kRPC`` as another input, e.g. ``KRPC.StdLib.json``.
 
 Generating client code from an assembly DLL requires a copy of Kerbal Space Program and a C# runtime
 to be available on the machine. In contrast, generating client code from a JSON file does not have
@@ -889,7 +1093,7 @@ The following demonstrates how to generate code for the C++ and C# clients to in
 LaunchControl service, given in an example previously.
 
 krpc-clientgen expects to be passed the location of your copy of Kerbal Space Program, the name of
-the language to generate, the name of the service (from the :csharp:attr:`KRPCService` attribute), a
+the language to generate, the name of the service (from the :cs:attr:`KRPCService` attribute), a
 path to the assembly containing the service and the path to write the generated code to.
 
 For C++, run the following:
@@ -897,7 +1101,9 @@ For C++, run the following:
 ``krpc-clientgen --ksp=/path/to/ksp cpp LaunchControl LaunchControl.dll launch_control.hpp``
 
 To then use the LaunchControl service from C++, you need to link your code against the C++ client
-library, and include `launch_control.hpp`.
+library, and include `launch_control.hpp`. If the service uses types from another service, pass
+``--include`` with the path of that service's header, so that `launch_control.hpp` includes it,
+e.g. ``--include=SpaceCenter=krpc/services/space_center.hpp``.
 
 For C#, run the following:
 

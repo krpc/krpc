@@ -32,7 +32,7 @@ CelestialBody
       The orbit of the body.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Orbit`
+      :rtype: :class:`Orbit` or None
    
 
    .. attribute:: mass
@@ -79,7 +79,7 @@ CelestialBody
    .. attribute:: rotation_angle
 
       The current rotation angle of the body, in radians.
-      A value between 0 and 2·pi
+      A value between 0 and 2 pi.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -88,7 +88,7 @@ CelestialBody
    .. attribute:: initial_rotation
 
       The initial rotation angle of the body (at UT 0), in radians.
-      A value between 0 and 2·pi
+      A value between 0 and 2 pi.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -171,6 +171,66 @@ CelestialBody
       :rtype: tuple(float, float, float)
    
 
+   .. method:: surface_reference_frame(latitude, longitude, [altitude = 0.0])
+
+      Create a reference frame fixed to the surface at the given latitude and longitude.
+
+      * The origin is the given altitude above the surface, at the
+        given latitude and longitude.
+      * The axes rotate with the body.
+      * The x-axis points out from the center of the body.
+      * The y-axis points north.
+      * The z-axis points east.
+
+      :param float latitude: Latitude in degrees.
+      :param float longitude: Longitude in degrees.
+      :param float altitude: Altitude of the origin above the surface, in meters.
+      :rtype: :class:`ReferenceFrame`
+   
+
+      .. note::
+
+         Each call returns a new frame, as for :meth:`ReferenceFrame.create_relative`.
+
+   .. method:: msl_normal(latitude, longitude, reference_frame)
+
+      The normal to the sphere at mean sea level, at the given latitude and longitude,
+      in the given reference frame. This points straight up, away from the center of
+      the body, and takes no account of the shape of the terrain.
+
+      :param float latitude: Latitude in degrees.
+      :param float longitude: Longitude in degrees.
+      :param ReferenceFrame reference_frame: Reference frame for the returned normal vector.
+      :returns: The normal as a unit vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: surface_normal(latitude, longitude, reference_frame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the surface of
+      the water when over water.
+
+      :param float latitude: Latitude in degrees.
+      :param float longitude: Longitude in degrees.
+      :param ReferenceFrame reference_frame: Reference frame for the returned normal vector.
+      :returns: The normal as a unit vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: bedrock_normal(latitude, longitude, reference_frame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the sea-bed
+      when over water.
+
+      :param float latitude: Latitude in degrees.
+      :param float longitude: Longitude in degrees.
+      :param ReferenceFrame reference_frame: Reference frame for the returned normal vector.
+      :returns: The normal as a unit vector.
+      :rtype: tuple(float, float, float)
+   
+
    .. method:: altitude_at_position(position, reference_frame)
 
       The altitude, in meters, of the given position in the given reference frame.
@@ -238,6 +298,23 @@ CelestialBody
       :rtype: float
    
 
+   .. attribute:: has_ocean
+
+      ``True`` if the body has an ocean.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: ocean_density
+
+      The density of the body's ocean, in :math:`kg/m^3`.
+      Returns zero if the body has no ocean.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
    .. method:: atmospheric_density_at_position(position, reference_frame)
 
       The atmospheric density at the given position, in :math:`kg/m^3`,
@@ -288,12 +365,16 @@ CelestialBody
 
    .. method:: pressure_at(altitude)
 
-      Gets the air pressure, in Pascals, for the specified
+      Gets the static pressure, in Pascals, for the specified
       altitude above sea level, in meters.
 
       :param float altitude:
       :rtype: float
    
+
+      .. note::
+
+         Below sea level on a body with an ocean, this includes the pressure of the water.
 
    .. attribute:: biomes
 

@@ -19,6 +19,12 @@ ServoGroup
       :Attribute: Can be read or written
       :rtype: string
 
+      .. note::
+
+         Renaming a group renames it for every servo in it. This object identifies the
+         group by its name, so a rename destroys every object for the group, including the
+         one the rename was made through. Obtain the group again under the new name.
+
    .. attribute:: forward_key: string
 
       The key assigned to be the "forward" key for the group.
@@ -49,7 +55,7 @@ ServoGroup
 
    .. attribute:: vessel: SpaceCenter.Vessel
 
-      The vessel the group belongs to, or ``nil`` if it is not available.
+      The vessel the group belongs to.
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Vessel`
@@ -104,7 +110,7 @@ ServoGroup
       or ``nil`` if none exists.
 
       :param string name: Name of servo to find.
-      :rtype: :class:`InfernalRobotics.Servo`
+      :rtype: :class:`InfernalRobotics.Servo` or ``Types.none``
 
    .. attribute:: parts: List
 

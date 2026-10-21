@@ -32,7 +32,7 @@ Alarms
       one alarm shares the given title, the first one found is returned.
 
       :param string name: The title of the alarm to return.
-      :rtype: :class:`SpaceCenter.Alarm`
+      :rtype: :class:`SpaceCenter.Alarm` or ``Types.none``
 
    .. staticmethod:: add_alarm(time, [title = 'Alarm'], [description = ''])
 
@@ -73,7 +73,7 @@ Alarms
       :param string description: Description for the alarm.
       :rtype: :class:`SpaceCenter.Alarm`
 
-   .. staticmethod:: add_maneuver_node_alarm(vessel, node, [offset = 60.0], [add_burn_time = True], [title = 'Maneuver Node Alarm'], [description = ''])
+   .. staticmethod:: add_maneuver_node_alarm(vessel, node, [offset = 60.0], [add_burn_time = true], [title = 'Maneuver Node Alarm'], [description = ''])
 
       Create an alarm for the given vessel and maneuver node.
 
@@ -170,12 +170,17 @@ Alarms
       :Attribute: Can be read or written
       :rtype: number
 
+      .. note::
+
+         For a maneuver alarm that includes the burn time, setting this sets the margin
+         before the start of the burn, and the value read back includes half the burn time.
+
    .. attribute:: vessel: SpaceCenter.Vessel
 
       Vessel the alarm references. ``nil`` if it does not reference a vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Vessel`
+      :rtype: :class:`SpaceCenter.Vessel` or ``Types.none``
 
    .. attribute:: node: SpaceCenter.Node
 
@@ -262,6 +267,11 @@ Alarms
    .. method:: remove()
 
       Removes the alarm.
+
+
+      .. note::
+
+         Any further use of this object throws an exception.
 
 
 

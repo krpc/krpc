@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.RemoteTech
 
@@ -25,7 +25,7 @@ Antenna
    .. property:: Target Target { get; set; }
 
       The object that the antenna is targetting.
-      This property can be used to set the target to :enum:`Target.None` or :enum:`Target.ActiveVessel`.
+      This property can be used to set the target to :value:`Target.None` or :value:`Target.ActiveVessel`.
       To set the target to a celestial body, ground station or vessel see :prop:`Antenna.TargetBody`,
       :prop:`Antenna.TargetGroundStation` and :prop:`Antenna.TargetVessel`.
 
@@ -57,26 +57,26 @@ Antenna
    See :prop:`Antenna.Target`.
 
 
-   .. value:: ActiveVessel
+   .. enumerator:: ActiveVessel
 
       The active vessel.
 
 
-   .. value:: CelestialBody
+   .. enumerator:: CelestialBody
 
       A celestial body.
 
 
-   .. value:: GroundStation
+   .. enumerator:: GroundStation
 
       A ground station.
 
 
-   .. value:: Vessel
+   .. enumerator:: Vessel
 
       A specific vessel.
 
 
-   .. value:: None
+   .. enumerator:: None
 
       No target.

@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -49,7 +49,7 @@ Vessel
    .. property:: float PhysicsRange { get; set; }
 
       The distance from the active vessel, in meters, out to which this vessel keeps running
-      its physics simulation — and so stays controllable, able to burn its engines and
+      its physics simulation, and so stays controllable, able to burn its engines and
       respond to its autopilot. Setting this raises the vessel out of the stock physics
       bubble, so that it keeps flying while the active vessel is far away. Set to zero to
       restore the game's default range.
@@ -60,7 +60,7 @@ Vessel
       .. note::
 
          This always reports the vessel's live range, so reading it when no range has been set
-         gives the game's default for the vessel's current :prop:`Vessel.Situation` — which is
+         gives the game's default for the vessel's current :prop:`Vessel.Situation`, which is
          much shorter than the distance at which the vessel unloads. In orbit a vessel is put
          on rails just 350m away, long before it unloads at 2.5km, and a vessel on rails
          produces no thrust and ignores control input even though it is still loaded.
@@ -71,7 +71,7 @@ Vessel
          between it keeps whichever state it is already in.
 
          The requested range applies in every situation. The game's own defaults are not
-         uniform — a vessel flying in atmosphere stays loaded out to 22.5km — so setting a
+         uniform, and a vessel flying in atmosphere stays loaded out to 22.5km, so setting a
          small range can shorten the range such a vessel would otherwise have had.
 
          A range lasts until it is set back to zero or the game is exited. Unlike most state a
@@ -89,12 +89,45 @@ Vessel
 
       :Game Scenes: All
 
-   .. method:: void Recover()
+   .. function:: void Recover()
 
-      Recover the vessel.
+      Recover the vessel. The crew return to the astronaut complex, and the funds and
+      science the vessel is worth are awarded.
 
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Recovering the active vessel ends the flight and returns to the space center, as
+         pressing recover in game does. When a non-active vessel is recovered the current scene
+         is unaffected, and the mission completion dialog is not shown, so a script flying
+         several vessels keeps control of the rest of them.
+
+         Returns immediately, does not wait for the vessel to be recovered.
+
+   .. function:: void Terminate()
+
+      Terminate the vessel. The vessel and its parts are removed from the game, and its
+      crew are lost, as when the vessel is terminated from the tracking station. Nothing
+      is recovered: no funds, no science and no crew.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The crew are reported missing, and return to the astronaut complex once their
+         respawn timer expires, or never if the game is set up so that missing crews do
+         not respawn.
+
+         The active vessel cannot be terminated, because the vessel being flown cannot be
+         taken out of the scene it is being flown in. Switch to another vessel first, or
+         use :meth:`Vessel.Recover`, which ends the flight and returns to the space center.
+
+         Returns immediately, does not wait for the vessel to be terminated.
 
    .. property:: double MET { get; }
 
@@ -108,7 +141,7 @@ Vessel
 
       :Game Scenes: All
 
-   .. method:: Flight Flight(ReferenceFrame referenceFrame = null)
+   .. function:: Flight Flight(ReferenceFrame referenceFrame = null)
 
       Returns a :meth:`Vessel.Flight` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.
@@ -180,25 +213,6 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: Resources ResourcesInDecoupleStage(int stage, bool cumulative = true)
-
-      .. warning:: Deprecated. Use :meth:`Stage.Resources` from the object returned by :meth:`Vessel.DecoupleStageAt` instead.
-
-      Returns a :prop:`Vessel.Resources` object, that can used to get
-      information about resources stored in a given *stage*.
-
-      :parameters:
-
-       * **stage** -- Get resources for parts that are decoupled in this stage.
-       * **cumulative** -- When ``false``, returns the resources for parts decoupled in just the given stage. When ``true`` returns the resources decoupled in the given stage and all subsequent stages combined.
-
-      :Game Scenes: Flight
-
-
-      .. note:: Deprecated. Use :meth:`Vessel.DecoupleStageAt`
-                and :meth:`Stage.Resources` instead. For details on
-                stage numbering, see the discussion on :rst:ref:`csharp-api-parts-staging`.
-
    .. property:: System.Collections.Generic.IList<Stage> Stages { get; }
 
       Activation (burn) stages for this vessel, in ascending stage order. This does
@@ -211,7 +225,7 @@ Vessel
       .. note:: Lists activation stages only (``decouple`` is ``false``). See also
                 :rst:ref:`csharp-api-parts-staging`.
 
-   .. method:: Stage StageAt(int stage)
+   .. function:: Stage StageAt(int stage)
 
       The activation stage with the given number. Pass -1 to get the parts that are
       never activated (those with no staging icon).
@@ -233,7 +247,7 @@ Vessel
 
       .. note:: Lists decouple stages only. Delta-v is not defined on these stages.
 
-   .. method:: Stage DecoupleStageAt(int stage)
+   .. function:: Stage DecoupleStageAt(int stage)
 
       The decouple stage with the given number. Pass -1 to get the parts that are
       never decoupled and remain on the vessel after all stages have fired.
@@ -241,6 +255,27 @@ Vessel
       :parameters:
 
        * **stage** -- Get decouple stage at this index.
+
+      :Game Scenes: Flight
+
+   .. property:: bool DeltaVReady { get; }
+
+      Whether the vessel's delta-v figures are current.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game calculates delta-v for the active vessel alone, over the several ticks
+         after the vessel changes. A delta-v member reports the figures from the last
+         calculation, and waits only when the game has calculated none.
+
+   .. function:: void RecalculateDeltaV()
+
+      Recalculates the vessel's delta-v figures, and waits until they are current.
+      Throws an exception if the vessel is not the active vessel.
+
 
       :Game Scenes: Flight
 
@@ -305,7 +340,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: float AvailableThrustAt(double pressure)
+   .. function:: float AvailableThrustAt(double pressure)
 
       Gets the total available thrust that can be produced by the vessel's
       active engines, in Newtons. This is computed by summing
@@ -326,7 +361,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: float MaxThrustAt(double pressure)
+   .. function:: float MaxThrustAt(double pressure)
 
       The total maximum thrust that can be produced by the vessel's active
       engines, in Newtons. This is computed by summing
@@ -363,7 +398,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: float AvailableAccelerationAt(double pressure)
+   .. function:: float AvailableAccelerationAt(double pressure)
 
       The total available acceleration that can be produced by the vessel's
       active engines, in :math:`m/s^2`. This is :meth:`Vessel.AvailableThrustAt`
@@ -383,7 +418,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: float MaxAccelerationAt(double pressure)
+   .. function:: float MaxAccelerationAt(double pressure)
 
       The total maximum acceleration that can be produced by the vessel's active
       engines, in :math:`m/s^2`. This is :meth:`Vessel.MaxThrustAt` divided by
@@ -410,7 +445,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. method:: float SpecificImpulseAt(double pressure)
+   .. function:: float SpecificImpulseAt(double pressure)
 
       The combined specific impulse of all active engines, in seconds. This is computed using the formula
       `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
@@ -452,9 +487,9 @@ Vessel
       in the vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+   .. property:: AxisRange AvailableTorque { get; }
 
       The maximum torque that the vessel generates. Includes contributions from
       reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
@@ -464,7 +499,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableReactionWheelTorque { get; }
+   .. property:: AxisRange AvailableReactionWheelTorque { get; }
 
       The maximum torque that the currently active and powered reaction wheels can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -473,7 +508,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableRCSTorque { get; }
+   .. property:: AxisRange AvailableRCSTorque { get; }
 
       The maximum torque that the currently active RCS thrusters can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -482,7 +517,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableRCSForce { get; }
+   .. property:: AxisRange AvailableRCSForce { get; }
 
       The maximum force that the currently active RCS thrusters can generate.
       Returns the forces in :math:`N` along each of the coordinate axes of the
@@ -491,7 +526,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableRCSAcceleration { get; }
+   .. property:: AxisRange AvailableRCSAcceleration { get; }
 
       The maximum acceleration that the currently active RCS thrusters can generate.
       This is :prop:`Vessel.AvailableRCSForce` divided by the vessel's :prop:`Vessel.Mass`.
@@ -501,7 +536,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableEngineTorque { get; }
+   .. property:: AxisRange AvailableEngineTorque { get; }
 
       The maximum torque that the currently active and gimballed engines can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -510,7 +545,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableControlSurfaceTorque { get; }
+   .. property:: AxisRange AvailableControlSurfaceTorque { get; }
 
       The maximum torque that the aerodynamic control surfaces can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -519,7 +554,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableOtherTorque { get; }
+   .. property:: AxisRange AvailableOtherTorque { get; }
 
       The maximum torque that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate.
@@ -529,7 +564,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableAngularAcceleration { get; }
+   .. property:: AxisRange AvailableAngularAcceleration { get; }
 
       The maximum angular acceleration that the vessel can generate. Includes contributions
       from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
@@ -540,7 +575,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableReactionWheelAngularAcceleration { get; }
+   .. property:: AxisRange AvailableReactionWheelAngularAcceleration { get; }
 
       The maximum angular acceleration that the currently active and powered reaction wheels
       can generate. This is :prop:`Vessel.AvailableReactionWheelTorque` divided by the vessel's
@@ -551,7 +586,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableRCSAngularAcceleration { get; }
+   .. property:: AxisRange AvailableRCSAngularAcceleration { get; }
 
       The maximum angular acceleration that the currently active RCS thrusters can generate.
       This is :prop:`Vessel.AvailableRCSTorque` divided by the vessel's :prop:`Vessel.MomentOfInertia`.
@@ -561,7 +596,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableEngineAngularAcceleration { get; }
+   .. property:: AxisRange AvailableEngineAngularAcceleration { get; }
 
       The maximum angular acceleration that the currently active and gimballed engines can
       generate. This is :prop:`Vessel.AvailableEngineTorque` divided by the vessel's
@@ -572,7 +607,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableControlSurfaceAngularAcceleration { get; }
+   .. property:: AxisRange AvailableControlSurfaceAngularAcceleration { get; }
 
       The maximum angular acceleration that the aerodynamic control surfaces can generate.
       This is :prop:`Vessel.AvailableControlSurfaceTorque` divided by the vessel's
@@ -583,7 +618,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableOtherAngularAcceleration { get; }
+   .. property:: AxisRange AvailableOtherAngularAcceleration { get; }
 
       The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate. This is :prop:`Vessel.AvailableOtherTorque` divided
@@ -692,7 +727,80 @@ Vessel
 
          Vessel surface velocity reference frame origin and axes
 
-   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+   .. property:: ReferenceFrame OrbitSpeedReferenceFrame { get; }
+
+      The reference frame that the navball measures speed against in 'orbit' mode.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are those of :prop:`Vessel.OrbitalReferenceFrame`, which are
+        the directions the navball marks in this mode: the x-axis points in the orbital
+        anti-radial direction, the y-axis in the orbital prograde direction and the z-axis in
+        the orbital normal direction.
+      * The frame moves with the body being orbited, but does not rotate
+        with it.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The velocity of the vessel in this frame is the one the navball shows in 'orbit' mode:
+         :prop:`Flight.Speed` is the speed it displays, and :prop:`Flight.Velocity`
+         points along the y-axis, towards its prograde marker.
+
+   .. property:: ReferenceFrame SurfaceSpeedReferenceFrame { get; }
+
+      The reference frame that the navball measures speed against in 'surface' mode.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are the directions the navball marks in this mode, in the
+        same arrangement as :prop:`Vessel.OrbitalReferenceFrame`: the y-axis points in the
+        direction the vessel is moving relative to the surface, which is where the prograde
+        marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+        anti-radial, pointing towards the body and perpendicular to the other
+        two.
+      * The frame moves with the surface of the body being orbited, so it
+        rotates with the body.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The velocity of the vessel in this frame is the one the navball shows in 'surface' mode:
+         :prop:`Flight.Speed` is the speed it displays, and :prop:`Flight.Velocity`
+         points along the y-axis, towards its prograde marker. The velocity gives the frame its
+         orientation, so, as with :prop:`Vessel.SurfaceVelocityReferenceFrame`, the frame is
+         singular and raises an error when the vessel is stationary relative to the surface.
+
+   .. property:: ReferenceFrame TargetSpeedReferenceFrame { get; }
+
+      The reference frame that the navball measures speed against in 'target' mode.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are the directions the navball marks in this mode, in the
+        same arrangement as :prop:`Vessel.OrbitalReferenceFrame`: the y-axis points in the
+        direction the vessel is moving relative to the target, which is where the prograde
+        marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+        anti-radial, pointing towards the body being orbited and perpendicular to the other
+        two.
+      * The frame moves with the vessels target.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The velocity of the vessel in this frame is the one the navball shows in 'target' mode:
+         :prop:`Flight.Speed` is the speed it displays, and :prop:`Flight.Velocity`
+         points along the y-axis, towards its prograde marker.
+         The target is the one set for the active vessel, via for example
+         :prop:`SpaceCenter.TargetVessel <SpaceCenter.SpaceCenter.TargetVessel>` or :prop:`SpaceCenter.TargetBody <SpaceCenter.SpaceCenter.TargetBody>`.
+         This is undefined when no target is set. The velocity gives the frame its orientation,
+         so it is also singular, and raises an error, when the vessel matches the velocity of
+         its target.
+
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
 
       The position of the center of mass of the vessel, in the given reference frame.
 
@@ -703,7 +811,7 @@ Vessel
       :returns: The position as a vector.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> BoundingBox(ReferenceFrame referenceFrame)
+   .. function:: BoundingBox BoundingBox(ReferenceFrame referenceFrame)
 
       The axis-aligned bounding box of the vessel in the given reference frame.
 
@@ -711,10 +819,10 @@ Vessel
 
        * **referenceFrame** -- The reference frame that the returned position vectors are in.
 
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+      :returns: The positions of the minimum and maximum vertices of the box.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
 
       The velocity of the center of mass of the vessel, in the given reference frame.
 
@@ -725,7 +833,7 @@ Vessel
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
 
       The rotation of the vessel, in the given reference frame.
 
@@ -736,7 +844,7 @@ Vessel
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
 
       The direction in which the vessel is pointing, in the given reference frame.
 
@@ -747,7 +855,7 @@ Vessel
       :returns: The direction as a unit vector.
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> AngularVelocity(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> AngularVelocity(ReferenceFrame referenceFrame)
 
       The angular velocity of the vessel, in the given reference frame.
 
@@ -760,93 +868,130 @@ Vessel
 
 
 
+.. struct:: AxisRange
+
+   The largest value of a quantity, such as a torque or a force, in the positive and the
+   negative direction of each of three axes.
+
+   .. function:: AxisRange(System.Tuple<double,double,double> positive, System.Tuple<double,double,double> negative)
+
+      Construct a AxisRange from the values of its fields.
+
+
+   .. property:: System.Tuple<double,double,double> Positive { get; }
+
+      The value in the positive direction of each axis.
+
+   .. property:: System.Tuple<double,double,double> Negative { get; }
+
+      The value in the negative direction of each axis, which is zero or less.
+
+
+.. struct:: BoundingBox
+
+   An axis-aligned bounding box, as the positions of its minimum and maximum vertices.
+
+   .. function:: BoundingBox(System.Tuple<double,double,double> min, System.Tuple<double,double,double> max)
+
+      Construct a BoundingBox from the values of its fields.
+
+
+   .. property:: System.Tuple<double,double,double> Min { get; }
+
+      The position of the minimum vertex of the box.
+
+   .. property:: System.Tuple<double,double,double> Max { get; }
+
+      The position of the maximum vertex of the box.
+
+
 .. enum:: VesselType
 
    The type of a vessel.
    See :prop:`Vessel.Type`.
 
 
-   .. value:: Base
+   .. enumerator:: Base
 
       Base.
 
 
-   .. value:: Debris
+   .. enumerator:: Debris
 
       Debris.
 
 
-   .. value:: Lander
+   .. enumerator:: Lander
 
       Lander.
 
 
-   .. value:: Plane
+   .. enumerator:: Plane
 
       Plane.
 
 
-   .. value:: Probe
+   .. enumerator:: Probe
 
       Probe.
 
 
-   .. value:: Relay
+   .. enumerator:: Relay
 
       Relay.
 
 
-   .. value:: Rover
+   .. enumerator:: Rover
 
       Rover.
 
 
-   .. value:: Ship
+   .. enumerator:: Ship
 
       Ship.
 
 
-   .. value:: Station
+   .. enumerator:: Station
 
       Station.
 
 
-   .. value:: SpaceObject
+   .. enumerator:: SpaceObject
 
       SpaceObject.
 
 
-   .. value:: Unknown
+   .. enumerator:: Unknown
 
       Unknown.
 
 
-   .. value:: EVA
+   .. enumerator:: EVA
 
       EVA.
 
 
-   .. value:: Flag
+   .. enumerator:: Flag
 
       Flag.
 
 
-   .. value:: DeployedScienceController
+   .. enumerator:: DeployedScienceController
 
       DeployedScienceController.
 
 
-   .. value:: DeployedSciencePart
+   .. enumerator:: DeployedSciencePart
 
       DeploedSciencePart.
 
 
-   .. value:: DroppedPart
+   .. enumerator:: DroppedPart
 
       DroppedPart.
 
 
-   .. value:: DeployedGroundPart
+   .. enumerator:: DeployedGroundPart
 
       DeployedGroundPart.
 
@@ -858,42 +1003,42 @@ Vessel
    See :prop:`Vessel.Situation`.
 
 
-   .. value:: Docked
+   .. enumerator:: Docked
 
       Vessel is docked to another.
 
 
-   .. value:: Escaping
+   .. enumerator:: Escaping
 
       Escaping.
 
 
-   .. value:: Flying
+   .. enumerator:: Flying
 
       Vessel is flying through an atmosphere.
 
 
-   .. value:: Landed
+   .. enumerator:: Landed
 
       Vessel is landed on the surface of a body.
 
 
-   .. value:: Orbiting
+   .. enumerator:: Orbiting
 
       Vessel is orbiting a body.
 
 
-   .. value:: PreLaunch
+   .. enumerator:: PreLaunch
 
       Vessel is awaiting launch.
 
 
-   .. value:: Splashed
+   .. enumerator:: Splashed
 
       Vessel has splashed down in an ocean.
 
 
-   .. value:: SubOrbital
+   .. enumerator:: SubOrbital
 
       Vessel is on a sub-orbital trajectory.
 
@@ -976,30 +1121,62 @@ Vessel
 
       :Game Scenes: Flight
 
+   .. function:: Vessel EVA()
+
+      Send the crew member outside on EVA, through the hatch of the part it is in, and
+      return the vessel it becomes. The game switches to that vessel, which can then be
+      walked around and flown using its :prop:`Vessel.Control`, and brought back
+      in with :meth:`Control.Board`. The kerbal climbs out onto the ladder by the
+      hatch, if there is one.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if EVA is disabled for the game, if the crew member is not in
+         a loaded vessel, if it is already on EVA, or if every hatch out of the part it is
+         in is obstructed.
+
    .. property:: SuitType SuitType { get; set; }
 
       The crew member's suit type.
 
       :Game Scenes: All
 
-   .. property:: System.Collections.Generic.IList<int> CareerLogFlights { get; }
+   .. property:: System.Collections.Generic.IList<FlightLogEntry> CareerLog { get; }
 
-      The flight IDs for each entry in the career flight log.
-
-      :Game Scenes: All
-
-   .. property:: System.Collections.Generic.IList<string> CareerLogTypes { get; }
-
-      The type for each entry in the career flight log.
+      The entries in the crew member's career flight log.
 
       :Game Scenes: All
 
-   .. property:: System.Collections.Generic.IList<string> CareerLogTargets { get; }
 
-      The body name for each entry in the career flight log.
 
-      :Game Scenes: All
+.. struct:: FlightLogEntry
 
+   An entry in a crew member's career flight log.
+
+   .. note::
+
+      See :prop:`CrewMember.CareerLog`.
+
+   .. function:: FlightLogEntry(int flight, string type, string target)
+
+      Construct a FlightLogEntry from the values of its fields.
+
+
+   .. property:: int Flight { get; }
+
+      The flight identifier of the entry.
+
+   .. property:: string Type { get; }
+
+      The type of the entry, e.g. ``Orbit`` or ``Land``.
+
+   .. property:: string Target { get; }
+
+      The name of the body the entry is for.
 
 
 .. enum:: CrewMemberType
@@ -1008,22 +1185,22 @@ Vessel
    See :prop:`CrewMember.Type`.
 
 
-   .. value:: Applicant
+   .. enumerator:: Applicant
 
       An applicant for crew.
 
 
-   .. value:: Crew
+   .. enumerator:: Crew
 
       Rocket crew.
 
 
-   .. value:: Tourist
+   .. enumerator:: Tourist
 
       A tourist.
 
 
-   .. value:: Unowned
+   .. enumerator:: Unowned
 
       An unowned crew member.
 
@@ -1035,12 +1212,12 @@ Vessel
    See :prop:`CrewMember.Gender`.
 
 
-   .. value:: Male
+   .. enumerator:: Male
 
       Male.
 
 
-   .. value:: Female
+   .. enumerator:: Female
 
       Female.
 
@@ -1052,22 +1229,22 @@ Vessel
    See :prop:`CrewMember.RosterStatus`.
 
 
-   .. value:: Available
+   .. enumerator:: Available
 
       Available.
 
 
-   .. value:: Assigned
+   .. enumerator:: Assigned
 
       Assigned.
 
 
-   .. value:: Dead
+   .. enumerator:: Dead
 
       Dead.
 
 
-   .. value:: Missing
+   .. enumerator:: Missing
 
       Missing.
 
@@ -1079,21 +1256,21 @@ Vessel
    See :prop:`CrewMember.SuitType`.
 
 
-   .. value:: Default
+   .. enumerator:: Default
 
       Default.
 
 
-   .. value:: Vintage
+   .. enumerator:: Vintage
 
       Vintage.
 
 
-   .. value:: Future
+   .. enumerator:: Future
 
       Future.
 
 
-   .. value:: Slim
+   .. enumerator:: Slim
 
       Slim.

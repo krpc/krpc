@@ -9,7 +9,7 @@ DockingCamera
 Camera service.
 
 
-.. function:: krpc_error_t krpc_DockingCamera_Available(krpc_connection_t connection, bool * result)
+.. function:: krpc_error_t krpc_DockingCamera_Available(krpc_connection_t connection, bool * returnValue)
 
    Check if the Camera API is available.
 
@@ -18,7 +18,7 @@ Camera service.
 
 
 
-.. function:: krpc_error_t krpc_DockingCamera_Camera(krpc_connection_t connection, krpc_DockingCamera_Camera_t * result, krpc_SpaceCenter_Part_t part)
+.. function:: krpc_error_t krpc_DockingCamera_Camera(krpc_connection_t connection, krpc_DockingCamera_Camera_t * returnValue, krpc_SpaceCenter_Part_t part)
 
    Get a Camera part.
 

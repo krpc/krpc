@@ -44,10 +44,20 @@ Parts
    .. attribute:: controlling
 
       The part from which the vessel is controlled.
+      Returns ``None`` if the vessel has no control point, in which case it is
+      oriented by its root part.
 
       :Attribute: Can be read or written
-      :rtype: :class:`Part`
-   
+      :rtype: :class:`Part` or None
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A vessel gets no control point when it is created by a decoupler or an undocking
+         and none of its parts is a command module with crew aboard. A probe core does not
+         give it one either. Assign this property to choose the control point, which is
+         equivalent to "Control From Here" in game.
 
    .. method:: with_name(name)
 
@@ -81,34 +91,6 @@ Parts
       :param str module_name:
       :rtype: list(:class:`Part`)
    
-
-   .. method:: in_stage(stage)
-
-      .. warning:: Deprecated. Use :attr:`Stage.parts` from the object returned by :meth:`Vessel.stage_at` instead.
-
-      A list of all parts that are activated in the given *stage*.
-
-      :param int stage:
-      :rtype: list(:class:`Part`)
-   
-
-      .. note:: Deprecated. Use :meth:`Vessel.stage_at` and
-                :attr:`Stage.parts` instead. See the discussion on
-                :rst:ref:`python-api-parts-staging`.
-
-   .. method:: in_decouple_stage(stage)
-
-      .. warning:: Deprecated. Use :attr:`Stage.parts` from the object returned by :meth:`Vessel.decouple_stage_at` instead.
-
-      A list of all parts that are decoupled in the given *stage*.
-
-      :param int stage:
-      :rtype: list(:class:`Part`)
-   
-
-      .. note:: Deprecated. Use :meth:`Vessel.decouple_stage_at` and
-                :attr:`Stage.parts` instead. See the discussion on
-                :rst:ref:`python-api-parts-staging`.
 
    .. method:: modules_with_name(module_name)
 
@@ -390,7 +372,7 @@ Part
    .. attribute:: tag
 
       The name tag for the part. Can be set to a custom string using the
-      in-game user interface.
+      in-game user interface. Throws an exception if no name tag part module is installed.
 
       :Attribute: Can be read or written
       :rtype: str
@@ -398,9 +380,11 @@ Part
 
       .. note::
 
-         This string is shared with
-         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_
-         if it is installed.
+         The name tag part module is provided by
+         `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
+         0.5 or later, or by
+         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
+         which shares this string.
 
    .. attribute:: flag_url
 
@@ -416,7 +400,8 @@ Part
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -424,11 +409,11 @@ Part
 
    .. attribute:: highlight_color
 
-      The color used to highlight the part, as an RGB triple.
+      The color used to highlight the part.
 
       :Attribute: Can be read or written
-      :rtype: tuple(float, float, float)
-   
+      :rtype: :class:`StdLib.ColorRGB`
+      :Game Scenes: Flight
 
    .. attribute:: cost
 
@@ -444,7 +429,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Vessel`
-   
+      :Game Scenes: Flight
 
    .. attribute:: parent
 
@@ -453,7 +438,7 @@ Part
       parts tree.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Part`
+      :rtype: :class:`Part` or None
    
 
       .. note:: See the discussion on :rst:ref:`python-api-parts-trees-of-parts`.
@@ -547,7 +532,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: dynamic_pressure
 
@@ -555,7 +540,158 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
+
+   .. attribute:: static_pressure
+
+      The static pressure acting on the part, in Pascals. Below the waterline this
+      includes the pressure of the water.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: displacement
+
+      The volume of water the part displaces when fully submerged, in :math:`m^3`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         See :attr:`Part.displaced_volume` for the volume it is displacing now.
+
+   .. attribute:: buoyancy_multiplier
+
+      The multiplier applied to the buoyant force on the part. One for most parts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: buoyant_force_at(density, gravity)
+
+      The buoyant force on the part when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :param float density: The density of the fluid, in :math:`kg/m^3`.
+      :param float gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Applies :attr:`buoyancy_scalar` and
+         :attr:`Part.buoyancy_multiplier`, so the result is what the game would do to the
+         part rather than what
+         `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
+
+   .. attribute:: splashed
+
+      Whether the part is in contact with water.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: submerged_portion
+
+      The fraction of the part below the waterline, between 0 and 1.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: displaced_volume
+
+      The volume of water the part is displacing, in :math:`m^3`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: depth
+
+      The depth of the part below the waterline, in meters, measured at
+      :meth:`Part.center_of_displacement`. Negative above the waterline. Returns zero
+      if the body the vessel is at has no ocean.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: min_depth
+
+      The depth of the shallowest point of the part below the waterline, in meters.
+      Returns zero if the body the vessel is at has no ocean.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_depth
+
+      The depth of the deepest point of the part below the waterline, in meters.
+      Returns zero if the body the vessel is at has no ocean.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game ramps the buoyant force in over the first fraction of a meter of this
+         depth.
+
+   .. attribute:: submerged_dynamic_pressure
+
+      The dynamic pressure of the water acting on the part, in Pascals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: submerged_drag_multiplier
+
+      The multiplier applied to the drag on the part while it is submerged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game sets this high on splashdown and eases it down as the part moves through
+         the water. It climbs back once the part slows to a crawl, so a hull under way
+         reads lower than one lying still.
+
+   .. attribute:: submerged_lift_multiplier
+
+      The multiplier applied to the lift on the part while it is submerged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: water_angular_drag_multiplier
+
+      The multiplier applied to the angular drag on the part while it is submerged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Part of the part's configuration rather than a live readout, so it reads the same
+         in the editor and at a body with no ocean.
 
    .. attribute:: impact_tolerance
 
@@ -571,7 +707,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: skin_temperature
 
@@ -579,7 +715,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: max_temperature
 
@@ -597,6 +733,19 @@ Part
       :rtype: float
    
 
+   .. attribute:: max_pressure
+
+      Maximum pressure that the part can survive, in Pascals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         With part pressure limits enabled in the difficulty settings, the part is destroyed
+         when :attr:`Part.static_pressure` plus :attr:`Part.dynamic_pressure` exceeds this.
+
    .. attribute:: thermal_mass
 
       A measure of how much energy it takes to increase the internal temperature of the part,
@@ -604,7 +753,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: thermal_skin_mass
 
@@ -613,7 +762,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: thermal_resource_mass
 
@@ -622,7 +771,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: thermal_conduction_flux
 
@@ -633,7 +782,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: thermal_convection_flux
 
@@ -644,7 +793,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: thermal_radiation_flux
 
@@ -655,7 +804,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: thermal_internal_flux
 
@@ -667,7 +816,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: thermal_skin_to_internal_flux
 
@@ -678,7 +827,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: crew_capacity
 
@@ -694,7 +843,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`CrewMember`)
-   
+      :Game Scenes: Flight
 
    .. attribute:: available_seats
 
@@ -702,7 +851,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: int
-   
+      :Game Scenes: Flight
 
    .. attribute:: resources
 
@@ -735,7 +884,8 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`Part`)
-   
+      :Game Scenes: Flight
+
 
       .. note:: See the discussion on :rst:ref:`python-api-parts-fuel-lines`.
 
@@ -746,7 +896,8 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`Part`)
-   
+      :Game Scenes: Flight
+
 
       .. note:: See the discussion on :rst:ref:`python-api-parts-fuel-lines`.
 
@@ -763,7 +914,7 @@ Part
       An :attr:`Part.antenna` if the part is an antenna, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Antenna`
+      :rtype: :class:`Antenna` or None
    
 
       .. note::
@@ -776,7 +927,7 @@ Part
       A :attr:`Part.cargo_bay` if the part is a cargo bay, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`CargoBay`
+      :rtype: :class:`CargoBay` or None
    
 
    .. attribute:: control_surface
@@ -785,7 +936,7 @@ Part
       otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ControlSurface`
+      :rtype: :class:`ControlSurface` or None
    
 
    .. attribute:: decoupler
@@ -793,7 +944,7 @@ Part
       A :attr:`Part.decoupler` if the part is a decoupler, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Decoupler`
+      :rtype: :class:`Decoupler` or None
    
 
    .. attribute:: docking_port
@@ -801,7 +952,7 @@ Part
       A :attr:`Part.docking_port` if the part is a docking port, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`DockingPort`
+      :rtype: :class:`DockingPort` or None
    
 
    .. attribute:: engine
@@ -809,7 +960,7 @@ Part
       An :attr:`Part.engine` if the part is an engine, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Engine`
+      :rtype: :class:`Engine` or None
    
 
    .. attribute:: experiment
@@ -818,7 +969,7 @@ Part
       single science experiment, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Experiment`
+      :rtype: :class:`Experiment` or None
    
 
       .. note::
@@ -831,7 +982,7 @@ Part
       A list of :attr:`Part.experiment` objects that the part contains.
 
       :Attribute: Read-only, cannot be set
-      :rtype: list(:class:`Experiment`)
+      :rtype: list(:class:`Experiment`) or None
    
 
    .. attribute:: fairing
@@ -839,7 +990,7 @@ Part
       A :attr:`Part.fairing` if the part is a fairing, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Fairing`
+      :rtype: :class:`Fairing` or None
    
 
    .. attribute:: intake
@@ -847,7 +998,7 @@ Part
       An :attr:`Part.intake` if the part is an intake, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Intake`
+      :rtype: :class:`Intake` or None
    
 
       .. note::
@@ -861,7 +1012,7 @@ Part
       A :attr:`Part.leg` if the part is a landing leg, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Leg`
+      :rtype: :class:`Leg` or None
    
 
    .. attribute:: launch_clamp
@@ -869,7 +1020,7 @@ Part
       A :attr:`Part.launch_clamp` if the part is a launch clamp, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`LaunchClamp`
+      :rtype: :class:`LaunchClamp` or None
    
 
    .. attribute:: light
@@ -877,7 +1028,7 @@ Part
       A :attr:`Part.light` if the part is a light, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Light`
+      :rtype: :class:`Light` or None
    
 
    .. attribute:: parachute
@@ -885,7 +1036,7 @@ Part
       A :attr:`Part.parachute` if the part is a parachute, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Parachute`
+      :rtype: :class:`Parachute` or None
    
 
    .. attribute:: radiator
@@ -893,7 +1044,7 @@ Part
       A :attr:`Part.radiator` if the part is a radiator, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Radiator`
+      :rtype: :class:`Radiator` or None
    
 
    .. attribute:: resource_drain
@@ -901,7 +1052,7 @@ Part
       A :attr:`Part.resource_drain` if the part is a resource drain, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ResourceDrain`
+      :rtype: :class:`ResourceDrain` or None
    
 
    .. attribute:: rcs
@@ -909,7 +1060,7 @@ Part
       A :attr:`Part.rcs` if the part is an RCS block/thruster, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RCS`
+      :rtype: :class:`RCS` or None
    
 
    .. attribute:: reaction_wheel
@@ -917,7 +1068,7 @@ Part
       A :attr:`Part.reaction_wheel` if the part is a reaction wheel, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ReactionWheel`
+      :rtype: :class:`ReactionWheel` or None
    
 
    .. attribute:: resource_converter
@@ -926,7 +1077,7 @@ Part
       otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ResourceConverter`
+      :rtype: :class:`ResourceConverter` or None
    
 
    .. attribute:: resource_harvester
@@ -935,7 +1086,7 @@ Part
       otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ResourceHarvester`
+      :rtype: :class:`ResourceHarvester` or None
    
 
    .. attribute:: robotic_controller
@@ -944,7 +1095,7 @@ Part
       otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RoboticController`
+      :rtype: :class:`RoboticController` or None
    
 
    .. attribute:: robotic_hinge
@@ -952,7 +1103,7 @@ Part
       A :attr:`Part.robotic_hinge` if the part is a robotic hinge, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RoboticHinge`
+      :rtype: :class:`RoboticHinge` or None
    
 
    .. attribute:: robotic_piston
@@ -960,7 +1111,7 @@ Part
       A :attr:`Part.robotic_piston` if the part is a robotic piston, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RoboticPiston`
+      :rtype: :class:`RoboticPiston` or None
    
 
    .. attribute:: robotic_rotation
@@ -968,7 +1119,7 @@ Part
       A :attr:`Part.robotic_rotation` if the part is a robotic rotation servo, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RoboticRotation`
+      :rtype: :class:`RoboticRotation` or None
    
 
    .. attribute:: robotic_rotor
@@ -976,7 +1127,7 @@ Part
       A :attr:`Part.robotic_rotor` if the part is a robotic rotor, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RoboticRotor`
+      :rtype: :class:`RoboticRotor` or None
    
 
    .. attribute:: sensor
@@ -984,7 +1135,7 @@ Part
       A :attr:`Part.sensor` if the part is a sensor, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Sensor`
+      :rtype: :class:`Sensor` or None
    
 
    .. attribute:: solar_panel
@@ -992,7 +1143,7 @@ Part
       A :attr:`Part.solar_panel` if the part is a solar panel, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SolarPanel`
+      :rtype: :class:`SolarPanel` or None
    
 
    .. attribute:: wheel
@@ -1000,7 +1151,7 @@ Part
       A :attr:`Part.wheel` if the part is a wheel, otherwise ``None``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Wheel`
+      :rtype: :class:`Wheel` or None
    
 
    .. method:: position(reference_frame)
@@ -1010,7 +1161,8 @@ Part
       :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
 
       .. note::
 
@@ -1021,27 +1173,29 @@ Part
    .. method:: center_of_mass(reference_frame)
 
       The position of the parts center of mass in the given reference frame.
-      If the part is physicsless, this is equivalent to :meth:`Part.position`.
+      If the part is physicsless in flight, this is equivalent to :meth:`Part.position`.
 
       :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: bounding_box(reference_frame)
 
       The axis-aligned bounding box of the part in the given reference frame.
 
       :param ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
-   
+      :returns: The positions of the minimum and maximum vertices of the box.
+      :rtype: :class:`BoundingBox`
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
 
       .. note::
 
-         This is computed from the collision mesh of the part.
-         If the part is not collidable, the box has zero volume and is centered on
-         the :meth:`Part.position` of the part.
+         This is computed from the meshes that make up the parts model, and covers only
+         this part - the models of any child parts are excluded.
+         If the part has no visible model, the box has zero volume and is centered on
+         the :meth:`Part.center_of_mass` of the part.
 
    .. method:: direction(reference_frame)
 
@@ -1050,7 +1204,7 @@ Part
       :param ReferenceFrame reference_frame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: velocity(reference_frame)
 
@@ -1059,7 +1213,7 @@ Part
       :param ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in.
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
    .. method:: rotation(reference_frame)
 
@@ -1068,7 +1222,7 @@ Part
       :param ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
       :rtype: tuple(float, float, float, float)
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: lift(reference_frame)
 
@@ -1078,7 +1232,8 @@ Part
       :param ReferenceFrame reference_frame: The reference frame that the returned vector is in.
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1092,30 +1247,72 @@ Part
       :param ReferenceFrame reference_frame: The reference frame that the returned vector is in.
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
          Not available when the Ferram Aerospace Research mod is installed.
 
+   .. method:: center_of_buoyancy(reference_frame)
+
+      The point the buoyant force on the part acts at, in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A submerged part reports the point the game applied the force at, which it shifts
+         towards the submerged part of the hull. Any other part reports its configured
+         center of buoyancy.
+
+   .. method:: center_of_displacement(reference_frame)
+
+      The point the depth of the part is measured at, in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: buoyant_force(reference_frame)
+
+      The buoyant force currently acting on the part.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned vector is in.
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The buoyant force on its own. The water drag and lift the game applies alongside
+         it are reported by :attr:`Part.submerged_drag_multiplier` and
+         :attr:`Part.submerged_lift_multiplier`.
+
    .. attribute:: moment_of_inertia
 
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
-      in the parts reference frame (:attr:`Part.reference_frame`).
+      in the parts center of mass reference frame (:attr:`Part.center_of_mass_reference_frame`).
 
       :Attribute: Read-only, cannot be set
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: inertia_tensor
 
-      The inertia tensor of the part in the parts reference frame
-      (:attr:`Part.reference_frame`).
+      The inertia tensor of the part around its center of mass, in the parts center of
+      mass reference frame (:attr:`Part.center_of_mass_reference_frame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
       :Attribute: Read-only, cannot be set
       :rtype: list(float)
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: reference_frame
 
@@ -1129,7 +1326,8 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`ReferenceFrame`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
 
       .. note::
 
@@ -1154,7 +1352,8 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`ReferenceFrame`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
 
       .. note::
 
@@ -1164,6 +1363,8 @@ Part
 
    .. method:: add_force(force, position, reference_frame)
 
+      .. warning:: Deprecated. Use ``Debug.AddForce`` instead.
+
       Exert a constant force on the part, acting at the given position.
 
       :param tuple force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
@@ -1171,7 +1372,8 @@ Part
       :param ReferenceFrame reference_frame: The reference frame that the force and position are in.
       :returns: An object that can be used to remove or modify the force.
       :rtype: :class:`Force`
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1179,12 +1381,15 @@ Part
 
    .. method:: instantaneous_force(force, position, reference_frame)
 
+      .. warning:: Deprecated. Use ``Debug.InstantaneousForce`` instead.
+
       Exert an instantaneous force on the part, acting at the given position.
 
       :param tuple force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :param tuple position: The position at which the force acts, as a vector.
       :param ReferenceFrame reference_frame: The reference frame that the force and position are in.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1196,7 +1401,7 @@ Part
 
       :Attribute: Write-only, cannot be read
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: auto_strut_mode
 
@@ -1204,6 +1409,40 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`AutoStrutMode`
+   
+
+   .. attribute:: has_real_fuels_tank
+
+      Whether the part is a fuel tank managed by
+      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      The remaining properties in this section are only available when it is.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: highly_pressurized
+
+      Whether the tank is highly pressurized, which is what a pressure-fed engine needs to
+      draw from (see :attr:`Engine.pressure_fed`). Throws an exception if the part is
+      not a RealFuels fuel tank (see :attr:`Part.has_real_fuels_tank`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: boiloff_rate
+
+      The rate at which the tank's cryogenic contents are boiling off, in kilograms per
+      second of in-game time, measured over the last update RealFuels computed it in.
+      The contents keep boiling off under time warp, where that update covers a much
+      longer span of in-game time than a physics frame does. The rate is zero for a
+      tank holding nothing cryogenic, for one still being fed by a launch clamp, whose
+      temperature RealFuels holds down instead, and in the editor. Throws an exception
+      if the part is not a RealFuels fuel tank (see :attr:`Part.has_real_fuels_tank`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
    
 
 
@@ -1251,7 +1490,7 @@ Part
 
 .. class:: Force
 
-   Obtained by calling :meth:`Part.add_force`.
+   Obtained by calling ``Debug.AddForce``.
 
    .. attribute:: part
 
@@ -1259,7 +1498,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight
 
    .. attribute:: force_vector
 
@@ -1268,7 +1507,7 @@ Part
       :Attribute: Can be read or written
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
    .. attribute:: position
 
@@ -1277,7 +1516,7 @@ Part
       :Attribute: Can be read or written
       :returns: The position as a vector.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
    .. attribute:: reference_frame
 
@@ -1285,13 +1524,18 @@ Part
 
       :Attribute: Can be read or written
       :rtype: :class:`ReferenceFrame`
-   
+      :Game Scenes: Flight
 
    .. method:: remove()
 
       Remove the force.
 
-   
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Any further use of this object throws an exception.
 
 
 
@@ -1365,299 +1609,6 @@ Module
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`PartAction`)
-   
-
-   .. attribute:: fields
-
-      .. warning:: Deprecated. Use :attr:`Module.field_list` instead, filtering by :attr:`PartField.visible`.
-
-      The modules field names and their associated values, as a dictionary.
-      These are the values visible in the right-click menu of the part.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: dict(str, str)
-   
-
-      .. note::
-
-         Throws an exception if there is more than one field with the same name.
-         In that case, use :attr:`Module.fields_by_id` to get the fields by identifier.
-
-   .. attribute:: fields_by_id
-
-      .. warning:: Deprecated. Use :attr:`Module.field_list` instead, filtering by :attr:`PartField.visible`.
-
-      The modules field identifiers and their associated values, as a dictionary.
-      These are the values visible in the right-click menu of the part.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: dict(str, str)
-   
-
-   .. method:: has_field(name)
-
-      .. warning:: Deprecated. Filter :attr:`Module.field_list` by :attr:`PartField.gui_name` instead.
-
-      Returns ``True`` if the module has a field with the given name.
-
-      :param str name: Name of the field.
-      :rtype: bool
-   
-
-   .. method:: has_field_with_id(id)
-
-      .. warning:: Deprecated. Filter :attr:`Module.field_list` by :attr:`PartField.name` instead.
-
-      Returns ``True`` if the module has a field with the given identifier.
-
-      :param str id: Identifier of the field.
-      :rtype: bool
-   
-
-   .. method:: get_field(name)
-
-      .. warning:: Deprecated. Filter :attr:`Module.field_list` by :attr:`PartField.gui_name` and read :attr:`PartField.value` instead.
-
-      Returns the value of a field with the given name.
-
-      :param str name: Name of the field.
-      :rtype: str
-   
-
-   .. method:: get_field_by_id(id)
-
-      .. warning:: Deprecated. Filter :attr:`Module.field_list` by :attr:`PartField.name` and read :attr:`PartField.value` instead.
-
-      Returns the value of a field with the given identifier.
-
-      :param str id: Identifier of the field.
-      :rtype: str
-   
-
-   .. method:: set_field_int(name, value)
-
-      .. warning:: Deprecated. Set :attr:`PartField.int_value` instead.
-
-      Set the value of a field to the given integer number.
-
-      :param str name: Name of the field.
-      :param int value: Value to set.
-   
-
-   .. method:: set_field_int_by_id(id, value)
-
-      .. warning:: Deprecated. Set :attr:`PartField.int_value` instead.
-
-      Set the value of a field to the given integer number.
-
-      :param str id: Identifier of the field.
-      :param int value: Value to set.
-   
-
-   .. method:: set_field_float(name, value)
-
-      .. warning:: Deprecated. Set :attr:`PartField.float_value` instead.
-
-      Set the value of a field to the given floating point number.
-
-      :param str name: Name of the field.
-      :param float value: Value to set.
-   
-
-   .. method:: set_field_float_by_id(id, value)
-
-      .. warning:: Deprecated. Set :attr:`PartField.float_value` instead.
-
-      Set the value of a field to the given floating point number.
-
-      :param str id: Identifier of the field.
-      :param float value: Value to set.
-   
-
-   .. method:: set_field_string(name, value)
-
-      .. warning:: Deprecated. Set :attr:`PartField.value` instead.
-
-      Set the value of a field to the given string.
-
-      :param str name: Name of the field.
-      :param str value: Value to set.
-   
-
-   .. method:: set_field_string_by_id(id, value)
-
-      .. warning:: Deprecated. Set :attr:`PartField.value` instead.
-
-      Set the value of a field to the given string.
-
-      :param str id: Identifier of the field.
-      :param str value: Value to set.
-   
-
-   .. method:: set_field_bool(name, value)
-
-      .. warning:: Deprecated. Set :attr:`PartField.bool_value` instead.
-
-      Set the value of a field to true or false.
-
-      :param str name: Name of the field.
-      :param bool value: Value to set.
-   
-
-   .. method:: set_field_bool_by_id(id, value)
-
-      .. warning:: Deprecated. Set :attr:`PartField.bool_value` instead.
-
-      Set the value of a field to true or false.
-
-      :param str id: Identifier of the field.
-      :param bool value: Value to set.
-   
-
-   .. method:: reset_field(name)
-
-      .. warning:: Deprecated. Use :meth:`PartField.reset` instead.
-
-      Set the value of a field to its original value.
-
-      :param str name: Name of the field.
-   
-
-   .. method:: reset_field_by_id(id)
-
-      .. warning:: Deprecated. Use :meth:`PartField.reset` instead.
-
-      Set the value of a field to its original value.
-
-      :param str id: Identifier of the field.
-   
-
-      .. note::
-
-         The original value is the value the field had when the part was loaded.
-
-   .. attribute:: events
-
-      .. warning:: Deprecated. Use :attr:`Module.event_list` instead, filtering by :attr:`PartEvent.visible` and :attr:`PartEvent.active`.
-
-      A list of the names of all of the modules events. Events are the clickable buttons
-      visible in the right-click menu of the part.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: list(str)
-   
-
-   .. attribute:: events_by_id
-
-      .. warning:: Deprecated. Use :attr:`Module.event_list` instead, filtering by :attr:`PartEvent.visible` and :attr:`PartEvent.active`.
-
-      A list of the identifiers of all of the modules events. Events are the clickable buttons
-      visible in the right-click menu of the part.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: list(str)
-   
-
-   .. method:: has_event(name)
-
-      .. warning:: Deprecated. Filter :attr:`Module.event_list` by :attr:`PartEvent.gui_name` instead.
-
-      ``True`` if the module has an event with the given name.
-
-      :param str name:
-      :rtype: bool
-   
-
-   .. method:: has_event_with_id(id)
-
-      .. warning:: Deprecated. Filter :attr:`Module.event_list` by :attr:`PartEvent.name` instead.
-
-      ``True`` if the module has an event with the given identifier.
-
-      :param str id:
-      :rtype: bool
-   
-
-   .. method:: trigger_event(name)
-
-      .. warning:: Deprecated. Filter :attr:`Module.event_list` by :attr:`PartEvent.gui_name` and call :meth:`PartEvent.trigger` instead.
-
-      Trigger the named event. Equivalent to clicking the button in the right-click menu
-      of the part.
-
-      :param str name:
-   
-
-   .. method:: trigger_event_by_id(id)
-
-      .. warning:: Deprecated. Filter :attr:`Module.event_list` by :attr:`PartEvent.name` and call :meth:`PartEvent.trigger` instead.
-
-      Trigger the event with the given identifier.
-      Equivalent to clicking the button in the right-click menu of the part.
-
-      :param str id:
-   
-
-   .. attribute:: actions
-
-      .. warning:: Deprecated. Use :attr:`Module.action_list` instead.
-
-      A list of all the names of the modules actions. These are the parts actions that can
-      be assigned to action groups in the in-game editor.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: list(str)
-   
-
-   .. attribute:: actions_by_id
-
-      .. warning:: Deprecated. Use :attr:`Module.action_list` instead.
-
-      A list of all the identifiers of the modules actions. These are the parts actions
-      that can be assigned to action groups in the in-game editor.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: list(str)
-   
-
-   .. method:: has_action(name)
-
-      .. warning:: Deprecated. Filter :attr:`Module.action_list` by :attr:`PartAction.gui_name` instead.
-
-      ``True`` if the part has an action with the given name.
-
-      :param str name:
-      :rtype: bool
-   
-
-   .. method:: has_action_with_id(id)
-
-      .. warning:: Deprecated. Filter :attr:`Module.action_list` by :attr:`PartAction.name` instead.
-
-      ``True`` if the part has an action with the given identifier.
-
-      :param str id:
-      :rtype: bool
-   
-
-   .. method:: set_action(name, [value = True])
-
-      .. warning:: Deprecated. Filter :attr:`Module.action_list` by :attr:`PartAction.gui_name` and set :attr:`PartAction.activated` instead.
-
-      Set the value of an action with the given name.
-
-      :param str name:
-      :param bool value:
-   
-
-   .. method:: set_action_by_id(id, [value = True])
-
-      .. warning:: Deprecated. Filter :attr:`Module.action_list` by :attr:`PartAction.name` and set :attr:`PartAction.activated` instead.
-
-      Set the value of an action with the given identifier.
-
-      :param str id:
-      :param bool value:
    
 
 
@@ -2041,7 +1992,7 @@ Antenna
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: state
 
@@ -2049,7 +2000,7 @@ Antenna
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`DeployableState`
-   
+      :Game Scenes: Flight
 
    .. attribute:: deployable
 
@@ -2057,7 +2008,7 @@ Antenna
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: deployed
 
@@ -2065,7 +2016,8 @@ Antenna
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2078,19 +2030,19 @@ Antenna
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: transmit()
 
       Transmit data.
 
-   
+      :Game Scenes: Flight
 
    .. method:: cancel()
 
       Cancel current transmission of data.
 
-   
+      :Game Scenes: Flight
 
    .. attribute:: allow_partial
 
@@ -2098,7 +2050,7 @@ Antenna
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: power
 
@@ -2106,7 +2058,7 @@ Antenna
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: combinable
 
@@ -2115,7 +2067,7 @@ Antenna
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: combinable_exponent
 
@@ -2123,7 +2075,7 @@ Antenna
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: packet_interval
 
@@ -2131,7 +2083,7 @@ Antenna
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: packet_size
 
@@ -2139,7 +2091,7 @@ Antenna
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: packet_resource_cost
 
@@ -2147,7 +2099,7 @@ Antenna
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -2165,7 +2117,7 @@ Cargo Bay
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: state
 
@@ -2173,7 +2125,8 @@ Cargo Bay
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`DeployableState`
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2190,7 +2143,7 @@ Cargo Bay
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
 
 
@@ -2208,7 +2161,7 @@ Control Surface
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: pitch_enabled
 
@@ -2216,7 +2169,7 @@ Control Surface
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: yaw_enabled
 
@@ -2224,7 +2177,7 @@ Control Surface
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: roll_enabled
 
@@ -2232,7 +2185,7 @@ Control Surface
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: authority_limiter
 
@@ -2241,7 +2194,7 @@ Control Surface
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: inverted
 
@@ -2249,15 +2202,48 @@ Control Surface
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: deployed
 
-      Whether the control surface has been fully deployed.
+      Whether the control surface has been fully deployed. Throws an exception if set
+      while :attr:`ControlSurface.deflection_override` is enabled, which holds the surface deployed.
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: deploy_angle
+
+      The deploy angle of the control surface, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Applied when :attr:`ControlSurface.deployed` is true, and clamped to the range given by
+         :attr:`ControlSurface.min_deploy_angle` and :attr:`ControlSurface.max_deploy_angle`. While
+         :attr:`ControlSurface.deflection_override` is enabled, :attr:`ControlSurface.deflection` drives the
+         angle. A value set here takes effect when the override is released.
+
+   .. attribute:: min_deploy_angle
+
+      The minimum :attr:`ControlSurface.deploy_angle` of the control surface, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: max_deploy_angle
+
+      The maximum :attr:`ControlSurface.deploy_angle` of the control surface, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: deflection_override
 
@@ -2269,7 +2255,7 @@ Control Surface
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: deflection
 
@@ -2278,7 +2264,7 @@ Control Surface
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: surface_area
 
@@ -2286,7 +2272,7 @@ Control Surface
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: available_torque
 
@@ -2295,8 +2281,8 @@ Control Surface
       correspond to the coordinate axes of the :attr:`Vessel.reference_frame`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
-   
+      :rtype: :class:`AxisRange`
+      :Game Scenes: Flight
 
 
 
@@ -2314,7 +2300,7 @@ Decoupler
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: decouple()
 
@@ -2322,7 +2308,8 @@ Decoupler
       Throws an exception if the decoupler has already fired.
 
       :rtype: :class:`Vessel`
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2336,7 +2323,7 @@ Decoupler
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: staged
 
@@ -2344,7 +2331,7 @@ Decoupler
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: impulse
 
@@ -2352,7 +2339,7 @@ Decoupler
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: is_omni_decoupler
 
@@ -2360,15 +2347,15 @@ Decoupler
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: attached_part
 
       The part attached to this decoupler's explosive node.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Part`
-   
+      :rtype: :class:`Part` or None
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -2431,7 +2418,7 @@ Docking Port
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: state
 
@@ -2439,7 +2426,7 @@ Docking Port
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`DockingPortState`
-   
+      :Game Scenes: Flight
 
    .. attribute:: docked_part
 
@@ -2447,8 +2434,8 @@ Docking Port
       docking port is not docked to anything.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Part`
-   
+      :rtype: :class:`Part` or None
+      :Game Scenes: Flight
 
    .. method:: undock()
 
@@ -2457,7 +2444,8 @@ Docking Port
       Throws an exception if the docking port is not docked to anything.
 
       :rtype: :class:`Vessel`
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2472,7 +2460,7 @@ Docking Port
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: has_shield
 
@@ -2480,7 +2468,7 @@ Docking Port
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: shielded
 
@@ -2493,7 +2481,7 @@ Docking Port
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: can_rotate
 
@@ -2501,7 +2489,7 @@ Docking Port
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: maximum_rotation
 
@@ -2509,7 +2497,7 @@ Docking Port
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: minimum_rotation
 
@@ -2517,7 +2505,7 @@ Docking Port
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: rotation_target
 
@@ -2525,7 +2513,7 @@ Docking Port
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: rotation_locked
 
@@ -2533,7 +2521,7 @@ Docking Port
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: position(reference_frame)
 
@@ -2542,7 +2530,7 @@ Docking Port
       :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
    .. method:: direction(reference_frame)
 
@@ -2551,7 +2539,7 @@ Docking Port
       :param ReferenceFrame reference_frame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
    .. method:: rotation(reference_frame)
 
@@ -2560,7 +2548,7 @@ Docking Port
       :param ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
       :rtype: tuple(float, float, float, float)
-   
+      :Game Scenes: Flight
 
    .. attribute:: reference_frame
 
@@ -2575,7 +2563,8 @@ Docking Port
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`ReferenceFrame`
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2654,7 +2643,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: active
 
@@ -2663,7 +2652,7 @@ Engine
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: thrust
 
@@ -2671,7 +2660,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: available_thrust
 
@@ -2683,7 +2672,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. method:: available_thrust_at(pressure)
 
@@ -2694,7 +2683,7 @@ Engine
 
       :param float pressure: Atmospheric pressure in atmospheres
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: max_thrust
 
@@ -2703,7 +2692,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. method:: max_thrust_at(pressure)
 
@@ -2713,7 +2702,7 @@ Engine
 
       :param float pressure: Atmospheric pressure in atmospheres
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: max_vacuum_thrust
 
@@ -2724,7 +2713,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: thrust_limit
 
@@ -2734,7 +2723,7 @@ Engine
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: thrusters
 
@@ -2742,7 +2731,8 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`Thruster`)
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2758,7 +2748,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. method:: specific_impulse_at(pressure)
 
@@ -2767,7 +2757,7 @@ Engine
 
       :param float pressure: Atmospheric pressure in atmospheres
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: vacuum_specific_impulse
 
@@ -2775,7 +2765,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: kerbin_sea_level_specific_impulse
 
@@ -2783,7 +2773,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: propellant_names
 
@@ -2791,7 +2781,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: list(str)
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: propellant_ratios
 
@@ -2800,7 +2790,8 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: dict(str, float)
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2813,7 +2804,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`Propellant`)
-   
+      :Game Scenes: Flight
 
    .. attribute:: has_fuel
 
@@ -2821,7 +2812,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: flameout
 
@@ -2833,7 +2824,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: throttle
 
@@ -2847,7 +2838,7 @@ Engine
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: throttle_locked
 
@@ -2857,7 +2848,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: independent_throttle
 
@@ -2865,7 +2856,7 @@ Engine
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: can_restart
 
@@ -2875,7 +2866,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: can_shutdown
 
@@ -2884,7 +2875,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: has_modes
 
@@ -2892,7 +2883,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: mode
 
@@ -2900,7 +2891,7 @@ Engine
 
       :Attribute: Can be read or written
       :rtype: str
-   
+      :Game Scenes: Flight
 
    .. attribute:: modes
 
@@ -2909,13 +2900,13 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: dict(str, :class:`Engine`)
-   
+      :Game Scenes: Flight
 
    .. method:: toggle_mode()
 
       Toggle the current engine mode.
 
-   
+      :Game Scenes: Flight
 
    .. attribute:: auto_mode_switch
 
@@ -2923,7 +2914,7 @@ Engine
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: gimballed
 
@@ -2931,7 +2922,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: gimbal_range
 
@@ -2940,7 +2931,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: gimbal_locked
 
@@ -2949,7 +2940,7 @@ Engine
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: gimbal_limit
 
@@ -2958,7 +2949,7 @@ Engine
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: gimbal_override
 
@@ -2970,7 +2961,7 @@ Engine
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: gimbal_actuation
 
@@ -2982,7 +2973,7 @@ Engine
 
       :Attribute: Can be read or written
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
    .. attribute:: available_torque
 
@@ -2992,8 +2983,8 @@ Engine
       Returns zero if the engine is inactive, or not gimballed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
-   
+      :rtype: :class:`AxisRange`
+      :Game Scenes: Flight
 
    .. attribute:: can_reverse_thrust
 
@@ -3005,7 +2996,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: thrust_reversed
 
@@ -3013,19 +3004,103 @@ Engine
       direction of thrust. While the reverser is still moving, this reports
       the state it is moving to, so a read immediately after a set returns
       the value that was set and setting the same value again has no effect.
-      Raises an exception if the engine does not have a thrust reverser
+      Throws an exception if the engine does not have a thrust reverser
       (see :attr:`Engine.can_reverse_thrust`).
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: toggle_thrust_reversal()
 
-      Toggle the engine's thrust reverser. Raises an exception if the engine
+      Toggle the engine's thrust reverser. Throws an exception if the engine
       does not have a thrust reverser (see :attr:`Engine.can_reverse_thrust`).
 
-   
+      :Game Scenes: Flight
+
+   .. attribute:: has_real_fuels
+
+      Whether the engine is managed by
+      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      The remaining properties in this section are only available when it is.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: ignitions
+
+      The number of times the engine can still be ignited, or -1 if it can be ignited an
+      unlimited number of times. Throws an exception if the engine is not managed by
+      RealFuels (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: ignition_resources
+
+      The resources the engine consumes each time it ignites, keyed by resource name, with
+      the amount of each that is required. The engine uses up an ignition and fails to
+      light if they are not available. Throws an exception if the engine is not managed by
+      RealFuels (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: dict(str, float)
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: has_ullage
+
+      Whether the engine's propellant is subject to ullage, so that it must be settled
+      before the engine will run reliably. Throws an exception if the engine is not
+      managed by RealFuels (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: propellant_stability
+
+      How settled the propellant feeding the engine is, from 0 (fully unsettled) to 1
+      (fully settled). Acceleration along the engine's thrust axis settles it, and
+      coasting and rotation unsettle it. Throws an exception if the engine is not managed
+      by RealFuels (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: propellant_reliability
+
+      The probability that the propellant feeding the engine behaves normally, from 0 to 1.
+      This is :attr:`Engine.propellant_stability` scaled by the game's ullage difficulty
+      setting, and is the value RealFuels itself tests against when deciding whether the
+      engine runs. Throws an exception if the engine is not managed by RealFuels
+      (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: pressure_fed
+
+      Whether the engine is fed by tank pressure rather than by a pump, and so needs to
+      draw from a highly pressurized tank. Throws an exception if the engine is not
+      managed by RealFuels (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: has_feed_pressure
+
+      Whether the tanks feeding the engine supply the pressure it needs. Always
+      ``True`` for an engine that is not pressure fed. Throws an exception if the
+      engine is not managed by RealFuels (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
 
 
 
@@ -3039,7 +3114,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-   
+      :Game Scenes: Flight
 
    .. attribute:: current_amount
 
@@ -3047,7 +3122,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: current_requirement
 
@@ -3055,7 +3130,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: total_resource_available
 
@@ -3064,7 +3139,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: total_resource_capacity
 
@@ -3073,7 +3148,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: ignore_for_isp
 
@@ -3082,7 +3157,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: ignore_for_thrust_curve
 
@@ -3090,7 +3165,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: draw_stack_gauge
 
@@ -3098,7 +3173,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: is_deprived
 
@@ -3106,7 +3181,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: ratio
 
@@ -3114,7 +3189,7 @@ Engine
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
 
 
@@ -3132,7 +3207,7 @@ Experiment
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: name
 
@@ -3141,7 +3216,7 @@ Experiment
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-   
+      :Game Scenes: Flight
 
    .. attribute:: title
 
@@ -3149,31 +3224,31 @@ Experiment
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-   
+      :Game Scenes: Flight
 
    .. method:: run()
 
       Run the experiment.
 
-   
+      :Game Scenes: Flight
 
    .. method:: transmit()
 
       Transmit all experimental data contained by this part.
 
-   
+      :Game Scenes: Flight
 
    .. method:: dump()
 
       Dump the experimental data contained by the experiment.
 
-   
+      :Game Scenes: Flight
 
    .. method:: reset()
 
       Reset the experiment.
 
-   
+      :Game Scenes: Flight
 
    .. attribute:: deployed
 
@@ -3181,7 +3256,7 @@ Experiment
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: rerunnable
 
@@ -3189,7 +3264,7 @@ Experiment
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: inoperable
 
@@ -3197,7 +3272,7 @@ Experiment
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: has_data
 
@@ -3205,7 +3280,7 @@ Experiment
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: data
 
@@ -3213,7 +3288,7 @@ Experiment
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`ScienceData`)
-   
+      :Game Scenes: Flight
 
    .. attribute:: biome
 
@@ -3221,7 +3296,7 @@ Experiment
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-   
+      :Game Scenes: Flight
 
    .. attribute:: available
 
@@ -3229,7 +3304,7 @@ Experiment
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: science_subject
 
@@ -3237,52 +3312,51 @@ Experiment
       conditions. Returns ``None`` if the experiment is unavailable.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ScienceSubject`
-   
+      :rtype: :class:`ScienceSubject` or None
+      :Game Scenes: Flight
 
 
 
-.. class:: ScienceData
+.. class:: ScienceData(data_amount, science_value, transmit_value)
 
    Obtained by calling :attr:`Experiment.data`.
+
 
    .. attribute:: data_amount
 
       Data amount.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-   
 
    .. attribute:: science_value
 
       Science value.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-   
 
    .. attribute:: transmit_value
 
       Transmit value.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-   
 
 
-
-.. class:: ScienceSubject
+.. class:: ScienceSubject(id, title, is_complete, science, science_cap, data_scale, subject_value, scientific_value)
 
    Obtained by calling :attr:`Experiment.science_subject`.
 
+
+   .. attribute:: id
+
+      The identifier of the subject, e.g. ``crewReport@KerbinSrfLandedLaunchPad``.
+
+      :rtype: str
+
    .. attribute:: title
 
-      Title of science subject, displayed in science archives
+      The title of the subject, as shown in the science archives.
 
-      :Attribute: Read-only, cannot be set
       :rtype: str
-   
 
    .. attribute:: is_complete
 
@@ -3293,52 +3367,39 @@ Experiment
       has produced data, and how valuable it is, use :attr:`Experiment.has_data` and
       :attr:`ScienceData.transmit_value`.
 
-      :Attribute: Read-only, cannot be set
       :rtype: bool
-   
 
    .. attribute:: science
 
       Amount of science already earned from this subject, not updated until after
       transmission/recovery.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-   
 
    .. attribute:: science_cap
 
       Total science allowable for this subject.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-   
 
    .. attribute:: data_scale
 
       Multiply science value by this to determine data amount in mits.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-   
 
    .. attribute:: subject_value
 
       Multiplier for specific Celestial Body/Experiment Situation combination.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-   
 
    .. attribute:: scientific_value
 
       Diminishing value multiplier for decreasing the science value returned from repeated
       experiments.
 
-      :Attribute: Read-only, cannot be set
       :rtype: float
-   
-
 
 
 Fairing
@@ -3356,13 +3417,13 @@ Fairing
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: jettison()
 
       Jettison the fairing. Has no effect if it has already been jettisoned.
 
-   
+      :Game Scenes: Flight
 
    .. attribute:: jettisoned
 
@@ -3370,7 +3431,7 @@ Fairing
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
 
 
@@ -3388,7 +3449,7 @@ Intake
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: open
 
@@ -3396,7 +3457,7 @@ Intake
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: speed
 
@@ -3404,7 +3465,7 @@ Intake
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: flow
 
@@ -3412,7 +3473,7 @@ Intake
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: area
 
@@ -3420,7 +3481,7 @@ Intake
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -3438,7 +3499,7 @@ Leg
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: state
 
@@ -3446,7 +3507,7 @@ Leg
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`DeployableState`
-   
+      :Game Scenes: Flight
 
    .. attribute:: deployable
 
@@ -3454,7 +3515,7 @@ Leg
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: deployed
 
@@ -3462,7 +3523,8 @@ Leg
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3475,7 +3537,7 @@ Leg
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
 
 
@@ -3493,13 +3555,13 @@ Launch Clamp
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: release()
 
       Releases the docking clamp. Has no effect if the clamp has already been released.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3517,7 +3579,7 @@ Light
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: active
 
@@ -3525,15 +3587,15 @@ Light
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: color
 
-      The color of the light, as an RGB triple.
+      The color of the light.
 
       :Attribute: Can be read or written
-      :rtype: tuple(float, float, float)
-   
+      :rtype: :class:`StdLib.ColorRGB`
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: blink
 
@@ -3541,7 +3603,7 @@ Light
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: blink_rate
 
@@ -3549,7 +3611,7 @@ Light
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: power_usage
 
@@ -3557,7 +3619,7 @@ Light
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
 
 
@@ -3575,14 +3637,14 @@ Parachute
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: deploy()
 
       Deploys the parachute. This has no effect if the parachute has already
       been deployed.
 
-   
+      :Game Scenes: Flight
 
    .. attribute:: deployed
 
@@ -3590,14 +3652,14 @@ Parachute
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: arm()
 
       Deploys the parachute. This has no effect if the parachute has already
       been armed or deployed.
 
-   
+      :Game Scenes: Flight
 
    .. attribute:: armed
 
@@ -3605,13 +3667,13 @@ Parachute
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: cut()
 
       Cuts the parachute.
 
-   
+      :Game Scenes: Flight
 
    .. attribute:: state
 
@@ -3619,7 +3681,7 @@ Parachute
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`ParachuteState`
-   
+      :Game Scenes: Flight
 
    .. attribute:: deploy_altitude
 
@@ -3628,7 +3690,7 @@ Parachute
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: deploy_min_pressure
 
@@ -3637,7 +3699,7 @@ Parachute
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: safe_state
 
@@ -3649,7 +3711,7 @@ Parachute
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`ParachuteSafeState`
-   
+      :Game Scenes: Flight
 
 
 
@@ -3726,7 +3788,7 @@ Radiator
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: deployable
 
@@ -3734,7 +3796,7 @@ Radiator
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: deployed
 
@@ -3743,7 +3805,7 @@ Radiator
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: state
 
@@ -3751,7 +3813,8 @@ Radiator
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`DeployableState`
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3773,7 +3836,7 @@ Resource Converter
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: count
 
@@ -3781,7 +3844,7 @@ Resource Converter
 
       :Attribute: Read-only, cannot be set
       :rtype: int
-   
+      :Game Scenes: Flight
 
    .. method:: name(index)
 
@@ -3789,7 +3852,7 @@ Resource Converter
 
       :param int index: Index of the converter.
       :rtype: str
-   
+      :Game Scenes: Flight
 
    .. method:: active(index)
 
@@ -3797,21 +3860,21 @@ Resource Converter
 
       :param int index: Index of the converter.
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: start(index)
 
       Start the specified converter.
 
       :param int index: Index of the converter.
-   
+      :Game Scenes: Flight
 
    .. method:: stop(index)
 
       Stop the specified converter.
 
       :param int index: Index of the converter.
-   
+      :Game Scenes: Flight
 
    .. method:: state(index)
 
@@ -3819,7 +3882,7 @@ Resource Converter
 
       :param int index: Index of the converter.
       :rtype: :class:`ResourceConverterState`
-   
+      :Game Scenes: Flight
 
    .. method:: status_info(index)
 
@@ -3828,7 +3891,7 @@ Resource Converter
 
       :param int index: Index of the converter.
       :rtype: str
-   
+      :Game Scenes: Flight
 
    .. method:: inputs(index)
 
@@ -3836,7 +3899,7 @@ Resource Converter
 
       :param int index: Index of the converter.
       :rtype: list(str)
-   
+      :Game Scenes: Flight
 
    .. method:: outputs(index)
 
@@ -3844,7 +3907,7 @@ Resource Converter
 
       :param int index: Index of the converter.
       :rtype: list(str)
-   
+      :Game Scenes: Flight
 
    .. attribute:: optimum_core_temperature
 
@@ -3852,7 +3915,7 @@ Resource Converter
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: core_temperature
 
@@ -3860,7 +3923,7 @@ Resource Converter
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: thermal_efficiency
 
@@ -3868,7 +3931,7 @@ Resource Converter
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
 
 
@@ -3923,7 +3986,7 @@ Resource Harvester
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: state
 
@@ -3932,7 +3995,8 @@ Resource Harvester
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`DeployableState`
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3945,7 +4009,7 @@ Resource Harvester
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: active
 
@@ -3953,7 +4017,8 @@ Resource Harvester
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3969,7 +4034,7 @@ Resource Harvester
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: thermal_efficiency
 
@@ -3977,7 +4042,7 @@ Resource Harvester
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: core_temperature
 
@@ -3985,7 +4050,7 @@ Resource Harvester
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: optimum_core_temperature
 
@@ -3993,7 +4058,7 @@ Resource Harvester
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
 
 
@@ -4011,7 +4076,7 @@ Reaction Wheel
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: active
 
@@ -4019,7 +4084,7 @@ Reaction Wheel
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: broken
 
@@ -4027,7 +4092,7 @@ Reaction Wheel
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: available_torque
 
@@ -4037,8 +4102,8 @@ Reaction Wheel
       Returns zero if the reaction wheel is inactive or broken.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
-   
+      :rtype: :class:`AxisRange`
+      :Game Scenes: Flight
 
    .. attribute:: max_torque
 
@@ -4047,8 +4112,8 @@ Reaction Wheel
       These axes correspond to the coordinate axes of the :attr:`Vessel.reference_frame`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
-   
+      :rtype: :class:`AxisRange`
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: authority_limiter
 
@@ -4057,7 +4122,7 @@ Reaction Wheel
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -4075,7 +4140,7 @@ Resource Drain
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: available_resources
 
@@ -4083,7 +4148,7 @@ Resource Drain
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`Resource`)
-   
+      :Game Scenes: Flight
 
    .. method:: set_resource(resource, enabled)
 
@@ -4091,7 +4156,7 @@ Resource Drain
 
       :param Resource resource:
       :param bool enabled:
-   
+      :Game Scenes: Flight
 
    .. method:: check_resource(resource)
 
@@ -4099,7 +4164,7 @@ Resource Drain
 
       :param Resource resource:
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: drain_mode
 
@@ -4107,7 +4172,7 @@ Resource Drain
 
       :Attribute: Can be read or written
       :rtype: :class:`DrainMode`
-   
+      :Game Scenes: Flight
 
    .. attribute:: min_rate
 
@@ -4115,7 +4180,7 @@ Resource Drain
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: max_rate
 
@@ -4123,7 +4188,7 @@ Resource Drain
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: rate
 
@@ -4131,19 +4196,19 @@ Resource Drain
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. method:: start()
 
       Activates resource draining for all enabled parts.
 
-   
+      :Game Scenes: Flight
 
    .. method:: stop()
 
       Turns off resource draining.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4178,7 +4243,7 @@ Robotic Controller
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: enabled
 
@@ -4186,7 +4251,7 @@ Robotic Controller
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: playing
 
@@ -4194,7 +4259,7 @@ Robotic Controller
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: position
 
@@ -4202,7 +4267,7 @@ Robotic Controller
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: length
 
@@ -4210,7 +4275,7 @@ Robotic Controller
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: play_speed
 
@@ -4218,19 +4283,19 @@ Robotic Controller
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. method:: play()
 
       Start playing the controller's sequence.
 
-   
+      :Game Scenes: Flight
 
    .. method:: stop()
 
       Stop playing the controller's sequence.
 
-   
+      :Game Scenes: Flight
 
    .. method:: has_part(part)
 
@@ -4238,14 +4303,14 @@ Robotic Controller
 
       :param Part part:
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: axes()
 
       The axes for the controller.
 
-      :rtype: list(list(str))
-   
+      :rtype: list(:class:`RoboticAxis`)
+      :Game Scenes: Flight
 
    .. method:: add_axis(module, field_name)
 
@@ -4255,7 +4320,7 @@ Robotic Controller
       :param str field_name: The name of the axis field, as returned by :meth:`RoboticController.axes`.
       :returns: Returns ``True`` if the axis is added successfully.
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: add_key_frame(module, field_name, time, value)
 
@@ -4267,7 +4332,7 @@ Robotic Controller
       :param float value: The value of the key frame.
       :returns: Returns ``True`` if the key frame is added successfully.
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: clear_axis(module, field_name)
 
@@ -4277,8 +4342,28 @@ Robotic Controller
       :param str field_name: The name of the axis field, as returned by :meth:`RoboticController.axes`.
       :returns: Returns ``True`` if the axis is cleared successfully.
       :rtype: bool
-   
+      :Game Scenes: Flight
 
+
+
+.. class:: RoboticAxis(module, field_name)
+
+   An axis of a robotic controller.
+
+   .. note::
+
+      See :meth:`RoboticController.axes`.
+   .. attribute:: module
+
+      The part module the axis belongs to.
+
+      :rtype: :class:`Module`
+
+   .. attribute:: field_name
+
+      The name of the field the axis controls.
+
+      :rtype: str
 
 
 Robotic Hinge
@@ -4295,7 +4380,7 @@ Robotic Hinge
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: target_angle
 
@@ -4303,7 +4388,7 @@ Robotic Hinge
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: current_angle
 
@@ -4311,7 +4396,7 @@ Robotic Hinge
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: min_angle
 
@@ -4319,7 +4404,7 @@ Robotic Hinge
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: max_angle
 
@@ -4327,7 +4412,7 @@ Robotic Hinge
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: rate
 
@@ -4335,7 +4420,7 @@ Robotic Hinge
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: damping
 
@@ -4343,7 +4428,7 @@ Robotic Hinge
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: locked
 
@@ -4351,7 +4436,7 @@ Robotic Hinge
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: motor_engaged
 
@@ -4359,7 +4444,7 @@ Robotic Hinge
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: is_moving
 
@@ -4367,13 +4452,13 @@ Robotic Hinge
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: move_home()
 
       Move hinge to its built position.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4391,7 +4476,7 @@ Robotic Piston
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: target_extension
 
@@ -4399,7 +4484,7 @@ Robotic Piston
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: current_extension
 
@@ -4407,7 +4492,7 @@ Robotic Piston
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: min_extension
 
@@ -4415,7 +4500,7 @@ Robotic Piston
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: max_extension
 
@@ -4423,7 +4508,7 @@ Robotic Piston
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: rate
 
@@ -4431,7 +4516,7 @@ Robotic Piston
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: damping
 
@@ -4439,7 +4524,7 @@ Robotic Piston
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: locked
 
@@ -4447,7 +4532,7 @@ Robotic Piston
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: motor_engaged
 
@@ -4455,7 +4540,7 @@ Robotic Piston
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: is_moving
 
@@ -4463,13 +4548,13 @@ Robotic Piston
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: move_home()
 
       Move piston to its built position.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4487,7 +4572,7 @@ Robotic Rotation
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: target_angle
 
@@ -4495,7 +4580,7 @@ Robotic Rotation
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: current_angle
 
@@ -4503,7 +4588,7 @@ Robotic Rotation
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: min_angle
 
@@ -4511,7 +4596,7 @@ Robotic Rotation
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: max_angle
 
@@ -4519,7 +4604,7 @@ Robotic Rotation
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: allow_full_rotation
 
@@ -4528,7 +4613,7 @@ Robotic Rotation
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: rate
 
@@ -4536,7 +4621,7 @@ Robotic Rotation
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: damping
 
@@ -4544,7 +4629,7 @@ Robotic Rotation
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: locked
 
@@ -4552,7 +4637,7 @@ Robotic Rotation
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: motor_engaged
 
@@ -4560,7 +4645,7 @@ Robotic Rotation
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: is_moving
 
@@ -4568,13 +4653,13 @@ Robotic Rotation
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: move_home()
 
       Move rotation servo to its built position.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4592,7 +4677,7 @@ Robotic Rotor
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: target_rpm
 
@@ -4600,7 +4685,7 @@ Robotic Rotor
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: current_rpm
 
@@ -4608,7 +4693,7 @@ Robotic Rotor
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: inverted
 
@@ -4616,7 +4701,7 @@ Robotic Rotor
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: torque_limit
 
@@ -4624,7 +4709,7 @@ Robotic Rotor
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: max_torque
 
@@ -4632,7 +4717,7 @@ Robotic Rotor
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: brake_percentage
 
@@ -4640,7 +4725,7 @@ Robotic Rotor
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: locked
 
@@ -4648,7 +4733,7 @@ Robotic Rotor
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: motor_engaged
 
@@ -4656,7 +4741,7 @@ Robotic Rotor
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: is_moving
 
@@ -4664,7 +4749,7 @@ Robotic Rotor
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
 
 
@@ -4682,7 +4767,7 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: active
 
@@ -4694,7 +4779,7 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: enabled
 
@@ -4702,7 +4787,7 @@ RCS
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: pitch_enabled
 
@@ -4710,7 +4795,7 @@ RCS
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: yaw_enabled
 
@@ -4718,7 +4803,7 @@ RCS
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: roll_enabled
 
@@ -4726,7 +4811,7 @@ RCS
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: forward_enabled
 
@@ -4734,7 +4819,7 @@ RCS
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: up_enabled
 
@@ -4742,7 +4827,7 @@ RCS
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: right_enabled
 
@@ -4750,7 +4835,7 @@ RCS
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: input_override
 
@@ -4759,10 +4844,11 @@ RCS
       :attr:`RCS.rotation_override` and :attr:`RCS.translation_override` instead of the
       normal control inputs. The override is automatically released if the
       controlling client disconnects or the vessel changes.
+      Precision mode leaves an overridden block at full thrust.
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: rotation_override
 
@@ -4771,7 +4857,7 @@ RCS
 
       :Attribute: Can be read or written
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
    .. attribute:: translation_override
 
@@ -4781,7 +4867,7 @@ RCS
 
       :Attribute: Can be read or written
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
    .. attribute:: available_torque
 
@@ -4791,8 +4877,15 @@ RCS
       Returns zero if RCS is disable.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
-   
+      :rtype: :class:`AxisRange`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the block, and the available torque follows it. A block
+         driven by :attr:`RCS.input_override` is exempt, so :meth:`RCS.override_wrench`
+         can report the larger torque an override reaches.
 
    .. attribute:: available_force
 
@@ -4802,8 +4895,51 @@ RCS
       Returns zero if RCS is disabled.
 
       :Attribute: Read-only, cannot be set
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
-   
+      :rtype: :class:`AxisRange`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the block, and the available force follows it. A block
+         driven by :attr:`RCS.input_override` is exempt, so :meth:`RCS.override_wrench`
+         can report the larger force an override reaches.
+
+   .. attribute:: force
+
+      The force being applied by the RCS thrusters, in Newtons. The vector is in the
+      vessel's reference frame (:attr:`Vessel.reference_frame`).
+      Returns zero if the RCS is inactive.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: torque
+
+      The torque being applied by the RCS thrusters about the vessel's center of mass,
+      in Newton meters. The vector is in the vessel's reference frame
+      (:attr:`Vessel.reference_frame`). Returns zero if the RCS is inactive.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. method:: override_wrench(rotation, translation)
+
+      The force and torque the given demands would produce, in Newtons and Newton meters.
+
+      :param tuple rotation: A rotation demand, as set by :attr:`RCS.rotation_override`.
+      :param tuple translation: A translation demand, as set by :attr:`RCS.translation_override`.
+      :returns: The force, and the torque about the vessel's center of mass, in the vessel's reference frame (:attr:`Vessel.reference_frame`), or zero if the RCS is inactive.
+      :rtype: :class:`Wrench`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out full thrust, which
+         :attr:`RCS.force` and :attr:`RCS.torque` include.
 
    .. attribute:: available_thrust
 
@@ -4814,7 +4950,7 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: max_thrust
 
@@ -4824,7 +4960,7 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: max_vacuum_thrust
 
@@ -4833,7 +4969,7 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: thrust_limit
 
@@ -4841,7 +4977,7 @@ RCS
 
       :Attribute: Can be read or written
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: thrusters
 
@@ -4849,7 +4985,7 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`Thruster`)
-   
+      :Game Scenes: Flight
 
    .. attribute:: specific_impulse
 
@@ -4858,7 +4994,7 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: vacuum_specific_impulse
 
@@ -4866,7 +5002,7 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: kerbin_sea_level_specific_impulse
 
@@ -4874,7 +5010,7 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: propellants
 
@@ -4882,7 +5018,7 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: list(str)
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: propellant_ratios
 
@@ -4891,7 +5027,7 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: dict(str, float)
-   
+      :Game Scenes: Flight
 
    .. attribute:: has_fuel
 
@@ -4899,7 +5035,7 @@ RCS
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
 
 
@@ -4917,7 +5053,7 @@ Sensor
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: active
 
@@ -4925,7 +5061,7 @@ Sensor
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: value
 
@@ -4933,7 +5069,8 @@ Sensor
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -4962,7 +5099,7 @@ Solar Panel
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: deployable
 
@@ -4970,7 +5107,7 @@ Solar Panel
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: deployed
 
@@ -4978,7 +5115,7 @@ Solar Panel
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. attribute:: state
 
@@ -4986,7 +5123,7 @@ Solar Panel
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`DeployableState`
-   
+      :Game Scenes: Flight
 
    .. attribute:: energy_flow
 
@@ -4995,7 +5132,7 @@ Solar Panel
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
    .. attribute:: sun_exposure
 
@@ -5004,7 +5141,7 @@ Solar Panel
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight
 
 
 
@@ -5029,7 +5166,15 @@ Thruster
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight
+
+   .. attribute:: thrust
+
+      The thrust being produced by the thruster, in Newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
 
    .. method:: thrust_position(reference_frame)
 
@@ -5039,7 +5184,7 @@ Thruster
       :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
    .. method:: thrust_direction(reference_frame)
 
@@ -5050,7 +5195,7 @@ Thruster
       :param ReferenceFrame reference_frame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
    .. attribute:: thrust_reference_frame
 
@@ -5067,7 +5212,7 @@ Thruster
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`ReferenceFrame`
-   
+      :Game Scenes: Flight
 
    .. attribute:: gimballed
 
@@ -5075,7 +5220,7 @@ Thruster
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
-   
+      :Game Scenes: Flight
 
    .. method:: gimbal_position(reference_frame)
 
@@ -5084,7 +5229,7 @@ Thruster
       :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
    .. attribute:: gimbal_angle
 
@@ -5092,7 +5237,7 @@ Thruster
 
       :Attribute: Read-only, cannot be set
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
    .. method:: initial_thrust_position(reference_frame)
 
@@ -5102,7 +5247,8 @@ Thruster
       :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -5118,7 +5264,7 @@ Thruster
       :param ReferenceFrame reference_frame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
       :rtype: tuple(float, float, float)
-   
+      :Game Scenes: Flight
 
 
 
@@ -5510,7 +5656,7 @@ returns ``None``.
 The following Python example uses these attributes to perform a
 depth-first traversal over all of the parts in a vessel:
 
-.. literalinclude:: /scripts/services/space-center/TreeTraversal.py
+.. literalinclude:: /scripts/api/space-center/parts/TreeTraversal.py
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -5557,7 +5703,7 @@ consider to be *axially* attached to nothing.
 The following Python example does a depth-first traversal as before,
 but also prints out the attachment mode used by the part:
 
-.. literalinclude:: /scripts/services/space-center/AttachmentModes.py
+.. literalinclude:: /scripts/api/space-center/parts/AttachmentModes.py
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -5652,11 +5798,7 @@ Staging
 For vessel-level summaries (delta-v, thrust, fuel, and resources grouped per
 stage), use the :rst:ref:`python-api-stage` class via
 :attr:`Vessel.stages` and
-:attr:`Vessel.decouple_stages`. Legacy helpers
-:meth:`Parts.in_stage`,
-:meth:`Parts.in_decouple_stage`, and
-:meth:`Vessel.resources_in_decouple_stage` remain available but
-are deprecated.
+:attr:`Vessel.decouple_stages`.
 
 .. only:: html
 

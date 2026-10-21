@@ -10,52 +10,104 @@ Polygon
 
    A polygon. Created using :func:`krpc_Drawing_AddPolygon`.
 
-   .. function:: krpc_error_t krpc_Drawing_Polygon_Vertices(krpc_connection_t connection, krpc_list_tuple_double_double_double_t * result)
-   .. function:: void krpc_Drawing_Polygon_set_Vertices(const krpc_list_tuple_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_Vertices(krpc_connection_t connection, krpc_list_tuple_double_double_double_t * returnValue, krpc_Drawing_Polygon_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_set_Vertices(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, const krpc_list_tuple_double_double_double_t * value)
 
       Vertices for the polygon.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_Polygon_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
-   .. function:: void krpc_Drawing_Polygon_set_ReferenceFrame(krpc_SpaceCenter_ReferenceFrame_t value)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_Drawing_Polygon_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_set_ReferenceFrame(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, krpc_SpaceCenter_ReferenceFrame_t value)
 
       Reference frame for the positions of the object.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_Polygon_Visible(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_Drawing_Polygon_set_Visible(bool value)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_Visible(krpc_connection_t connection, bool * returnValue, krpc_Drawing_Polygon_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_set_Visible(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, bool value)
 
       Whether the object is visible.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_Polygon_Remove(krpc_connection_t connection)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_Color(krpc_connection_t connection, krpc_StdLib_ColorRGB_t * returnValue, krpc_Drawing_Polygon_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_set_Color(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, const krpc_StdLib_ColorRGB_t * value)
 
-      Remove the object.
+      The color of the path.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
 
-      :Game Scenes: Flight
+      .. note::
 
-   .. function:: krpc_error_t krpc_Drawing_Polygon_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
-   .. function:: void krpc_Drawing_Polygon_set_Color(const krpc_tuple_double_double_double_t * value)
+         For a path drawn with more than one color, this is the color at its start.
 
-      Set the color
+   .. function:: krpc_error_t krpc_Drawing_Polygon_Colors(krpc_connection_t connection, krpc_list_StdLib_ColorRGB_t * returnValue, krpc_Drawing_Polygon_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_set_Colors(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, const krpc_list_StdLib_ColorRGB_t * value)
 
-      :Game Scenes: Flight
+      The colors of the path, blended evenly from its start to its end.
 
-   .. function:: krpc_error_t krpc_Drawing_Polygon_Material(krpc_connection_t connection, char * * result)
-   .. function:: void krpc_Drawing_Polygon_set_Material(const char * value)
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Throws an exception if the list is empty or holds more than 8 colors.
+
+   .. function:: krpc_error_t krpc_Drawing_Polygon_Thickness(krpc_connection_t connection, float * returnValue, krpc_Drawing_Polygon_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_set_Thickness(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, float value)
+
+      The thickness of the path.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polygon_StartArrow(krpc_connection_t connection, bool * returnValue, krpc_Drawing_Polygon_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_set_StartArrow(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, bool value)
+
+      Whether an arrow head is drawn at the start.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polygon_EndArrow(krpc_connection_t connection, bool * returnValue, krpc_Drawing_Polygon_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_set_EndArrow(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, bool value)
+
+      Whether an arrow head is drawn at the end.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polygon_ArrowSize(krpc_connection_t connection, float * returnValue, krpc_Drawing_Polygon_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_set_ArrowSize(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, float value)
+
+      The size of the arrow heads, relative to the thickness.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polygon_Dashed(krpc_connection_t connection, bool * returnValue, krpc_Drawing_Polygon_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_set_Dashed(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, bool value)
+
+      Whether the path is drawn as a dashed line.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polygon_Label(krpc_connection_t connection, char * * returnValue, krpc_Drawing_Polygon_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_set_Label(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, const char * value)
+
+      Text drawn halfway along the path, facing the camera. Empty for no label.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Polygon_Material(krpc_connection_t connection, char * * returnValue, krpc_Drawing_Polygon_t instance)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_set_Material(krpc_connection_t connection, krpc_Drawing_Polygon_t instance, const char * value)
 
       Material used to render the object.
       Creates the material from a shader with the given name.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_Drawing_Polygon_Thickness(krpc_connection_t connection, float * result)
-   .. function:: void krpc_Drawing_Polygon_set_Thickness(float value)
+   .. function:: krpc_error_t krpc_Drawing_Polygon_Remove(krpc_connection_t connection, krpc_Drawing_Polygon_t instance)
 
-      Set the thickness
+      Remove the object.
 
-      :Game Scenes: Flight
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

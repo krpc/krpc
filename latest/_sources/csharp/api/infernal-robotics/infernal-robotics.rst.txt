@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.InfernalRobotics
 
@@ -9,7 +9,7 @@ InfernalRobotics
 .. class:: InfernalRobotics
 
    This service provides functionality to interact with
-   `Infernal Robotics <https://forum.kerbalspaceprogram.com/index.php?/topic/184787-infernal-robotics-next/>`_.
+   `Infernal Robotics <https://forum.kerbalspaceprogram.com/topic/184787-infernal-robotics-next/>`_.
 
    .. property:: bool Available { get; }
 
@@ -23,7 +23,7 @@ InfernalRobotics
 
       :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<ServoGroup> ServoGroups(SpaceCenter.Vessel vessel)
+   .. function:: System.Collections.Generic.IList<ServoGroup> ServoGroups(SpaceCenter.Vessel vessel)
 
       A list of all the servo groups in the given *vessel*.
 
@@ -40,7 +40,7 @@ InfernalRobotics
          support movement and per-servo control, but not preset, key, speed-factor or
          expanded state, which are only tracked by Infernal Robotics for the active vessel.
 
-   .. method:: ServoGroup ServoGroupWithName(SpaceCenter.Vessel vessel, string name)
+   .. function:: ServoGroup ServoGroupWithName(SpaceCenter.Vessel vessel, string name)
 
       Returns the servo group in the given *vessel* with the given *name*,
       or ``null`` if none exists. If multiple servo groups have the same name, only one of them is returned.
@@ -52,7 +52,7 @@ InfernalRobotics
 
       :Game Scenes: Flight
 
-   .. method:: Servo ServoWithName(SpaceCenter.Vessel vessel, string name)
+   .. function:: Servo ServoWithName(SpaceCenter.Vessel vessel, string name)
 
       Returns the servo in the given *vessel* with the given *name* or
       ``null`` if none exists. If multiple servos have the same name, only one of them is returned.

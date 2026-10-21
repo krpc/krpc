@@ -18,6 +18,24 @@ Camera
 
       :Game Scenes: Flight
 
+   .. function:: void next_camera()
+
+      Switch to the next available camera.
+      In flight, this moves to the next flight camera mode. In IVA, it moves the
+      view to the next crew member in the active vessel.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void previous_camera()
+
+      Switch to the previous available camera.
+      In flight, this moves to the previous flight camera mode. In IVA, it moves
+      the view to the previous crew member in the active vessel.
+
+
+      :Game Scenes: Flight
+
    .. function:: float pitch()
    .. function:: void set_pitch(float value)
 
@@ -97,8 +115,8 @@ Camera
 
       :Game Scenes: Flight
 
-   .. function:: CelestialBody focussed_body()
-   .. function:: void set_focussed_body(CelestialBody value)
+   .. function:: std::optional<CelestialBody> focussed_body()
+   .. function:: void set_focussed_body(std::optional<CelestialBody> value)
 
       In map mode, the celestial body that the camera is focussed on.
       Returns ``NULL`` if the camera is not focussed on a celestial body.
@@ -106,8 +124,8 @@ Camera
 
       :Game Scenes: Flight
 
-   .. function:: Vessel focussed_vessel()
-   .. function:: void set_focussed_vessel(Vessel value)
+   .. function:: std::optional<Vessel> focussed_vessel()
+   .. function:: void set_focussed_vessel(std::optional<Vessel> value)
 
       In map mode, the vessel that the camera is focussed on.
       Returns ``NULL`` if the camera is not focussed on a vessel.
@@ -115,8 +133,8 @@ Camera
 
       :Game Scenes: Flight
 
-   .. function:: Node focussed_node()
-   .. function:: void set_focussed_node(Node value)
+   .. function:: std::optional<Node> focussed_node()
+   .. function:: void set_focussed_node(std::optional<Node> value)
 
       In map mode, the maneuver node that the camera is focussed on.
       Returns ``NULL`` if the camera is not focussed on a maneuver node.
@@ -124,25 +142,15 @@ Camera
 
       :Game Scenes: Flight
 
-   .. function:: CrewMember focussed_crew_member()
-   .. function:: void set_focussed_crew_member(CrewMember value)
+   .. function:: std::optional<CrewMember> focussed_crew_member()
+   .. function:: void set_focussed_crew_member(std::optional<CrewMember> value)
 
-      When the internal camera is active the kerbal that is in focus
+      In IVA mode, the crew member whose view the camera is showing.
+      Returns ``NULL`` if no crew member is in view.
       Returns an error if the camera is not in IVA mode.
-
-      :Game Scenes: Flight
-
-   .. function:: void next_camera()
-
-      Switch to the next available camera
-
-
-      :Game Scenes: Flight
-
-   .. function:: void previous_camera()
-
-      Switch to the previous available camera
-
+      Setting this moves the view to the given crew member, switching the camera to
+      IVA mode if it is not already. The crew member must be in the active vessel,
+      and in a part whose interior the game has placed them in.
 
       :Game Scenes: Flight
 

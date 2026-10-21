@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>KRPC &#8212; kRPC v0.7.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../../_static/documentation_options.js?v=fe7df9b0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'csharp/api/krpc/krpc';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <script src="../../../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/csharp/api/krpc/krpc.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Expressions" href="expressions.html" />
+    <link rel="prev" title="KRPC API" href="../krpc.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.7.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../client.html">C# Client</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../krpc.html">KRPC API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../stdlib.html">Standard Library</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/space-center.html">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/editor.html">Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/flight.html">Flight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/control.html">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/point.html">Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/sphere.html">Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/size-fitter.html">Size Fitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LIDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LIDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../debug.html">Debug API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../debug/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../csharp.html" class="nav-link">C#</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../krpc.html" class="nav-link">KRPC API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">KRPC</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="krpc">
+<span id="namespace-KRPC.Client.Services.KRPC"></span><h1>KRPC<a class="headerlink" href="#krpc" title="Link to this heading">#</a></h1>
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.KRPC">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">KRPC</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.KRPC" title="Link to this definition">#</a></dt>
+<dd><p>Main kRPC service, used by clients to interact with basic server functionality.</p>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.KRPC.GetClientID">
+<span id="function-KRPC.Client.Services.KRPC.KRPC.GetClientID()"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Byte" title="type: msdn ~&gt; System.Byte"><span class="pre">byte</span></a><span class="p"><span class="pre">[]</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetClientID</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.KRPC.GetClientID" title="Link to this definition">#</a></dt>
+<dd><p>Returns the identifier for the current client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.KRPC.GetClientName">
+<span id="function-KRPC.Client.Services.KRPC.KRPC.GetClientName()"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">GetClientName</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.KRPC.GetClientName" title="Link to this definition">#</a></dt>
+<dd><p>Returns the name of the current client.
+This is an empty string if the client has no name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.KRPC.Clients">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#struct-KRPC.Client.Services.KRPC.ClientInfo" title="struct: KRPC.Client.Services.KRPC.ClientInfo"><span class="pre">ClientInfo</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Clients</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.KRPC.Clients" title="Link to this definition">#</a></dt>
+<dd><p>The RPC clients that are currently connected to the server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.KRPC.GetStatus">
+<span id="function-KRPC.Client.Services.KRPC.KRPC.GetStatus()"></span><span class="pre">KRPC.Schema.KRPC.Status</span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetStatus</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.KRPC.GetStatus" title="Link to this definition">#</a></dt>
+<dd><p>Returns some information about the server, such as the version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.KRPC.GetServices">
+<span id="function-KRPC.Client.Services.KRPC.KRPC.GetServices()"></span><span class="pre">KRPC.Schema.KRPC.Services</span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetServices</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.KRPC.GetServices" title="Link to this definition">#</a></dt>
+<dd><p>Returns information on all services, procedures, classes, properties etc. provided by the server.
+Can be used by client libraries to automatically create functionality such as stubs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.KRPC.AddFunctionStream">
+<span id="function-KRPC.Client.Services.KRPC.KRPC.AddFunctionStream(Expression)"></span><span class="pre">KRPC.Schema.KRPC.Stream</span><span class="w"> </span><span class="sig-name descname"><span class="pre">AddFunctionStream</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.KRPC.AddFunctionStream" title="Link to this definition">#</a></dt>
+<dd><p>Add a stream of the value a server side function computes on each update.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call adds a new stream, with values of the type given by
+<a class="reference internal" href="expressions.html#property-KRPC.Client.Services.KRPC.Expression.ReturnType" title="property: KRPC.Client.Services.KRPC.Expression.ReturnType"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Expression.ReturnType</span></code></a>. Any exception from the function ends the
+stream, including one for an object that is not loaded. A procedure that pauses
+execution to resume on a later tick produces an error on the stream.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.KRPC.HoldTick">
+<span id="function-KRPC.Client.Services.KRPC.KRPC.HoldTick()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">HoldTick</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.KRPC.HoldTick" title="Link to this definition">#</a></dt>
+<dd><p>Hold the game on its current physics tick until <a class="reference internal" href="#function-KRPC.Client.Services.KRPC.KRPC.ReleaseTick" title="function: KRPC.Client.Services.KRPC.KRPC.ReleaseTick"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">KRPC.ReleaseTick</span></code></a> is called
+or the hold times out. Every call made in between is executed before the game
+advances, so a read, compute and write all happen in the state of one tick.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game renders no frame, takes no input and runs no physics while the tick is
+held. Keep a hold as short as possible, and release it even when the code between
+the two calls fails.</p>
+<p>A tick is held once, so this waits for the next tick when the current one has
+already been released. One client holds the tick at a time, and only a client
+making a call can hold it: a stream or an event cannot.</p>
+<p>A hold ends by itself when it times out, when the client disconnects, and when the
+client calls a procedure that takes more than one tick to finish, such as staging
+or warping. Stream updates are sent once the tick is released, so waiting for a
+stream or an event inside a hold waits out the timeout.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.KRPC.ReleaseTick">
+<span id="function-KRPC.Client.Services.KRPC.KRPC.ReleaseTick()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">ReleaseTick</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.KRPC.ReleaseTick" title="Link to this definition">#</a></dt>
+<dd><p>Let the game move on from the tick that <a class="reference internal" href="#function-KRPC.Client.Services.KRPC.KRPC.HoldTick" title="function: KRPC.Client.Services.KRPC.KRPC.HoldTick"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">KRPC.HoldTick</span></code></a> held it on. Does
+nothing when no tick is held, which is the case once a hold has timed out.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.KRPC.NextTick">
+<span id="function-KRPC.Client.Services.KRPC.KRPC.NextTick()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">NextTick</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.KRPC.NextTick" title="Link to this definition">#</a></dt>
+<dd><p>Let the game move on from the tick being held and hold the one after it, so that a
+program acts on consecutive physics ticks. Holds the soonest tick it can if no tick
+is currently being held.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A release and a hold made as two separate calls let the game advance between them.
+This takes the next tick without that gap. Call it at the top of a loop that has to
+act on every tick, work, and come back to it.</p>
+<p>The game advances one tick per call, so it runs at the rate of the loop for as long
+as the loop runs. End the loop with <a class="reference internal" href="#function-KRPC.Client.Services.KRPC.KRPC.ReleaseTick" title="function: KRPC.Client.Services.KRPC.KRPC.ReleaseTick"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">KRPC.ReleaseTick</span></code></a>.</p>
+<p>Every limit of <a class="reference internal" href="#function-KRPC.Client.Services.KRPC.KRPC.HoldTick" title="function: KRPC.Client.Services.KRPC.KRPC.HoldTick"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">KRPC.HoldTick</span></code></a> applies, the timeout included. A hold lost to
+the timeout is not reported, and the next call takes whatever tick it lands on.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.KRPC.CompileFunction">
+<span id="function-KRPC.Client.Services.KRPC.KRPC.CompileFunction(Expression)"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">CompileFunction</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.KRPC.CompileFunction" title="Link to this definition">#</a></dt>
+<dd><p>Compile a server side function, so that running, streaming or adding it as an
+event does not compile it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Compiling a large function takes time on the game’s main thread. Compiling it
+in advance keeps that time out of its first run.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.KRPC.RunFunction">
+<span id="function-KRPC.Client.Services.KRPC.KRPC.RunFunction(Expression,System.Collections.Generic.IList<byte[]>)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Byte" title="type: msdn ~&gt; System.Byte"><span class="pre">byte</span></a><span class="p"><span class="pre">[]</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">RunFunction</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="expressions.html#class-KRPC.Client.Services.KRPC.Expression" title="class: KRPC.Client.Services.KRPC.Expression"><span class="pre">Expression</span></a><span class="w"> </span><span class="n"><span class="pre">function</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Byte" title="type: msdn ~&gt; System.Byte"><span class="pre">byte</span></a><span class="p"><span class="pre">[]</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">arguments</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.KRPC.RunFunction" title="Link to this definition">#</a></dt>
+<dd><p>Run a server side function once, within a single physics tick, and return
+the value it produces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>function</strong> – The function to run.</p></li>
+<li><p><strong>arguments</strong> – The encoded arguments, one per parameter. If null, defaults to <code class="docutils literal notranslate"><span class="pre">new</span> <span class="pre">System.Collections.Generic.List&lt;byte[]&gt;</span> <span class="pre">{</span> <span class="pre">}</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The encoded value of the function, or no bytes for a function with no value.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The arguments are encoded at the types given by <a class="reference internal" href="expressions.html#property-KRPC.Client.Services.KRPC.Expression.ParameterTypes" title="property: KRPC.Client.Services.KRPC.Expression.ParameterTypes"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Expression.ParameterTypes</span></code></a>.
+Throws an exception if a procedure the function calls pauses execution, and the
+effects up to the pause remain.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.KRPC.GameScene">
+<a class="reference internal" href="#enum-KRPC.Client.Services.KRPC.GameScene" title="enum: KRPC.Client.Services.KRPC.GameScene"><span class="pre">GameScene</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">GameScene</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.KRPC.GameScene" title="Link to this definition">#</a></dt>
+<dd><p>The current game scene. Setting this switches the game to the given
+scene, or opens/closes the corresponding facility for the pseudo-scenes.
+Scene changes happen asynchronously: setting this property returns
+immediately, and clients should poll it until it reports the requested
+scene. Setting it to <a class="reference internal" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.Flight" title="enumerator: KRPC.Client.Services.KRPC.GameScene.Flight"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">GameScene.Flight</span></code></a> resumes the save’s
+active vessel, and fails if there is none. Moving between
+<a class="reference internal" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.EditorVAB" title="enumerator: KRPC.Client.Services.KRPC.GameScene.EditorVAB"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">GameScene.EditorVAB</span></code></a> and <a class="reference internal" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.EditorSPH" title="enumerator: KRPC.Client.Services.KRPC.GameScene.EditorSPH"><code class="xref cs cs-value docutils literal notranslate"><span class="pre">GameScene.EditorSPH</span></code></a>
+keeps the vessel that is being constructed, as the game’s own switch
+editor button does. Leaving flight saves the game first, unless the game
+cannot be saved, e.g. while under acceleration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.KRPC.Paused">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Paused</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.KRPC.Paused" title="Link to this definition">#</a></dt>
+<dd><p>Whether the game is paused.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.KRPC.GameStateLoads">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">GameStateLoads</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.KRPC.GameStateLoads" title="Link to this definition">#</a></dt>
+<dd><p>The number of game states that have finished loading.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Increases once a game load, quickload, revert or scene change has finished.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs enum">
+<dt class="sig sig-object cs" id="enum-KRPC.Client.Services.KRPC.GameScene">
+<span class="property"><span class="k"><span class="pre">enum</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">GameScene</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.KRPC.GameScene" title="Link to this definition">#</a></dt>
+<dd><p>The game scene. See <a class="reference internal" href="#property-KRPC.Client.Services.KRPC.KRPC.GameScene" title="property: KRPC.Client.Services.KRPC.KRPC.GameScene"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">KRPC.GameScene</span></code></a>.</p>
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KRPC.GameScene.SpaceCenter">
+<span class="sig-name descname"><span class="pre">SpaceCenter</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.SpaceCenter" title="Link to this definition">#</a></dt>
+<dd><p>The game scene showing the Kerbal Space Center buildings.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KRPC.GameScene.Flight">
+<span class="sig-name descname"><span class="pre">Flight</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.Flight" title="Link to this definition">#</a></dt>
+<dd><p>The game scene showing a vessel in flight (or on the launchpad/runway).</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KRPC.GameScene.TrackingStation">
+<span class="sig-name descname"><span class="pre">TrackingStation</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.TrackingStation" title="Link to this definition">#</a></dt>
+<dd><p>The tracking station.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KRPC.GameScene.EditorVAB">
+<span class="sig-name descname"><span class="pre">EditorVAB</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.EditorVAB" title="Link to this definition">#</a></dt>
+<dd><p>The Vehicle Assembly Building.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KRPC.GameScene.EditorSPH">
+<span class="sig-name descname"><span class="pre">EditorSPH</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.EditorSPH" title="Link to this definition">#</a></dt>
+<dd><p>The Space Plane Hangar.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KRPC.GameScene.MissionBuilder">
+<span class="sig-name descname"><span class="pre">MissionBuilder</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.MissionBuilder" title="Link to this definition">#</a></dt>
+<dd><p>The mission builder.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KRPC.GameScene.AstronautComplex">
+<span class="sig-name descname"><span class="pre">AstronautComplex</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.AstronautComplex" title="Link to this definition">#</a></dt>
+<dd><p>The astronaut complex. This is a pseudo-scene, shown when the
+astronaut complex facility is open within the space center scene.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KRPC.GameScene.MissionControl">
+<span class="sig-name descname"><span class="pre">MissionControl</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.MissionControl" title="Link to this definition">#</a></dt>
+<dd><p>Mission control. This is a pseudo-scene, shown when the
+mission control facility is open within the space center scene.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KRPC.GameScene.ResearchAndDevelopment">
+<span class="sig-name descname"><span class="pre">ResearchAndDevelopment</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.ResearchAndDevelopment" title="Link to this definition">#</a></dt>
+<dd><p>Research and development. This is a pseudo-scene, shown when the
+research and development facility is open within the space center scene.</p>
+</dd></dl>
+
+<dl class="cs enumerator">
+<dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.KRPC.GameScene.Administration">
+<span class="sig-name descname"><span class="pre">Administration</span></span><a class="headerlink" href="#enumerator-KRPC.Client.Services.KRPC.GameScene.Administration" title="Link to this definition">#</a></dt>
+<dd><p>The administration facility. This is a pseudo-scene, shown when the
+administration facility is open within the space center scene.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs struct">
+<dt class="sig sig-object cs" id="struct-KRPC.Client.Services.KRPC.ClientInfo">
+<span class="property"><span class="k"><span class="pre">struct</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ClientInfo</span></span><a class="headerlink" href="#struct-KRPC.Client.Services.KRPC.ClientInfo" title="Link to this definition">#</a></dt>
+<dd><p>A client connected to the server.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#property-KRPC.Client.Services.KRPC.KRPC.Clients" title="property: KRPC.Client.Services.KRPC.KRPC.Clients"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">KRPC.Clients</span></code></a>.</p>
+</div>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.ClientInfo.ClientInfo">
+<span id="function-KRPC.Client.Services.KRPC.ClientInfo.ClientInfo(byte[],string,string)"></span><span class="sig-name descname"><span class="pre">ClientInfo</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Byte" title="type: msdn ~&gt; System.Byte"><span class="pre">byte</span></a><span class="p"><span class="pre">[]</span></span><span class="w"> </span><span class="n"><span class="pre">id</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">address</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.ClientInfo.ClientInfo" title="Link to this definition">#</a></dt>
+<dd><p>Construct a ClientInfo from the values of its fields.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ClientInfo.Id">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Byte" title="type: msdn ~&gt; System.Byte"><span class="pre">byte</span></a><span class="p"><span class="pre">[]</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Id</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ClientInfo.Id" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of the client.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ClientInfo.Name">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Name</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ClientInfo.Name" title="Link to this definition">#</a></dt>
+<dd><p>The name of the client, or an empty string if it has no name.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ClientInfo.Address">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Address</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ClientInfo.Address" title="Link to this definition">#</a></dt>
+<dd><p>The address of the client.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.InvalidOperationException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">InvalidOperationException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.InvalidOperationException" title="Link to this definition">#</a></dt>
+<dd><p>A method call was made to a method that is invalid
+given the current state of the object.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.ArgumentException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ArgumentException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.ArgumentException" title="Link to this definition">#</a></dt>
+<dd><p>A method was invoked where at least one of the passed arguments does not
+meet the parameter specification of the method.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.ArgumentNullException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ArgumentNullException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.ArgumentNullException" title="Link to this definition">#</a></dt>
+<dd><p>A null reference was passed to a method that does not accept it as a valid argument.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.ArgumentOutOfRangeException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ArgumentOutOfRangeException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.ArgumentOutOfRangeException" title="Link to this definition">#</a></dt>
+<dd><p>The value of an argument is outside the allowable range of values as defined by the invoked method.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.NullReferenceException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">NullReferenceException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.NullReferenceException" title="Link to this definition">#</a></dt>
+<dd><p>A value was null where its type does not allow one.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.KeyNotFoundException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">KeyNotFoundException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.KeyNotFoundException" title="Link to this definition">#</a></dt>
+<dd><p>A key was not found in a dictionary.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.IndexOutOfRangeException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">IndexOutOfRangeException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.IndexOutOfRangeException" title="Link to this definition">#</a></dt>
+<dd><p>An index was outside the bounds of a collection, string or array.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.DivideByZeroException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DivideByZeroException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.DivideByZeroException" title="Link to this definition">#</a></dt>
+<dd><p>An integer was divided by zero.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.NotSupportedException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">NotSupportedException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.NotSupportedException" title="Link to this definition">#</a></dt>
+<dd><p>A method was invoked that is not supported.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.TimeoutException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">TimeoutException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.TimeoutException" title="Link to this definition">#</a></dt>
+<dd><p>An operation did not complete in the time allotted to it.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.OverflowException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">OverflowException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.OverflowException" title="Link to this definition">#</a></dt>
+<dd><p>An arithmetic or conversion operation overflowed.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.ObjectDestroyedException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ObjectDestroyedException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.ObjectDestroyedException" title="Link to this definition">#</a></dt>
+<dd><p>The game object that a service object refers to no longer exists,
+so the object cannot be used. For example, the part it represents
+was destroyed, or the vessel it belongs to was recovered.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.ObjectNotLoadedException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ObjectNotLoadedException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.ObjectNotLoadedException" title="Link to this definition">#</a></dt>
+<dd><p>The game object that a service object refers to exists, but is not loaded.
+For example, the game is loading, or the vessel carrying the part is unloaded.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.UnsupportedSceneException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">UnsupportedSceneException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.UnsupportedSceneException" title="Link to this definition">#</a></dt>
+<dd><p>The procedure is not available in the current game scene.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.StreamRemovedException">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">StreamRemovedException</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.StreamRemovedException" title="Link to this definition">#</a></dt>
+<dd><p>A stream was removed by the server, e.g. an event that has finished.</p>
+</dd></dl>
+
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.KRPC.Error">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Error</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.Error" title="Link to this definition">#</a></dt>
+<dd><p>A general error, described by its message.</p>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../krpc.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">KRPC API</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="expressions.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Expressions</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/csharp/api/krpc/krpc.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

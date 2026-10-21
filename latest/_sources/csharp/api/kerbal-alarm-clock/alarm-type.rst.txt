@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.KerbalAlarmClock
 
@@ -11,102 +11,102 @@ AlarmType
    The type of an alarm.
 
 
-   .. value:: Raw
+   .. enumerator:: Raw
 
       An alarm for a specific date/time or a specific period in the future.
 
 
-   .. value:: Maneuver
+   .. enumerator:: Maneuver
 
       An alarm based on the next maneuver node on the current ships flight path.
       This node will be stored and can be restored when you come back to the ship.
 
 
-   .. value:: ManeuverAuto
+   .. enumerator:: ManeuverAuto
 
-      See :enum:`AlarmType.Maneuver`.
+      See :value:`AlarmType.Maneuver`.
 
 
-   .. value:: Apoapsis
+   .. enumerator:: Apoapsis
 
       An alarm for furthest part of the orbit from the planet.
 
 
-   .. value:: Periapsis
+   .. enumerator:: Periapsis
 
       An alarm for nearest part of the orbit from the planet.
 
 
-   .. value:: AscendingNode
+   .. enumerator:: AscendingNode
 
       Ascending node for the targeted object, or equatorial ascending node.
 
 
-   .. value:: DescendingNode
+   .. enumerator:: DescendingNode
 
       Descending node for the targeted object, or equatorial descending node.
 
 
-   .. value:: Closest
+   .. enumerator:: Closest
 
       An alarm based on the closest approach of this vessel to the targeted
       vessel, some number of orbits into the future.
 
 
-   .. value:: Contract
+   .. enumerator:: Contract
 
       An alarm based on the expiry or deadline of contracts in career modes.
 
 
-   .. value:: ContractAuto
+   .. enumerator:: ContractAuto
 
-      See :enum:`AlarmType.Contract`.
+      See :value:`AlarmType.Contract`.
 
 
-   .. value:: Crew
+   .. enumerator:: Crew
 
       An alarm that is attached to a crew member.
 
 
-   .. value:: Distance
+   .. enumerator:: Distance
 
       An alarm that is triggered when a selected target comes within a chosen distance.
 
 
-   .. value:: EarthTime
+   .. enumerator:: EarthTime
 
       An alarm based on the time in the "Earth" alternative Universe (aka the Real World).
 
 
-   .. value:: LaunchRendevous
+   .. enumerator:: LaunchRendevous
 
       An alarm that fires as your landed craft passes under the orbit of your target.
 
 
-   .. value:: SOIChange
+   .. enumerator:: SOIChange
 
       An alarm manually based on when the next SOI point is on the flight path
       or set to continually monitor the active flight path and add alarms as it
       detects SOI changes.
 
 
-   .. value:: SOIChangeAuto
+   .. enumerator:: SOIChangeAuto
 
-      See :enum:`AlarmType.SOIChange`.
+      See :value:`AlarmType.SOIChange`.
 
 
-   .. value:: Transfer
+   .. enumerator:: Transfer
 
       An alarm based on Interplanetary Transfer Phase Angles, i.e. when should
       I launch to planet X? Based on Kosmo Not's post and used in Olex's
       Calculator.
 
 
-   .. value:: TransferModelled
+   .. enumerator:: TransferModelled
 
-      See :enum:`AlarmType.Transfer`.
+      See :value:`AlarmType.Transfer`.
 
 
-   .. value:: ScienceLab
+   .. enumerator:: ScienceLab
 
       An alarm for when a science lab has finished processing data.

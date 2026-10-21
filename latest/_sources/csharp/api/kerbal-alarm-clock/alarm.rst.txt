@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.KerbalAlarmClock
 
@@ -129,9 +129,14 @@ Alarm
 
       :Game Scenes: All
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Removes the alarm. Any further use of this object throws an exception.
 
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Any further use of this object throws an exception.

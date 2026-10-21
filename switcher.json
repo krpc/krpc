@@ -5,10 +5,15 @@
     "url": "https://krpc.github.io/krpc/dev/"
   },
   {
-    "name": "v0.6.0 (stable)",
-    "version": "0.6.0",
-    "url": "https://krpc.github.io/krpc/0.6.0/",
+    "name": "v0.7.0 (stable)",
+    "version": "0.7.0",
+    "url": "https://krpc.github.io/krpc/0.7.0/",
     "preferred": true
+  },
+  {
+    "name": "v0.6.0",
+    "version": "0.6.0",
+    "url": "https://krpc.github.io/krpc/0.6.0/"
   },
   {
     "name": "v0.5.4",

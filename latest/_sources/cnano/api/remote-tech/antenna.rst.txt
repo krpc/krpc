@@ -10,20 +10,20 @@ Antenna
 
    A RemoteTech antenna. Obtained by calling :func:`krpc_RemoteTech_Comms_Antennas` or :func:`krpc_RemoteTech_Antenna`.
 
-   .. function:: krpc_error_t krpc_RemoteTech_Antenna_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_RemoteTech_Antenna_t instance)
 
       Get the part containing this antenna.
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Antenna_HasConnection(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_HasConnection(krpc_connection_t connection, bool * returnValue, krpc_RemoteTech_Antenna_t instance)
 
       Whether the antenna has a connection.
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Antenna_Target(krpc_connection_t connection, krpc_RemoteTech_Target_t * result)
-   .. function:: void krpc_RemoteTech_Antenna_set_Target(krpc_RemoteTech_Target_t value)
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_Target(krpc_connection_t connection, krpc_RemoteTech_Target_t * returnValue, krpc_RemoteTech_Antenna_t instance)
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_set_Target(krpc_connection_t connection, krpc_RemoteTech_Antenna_t instance, krpc_RemoteTech_Target_t value)
 
       The object that the antenna is targetting.
       This property can be used to set the target to :macro:`KRPC_REMOTETECH_TARGET_NONE` or :macro:`KRPC_REMOTETECH_TARGET_ACTIVEVESSEL`.
@@ -32,22 +32,22 @@ Antenna
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Antenna_TargetBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
-   .. function:: void krpc_RemoteTech_Antenna_set_TargetBody(krpc_SpaceCenter_CelestialBody_t value)
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_TargetBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * returnValue, krpc_RemoteTech_Antenna_t instance)
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_set_TargetBody(krpc_connection_t connection, krpc_RemoteTech_Antenna_t instance, krpc_SpaceCenter_CelestialBody_t value)
 
       The celestial body the antenna is targetting.
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Antenna_TargetGroundStation(krpc_connection_t connection, char * * result)
-   .. function:: void krpc_RemoteTech_Antenna_set_TargetGroundStation(const char * value)
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_TargetGroundStation(krpc_connection_t connection, char * * returnValue, krpc_RemoteTech_Antenna_t instance)
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_set_TargetGroundStation(krpc_connection_t connection, krpc_RemoteTech_Antenna_t instance, const char * value)
 
       The ground station the antenna is targetting.
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Antenna_TargetVessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
-   .. function:: void krpc_RemoteTech_Antenna_set_TargetVessel(krpc_SpaceCenter_Vessel_t value)
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_TargetVessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * returnValue, krpc_RemoteTech_Antenna_t instance)
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_set_TargetVessel(krpc_connection_t connection, krpc_RemoteTech_Antenna_t instance, krpc_SpaceCenter_Vessel_t value)
 
       The vessel the antenna is targetting.
 

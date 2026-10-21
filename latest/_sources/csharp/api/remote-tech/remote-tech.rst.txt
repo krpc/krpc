@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.RemoteTech
 
@@ -9,7 +9,7 @@ RemoteTech
 .. class:: RemoteTech
 
    This service provides functionality to interact with
-   `RemoteTech <https://forum.kerbalspaceprogram.com/index.php?/topic/139167-13-remotetech-v188-2017-09-03/>`_.
+   `RemoteTech <https://forum.kerbalspaceprogram.com/topic/139167-111-remotetech-v199-2020-12-19/>`_.
 
    .. property:: bool Available { get; }
 
@@ -23,7 +23,7 @@ RemoteTech
 
       :Game Scenes: All
 
-   .. method:: Antenna Antenna(SpaceCenter.Part part)
+   .. function:: Antenna Antenna(SpaceCenter.Part part)
 
       Get the antenna object for a particular part.
 
@@ -33,7 +33,7 @@ RemoteTech
 
       :Game Scenes: All
 
-   .. method:: Comms Comms(SpaceCenter.Vessel vessel)
+   .. function:: Comms Comms(SpaceCenter.Vessel vessel)
 
       Get a communications object, representing the communication capability of a particular vessel.
 

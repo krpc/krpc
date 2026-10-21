@@ -20,6 +20,13 @@ ServoGroup
       :rtype: str
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Renaming a group renames it for every servo in it. This object identifies the
+         group by its name, so a rename destroys every object for the group, including the
+         one the rename was made through. Obtain the group again under the new name.
+
    .. attribute:: forward_key
 
       The key assigned to be the "forward" key for the group.
@@ -54,7 +61,7 @@ ServoGroup
 
    .. attribute:: vessel
 
-      The vessel the group belongs to, or ``None`` if it is not available.
+      The vessel the group belongs to.
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Vessel`
@@ -116,7 +123,7 @@ ServoGroup
       or ``None`` if none exists.
 
       :param str name: Name of servo to find.
-      :rtype: :class:`Servo`
+      :rtype: :class:`Servo` or None
       :Game Scenes: Flight
 
    .. attribute:: parts

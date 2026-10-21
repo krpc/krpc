@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.KerbalAlarmClock
 
@@ -9,7 +9,7 @@ KerbalAlarmClock
 .. class:: KerbalAlarmClock
 
    This service provides functionality to interact with
-   `Kerbal Alarm Clock <https://forum.kerbalspaceprogram.com/index.php?/topic/22809-13x-kerbal-alarm-clock-v3850-may-30/>`_.
+   `Kerbal Alarm Clock <https://forum.kerbalspaceprogram.com/topic/22809-112x-kerbal-alarm-clock-v31300-april-10/>`_.
 
    .. property:: bool Available { get; }
 
@@ -23,7 +23,7 @@ KerbalAlarmClock
 
       :Game Scenes: All
 
-   .. method:: Alarm AlarmWithName(string name)
+   .. function:: Alarm AlarmWithName(string name)
 
       Get the alarm with the given *name*, or ``null``
       if no alarms have that name. If more than one alarm has the name,
@@ -35,7 +35,7 @@ KerbalAlarmClock
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<Alarm> AlarmsWithType(AlarmType type)
+   .. function:: System.Collections.Generic.IList<Alarm> AlarmsWithType(AlarmType type)
 
       Get a list of alarms of the specified *type*.
 
@@ -45,7 +45,7 @@ KerbalAlarmClock
 
       :Game Scenes: All
 
-   .. method:: Alarm CreateAlarm(AlarmType type, string name, double ut)
+   .. function:: Alarm CreateAlarm(AlarmType type, string name, double ut)
 
       Create a new alarm and return it.
 

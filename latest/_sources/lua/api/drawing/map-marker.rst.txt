@@ -1,0 +1,212 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Drawing
+
+MapMarker
+=========
+
+
+.. class:: MapMarker
+
+   A marker drawn in the map view, with one of the game's own map icons. Created using
+   :meth:`Drawing.add_map_marker`.
+
+   .. attribute:: position: Tuple
+
+      Position of the marker.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
+
+      Reference frame that the position of the marker is in.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+
+   .. attribute:: visible: boolean
+
+      Whether the marker is visible.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: icon: Drawing.MapMarkerIcon
+
+      The icon that the marker is drawn with.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`Drawing.MapMarkerIcon`
+
+   .. attribute:: image: Drawing.Image
+
+      The image that the marker is drawn with in place of its icon, or null to draw the
+      icon.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`Drawing.Image` or ``Types.none``
+
+   .. attribute:: caption: string
+
+      The caption shown when the mouse is over the marker.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: color: StdLib.ColorRGB
+
+      The color of the marker.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+
+   .. method:: remove()
+
+      Remove the marker.
+
+
+
+.. class:: MapMarkerIcon
+
+   The icon a :class:`Drawing.MapMarker` is drawn with, from the game's own map icons.
+
+
+   .. data:: generic
+
+      A plain marker.
+
+
+   .. data:: celestial_body
+
+      A celestial body.
+
+
+   .. data:: apoapsis
+
+      An apoapsis.
+
+
+   .. data:: periapsis
+
+      A periapsis.
+
+
+   .. data:: ascending_node
+
+      An ascending node.
+
+
+   .. data:: descending_node
+
+      A descending node.
+
+
+   .. data:: maneuver_node
+
+      A maneuver node.
+
+
+   .. data:: encounter
+
+      An encounter with a sphere of influence.
+
+
+   .. data:: escape
+
+      An escape from a sphere of influence.
+
+
+   .. data:: impact
+
+      An impact with the surface.
+
+
+   .. data:: close_approach
+
+      A closest approach to a target.
+
+
+   .. data:: intersect
+
+      An intersection with the orbit of a target.
+
+
+   .. data:: ship
+
+      A ship.
+
+
+   .. data:: probe
+
+      A probe.
+
+
+   .. data:: relay
+
+      A relay.
+
+
+   .. data:: station
+
+      A station.
+
+
+   .. data:: base
+
+      A base.
+
+
+   .. data:: lander
+
+      A lander.
+
+
+   .. data:: rover
+
+      A rover.
+
+
+   .. data:: plane
+
+      A plane.
+
+
+   .. data:: eva
+
+      A kerbal on EVA.
+
+
+   .. data:: flag
+
+      A flag.
+
+
+   .. data:: debris
+
+      Debris.
+
+
+   .. data:: space_object
+
+      An asteroid or comet.
+
+
+   .. data:: deployed_science
+
+      Deployed science equipment.
+
+
+   .. data:: launch_site
+
+      A launch site.
+
+
+   .. data:: runway
+
+      A runway.
+
+
+   .. data:: ksc
+
+      The Kerbal Space Center.

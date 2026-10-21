@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -79,14 +79,14 @@ SpaceCenter
 
       :Game Scenes: Flight
 
-   .. method:: void ClearTarget()
+   .. function:: void ClearTarget()
 
       Clears the current target.
 
 
       :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<string> LaunchableVessels(string craftDirectory)
+   .. function:: System.Collections.Generic.IList<string> LaunchableVessels(string craftDirectory)
 
       Returns a list of vessels from the given *craftDirectory*
       that can be launched.
@@ -97,7 +97,7 @@ SpaceCenter
 
       :Game Scenes: All
 
-   .. method:: void LaunchVessel(string craftDirectory, string name, string launchSite, System.Collections.Generic.IList<string> crew, bool recover = true, string flagUrl = "")
+   .. function:: void LaunchVessel(string craftDirectory, string name, string launchSite, System.Collections.Generic.IList<string> crew = null, bool recover = true, string flagUrl = "")
 
       Launch a vessel.
 
@@ -106,7 +106,7 @@ SpaceCenter
        * **craftDirectory** -- Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
        * **name** -- Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
        * **launchSite** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
-       * **crew** -- A list of names of Kerbals to place in the craft. Pass an empty list to use default crew assignments.
+       * **crew** -- The Kerbals to place in the craft, by name. Controls how the craft is crewed, as described in the remarks. If null, defaults to ``new System.Collections.Generic.List<string> { }``.
        * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
        * **flagUrl** -- If not ``null``, the asset URL of the mission flag to use for the launch.
 
@@ -115,9 +115,19 @@ SpaceCenter
 
       .. note::
 
+         The *crew* parameter controls how the craft is crewed:
+
+         * If ``null``, the craft's default crew assignments are used.
+         * If an empty list, the craft is launched with no crew.
+         * Otherwise, the named Kerbals are placed in the craft in the order
+           given: the first name takes the first seat, the second name the next seat, and so on,
+           scanning the craft's parts in order. No other Kerbals are hired to fill remaining seats.
+           Throws an exception, without launching, if a name does not match an available Kerbal
+           or the craft has too few seats for the requested crew.
+
          Throws an exception if any of the games pre-flight checks fail.
 
-   .. method:: void LaunchVesselFromVAB(string name, bool recover = true)
+   .. function:: void LaunchVesselFromVAB(string name, bool recover = true)
 
       Launch a new vessel from the VAB onto the launchpad.
 
@@ -135,7 +145,7 @@ SpaceCenter
          set to "VAB" and the launch site set to "LaunchPad".
          Throws an exception if any of the games pre-flight checks fail.
 
-   .. method:: void LaunchVesselFromSPH(string name, bool recover = true)
+   .. function:: void LaunchVesselFromSPH(string name, bool recover = true)
 
       Launch a new vessel from the SPH onto the runway.
 
@@ -153,7 +163,13 @@ SpaceCenter
          set to "SPH" and the launch site set to "Runway".
          Throws an exception if any of the games pre-flight checks fail.
 
-   .. method:: void Save(string name)
+   .. property:: Editor Editor { get; }
+
+      The editor, for inspecting the vessel that is being constructed.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: void Save(string name)
 
       Save the game with a given name.
       This will create a save file called ``name.sfs`` in the folder of the
@@ -165,7 +181,7 @@ SpaceCenter
 
       :Game Scenes: All
 
-   .. method:: void Load(string name)
+   .. function:: void Load(string name)
 
       Load the game with the given name.
       This will create a load a save file called ``name.sfs`` from the folder of the
@@ -177,7 +193,7 @@ SpaceCenter
 
       :Game Scenes: All
 
-   .. method:: void Quicksave()
+   .. function:: void Quicksave()
 
       Save a quicksave.
 
@@ -189,7 +205,7 @@ SpaceCenter
 
          This is the same as calling :meth:`SpaceCenter.Save <SpaceCenter.SpaceCenter.Save>` with the name "quicksave".
 
-   .. method:: void Quickload()
+   .. function:: void Quickload()
 
       Load a quicksave.
 
@@ -201,21 +217,35 @@ SpaceCenter
 
          This is the same as calling :meth:`SpaceCenter.Load <SpaceCenter.SpaceCenter.Load>` with the name "quicksave".
 
-   .. method:: bool CanRevertToLaunch()
+   .. property:: bool CanSave { get; }
+
+      Whether the game can be saved.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The game cannot be saved in some flight states, e.g. while under acceleration
+         or moving over the surface. Setting
+         :prop:`KRPC.GameScene <KRPC.KRPC.GameScene>` to leave flight saves the
+         game only when this is true.
+
+   .. function:: bool CanRevertToLaunch()
 
       Whether the current flight can be reverted to launch.
 
 
       :Game Scenes: All
 
-   .. method:: void RevertToLaunch()
+   .. function:: void RevertToLaunch()
 
       Revert the current flight to launch.
 
 
       :Game Scenes: All
 
-   .. method:: void TransferCrew(CrewMember crewMember, Part targetPart)
+   .. function:: void TransferCrew(CrewMember crewMember, Part targetPart)
 
       Transfers a crew member to a different part.
 
@@ -256,6 +286,18 @@ SpaceCenter
 
       :Game Scenes: All
 
+   .. property:: double BuoyancyScalar { get; }
+
+      The multiplier the game applies to every buoyant force.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Stock KSP sets it to 1.2. A buoyant force is a fifth larger than
+         `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
+
    .. property:: float WarpRate { get; }
 
       The current warp rate. This is the rate at which time is passing for
@@ -263,7 +305,7 @@ SpaceCenter
       time is passing 10x faster than normal. Returns 1 if time warp is not
       active.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. property:: float WarpFactor { get; }
 
@@ -273,7 +315,7 @@ SpaceCenter
       :prop:`SpaceCenter.RailsWarpFactor <SpaceCenter.SpaceCenter.RailsWarpFactor>`, and in physics time warp, this is equal to
       :prop:`SpaceCenter.PhysicsWarpFactor <SpaceCenter.SpaceCenter.PhysicsWarpFactor>`.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. property:: int RailsWarpFactor { get; set; }
 
@@ -285,7 +327,12 @@ SpaceCenter
       lowest possible value. For example, if the vessel is too close to a
       planet. See `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, every factor can be set.
 
    .. property:: int PhysicsWarpFactor { get; set; }
 
@@ -294,7 +341,7 @@ SpaceCenter
 
       :Game Scenes: Flight
 
-   .. method:: bool CanRailsWarpAt(int factor = 1)
+   .. function:: bool CanRailsWarpAt(int factor = 1)
 
       Returns ``true`` if regular "on-rails" time warp can be used, at the specified warp
       *factor*. The maximum time warp rate is limited by various things,
@@ -306,7 +353,12 @@ SpaceCenter
 
        * **factor** -- The warp factor to check.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, every valid factor can be used.
 
    .. property:: int MaximumRailsWarpFactor { get; }
 
@@ -315,9 +367,14 @@ SpaceCenter
       `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
       for details.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
-   .. method:: void WarpTo(double ut, float maxRailsRate = 100000.0f, float maxPhysicsRate = 2.0f)
+
+      .. note::
+
+         Outside the flight scene, this is the highest factor.
+
+   .. function:: void WarpTo(double ut, float maxRailsRate = 1e+05f, float maxPhysicsRate = 2.0f)
 
       Uses time acceleration to warp forward to a time in the future, specified
       by universal time *ut*. This call blocks until the desired
@@ -334,9 +391,15 @@ SpaceCenter
        * **maxPhysicsRate** -- The maximum warp rate in physical time warp.
 
       :returns: When the time warp is complete.
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
-   .. method:: System.Tuple<double,double,double> TransformPosition(System.Tuple<double,double,double> position, ReferenceFrame from, ReferenceFrame to)
+
+      .. note::
+
+         Outside the flight scene, only regular "on-rails" time warp is used.
+         Throws an exception if the game scene changes during the time warp.
+
+   .. function:: System.Tuple<double,double,double> TransformPosition(System.Tuple<double,double,double> position, ReferenceFrame from, ReferenceFrame to)
 
       Converts a position from one reference frame to another.
 
@@ -349,7 +412,7 @@ SpaceCenter
       :returns: The corresponding position, as a vector, in reference frame *to*.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> TransformDirection(System.Tuple<double,double,double> direction, ReferenceFrame from, ReferenceFrame to)
+   .. function:: System.Tuple<double,double,double> TransformDirection(System.Tuple<double,double,double> direction, ReferenceFrame from, ReferenceFrame to)
 
       Converts a direction from one reference frame to another.
 
@@ -362,7 +425,7 @@ SpaceCenter
       :returns: The corresponding direction, as a vector, in reference frame *to*.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double,double> TransformRotation(System.Tuple<double,double,double,double> rotation, ReferenceFrame from, ReferenceFrame to)
+   .. function:: System.Tuple<double,double,double,double> TransformRotation(System.Tuple<double,double,double,double> rotation, ReferenceFrame from, ReferenceFrame to)
 
       Converts a rotation from one reference frame to another.
 
@@ -375,7 +438,7 @@ SpaceCenter
       :returns: The corresponding rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *to*.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> TransformVelocity(System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, ReferenceFrame from, ReferenceFrame to)
+   .. function:: System.Tuple<double,double,double> TransformVelocity(System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, ReferenceFrame from, ReferenceFrame to)
 
       Converts a velocity (acting at the specified position) from one reference frame
       to another. The position is required to take the relative angular velocity of the
@@ -391,7 +454,7 @@ SpaceCenter
       :returns: The corresponding velocity, as a vector, in reference frame *to*.
       :Game Scenes: All
 
-   .. method:: double RaycastDistance(System.Tuple<double,double,double> position, System.Tuple<double,double,double> direction, ReferenceFrame referenceFrame)
+   .. function:: double RaycastDistance(System.Tuple<double,double,double> position, System.Tuple<double,double,double> direction, ReferenceFrame referenceFrame)
 
       Cast a ray from a given position in a given direction, and return the distance to the hit point.
       If no hit occurs, returns infinity.
@@ -405,7 +468,7 @@ SpaceCenter
       :returns: The distance to the hit, in meters, or infinity if there was no hit.
       :Game Scenes: All
 
-   .. method:: Part RaycastPart(System.Tuple<double,double,double> position, System.Tuple<double,double,double> direction, ReferenceFrame referenceFrame)
+   .. function:: Part RaycastPart(System.Tuple<double,double,double> position, System.Tuple<double,double,double> direction, ReferenceFrame referenceFrame)
 
       Cast a ray from a given position in a given direction, and return the part that it hits.
       If no hit occurs, returns ``null``.
@@ -421,11 +484,17 @@ SpaceCenter
 
    .. property:: bool FARAvailable { get; }
 
-      Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_ is installed.
+      Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_ is installed.
 
       :Game Scenes: All
 
-   .. method:: void CreateKerbal(string name, string job, bool male)
+   .. property:: bool RealFuelsAvailable { get; }
+
+      Whether `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_ is installed.
+
+      :Game Scenes: All
+
+   .. function:: void CreateKerbal(string name, string job, bool male)
 
       Creates a Kerbal.
 
@@ -437,21 +506,12 @@ SpaceCenter
 
       :Game Scenes: All
 
-   .. method:: CrewMember GetKerbal(string name)
+   .. function:: CrewMember GetKerbal(string name)
 
       Find a Kerbal by name.
 
       :parameters:
 
-
-
-      :Game Scenes: All
-
-   .. method:: void LoadSpaceCenter()
-
-      .. warning:: Deprecated. Set :prop:`KRPC.GameScene <KRPC.KRPC.GameScene>` instead.
-
-      Switch to the space center view.
 
 
       :Game Scenes: All
@@ -462,7 +522,7 @@ SpaceCenter
 
       :Game Scenes: All
 
-   .. method:: void Screenshot(string filePath, int scale = 1)
+   .. function:: void Screenshot(string filePath, int scale = 1)
 
       Saves a screenshot.
 
@@ -481,11 +541,11 @@ SpaceCenter
 
    .. property:: WarpMode WarpMode { get; }
 
-      The current time warp mode. Returns :enum:`WarpMode.None` if time
-      warp is not active, :enum:`WarpMode.Rails` if regular "on-rails" time warp
-      is active, or :enum:`WarpMode.Physics` if physical time warp is active.
+      The current time warp mode. Returns :value:`WarpMode.None` if time
+      warp is not active, :value:`WarpMode.Rails` if regular "on-rails" time warp
+      is active, or :value:`WarpMode.Physics` if physical time warp is active.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. property:: Camera Camera { get; }
 
@@ -519,42 +579,42 @@ SpaceCenter
    Returned by :type:`GameMode`
 
 
-   .. value:: Sandbox
+   .. enumerator:: Sandbox
 
       Sandbox mode.
 
 
-   .. value:: Career
+   .. enumerator:: Career
 
       Career mode.
 
 
-   .. value:: Science
+   .. enumerator:: Science
 
       Science career mode.
 
 
-   .. value:: ScienceSandbox
+   .. enumerator:: ScienceSandbox
 
       Science sandbox mode.
 
 
-   .. value:: Mission
+   .. enumerator:: Mission
 
       Mission mode.
 
 
-   .. value:: MissionBuilder
+   .. enumerator:: MissionBuilder
 
       Mission builder mode.
 
 
-   .. value:: Scenario
+   .. enumerator:: Scenario
 
       Scenario mode.
 
 
-   .. value:: ScenarioNonResumable
+   .. enumerator:: ScenarioNonResumable
 
       Scenario mode that cannot be resumed.
 
@@ -566,17 +626,17 @@ SpaceCenter
    See :prop:`SpaceCenter.AltimeterMode <SpaceCenter.SpaceCenter.AltimeterMode>`.
 
 
-   .. value:: DEFAULT
+   .. enumerator:: DEFAULT
 
       The altimeter is in the default mode.
 
 
-   .. value:: ASL
+   .. enumerator:: ASL
 
       The altimeter is in the "Above Sea Level" mode.
 
 
-   .. value:: AGL
+   .. enumerator:: AGL
 
       The altimeter is in the "Above Ground Level" mode.
 
@@ -588,17 +648,17 @@ SpaceCenter
    Returned by :type:`WarpMode`
 
 
-   .. value:: Rails
+   .. enumerator:: Rails
 
       Time warp is active, and in regular "on-rails" mode.
 
 
-   .. value:: Physics
+   .. enumerator:: Physics
 
       Time warp is active, and in physical time warp mode.
 
 
-   .. value:: None
+   .. enumerator:: None
 
       Time warp is not active.
 
@@ -610,115 +670,113 @@ SpaceCenter
    These may be combined with bitwise logic.
 
 
-   .. value:: All
+   .. enumerator:: All
 
       Everything.
 
 
-   .. value:: None
+   .. enumerator:: None
 
       Nothing.
 
 
-   .. value:: Debris
+   .. enumerator:: Debris
 
       Debris.
 
 
-   .. value:: Unknown
+   .. enumerator:: Unknown
 
       Unknown.
 
 
-   .. value:: SpaceObjects
+   .. enumerator:: SpaceObjects
 
       SpaceObjects.
 
 
-   .. value:: Probes
+   .. enumerator:: Probes
 
       Probes.
 
 
-   .. value:: Rovers
+   .. enumerator:: Rovers
 
       Rovers.
 
 
-   .. value:: Landers
+   .. enumerator:: Landers
 
       Landers.
 
 
-   .. value:: Ships
+   .. enumerator:: Ships
 
       Ships.
 
 
-   .. value:: Stations
+   .. enumerator:: Stations
 
       Stations.
 
 
-   .. value:: Bases
+   .. enumerator:: Bases
 
       Bases.
 
 
-   .. value:: EVAs
+   .. enumerator:: EVAs
 
       EVAs.
 
 
-   .. value:: Flags
+   .. enumerator:: Flags
 
       Flags.
 
 
-   .. value:: Plane
+   .. enumerator:: Plane
 
       Planes.
 
 
-   .. value:: Relay
+   .. enumerator:: Relay
 
       Relays.
 
 
-   .. value:: Site
+   .. enumerator:: Site
 
       Launch Sites.
 
 
-   .. value:: DeployedScienceController
+   .. enumerator:: DeployedScienceController
 
       Deployed Science Controllers.
 
 
 
-.. class:: LaunchSite
+.. struct:: LaunchSite
 
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
+
+   .. function:: LaunchSite(string name, CelestialBody body, EditorFacility editorFacility)
+
+      Construct a LaunchSite from the values of its fields.
+
 
    .. property:: string Name { get; }
 
       The name of the launch site.
 
-      :Game Scenes: All
-
    .. property:: CelestialBody Body { get; }
 
       The celestial body the launch site is on.
 
-      :Game Scenes: All
-
    .. property:: EditorFacility EditorFacility { get; }
 
       Which editor is normally used for this launch site.
-
-      :Game Scenes: All
-
 
 
 .. enum:: EditorFacility
@@ -727,16 +785,16 @@ SpaceCenter
    See :prop:`LaunchSite.EditorFacility`.
 
 
-   .. value:: VAB
+   .. enumerator:: VAB
 
       Vehicle Assembly Building.
 
 
-   .. value:: SPH
+   .. enumerator:: SPH
 
       Space Plane Hanger.
 
 
-   .. value:: None
+   .. enumerator:: None
 
       None.

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Lua Client &#8212; kRPC v0.6.0 documentation</title>
+    <title>Lua Client &#8212; kRPC v0.7.0 documentation</title>
   
   
   
@@ -27,41 +26,43 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=8fa8b3e9"></script>
+    <script src="../_static/documentation_options.js?v=fe7df9b0"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'lua/client';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.6.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/external-links.js?v=e8892020"></script>
     <script src="../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/0.6.0/lua/client.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/lua/client.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="KRPC API" href="api/krpc.html" />
     <link rel="prev" title="Lua" href="../lua.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.6.0" />
+  <meta name="docsearch:version" content="0.7.0" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -109,7 +110,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -152,7 +153,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -261,7 +262,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -292,15 +293,15 @@
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -326,7 +327,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -335,7 +336,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -374,7 +375,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -495,15 +496,15 @@
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -527,7 +528,7 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
   <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
   </svg>
@@ -540,16 +541,18 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Lua Client</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Lua Client</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/krpc/expressions.html">Expressions</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="api/stdlib.html">Standard Library</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/space-center.html">SpaceCenter API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/space-center/space-center.html">SpaceCenter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/space-center/vessel.html">Vessel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/space-center/stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/editor.html">Editor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/space-center/celestial-body.html">CelestialBody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/space-center/flight.html">Flight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/space-center/orbit.html">Orbit</a></li>
@@ -570,8 +573,18 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/drawing/text.html">Text</a></li>
 </ul>
 </details></li>
@@ -582,6 +595,15 @@
 <li class="toctree-l2"><a class="reference internal" href="api/ui/text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/ui/button.html">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/ui/rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -604,14 +626,18 @@
 <li class="toctree-l2"><a class="reference internal" href="api/remote-tech/antenna.html">Antenna</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="api/lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/lidar.html">LIDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/lidar/lidar.html">LIDAR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/lidar/laser.html">Laser</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/docking-camera/docking-camera.html">DockingCamera</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/debug.html">Debug API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/debug/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
@@ -681,8 +707,8 @@ written in Lua. It can be <a class="reference external" href="https://luarocks.o
 <a class="reference external" href="https://github.com/krpc/krpc/releases">downloaded from GitHub</a>.</p>
 <section id="installing">
 <h2>Installing<a class="headerlink" href="#installing" title="Link to this heading">#</a></h2>
-<p>The Lua client and all of its dependencies can be installed using luarocks with
-a single command:</p>
+<p>The client runs on Lua 5.1 to 5.4 and LuaJIT. It and all of its dependencies can be installed
+using luarocks with a single command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>luarocks<span class="w"> </span>install<span class="w"> </span>krpc
 </pre></div>
 </div>
@@ -695,15 +721,15 @@ a single command:</p>
 <p>To connect to a server, use the <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> function. This returns a
 connection object through which you can interact with the server. For example to
 connect to a server running on the local machine:</p>
-<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc&#39;</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">&#39;Example&#39;</span><span class="p">)</span>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">'Example'</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="nf">get_status</span><span class="p">().</span><span class="nv">version</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This function also accepts arguments that specify what address and port numbers
 to connect to. For example:</p>
-<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc&#39;</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">&#39;Remote example&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;my.domain.name&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">'Remote example'</span><span class="p">,</span><span class="w"> </span><span class="s1">'my.domain.name'</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="nf">get_status</span><span class="p">().</span><span class="nv">version</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -722,6 +748,9 @@ accessible via <code class="docutils literal notranslate"><span class="pre">conn
 InfernalRobotics service is accessible via <code class="docutils literal notranslate"><span class="pre">conn.infernal_robotics</span></code>.</p>
 <p>Calling methods, getting or setting properties, etc. are mapped to remote
 procedure calls and passed to the server by the lua client.</p>
+<p>Many procedures return an object identifying something in the game, such as a vessel or
+a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for how such an object
+behaves when a game is loaded or what it identifies is destroyed.</p>
 </section>
 <section id="streams-and-events">
 <h2>Streams and Events<a class="headerlink" href="#streams-and-events" title="Link to this heading">#</a></h2>
@@ -746,6 +775,51 @@ a hostname or an IP address in dotted decimal
 notation. Defaults to ‘127.0.0.1’.</p></li>
 <li><p><strong>rpc_port</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The port number of the RPC Server. Defaults to 50000.</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua function">
+<dt class="sig sig-object lua" id="krpc.krpc.connect_local">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">name</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">rpc_path</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.krpc.connect_local" title="Link to this definition">#</a></dt>
+<dd><p>This function connects to a kRPC server running on the same machine, over a
+unix domain socket rather than TCP/IP. It returns a <a class="reference internal" href="#krpc.Client" title="krpc.Client"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Client</span></code></a> object,
+just as <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> does, and the connection behaves identically
+thereafter.</p>
+<p>This needs luasocket’s <code class="docutils literal notranslate"><span class="pre">socket.unix</span></code> module, which luasocket builds on Linux
+and macOS.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>luasocket does not yet build <code class="docutils literal notranslate"><span class="pre">socket.unix</span></code> on Windows. Connect with
+<a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> there instead.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – A descriptive name for the connection. This is passed to
+the server and appears, for example, in the client
+connection dialog on the in-game server window.</p></li>
+<li><p><strong>rpc_path</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The path of the socket the RPC Server is listening
+on. This should match the RPC socket path shown in
+the in-game server window. Defaults to the path the
+server uses unless it was configured with another.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua function">
+<dt class="sig sig-object lua" id="krpc.krpc.get_object_id">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">get_object_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">obj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.krpc.get_object_id" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of a remote object on the server, e.g. to pass to
+<a class="reference internal" href="api/krpc/expressions.html#KRPC.Expression.constant_object" title="KRPC.Expression.constant_object"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KRPC.Expression.constant_object()</span></code></a>. Raises an error if the object
+is <code class="docutils literal notranslate"><span class="pre">nil</span></code> or <code class="docutils literal notranslate"><span class="pre">krpc.types.none</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> – The remote object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -791,22 +865,82 @@ application code. The only exception that may be useful is:</p>
 the server’s version string and performance statistics.</p>
 <p>For example, the following prints out the version string for the
 server:</p>
-<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc&#39;</span>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Server version = &#39;</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="nf">get_status</span><span class="p">().</span><span class="nv">version</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Server version = '</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="nf">get_status</span><span class="p">().</span><span class="nv">version</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Or to get the rate at which the server is sending and receiving data
 over the network:</p>
-<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc&#39;</span>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="nf">get_status</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span><span class="s1">&#39;Data in = %.2f KB/s&#39;</span><span class="p">,</span><span class="w"> </span><span class="nv">status</span><span class="p">.</span><span class="py">bytes_read_rate</span><span class="o">/</span><span class="mi">1024</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span><span class="s1">&#39;Data out = %.2f KB/s&#39;</span><span class="p">,</span><span class="w"> </span><span class="nv">status</span><span class="p">.</span><span class="py">bytes_written_rate</span><span class="o">/</span><span class="mi">1024</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span><span class="s1">'Data in = %.2f KB/s'</span><span class="p">,</span><span class="w"> </span><span class="nv">status</span><span class="p">.</span><span class="py">bytes_read_rate</span><span class="o">/</span><span class="mi">1024</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span><span class="s1">'Data out = %.2f KB/s'</span><span class="p">,</span><span class="w"> </span><span class="nv">status</span><span class="p">.</span><span class="py">bytes_written_rate</span><span class="o">/</span><span class="mi">1024</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
 
+</dd></dl>
+
+</section>
+<section id="numeric-limits">
+<h2>Numeric Limits<a class="headerlink" href="#numeric-limits" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">krpc.limits</span></code> module names the extremes of the numeric types kRPC carries over the wire.
+A service can declare one of these limits as a parameter’s default value, and it is then
+documented as the constant here.</p>
+<p>The minimum of an unsigned type is <code class="docutils literal notranslate"><span class="pre">0</span></code>, so it has no constant.</p>
+<p>From Lua 5.3 on, a 64-bit value is an exact integer. Lua has no unsigned integer type. A
+<code class="docutils literal notranslate"><span class="pre">uint64</span></code> above <span class="math notranslate nohighlight">\(2^{63} - 1\)</span> wraps to a negative integer, so
+<a class="reference internal" href="#krpc.limits.UINT64_MAX" title="krpc.limits.UINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">krpc.limits.UINT64_MAX</span></code></a> is <code class="docutils literal notranslate"><span class="pre">-1</span></code>. <code class="docutils literal notranslate"><span class="pre">math.ult</span></code> compares two such values.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In Lua 5.1, 5.2 and LuaJIT every number is a double, which holds an integer exactly up to
+<span class="math notranslate nohighlight">\(2^{53}\)</span>. <a class="reference internal" href="#krpc.limits.SINT64_MAX" title="krpc.limits.SINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">krpc.limits.SINT64_MAX</span></code></a> and <a class="reference internal" href="#krpc.limits.UINT64_MAX" title="krpc.limits.UINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">krpc.limits.UINT64_MAX</span></code></a> round up
+to <span class="math notranslate nohighlight">\(2^{63}\)</span> and <span class="math notranslate nohighlight">\(2^{64}\)</span>, as does a 64-bit value arriving from the server.</p>
+</div>
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.DOUBLE_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">DOUBLE_MAX</span></span><a class="headerlink" href="#krpc.limits.DOUBLE_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="krpc.limits.DOUBLE_LOWEST">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">DOUBLE_LOWEST</span></span><a class="headerlink" href="#krpc.limits.DOUBLE_LOWEST" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative finite 64-bit float.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.FLOAT_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">FLOAT_MAX</span></span><a class="headerlink" href="#krpc.limits.FLOAT_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="krpc.limits.FLOAT_LOWEST">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">FLOAT_LOWEST</span></span><a class="headerlink" href="#krpc.limits.FLOAT_LOWEST" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative finite 32-bit float.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.SINT32_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">SINT32_MAX</span></span><a class="headerlink" href="#krpc.limits.SINT32_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="krpc.limits.SINT32_MIN">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">SINT32_MIN</span></span><a class="headerlink" href="#krpc.limits.SINT32_MIN" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative 32-bit signed integer.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.SINT64_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">SINT64_MAX</span></span><a class="headerlink" href="#krpc.limits.SINT64_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="krpc.limits.SINT64_MIN">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">SINT64_MIN</span></span><a class="headerlink" href="#krpc.limits.SINT64_MIN" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative 64-bit signed integer.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.UINT32_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">UINT32_MAX</span></span><a class="headerlink" href="#krpc.limits.UINT32_MAX" title="Link to this definition">#</a></dt>
+<dd><p>The largest 32-bit unsigned integer.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.UINT64_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">UINT64_MAX</span></span><a class="headerlink" href="#krpc.limits.UINT64_MAX" title="Link to this definition">#</a></dt>
+<dd><p>The largest 64-bit unsigned integer.</p>
 </dd></dl>
 
 </section>
@@ -867,6 +1001,7 @@ over the network:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interacting-with-the-server">Interacting with the Server</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-and-events">Streams and Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference">Reference</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numeric-limits">Numeric Limits</a></li>
 </ul>
   </nav></div>
 
@@ -892,8 +1027,8 @@ over the network:</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -913,8 +1048,7 @@ over the network:</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    <br/>
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
   </p>
 </div>
       
@@ -927,7 +1061,7 @@ over the network:</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
 </p></div>
       
     </div>

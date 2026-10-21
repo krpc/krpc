@@ -1,0 +1,46 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::UI
+
+Layout Element
+==============
+
+
+.. class:: LayoutElement
+
+   How much space a user interface element asks a :class:`Layout` for.
+
+   .. note::
+
+      A layout gives every element its minimum size first. Any space left over is shared
+      out to bring elements up to their preferred size, and anything still left over is
+      shared between the elements with a flexible size, in proportion to it.
+
+   .. function:: std::tuple<double, double> min_size()
+   .. function:: void set_min_size(std::tuple<double, double> value)
+
+      The smallest size the element can be given, in pixels. A negative value in either
+      direction leaves that direction unconstrained.
+
+   
+
+   .. function:: std::tuple<double, double> preferred_size()
+   .. function:: void set_preferred_size(std::tuple<double, double> value)
+
+      The size the element asks for, in pixels. A negative value in either direction
+      leaves that direction unconstrained.
+
+   
+
+   .. function:: std::tuple<double, double> flexible_size()
+   .. function:: void set_flexible_size(std::tuple<double, double> value)
+
+      The share the element takes of the space left over once every element has its
+      preferred size. A negative value in either direction takes no share.
+
+   
+
+   .. function:: bool ignore_layout()
+   .. function:: void set_ignore_layout(bool value)
+
+      Whether the layout leaves the element out and lets it be positioned by hand.

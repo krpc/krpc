@@ -34,7 +34,7 @@ Alarms
       one alarm shares the given title, the first one found is returned.
 
       :param str name: The title of the alarm to return.
-      :rtype: :class:`Alarm`
+      :rtype: :class:`Alarm` or None
    
 
    .. staticmethod:: add_alarm(time, [title = 'Alarm'], [description = ''])
@@ -187,12 +187,17 @@ Alarms
       :rtype: float
    
 
+      .. note::
+
+         For a maneuver alarm that includes the burn time, setting this sets the margin
+         before the start of the burn, and the value read back includes half the burn time.
+
    .. attribute:: vessel
 
       Vessel the alarm references. ``None`` if it does not reference a vessel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`Vessel`
+      :rtype: :class:`Vessel` or None
    
 
    .. attribute:: node
@@ -291,6 +296,10 @@ Alarms
       Removes the alarm.
 
    
+
+      .. note::
+
+         Any further use of this object throws an exception.
 
 
 

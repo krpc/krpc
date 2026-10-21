@@ -1,0 +1,66 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::Drawing
+
+Sphere
+======
+
+
+.. class:: Sphere
+
+   A solid sphere. Created using :func:`add_sphere`.
+
+   .. note::
+
+      The sphere is drawn with an additive material, so a darker color draws it more
+      transparent.
+
+   .. function:: std::tuple<double, double, double> center()
+   .. function:: void set_center(std::tuple<double, double, double> value)
+
+      Position of the center of the sphere.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: double radius()
+   .. function:: void set_radius(double value)
+
+      Radius of the sphere, in meters.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: SpaceCenter::ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(SpaceCenter::ReferenceFrame value)
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
+
+      The color of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: std::string material()
+   .. function:: void set_material(std::string value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: void remove()
+
+      Remove the object.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

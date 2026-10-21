@@ -1,6 +1,6 @@
 .. default-domain:: cpp
 .. highlight:: cpp
-.. namespace:: krpc::services::LiDAR
+.. namespace:: krpc::services::LIDAR
 
 Laser
 =====

@@ -1,0 +1,94 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: RemoteTech
+
+Antenna
+=======
+
+
+.. class:: Antenna
+
+   A RemoteTech antenna. Obtained by calling :attr:`Comms.antennas` or :meth:`antenna`.
+
+   .. attribute:: part
+
+      Get the part containing this antenna.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+   
+
+   .. attribute:: has_connection
+
+      Whether the antenna has a connection.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: target
+
+      The object that the antenna is targetting.
+      This property can be used to set the target to :attr:`Target.none` or :attr:`Target.active_vessel`.
+      To set the target to a celestial body, ground station or vessel see :attr:`Antenna.target_body`,
+      :attr:`Antenna.target_ground_station` and :attr:`Antenna.target_vessel`.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`Target`
+   
+
+   .. attribute:: target_body
+
+      The celestial body the antenna is targetting.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+   
+
+   .. attribute:: target_ground_station
+
+      The ground station the antenna is targetting.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: target_vessel
+
+      The vessel the antenna is targetting.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.Vessel`
+   
+
+
+
+.. class:: Target
+
+   The type of object an antenna is targetting.
+   See :attr:`Antenna.target`.
+
+
+   .. data:: active_vessel
+
+      The active vessel.
+
+
+   .. data:: celestial_body
+
+      A celestial body.
+
+
+   .. data:: ground_station
+
+      A ground station.
+
+
+   .. data:: vessel
+
+      A specific vessel.
+
+
+   .. data:: none
+
+      No target.

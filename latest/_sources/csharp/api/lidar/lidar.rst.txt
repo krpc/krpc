@@ -1,12 +1,12 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
-.. namespace:: KRPC.Client.Services.LiDAR
+.. namespace:: KRPC.Client.Services.LIDAR
 
-LiDAR
+LIDAR
 =====
 
 
-.. class:: LiDAR
+.. class:: LIDAR
 
    LaserDist service.
 
@@ -16,7 +16,7 @@ LiDAR
 
       :Game Scenes: All
 
-   .. method:: Laser Laser(SpaceCenter.Part part)
+   .. function:: Laser Laser(SpaceCenter.Part part)
 
       Get a LaserDist part.
 

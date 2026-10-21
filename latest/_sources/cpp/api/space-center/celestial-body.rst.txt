@@ -23,7 +23,7 @@ CelestialBody
 
    
 
-   .. function:: Orbit orbit()
+   .. function:: std::optional<Orbit> orbit()
 
       The orbit of the body.
 
@@ -63,14 +63,14 @@ CelestialBody
    .. function:: double rotation_angle()
 
       The current rotation angle of the body, in radians.
-      A value between 0 and 2·pi
+      A value between 0 and 2 pi.
 
    
 
    .. function:: double initial_rotation()
 
       The initial rotation angle of the body (at UT 0), in radians.
-      A value between 0 and 2·pi
+      A value between 0 and 2 pi.
 
    
 
@@ -161,6 +161,74 @@ CelestialBody
       :returns: Position as a vector.
    
 
+   .. function:: ReferenceFrame surface_reference_frame(double latitude, double longitude, double altitude = 0.0)
+
+      Create a reference frame fixed to the surface at the given latitude and longitude.
+
+      * The origin is the given altitude above the surface, at the
+        given latitude and longitude.
+      * The axes rotate with the body.
+      * The x-axis points out from the center of the body.
+      * The y-axis points north.
+      * The z-axis points east.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **altitude** -- Altitude of the origin above the surface, in meters.
+
+   
+
+      .. note::
+
+         Each call returns a new frame, as for :func:`ReferenceFrame::create_relative`.
+
+   .. function:: std::tuple<double, double, double> msl_normal(double latitude, double longitude, ReferenceFrame reference_frame)
+
+      The normal to the sphere at mean sea level, at the given latitude and longitude,
+      in the given reference frame. This points straight up, away from the center of
+      the body, and takes no account of the shape of the terrain.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **reference_frame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+   
+
+   .. function:: std::tuple<double, double, double> surface_normal(double latitude, double longitude, ReferenceFrame reference_frame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the surface of
+      the water when over water.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **reference_frame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+   
+
+   .. function:: std::tuple<double, double, double> bedrock_normal(double latitude, double longitude, ReferenceFrame reference_frame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the sea-bed
+      when over water.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **reference_frame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+   
+
    .. function:: double altitude_at_position(std::tuple<double, double, double> position, ReferenceFrame reference_frame)
 
       The altitude, in meters, of the given position in the given reference frame.
@@ -224,6 +292,19 @@ CelestialBody
 
    
 
+   .. function:: bool has_ocean()
+
+      ``true`` if the body has an ocean.
+
+   
+
+   .. function:: double ocean_density()
+
+      The density of the body's ocean, in :math:`kg/m^3`.
+      Returns zero if the body has no ocean.
+
+   
+
    .. function:: double atmospheric_density_at_position(std::tuple<double, double, double> position, ReferenceFrame reference_frame)
 
       The atmospheric density at the given position, in :math:`kg/m^3`,
@@ -278,7 +359,7 @@ CelestialBody
 
    .. function:: double pressure_at(double altitude)
 
-      Gets the air pressure, in Pascals, for the specified
+      Gets the static pressure, in Pascals, for the specified
       altitude above sea level, in meters.
 
       :Parameters:
@@ -286,6 +367,10 @@ CelestialBody
 
 
    
+
+      .. note::
+
+         Below sea level on a body with an ocean, this includes the pressure of the water.
 
    .. function:: std::set<std::string> biomes()
 

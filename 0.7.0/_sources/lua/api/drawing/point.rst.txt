@@ -1,0 +1,59 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Drawing
+
+Point
+=====
+
+
+.. class:: Point
+
+   A point, drawn as a dot that keeps its size on screen. Created using
+   :meth:`Drawing.add_point`.
+
+   .. attribute:: position: Tuple
+
+      Position of the point.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
+
+      Reference frame for the positions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+
+   .. attribute:: visible: boolean
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: color: StdLib.ColorRGB
+
+      The color of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+
+   .. attribute:: size: number
+
+      Diameter of the point, in pixels.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: material: string
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. method:: remove()
+
+      Remove the object.

@@ -63,7 +63,7 @@ Communications
 
 .. class:: CommLink
 
-   Represents a communication node in the network. For example, a vessel or the KSC.
+   Represents a communication link between two nodes in the network.
 
    .. attribute:: type
 
@@ -91,7 +91,7 @@ Communications
 
    .. attribute:: end
 
-      Start point of the link.
+      End point of the link.
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`CommNode`
@@ -121,45 +121,37 @@ Communications
 
 
 
-.. class:: CommNode
+.. class:: CommNode(name, is_home, is_control_point, is_vessel, vessel)
 
    Represents a communication node in the network. For example, a vessel or the KSC.
+
 
    .. attribute:: name
 
       Name of the communication node.
 
-      :Attribute: Read-only, cannot be set
       :rtype: str
-   
 
    .. attribute:: is_home
 
       Whether the communication node is on Kerbin.
 
-      :Attribute: Read-only, cannot be set
       :rtype: bool
-   
 
    .. attribute:: is_control_point
 
       Whether the communication node is a control point, for example a manned vessel.
 
-      :Attribute: Read-only, cannot be set
       :rtype: bool
-   
 
    .. attribute:: is_vessel
 
       Whether the communication node is a vessel.
 
-      :Attribute: Read-only, cannot be set
       :rtype: bool
-   
 
    .. attribute:: vessel
 
-      The vessel for this communication node.
+      The vessel for this communication node, or null if the node is not a vessel.
 
-      :Attribute: Read-only, cannot be set
-      :rtype: :class:`Vessel`
+      :rtype: :class:`Vessel` or None

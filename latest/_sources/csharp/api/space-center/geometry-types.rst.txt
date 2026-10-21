@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -10,7 +10,7 @@ Vectors
 
 3-dimensional vectors are represented as a 3-tuple. For example:
 
-.. literalinclude:: /scripts/services/space-center/Vector3.cs
+.. literalinclude:: /scripts/api/space-center/geometry-types/Vector3.cs
 
 Quaternions
 -----------
@@ -18,4 +18,4 @@ Quaternions
 Quaternions (rotations in 3-dimensional space) are encoded as a 4-tuple
 containing the x, y, z and w components. For example:
 
-.. literalinclude:: /scripts/services/space-center/Quaternion.cs
+.. literalinclude:: /scripts/api/space-center/geometry-types/Quaternion.cs

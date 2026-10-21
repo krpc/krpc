@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 
 Drawing API
@@ -9,6 +9,16 @@ Drawing API
    :maxdepth: 1
 
    drawing/drawing
+   drawing/arc
+   drawing/box
+   drawing/circle
+   drawing/image
    drawing/line
+   drawing/map-marker
+   drawing/navball-marker
+   drawing/orbit-path
+   drawing/point
    drawing/polygon
+   drawing/polyline
+   drawing/sphere
    drawing/text

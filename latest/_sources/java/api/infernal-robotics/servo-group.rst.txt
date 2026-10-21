@@ -20,6 +20,13 @@ ServoGroup
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Renaming a group renames it for every servo in it. This object identifies the
+         group by its name, so a rename destroys every object for the group, including the
+         one the rename was made through. Obtain the group again under the new name.
+
    .. method:: String getForwardKey()
 
    .. method:: void setForwardKey(String value)
@@ -55,7 +62,7 @@ ServoGroup
    .. method:: SpaceCenter.Vessel getVessel()
 
 
-      The vessel the group belongs to, or ``null`` if it is not available.
+      The vessel the group belongs to.
 
       :Game Scenes: Flight
 

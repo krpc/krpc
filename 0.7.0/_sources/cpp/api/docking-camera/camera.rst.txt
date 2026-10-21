@@ -1,0 +1,22 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::DockingCamera
+
+Camera
+======
+
+
+.. class:: Camera
+
+   A Docking Camera.
+
+   .. function:: SpaceCenter::Part part()
+
+      Get the part containing this camera.
+
+   
+
+   .. function:: std::string image()
+
+      Get an image.
+      Returns an empty byte array on failure.

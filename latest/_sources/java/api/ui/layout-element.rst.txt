@@ -1,0 +1,50 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.UI
+
+Layout Element
+==============
+
+
+.. type:: public class LayoutElement
+
+   How much space a user interface element asks a :type:`Layout` for.
+
+   .. note::
+
+      A layout gives every element its minimum size first. Any space left over is shared
+      out to bring elements up to their preferred size, and anything still left over is
+      shared between the elements with a flexible size, in proportion to it.
+
+   .. method:: org.javatuples.Pair<Double,Double> getMinSize()
+
+   .. method:: void setMinSize(org.javatuples.Pair<Double,Double> value)
+
+      The smallest size the element can be given, in pixels. A negative value in either
+      direction leaves that direction unconstrained.
+
+   
+
+   .. method:: org.javatuples.Pair<Double,Double> getPreferredSize()
+
+   .. method:: void setPreferredSize(org.javatuples.Pair<Double,Double> value)
+
+      The size the element asks for, in pixels. A negative value in either direction
+      leaves that direction unconstrained.
+
+   
+
+   .. method:: org.javatuples.Pair<Double,Double> getFlexibleSize()
+
+   .. method:: void setFlexibleSize(org.javatuples.Pair<Double,Double> value)
+
+      The share the element takes of the space left over once every element has its
+      preferred size. A negative value in either direction takes no share.
+
+   
+
+   .. method:: boolean getIgnoreLayout()
+
+   .. method:: void setIgnoreLayout(boolean value)
+
+      Whether the layout leaves the element out and lets it be positioned by hand.

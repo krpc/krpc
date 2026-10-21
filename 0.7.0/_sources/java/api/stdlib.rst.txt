@@ -1,0 +1,572 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.StdLib
+
+Standard Library
+================
+
+
+.. type:: public class StdLib
+
+   A standard library of mathematics and printing for server side functions, and of the
+   colors other services use.
+
+   .. note::
+
+      Vectors are position and direction tuples, and rotations are unit quaternion tuples
+      in the order x, y, z, w the SpaceCenter service uses. Angles are in radians unless
+      stated otherwise.
+
+   .. method:: double getPi()
+
+
+      The constant pi.
+
+   
+
+   .. method:: double getE()
+
+
+      The constant e, the base of the natural logarithm.
+
+   
+
+   .. method:: double abs(double x)
+
+      The absolute value of a number.
+
+      :param double x: The number.
+   
+
+   .. method:: int sign(double x)
+
+      The sign of a number: -1 if it is negative, 1 if it is positive,
+      and 0 if it is zero or not a number.
+
+      :param double x: The number.
+   
+
+   .. method:: double copySign(double x, double y)
+
+      The magnitude of the first number with the sign of the second.
+
+      :param double x: The number giving the magnitude.
+      :param double y: The number giving the sign.
+   
+
+   .. method:: boolean isNan(double x)
+
+      Whether a number is not a number.
+
+      :param double x: The number.
+   
+
+   .. method:: boolean isFinite(double x)
+
+      Whether a number is neither infinite nor not a number.
+
+      :param double x: The number.
+   
+
+   .. method:: double floor(double x)
+
+      The largest whole number less than or equal to the given number.
+
+      :param double x: The number.
+   
+
+   .. method:: double ceiling(double x)
+
+      The smallest whole number greater than or equal to the given number.
+
+      :param double x: The number.
+   
+
+   .. method:: double round(double x, int digits)
+
+      The given number rounded to the given number of decimal places,
+      with a halfway value rounded to the nearer even number.
+
+      :param double x: The number.
+      :param int digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+   
+
+      .. note::
+
+         Throws an exception if the rounded value is too large for a double.
+
+   .. method:: double roundHalfAwayFromZero(double x, int digits)
+
+      The given number rounded to the given number of decimal places,
+      with a halfway value rounded away from zero.
+
+      :param double x: The number.
+      :param int digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+   
+
+      .. note::
+
+         Throws an exception if the rounded value is too large for a double.
+
+   .. method:: double roundHalfUp(double x, int digits)
+
+      The given number rounded to the given number of decimal places,
+      with a halfway value rounded toward positive infinity.
+
+      :param double x: The number.
+      :param int digits: The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+   
+
+      .. note::
+
+         Throws an exception if the rounded value is too large for a double.
+
+   .. method:: double sqrt(double x)
+
+      The square root of a number.
+
+      :param double x: The number.
+   
+
+   .. method:: double hypot(double x, double y)
+
+      The length of the hypotenuse of a right triangle with the given sides.
+
+      :param double x: The first side.
+      :param double y: The second side.
+   
+
+   .. method:: double sin(double x)
+
+      The sine of an angle, in radians.
+
+      :param double x: The angle.
+   
+
+   .. method:: double cos(double x)
+
+      The cosine of an angle, in radians.
+
+      :param double x: The angle.
+   
+
+   .. method:: double tan(double x)
+
+      The tangent of an angle, in radians.
+
+      :param double x: The angle.
+   
+
+   .. method:: double asin(double x)
+
+      The angle, in radians, whose sine is the given number.
+
+      :param double x: The number.
+   
+
+   .. method:: double acos(double x)
+
+      The angle, in radians, whose cosine is the given number.
+
+      :param double x: The number.
+   
+
+   .. method:: double atan(double x)
+
+      The angle, in radians, whose tangent is the given number.
+
+      :param double x: The number.
+   
+
+   .. method:: double atan2(double y, double x)
+
+      The angle, in radians, between the positive x axis and the point (x, y).
+
+      :param double y: The y coordinate.
+      :param double x: The x coordinate.
+   
+
+   .. method:: double log(double x, double newBase)
+
+      The logarithm of a number, natural unless another base is given.
+
+      :param double x: The number.
+      :param double newBase: The base of the logarithm.
+   
+
+   .. method:: double log10(double x)
+
+      The base 10 logarithm of a number.
+
+      :param double x: The number.
+   
+
+   .. method:: double exp(double x)
+
+      The number e raised to the given power.
+
+      :param double x: The power.
+   
+
+   .. method:: double min(double x, double y)
+
+      The smaller of two numbers.
+
+      :param double x: The first number.
+      :param double y: The second number.
+   
+
+   .. method:: double max(double x, double y)
+
+      The larger of two numbers.
+
+      :param double x: The first number.
+      :param double y: The second number.
+   
+
+   .. method:: double clamp(double x, double min, double max)
+
+      The given number limited to the given range.
+
+      :param double x: The number.
+      :param double min: The minimum of the range.
+      :param double max: The maximum of the range.
+   
+
+      .. note::
+
+         Throws an exception if the minimum is greater than the maximum.
+
+   .. method:: double lerp(double a, double b, double t)
+
+      Linear interpolation between two numbers.
+
+      :param double a: The number when t is 0.
+      :param double b: The number when t is 1.
+      :param double t: The interpolation parameter.
+   
+
+      .. note::
+
+         The parameter is not limited to the range 0 to 1, and a value outside it
+         extrapolates.
+
+   .. method:: double inverseLerp(double a, double b, double x)
+
+      The interpolation parameter of a number between two others,
+      limited to the range 0 to 1.
+
+      :param double a: The number at 0.
+      :param double b: The number at 1.
+      :param double x: The number.
+   
+
+      .. note::
+
+         Returns 0 if the two numbers are equal.
+
+   .. method:: double degreesToRadians(double x)
+
+      The angle in radians of an angle in degrees.
+
+      :param double x: The angle in degrees.
+   
+
+   .. method:: double radiansToDegrees(double x)
+
+      The angle in degrees of an angle in radians.
+
+      :param double x: The angle in radians.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> vectorAdd(org.javatuples.Triplet<Double,Double,Double> u, org.javatuples.Triplet<Double,Double,Double> v)
+
+      The sum of two vectors.
+
+      :param org.javatuples.Triplet<Double,Double,Double> u: The first vector.
+      :param org.javatuples.Triplet<Double,Double,Double> v: The second vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> vectorSubtract(org.javatuples.Triplet<Double,Double,Double> u, org.javatuples.Triplet<Double,Double,Double> v)
+
+      The difference of two vectors.
+
+      :param org.javatuples.Triplet<Double,Double,Double> u: The first vector.
+      :param org.javatuples.Triplet<Double,Double,Double> v: The second vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> vectorScale(org.javatuples.Triplet<Double,Double,Double> v, double scale)
+
+      A vector scaled by a number.
+
+      :param org.javatuples.Triplet<Double,Double,Double> v: The vector.
+      :param double scale: The scaling factor.
+   
+
+   .. method:: double vectorDot(org.javatuples.Triplet<Double,Double,Double> u, org.javatuples.Triplet<Double,Double,Double> v)
+
+      The dot product of two vectors.
+
+      :param org.javatuples.Triplet<Double,Double,Double> u: The first vector.
+      :param org.javatuples.Triplet<Double,Double,Double> v: The second vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> vectorCross(org.javatuples.Triplet<Double,Double,Double> u, org.javatuples.Triplet<Double,Double,Double> v)
+
+      The cross product of two vectors.
+
+      :param org.javatuples.Triplet<Double,Double,Double> u: The first vector.
+      :param org.javatuples.Triplet<Double,Double,Double> v: The second vector.
+   
+
+   .. method:: double vectorMagnitude(org.javatuples.Triplet<Double,Double,Double> v)
+
+      The magnitude (length) of a vector.
+
+      :param org.javatuples.Triplet<Double,Double,Double> v: The vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> vectorNormalize(org.javatuples.Triplet<Double,Double,Double> v)
+
+      A vector scaled to a magnitude of 1.
+
+      :param org.javatuples.Triplet<Double,Double,Double> v: The vector.
+   
+
+      .. note::
+
+         Throws an exception if the vector is zero.
+
+   .. method:: double vectorDistance(org.javatuples.Triplet<Double,Double,Double> u, org.javatuples.Triplet<Double,Double,Double> v)
+
+      The distance between two positions.
+
+      :param org.javatuples.Triplet<Double,Double,Double> u: The first position.
+      :param org.javatuples.Triplet<Double,Double,Double> v: The second position.
+   
+
+   .. method:: double vectorAngle(org.javatuples.Triplet<Double,Double,Double> u, org.javatuples.Triplet<Double,Double,Double> v)
+
+      The angle between two vectors, in radians, between 0 and pi.
+
+      :param org.javatuples.Triplet<Double,Double,Double> u: The first vector.
+      :param org.javatuples.Triplet<Double,Double,Double> v: The second vector.
+   
+
+      .. note::
+
+         Throws an exception if either vector is zero.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> vectorLerp(org.javatuples.Triplet<Double,Double,Double> u, org.javatuples.Triplet<Double,Double,Double> v, double t)
+
+      Linear interpolation between two vectors.
+
+      :param org.javatuples.Triplet<Double,Double,Double> u: The vector when t is 0.
+      :param org.javatuples.Triplet<Double,Double,Double> v: The vector when t is 1.
+      :param double t: The interpolation parameter.
+   
+
+      .. note::
+
+         The parameter is not limited to the range 0 to 1, and a value outside it
+         extrapolates.
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> quaternionMultiply(org.javatuples.Quartet<Double,Double,Double,Double> q, org.javatuples.Quartet<Double,Double,Double,Double> r)
+
+      The composition of two rotations: the rotation r followed by the
+      rotation q.
+
+      :param org.javatuples.Quartet<Double,Double,Double,Double> q: The second rotation.
+      :param org.javatuples.Quartet<Double,Double,Double,Double> r: The first rotation.
+   
+
+      .. note::
+
+         Throws an exception if either quaternion is zero.
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> quaternionInverse(org.javatuples.Quartet<Double,Double,Double,Double> q)
+
+      The inverse of a rotation.
+
+      :param org.javatuples.Quartet<Double,Double,Double,Double> q: The rotation.
+   
+
+      .. note::
+
+         Throws an exception if the quaternion is zero.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> quaternionRotateVector(org.javatuples.Quartet<Double,Double,Double,Double> q, org.javatuples.Triplet<Double,Double,Double> v)
+
+      A vector rotated by a rotation.
+
+      :param org.javatuples.Quartet<Double,Double,Double,Double> q: The rotation.
+      :param org.javatuples.Triplet<Double,Double,Double> v: The vector.
+   
+
+      .. note::
+
+         Throws an exception if the quaternion is zero.
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> quaternionFromAxisAngle(org.javatuples.Triplet<Double,Double,Double> axis, double angle)
+
+      The rotation about an axis by an angle.
+
+      :param org.javatuples.Triplet<Double,Double,Double> axis: The axis of rotation.
+      :param double angle: The angle of rotation, in radians.
+   
+
+      .. note::
+
+         Throws an exception if the axis is zero.
+
+   .. method:: AxisAngle quaternionToAxisAngle(org.javatuples.Quartet<Double,Double,Double,Double> q)
+
+      The axis and angle of a rotation.
+
+      :param org.javatuples.Quartet<Double,Double,Double,Double> q: The rotation.
+   
+
+      .. note::
+
+         Throws an exception if the quaternion is zero.
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> quaternionFromToRotation(org.javatuples.Triplet<Double,Double,Double> u, org.javatuples.Triplet<Double,Double,Double> v)
+
+      The shortest rotation that takes one direction onto another.
+
+      :param org.javatuples.Triplet<Double,Double,Double> u: The direction to rotate from.
+      :param org.javatuples.Triplet<Double,Double,Double> v: The direction to rotate to.
+   
+
+      .. note::
+
+         Opposite directions give a half turn about an arbitrary perpendicular axis.
+         Throws an exception if either vector is zero.
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> quaternionLookRotation(org.javatuples.Triplet<Double,Double,Double> forward, org.javatuples.Triplet<Double,Double,Double> up)
+
+      The rotation that takes the z axis onto a forward direction, and the y axis
+      toward an up direction.
+
+      :param org.javatuples.Triplet<Double,Double,Double> forward: The direction of the z axis.
+      :param org.javatuples.Triplet<Double,Double,Double> up: The direction the y axis points toward.
+   
+
+      .. note::
+
+         The up direction need not be perpendicular to the forward direction. Throws an
+         exception if either vector is zero, or if they are parallel.
+
+   .. method:: double quaternionAngle(org.javatuples.Quartet<Double,Double,Double,Double> q, org.javatuples.Quartet<Double,Double,Double,Double> r)
+
+      The angle of the rotation that takes one rotation to another,
+      in radians, between 0 and pi.
+
+      :param org.javatuples.Quartet<Double,Double,Double,Double> q: The first rotation.
+      :param org.javatuples.Quartet<Double,Double,Double,Double> r: The second rotation.
+   
+
+      .. note::
+
+         Throws an exception if either quaternion is zero.
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> quaternionSlerp(org.javatuples.Quartet<Double,Double,Double,Double> q, org.javatuples.Quartet<Double,Double,Double,Double> r, double t)
+
+      Spherical linear interpolation between two rotations.
+
+      :param org.javatuples.Quartet<Double,Double,Double,Double> q: The rotation when t is 0.
+      :param org.javatuples.Quartet<Double,Double,Double,Double> r: The rotation when t is 1.
+      :param double t: The interpolation parameter.
+   
+
+      .. note::
+
+         The parameter is not limited to the range 0 to 1, and a value outside it
+         extrapolates. Throws an exception if either quaternion is zero.
+
+   .. method:: void print(String message)
+
+      Writes a message to the game's log, for debugging.
+
+      :param String message: The message.
+   
+
+      .. note::
+
+         A function evaluated by a stream or an event prints on every update. The message is
+         written at the Info level, so a server log level of Warning or Error hides it.
+
+
+
+.. type:: public class AxisAngle
+
+   A rotation as an axis and an angle.
+
+   .. note::
+
+      See :meth:`quaternionToAxisAngle(org.javatuples.Quartet<Double,Double,Double,Double>)`.
+
+   .. constructor:: public AxisAngle(org.javatuples.Triplet<Double,Double,Double> axis, double angle)
+
+      Construct a AxisAngle from the values of its fields.
+
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getAxis()
+
+      The axis of the rotation, as a unit vector, or zero for no rotation.
+
+   .. method:: double getAngle()
+
+      The angle of the rotation, in radians between 0 and pi.
+
+
+.. type:: public class ColorRGB
+
+   A color, as red, green and blue components between 0 and 1.
+
+   .. constructor:: public ColorRGB(float r, float g, float b)
+
+      Construct a ColorRGB from the values of its fields.
+
+
+   .. method:: float getR()
+
+      The red component.
+
+   .. method:: float getG()
+
+      The green component.
+
+   .. method:: float getB()
+
+      The blue component.
+
+
+.. type:: public class ColorRGBA
+
+   A color, as red, green, blue and alpha components between 0 and 1.
+
+   .. note::
+
+      An alpha of 0 is fully transparent and 1 is fully opaque.
+
+   .. constructor:: public ColorRGBA(float r, float g, float b, float a)
+
+      Construct a ColorRGBA from the values of its fields.
+
+
+   .. method:: float getR()
+
+      The red component.
+
+   .. method:: float getG()
+
+      The green component.
+
+   .. method:: float getB()
+
+      The blue component.
+
+   .. method:: float getA()
+
+      The alpha component.

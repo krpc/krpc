@@ -42,9 +42,18 @@ Parts
    .. attribute:: controlling: SpaceCenter.Part
 
       The part from which the vessel is controlled.
+      Returns ``nil`` if the vessel has no control point, in which case it is
+      oriented by its root part.
 
       :Attribute: Can be read or written
-      :rtype: :class:`SpaceCenter.Part`
+      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
+
+      .. note::
+
+         A vessel gets no control point when it is created by a decoupler or an undocking
+         and none of its parts is a command module with crew aboard. A probe core does not
+         give it one either. Assign this property to choose the control point, which is
+         equivalent to "Control From Here" in game.
 
    .. method:: with_name(name)
 
@@ -74,32 +83,6 @@ Parts
 
       :param string module_name:
       :rtype: List
-
-   .. method:: in_stage(stage)
-
-      .. warning:: Deprecated. Use :attr:`SpaceCenter.Stage.parts` from the object returned by :meth:`SpaceCenter.Vessel.stage_at` instead.
-
-      A list of all parts that are activated in the given *stage*.
-
-      :param number stage:
-      :rtype: List
-
-      .. note:: Deprecated. Use :meth:`SpaceCenter.Vessel.stage_at` and
-                :attr:`SpaceCenter.Stage.parts` instead. See the discussion on
-                :rst:ref:`lua-api-parts-staging`.
-
-   .. method:: in_decouple_stage(stage)
-
-      .. warning:: Deprecated. Use :attr:`SpaceCenter.Stage.parts` from the object returned by :meth:`SpaceCenter.Vessel.decouple_stage_at` instead.
-
-      A list of all parts that are decoupled in the given *stage*.
-
-      :param number stage:
-      :rtype: List
-
-      .. note:: Deprecated. Use :meth:`SpaceCenter.Vessel.decouple_stage_at` and
-                :attr:`SpaceCenter.Stage.parts` instead. See the discussion on
-                :rst:ref:`lua-api-parts-staging`.
 
    .. method:: modules_with_name(module_name)
 
@@ -350,16 +333,18 @@ Part
    .. attribute:: tag: string
 
       The name tag for the part. Can be set to a custom string using the
-      in-game user interface.
+      in-game user interface. Throws an exception if no name tag part module is installed.
 
       :Attribute: Can be read or written
       :rtype: string
 
       .. note::
 
-         This string is shared with
-         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_
-         if it is installed.
+         The name tag part module is provided by
+         `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
+         0.5 or later, or by
+         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
+         which shares this string.
 
    .. attribute:: flag_url: string
 
@@ -379,12 +364,12 @@ Part
 
          The highlighting is removed when the client that enabled it disconnects.
 
-   .. attribute:: highlight_color: Tuple
+   .. attribute:: highlight_color: StdLib.ColorRGB
 
-      The color used to highlight the part, as an RGB triple.
+      The color used to highlight the part.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
+      :rtype: :class:`StdLib.ColorRGB`
 
    .. attribute:: cost: number
 
@@ -407,7 +392,7 @@ Part
       parts tree.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part`
+      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
       .. note:: See the discussion on :rst:ref:`lua-api-parts-trees-of-parts`.
 
@@ -500,6 +485,138 @@ Part
       :Attribute: Read-only, cannot be set
       :rtype: number
 
+   .. attribute:: static_pressure: number
+
+      The static pressure acting on the part, in Pascals. Below the waterline this
+      includes the pressure of the water.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: displacement: number
+
+      The volume of water the part displaces when fully submerged, in :math:`m^3`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note::
+
+         See :attr:`SpaceCenter.Part.displaced_volume` for the volume it is displacing now.
+
+   .. attribute:: buoyancy_multiplier: number
+
+      The multiplier applied to the buoyant force on the part. One for most parts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. method:: buoyant_force_at(density, gravity)
+
+      The buoyant force on the part when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :param number density: The density of the fluid, in :math:`kg/m^3`.
+      :param number gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :rtype: number
+
+      .. note::
+
+         Applies :attr:`SpaceCenter.buoyancy_scalar <SpaceCenter.SpaceCenter.buoyancy_scalar>` and
+         :attr:`SpaceCenter.Part.buoyancy_multiplier`, so the result is what the game would do to the
+         part rather than what
+         `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
+
+   .. attribute:: splashed: boolean
+
+      Whether the part is in contact with water.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: submerged_portion: number
+
+      The fraction of the part below the waterline, between 0 and 1.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: displaced_volume: number
+
+      The volume of water the part is displacing, in :math:`m^3`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: depth: number
+
+      The depth of the part below the waterline, in meters, measured at
+      :meth:`SpaceCenter.Part.center_of_displacement`. Negative above the waterline. Returns zero
+      if the body the vessel is at has no ocean.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: min_depth: number
+
+      The depth of the shallowest point of the part below the waterline, in meters.
+      Returns zero if the body the vessel is at has no ocean.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: max_depth: number
+
+      The depth of the deepest point of the part below the waterline, in meters.
+      Returns zero if the body the vessel is at has no ocean.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note::
+
+         The game ramps the buoyant force in over the first fraction of a meter of this
+         depth.
+
+   .. attribute:: submerged_dynamic_pressure: number
+
+      The dynamic pressure of the water acting on the part, in Pascals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: submerged_drag_multiplier: number
+
+      The multiplier applied to the drag on the part while it is submerged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note::
+
+         The game sets this high on splashdown and eases it down as the part moves through
+         the water. It climbs back once the part slows to a crawl, so a hull under way
+         reads lower than one lying still.
+
+   .. attribute:: submerged_lift_multiplier: number
+
+      The multiplier applied to the lift on the part while it is submerged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: water_angular_drag_multiplier: number
+
+      The multiplier applied to the angular drag on the part while it is submerged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note::
+
+         Part of the part's configuration rather than a live readout, so it reads the same
+         in the editor and at a body with no ocean.
+
    .. attribute:: impact_tolerance: number
 
       The impact tolerance of the part, in meters per second.
@@ -534,6 +651,18 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: number
+
+   .. attribute:: max_pressure: number
+
+      Maximum pressure that the part can survive, in Pascals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note::
+
+         With part pressure limits enabled in the difficulty settings, the part is destroyed
+         when :attr:`SpaceCenter.Part.static_pressure` plus :attr:`SpaceCenter.Part.dynamic_pressure` exceeds this.
 
    .. attribute:: thermal_mass: number
 
@@ -684,7 +813,7 @@ Part
       An :attr:`SpaceCenter.Part.antenna` if the part is an antenna, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Antenna`
+      :rtype: :class:`SpaceCenter.Antenna` or ``Types.none``
 
       .. note::
 
@@ -696,7 +825,7 @@ Part
       A :attr:`SpaceCenter.Part.cargo_bay` if the part is a cargo bay, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.CargoBay`
+      :rtype: :class:`SpaceCenter.CargoBay` or ``Types.none``
 
    .. attribute:: control_surface: SpaceCenter.ControlSurface
 
@@ -704,28 +833,28 @@ Part
       otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ControlSurface`
+      :rtype: :class:`SpaceCenter.ControlSurface` or ``Types.none``
 
    .. attribute:: decoupler: SpaceCenter.Decoupler
 
       A :attr:`SpaceCenter.Part.decoupler` if the part is a decoupler, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Decoupler`
+      :rtype: :class:`SpaceCenter.Decoupler` or ``Types.none``
 
    .. attribute:: docking_port: SpaceCenter.DockingPort
 
       A :attr:`SpaceCenter.Part.docking_port` if the part is a docking port, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.DockingPort`
+      :rtype: :class:`SpaceCenter.DockingPort` or ``Types.none``
 
    .. attribute:: engine: SpaceCenter.Engine
 
       An :attr:`SpaceCenter.Part.engine` if the part is an engine, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Engine`
+      :rtype: :class:`SpaceCenter.Engine` or ``Types.none``
 
    .. attribute:: experiment: SpaceCenter.Experiment
 
@@ -733,7 +862,7 @@ Part
       single science experiment, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Experiment`
+      :rtype: :class:`SpaceCenter.Experiment` or ``Types.none``
 
       .. note::
 
@@ -745,21 +874,21 @@ Part
       A list of :attr:`SpaceCenter.Part.experiment` objects that the part contains.
 
       :Attribute: Read-only, cannot be set
-      :rtype: List
+      :rtype: List or ``Types.none``
 
    .. attribute:: fairing: SpaceCenter.Fairing
 
       A :attr:`SpaceCenter.Part.fairing` if the part is a fairing, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Fairing`
+      :rtype: :class:`SpaceCenter.Fairing` or ``Types.none``
 
    .. attribute:: intake: SpaceCenter.Intake
 
       An :attr:`SpaceCenter.Part.intake` if the part is an intake, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Intake`
+      :rtype: :class:`SpaceCenter.Intake` or ``Types.none``
 
       .. note::
 
@@ -772,56 +901,56 @@ Part
       A :attr:`SpaceCenter.Part.leg` if the part is a landing leg, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Leg`
+      :rtype: :class:`SpaceCenter.Leg` or ``Types.none``
 
    .. attribute:: launch_clamp: SpaceCenter.LaunchClamp
 
       A :attr:`SpaceCenter.Part.launch_clamp` if the part is a launch clamp, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.LaunchClamp`
+      :rtype: :class:`SpaceCenter.LaunchClamp` or ``Types.none``
 
    .. attribute:: light: SpaceCenter.Light
 
       A :attr:`SpaceCenter.Part.light` if the part is a light, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Light`
+      :rtype: :class:`SpaceCenter.Light` or ``Types.none``
 
    .. attribute:: parachute: SpaceCenter.Parachute
 
       A :attr:`SpaceCenter.Part.parachute` if the part is a parachute, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Parachute`
+      :rtype: :class:`SpaceCenter.Parachute` or ``Types.none``
 
    .. attribute:: radiator: SpaceCenter.Radiator
 
       A :attr:`SpaceCenter.Part.radiator` if the part is a radiator, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Radiator`
+      :rtype: :class:`SpaceCenter.Radiator` or ``Types.none``
 
    .. attribute:: resource_drain: SpaceCenter.ResourceDrain
 
       A :attr:`SpaceCenter.Part.resource_drain` if the part is a resource drain, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ResourceDrain`
+      :rtype: :class:`SpaceCenter.ResourceDrain` or ``Types.none``
 
    .. attribute:: rcs: SpaceCenter.RCS
 
       A :attr:`SpaceCenter.Part.rcs` if the part is an RCS block/thruster, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RCS`
+      :rtype: :class:`SpaceCenter.RCS` or ``Types.none``
 
    .. attribute:: reaction_wheel: SpaceCenter.ReactionWheel
 
       A :attr:`SpaceCenter.Part.reaction_wheel` if the part is a reaction wheel, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ReactionWheel`
+      :rtype: :class:`SpaceCenter.ReactionWheel` or ``Types.none``
 
    .. attribute:: resource_converter: SpaceCenter.ResourceConverter
 
@@ -829,7 +958,7 @@ Part
       otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ResourceConverter`
+      :rtype: :class:`SpaceCenter.ResourceConverter` or ``Types.none``
 
    .. attribute:: resource_harvester: SpaceCenter.ResourceHarvester
 
@@ -837,7 +966,7 @@ Part
       otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ResourceHarvester`
+      :rtype: :class:`SpaceCenter.ResourceHarvester` or ``Types.none``
 
    .. attribute:: robotic_controller: SpaceCenter.RoboticController
 
@@ -845,56 +974,56 @@ Part
       otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RoboticController`
+      :rtype: :class:`SpaceCenter.RoboticController` or ``Types.none``
 
    .. attribute:: robotic_hinge: SpaceCenter.RoboticHinge
 
       A :attr:`SpaceCenter.Part.robotic_hinge` if the part is a robotic hinge, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RoboticHinge`
+      :rtype: :class:`SpaceCenter.RoboticHinge` or ``Types.none``
 
    .. attribute:: robotic_piston: SpaceCenter.RoboticPiston
 
       A :attr:`SpaceCenter.Part.robotic_piston` if the part is a robotic piston, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RoboticPiston`
+      :rtype: :class:`SpaceCenter.RoboticPiston` or ``Types.none``
 
    .. attribute:: robotic_rotation: SpaceCenter.RoboticRotation
 
       A :attr:`SpaceCenter.Part.robotic_rotation` if the part is a robotic rotation servo, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RoboticRotation`
+      :rtype: :class:`SpaceCenter.RoboticRotation` or ``Types.none``
 
    .. attribute:: robotic_rotor: SpaceCenter.RoboticRotor
 
       A :attr:`SpaceCenter.Part.robotic_rotor` if the part is a robotic rotor, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RoboticRotor`
+      :rtype: :class:`SpaceCenter.RoboticRotor` or ``Types.none``
 
    .. attribute:: sensor: SpaceCenter.Sensor
 
       A :attr:`SpaceCenter.Part.sensor` if the part is a sensor, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Sensor`
+      :rtype: :class:`SpaceCenter.Sensor` or ``Types.none``
 
    .. attribute:: solar_panel: SpaceCenter.SolarPanel
 
       A :attr:`SpaceCenter.Part.solar_panel` if the part is a solar panel, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.SolarPanel`
+      :rtype: :class:`SpaceCenter.SolarPanel` or ``Types.none``
 
    .. attribute:: wheel: SpaceCenter.Wheel
 
       A :attr:`SpaceCenter.Part.wheel` if the part is a wheel, otherwise ``nil``.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Wheel`
+      :rtype: :class:`SpaceCenter.Wheel` or ``Types.none``
 
    .. method:: position(reference_frame)
 
@@ -913,7 +1042,7 @@ Part
    .. method:: center_of_mass(reference_frame)
 
       The position of the parts center of mass in the given reference frame.
-      If the part is physicsless, this is equivalent to :meth:`SpaceCenter.Part.position`.
+      If the part is physicsless in flight, this is equivalent to :meth:`SpaceCenter.Part.position`.
 
       :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
@@ -924,14 +1053,15 @@ Part
       The axis-aligned bounding box of the part in the given reference frame.
 
       :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
-      :rtype: Tuple
+      :returns: The positions of the minimum and maximum vertices of the box.
+      :rtype: :class:`SpaceCenter.BoundingBox`
 
       .. note::
 
-         This is computed from the collision mesh of the part.
-         If the part is not collidable, the box has zero volume and is centered on
-         the :meth:`SpaceCenter.Part.position` of the part.
+         This is computed from the meshes that make up the parts model, and covers only
+         this part - the models of any child parts are excluded.
+         If the part has no visible model, the box has zero volume and is centered on
+         the :meth:`SpaceCenter.Part.center_of_mass` of the part.
 
    .. method:: direction(reference_frame)
 
@@ -983,18 +1113,54 @@ Part
 
          Not available when the Ferram Aerospace Research mod is installed.
 
+   .. method:: center_of_buoyancy(reference_frame)
+
+      The point the buoyant force on the part acts at, in the given reference frame.
+
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: Tuple
+
+      .. note::
+
+         A submerged part reports the point the game applied the force at, which it shifts
+         towards the submerged part of the hull. Any other part reports its configured
+         center of buoyancy.
+
+   .. method:: center_of_displacement(reference_frame)
+
+      The point the depth of the part is measured at, in the given reference frame.
+
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: Tuple
+
+   .. method:: buoyant_force(reference_frame)
+
+      The buoyant force currently acting on the part.
+
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned vector is in.
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :rtype: Tuple
+
+      .. note::
+
+         The buoyant force on its own. The water drag and lift the game applies alongside
+         it are reported by :attr:`SpaceCenter.Part.submerged_drag_multiplier` and
+         :attr:`SpaceCenter.Part.submerged_lift_multiplier`.
+
    .. attribute:: moment_of_inertia: Tuple
 
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
-      in the parts reference frame (:attr:`SpaceCenter.Part.reference_frame`).
+      in the parts center of mass reference frame (:attr:`SpaceCenter.Part.center_of_mass_reference_frame`).
 
       :Attribute: Read-only, cannot be set
       :rtype: Tuple
 
    .. attribute:: inertia_tensor: List
 
-      The inertia tensor of the part in the parts reference frame
-      (:attr:`SpaceCenter.Part.reference_frame`).
+      The inertia tensor of the part around its center of mass, in the parts center of
+      mass reference frame (:attr:`SpaceCenter.Part.center_of_mass_reference_frame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
       :Attribute: Read-only, cannot be set
@@ -1045,6 +1211,8 @@ Part
 
    .. method:: add_force(force, position, reference_frame)
 
+      .. warning:: Deprecated. Use ``Debug.AddForce`` instead.
+
       Exert a constant force on the part, acting at the given position.
 
       :param Tuple force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
@@ -1058,6 +1226,8 @@ Part
          The force is removed when the client that added it disconnects.
 
    .. method:: instantaneous_force(force, position, reference_frame)
+
+      .. warning:: Deprecated. Use ``Debug.InstantaneousForce`` instead.
 
       Exert an instantaneous force on the part, acting at the given position.
 
@@ -1082,6 +1252,37 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.AutoStrutMode`
+
+   .. attribute:: has_real_fuels_tank: boolean
+
+      Whether the part is a fuel tank managed by
+      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      The remaining properties in this section are only available when it is.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: highly_pressurized: boolean
+
+      Whether the tank is highly pressurized, which is what a pressure-fed engine needs to
+      draw from (see :attr:`SpaceCenter.Engine.pressure_fed`). Throws an exception if the part is
+      not a RealFuels fuel tank (see :attr:`SpaceCenter.Part.has_real_fuels_tank`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: boiloff_rate: number
+
+      The rate at which the tank's cryogenic contents are boiling off, in kilograms per
+      second of in-game time, measured over the last update RealFuels computed it in.
+      The contents keep boiling off under time warp, where that update covers a much
+      longer span of in-game time than a physics frame does. The rate is zero for a
+      tank holding nothing cryogenic, for one still being fed by a launch clamp, whose
+      temperature RealFuels holds down instead, and in the editor. Throws an exception
+      if the part is not a RealFuels fuel tank (see :attr:`SpaceCenter.Part.has_real_fuels_tank`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
 
 
 
@@ -1128,7 +1329,7 @@ Part
 
 .. class:: Force
 
-   Obtained by calling :meth:`SpaceCenter.Part.add_force`.
+   Obtained by calling ``Debug.AddForce``.
 
    .. attribute:: part: SpaceCenter.Part
 
@@ -1163,6 +1364,11 @@ Part
    .. method:: remove()
 
       Remove the force.
+
+
+      .. note::
+
+         Any further use of this object throws an exception.
 
 
 
@@ -1231,271 +1437,6 @@ Module
 
       :Attribute: Read-only, cannot be set
       :rtype: List
-
-   .. attribute:: fields: Map
-
-      .. warning:: Deprecated. Use :attr:`SpaceCenter.Module.field_list` instead, filtering by :attr:`SpaceCenter.PartField.visible`.
-
-      The modules field names and their associated values, as a dictionary.
-      These are the values visible in the right-click menu of the part.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: Map
-
-      .. note::
-
-         Throws an exception if there is more than one field with the same name.
-         In that case, use :attr:`SpaceCenter.Module.fields_by_id` to get the fields by identifier.
-
-   .. attribute:: fields_by_id: Map
-
-      .. warning:: Deprecated. Use :attr:`SpaceCenter.Module.field_list` instead, filtering by :attr:`SpaceCenter.PartField.visible`.
-
-      The modules field identifiers and their associated values, as a dictionary.
-      These are the values visible in the right-click menu of the part.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: Map
-
-   .. method:: has_field(name)
-
-      .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.field_list` by :attr:`SpaceCenter.PartField.gui_name` instead.
-
-      Returns ``True`` if the module has a field with the given name.
-
-      :param string name: Name of the field.
-      :rtype: boolean
-
-   .. method:: has_field_with_id(id)
-
-      .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.field_list` by :attr:`SpaceCenter.PartField.name` instead.
-
-      Returns ``True`` if the module has a field with the given identifier.
-
-      :param string id: Identifier of the field.
-      :rtype: boolean
-
-   .. method:: get_field(name)
-
-      .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.field_list` by :attr:`SpaceCenter.PartField.gui_name` and read :attr:`SpaceCenter.PartField.value` instead.
-
-      Returns the value of a field with the given name.
-
-      :param string name: Name of the field.
-      :rtype: string
-
-   .. method:: get_field_by_id(id)
-
-      .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.field_list` by :attr:`SpaceCenter.PartField.name` and read :attr:`SpaceCenter.PartField.value` instead.
-
-      Returns the value of a field with the given identifier.
-
-      :param string id: Identifier of the field.
-      :rtype: string
-
-   .. method:: set_field_int(name, value)
-
-      .. warning:: Deprecated. Set :attr:`SpaceCenter.PartField.int_value` instead.
-
-      Set the value of a field to the given integer number.
-
-      :param string name: Name of the field.
-      :param number value: Value to set.
-
-   .. method:: set_field_int_by_id(id, value)
-
-      .. warning:: Deprecated. Set :attr:`SpaceCenter.PartField.int_value` instead.
-
-      Set the value of a field to the given integer number.
-
-      :param string id: Identifier of the field.
-      :param number value: Value to set.
-
-   .. method:: set_field_float(name, value)
-
-      .. warning:: Deprecated. Set :attr:`SpaceCenter.PartField.float_value` instead.
-
-      Set the value of a field to the given floating point number.
-
-      :param string name: Name of the field.
-      :param number value: Value to set.
-
-   .. method:: set_field_float_by_id(id, value)
-
-      .. warning:: Deprecated. Set :attr:`SpaceCenter.PartField.float_value` instead.
-
-      Set the value of a field to the given floating point number.
-
-      :param string id: Identifier of the field.
-      :param number value: Value to set.
-
-   .. method:: set_field_string(name, value)
-
-      .. warning:: Deprecated. Set :attr:`SpaceCenter.PartField.value` instead.
-
-      Set the value of a field to the given string.
-
-      :param string name: Name of the field.
-      :param string value: Value to set.
-
-   .. method:: set_field_string_by_id(id, value)
-
-      .. warning:: Deprecated. Set :attr:`SpaceCenter.PartField.value` instead.
-
-      Set the value of a field to the given string.
-
-      :param string id: Identifier of the field.
-      :param string value: Value to set.
-
-   .. method:: set_field_bool(name, value)
-
-      .. warning:: Deprecated. Set :attr:`SpaceCenter.PartField.bool_value` instead.
-
-      Set the value of a field to true or false.
-
-      :param string name: Name of the field.
-      :param boolean value: Value to set.
-
-   .. method:: set_field_bool_by_id(id, value)
-
-      .. warning:: Deprecated. Set :attr:`SpaceCenter.PartField.bool_value` instead.
-
-      Set the value of a field to true or false.
-
-      :param string id: Identifier of the field.
-      :param boolean value: Value to set.
-
-   .. method:: reset_field(name)
-
-      .. warning:: Deprecated. Use :meth:`SpaceCenter.PartField.reset` instead.
-
-      Set the value of a field to its original value.
-
-      :param string name: Name of the field.
-
-   .. method:: reset_field_by_id(id)
-
-      .. warning:: Deprecated. Use :meth:`SpaceCenter.PartField.reset` instead.
-
-      Set the value of a field to its original value.
-
-      :param string id: Identifier of the field.
-
-      .. note::
-
-         The original value is the value the field had when the part was loaded.
-
-   .. attribute:: events: List
-
-      .. warning:: Deprecated. Use :attr:`SpaceCenter.Module.event_list` instead, filtering by :attr:`SpaceCenter.PartEvent.visible` and :attr:`SpaceCenter.PartEvent.active`.
-
-      A list of the names of all of the modules events. Events are the clickable buttons
-      visible in the right-click menu of the part.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: List
-
-   .. attribute:: events_by_id: List
-
-      .. warning:: Deprecated. Use :attr:`SpaceCenter.Module.event_list` instead, filtering by :attr:`SpaceCenter.PartEvent.visible` and :attr:`SpaceCenter.PartEvent.active`.
-
-      A list of the identifiers of all of the modules events. Events are the clickable buttons
-      visible in the right-click menu of the part.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: List
-
-   .. method:: has_event(name)
-
-      .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.event_list` by :attr:`SpaceCenter.PartEvent.gui_name` instead.
-
-      ``True`` if the module has an event with the given name.
-
-      :param string name:
-      :rtype: boolean
-
-   .. method:: has_event_with_id(id)
-
-      .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.event_list` by :attr:`SpaceCenter.PartEvent.name` instead.
-
-      ``True`` if the module has an event with the given identifier.
-
-      :param string id:
-      :rtype: boolean
-
-   .. method:: trigger_event(name)
-
-      .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.event_list` by :attr:`SpaceCenter.PartEvent.gui_name` and call :meth:`SpaceCenter.PartEvent.trigger` instead.
-
-      Trigger the named event. Equivalent to clicking the button in the right-click menu
-      of the part.
-
-      :param string name:
-
-   .. method:: trigger_event_by_id(id)
-
-      .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.event_list` by :attr:`SpaceCenter.PartEvent.name` and call :meth:`SpaceCenter.PartEvent.trigger` instead.
-
-      Trigger the event with the given identifier.
-      Equivalent to clicking the button in the right-click menu of the part.
-
-      :param string id:
-
-   .. attribute:: actions: List
-
-      .. warning:: Deprecated. Use :attr:`SpaceCenter.Module.action_list` instead.
-
-      A list of all the names of the modules actions. These are the parts actions that can
-      be assigned to action groups in the in-game editor.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: List
-
-   .. attribute:: actions_by_id: List
-
-      .. warning:: Deprecated. Use :attr:`SpaceCenter.Module.action_list` instead.
-
-      A list of all the identifiers of the modules actions. These are the parts actions
-      that can be assigned to action groups in the in-game editor.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: List
-
-   .. method:: has_action(name)
-
-      .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.action_list` by :attr:`SpaceCenter.PartAction.gui_name` instead.
-
-      ``True`` if the part has an action with the given name.
-
-      :param string name:
-      :rtype: boolean
-
-   .. method:: has_action_with_id(id)
-
-      .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.action_list` by :attr:`SpaceCenter.PartAction.name` instead.
-
-      ``True`` if the part has an action with the given identifier.
-
-      :param string id:
-      :rtype: boolean
-
-   .. method:: set_action(name, [value = True])
-
-      .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.action_list` by :attr:`SpaceCenter.PartAction.gui_name` and set :attr:`SpaceCenter.PartAction.activated` instead.
-
-      Set the value of an action with the given name.
-
-      :param string name:
-      :param boolean value:
-
-   .. method:: set_action_by_id(id, [value = True])
-
-      .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.action_list` by :attr:`SpaceCenter.PartAction.name` and set :attr:`SpaceCenter.PartAction.activated` instead.
-
-      Set the value of an action with the given identifier.
-
-      :param string id:
-      :param boolean value:
 
 
 
@@ -2034,10 +1975,39 @@ Control Surface
 
    .. attribute:: deployed: boolean
 
-      Whether the control surface has been fully deployed.
+      Whether the control surface has been fully deployed. Throws an exception if set
+      while :attr:`SpaceCenter.ControlSurface.deflection_override` is enabled, which holds the surface deployed.
 
       :Attribute: Can be read or written
       :rtype: boolean
+
+   .. attribute:: deploy_angle: number
+
+      The deploy angle of the control surface, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         Applied when :attr:`SpaceCenter.ControlSurface.deployed` is true, and clamped to the range given by
+         :attr:`SpaceCenter.ControlSurface.min_deploy_angle` and :attr:`SpaceCenter.ControlSurface.max_deploy_angle`. While
+         :attr:`SpaceCenter.ControlSurface.deflection_override` is enabled, :attr:`SpaceCenter.ControlSurface.deflection` drives the
+         angle. A value set here takes effect when the override is released.
+
+   .. attribute:: min_deploy_angle: number
+
+      The minimum :attr:`SpaceCenter.ControlSurface.deploy_angle` of the control surface, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: max_deploy_angle: number
+
+      The maximum :attr:`SpaceCenter.ControlSurface.deploy_angle` of the control surface, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
 
    .. attribute:: deflection_override: boolean
 
@@ -2065,14 +2035,14 @@ Control Surface
       :Attribute: Read-only, cannot be set
       :rtype: number
 
-   .. attribute:: available_torque: Tuple
+   .. attribute:: available_torque: SpaceCenter.AxisRange
 
       The available torque, in Newton meters, that can be produced by this control surface,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :attr:`SpaceCenter.Vessel.reference_frame`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
 
 
@@ -2137,7 +2107,7 @@ Decoupler
       The part attached to this decoupler's explosive node.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part`
+      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
 
 
@@ -2214,7 +2184,7 @@ Docking Port
       docking port is not docked to anything.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.Part`
+      :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
    .. method:: undock()
 
@@ -2701,7 +2671,7 @@ Engine
       :Attribute: Can be read or written
       :rtype: Tuple
 
-   .. attribute:: available_torque: Tuple
+   .. attribute:: available_torque: SpaceCenter.AxisRange
 
       The available torque, in Newton meters, that can be produced by this engine,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -2709,7 +2679,7 @@ Engine
       Returns zero if the engine is inactive, or not gimballed.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: can_reverse_thrust: boolean
 
@@ -2728,7 +2698,7 @@ Engine
       direction of thrust. While the reverser is still moving, this reports
       the state it is moving to, so a read immediately after a set returns
       the value that was set and setting the same value again has no effect.
-      Raises an exception if the engine does not have a thrust reverser
+      Throws an exception if the engine does not have a thrust reverser
       (see :attr:`SpaceCenter.Engine.can_reverse_thrust`).
 
       :Attribute: Can be read or written
@@ -2736,8 +2706,84 @@ Engine
 
    .. method:: toggle_thrust_reversal()
 
-      Toggle the engine's thrust reverser. Raises an exception if the engine
+      Toggle the engine's thrust reverser. Throws an exception if the engine
       does not have a thrust reverser (see :attr:`SpaceCenter.Engine.can_reverse_thrust`).
+
+   .. attribute:: has_real_fuels: boolean
+
+      Whether the engine is managed by
+      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      The remaining properties in this section are only available when it is.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: ignitions: number
+
+      The number of times the engine can still be ignited, or -1 if it can be ignited an
+      unlimited number of times. Throws an exception if the engine is not managed by
+      RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: ignition_resources: Map
+
+      The resources the engine consumes each time it ignites, keyed by resource name, with
+      the amount of each that is required. The engine uses up an ignition and fails to
+      light if they are not available. Throws an exception if the engine is not managed by
+      RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: Map
+
+   .. attribute:: has_ullage: boolean
+
+      Whether the engine's propellant is subject to ullage, so that it must be settled
+      before the engine will run reliably. Throws an exception if the engine is not
+      managed by RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: propellant_stability: number
+
+      How settled the propellant feeding the engine is, from 0 (fully unsettled) to 1
+      (fully settled). Acceleration along the engine's thrust axis settles it, and
+      coasting and rotation unsettle it. Throws an exception if the engine is not managed
+      by RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: propellant_reliability: number
+
+      The probability that the propellant feeding the engine behaves normally, from 0 to 1.
+      This is :attr:`SpaceCenter.Engine.propellant_stability` scaled by the game's ullage difficulty
+      setting, and is the value RealFuels itself tests against when deciding whether the
+      engine runs. Throws an exception if the engine is not managed by RealFuels
+      (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: pressure_fed: boolean
+
+      Whether the engine is fed by tank pressure rather than by a pump, and so needs to
+      draw from a highly pressurized tank. Throws an exception if the engine is not
+      managed by RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: has_feed_pressure: boolean
+
+      Whether the tanks feeding the engine supply the pressure it needs. Always
+      ``True`` for an engine that is not pressure fed. Throws an exception if the
+      engine is not managed by RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
 
 
 
@@ -2921,7 +2967,7 @@ Experiment
       conditions. Returns ``nil`` if the experiment is unavailable.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ScienceSubject`
+      :rtype: :class:`SpaceCenter.ScienceSubject` or ``Types.none``
 
 
 
@@ -2929,38 +2975,41 @@ Experiment
 
    Obtained by calling :attr:`SpaceCenter.Experiment.data`.
 
+
    .. attribute:: data_amount: number
 
       Data amount.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: science_value: number
 
       Science value.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: transmit_value: number
 
       Transmit value.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
-
 
 
 .. class:: ScienceSubject
 
    Obtained by calling :attr:`SpaceCenter.Experiment.science_subject`.
 
+
+   .. attribute:: id: string
+
+      The identifier of the subject, e.g. ``crewReport@KerbinSrfLandedLaunchPad``.
+
+      :rtype: string
+
    .. attribute:: title: string
 
-      Title of science subject, displayed in science archives
+      The title of the subject, as shown in the science archives.
 
-      :Attribute: Read-only, cannot be set
       :rtype: string
 
    .. attribute:: is_complete: boolean
@@ -2972,7 +3021,6 @@ Experiment
       has produced data, and how valuable it is, use :attr:`SpaceCenter.Experiment.has_data` and
       :attr:`SpaceCenter.ScienceData.transmit_value`.
 
-      :Attribute: Read-only, cannot be set
       :rtype: boolean
 
    .. attribute:: science: number
@@ -2980,28 +3028,24 @@ Experiment
       Amount of science already earned from this subject, not updated until after
       transmission/recovery.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: science_cap: number
 
       Total science allowable for this subject.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: data_scale: number
 
       Multiply science value by this to determine data amount in mits.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: subject_value: number
 
       Multiplier for specific Celestial Body/Experiment Situation combination.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: scientific_value: number
@@ -3009,9 +3053,7 @@ Experiment
       Diminishing value multiplier for decreasing the science value returned from repeated
       experiments.
 
-      :Attribute: Read-only, cannot be set
       :rtype: number
-
 
 
 Fairing
@@ -3181,12 +3223,12 @@ Light
       :Attribute: Can be read or written
       :rtype: boolean
 
-   .. attribute:: color: Tuple
+   .. attribute:: color: StdLib.ColorRGB
 
-      The color of the light, as an RGB triple.
+      The color of the light.
 
       :Attribute: Can be read or written
-      :rtype: Tuple
+      :rtype: :class:`StdLib.ColorRGB`
 
    .. attribute:: blink: boolean
 
@@ -3638,7 +3680,7 @@ Reaction Wheel
       :Attribute: Read-only, cannot be set
       :rtype: boolean
 
-   .. attribute:: available_torque: Tuple
+   .. attribute:: available_torque: SpaceCenter.AxisRange
 
       The available torque, in Newton meters, that can be produced by this reaction wheel,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -3646,16 +3688,16 @@ Reaction Wheel
       Returns zero if the reaction wheel is inactive or broken.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: max_torque: Tuple
+   .. attribute:: max_torque: SpaceCenter.AxisRange
 
       The maximum torque, in Newton meters, that can be produced by this reaction wheel,
       when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
       These axes correspond to the coordinate axes of the :attr:`SpaceCenter.Vessel.reference_frame`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
    .. attribute:: authority_limiter: number
 
@@ -3858,6 +3900,26 @@ Robotic Controller
       :returns: Returns ``True`` if the axis is cleared successfully.
       :rtype: boolean
 
+
+
+.. class:: RoboticAxis
+
+   An axis of a robotic controller.
+
+   .. note::
+
+      See :meth:`SpaceCenter.RoboticController.axes`.
+   .. attribute:: module: SpaceCenter.Module
+
+      The part module the axis belongs to.
+
+      :rtype: :class:`SpaceCenter.Module`
+
+   .. attribute:: field_name: string
+
+      The name of the field the axis controls.
+
+      :rtype: string
 
 
 Robotic Hinge
@@ -4282,6 +4344,7 @@ RCS
       :attr:`SpaceCenter.RCS.rotation_override` and :attr:`SpaceCenter.RCS.translation_override` instead of the
       normal control inputs. The override is automatically released if the
       controlling client disconnects or the vessel changes.
+      Precision mode leaves an overridden block at full thrust.
 
       :Attribute: Can be read or written
       :rtype: boolean
@@ -4303,7 +4366,7 @@ RCS
       :Attribute: Can be read or written
       :rtype: Tuple
 
-   .. attribute:: available_torque: Tuple
+   .. attribute:: available_torque: SpaceCenter.AxisRange
 
       The available torque, in Newton meters, that can be produced by this RCS,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
@@ -4311,9 +4374,15 @@ RCS
       Returns zero if RCS is disable.
 
       :Attribute: Read-only, cannot be set
-      :rtype: Tuple
+      :rtype: :class:`SpaceCenter.AxisRange`
 
-   .. attribute:: available_force: Tuple
+      .. note::
+
+         Precision mode weakens the block, and the available torque follows it. A block
+         driven by :attr:`SpaceCenter.RCS.input_override` is exempt, so :meth:`SpaceCenter.RCS.override_wrench`
+         can report the larger torque an override reaches.
+
+   .. attribute:: available_force: SpaceCenter.AxisRange
 
       The available force, in Newtons, that can be produced by this RCS,
       in the positive and negative x, y and z axes of the vessel. These axes
@@ -4321,7 +4390,45 @@ RCS
       Returns zero if RCS is disabled.
 
       :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.AxisRange`
+
+      .. note::
+
+         Precision mode weakens the block, and the available force follows it. A block
+         driven by :attr:`SpaceCenter.RCS.input_override` is exempt, so :meth:`SpaceCenter.RCS.override_wrench`
+         can report the larger force an override reaches.
+
+   .. attribute:: force: Tuple
+
+      The force being applied by the RCS thrusters, in Newtons. The vector is in the
+      vessel's reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
+      Returns zero if the RCS is inactive.
+
+      :Attribute: Read-only, cannot be set
       :rtype: Tuple
+
+   .. attribute:: torque: Tuple
+
+      The torque being applied by the RCS thrusters about the vessel's center of mass,
+      in Newton meters. The vector is in the vessel's reference frame
+      (:attr:`SpaceCenter.Vessel.reference_frame`). Returns zero if the RCS is inactive.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: Tuple
+
+   .. method:: override_wrench(rotation, translation)
+
+      The force and torque the given demands would produce, in Newtons and Newton meters.
+
+      :param Tuple rotation: A rotation demand, as set by :attr:`SpaceCenter.RCS.rotation_override`.
+      :param Tuple translation: A translation demand, as set by :attr:`SpaceCenter.RCS.translation_override`.
+      :returns: The force, and the torque about the vessel's center of mass, in the vessel's reference frame (:attr:`SpaceCenter.Vessel.reference_frame`), or zero if the RCS is inactive.
+      :rtype: :class:`SpaceCenter.Wrench`
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out full thrust, which
+         :attr:`SpaceCenter.RCS.force` and :attr:`SpaceCenter.RCS.torque` include.
 
    .. attribute:: available_thrust: number
 
@@ -4527,6 +4634,13 @@ Thruster
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Part`
+
+   .. attribute:: thrust: number
+
+      The thrust being produced by the thruster, in Newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
 
    .. method:: thrust_position(reference_frame)
 
@@ -4965,7 +5079,7 @@ returns ``nil``.
 The following Lua example uses these attributes to perform a
 depth-first traversal over all of the parts in a vessel:
 
-.. literalinclude:: /scripts/services/space-center/TreeTraversal.lua
+.. literalinclude:: /scripts/api/space-center/parts/TreeTraversal.lua
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -5012,7 +5126,7 @@ consider to be *axially* attached to nothing.
 The following Lua example does a depth-first traversal as before,
 but also prints out the attachment mode used by the part:
 
-.. literalinclude:: /scripts/services/space-center/AttachmentModes.lua
+.. literalinclude:: /scripts/api/space-center/parts/AttachmentModes.lua
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -5107,11 +5221,7 @@ Staging
 For vessel-level summaries (delta-v, thrust, fuel, and resources grouped per
 stage), use the :rst:ref:`lua-api-stage` class via
 :attr:`SpaceCenter.Vessel.stages` and
-:attr:`SpaceCenter.Vessel.decouple_stages`. Legacy helpers
-:meth:`SpaceCenter.Parts.in_stage`,
-:meth:`SpaceCenter.Parts.in_decouple_stage`, and
-:meth:`SpaceCenter.Vessel.resources_in_decouple_stage` remain available but
-are deprecated.
+:attr:`SpaceCenter.Vessel.decouple_stages`.
 
 .. only:: html
 

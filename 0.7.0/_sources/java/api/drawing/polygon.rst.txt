@@ -1,0 +1,124 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.Drawing
+
+Polygon
+=======
+
+
+.. type:: public class Polygon
+
+   A polygon. Created using :meth:`addPolygon(java.util.List<org.javatuples.Triplet<Double,Double,Double>>, SpaceCenter.ReferenceFrame, boolean)`.
+
+   .. method:: java.util.List<org.javatuples.Triplet<Double,Double,Double>> getVertices()
+
+   .. method:: void setVertices(java.util.List<org.javatuples.Triplet<Double,Double,Double>> value)
+
+      Vertices for the polygon.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: SpaceCenter.ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(SpaceCenter.ReferenceFrame value)
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: StdLib.ColorRGB getColor()
+
+   .. method:: void setColor(StdLib.ColorRGB value)
+
+      The color of the path.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         For a path drawn with more than one color, this is the color at its start.
+
+   .. method:: java.util.List<StdLib.ColorRGB> getColors()
+
+   .. method:: void setColors(java.util.List<StdLib.ColorRGB> value)
+
+      The colors of the path, blended evenly from its start to its end.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Throws an exception if the list is empty or holds more than 8 colors.
+
+   .. method:: float getThickness()
+
+   .. method:: void setThickness(float value)
+
+      The thickness of the path.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: boolean getStartArrow()
+
+   .. method:: void setStartArrow(boolean value)
+
+      Whether an arrow head is drawn at the start.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: boolean getEndArrow()
+
+   .. method:: void setEndArrow(boolean value)
+
+      Whether an arrow head is drawn at the end.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: float getArrowSize()
+
+   .. method:: void setArrowSize(float value)
+
+      The size of the arrow heads, relative to the thickness.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: boolean getDashed()
+
+   .. method:: void setDashed(boolean value)
+
+      Whether the path is drawn as a dashed line.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: String getLabel()
+
+   .. method:: void setLabel(String value)
+
+      Text drawn halfway along the path, facing the camera. Empty for no label.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: String getMaterial()
+
+   .. method:: void setMaterial(String value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: void remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

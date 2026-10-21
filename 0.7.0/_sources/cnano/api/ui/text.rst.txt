@@ -1,0 +1,217 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Text
+====
+
+
+.. type:: krpc_UI_Text_t
+
+   A text label.
+   Added to a :type:`krpc_UI_Canvas_t` or a :type:`krpc_UI_Panel_t`.
+
+   .. function:: krpc_error_t krpc_UI_Text_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * returnValue, krpc_UI_Text_t instance)
+
+      The rect transform for the UI object.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * returnValue, krpc_UI_Text_t instance)
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. function:: krpc_error_t krpc_UI_Text_Visible(krpc_connection_t connection, bool * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Visible(krpc_connection_t connection, krpc_UI_Text_t instance, bool value)
+
+      Whether the UI object is visible.
+
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. function:: krpc_error_t krpc_UI_Text_Content(krpc_connection_t connection, char * * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Content(krpc_connection_t connection, krpc_UI_Text_t instance, const char * value)
+
+      The text string
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_WordWrap(krpc_connection_t connection, bool * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_WordWrap(krpc_connection_t connection, krpc_UI_Text_t instance, bool value)
+
+      Whether the text wraps onto further lines when it is wider than the space it
+      has. Text that does not wrap carries on past the edge, and its preferred size
+      is that of a single line, so a changing value leaves a layout in place.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Font(krpc_connection_t connection, char * * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Font(krpc_connection_t connection, krpc_UI_Text_t instance, const char * value)
+
+      Name of the font
+
+   
+
+      .. note::
+
+         Empty if the game provided no font to draw the text with, in which case it is
+         not drawn. See :func:`krpc_UI_Text_AvailableFonts` for the names that can be set.
+
+   .. function:: krpc_error_t krpc_UI_Text_AvailableFonts(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_UI_Text_t instance)
+
+      A list of all available fonts.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Size(krpc_connection_t connection, int32_t * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Size(krpc_connection_t connection, krpc_UI_Text_t instance, int32_t value)
+
+      Font size.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Style(krpc_connection_t connection, krpc_UI_FontStyle_t * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Style(krpc_connection_t connection, krpc_UI_Text_t instance, krpc_UI_FontStyle_t value)
+
+      Font style.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Color(krpc_connection_t connection, krpc_StdLib_ColorRGBA_t * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Color(krpc_connection_t connection, krpc_UI_Text_t instance, const krpc_StdLib_ColorRGBA_t * value)
+
+      The color the text is drawn in.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Alignment(krpc_connection_t connection, krpc_UI_TextAnchor_t * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_Alignment(krpc_connection_t connection, krpc_UI_Text_t instance, krpc_UI_TextAnchor_t value)
+
+      Alignment.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_LineSpacing(krpc_connection_t connection, float * returnValue, krpc_UI_Text_t instance)
+   .. function:: krpc_error_t krpc_UI_Text_set_LineSpacing(krpc_connection_t connection, krpc_UI_Text_t instance, float value)
+
+      Line spacing.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_Remove(krpc_connection_t connection, krpc_UI_Text_t instance)
+
+      Remove the UI object.
+
+
+   
+
+
+
+.. type:: krpc_UI_FontStyle_t
+
+   Font style.
+
+
+   .. macro:: KRPC_UI_FONTSTYLE_NORMAL
+
+      Normal.
+
+
+   .. macro:: KRPC_UI_FONTSTYLE_BOLD
+
+      Bold.
+
+
+   .. macro:: KRPC_UI_FONTSTYLE_ITALIC
+
+      Italic.
+
+
+   .. macro:: KRPC_UI_FONTSTYLE_BOLDANDITALIC
+
+      Bold and italic.
+
+
+
+.. type:: krpc_UI_TextAlignment_t
+
+   Text alignment.
+
+
+   .. macro:: KRPC_UI_TEXTALIGNMENT_LEFT
+
+      Left aligned.
+
+
+   .. macro:: KRPC_UI_TEXTALIGNMENT_RIGHT
+
+      Right aligned.
+
+
+   .. macro:: KRPC_UI_TEXTALIGNMENT_CENTER
+
+      Center aligned.
+
+
+
+.. type:: krpc_UI_TextAnchor_t
+
+   Text alignment.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_LOWERCENTER
+
+      Lower center.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_LOWERLEFT
+
+      Lower left.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_LOWERRIGHT
+
+      Lower right.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_MIDDLECENTER
+
+      Middle center.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_MIDDLELEFT
+
+      Middle left.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_MIDDLERIGHT
+
+      Middle right.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_UPPERCENTER
+
+      Upper center.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_UPPERLEFT
+
+      Upper left.
+
+
+   .. macro:: KRPC_UI_TEXTANCHOR_UPPERRIGHT
+
+      Upper right.

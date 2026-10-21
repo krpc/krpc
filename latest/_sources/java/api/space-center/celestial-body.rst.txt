@@ -72,7 +72,7 @@ CelestialBody
 
 
       The current rotation angle of the body, in radians.
-      A value between 0 and 2·pi
+      A value between 0 and 2 pi.
 
    
 
@@ -80,7 +80,7 @@ CelestialBody
 
 
       The initial rotation angle of the body (at UT 0), in radians.
-      A value between 0 and 2·pi
+      A value between 0 and 2 pi.
 
    
 
@@ -154,6 +154,62 @@ CelestialBody
       :returns: Position as a vector.
    
 
+   .. method:: ReferenceFrame surfaceReferenceFrame(double latitude, double longitude, double altitude)
+
+      Create a reference frame fixed to the surface at the given latitude and longitude.
+
+      * The origin is the given altitude above the surface, at the
+        given latitude and longitude.
+      * The axes rotate with the body.
+      * The x-axis points out from the center of the body.
+      * The y-axis points north.
+      * The z-axis points east.
+
+      :param double latitude: Latitude in degrees.
+      :param double longitude: Longitude in degrees.
+      :param double altitude: Altitude of the origin above the surface, in meters.
+   
+
+      .. note::
+
+         Each call returns a new frame, as for :meth:`ReferenceFrame.createRelative(ReferenceFrame, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Quartet<Double,Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>)`.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> mSLNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
+
+      The normal to the sphere at mean sea level, at the given latitude and longitude,
+      in the given reference frame. This points straight up, away from the center of
+      the body, and takes no account of the shape of the terrain.
+
+      :param double latitude: Latitude in degrees.
+      :param double longitude: Longitude in degrees.
+      :param ReferenceFrame referenceFrame: Reference frame for the returned normal vector.
+      :returns: The normal as a unit vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> surfaceNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the surface of
+      the water when over water.
+
+      :param double latitude: Latitude in degrees.
+      :param double longitude: Longitude in degrees.
+      :param ReferenceFrame referenceFrame: Reference frame for the returned normal vector.
+      :returns: The normal as a unit vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> bedrockNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the sea-bed
+      when over water.
+
+      :param double latitude: Latitude in degrees.
+      :param double longitude: Longitude in degrees.
+      :param ReferenceFrame referenceFrame: Reference frame for the returned normal vector.
+      :returns: The normal as a unit vector.
+   
+
    .. method:: double altitudeAtPosition(org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame referenceFrame)
 
       The altitude, in meters, of the given position in the given reference frame.
@@ -213,6 +269,21 @@ CelestialBody
 
    
 
+   .. method:: boolean getHasOcean()
+
+
+      ``true`` if the body has an ocean.
+
+   
+
+   .. method:: double getOceanDensity()
+
+
+      The density of the body's ocean, in :math:`kg/m^3`.
+      Returns zero if the body has no ocean.
+
+   
+
    .. method:: double atmosphericDensityAtPosition(org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame referenceFrame)
 
       The atmospheric density at the given position, in :math:`kg/m^3`,
@@ -259,11 +330,15 @@ CelestialBody
 
    .. method:: double pressureAt(double altitude)
 
-      Gets the air pressure, in Pascals, for the specified
+      Gets the static pressure, in Pascals, for the specified
       altitude above sea level, in meters.
 
       :param double altitude:
    
+
+      .. note::
+
+         Below sea level on a body with an ocean, this includes the pressure of the water.
 
    .. method:: java.util.Set<String> getBiomes()
 

@@ -7,7 +7,7 @@ local ref_frame = conn.space_center.ReferenceFrame.create_hybrid(
   vessel.surface_reference_frame)
 
 while true do
-    velocity = vessel:flight(ref_frame).velocity
+    local velocity = vessel:flight(ref_frame).velocity
     print(string.format('Surface velocity = (%.1f, %.1f, %.1f)',
                         velocity[1], velocity[2], velocity[3]))
     platform.sleep(1)

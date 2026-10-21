@@ -16,7 +16,7 @@ Text
 
       Position of the text.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Quartet<Double,Double,Double,Double> getRotation()
 
@@ -24,7 +24,15 @@ Text
 
       Rotation of the text as a quaternion.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: boolean getFaceCamera()
+
+   .. method:: void setFaceCamera(boolean value)
+
+      Whether the text turns to face the camera, in place of its :meth:`Text.getRotation()`.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: SpaceCenter.ReferenceFrame getReferenceFrame()
 
@@ -32,7 +40,7 @@ Text
 
       Reference frame for the positions of the object.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: boolean getVisible()
 
@@ -40,13 +48,13 @@ Text
 
       Whether the object is visible.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: void remove()
 
       Remove the object.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: String getContent()
 
@@ -54,7 +62,7 @@ Text
 
       The text string
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: String getFont()
 
@@ -62,13 +70,13 @@ Text
 
       Name of the font
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: static java.util.List<String> availableFonts(Connection connection)
 
       A list of all available fonts.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: int getSize()
 
@@ -76,7 +84,7 @@ Text
 
       Font size.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: float getCharacterSize()
 
@@ -84,7 +92,7 @@ Text
 
       Character size.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: UI.FontStyle getStyle()
 
@@ -92,15 +100,15 @@ Text
 
       Font style.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. method:: org.javatuples.Triplet<Double,Double,Double> getColor()
+   .. method:: StdLib.ColorRGB getColor()
 
-   .. method:: void setColor(org.javatuples.Triplet<Double,Double,Double> value)
+   .. method:: void setColor(StdLib.ColorRGB value)
 
       Set the color
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: String getMaterial()
 
@@ -109,7 +117,7 @@ Text
       Material used to render the object.
       Creates the material from a shader with the given name.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: UI.TextAlignment getAlignment()
 
@@ -117,7 +125,7 @@ Text
 
       Alignment.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: float getLineSpacing()
 
@@ -125,7 +133,7 @@ Text
 
       Line spacing.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
    .. method:: UI.TextAnchor getAnchor()
 
@@ -133,4 +141,4 @@ Text
 
       Anchor.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

@@ -15,8 +15,6 @@ KRPC
 
 
 
-
-
 .. namespace:: krpc::services
 .. class:: KRPC : public krpc::Service
 
@@ -41,10 +39,9 @@ KRPC
 
    
 
-   .. function:: std::vector<std::tuple<std::string, std::string, std::string>> clients()
+   .. function:: std::vector<ClientInfo> clients()
 
-      A list of RPC clients that are currently connected to the server.
-      Each entry in the list is a clients identifier, name and address.
+      The RPC clients that are currently connected to the server.
 
    
 
@@ -63,6 +60,111 @@ KRPC
 
    
 
+   .. function:: krpc::schema::Stream add_function_stream(Expression function)
+
+      Add a stream of the value a server side function computes on each update.
+
+      :Parameters:
+
+
+
+   
+
+      .. note::
+
+         Each call adds a new stream, with values of the type given by
+         :func:`Expression::return_type`. Any exception from the function ends the
+         stream, including one for an object that is not loaded. A procedure that pauses
+         execution to resume on a later tick produces an error on the stream.
+
+   .. function:: void hold_tick()
+
+      Hold the game on its current physics tick until :func:`release_tick` is called
+      or the hold times out. Every call made in between is executed before the game
+      advances, so a read, compute and write all happen in the state of one tick.
+
+
+   
+
+      .. note::
+
+         The game renders no frame, takes no input and runs no physics while the tick is
+         held. Keep a hold as short as possible, and release it even when the code between
+         the two calls fails.
+
+         A tick is held once, so this waits for the next tick when the current one has
+         already been released. One client holds the tick at a time, and only a client
+         making a call can hold it: a stream or an event cannot.
+
+         A hold ends by itself when it times out, when the client disconnects, and when the
+         client calls a procedure that takes more than one tick to finish, such as staging
+         or warping. Stream updates are sent once the tick is released, so waiting for a
+         stream or an event inside a hold waits out the timeout.
+
+   .. function:: void release_tick()
+
+      Let the game move on from the tick that :func:`hold_tick` held it on. Does
+      nothing when no tick is held, which is the case once a hold has timed out.
+
+
+   
+
+   .. function:: void next_tick()
+
+      Let the game move on from the tick being held and hold the one after it, so that a
+      program acts on consecutive physics ticks. Holds the soonest tick it can if no tick
+      is currently being held.
+
+
+   
+
+      .. note::
+
+         A release and a hold made as two separate calls let the game advance between them.
+         This takes the next tick without that gap. Call it at the top of a loop that has to
+         act on every tick, work, and come back to it.
+
+         The game advances one tick per call, so it runs at the rate of the loop for as long
+         as the loop runs. End the loop with :func:`release_tick`.
+
+         Every limit of :func:`hold_tick` applies, the timeout included. A hold lost to
+         the timeout is not reported, and the next call takes whatever tick it lands on.
+
+   .. function:: void compile_function(Expression function)
+
+      Compile a server side function, so that running, streaming or adding it as an
+      event does not compile it.
+
+      :Parameters:
+
+
+
+   
+
+      .. note::
+
+         Compiling a large function takes time on the game's main thread. Compiling it
+         in advance keeps that time out of its first run.
+
+   .. function:: std::optional<std::string> run_function(Expression function, std::vector<std::optional<std::string>> arguments = std::vector<std::optional<std::string>>{})
+
+      Run a server side function once, within a single physics tick, and return
+      the value it produces.
+
+      :Parameters:
+
+       * **function** -- The function to run.
+       * **arguments** -- The encoded arguments, one per parameter.
+
+      :returns: The encoded value of the function, or no bytes for a function with no value.
+   
+
+      .. note::
+
+         The arguments are encoded at the types given by :func:`Expression::parameter_types`.
+         Throws an exception if a procedure the function calls pauses execution, and the
+         effects up to the pause remain.
+
    .. function:: GameScene game_scene()
    .. function:: void set_game_scene(GameScene value)
 
@@ -71,15 +173,11 @@ KRPC
       Scene changes happen asynchronously: setting this property returns
       immediately, and clients should poll it until it reports the requested
       scene. Setting it to :enumerator:`GameScene::flight` resumes the save's
-      active vessel, and fails if there is none.
-
-   
-
-   .. function:: GameScene current_game_scene()
-
-      .. warning:: Deprecated. Use :func:`game_scene` instead.
-
-      Get the current game scene.
+      active vessel, and fails if there is none. Moving between
+      :enumerator:`GameScene::editor_vab` and :enumerator:`GameScene::editor_sph`
+      keeps the vessel that is being constructed, as the game's own switch
+      editor button does. Leaving flight saves the game first, unless the game
+      cannot be saved, e.g. while under acceleration.
 
    
 
@@ -89,6 +187,16 @@ KRPC
       Whether the game is paused.
 
    
+
+   .. function:: uint32_t game_state_loads()
+
+      The number of game states that have finished loading.
+
+   
+
+      .. note::
+
+         Increases once a game load, quickload, revert or scene change has finished.
 
 
 
@@ -154,6 +262,27 @@ KRPC
 
 
 .. namespace:: krpc::services::KRPC
+.. struct:: ClientInfo
+
+   A client connected to the server.
+
+   .. note::
+
+      See :func:`clients`.
+   .. member:: std::string id
+
+      The identifier of the client.
+
+   .. member:: std::string name
+
+      The name of the client, or an empty string if it has no name.
+
+   .. member:: std::string address
+
+      The address of the client.
+
+
+.. namespace:: krpc::services::KRPC
 .. class:: InvalidOperationException
 
    A method call was made to a method that is invalid
@@ -180,3 +309,90 @@ KRPC
 .. class:: ArgumentOutOfRangeException
 
    The value of an argument is outside the allowable range of values as defined by the invoked method.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: NullReferenceException
+
+   A value was null where its type does not allow one.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: KeyNotFoundException
+
+   A key was not found in a dictionary.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: IndexOutOfRangeException
+
+   An index was outside the bounds of a collection, string or array.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: DivideByZeroException
+
+   An integer was divided by zero.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: NotSupportedException
+
+   A method was invoked that is not supported.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: TimeoutException
+
+   An operation did not complete in the time allotted to it.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: OverflowException
+
+   An arithmetic or conversion operation overflowed.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: ObjectDestroyedException
+
+   The game object that a service object refers to no longer exists,
+   so the object cannot be used. For example, the part it represents
+   was destroyed, or the vessel it belongs to was recovered.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: ObjectNotLoadedException
+
+   The game object that a service object refers to exists, but is not loaded.
+   For example, the game is loading, or the vessel carrying the part is unloaded.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: UnsupportedSceneException
+
+   The procedure is not available in the current game scene.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: StreamRemovedException
+
+   A stream was removed by the server, e.g. an event that has finished.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: Error
+
+   A general error, described by its message.

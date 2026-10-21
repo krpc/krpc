@@ -41,8 +41,8 @@ SpaceCenter
 
    
 
-   .. function:: Vessel active_vessel()
-   .. function:: void set_active_vessel(Vessel value)
+   .. function:: std::optional<Vessel> active_vessel()
+   .. function:: void set_active_vessel(std::optional<Vessel> value)
 
       The currently active vessel.
 
@@ -67,22 +67,22 @@ SpaceCenter
 
    
 
-   .. function:: CelestialBody target_body()
-   .. function:: void set_target_body(CelestialBody value)
+   .. function:: std::optional<CelestialBody> target_body()
+   .. function:: void set_target_body(std::optional<CelestialBody> value)
 
       The currently targeted celestial body.
 
       :Game Scenes: Flight
 
-   .. function:: Vessel target_vessel()
-   .. function:: void set_target_vessel(Vessel value)
+   .. function:: std::optional<Vessel> target_vessel()
+   .. function:: void set_target_vessel(std::optional<Vessel> value)
 
       The currently targeted vessel.
 
       :Game Scenes: Flight
 
-   .. function:: DockingPort target_docking_port()
-   .. function:: void set_target_docking_port(DockingPort value)
+   .. function:: std::optional<DockingPort> target_docking_port()
+   .. function:: void set_target_docking_port(std::optional<DockingPort> value)
 
       The currently targeted docking port.
 
@@ -106,7 +106,7 @@ SpaceCenter
 
    
 
-   .. function:: void launch_vessel(std::string craft_directory, std::string name, std::string launch_site, std::vector<std::string> crew, bool recover = true, std::string flag_url = "")
+   .. function:: void launch_vessel(std::string craft_directory, std::string name, std::string launch_site, std::optional<std::vector<std::string>> crew = std::optional<std::vector<std::string>>(), bool recover = true, std::string flag_url = "")
 
       Launch a vessel.
 
@@ -115,13 +115,23 @@ SpaceCenter
        * **craft_directory** -- Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
        * **name** -- Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
        * **launch_site** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
-       * **crew** -- A list of names of Kerbals to place in the craft. Pass an empty list to use default crew assignments.
+       * **crew** -- The Kerbals to place in the craft, by name. Controls how the craft is crewed, as described in the remarks.
        * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
        * **flag_url** -- If not ``NULL``, the asset URL of the mission flag to use for the launch.
 
    
 
       .. note::
+
+         The *crew* parameter controls how the craft is crewed:
+
+         * If ``NULL``, the craft's default crew assignments are used.
+         * If an empty list, the craft is launched with no crew.
+         * Otherwise, the named Kerbals are placed in the craft in the order
+           given: the first name takes the first seat, the second name the next seat, and so on,
+           scanning the craft's parts in order. No other Kerbals are hired to fill remaining seats.
+           Throws an exception, without launching, if a name does not match an available Kerbal
+           or the craft has too few seats for the requested crew.
 
          Throws an exception if any of the games pre-flight checks fail.
 
@@ -158,6 +168,12 @@ SpaceCenter
          This is equivalent to calling :func:`launch_vessel` with the craft directory
          set to "SPH" and the launch site set to "Runway".
          Throws an exception if any of the games pre-flight checks fail.
+
+   .. function:: Editor editor()
+
+      The editor, for inspecting the vessel that is being constructed.
+
+      :Game Scenes: Editor Vab, Editor Sph
 
    .. function:: void save(std::string name)
 
@@ -204,6 +220,19 @@ SpaceCenter
       .. note::
 
          This is the same as calling :func:`load` with the name "quicksave".
+
+   .. function:: bool can_save()
+
+      Whether the game can be saved.
+
+   
+
+      .. note::
+
+         The game cannot be saved in some flight states, e.g. while under acceleration
+         or moving over the surface. Setting
+         :func:`KRPC::game_scene` to leave flight saves the
+         game only when this is true.
 
    .. function:: bool can_revert_to_launch()
 
@@ -263,6 +292,17 @@ SpaceCenter
 
    
 
+   .. function:: double buoyancy_scalar()
+
+      The multiplier the game applies to every buoyant force.
+
+   
+
+      .. note::
+
+         Stock KSP sets it to 1.2. A buoyant force is a fifth larger than
+         `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
+
    .. function:: float warp_rate()
 
       The current warp rate. This is the rate at which time is passing for
@@ -270,7 +310,7 @@ SpaceCenter
       time is passing 10x faster than normal. Returns 1 if time warp is not
       active.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. function:: float warp_factor()
 
@@ -280,7 +320,7 @@ SpaceCenter
       :func:`rails_warp_factor`, and in physics time warp, this is equal to
       :func:`physics_warp_factor`.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. function:: int32_t rails_warp_factor()
    .. function:: void set_rails_warp_factor(int32_t value)
@@ -293,7 +333,12 @@ SpaceCenter
       lowest possible value. For example, if the vessel is too close to a
       planet. See `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, every factor can be set.
 
    .. function:: int32_t physics_warp_factor()
    .. function:: void set_physics_warp_factor(int32_t value)
@@ -315,7 +360,12 @@ SpaceCenter
 
        * **factor** -- The warp factor to check.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, every valid factor can be used.
 
    .. function:: int32_t maximum_rails_warp_factor()
 
@@ -324,9 +374,14 @@ SpaceCenter
       `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
       for details.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
-   .. function:: void warp_to(double ut, float max_rails_rate = 100000.0, float max_physics_rate = 2.0)
+
+      .. note::
+
+         Outside the flight scene, this is the highest factor.
+
+   .. function:: void warp_to(double ut, float max_rails_rate = 1e+05f, float max_physics_rate = 2.0f)
 
       Uses time acceleration to warp forward to a time in the future, specified
       by universal time *ut*. This call blocks until the desired
@@ -343,7 +398,13 @@ SpaceCenter
        * **max_physics_rate** -- The maximum warp rate in physical time warp.
 
       :returns: When the time warp is complete.
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, only regular "on-rails" time warp is used.
+         Throws an exception if the game scene changes during the time warp.
 
    .. function:: std::tuple<double, double, double> transform_position(std::tuple<double, double, double> position, ReferenceFrame from, ReferenceFrame to)
 
@@ -414,7 +475,7 @@ SpaceCenter
       :returns: The distance to the hit, in meters, or infinity if there was no hit.
    
 
-   .. function:: Part raycast_part(std::tuple<double, double, double> position, std::tuple<double, double, double> direction, ReferenceFrame reference_frame)
+   .. function:: std::optional<Part> raycast_part(std::tuple<double, double, double> position, std::tuple<double, double, double> direction, ReferenceFrame reference_frame)
 
       Cast a ray from a given position in a given direction, and return the part that it hits.
       If no hit occurs, returns ``NULL``.
@@ -430,7 +491,13 @@ SpaceCenter
 
    .. function:: bool far_available()
 
-      Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_ is installed.
+      Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_ is installed.
+
+   
+
+   .. function:: bool real_fuels_available()
+
+      Whether `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_ is installed.
 
    
 
@@ -446,21 +513,12 @@ SpaceCenter
 
    
 
-   .. function:: CrewMember get_kerbal(std::string name)
+   .. function:: std::optional<CrewMember> get_kerbal(std::string name)
 
       Find a Kerbal by name.
 
       :Parameters:
 
-
-
-   
-
-   .. function:: void load_space_center()
-
-      .. warning:: Deprecated. Set :func:`KRPC::game_scene` instead.
-
-      Switch to the space center view.
 
 
    
@@ -495,7 +553,7 @@ SpaceCenter
       warp is not active, :enumerator:`WarpMode::rails` if regular "on-rails" time warp
       is active, or :enumerator:`WarpMode::physics` if physical time warp is active.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. function:: Camera camera()
 
@@ -578,7 +636,7 @@ SpaceCenter
    See :func:`altimeter_mode`.
 
 
-   .. enumerator:: default__
+   .. enumerator:: default_
 
       The altimeter is in the default mode.
 
@@ -710,36 +768,31 @@ SpaceCenter
 
 
 
-.. class:: LaunchSite
+.. namespace:: krpc::services::SpaceCenter
+.. struct:: LaunchSite
 
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
 
-   .. function:: std::string name()
+
+   .. member:: std::string name
 
       The name of the launch site.
 
-   
-
-   .. function:: CelestialBody body()
+   .. member:: CelestialBody body
 
       The celestial body the launch site is on.
 
-   
-
-   .. function:: EditorFacility editor_facility()
+   .. member:: EditorFacility editor_facility
 
       Which editor is normally used for this launch site.
-
-   
-
 
 
 .. namespace:: krpc::services::SpaceCenter
 .. enum-struct:: EditorFacility
 
    Editor facility.
-   See :func:`LaunchSite::editor_facility`.
+   See :member:`LaunchSite::editor_facility`.
 
 
    .. enumerator:: vab

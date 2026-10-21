@@ -1,6 +1,6 @@
 .. default-domain:: java
 .. highlight:: java
-.. package:: krpc.client.services.LiDAR
+.. package:: krpc.client.services.LIDAR
 
 Laser
 =====

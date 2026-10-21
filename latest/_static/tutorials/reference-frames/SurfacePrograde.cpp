@@ -5,7 +5,7 @@
 int main() {
   krpc::Client conn = krpc::connect("Surface prograde");
   krpc::services::SpaceCenter spaceCenter(&conn);
-  auto vessel = spaceCenter.active_vessel();
+  auto vessel = spaceCenter.active_vessel().value();
   auto ap = vessel.auto_pilot();
 
   ap.set_reference_frame(vessel.surface_velocity_reference_frame());

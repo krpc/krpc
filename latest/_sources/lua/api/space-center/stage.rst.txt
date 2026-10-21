@@ -36,17 +36,14 @@ Stage
       :Attribute: Read-only, cannot be set
       :rtype: List
 
-   .. method:: resources([cumulative = True])
+   .. method:: resources([cumulative = true])
 
       Returns a :meth:`SpaceCenter.Stage.resources` object for this stage.
 
-      :param boolean cumulative: When ``False``, only resources assigned to this stage. When ``True``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Defaults to ``True`` so decouple-stage calls match the legacy ``Vessel.ResourcesInDecoupleStage`` RPC.
+      :param boolean cumulative: When ``False``, only resources assigned to this stage. When ``True``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached.
       :rtype: :class:`SpaceCenter.Resources`
 
       .. note:: This is an RPC method: call ``resources()`` (optional ``cumulative`` argument).
-                The default ``cumulative=true`` matches the legacy
-                :meth:`SpaceCenter.Vessel.resources_in_decouple_stage` RPC.
-                For decouple stages, grouping is the same as that deprecated method.
                 For activation stages, unstaged resource containers (for example fuel tanks)
                 are grouped with the first higher activation stage before they detach, matching
                 the C# ``Resources()`` documentation.
@@ -147,28 +144,37 @@ Stage
 
    .. attribute:: start_mass: number
 
-      Start mass for this stage, in kg.
+      The mass of the vessel after the stage activates, in kg.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: end_mass: number
 
-      End mass for this stage, in kg.
+      The mass of the vessel when the stage burns out, in kg.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: dry_mass: number
 
-      Dry mass for this stage, in kg.
+      The dry mass of the vessel after the stage activates, in kg.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
+
+      .. note::
+
+         Includes the parts of all later stages.
 
    .. attribute:: fuel_mass: number
 
-      Fuel mass for this stage, in kg.
+      The fuel mass of the vessel when the stage activates, in kg.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
+
+      .. note::
+
+         Includes the fuel of all later stages, and the fuel left in the parts the stage
+         decouples. The stage burns :attr:`SpaceCenter.Stage.start_mass` minus :attr:`SpaceCenter.Stage.end_mass`.

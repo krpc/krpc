@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Vessel &#8212; kRPC v0.6.0 documentation</title>
+    <title>Vessel &#8212; kRPC v0.7.0 documentation</title>
   
   
   
@@ -27,42 +26,43 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+    <script src="../../../_static/documentation_options.js?v=fe7df9b0"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cpp/api/space-center/vessel';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.6.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             true;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../../../_static/external-links.js?v=e8892020"></script>
     <script src="../../../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/0.6.0/cpp/api/space-center/vessel.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/cpp/api/space-center/vessel.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Stage" href="stage.html" />
     <link rel="prev" title="SpaceCenter" href="space-center.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.6.0" />
+  <meta name="docsearch:version" content="0.7.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -110,7 +110,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -153,7 +153,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -262,7 +262,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -293,15 +293,15 @@
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -327,7 +327,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -336,7 +336,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -375,7 +375,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -496,15 +496,15 @@
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -528,7 +528,7 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
   <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
   </svg>
@@ -547,10 +547,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../stdlib.html">Standard Library</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Vessel</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Vessel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="editor.html">Editor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
@@ -571,8 +573,18 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/image.html">Image</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/point.html">Point</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/sphere.html">Sphere</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
 </ul>
 </details></li>
@@ -583,6 +595,15 @@
 <li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -605,14 +626,18 @@
 <li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LIDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LIDAR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../debug.html">Debug API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../debug/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
@@ -739,7 +764,7 @@ loaded (see <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCen
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel17set_physics_rangeEf">
 <span id="_CPPv3N4krpc8services11SpaceCenter6Vessel17set_physics_rangeEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel17set_physics_rangeEf"></span><span id="krpc::services::SpaceCenter::Vessel::set_physics_range__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_physics_range</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel17set_physics_rangeEf" title="Link to this definition">#</a><br /></dt>
 <dd><p>The distance from the active vessel, in meters, out to which this vessel keeps running
-its physics simulation — and so stays controllable, able to burn its engines and
+its physics simulation, and so stays controllable, able to burn its engines and
 respond to its autopilot. Setting this raises the vessel out of the stock physics
 bubble, so that it keeps flying while the active vessel is far away. Set to zero to
 restore the game’s default range.</p>
@@ -751,7 +776,7 @@ restore the game’s default range.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This always reports the vessel’s live range, so reading it when no range has been set
-gives the game’s default for the vessel’s current <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel9situationEv" title="krpc::services::SpaceCenter::Vessel::situation"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::situation()</span></code></a> — which is
+gives the game’s default for the vessel’s current <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel9situationEv" title="krpc::services::SpaceCenter::Vessel::situation"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::situation()</span></code></a>, which is
 much shorter than the distance at which the vessel unloads. In orbit a vessel is put
 on rails just 350m away, long before it unloads at 2.5km, and a vessel on rails
 produces no thrust and ignores control input even though it is still loaded.</p>
@@ -760,7 +785,7 @@ not repeatedly drop out of the simulation and rejoin it. The vessel leaves the
 simulation at the distance set here, and rejoins it at 90% of that distance; in
 between it keeps whichever state it is already in.</p>
 <p>The requested range applies in every situation. The game’s own defaults are not
-uniform — a vessel flying in atmosphere stays loaded out to 22.5km — so setting a
+uniform, and a vessel flying in atmosphere stays loaded out to 22.5km, so setting a
 small range can shorten the range such a vessel would otherwise have had.</p>
 <p>A range lasts until it is set back to zero or the game is exited. Unlike most state a
 client sets, it is not released when that client disconnects, because dropping a
@@ -781,7 +806,34 @@ need it, by as little as they need.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel7recoverEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter6Vessel7recoverEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel7recoverEv"></span><span id="krpc::services::SpaceCenter::Vessel::recover"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">recover</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel7recoverEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Recover the vessel.</p>
+<dd><p>Recover the vessel. The crew return to the astronaut complex, and the funds and
+science the vessel is worth are awarded.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Recovering the active vessel ends the flight and returns to the space center, as
+pressing recover in game does. When a non-active vessel is recovered the current scene
+is unaffected, and the mission completion dialog is not shown, so a script flying
+several vessels keeps control of the rest of them.</p>
+<p>Returns immediately, does not wait for the vessel to be recovered.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel9terminateEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel9terminateEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel9terminateEv"></span><span id="krpc::services::SpaceCenter::Vessel::terminate"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">terminate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel9terminateEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Terminate the vessel. The vessel and its parts are removed from the game, and its
+crew are lost, as when the vessel is terminated from the tracking station. Nothing
+is recovered: no funds, no science and no crew.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The crew are reported missing, and return to the astronaut complex once their
+respawn timer expires, or never if the game is set up so that missing crews do
+not respawn.</p>
+<p>The active vessel cannot be terminated, because the vessel being flown cannot be
+taken out of the scene it is being flown in. Switch to another vessel first, or
+use <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel7recoverEv" title="krpc::services::SpaceCenter::Vessel::recover"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::recover()</span></code></a>, which ends the flight and returns to the space center.</p>
+<p>Returns immediately, does not wait for the vessel to be terminated.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -797,9 +849,9 @@ need it, by as little as they need.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel6flightE14ReferenceFrame">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel6flightE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel6flightE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Vessel::flight__ReferenceFrame"></span><a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6FlightE" title="krpc::services::SpaceCenter::Flight"><span class="n"><span class="pre">Flight</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flight</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel6flightE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
-<dd><p>Returns a <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel6flightE14ReferenceFrame" title="krpc::services::SpaceCenter::Vessel::flight"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::flight()</span></code></a> object that can be used to get flight
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel6flightENSt8optionalI14ReferenceFrameEE">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel6flightENSt8optionalI14ReferenceFrameEE"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel6flightENSt8optionalI14ReferenceFrameEE"></span><span id="krpc::services::SpaceCenter::Vessel::flight__std::optional:ReferenceFrame:"></span><a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6FlightE" title="krpc::services::SpaceCenter::Flight"><span class="n"><span class="pre">Flight</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flight</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel6flightENSt8optionalI14ReferenceFrameEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns a <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel6flightENSt8optionalI14ReferenceFrameEE" title="krpc::services::SpaceCenter::Vessel::flight"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::flight()</span></code></a> object that can be used to get flight
 telemetry for the vessel, in the specified reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -896,34 +948,6 @@ about resources stored in the vessel.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel27resources_in_decouple_stageE7int32_tb">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel27resources_in_decouple_stageE7int32_tb"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel27resources_in_decouple_stageE7int32_tb"></span><span id="krpc::services::SpaceCenter::Vessel::resources_in_decouple_stage__int32_t.b"></span><a class="reference internal" href="resources.html#_CPPv4N4krpc8services11SpaceCenter9ResourcesE" title="krpc::services::SpaceCenter::Resources"><span class="n"><span class="pre">Resources</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">resources_in_decouple_stage</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">stage</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cumulative</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">true</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel27resources_in_decouple_stageE7int32_tb" title="Link to this definition">#</a><br /></dt>
-<dd><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Deprecated. Use <a class="reference internal" href="stage.html#_CPPv4N4krpc8services11SpaceCenter5Stage9resourcesEb" title="krpc::services::SpaceCenter::Stage::resources"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Stage::resources()</span></code></a> from the object returned by <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel17decouple_stage_atE7int32_t" title="krpc::services::SpaceCenter::Vessel::decouple_stage_at"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::decouple_stage_at()</span></code></a> instead.</p>
-</div>
-<p>Returns a <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel9resourcesEv" title="krpc::services::SpaceCenter::Vessel::resources"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::resources()</span></code></a> object, that can used to get
-information about resources stored in a given <em>stage</em>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>stage</strong> – Get resources for parts that are decoupled in this stage.</p></li>
-<li><p><strong>cumulative</strong> – When <code class="docutils literal notranslate"><span class="pre">false</span></code>, returns the resources for parts decoupled in just the given stage. When <code class="docutils literal notranslate"><span class="pre">true</span></code> returns the resources decoupled in the given stage and all subsequent stages combined.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
-</dd>
-</dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Deprecated. Use <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel17decouple_stage_atE7int32_t" title="krpc::services::SpaceCenter::Vessel::decouple_stage_at"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::decouple_stage_at()</span></code></a>
-and <a class="reference internal" href="stage.html#_CPPv4N4krpc8services11SpaceCenter5Stage9resourcesEb" title="krpc::services::SpaceCenter::Stage::resources"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Stage::resources()</span></code></a> instead. For details on
-stage numbering, see the discussion on <a class="reference internal" href="parts.html#cpp-api-parts-staging"><span class="std std-ref">Staging</span></a>.</p>
-</div>
-</dd></dl>
-
-<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel6stagesEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter6Vessel6stagesEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel6stagesEv"></span><span id="krpc::services::SpaceCenter::Vessel::stages"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="stage.html#_CPPv4N4krpc8services11SpaceCenter5StageE" title="krpc::services::SpaceCenter::Stage"><span class="n"><span class="pre">Stage</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stages</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel6stagesEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Activation (burn) stages for this vessel, in ascending stage order. This does
@@ -988,6 +1012,35 @@ never decoupled and remain on the vessel after all stages have fired.</p>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel13delta_v_readyEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel13delta_v_readyEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel13delta_v_readyEv"></span><span id="krpc::services::SpaceCenter::Vessel::delta_v_ready"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delta_v_ready</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel13delta_v_readyEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the vessel’s delta-v figures are current.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game calculates delta-v for the active vessel alone, over the several ticks
+after the vessel changes. A delta-v member reports the figures from the last
+calculation, and waits only when the game has calculated none.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel19recalculate_delta_vEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel19recalculate_delta_vEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel19recalculate_delta_vEv"></span><span id="krpc::services::SpaceCenter::Vessel::recalculate_delta_v"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">recalculate_delta_v</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel19recalculate_delta_vEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Recalculates the vessel’s delta-v figures, and waits until they are current.
+Throws an exception if the vessel is not the active vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1326,11 +1379,16 @@ This corresponds to the vessels reference frame (<a class="reference internal" h
 <dd><p>The inertia tensor of the vessel around its center of mass,
 in the vessels reference frame (<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel15reference_frameEv" title="krpc::services::SpaceCenter::Vessel::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::reference_frame()</span></code></a>).
 Returns the 3x3 matrix as a list of elements, in row-major order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel16available_torqueEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel16available_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel16available_torqueEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_torque"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel16available_torqueEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel16available_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel16available_torqueEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_torque"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel16available_torqueEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum torque that the vessel generates. Includes contributions from
 reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
 Returns the torques in <span class="math notranslate nohighlight">\(N.m\)</span> around each of the coordinate axes of the
@@ -1345,7 +1403,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel31available_reaction_wheel_torqueEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel31available_reaction_wheel_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel31available_reaction_wheel_torqueEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_reaction_wheel_torque"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_reaction_wheel_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel31available_reaction_wheel_torqueEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel31available_reaction_wheel_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel31available_reaction_wheel_torqueEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_reaction_wheel_torque"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_reaction_wheel_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel31available_reaction_wheel_torqueEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum torque that the currently active and powered reaction wheels can generate.
 Returns the torques in <span class="math notranslate nohighlight">\(N.m\)</span> around each of the coordinate axes of the
 vessels reference frame (<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel15reference_frameEv" title="krpc::services::SpaceCenter::Vessel::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::reference_frame()</span></code></a>).
@@ -1359,7 +1417,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel20available_rcs_torqueEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel20available_rcs_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel20available_rcs_torqueEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_rcs_torque"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_rcs_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel20available_rcs_torqueEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel20available_rcs_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel20available_rcs_torqueEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_rcs_torque"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_rcs_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel20available_rcs_torqueEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum torque that the currently active RCS thrusters can generate.
 Returns the torques in <span class="math notranslate nohighlight">\(N.m\)</span> around each of the coordinate axes of the
 vessels reference frame (<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel15reference_frameEv" title="krpc::services::SpaceCenter::Vessel::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::reference_frame()</span></code></a>).
@@ -1373,7 +1431,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel19available_rcs_forceEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel19available_rcs_forceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel19available_rcs_forceEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_rcs_force"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_rcs_force</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel19available_rcs_forceEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel19available_rcs_forceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel19available_rcs_forceEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_rcs_force"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_rcs_force</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel19available_rcs_forceEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum force that the currently active RCS thrusters can generate.
 Returns the forces in <span class="math notranslate nohighlight">\(N\)</span> along each of the coordinate axes of the
 vessels reference frame (<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel15reference_frameEv" title="krpc::services::SpaceCenter::Vessel::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::reference_frame()</span></code></a>).
@@ -1387,7 +1445,7 @@ These axes are equivalent to the right, forward and bottom directions of the ves
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel26available_rcs_accelerationEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel26available_rcs_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel26available_rcs_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_rcs_acceleration"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_rcs_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel26available_rcs_accelerationEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel26available_rcs_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel26available_rcs_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_rcs_acceleration"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_rcs_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel26available_rcs_accelerationEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum acceleration that the currently active RCS thrusters can generate.
 This is <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel19available_rcs_forceEv" title="krpc::services::SpaceCenter::Vessel::available_rcs_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::available_rcs_force()</span></code></a> divided by the vessel’s <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel4massEv" title="krpc::services::SpaceCenter::Vessel::mass"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::mass()</span></code></a>.
 Returns the accelerations in <span class="math notranslate nohighlight">\(m/s^2\)</span> along each of the coordinate axes of the
@@ -1402,7 +1460,7 @@ These axes are equivalent to the right, forward and bottom directions of the ves
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel23available_engine_torqueEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel23available_engine_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel23available_engine_torqueEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_engine_torque"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_engine_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel23available_engine_torqueEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel23available_engine_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel23available_engine_torqueEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_engine_torque"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_engine_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel23available_engine_torqueEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum torque that the currently active and gimballed engines can generate.
 Returns the torques in <span class="math notranslate nohighlight">\(N.m\)</span> around each of the coordinate axes of the
 vessels reference frame (<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel15reference_frameEv" title="krpc::services::SpaceCenter::Vessel::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::reference_frame()</span></code></a>).
@@ -1416,7 +1474,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel32available_control_surface_torqueEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel32available_control_surface_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel32available_control_surface_torqueEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_control_surface_torque"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_control_surface_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel32available_control_surface_torqueEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel32available_control_surface_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel32available_control_surface_torqueEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_control_surface_torque"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_control_surface_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel32available_control_surface_torqueEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum torque that the aerodynamic control surfaces can generate.
 Returns the torques in <span class="math notranslate nohighlight">\(N.m\)</span> around each of the coordinate axes of the
 vessels reference frame (<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel15reference_frameEv" title="krpc::services::SpaceCenter::Vessel::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::reference_frame()</span></code></a>).
@@ -1430,7 +1488,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel22available_other_torqueEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel22available_other_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel22available_other_torqueEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_other_torque"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_other_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel22available_other_torqueEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel22available_other_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel22available_other_torqueEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_other_torque"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_other_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel22available_other_torqueEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum torque that parts (excluding reaction wheels, gimballed engines,
 RCS and control surfaces) can generate.
 Returns the torques in <span class="math notranslate nohighlight">\(N.m\)</span> around each of the coordinate axes of the
@@ -1445,7 +1503,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel30available_angular_accelerationEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel30available_angular_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel30available_angular_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_angular_acceleration"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_angular_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel30available_angular_accelerationEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel30available_angular_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel30available_angular_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_angular_acceleration"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_angular_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel30available_angular_accelerationEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum angular acceleration that the vessel can generate. Includes contributions
 from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
 This is <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel16available_torqueEv" title="krpc::services::SpaceCenter::Vessel::available_torque"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::available_torque()</span></code></a> divided by the vessel’s <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel17moment_of_inertiaEv" title="krpc::services::SpaceCenter::Vessel::moment_of_inertia"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::moment_of_inertia()</span></code></a>.
@@ -1461,7 +1519,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel45available_reaction_wheel_angular_accelerationEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel45available_reaction_wheel_angular_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel45available_reaction_wheel_angular_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_reaction_wheel_angular_acceleration"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_reaction_wheel_angular_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel45available_reaction_wheel_angular_accelerationEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel45available_reaction_wheel_angular_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel45available_reaction_wheel_angular_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_reaction_wheel_angular_acceleration"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_reaction_wheel_angular_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel45available_reaction_wheel_angular_accelerationEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum angular acceleration that the currently active and powered reaction wheels
 can generate. This is <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel31available_reaction_wheel_torqueEv" title="krpc::services::SpaceCenter::Vessel::available_reaction_wheel_torque"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::available_reaction_wheel_torque()</span></code></a> divided by the vessel’s
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel17moment_of_inertiaEv" title="krpc::services::SpaceCenter::Vessel::moment_of_inertia"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::moment_of_inertia()</span></code></a>.
@@ -1477,7 +1535,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel34available_rcs_angular_accelerationEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel34available_rcs_angular_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel34available_rcs_angular_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_rcs_angular_acceleration"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_rcs_angular_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel34available_rcs_angular_accelerationEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel34available_rcs_angular_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel34available_rcs_angular_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_rcs_angular_acceleration"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_rcs_angular_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel34available_rcs_angular_accelerationEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum angular acceleration that the currently active RCS thrusters can generate.
 This is <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel20available_rcs_torqueEv" title="krpc::services::SpaceCenter::Vessel::available_rcs_torque"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::available_rcs_torque()</span></code></a> divided by the vessel’s <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel17moment_of_inertiaEv" title="krpc::services::SpaceCenter::Vessel::moment_of_inertia"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::moment_of_inertia()</span></code></a>.
 Returns the angular accelerations in <span class="math notranslate nohighlight">\(rad/s^2\)</span> around each of the coordinate
@@ -1492,7 +1550,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel37available_engine_angular_accelerationEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel37available_engine_angular_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel37available_engine_angular_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_engine_angular_acceleration"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_engine_angular_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel37available_engine_angular_accelerationEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel37available_engine_angular_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel37available_engine_angular_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_engine_angular_acceleration"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_engine_angular_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel37available_engine_angular_accelerationEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum angular acceleration that the currently active and gimballed engines can
 generate. This is <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel23available_engine_torqueEv" title="krpc::services::SpaceCenter::Vessel::available_engine_torque"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::available_engine_torque()</span></code></a> divided by the vessel’s
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel17moment_of_inertiaEv" title="krpc::services::SpaceCenter::Vessel::moment_of_inertia"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::moment_of_inertia()</span></code></a>.
@@ -1508,7 +1566,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel46available_control_surface_angular_accelerationEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel46available_control_surface_angular_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel46available_control_surface_angular_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_control_surface_angular_acceleration"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_control_surface_angular_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel46available_control_surface_angular_accelerationEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel46available_control_surface_angular_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel46available_control_surface_angular_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_control_surface_angular_acceleration"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_control_surface_angular_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel46available_control_surface_angular_accelerationEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum angular acceleration that the aerodynamic control surfaces can generate.
 This is <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel32available_control_surface_torqueEv" title="krpc::services::SpaceCenter::Vessel::available_control_surface_torque"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::available_control_surface_torque()</span></code></a> divided by the vessel’s
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel17moment_of_inertiaEv" title="krpc::services::SpaceCenter::Vessel::moment_of_inertia"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::moment_of_inertia()</span></code></a>.
@@ -1524,7 +1582,7 @@ These axes are equivalent to the pitch, roll and yaw axes of the vessel.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel36available_other_angular_accelerationEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel36available_other_angular_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel36available_other_angular_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_other_angular_acceleration"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_other_angular_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel36available_other_angular_accelerationEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel36available_other_angular_accelerationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel36available_other_angular_accelerationEv"></span><span id="krpc::services::SpaceCenter::Vessel::available_other_angular_acceleration"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="krpc::services::SpaceCenter::AxisRange"><span class="n"><span class="pre">AxisRange</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">available_other_angular_acceleration</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel36available_other_angular_accelerationEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
 RCS and control surfaces) can generate. This is <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel22available_other_torqueEv" title="krpc::services::SpaceCenter::Vessel::available_other_torque"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::available_other_torque()</span></code></a> divided
 by the vessel’s <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel17moment_of_inertiaEv" title="krpc::services::SpaceCenter::Vessel::moment_of_inertia"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::moment_of_inertia()</span></code></a>.
@@ -1662,6 +1720,94 @@ relative to the surface of the body being orbited.</p></li>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel27orbit_speed_reference_frameEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel27orbit_speed_reference_frameEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel27orbit_speed_reference_frameEv"></span><span id="krpc::services::SpaceCenter::Vessel::orbit_speed_reference_frame"></span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">orbit_speed_reference_frame</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel27orbit_speed_reference_frameEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘orbit’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are those of <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel23orbital_reference_frameEv" title="krpc::services::SpaceCenter::Vessel::orbital_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::orbital_reference_frame()</span></code></a>, which are
+the directions the navball marks in this mode: the x-axis points in the orbital
+anti-radial direction, the y-axis in the orbital prograde direction and the z-axis in
+the orbital normal direction.</p></li>
+<li><p>The frame moves with the body being orbited, but does not rotate
+with it.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘orbit’ mode:
+<a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight5speedEv" title="krpc::services::SpaceCenter::Flight::speed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::speed()</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight8velocityEv" title="krpc::services::SpaceCenter::Flight::velocity"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::velocity()</span></code></a>
+points along the y-axis, towards its prograde marker.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel29surface_speed_reference_frameEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel29surface_speed_reference_frameEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel29surface_speed_reference_frameEv"></span><span id="krpc::services::SpaceCenter::Vessel::surface_speed_reference_frame"></span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">surface_speed_reference_frame</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel29surface_speed_reference_frameEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘surface’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are the directions the navball marks in this mode, in the
+same arrangement as <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel23orbital_reference_frameEv" title="krpc::services::SpaceCenter::Vessel::orbital_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::orbital_reference_frame()</span></code></a>: the y-axis points in the
+direction the vessel is moving relative to the surface, which is where the prograde
+marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+anti-radial, pointing towards the body and perpendicular to the other
+two.</p></li>
+<li><p>The frame moves with the surface of the body being orbited, so it
+rotates with the body.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘surface’ mode:
+<a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight5speedEv" title="krpc::services::SpaceCenter::Flight::speed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::speed()</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight8velocityEv" title="krpc::services::SpaceCenter::Flight::velocity"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::velocity()</span></code></a>
+points along the y-axis, towards its prograde marker. The velocity gives the frame its
+orientation, so, as with <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel32surface_velocity_reference_frameEv" title="krpc::services::SpaceCenter::Vessel::surface_velocity_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::surface_velocity_reference_frame()</span></code></a>, the frame is
+singular and raises an error when the vessel is stationary relative to the surface.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel28target_speed_reference_frameEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel28target_speed_reference_frameEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel28target_speed_reference_frameEv"></span><span id="krpc::services::SpaceCenter::Vessel::target_speed_reference_frame"></span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">target_speed_reference_frame</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel28target_speed_reference_frameEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘target’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are the directions the navball marks in this mode, in the
+same arrangement as <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel23orbital_reference_frameEv" title="krpc::services::SpaceCenter::Vessel::orbital_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::orbital_reference_frame()</span></code></a>: the y-axis points in the
+direction the vessel is moving relative to the target, which is where the prograde
+marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+anti-radial, pointing towards the body being orbited and perpendicular to the other
+two.</p></li>
+<li><p>The frame moves with the vessels target.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘target’ mode:
+<a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight5speedEv" title="krpc::services::SpaceCenter::Flight::speed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::speed()</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight8velocityEv" title="krpc::services::SpaceCenter::Flight::velocity"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::velocity()</span></code></a>
+points along the y-axis, towards its prograde marker.
+The target is the one set for the active vessel, via for example
+<a class="reference internal" href="space-center.html#_CPPv4N4krpc8services11SpaceCenter13target_vesselEv" title="krpc::services::SpaceCenter::target_vessel"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">target_vessel()</span></code></a> or <a class="reference internal" href="space-center.html#_CPPv4N4krpc8services11SpaceCenter11target_bodyEv" title="krpc::services::SpaceCenter::target_body"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">target_body()</span></code></a>.
+This is undefined when no target is set. The velocity gives the frame its orientation,
+so it is also singular, and raises an error, when the vessel matches the velocity of
+its target.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel8positionE14ReferenceFrame">
 <span id="_CPPv3N4krpc8services11SpaceCenter6Vessel8positionE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel8positionE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Vessel::position__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">position</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel8positionE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position of the center of mass of the vessel, in the given reference frame.</p>
@@ -1682,7 +1828,7 @@ relative to the surface of the body being orbited.</p></li>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel12bounding_boxE14ReferenceFrame">
-<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel12bounding_boxE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel12bounding_boxE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Vessel::bounding_box__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bounding_box</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel12bounding_boxE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel12bounding_boxE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel12bounding_boxE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Vessel::bounding_box__ReferenceFrame"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter11BoundingBoxE" title="krpc::services::SpaceCenter::BoundingBox"><span class="n"><span class="pre">BoundingBox</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bounding_box</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel12bounding_boxE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
 <dd><p>The axis-aligned bounding box of the vessel in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1691,7 +1837,7 @@ relative to the surface of the body being orbited.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The positions of the minimum and maximum vertices of the box, as position vectors.</p>
+<dd class="field-even"><p>The positions of the minimum and maximum vertices of the box.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1773,6 +1919,43 @@ relative to the surface of the body being orbited.</p></li>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9AxisRangeE">
+<span id="_CPPv3N4krpc8services11SpaceCenter9AxisRangeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter9AxisRangeE"></span><span id="krpc::services::SpaceCenter::AxisRange"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">AxisRange</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRangeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The largest value of a quantity, such as a torque or a force, in the positive and the
+negative direction of each of three axes.</p>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9AxisRange8positiveE">
+<span id="_CPPv3N4krpc8services11SpaceCenter9AxisRange8positiveE"></span><span id="_CPPv2N4krpc8services11SpaceCenter9AxisRange8positiveE"></span><span id="krpc::services::SpaceCenter::AxisRange::positive__std::tuple:double.double.double:"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">positive</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRange8positiveE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The value in the positive direction of each axis.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9AxisRange8negativeE">
+<span id="_CPPv3N4krpc8services11SpaceCenter9AxisRange8negativeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter9AxisRange8negativeE"></span><span id="krpc::services::SpaceCenter::AxisRange::negative__std::tuple:double.double.double:"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">negative</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9AxisRange8negativeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The value in the negative direction of each axis, which is zero or less.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter11BoundingBoxE">
+<span id="_CPPv3N4krpc8services11SpaceCenter11BoundingBoxE"></span><span id="_CPPv2N4krpc8services11SpaceCenter11BoundingBoxE"></span><span id="krpc::services::SpaceCenter::BoundingBox"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">BoundingBox</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter11BoundingBoxE" title="Link to this definition">#</a><br /></dt>
+<dd><p>An axis-aligned bounding box, as the positions of its minimum and maximum vertices.</p>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter11BoundingBox3minE">
+<span id="_CPPv3N4krpc8services11SpaceCenter11BoundingBox3minE"></span><span id="_CPPv2N4krpc8services11SpaceCenter11BoundingBox3minE"></span><span id="krpc::services::SpaceCenter::BoundingBox::min__std::tuple:double.double.double:"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">min</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter11BoundingBox3minE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the minimum vertex of the box.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter11BoundingBox3maxE">
+<span id="_CPPv3N4krpc8services11SpaceCenter11BoundingBox3maxE"></span><span id="_CPPv2N4krpc8services11SpaceCenter11BoundingBox3maxE"></span><span id="krpc::services::SpaceCenter::BoundingBox::max__std::tuple:double.double.double:"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter11BoundingBox3maxE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the maximum vertex of the box.</p>
 </dd></dl>
 
 </dd></dl>
@@ -2043,7 +2226,7 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vess
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember4partEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember4partEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember4partEv"></span><span id="krpc::services::SpaceCenter::CrewMember::part"></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">part</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember4partEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember4partEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember4partEv"></span><span id="krpc::services::SpaceCenter::CrewMember::part"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">part</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember4partEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The part containing the crew member. Returns <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if the crew member is not
 occupying a part, or the vessel containing the part is not loaded.</p>
 <dl class="field-list simple">
@@ -2051,6 +2234,27 @@ occupying a part, or the vessel containing the part is not loaded.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember3evaEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember3evaEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember3evaEv"></span><span id="krpc::services::SpaceCenter::CrewMember::eva"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6VesselE" title="krpc::services::SpaceCenter::Vessel"><span class="n"><span class="pre">Vessel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eva</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember3evaEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Send the crew member outside on EVA, through the hatch of the part it is in, and
+return the vessel it becomes. The game switches to that vessel, which can then be
+walked around and flown using its <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel7controlEv" title="krpc::services::SpaceCenter::Vessel::control"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::control()</span></code></a>, and brought back
+in with <a class="reference internal" href="control.html#_CPPv4N4krpc8services11SpaceCenter7Control5boardEv" title="krpc::services::SpaceCenter::Control::board"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::board()</span></code></a>. The kerbal climbs out onto the ladder by the
+hatch, if there is one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if EVA is disabled for the game, if the crew member is not in
+a loaded vessel, if it is already on EVA, or if every hatch out of the part it is
+in is obstructed.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -2065,21 +2269,37 @@ occupying a part, or the vessel containing the part is not loaded.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember18career_log_flightsEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember18career_log_flightsEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember18career_log_flightsEv"></span><span id="krpc::services::SpaceCenter::CrewMember::career_log_flights"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">int32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">career_log_flights</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember18career_log_flightsEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The flight IDs for each entry in the career flight log.</p>
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember10career_logEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember10career_logEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember10career_logEv"></span><span id="krpc::services::SpaceCenter::CrewMember::career_log"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14FlightLogEntryE" title="krpc::services::SpaceCenter::FlightLogEntry"><span class="n"><span class="pre">FlightLogEntry</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">career_log</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember10career_logEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The entries in the crew member’s career flight log.</p>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember16career_log_typesEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember16career_log_typesEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember16career_log_typesEv"></span><span id="krpc::services::SpaceCenter::CrewMember::career_log_types"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">career_log_types</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember16career_log_typesEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The type for each entry in the career flight log.</p>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember18career_log_targetsEv">
-<span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember18career_log_targetsEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember18career_log_targetsEv"></span><span id="krpc::services::SpaceCenter::CrewMember::career_log_targets"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">career_log_targets</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember18career_log_targetsEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The body name for each entry in the career flight log.</p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter14FlightLogEntryE">
+<span id="_CPPv3N4krpc8services11SpaceCenter14FlightLogEntryE"></span><span id="_CPPv2N4krpc8services11SpaceCenter14FlightLogEntryE"></span><span id="krpc::services::SpaceCenter::FlightLogEntry"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FlightLogEntry</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter14FlightLogEntryE" title="Link to this definition">#</a><br /></dt>
+<dd><p>An entry in a crew member’s career flight log.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember10career_logEv" title="krpc::services::SpaceCenter::CrewMember::career_log"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrewMember::career_log()</span></code></a>.</p>
+</div>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter14FlightLogEntry6flightE">
+<span id="_CPPv3N4krpc8services11SpaceCenter14FlightLogEntry6flightE"></span><span id="_CPPv2N4krpc8services11SpaceCenter14FlightLogEntry6flightE"></span><span id="krpc::services::SpaceCenter::FlightLogEntry::flight__int32_t"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flight</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter14FlightLogEntry6flightE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The flight identifier of the entry.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter14FlightLogEntry4typeE">
+<span id="_CPPv3N4krpc8services11SpaceCenter14FlightLogEntry4typeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter14FlightLogEntry4typeE"></span><span id="krpc::services::SpaceCenter::FlightLogEntry::type__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">type</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter14FlightLogEntry4typeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The type of the entry, e.g. <code class="docutils literal notranslate"><span class="pre">Orbit</span></code> or <code class="docutils literal notranslate"><span class="pre">Land</span></code>.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter14FlightLogEntry6targetE">
+<span id="_CPPv3N4krpc8services11SpaceCenter14FlightLogEntry6targetE"></span><span id="_CPPv2N4krpc8services11SpaceCenter14FlightLogEntry6targetE"></span><span id="krpc::services::SpaceCenter::FlightLogEntry::target__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">target</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter14FlightLogEntry6targetE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The name of the body the entry is for.</p>
 </dd></dl>
 
 </dd></dl>
@@ -2171,8 +2391,8 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter10Cre
 <dd><p>A crew member’s suit type.
 See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember9suit_typeEv" title="krpc::services::SpaceCenter::CrewMember::suit_type"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrewMember::suit_type()</span></code></a>.</p>
 <dl class="cpp enumerator">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8SuitType9default__E">
-<span id="_CPPv3N4krpc8services11SpaceCenter8SuitType9default__E"></span><span id="_CPPv2N4krpc8services11SpaceCenter8SuitType9default__E"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">default__</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8SuitType9default__E" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8SuitType8default_E">
+<span id="_CPPv3N4krpc8services11SpaceCenter8SuitType8default_E"></span><span id="_CPPv2N4krpc8services11SpaceCenter8SuitType8default_E"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">default_</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8SuitType8default_E" title="Link to this definition">#</a><br /></dt>
 <dd><p>Default.</p>
 </dd></dl>
 
@@ -2259,8 +2479,8 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter10Cre
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2280,8 +2500,7 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter10Cre
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    <br/>
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
   </p>
 </div>
       
@@ -2294,7 +2513,7 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter10Cre
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
 </p></div>
       
     </div>

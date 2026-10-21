@@ -1,0 +1,333 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::InfernalRobotics
+
+Servo
+=====
+
+
+.. class:: Servo
+
+   Represents a servo. Obtained using
+   :func:`ServoGroup::servos`,
+   :func:`ServoGroup::servo_with_name`
+   or :func:`servo_with_name`.
+
+   .. function:: std::string name()
+   .. function:: void set_name(std::string value)
+
+      The name of the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: uint32_t uid()
+
+      The unique identifier of the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Part part()
+
+      The part containing the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: ServoMode mode()
+
+      Whether the part acts as a servo or a rotor.
+
+      :Game Scenes: Flight
+
+   .. function:: void set_highlight(bool value)
+
+      Whether the servo should be highlighted in-game.
+
+      :Game Scenes: Flight
+
+   .. function:: float position()
+
+      The position of the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: float min_config_position()
+
+      The minimum position of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_config_position()
+
+      The maximum position of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. function:: float min_position()
+   .. function:: void set_min_position(float value)
+
+      The minimum position of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_position()
+   .. function:: void set_max_position(float value)
+
+      The maximum position of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. function:: float config_speed()
+
+      The speed multiplier of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. function:: float speed()
+   .. function:: void set_speed(float value)
+
+      The speed multiplier of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. function:: float current_speed()
+
+      The current speed at which the servo is moving.
+
+      :Game Scenes: Flight
+
+   .. function:: float acceleration()
+   .. function:: void set_acceleration(float value)
+
+      The current speed multiplier set in the UI.
+
+      :Game Scenes: Flight
+
+   .. function:: bool is_moving()
+
+      Whether the servo is moving.
+
+      :Game Scenes: Flight
+
+   .. function:: bool is_free_moving()
+
+      Whether the servo is freely moving.
+
+      :Game Scenes: Flight
+
+   .. function:: bool is_locked()
+   .. function:: void set_is_locked(bool value)
+
+      Whether the servo is locked.
+
+      :Game Scenes: Flight
+
+   .. function:: bool is_axis_inverted()
+   .. function:: void set_is_axis_inverted(bool value)
+
+      Whether the servos axis is inverted.
+
+      :Game Scenes: Flight
+
+   .. function:: float target_position()
+
+      The target position the servo is moving towards.
+
+      :Game Scenes: Flight
+
+   .. function:: float target_speed()
+
+      The target speed the servo is moving at.
+
+      :Game Scenes: Flight
+
+   .. function:: float commanded_position()
+
+      The position the servo is currently being commanded to move to.
+
+      :Game Scenes: Flight
+
+   .. function:: float default_position()
+
+      The default (built) position of the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: float force_limit()
+   .. function:: void set_force_limit(float value)
+
+      The force limit of the servo, as a percentage of the maximum force.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_force()
+
+      The maximum force the servo can generate.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_acceleration()
+
+      The maximum acceleration the servo can achieve.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_speed()
+
+      The maximum speed the servo can achieve.
+
+      :Game Scenes: Flight
+
+   .. function:: float electric_charge_required()
+
+      The rate at which the servo consumes electric charge, in units per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. function:: float spring_power()
+   .. function:: void set_spring_power(float value)
+
+      The strength of the servo's spring, when it has one.
+
+      :Game Scenes: Flight
+
+   .. function:: float damping_power()
+   .. function:: void set_damping_power(float value)
+
+      The strength of the servo's damping.
+
+      :Game Scenes: Flight
+
+   .. function:: float rotor_acceleration()
+   .. function:: void set_rotor_acceleration(float value)
+
+      The acceleration of the servo when operating as a rotor.
+
+      :Game Scenes: Flight
+
+   .. function:: bool is_limited()
+   .. function:: void set_is_limited(bool value)
+
+      Whether the servo's range of movement is limited to the configured minimum and
+      maximum positions.
+
+      :Game Scenes: Flight
+
+   .. function:: bool is_rotational()
+
+      Whether the servo moves rotationally (as opposed to linearly).
+
+      :Game Scenes: Flight
+
+   .. function:: bool is_servo()
+
+      Whether the part is operating as a servo (rather than a rotor).
+
+      :Game Scenes: Flight
+
+   .. function:: bool can_have_limits()
+
+      Whether the servo can have its range of movement limited.
+
+      :Game Scenes: Flight
+
+   .. function:: bool has_spring()
+
+      Whether the servo has a spring.
+
+      :Game Scenes: Flight
+
+   .. function:: bool is_running()
+
+      Whether the servo is running, when operating as a rotor.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<float> preset_positions()
+
+      The list of preset positions configured for the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: void move_right()
+
+      Moves the servo to the right.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void move_left()
+
+      Moves the servo to the left.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void move_center()
+
+      Moves the servo to the center.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void move_to(float position, float speed)
+
+      Moves the servo to *position* and sets the
+      speed multiplier to *speed*.
+
+      :Parameters:
+
+       * **position** -- The position to move the servo to.
+       * **speed** -- Speed multiplier for the movement.
+
+      :Game Scenes: Flight
+
+   .. function:: void stop()
+
+      Stops the servo.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void add_preset(float position)
+
+      Adds a preset position to the servo.
+
+      :Parameters:
+
+       * **position** -- The position of the preset.
+
+      :Game Scenes: Flight
+
+   .. function:: void remove_preset_at(int32_t index)
+
+      Removes the preset position at the given index.
+
+      :Parameters:
+
+       * **index** -- The index of the preset to remove.
+
+      :Game Scenes: Flight
+
+   .. function:: void sort_presets()
+
+      Sorts the preset positions of the servo into ascending order.
+
+
+      :Game Scenes: Flight
+
+
+
+.. namespace:: krpc::services::InfernalRobotics
+.. enum-struct:: ServoMode
+
+   The mode a servo is operating in. See :func:`Servo::mode`.
+
+
+   .. enumerator:: servo
+
+      The part acts as a servo, driving towards a target position.
+
+
+   .. enumerator:: rotor
+
+      The part acts as a rotor, spinning continuously.

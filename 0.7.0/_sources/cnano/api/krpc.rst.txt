@@ -1,0 +1,12 @@
+.. default-domain:: c
+.. highlight:: c
+
+KRPC API
+========
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   krpc/krpc
+   krpc/expressions

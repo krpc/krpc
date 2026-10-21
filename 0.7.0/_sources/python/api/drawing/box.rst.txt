@@ -1,0 +1,82 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: Drawing
+
+Box
+===
+
+
+.. class:: Box
+
+   The edges of a box. Created using :meth:`add_box`.
+
+   .. attribute:: center
+
+      Position of the center of the box.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: size
+
+      Lengths of the sides of the box along its x, y and z axes, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: rotation
+
+      Rotation of the box, as a quaternion.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float, float)
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: reference_frame
+
+      Reference frame for the position and rotation of the box.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: visible
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: color
+
+      The color of the edges.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: thickness
+
+      The thickness of the edges.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. attribute:: material
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

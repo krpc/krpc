@@ -1,0 +1,36 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.Drawing
+
+Image
+=====
+
+
+.. type:: public class Image
+
+   An image that markers can be drawn with. Created using :meth:`addImage(byte[])`.
+
+   .. note::
+
+      An image is kept across scene changes, until it is removed or the client that
+      created it disconnects.
+
+   .. method:: int getWidth()
+
+
+      The width of the image, in pixels.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: int getHeight()
+
+
+      The height of the image, in pixels.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: void remove()
+
+      Remove the image. A marker drawn with it goes back to its own icon.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

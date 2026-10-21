@@ -25,37 +25,37 @@ bunch of streams to get flight telemetry then prepares the rocket for launch.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 1-42
+         :end-at: printf("Launch!\n");
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 1-40
+         :end-at: Console.WriteLine ("Launch!");
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 1-36
+         :end-at: std::cout << "Launch!" << std::endl;
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 1-51
+         :end-at: System.out.println("Launch!");
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 1-28
+         :end-at: print('Launch!')
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 1-31
+         :end-at: print("Launch!")
 
 The next part of the program launches the rocket. The main loop continuously
 updates the auto-pilot heading to gradually pitch the rocket towards the
@@ -69,40 +69,51 @@ close to the target apoapsis.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 44-79
+         :start-at: krpc_SpaceCenter_Control_ActivateNextStage(conn, NULL, control);
+         :end-before: krpc_SpaceCenter_Control_set_Throttle(conn, control, 0.25);
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 42-79
+         :start-at: // Activate the first stage
+         :end-before: // Disable engines when target apoapsis is reached
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 38-72
+         :start-at: // Activate the first stage
+         :end-before: // Disable engines when target apoapsis is reached
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 53-90
+         :start-at: // Activate the first stage
+         :end-before: // Disable engines when target apoapsis is reached
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 30-64
+         :start-at: -- Activate the first stage
+         :end-before: -- Disable engines when target apoapsis is reached
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 33-63
+         :start-at: # Activate the first stage
+         :end-before: # Disable engines when target apoapsis is reached
 
-Next, the program fine tunes the apoapsis, using 25% thrust, then waits until
-the rocket has left Kerbin's atmosphere.
+Next, the program fine tunes the apoapsis using 25% thrust, then waits until the rocket has
+left Kerbin's atmosphere. Each wait is an event, which the server checks every physics tick. See
+:ref:`tutorial-server-side-functions` for how events work.
+
+The Python and C# clients compile the event's condition from a lambda, and the C++ and Java
+clients build it with the :ref:`expression API <server-side-functions-api>`. The C and Lua
+programs poll in a loop, as those clients have no events.
 
 .. tabs::
 
@@ -110,37 +121,43 @@ the rocket has left Kerbin's atmosphere.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 81-97
+         :start-at: krpc_SpaceCenter_Control_set_Throttle(conn, control, 0.25);
+         :end-before: printf("Planning circularization burn\n");
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 81-91
+         :start-at: // Disable engines when target apoapsis is reached
+         :end-before: // Plan circularization burn (using vis-viva equation)
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 74-84
+         :start-at: // Disable engines when target apoapsis is reached
+         :end-before: // Plan circularization burn (using vis-viva equation)
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 92-102
+         :start-at: // Disable engines when target apoapsis is reached
+         :end-before: // Plan circularization burn (using vis-viva equation)
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 66-76
+         :start-at: -- Disable engines when target apoapsis is reached
+         :end-before: ---- Plan circularization burn (using vis-viva equation)
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 65-75
+         :start-at: # Disable engines when target apoapsis is reached
+         :end-before: # Plan circularization burn (using vis-viva equation)
 
 It is now time to plan the circularization burn. First, we calculate the delta-v
 required to circularize the orbit using the `vis-viva equation
@@ -161,37 +178,43 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 99-128
+         :start-at: printf("Planning circularization burn\n");
+         :end-at: double burn_time = (m0 - m1) / flow_rate;
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 93-111
+         :start-at: // Plan circularization burn (using vis-viva equation)
+         :end-at: double burnTime = (m0 - m1) / flowRate;
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 86-104
+         :start-at: // Plan circularization burn (using vis-viva equation)
+         :end-at: double burn_time = (m0 - m1) / flow_rate;
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 104-122
+         :start-at: // Plan circularization burn (using vis-viva equation)
+         :end-at: double burnTime = (m0 - m1) / flowRate;
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 78-95
+         :start-at: ---- Plan circularization burn (using vis-viva equation)
+         :end-at: local burn_time = (m0 - m1) / flow_rate
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 77-94
+         :start-at: # Plan circularization burn (using vis-viva equation)
+         :end-at: burn_time = (m0 - m1) / flow_rate
 
 Next, we need to rotate the craft and wait until the circularization burn. We
 orientate the ship along the y-axis of the maneuver node's reference frame
@@ -203,42 +226,50 @@ orientate the ship along the y-axis of the maneuver node's reference frame
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 130-143
+         :start-at: printf("Orientating ship for circularization burn\n");
+         :end-at: krpc_SpaceCenter_WarpTo(conn, burn_ut - lead_time, 100000, 2);
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 113-123
+         :start-at: // Orientate ship
+         :end-at: conn.SpaceCenter ().WarpTo (burnUT - leadTime);
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 106-116
+         :start-at: // Orientate ship
+         :end-at: space_center.warp_to(burn_ut - lead_time);
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 124-136
+         :start-at: // Orientate ship
+         :end-at: spaceCenter.warpTo(burnUt - leadTime, 100000, 2);
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 97-107
+         :start-at: -- Orientate ship
+         :end-at: conn.space_center.warp_to(burn_ut - lead_time)
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 96-106
+         :start-at: # Orientate ship
+         :end-at: conn.space_center.warp_to(burn_ut - lead_time)
 
-This next part executes the burn. It sets maximum throttle, then throttles down
-to 5% approximately a tenth of a second before the predicted end of the burn. It then
-monitors the remaining delta-v until it flips around to point retrograde (at
-which point the node has been executed).
+Finally, the program waits for an event that fires half the burn time before apoapsis, then sets
+maximum throttle to start the burn.
+
+It throttles down to 5% about a tenth of a second before the predicted end of the burn. A last
+event fires when the remaining delta-v flips around to point retrograde, which marks the node as
+executed:
 
 .. tabs::
 
@@ -246,36 +277,36 @@ which point the node has been executed).
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 145-
+         :start-at: printf("Ready to execute burn\n");
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 125-
+         :start-at: // Execute burn
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 118-
+         :start-at: // Execute burn
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 138-
+         :start-at: // Execute burn
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.lua
          :language: lua
-         :lines: 109-
+         :start-at: -- Execute burn
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 108-
+         :start-at: # Execute burn
 
 The rocket should now be in a circular 150km orbit above Kerbin.

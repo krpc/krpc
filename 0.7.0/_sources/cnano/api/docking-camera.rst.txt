@@ -1,0 +1,14 @@
+.. default-domain:: c
+.. highlight:: c
+
+Docking Camera API
+==================
+
+Provides RPCs to interact with the `Docking Camera <https://github.com/nullprofile/DockingCam>`_ mod.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   docking-camera/docking-camera
+   docking-camera/camera

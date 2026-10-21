@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Orbit &#8212; kRPC v0.7.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../../_static/documentation_options.js?v=fe7df9b0"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'csharp/api/space-center/orbit';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <script src="../../../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/csharp/api/space-center/orbit.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Closest Approach" href="closest-approach.html" />
+    <link rel="prev" title="Flight" href="flight.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.7.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../client.html">C# Client</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/krpc.html">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../stdlib.html">Standard Library</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="editor.html">Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/point.html">Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/sphere.html">Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/size-fitter.html">Size Fitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LIDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LIDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../debug.html">Debug API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../debug/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../csharp.html" class="nav-link">C#</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../space-center.html" class="nav-link">SpaceCenter API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Orbit</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="orbit">
+<span id="namespace-KRPC.Client.Services.SpaceCenter"></span><h1>Orbit<a class="headerlink" href="#orbit" title="Link to this heading">#</a></h1>
+<dl class="cs class">
+<dt class="sig sig-object cs" id="class-KRPC.Client.Services.SpaceCenter.Orbit">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Orbit</span></span><a class="headerlink" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="Link to this definition">#</a></dt>
+<dd><p>Describes an orbit. For example, the orbit of a vessel, obtained by calling
+<a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.Orbit" title="property: KRPC.Client.Services.SpaceCenter.Vessel.Orbit"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.Orbit</span></code></a>, or a celestial body, obtained by calling
+<a class="reference internal" href="celestial-body.html#property-KRPC.Client.Services.SpaceCenter.CelestialBody.Orbit" title="property: KRPC.Client.Services.SpaceCenter.CelestialBody.Orbit"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CelestialBody.Orbit</span></code></a>.</p>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromPositionAndVelocity">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromPositionAndVelocity(IConnection,CelestialBody,System.Tuple<double,double,double>,System.Tuple<double,double,double>,double,ReferenceFrame)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="class: KRPC.Client.Services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">CreateFromPositionAndVelocity</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="class: IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="celestial-body.html#class-KRPC.Client.Services.SpaceCenter.CelestialBody" title="class: KRPC.Client.Services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">position</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">velocity</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">ut</span></span>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromPositionAndVelocity" title="Link to this definition">#</a></dt>
+<dd><p>Create the orbit that passes through a given position at a given velocity.
+The orbit coasts freely under the gravity of the body being orbited, so it
+describes where an object left to fall from that position and velocity would
+be at any later time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The celestial body being orbited.</p></li>
+<li><p><strong>position</strong> – The position, as a position vector.</p></li>
+<li><p><strong>velocity</strong> – The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.</p></li>
+<li><p><strong>ut</strong> – The universal time, in seconds, at which the object is at <em>position</em> traveling at <em>velocity</em>.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that <em>position</em> and <em>velocity</em> are in. Defaults to <a class="reference internal" href="celestial-body.html#property-KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CelestialBody.NonRotatingReferenceFrame</span></code></a> of <em>body</em>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The orbit is a single conic around <em>body</em>. It never changes
+sphere of influence, so <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.NextOrbit" title="property: KRPC.Client.Services.SpaceCenter.Orbit.NextOrbit"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.NextOrbit</span></code></a> is <code class="docutils literal notranslate"><span class="pre">null</span></code>, and no
+atmosphere slows it. A vessel held on rails follows its own orbit exactly,
+while one inside the physics bubble is simulated and drifts from it a little.</p>
+<p><a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Radius" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Radius"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Radius</span></code></a>, <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Speed" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Speed"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Speed</span></code></a>, <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.Position" title="function: KRPC.Client.Services.SpaceCenter.Orbit.Position"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.Position</span></code></a>,
+<a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.Velocity" title="function: KRPC.Client.Services.SpaceCenter.Orbit.Velocity"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.Velocity</span></code></a> and the like describe the orbit at
+<em>ut</em> and stay there. Use <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.RadiusAt" title="function: KRPC.Client.Services.SpaceCenter.Orbit.RadiusAt"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.RadiusAt</span></code></a>,
+<a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.SpeedAt" title="function: KRPC.Client.Services.SpaceCenter.Orbit.SpeedAt"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.SpeedAt</span></code></a>, <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.PositionAt" title="function: KRPC.Client.Services.SpaceCenter.Orbit.PositionAt"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.PositionAt</span></code></a>, <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt" title="function: KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.VelocityAt</span></code></a> and
+<a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT" title="function: KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.TrueAnomalyAtUT</span></code></a> for another time, and
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.ReferenceFrame</span></code></a> and <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.OrbitalReferenceFrame</span></code></a> to follow
+the orbit as time passes.</p>
+<p>The orbit is held until <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.Remove" title="function: KRPC.Client.Services.SpaceCenter.Orbit.Remove"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.Remove</span></code></a> is called on it or the client
+that created it disconnects. Remove each one created by a script that creates
+them repeatedly, for example once per update.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromOrbitalElements">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromOrbitalElements(IConnection,CelestialBody,double,double,double,double,double,double,double)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="class: KRPC.Client.Services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">CreateFromOrbitalElements</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="class: IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="celestial-body.html#class-KRPC.Client.Services.SpaceCenter.CelestialBody" title="class: KRPC.Client.Services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">semiMajorAxis</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">eccentricity</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">inclination</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">longitudeOfAscendingNode</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">argumentOfPeriapsis</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">meanAnomalyAtEpoch</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">epoch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromOrbitalElements" title="Link to this definition">#</a></dt>
+<dd><p>Create the orbit with the given
+<a class="reference external" href="https://en.wikipedia.org/wiki/Orbital_elements">orbital elements</a>
+around a given body. The orbit coasts freely under the gravity of that body,
+so it describes where an object on it would be at any time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The celestial body being orbited.</p></li>
+<li><p><strong>semiMajorAxis</strong> – The semi-major axis of the orbit, in meters. Positive for an ellipse and negative for a hyperbola.</p></li>
+<li><p><strong>eccentricity</strong> – The eccentricity of the orbit. Below one for an ellipse and above one for a hyperbola.</p></li>
+<li><p><strong>inclination</strong> – The inclination of the orbit, in radians.</p></li>
+<li><p><strong>longitudeOfAscendingNode</strong> – The longitude of the ascending node, in radians.</p></li>
+<li><p><strong>argumentOfPeriapsis</strong> – The argument of periapsis, in radians.</p></li>
+<li><p><strong>meanAnomalyAtEpoch</strong> – The mean anomaly at <em>epoch</em>, in radians.</p></li>
+<li><p><strong>epoch</strong> – The universal time, in seconds, that <em>meanAnomalyAtEpoch</em> is measured at.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The orbit is a single conic around <em>body</em>. It never changes
+sphere of influence, so <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.NextOrbit" title="property: KRPC.Client.Services.SpaceCenter.Orbit.NextOrbit"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.NextOrbit</span></code></a> is <code class="docutils literal notranslate"><span class="pre">null</span></code>, and no
+atmosphere slows it.</p>
+<p>The angles are measured against the reference plane and direction that
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Inclination" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Inclination"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Inclination</span></code></a>, <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.LongitudeOfAscendingNode" title="property: KRPC.Client.Services.SpaceCenter.Orbit.LongitudeOfAscendingNode"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.LongitudeOfAscendingNode</span></code></a> and
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ArgumentOfPeriapsis" title="property: KRPC.Client.Services.SpaceCenter.Orbit.ArgumentOfPeriapsis"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.ArgumentOfPeriapsis</span></code></a> report them against.
+<a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneNormal" title="function: KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneNormal"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.ReferencePlaneNormal</span></code></a> and <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneDirection" title="function: KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneDirection"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.ReferencePlaneDirection</span></code></a>
+give these as vectors in a reference frame.</p>
+<p><a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Radius" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Radius"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Radius</span></code></a>, <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Speed" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Speed"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Speed</span></code></a>, <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.Position" title="function: KRPC.Client.Services.SpaceCenter.Orbit.Position"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.Position</span></code></a>,
+<a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.Velocity" title="function: KRPC.Client.Services.SpaceCenter.Orbit.Velocity"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.Velocity</span></code></a> and the like describe the orbit at
+<em>epoch</em> and stay there. Use <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.RadiusAt" title="function: KRPC.Client.Services.SpaceCenter.Orbit.RadiusAt"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.RadiusAt</span></code></a>,
+<a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.SpeedAt" title="function: KRPC.Client.Services.SpaceCenter.Orbit.SpeedAt"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.SpeedAt</span></code></a>, <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.PositionAt" title="function: KRPC.Client.Services.SpaceCenter.Orbit.PositionAt"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.PositionAt</span></code></a>, <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt" title="function: KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.VelocityAt</span></code></a> and
+<a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT" title="function: KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.TrueAnomalyAtUT</span></code></a> for another time, and
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.ReferenceFrame</span></code></a> and <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.OrbitalReferenceFrame</span></code></a> to follow
+the orbit as time passes.</p>
+<p>The orbit is held until <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.Remove" title="function: KRPC.Client.Services.SpaceCenter.Orbit.Remove"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.Remove</span></code></a> is called on it or the client
+that created it disconnects. Remove each one created by a script that creates
+them repeatedly, for example once per update.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.Remove">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.Remove()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Remove</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.Remove" title="Link to this definition">#</a></dt>
+<dd><p>Remove the orbit, releasing the memory the server holds for it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only an orbit created by <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromPositionAndVelocity" title="function: KRPC.Client.Services.SpaceCenter.Orbit.CreateFromPositionAndVelocity"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.CreateFromPositionAndVelocity</span></code></a> or
+<a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromOrbitalElements" title="function: KRPC.Client.Services.SpaceCenter.Orbit.CreateFromOrbitalElements"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.CreateFromOrbitalElements</span></code></a> can be removed. Every other orbit
+belongs to something in the game, and the server holds one of each.</p>
+<p>Any further use of this object throws an exception, as does use of a
+reference frame defined against it. An orbit belongs to the client that
+created it, and is removed when that client disconnects.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Body">
+<a class="reference internal" href="celestial-body.html#class-KRPC.Client.Services.SpaceCenter.CelestialBody" title="class: KRPC.Client.Services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Body</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Body" title="Link to this definition">#</a></dt>
+<dd><p>The celestial body (e.g. planet or moon) around which the object is orbiting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame">
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ReferenceFrame</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame that moves along the orbit, and is orientated in a fixed
+direction.</p>
+<ul class="simple">
+<li><p>The origin is at the point the orbit has reached at the
+current time.</p></li>
+<li><p>The axes do not rotate. They point in the same fixed
+directions as those of
+<a class="reference internal" href="celestial-body.html#property-KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CelestialBody.NonRotatingReferenceFrame</span></code></a> of
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Body" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Body"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Body</span></code></a>.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the orbit of a vessel, the origin is the point the vessel’s orbit has
+reached rather than the vessel’s own center of mass. The two are a few meters
+apart, as a vessel inside the physics bubble is simulated rather than being
+held on its orbit.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame">
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">OrbitalReferenceFrame</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame that moves along the orbit, and is orientated with its
+prograde/normal/radial directions.</p>
+<ul class="simple">
+<li><p>The origin is at the point the orbit has reached at the
+current time.</p></li>
+<li><p>The axes rotate with the orbital prograde/normal/radial
+directions.</p></li>
+<li><p>The x-axis points in the orbital anti-radial direction.</p></li>
+<li><p>The y-axis points in the orbital prograde direction.</p></li>
+<li><p>The z-axis points in the orbital normal direction.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the orbit of a vessel, the origin is the point the vessel’s orbit has
+reached rather than the vessel’s own center of mass, which is what
+<a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.OrbitalReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.OrbitalReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.OrbitalReferenceFrame</span></code></a> is centered on.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Apoapsis">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Apoapsis</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Apoapsis" title="Link to this definition">#</a></dt>
+<dd><p>Gets the apoapsis of the orbit, in meters, from the center of mass
+of the body being orbited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the apoapsis altitude reported on the in-game map view,
+use <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ApoapsisAltitude" title="property: KRPC.Client.Services.SpaceCenter.Orbit.ApoapsisAltitude"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.ApoapsisAltitude</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Periapsis">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Periapsis</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Periapsis" title="Link to this definition">#</a></dt>
+<dd><p>The periapsis of the orbit, in meters, from the center of mass
+of the body being orbited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the periapsis altitude reported on the in-game map view,
+use <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.PeriapsisAltitude" title="property: KRPC.Client.Services.SpaceCenter.Orbit.PeriapsisAltitude"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.PeriapsisAltitude</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.ApoapsisAltitude">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ApoapsisAltitude</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ApoapsisAltitude" title="Link to this definition">#</a></dt>
+<dd><p>The apoapsis of the orbit, in meters, above the sea level of the body being orbited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is equal to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Apoapsis" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Apoapsis"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Apoapsis</span></code></a> minus the equatorial radius of the body.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.PeriapsisAltitude">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">PeriapsisAltitude</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.PeriapsisAltitude" title="Link to this definition">#</a></dt>
+<dd><p>The periapsis of the orbit, in meters, above the sea level of the body being orbited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is equal to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Periapsis" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Periapsis"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Periapsis</span></code></a> minus the equatorial radius of the body.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.SemiMajorAxis">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SemiMajorAxis</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.SemiMajorAxis" title="Link to this definition">#</a></dt>
+<dd><p>The semi-major axis of the orbit, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.SemiMinorAxis">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SemiMinorAxis</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.SemiMinorAxis" title="Link to this definition">#</a></dt>
+<dd><p>The semi-minor axis of the orbit, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.SemiLatusRectum">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SemiLatusRectum</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.SemiLatusRectum" title="Link to this definition">#</a></dt>
+<dd><p>The semi-latus rectum of the orbit, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Radius">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Radius</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Radius" title="Link to this definition">#</a></dt>
+<dd><p>The current radius of the orbit, in meters. This is the distance between the center
+of mass of the object in orbit, and the center of mass of the body around which it
+is orbiting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This value will change over time if the orbit is elliptical.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Altitude">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Altitude</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Altitude" title="Link to this definition">#</a></dt>
+<dd><p>The current altitude of the object, in meters above the sea level of the body
+being orbited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is equal to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Radius" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Radius"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Radius</span></code></a> minus the equatorial radius of the body.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.RadiusAt">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.RadiusAt(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">RadiusAt</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.RadiusAt" title="Link to this definition">#</a></dt>
+<dd><p>The orbital radius at the given time, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time to measure the radius at.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.RadiusAtTrueAnomaly">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.RadiusAtTrueAnomaly(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">RadiusAtTrueAnomaly</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">trueAnomaly</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.RadiusAtTrueAnomaly" title="Link to this definition">#</a></dt>
+<dd><p>The orbital radius at the point in the orbit given by the true anomaly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trueAnomaly</strong> – The true anomaly.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.Position">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.Position(ReferenceFrame)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Position</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.Position" title="Link to this definition">#</a></dt>
+<dd><p>The position the orbit has reached at the current time, in the given reference
+frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned position vector is in. Defaults to <a class="reference internal" href="celestial-body.html#property-KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CelestialBody.NonRotatingReferenceFrame</span></code></a> of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Body" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Body"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Body</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.PositionAt">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.PositionAt(double,ReferenceFrame)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PositionAt</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">ut</span></span>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.PositionAt" title="Link to this definition">#</a></dt>
+<dd><p>The position at a given time, in the specified reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time to measure the position at.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned position vector is in. Defaults to <a class="reference internal" href="celestial-body.html#property-KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CelestialBody.NonRotatingReferenceFrame</span></code></a> of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Body" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Body"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Body</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.PositionAtTrueAnomaly">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.PositionAtTrueAnomaly(double,ReferenceFrame)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PositionAtTrueAnomaly</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">trueAnomaly</span></span>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.PositionAtTrueAnomaly" title="Link to this definition">#</a></dt>
+<dd><p>The position at the point in the orbit given by the true anomaly, in the specified
+reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trueAnomaly</strong> – The true anomaly.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned position vector is in. Defaults to <a class="reference internal" href="celestial-body.html#property-KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CelestialBody.NonRotatingReferenceFrame</span></code></a> of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Body" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Body"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Body</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.Velocity">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.Velocity(ReferenceFrame)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Velocity</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.Velocity" title="Link to this definition">#</a></dt>
+<dd><p>The velocity the orbit has reached at the current time, in the given reference
+frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned velocity vector is in. Defaults to <a class="reference internal" href="celestial-body.html#property-KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CelestialBody.NonRotatingReferenceFrame</span></code></a> of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Body" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Body"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Body</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt(double,ReferenceFrame)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">VelocityAt</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">ut</span></span>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt" title="Link to this definition">#</a></dt>
+<dd><p>The velocity at a given time, in the specified reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time to measure the velocity at.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned velocity vector is in. Defaults to <a class="reference internal" href="celestial-body.html#property-KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CelestialBody.NonRotatingReferenceFrame</span></code></a> of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Body" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Body"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Body</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.VelocityAtTrueAnomaly">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.VelocityAtTrueAnomaly(double,ReferenceFrame)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">VelocityAtTrueAnomaly</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">trueAnomaly</span></span>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.VelocityAtTrueAnomaly" title="Link to this definition">#</a></dt>
+<dd><p>The velocity at the point in the orbit given by the true anomaly, in the specified
+reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trueAnomaly</strong> – The true anomaly.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned velocity vector is in. Defaults to <a class="reference internal" href="celestial-body.html#property-KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CelestialBody.NonRotatingReferenceFrame</span></code></a> of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Body" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Body"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Body</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Speed">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Speed</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Speed" title="Link to this definition">#</a></dt>
+<dd><p>The current orbital speed of the object in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This value will change over time if the orbit is elliptical.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.SpeedAt">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.SpeedAt(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SpeedAt</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.SpeedAt" title="Link to this definition">#</a></dt>
+<dd><p>The orbital speed at the given time, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time to measure the speed at.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.SpeedAtRadius">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.SpeedAtRadius(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SpeedAtRadius</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">radius</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.SpeedAtRadius" title="Link to this definition">#</a></dt>
+<dd><p>The orbital speed at the given orbital radius, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> – The orbital radius in meters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the vis-viva speed. A radius the orbit never reaches is accepted. On
+an ellipse the speed is <code class="docutils literal notranslate"><span class="pre">NaN</span></code> above twice the semi-major axis.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.SpeedAtTrueAnomaly">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.SpeedAtTrueAnomaly(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SpeedAtTrueAnomaly</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">trueAnomaly</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.SpeedAtTrueAnomaly" title="Link to this definition">#</a></dt>
+<dd><p>The orbital speed at the point in the orbit given by the true anomaly, in meters
+per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trueAnomaly</strong> – The true anomaly.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.SpecificEnergy">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SpecificEnergy</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.SpecificEnergy" title="Link to this definition">#</a></dt>
+<dd><p>The specific orbital energy, in Joules per kilogram (equivalently,
+meters squared per second squared).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the sum of the orbit’s specific kinetic and potential energy, and
+is negative for a bound (elliptical) orbit.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.SpecificAngularMomentum">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SpecificAngularMomentum</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.SpecificAngularMomentum" title="Link to this definition">#</a></dt>
+<dd><p>The specific relative angular momentum, in meters squared per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Period">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Period</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Period" title="Link to this definition">#</a></dt>
+<dd><p>The orbital period, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.MeanMotion">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">MeanMotion</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.MeanMotion" title="Link to this definition">#</a></dt>
+<dd><p>The mean motion, in radians per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.TimeToApoapsis">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TimeToApoapsis</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.TimeToApoapsis" title="Link to this definition">#</a></dt>
+<dd><p>The time until the object reaches apoapsis, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.TimeToPeriapsis">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TimeToPeriapsis</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.TimeToPeriapsis" title="Link to this definition">#</a></dt>
+<dd><p>The time until the object reaches periapsis, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Eccentricity">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Eccentricity</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Eccentricity" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Orbital_eccentricity">eccentricity</a>
+of the orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Inclination">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Inclination</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Inclination" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Orbital_inclination">inclination</a>
+of the orbit,
+in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.LongitudeOfAscendingNode">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">LongitudeOfAscendingNode</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.LongitudeOfAscendingNode" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node">longitude of the ascending node</a>, in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a near-equatorial orbit, the ascending node is ill-defined and
+this value may vary erratically over time.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.ArgumentOfPeriapsis">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ArgumentOfPeriapsis</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ArgumentOfPeriapsis" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Argument_of_periapsis">argument of periapsis</a>, in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a near-circular orbit, the periapsis is ill-defined and
+this value may vary erratically over time.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.MeanAnomalyAtEpoch">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">MeanAnomalyAtEpoch</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.MeanAnomalyAtEpoch" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Epoch">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Epoch</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Epoch" title="Link to this definition">#</a></dt>
+<dd><p>The universal time, in seconds, at which the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a>
+is measured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.MeanAnomaly">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">MeanAnomaly</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.MeanAnomaly" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.MeanAnomalyAtUT">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.MeanAnomalyAtUT(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">MeanAnomalyAtUT</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.MeanAnomalyAtUT" title="Link to this definition">#</a></dt>
+<dd><p>The mean anomaly at the given time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time in seconds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.EccentricAnomaly">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">EccentricAnomaly</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.EccentricAnomaly" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Eccentric_anomaly">eccentric anomaly</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.EccentricAnomalyAtUT">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.EccentricAnomalyAtUT(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">EccentricAnomalyAtUT</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.EccentricAnomalyAtUT" title="Link to this definition">#</a></dt>
+<dd><p>The eccentric anomaly at the given universal time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time, in seconds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomaly">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TrueAnomaly</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomaly" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/True_anomaly">true anomaly</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TrueAnomalyAtUT</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT" title="Link to this definition">#</a></dt>
+<dd><p>The true anomaly at the given time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time in seconds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtRadius">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtRadius(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TrueAnomalyAtRadius</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">radius</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtRadius" title="Link to this definition">#</a></dt>
+<dd><p>The true anomaly at the given orbital radius.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radius</strong> – The orbital radius in meters.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.UTAtTrueAnomaly">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.UTAtTrueAnomaly(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">UTAtTrueAnomaly</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">trueAnomaly</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.UTAtTrueAnomaly" title="Link to this definition">#</a></dt>
+<dd><p>The universal time, in seconds, corresponding to the given true anomaly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trueAnomaly</strong> – True anomaly.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtAN">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtAN(Orbit)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TrueAnomalyAtAN</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="class: KRPC.Client.Services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><span class="w"> </span><span class="n"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtAN" title="Link to this definition">#</a></dt>
+<dd><p>The true anomaly of the ascending node with the given target orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtDN">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtDN(Orbit)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TrueAnomalyAtDN</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="class: KRPC.Client.Services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><span class="w"> </span><span class="n"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtDN" title="Link to this definition">#</a></dt>
+<dd><p>The true anomaly of the descending node with the given target orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalSpeed">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">OrbitalSpeed</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalSpeed" title="Link to this definition">#</a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Speed" title="property: KRPC.Client.Services.SpaceCenter.Orbit.Speed"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.Speed</span></code></a> instead.</p>
+</div>
+<p>The current orbital speed in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalSpeedAt">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalSpeedAt(double)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">OrbitalSpeedAt</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalSpeedAt" title="Link to this definition">#</a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.SpeedAt" title="function: KRPC.Client.Services.SpaceCenter.Orbit.SpeedAt"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Orbit.SpeedAt</span></code></a> instead.</p>
+</div>
+<p>The orbital speed at the given time, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time to measure the speed at.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalEnergy">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">OrbitalEnergy</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalEnergy" title="Link to this definition">#</a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.SpecificEnergy" title="property: KRPC.Client.Services.SpaceCenter.Orbit.SpecificEnergy"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Orbit.SpecificEnergy</span></code></a> instead.</p>
+</div>
+<p>The specific orbital energy of the orbit, in Joules per kilogram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneNormal">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneNormal(IConnection,ReferenceFrame)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">ReferencePlaneNormal</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="class: IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneNormal" title="Link to this definition">#</a></dt>
+<dd><p>The direction that is normal to the orbits reference plane,
+in the given reference frame.
+The reference plane is the plane from which the orbits inclination is measured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned direction is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The direction as a unit vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneDirection">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneDirection(IConnection,ReferenceFrame)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">ReferencePlaneDirection</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="class: IConnection"><span class="pre">IConnection</span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="class: KRPC.Client.Services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneDirection" title="Link to this definition">#</a></dt>
+<dd><p>The direction from which the orbits longitude of ascending node is measured,
+in the given reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned direction is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The direction as a unit vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.RelativeInclination">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.RelativeInclination(Orbit)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">RelativeInclination</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="class: KRPC.Client.Services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><span class="w"> </span><span class="n"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.RelativeInclination" title="Link to this definition">#</a></dt>
+<dd><p>Relative inclination of this orbit and the target orbit, in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.TimeToSOIChange">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TimeToSOIChange</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.TimeToSOIChange" title="Link to this definition">#</a></dt>
+<dd><p>The time until the object changes sphere of influence, in seconds. Returns <code class="docutils literal notranslate"><span class="pre">NaN</span></code>
+if the object is not going to change sphere of influence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Orbit.NextOrbit">
+<a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="class: KRPC.Client.Services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">NextOrbit</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.NextOrbit" title="Link to this definition">#</a></dt>
+<dd><p>If the object is going to change sphere of influence in the future, returns the new
+orbit after the change. Otherwise returns <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.NextClosestApproach">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.NextClosestApproach(Orbit)"></span><a class="reference internal" href="closest-approach.html#class-KRPC.Client.Services.SpaceCenter.ClosestApproach" title="class: KRPC.Client.Services.SpaceCenter.ClosestApproach"><span class="pre">ClosestApproach</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">NextClosestApproach</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="class: KRPC.Client.Services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><span class="w"> </span><span class="n"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.NextClosestApproach" title="Link to this definition">#</a></dt>
+<dd><p>The next closest approach to a target orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Orbit.ClosestApproaches">
+<span id="function-KRPC.Client.Services.SpaceCenter.Orbit.ClosestApproaches(Orbit,int)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="closest-approach.html#class-KRPC.Client.Services.SpaceCenter.ClosestApproach" title="class: KRPC.Client.Services.SpaceCenter.ClosestApproach"><span class="pre">ClosestApproach</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">ClosestApproaches</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="class: KRPC.Client.Services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><span class="w"> </span><span class="n"><span class="pre">target</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="n"><span class="pre">orbits</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Orbit.ClosestApproaches" title="Link to this definition">#</a></dt>
+<dd><p>A list of the closest approaches to a target orbit, one for each of the next
+<em>orbits</em> orbital periods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+<li><p><strong>orbits</strong> – The number of future orbits to search.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="flight.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Flight</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="closest-approach.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Closest Approach</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/csharp/api/space-center/orbit.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

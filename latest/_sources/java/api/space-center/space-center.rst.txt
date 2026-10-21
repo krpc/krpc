@@ -115,12 +115,22 @@ SpaceCenter
       :param String craftDirectory: Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
       :param String name: Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
       :param String launchSite: Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
-      :param java.util.List<String> crew: A list of names of Kerbals to place in the craft. Pass an empty list to use default crew assignments.
+      :param java.util.List<String> crew: The Kerbals to place in the craft, by name. Controls how the craft is crewed, as described in the remarks.
       :param boolean recover: If true and there is a vessel on the launch site, recover it before launching.
       :param String flagUrl: If not ``null``, the asset URL of the mission flag to use for the launch.
    
 
       .. note::
+
+         The *crew* parameter controls how the craft is crewed:
+
+         * If ``null``, the craft's default crew assignments are used.
+         * If an empty list, the craft is launched with no crew.
+         * Otherwise, the named Kerbals are placed in the craft in the order
+           given: the first name takes the first seat, the second name the next seat, and so on,
+           scanning the craft's parts in order. No other Kerbals are hired to fill remaining seats.
+           Throws an exception, without launching, if a name does not match an available Kerbal
+           or the craft has too few seats for the requested crew.
 
          Throws an exception if any of the games pre-flight checks fail.
 
@@ -151,6 +161,13 @@ SpaceCenter
          This is equivalent to calling :meth:`launchVessel(String, String, String, java.util.List<String>, boolean, String)` with the craft directory
          set to "SPH" and the launch site set to "Runway".
          Throws an exception if any of the games pre-flight checks fail.
+
+   .. method:: Editor getEditor()
+
+
+      The editor, for inspecting the vessel that is being constructed.
+
+      :Game Scenes: Editor Vab, Editor Sph
 
    .. method:: void save(String name)
 
@@ -189,6 +206,20 @@ SpaceCenter
       .. note::
 
          This is the same as calling :meth:`load(String)` with the name "quicksave".
+
+   .. method:: boolean getCanSave()
+
+
+      Whether the game can be saved.
+
+   
+
+      .. note::
+
+         The game cannot be saved in some flight states, e.g. while under acceleration
+         or moving over the surface. Setting
+         :meth:`KRPC.getGameScene()` to leave flight saves the
+         game only when this is true.
 
    .. method:: boolean canRevertToLaunch()
 
@@ -248,6 +279,18 @@ SpaceCenter
 
    
 
+   .. method:: double getBuoyancyScalar()
+
+
+      The multiplier the game applies to every buoyant force.
+
+   
+
+      .. note::
+
+         Stock KSP sets it to 1.2. A buoyant force is a fifth larger than
+         `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
+
    .. method:: float getWarpRate()
 
 
@@ -256,7 +299,7 @@ SpaceCenter
       time is passing 10x faster than normal. Returns 1 if time warp is not
       active.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. method:: float getWarpFactor()
 
@@ -267,7 +310,7 @@ SpaceCenter
       :meth:`getRailsWarpFactor()`, and in physics time warp, this is equal to
       :meth:`getPhysicsWarpFactor()`.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. method:: int getRailsWarpFactor()
 
@@ -281,7 +324,12 @@ SpaceCenter
       lowest possible value. For example, if the vessel is too close to a
       planet. See `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_ for details.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, every factor can be set.
 
    .. method:: int getPhysicsWarpFactor()
 
@@ -301,7 +349,12 @@ SpaceCenter
       for details.
 
       :param int factor: The warp factor to check.
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, every valid factor can be used.
 
    .. method:: int getMaximumRailsWarpFactor()
 
@@ -311,7 +364,12 @@ SpaceCenter
       `the KSP wiki <https://wiki.kerbalspaceprogram.com/wiki/Time_warp>`_
       for details.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, this is the highest factor.
 
    .. method:: void warpTo(double ut, float maxRailsRate, float maxPhysicsRate)
 
@@ -327,7 +385,13 @@ SpaceCenter
       :param float maxRailsRate: The maximum warp rate in regular "on-rails" time warp.
       :param float maxPhysicsRate: The maximum warp rate in physical time warp.
       :returns: When the time warp is complete.
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
+
+
+      .. note::
+
+         Outside the flight scene, only regular "on-rails" time warp is used.
+         Throws an exception if the game scene changes during the time warp.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> transformPosition(org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame from, ReferenceFrame to)
 
@@ -397,7 +461,14 @@ SpaceCenter
    .. method:: boolean getFARAvailable()
 
 
-      Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_ is installed.
+      Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_ is installed.
+
+   
+
+   .. method:: boolean getRealFuelsAvailable()
+
+
+      Whether `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_ is installed.
 
    
 
@@ -415,14 +486,6 @@ SpaceCenter
       Find a Kerbal by name.
 
       :param String name:
-   
-
-   .. method:: void loadSpaceCenter()
-
-      .. warning:: Deprecated. Set :meth:`KRPC.getGameScene()` instead.
-
-      Switch to the space center view.
-
    
 
    .. method:: MapFilterType getMapFilter()
@@ -455,7 +518,7 @@ SpaceCenter
       warp is not active, :meth:`WarpMode.RAILS` if regular "on-rails" time warp
       is active, or :meth:`WarpMode.PHYSICS` if physical time warp is active.
 
-      :Game Scenes: Flight
+      :Game Scenes: Space Center, Flight, Tracking Station
 
    .. method:: Camera getCamera()
 
@@ -675,27 +738,22 @@ SpaceCenter
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
 
-   .. method:: String getName()
+   .. constructor:: public LaunchSite(String name, CelestialBody body, EditorFacility editorFacility)
 
+      Construct a LaunchSite from the values of its fields.
+
+
+   .. method:: String getName()
 
       The name of the launch site.
 
-   
-
    .. method:: CelestialBody getBody()
-
 
       The celestial body the launch site is on.
 
-   
-
    .. method:: EditorFacility getEditorFacility()
 
-
       Which editor is normally used for this launch site.
-
-   
-
 
 
 .. type:: public enum EditorFacility

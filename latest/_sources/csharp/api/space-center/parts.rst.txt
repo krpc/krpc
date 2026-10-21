@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -41,10 +41,20 @@ Parts
    .. property:: Part Controlling { get; set; }
 
       The part from which the vessel is controlled.
+      Returns ``null`` if the vessel has no control point, in which case it is
+      oriented by its root part.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<Part> WithName(string name)
+
+      .. note::
+
+         A vessel gets no control point when it is created by a decoupler or an undocking
+         and none of its parts is a command module with crew aboard. A probe core does not
+         give it one either. Assign this property to choose the control point, which is
+         equivalent to "Control From Here" in game.
+
+   .. function:: System.Collections.Generic.IList<Part> WithName(string name)
 
       A list of parts whose :prop:`Part.Name` is *name*.
 
@@ -54,7 +64,7 @@ Parts
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<Part> WithTitle(string title)
+   .. function:: System.Collections.Generic.IList<Part> WithTitle(string title)
 
       A list of all parts whose :prop:`Part.Title` is *title*.
 
@@ -64,7 +74,7 @@ Parts
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<Part> WithTag(string tag)
+   .. function:: System.Collections.Generic.IList<Part> WithTag(string tag)
 
       A list of all parts whose :prop:`Part.Tag` is *tag*.
 
@@ -74,7 +84,7 @@ Parts
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<Part> WithModule(string moduleName)
+   .. function:: System.Collections.Generic.IList<Part> WithModule(string moduleName)
 
       A list of all parts that contain a :type:`Module` whose
       :prop:`Module.Name` is *moduleName*.
@@ -85,41 +95,7 @@ Parts
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<Part> InStage(int stage)
-
-      .. warning:: Deprecated. Use :prop:`Stage.Parts` from the object returned by :meth:`Vessel.StageAt` instead.
-
-      A list of all parts that are activated in the given *stage*.
-
-      :parameters:
-
-
-
-      :Game Scenes: All
-
-
-      .. note:: Deprecated. Use :meth:`Vessel.StageAt` and
-                :prop:`Stage.Parts` instead. See the discussion on
-                :rst:ref:`csharp-api-parts-staging`.
-
-   .. method:: System.Collections.Generic.IList<Part> InDecoupleStage(int stage)
-
-      .. warning:: Deprecated. Use :prop:`Stage.Parts` from the object returned by :meth:`Vessel.DecoupleStageAt` instead.
-
-      A list of all parts that are decoupled in the given *stage*.
-
-      :parameters:
-
-
-
-      :Game Scenes: All
-
-
-      .. note:: Deprecated. Use :meth:`Vessel.DecoupleStageAt` and
-                :prop:`Stage.Parts` instead. See the discussion on
-                :rst:ref:`csharp-api-parts-staging`.
-
-   .. method:: System.Collections.Generic.IList<Module> ModulesWithName(string moduleName)
+   .. function:: System.Collections.Generic.IList<Module> ModulesWithName(string moduleName)
 
       A list of modules (combined across all parts in the vessel) whose
       :prop:`Module.Name` is *moduleName*.
@@ -343,16 +319,18 @@ Part
    .. property:: string Tag { get; set; }
 
       The name tag for the part. Can be set to a custom string using the
-      in-game user interface.
+      in-game user interface. Throws an exception if no name tag part module is installed.
 
       :Game Scenes: All
 
 
       .. note::
 
-         This string is shared with
-         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_
-         if it is installed.
+         The name tag part module is provided by
+         `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
+         0.5 or later, or by
+         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
+         which shares this string.
 
    .. property:: string FlagURL { get; set; }
 
@@ -364,18 +342,18 @@ Part
 
       Whether the part is highlighted.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
 
          The highlighting is removed when the client that enabled it disconnects.
 
-   .. property:: System.Tuple<double,double,double> HighlightColor { get; set; }
+   .. property:: StdLib.ColorRGB HighlightColor { get; set; }
 
-      The color used to highlight the part, as an RGB triple.
+      The color used to highlight the part.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: double Cost { get; }
 
@@ -387,7 +365,7 @@ Part
 
       The vessel that contains this part.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: Part Parent { get; }
 
@@ -476,13 +454,140 @@ Part
 
       Whether the part is shielded from the exterior of the vessel, for example by a fairing.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float DynamicPressure { get; }
 
       The dynamic pressure acting on the part, in Pascals.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
+
+   .. property:: float StaticPressure { get; }
+
+      The static pressure acting on the part, in Pascals. Below the waterline this
+      includes the pressure of the water.
+
+      :Game Scenes: Flight
+
+   .. property:: double Displacement { get; }
+
+      The volume of water the part displaces when fully submerged, in :math:`m^3`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         See :prop:`Part.DisplacedVolume` for the volume it is displacing now.
+
+   .. property:: float BuoyancyMultiplier { get; }
+
+      The multiplier applied to the buoyant force on the part. One for most parts.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: double BuoyantForceAt(double density, double gravity)
+
+      The buoyant force on the part when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Applies :prop:`SpaceCenter.BuoyancyScalar <SpaceCenter.SpaceCenter.BuoyancyScalar>` and
+         :prop:`Part.BuoyancyMultiplier`, so the result is what the game would do to the
+         part rather than what
+         `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
+
+   .. property:: bool Splashed { get; }
+
+      Whether the part is in contact with water.
+
+      :Game Scenes: Flight
+
+   .. property:: double SubmergedPortion { get; }
+
+      The fraction of the part below the waterline, between 0 and 1.
+
+      :Game Scenes: Flight
+
+   .. property:: double DisplacedVolume { get; }
+
+      The volume of water the part is displacing, in :math:`m^3`.
+
+      :Game Scenes: Flight
+
+   .. property:: double Depth { get; }
+
+      The depth of the part below the waterline, in meters, measured at
+      :meth:`Part.CenterOfDisplacement`. Negative above the waterline. Returns zero
+      if the body the vessel is at has no ocean.
+
+      :Game Scenes: Flight
+
+   .. property:: double MinDepth { get; }
+
+      The depth of the shallowest point of the part below the waterline, in meters.
+      Returns zero if the body the vessel is at has no ocean.
+
+      :Game Scenes: Flight
+
+   .. property:: double MaxDepth { get; }
+
+      The depth of the deepest point of the part below the waterline, in meters.
+      Returns zero if the body the vessel is at has no ocean.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game ramps the buoyant force in over the first fraction of a meter of this
+         depth.
+
+   .. property:: float SubmergedDynamicPressure { get; }
+
+      The dynamic pressure of the water acting on the part, in Pascals.
+
+      :Game Scenes: Flight
+
+   .. property:: double SubmergedDragMultiplier { get; }
+
+      The multiplier applied to the drag on the part while it is submerged.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game sets this high on splashdown and eases it down as the part moves through
+         the water. It climbs back once the part slows to a crawl, so a hull under way
+         reads lower than one lying still.
+
+   .. property:: double SubmergedLiftMultiplier { get; }
+
+      The multiplier applied to the lift on the part while it is submerged.
+
+      :Game Scenes: Flight
+
+   .. property:: float WaterAngularDragMultiplier { get; }
+
+      The multiplier applied to the angular drag on the part while it is submerged.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Part of the part's configuration rather than a live readout, so it reads the same
+         in the editor and at a body with no ocean.
 
    .. property:: double ImpactTolerance { get; }
 
@@ -494,13 +599,13 @@ Part
 
       Temperature of the part, in Kelvin.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: double SkinTemperature { get; }
 
       Temperature of the skin of the part, in Kelvin.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: double MaxTemperature { get; }
 
@@ -514,26 +619,38 @@ Part
 
       :Game Scenes: All
 
+   .. property:: double MaxPressure { get; }
+
+      Maximum pressure that the part can survive, in Pascals.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         With part pressure limits enabled in the difficulty settings, the part is destroyed
+         when :prop:`Part.StaticPressure` plus :prop:`Part.DynamicPressure` exceeds this.
+
    .. property:: float ThermalMass { get; }
 
       A measure of how much energy it takes to increase the internal temperature of the part,
       in Joules per Kelvin.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float ThermalSkinMass { get; }
 
       A measure of how much energy it takes to increase the skin temperature of the part,
       in Joules per Kelvin.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float ThermalResourceMass { get; }
 
       A measure of how much energy it takes to increase the temperature of the resources
       contained in the part, in Joules per Kelvin.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float ThermalConductionFlux { get; }
 
@@ -542,7 +659,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is
       losing heat energy.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float ThermalConvectionFlux { get; }
 
@@ -551,7 +668,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is
       losing heat energy.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float ThermalRadiationFlux { get; }
 
@@ -560,7 +677,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is
       losing heat energy.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float ThermalInternalFlux { get; }
 
@@ -570,7 +687,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is losing
       heat energy.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float ThermalSkinToInternalFlux { get; }
 
@@ -579,7 +696,7 @@ Part
       A positive value means the part's internals are gaining heat energy,
       and negative means its skin is gaining heat energy.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: int CrewCapacity { get; }
 
@@ -591,13 +708,13 @@ Part
 
       The crew members occupying the part.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: uint AvailableSeats { get; }
 
       How many open seats the part has.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: Resources Resources { get; }
 
@@ -622,7 +739,7 @@ Part
       The parts that are connected to this part via fuel lines, where the direction of the
       fuel line is into this part.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note:: See the discussion on :rst:ref:`csharp-api-parts-fuel-lines`.
@@ -632,7 +749,7 @@ Part
       The parts that are connected to this part via fuel lines, where the direction of the
       fuel line is out of this part.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note:: See the discussion on :rst:ref:`csharp-api-parts-fuel-lines`.
@@ -835,7 +952,7 @@ Part
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
 
       The position of the part in the given reference frame.
 
@@ -844,7 +961,7 @@ Part
        * **referenceFrame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -853,19 +970,19 @@ Part
          It s not necessarily the same as the parts center of mass.
          Use :meth:`Part.CenterOfMass` to get the parts center of mass.
 
-   .. method:: System.Tuple<double,double,double> CenterOfMass(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> CenterOfMass(ReferenceFrame referenceFrame)
 
       The position of the parts center of mass in the given reference frame.
-      If the part is physicsless, this is equivalent to :meth:`Part.Position`.
+      If the part is physicsless in flight, this is equivalent to :meth:`Part.Position`.
 
       :parameters:
 
        * **referenceFrame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> BoundingBox(ReferenceFrame referenceFrame)
+   .. function:: BoundingBox BoundingBox(ReferenceFrame referenceFrame)
 
       The axis-aligned bounding box of the part in the given reference frame.
 
@@ -873,17 +990,18 @@ Part
 
        * **referenceFrame** -- The reference frame that the returned position vectors are in.
 
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
-      :Game Scenes: All
+      :returns: The positions of the minimum and maximum vertices of the box.
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
 
-         This is computed from the collision mesh of the part.
-         If the part is not collidable, the box has zero volume and is centered on
-         the :meth:`Part.Position` of the part.
+         This is computed from the meshes that make up the parts model, and covers only
+         this part - the models of any child parts are excluded.
+         If the part has no visible model, the box has zero volume and is centered on
+         the :meth:`Part.CenterOfMass` of the part.
 
-   .. method:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
 
       The direction the part points in, in the given reference frame.
 
@@ -892,9 +1010,9 @@ Part
        * **referenceFrame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
 
       The linear velocity of the part in the given reference frame.
 
@@ -903,9 +1021,9 @@ Part
        * **referenceFrame** -- The reference frame that the returned velocity vector is in.
 
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
 
       The rotation of the part, in the given reference frame.
 
@@ -914,9 +1032,9 @@ Part
        * **referenceFrame** -- The reference frame that the returned rotation is in.
 
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: System.Tuple<double,double,double> Lift(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Lift(ReferenceFrame referenceFrame)
 
       The aerodynamic `lift <https://en.wikipedia.org/wiki/Aerodynamic_force>`_
       currently acting on the part.
@@ -926,14 +1044,14 @@ Part
        * **referenceFrame** -- The reference frame that the returned vector is in.
 
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
 
          Not available when the Ferram Aerospace Research mod is installed.
 
-   .. method:: System.Tuple<double,double,double> Drag(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Drag(ReferenceFrame referenceFrame)
 
       The aerodynamic `drag <https://en.wikipedia.org/wiki/Aerodynamic_force>`_
       currently acting on the part.
@@ -943,27 +1061,74 @@ Part
        * **referenceFrame** -- The reference frame that the returned vector is in.
 
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
 
          Not available when the Ferram Aerospace Research mod is installed.
 
+   .. function:: System.Tuple<double,double,double> CenterOfBuoyancy(ReferenceFrame referenceFrame)
+
+      The point the buoyant force on the part acts at, in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A submerged part reports the point the game applied the force at, which it shifts
+         towards the submerged part of the hull. Any other part reports its configured
+         center of buoyancy.
+
+   .. function:: System.Tuple<double,double,double> CenterOfDisplacement(ReferenceFrame referenceFrame)
+
+      The point the depth of the part is measured at, in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: System.Tuple<double,double,double> BuoyantForce(ReferenceFrame referenceFrame)
+
+      The buoyant force currently acting on the part.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned vector is in.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The buoyant force on its own. The water drag and lift the game applies alongside
+         it are reported by :prop:`Part.SubmergedDragMultiplier` and
+         :prop:`Part.SubmergedLiftMultiplier`.
+
    .. property:: System.Tuple<double,double,double> MomentOfInertia { get; }
 
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
-      in the parts reference frame (:prop:`Part.ReferenceFrame`).
+      in the parts center of mass reference frame (:prop:`Part.CenterOfMassReferenceFrame`).
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: System.Collections.Generic.IList<double> InertiaTensor { get; }
 
-      The inertia tensor of the part in the parts reference frame
-      (:prop:`Part.ReferenceFrame`).
+      The inertia tensor of the part around its center of mass, in the parts center of
+      mass reference frame (:prop:`Part.CenterOfMassReferenceFrame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: ReferenceFrame ReferenceFrame { get; }
 
@@ -975,7 +1140,7 @@ Part
       * The axes rotate with the part.
       * The x, y and z axis directions depend on the design of the part.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -999,7 +1164,7 @@ Part
       * The axes rotate with the part.
       * The x, y and z axis directions depend on the design of the part.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -1008,7 +1173,9 @@ Part
          reference frame for the docking port, returned by
          :prop:`DockingPort.ReferenceFrame`.
 
-   .. method:: Force AddForce(System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+   .. function:: Force AddForce(System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      .. warning:: Deprecated. Use ``Debug.AddForce`` instead.
 
       Exert a constant force on the part, acting at the given position.
 
@@ -1019,14 +1186,16 @@ Part
        * **referenceFrame** -- The reference frame that the force and position are in.
 
       :returns: An object that can be used to remove or modify the force.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
 
          The force is removed when the client that added it disconnects.
 
-   .. method:: void InstantaneousForce(System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+   .. function:: void InstantaneousForce(System.Tuple<double,double,double> force, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      .. warning:: Deprecated. Use ``Debug.InstantaneousForce`` instead.
 
       Exert an instantaneous force on the part, acting at the given position.
 
@@ -1036,7 +1205,7 @@ Part
        * **position** -- The position at which the force acts, as a vector.
        * **referenceFrame** -- The reference frame that the force and position are in.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
@@ -1047,11 +1216,39 @@ Part
 
       Whether the part is glowing.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: AutoStrutMode AutoStrutMode { get; }
 
       Auto-strut mode.
+
+      :Game Scenes: All
+
+   .. property:: bool HasRealFuelsTank { get; }
+
+      Whether the part is a fuel tank managed by
+      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      The remaining properties in this section are only available when it is.
+
+      :Game Scenes: All
+
+   .. property:: bool HighlyPressurized { get; }
+
+      Whether the tank is highly pressurized, which is what a pressure-fed engine needs to
+      draw from (see :prop:`Engine.PressureFed`). Throws an exception if the part is
+      not a RealFuels fuel tank (see :prop:`Part.HasRealFuelsTank`).
+
+      :Game Scenes: All
+
+   .. property:: double BoiloffRate { get; }
+
+      The rate at which the tank's cryogenic contents are boiling off, in kilograms per
+      second of in-game time, measured over the last update RealFuels computed it in.
+      The contents keep boiling off under time warp, where that update covers a much
+      longer span of in-game time than a physics frame does. The rate is zero for a
+      tank holding nothing cryogenic, for one still being fed by a launch clamp, whose
+      temperature RealFuels holds down instead, and in the editor. Throws an exception
+      if the part is not a RealFuels fuel tank (see :prop:`Part.HasRealFuelsTank`).
 
       :Game Scenes: All
 
@@ -1062,37 +1259,37 @@ Part
    The state of an auto-strut. :prop:`Part.AutoStrutMode`
 
 
-   .. value:: Off
+   .. enumerator:: Off
 
       Off
 
 
-   .. value:: Root
+   .. enumerator:: Root
 
       Root
 
 
-   .. value:: Heaviest
+   .. enumerator:: Heaviest
 
       Heaviest
 
 
-   .. value:: Grandparent
+   .. enumerator:: Grandparent
 
       Grandparent
 
 
-   .. value:: ForceRoot
+   .. enumerator:: ForceRoot
 
       ForceRoot
 
 
-   .. value:: ForceHeaviest
+   .. enumerator:: ForceHeaviest
 
       ForceHeaviest
 
 
-   .. value:: ForceGrandparent
+   .. enumerator:: ForceGrandparent
 
       ForceGrandparent
 
@@ -1100,40 +1297,45 @@ Part
 
 .. class:: Force
 
-   Obtained by calling :meth:`Part.AddForce`.
+   Obtained by calling ``Debug.AddForce``.
 
    .. property:: Part Part { get; }
 
       The part that this force is applied to.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: System.Tuple<double,double,double> ForceVector { get; set; }
 
       The force vector, in Newtons.
 
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: System.Tuple<double,double,double> Position { get; set; }
 
       The position at which the force acts, in reference frame :prop:`Force.ReferenceFrame`.
 
       :returns: The position as a vector.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: ReferenceFrame ReferenceFrame { get; set; }
 
       The reference frame of the force vector and position.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the force.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Any further use of this object throws an exception.
 
 
 
@@ -1194,347 +1396,6 @@ Module
 
       A list of all the actions of the module. These are the parts actions that can be assigned
       to action groups in the in-game editor.
-
-      :Game Scenes: All
-
-   .. property:: System.Collections.Generic.IDictionary<string,string> Fields { get; }
-
-      .. warning:: Deprecated. Use :prop:`Module.FieldList` instead, filtering by :prop:`PartField.Visible`.
-
-      The modules field names and their associated values, as a dictionary.
-      These are the values visible in the right-click menu of the part.
-
-      :Game Scenes: All
-
-
-      .. note::
-
-         Throws an exception if there is more than one field with the same name.
-         In that case, use :prop:`Module.FieldsById` to get the fields by identifier.
-
-   .. property:: System.Collections.Generic.IDictionary<string,string> FieldsById { get; }
-
-      .. warning:: Deprecated. Use :prop:`Module.FieldList` instead, filtering by :prop:`PartField.Visible`.
-
-      The modules field identifiers and their associated values, as a dictionary.
-      These are the values visible in the right-click menu of the part.
-
-      :Game Scenes: All
-
-   .. method:: bool HasField(string name)
-
-      .. warning:: Deprecated. Filter :prop:`Module.FieldList` by :prop:`PartField.GuiName` instead.
-
-      Returns ``true`` if the module has a field with the given name.
-
-      :parameters:
-
-       * **name** -- Name of the field.
-
-      :Game Scenes: All
-
-   .. method:: bool HasFieldWithId(string id)
-
-      .. warning:: Deprecated. Filter :prop:`Module.FieldList` by :prop:`PartField.Name` instead.
-
-      Returns ``true`` if the module has a field with the given identifier.
-
-      :parameters:
-
-       * **id** -- Identifier of the field.
-
-      :Game Scenes: All
-
-   .. method:: string GetField(string name)
-
-      .. warning:: Deprecated. Filter :prop:`Module.FieldList` by :prop:`PartField.GuiName` and read :prop:`PartField.Value` instead.
-
-      Returns the value of a field with the given name.
-
-      :parameters:
-
-       * **name** -- Name of the field.
-
-      :Game Scenes: All
-
-   .. method:: string GetFieldById(string id)
-
-      .. warning:: Deprecated. Filter :prop:`Module.FieldList` by :prop:`PartField.Name` and read :prop:`PartField.Value` instead.
-
-      Returns the value of a field with the given identifier.
-
-      :parameters:
-
-       * **id** -- Identifier of the field.
-
-      :Game Scenes: All
-
-   .. method:: void SetFieldInt(string name, int value)
-
-      .. warning:: Deprecated. Set :prop:`PartField.IntValue` instead.
-
-      Set the value of a field to the given integer number.
-
-      :parameters:
-
-       * **name** -- Name of the field.
-       * **value** -- Value to set.
-
-      :Game Scenes: All
-
-   .. method:: void SetFieldIntById(string id, int value)
-
-      .. warning:: Deprecated. Set :prop:`PartField.IntValue` instead.
-
-      Set the value of a field to the given integer number.
-
-      :parameters:
-
-       * **id** -- Identifier of the field.
-       * **value** -- Value to set.
-
-      :Game Scenes: All
-
-   .. method:: void SetFieldFloat(string name, float value)
-
-      .. warning:: Deprecated. Set :prop:`PartField.FloatValue` instead.
-
-      Set the value of a field to the given floating point number.
-
-      :parameters:
-
-       * **name** -- Name of the field.
-       * **value** -- Value to set.
-
-      :Game Scenes: All
-
-   .. method:: void SetFieldFloatById(string id, float value)
-
-      .. warning:: Deprecated. Set :prop:`PartField.FloatValue` instead.
-
-      Set the value of a field to the given floating point number.
-
-      :parameters:
-
-       * **id** -- Identifier of the field.
-       * **value** -- Value to set.
-
-      :Game Scenes: All
-
-   .. method:: void SetFieldString(string name, string value)
-
-      .. warning:: Deprecated. Set :prop:`PartField.Value` instead.
-
-      Set the value of a field to the given string.
-
-      :parameters:
-
-       * **name** -- Name of the field.
-       * **value** -- Value to set.
-
-      :Game Scenes: All
-
-   .. method:: void SetFieldStringById(string id, string value)
-
-      .. warning:: Deprecated. Set :prop:`PartField.Value` instead.
-
-      Set the value of a field to the given string.
-
-      :parameters:
-
-       * **id** -- Identifier of the field.
-       * **value** -- Value to set.
-
-      :Game Scenes: All
-
-   .. method:: void SetFieldBool(string name, bool value)
-
-      .. warning:: Deprecated. Set :prop:`PartField.BoolValue` instead.
-
-      Set the value of a field to true or false.
-
-      :parameters:
-
-       * **name** -- Name of the field.
-       * **value** -- Value to set.
-
-      :Game Scenes: All
-
-   .. method:: void SetFieldBoolById(string id, bool value)
-
-      .. warning:: Deprecated. Set :prop:`PartField.BoolValue` instead.
-
-      Set the value of a field to true or false.
-
-      :parameters:
-
-       * **id** -- Identifier of the field.
-       * **value** -- Value to set.
-
-      :Game Scenes: All
-
-   .. method:: void ResetField(string name)
-
-      .. warning:: Deprecated. Use :meth:`PartField.Reset` instead.
-
-      Set the value of a field to its original value.
-
-      :parameters:
-
-       * **name** -- Name of the field.
-
-      :Game Scenes: All
-
-   .. method:: void ResetFieldById(string id)
-
-      .. warning:: Deprecated. Use :meth:`PartField.Reset` instead.
-
-      Set the value of a field to its original value.
-
-      :parameters:
-
-       * **id** -- Identifier of the field.
-
-      :Game Scenes: All
-
-
-      .. note::
-
-         The original value is the value the field had when the part was loaded.
-
-   .. property:: System.Collections.Generic.IList<string> Events { get; }
-
-      .. warning:: Deprecated. Use :prop:`Module.EventList` instead, filtering by :prop:`PartEvent.Visible` and :prop:`PartEvent.Active`.
-
-      A list of the names of all of the modules events. Events are the clickable buttons
-      visible in the right-click menu of the part.
-
-      :Game Scenes: All
-
-   .. property:: System.Collections.Generic.IList<string> EventsById { get; }
-
-      .. warning:: Deprecated. Use :prop:`Module.EventList` instead, filtering by :prop:`PartEvent.Visible` and :prop:`PartEvent.Active`.
-
-      A list of the identifiers of all of the modules events. Events are the clickable buttons
-      visible in the right-click menu of the part.
-
-      :Game Scenes: All
-
-   .. method:: bool HasEvent(string name)
-
-      .. warning:: Deprecated. Filter :prop:`Module.EventList` by :prop:`PartEvent.GuiName` instead.
-
-      ``true`` if the module has an event with the given name.
-
-      :parameters:
-
-
-
-      :Game Scenes: All
-
-   .. method:: bool HasEventWithId(string id)
-
-      .. warning:: Deprecated. Filter :prop:`Module.EventList` by :prop:`PartEvent.Name` instead.
-
-      ``true`` if the module has an event with the given identifier.
-
-      :parameters:
-
-
-
-      :Game Scenes: All
-
-   .. method:: void TriggerEvent(string name)
-
-      .. warning:: Deprecated. Filter :prop:`Module.EventList` by :prop:`PartEvent.GuiName` and call :meth:`PartEvent.Trigger` instead.
-
-      Trigger the named event. Equivalent to clicking the button in the right-click menu
-      of the part.
-
-      :parameters:
-
-
-
-      :Game Scenes: All
-
-   .. method:: void TriggerEventById(string id)
-
-      .. warning:: Deprecated. Filter :prop:`Module.EventList` by :prop:`PartEvent.Name` and call :meth:`PartEvent.Trigger` instead.
-
-      Trigger the event with the given identifier.
-      Equivalent to clicking the button in the right-click menu of the part.
-
-      :parameters:
-
-
-
-      :Game Scenes: All
-
-   .. property:: System.Collections.Generic.IList<string> Actions { get; }
-
-      .. warning:: Deprecated. Use :prop:`Module.ActionList` instead.
-
-      A list of all the names of the modules actions. These are the parts actions that can
-      be assigned to action groups in the in-game editor.
-
-      :Game Scenes: All
-
-   .. property:: System.Collections.Generic.IList<string> ActionsById { get; }
-
-      .. warning:: Deprecated. Use :prop:`Module.ActionList` instead.
-
-      A list of all the identifiers of the modules actions. These are the parts actions
-      that can be assigned to action groups in the in-game editor.
-
-      :Game Scenes: All
-
-   .. method:: bool HasAction(string name)
-
-      .. warning:: Deprecated. Filter :prop:`Module.ActionList` by :prop:`PartAction.GuiName` instead.
-
-      ``true`` if the part has an action with the given name.
-
-      :parameters:
-
-
-
-      :Game Scenes: All
-
-   .. method:: bool HasActionWithId(string id)
-
-      .. warning:: Deprecated. Filter :prop:`Module.ActionList` by :prop:`PartAction.Name` instead.
-
-      ``true`` if the part has an action with the given identifier.
-
-      :parameters:
-
-
-
-      :Game Scenes: All
-
-   .. method:: void SetAction(string name, bool value = true)
-
-      .. warning:: Deprecated. Filter :prop:`Module.ActionList` by :prop:`PartAction.GuiName` and set :prop:`PartAction.Activated` instead.
-
-      Set the value of an action with the given name.
-
-      :parameters:
-
-
-
-
-      :Game Scenes: All
-
-   .. method:: void SetActionById(string id, bool value = true)
-
-      .. warning:: Deprecated. Filter :prop:`Module.ActionList` by :prop:`PartAction.Name` and set :prop:`PartAction.Activated` instead.
-
-      Set the value of an action with the given identifier.
-
-      :parameters:
-
-
-
 
       :Game Scenes: All
 
@@ -1639,7 +1500,7 @@ Module
          The getter throws an exception if the field is not a double precision floating point
          field (see :prop:`PartField.Type`).
 
-   .. method:: void Reset()
+   .. function:: void Reset()
 
       Set the value of the field to its original value.
 
@@ -1659,32 +1520,32 @@ Module
    The type of a part module field. See :prop:`PartField.Type`.
 
 
-   .. value:: Boolean
+   .. enumerator:: Boolean
 
       A boolean field. Access using :prop:`PartField.BoolValue`.
 
 
-   .. value:: Integer
+   .. enumerator:: Integer
 
       An integer field. Access using :prop:`PartField.IntValue`.
 
 
-   .. value:: Float
+   .. enumerator:: Float
 
       A single precision floating point field. Access using :prop:`PartField.FloatValue`.
 
 
-   .. value:: Double
+   .. enumerator:: Double
 
       A double precision floating point field. Access using :prop:`PartField.DoubleValue`.
 
 
-   .. value:: String
+   .. enumerator:: String
 
       A string field. Access using :prop:`PartField.Value`.
 
 
-   .. value:: Unknown
+   .. enumerator:: Unknown
 
       A field whose type is not one of the above. Its value can still be read as a
       string using :prop:`PartField.Value`.
@@ -1728,7 +1589,7 @@ Module
 
       :Game Scenes: All
 
-   .. method:: void Trigger()
+   .. function:: void Trigger()
 
       Trigger the event. Equivalent to clicking the button in the right-click menu of the part.
 
@@ -1799,7 +1660,7 @@ Config Node
          If a name appears more than once, only the first value is included. Use
          :meth:`ConfigNode.GetValues` to get all of the values with a given name.
 
-   .. method:: bool HasValue(string name)
+   .. function:: bool HasValue(string name)
 
       Returns ``true`` if the node has a value with the given name.
 
@@ -1809,7 +1670,7 @@ Config Node
 
       :Game Scenes: All
 
-   .. method:: string GetValue(string name)
+   .. function:: string GetValue(string name)
 
       Returns the value with the given name. If there is more than one value with
       the given name, the first is returned. Throws an exception if there is no
@@ -1821,7 +1682,7 @@ Config Node
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<string> GetValues(string name)
+   .. function:: System.Collections.Generic.IList<string> GetValues(string name)
 
       Returns all of the values with the given name, as a list.
 
@@ -1837,7 +1698,7 @@ Config Node
 
       :Game Scenes: All
 
-   .. method:: bool HasNode(string name)
+   .. function:: bool HasNode(string name)
 
       Returns ``true`` if the node has a child node with the given name.
 
@@ -1847,7 +1708,7 @@ Config Node
 
       :Game Scenes: All
 
-   .. method:: ConfigNode GetNode(string name)
+   .. function:: ConfigNode GetNode(string name)
 
       Returns the child node with the given name. If there is more than one child
       node with the given name, the first is returned. Throws an exception if there
@@ -1859,7 +1720,7 @@ Config Node
 
       :Game Scenes: All
 
-   .. method:: System.Collections.Generic.IList<ConfigNode> GetNodes(string name)
+   .. function:: System.Collections.Generic.IList<ConfigNode> GetNodes(string name)
 
       Returns all of the child nodes with the given name, as a list.
 
@@ -1894,25 +1755,25 @@ Antenna
 
       The part object for this antenna.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: DeployableState State { get; }
 
       The current state of the antenna.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Deployable { get; }
 
       Whether the antenna is deployable.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Deployed { get; set; }
 
       Whether the antenna is deployed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
@@ -1924,64 +1785,64 @@ Antenna
 
       Whether data can be transmitted by this antenna.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Transmit()
+   .. function:: void Transmit()
 
       Transmit data.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Cancel()
+   .. function:: void Cancel()
 
       Cancel current transmission of data.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool AllowPartial { get; set; }
 
       Whether partial data transmission is permitted.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: double Power { get; }
 
       The power of the antenna.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Combinable { get; }
 
       Whether the antenna can be combined with other antennae on the vessel
       to boost the power.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: double CombinableExponent { get; }
 
       Exponent used to calculate the combined power of multiple antennae on a vessel.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float PacketInterval { get; }
 
       Interval between sending packets in seconds.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float PacketSize { get; }
 
       Amount of data sent per packet in Mits.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: double PacketResourceCost { get; }
 
       Units of electric charge consumed per packet sent.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -1997,13 +1858,13 @@ Cargo Bay
 
       The part object for this cargo bay.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: DeployableState State { get; }
 
       The state of the cargo bay.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
@@ -2012,14 +1873,14 @@ Cargo Bay
          inside are sheltered: a bay whose open end has nothing attached to it never shelters
          anything, however tightly shut it is. Use :prop:`Part.Shielded` for that.
 
-         A cargo bay is never :enum:`DeployableState.Broken`, as the game
+         A cargo bay is never :value:`DeployableState.Broken`, as the game
          does not track damage for them.
 
    .. property:: bool Open { get; set; }
 
       Whether the cargo bay is open.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -2035,44 +1896,71 @@ Control Surface
 
       The part object for this control surface.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool PitchEnabled { get; set; }
 
       Whether the control surface has pitch control enabled.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool YawEnabled { get; set; }
 
       Whether the control surface has yaw control enabled.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool RollEnabled { get; set; }
 
       Whether the control surface has roll control enabled.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float AuthorityLimiter { get; set; }
 
       The authority limiter for the control surface, which controls how far the
       control surface will move.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Inverted { get; set; }
 
       Whether the control surface movement is inverted.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Deployed { get; set; }
 
-      Whether the control surface has been fully deployed.
+      Whether the control surface has been fully deployed. Throws an exception if set
+      while :prop:`ControlSurface.DeflectionOverride` is enabled, which holds the surface deployed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: float DeployAngle { get; set; }
+
+      The deploy angle of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Applied when :prop:`ControlSurface.Deployed` is true, and clamped to the range given by
+         :prop:`ControlSurface.MinDeployAngle` and :prop:`ControlSurface.MaxDeployAngle`. While
+         :prop:`ControlSurface.DeflectionOverride` is enabled, :prop:`ControlSurface.Deflection` drives the
+         angle. A value set here takes effect when the override is released.
+
+   .. property:: float MinDeployAngle { get; }
+
+      The minimum :prop:`ControlSurface.DeployAngle` of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: float MaxDeployAngle { get; }
+
+      The maximum :prop:`ControlSurface.DeployAngle` of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool DeflectionOverride { get; set; }
 
@@ -2082,28 +1970,28 @@ Control Surface
       The prior state is restored when the override is released, when the
       controlling client disconnects, or when the vessel changes.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Deflection { get; set; }
 
       The deflection command applied when :prop:`ControlSurface.DeflectionOverride` is enabled, as a
       value between -1 and 1, mapped onto the surface's deploy angle range.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float SurfaceArea { get; }
 
       Surface area of the control surface in :math:`m^2`.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+   .. property:: AxisRange AvailableTorque { get; }
 
       The available torque, in Newton meters, that can be produced by this control surface,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -2119,15 +2007,15 @@ Decoupler
 
       The part object for this decoupler.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: Vessel Decouple()
+   .. function:: Vessel Decouple()
 
       Fires the decoupler. Returns the new vessel created when the decoupler fires.
       Throws an exception if the decoupler has already fired.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
@@ -2140,31 +2028,31 @@ Decoupler
 
       Whether the decoupler has fired.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Staged { get; }
 
       Whether the decoupler is enabled in the staging sequence.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float Impulse { get; }
 
       The impulse that the decoupler imparts when it is fired, in Newton seconds.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool IsOmniDecoupler { get; }
 
       Whether the decoupler is an omni-decoupler (e.g. stack separator)
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: Part AttachedPart { get; }
 
       The part attached to this decoupler's explosive node.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -2184,29 +2072,29 @@ resource harvesters, solar panels and wheels.
    :prop:`Wheel.State`
 
 
-   .. value:: Deployed
+   .. enumerator:: Deployed
 
       The part is fully deployed. A cargo bay in this state is fully open.
       Parts that cannot be retracted, such as fixed radiators, solar panels,
       antennas, landing legs and wheels, are always in this state.
 
 
-   .. value:: Retracted
+   .. enumerator:: Retracted
 
       The part is fully retracted. A cargo bay in this state is closed and locked.
 
 
-   .. value:: Deploying
+   .. enumerator:: Deploying
 
       The part is being deployed. A cargo bay in this state is opening.
 
 
-   .. value:: Retracting
+   .. enumerator:: Retracting
 
       The part is being retracted. A cargo bay in this state is closing.
 
 
-   .. value:: Broken
+   .. enumerator:: Broken
 
       The part is broken. Cargo bays and resource harvesters never report
       this state, as the game does not track damage for them.
@@ -2225,29 +2113,29 @@ Docking Port
 
       The part object for this docking port.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: DockingPortState State { get; }
 
       The current state of the docking port.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: Part DockedPart { get; }
 
       The part that this docking port is docked to. Returns ``null`` if this
       docking port is not docked to anything.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: Vessel Undock()
+   .. function:: Vessel Undock()
 
       Undocks the docking port and returns the new :type:`Vessel` that is created.
       This method can be called for either docking port in a docked pair.
       Throws an exception if the docking port is not docked to anything.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
@@ -2261,13 +2149,13 @@ Docking Port
       The distance a docking port must move away when it undocks before it
       becomes ready to dock with another port, in meters.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool HasShield { get; }
 
       Whether the docking port has a shield.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Shielded { get; set; }
 
@@ -2278,39 +2166,39 @@ Docking Port
       closed, and when set to ``false`` the shield is opened. If the docking
       port does not have a shield, setting this attribute has no effect.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool CanRotate { get; }
 
       Whether the docking port can be commanded to rotate while docked.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MaximumRotation { get; }
 
       Maximum rotation angle in degrees.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MinimumRotation { get; }
 
       Minimum rotation angle in degrees.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float RotationTarget { get; set; }
 
       Rotation target angle in degrees.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool RotationLocked { get; set; }
 
       Lock rotation. When locked, allows auto-strut to work across the joint.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
 
       The position of the docking port, in the given reference frame.
 
@@ -2319,9 +2207,9 @@ Docking Port
        * **referenceFrame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
 
       The direction that docking port points in, in the given reference frame.
 
@@ -2330,9 +2218,9 @@ Docking Port
        * **referenceFrame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
 
       The rotation of the docking port, in the given reference frame.
 
@@ -2341,7 +2229,7 @@ Docking Port
        * **referenceFrame** -- The reference frame that the returned rotation is in.
 
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: ReferenceFrame ReferenceFrame { get; }
 
@@ -2354,7 +2242,7 @@ Docking Port
       * The y-axis points in the direction the docking port is facing.
       * The z-axis points out of the bottom off the docking port.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
@@ -2379,36 +2267,36 @@ Docking Port
    The state of a docking port. See :prop:`DockingPort.State`.
 
 
-   .. value:: Ready
+   .. enumerator:: Ready
 
       The docking port is ready to dock to another docking port.
 
 
-   .. value:: Docked
+   .. enumerator:: Docked
 
       The docking port is docked to another docking port, or docked to
       another part (from the VAB/SPH).
 
 
-   .. value:: Docking
+   .. enumerator:: Docking
 
       The docking port is very close to another docking port,
       but has not docked. It is using magnetic force to acquire a solid dock.
 
 
-   .. value:: Undocking
+   .. enumerator:: Undocking
 
       The docking port has just been undocked from another docking port,
       and is disabled until it moves away by a sufficient distance
       (:prop:`DockingPort.ReengageDistance`).
 
 
-   .. value:: Shielded
+   .. enumerator:: Shielded
 
       The docking port has a shield, and the shield is closed.
 
 
-   .. value:: Moving
+   .. enumerator:: Moving
 
       The docking ports shield is currently opening/closing.
 
@@ -2432,20 +2320,20 @@ Engine
 
       The part object for this engine.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Active { get; set; }
 
       Whether the engine is active. Setting this attribute may have no effect,
       depending on :prop:`Engine.CanShutdown` and :prop:`Engine.CanRestart`.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Thrust { get; }
 
       The current amount of thrust being produced by the engine, in Newtons.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float AvailableThrust { get; }
 
@@ -2455,9 +2343,9 @@ Engine
       Takes the engine's current :prop:`Engine.ThrustLimit` and atmospheric conditions
       into account.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: float AvailableThrustAt(double pressure)
+   .. function:: float AvailableThrustAt(double pressure)
 
       The amount of thrust, in Newtons, that would be produced by the engine
       when activated and with its throttle set to 100%.
@@ -2468,16 +2356,16 @@ Engine
 
        * **pressure** -- Atmospheric pressure in atmospheres
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MaxThrust { get; }
 
       The amount of thrust, in Newtons, that would be produced by the engine
       when activated and fueled, with its throttle and throttle limiter set to 100%.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: float MaxThrustAt(double pressure)
+   .. function:: float MaxThrustAt(double pressure)
 
       The amount of thrust, in Newtons, that would be produced by the engine
       when activated and fueled, with its throttle and throttle limiter set to 100%.
@@ -2487,7 +2375,7 @@ Engine
 
        * **pressure** -- Atmospheric pressure in atmospheres
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float MaxVacuumThrust { get; }
 
@@ -2496,7 +2384,7 @@ Engine
       when activated, :prop:`Engine.ThrustLimit` is set to 100%, the main
       vessel's throttle is set to 100% and the engine is in a vacuum.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float ThrustLimit { get; set; }
 
@@ -2504,13 +2392,13 @@ Engine
       attribute may have no effect, for example the thrust limit for a solid
       rocket booster cannot be changed in flight.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: System.Collections.Generic.IList<Thruster> Thrusters { get; }
 
       The components of the engine that generate thrust.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
@@ -2525,9 +2413,9 @@ Engine
       The current specific impulse of the engine, in seconds. Returns zero
       if the engine is not active.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: float SpecificImpulseAt(double pressure)
+   .. function:: float SpecificImpulseAt(double pressure)
 
       The specific impulse of the engine under the given pressure, in seconds. Returns zero
       if the engine is not active.
@@ -2536,32 +2424,32 @@ Engine
 
        * **pressure** -- Atmospheric pressure in atmospheres
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float VacuumSpecificImpulse { get; }
 
       The vacuum specific impulse of the engine, in seconds.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float KerbinSeaLevelSpecificImpulse { get; }
 
       The specific impulse of the engine at sea level on Kerbin, in seconds.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: System.Collections.Generic.IList<string> PropellantNames { get; }
 
       The names of the propellants that the engine consumes.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: System.Collections.Generic.IDictionary<string,float> PropellantRatios { get; }
 
       The ratio of resources that the engine consumes. A dictionary mapping resource names
       to the ratio at which they are consumed by the engine.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
@@ -2573,13 +2461,13 @@ Engine
 
       The propellants that the engine consumes.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool HasFuel { get; }
 
       Whether the engine has any fuel available.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Flameout { get; }
 
@@ -2589,7 +2477,7 @@ Engine
       vessel with drop tanks or asparagus staging some engines can flame out
       while others keep burning.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Throttle { get; set; }
 
@@ -2601,7 +2489,7 @@ Engine
       When the engine's independent throttle is enabled
       (see :prop:`Engine.IndependentThrottle`), can be used to set the throttle percentage.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool ThrottleLocked { get; }
 
@@ -2609,13 +2497,13 @@ Engine
       this is ``true`` for liquid fueled rockets, and ``false`` for solid rocket
       boosters.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool IndependentThrottle { get; set; }
 
       Whether the independent throttle is enabled for the engine.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool CanRestart { get; }
 
@@ -2623,73 +2511,73 @@ Engine
       returns ``false``. For example, this is ``true`` for liquid fueled rockets
       and ``false`` for solid rocket boosters.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool CanShutdown { get; }
 
       Whether the engine can be shutdown once activated. For example, this is
       ``true`` for liquid fueled rockets and ``false`` for solid rocket boosters.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool HasModes { get; }
 
       Whether the engine has multiple modes of operation.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: string Mode { get; set; }
 
       The name of the current engine mode.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: System.Collections.Generic.IDictionary<string,Engine> Modes { get; }
 
       The available modes for the engine.
       A dictionary mapping mode names to :type:`Engine` objects.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void ToggleMode()
+   .. function:: void ToggleMode()
 
       Toggle the current engine mode.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool AutoModeSwitch { get; set; }
 
       Whether the engine will automatically switch modes.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Gimballed { get; }
 
       Whether the engine is gimballed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float GimbalRange { get; }
 
       The range over which the gimbal can move, in degrees.
       Returns 0 if the engine is not gimballed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool GimbalLocked { get; set; }
 
       Whether the engines gimbal is locked in place. Setting this attribute has
       no effect if the engine is not gimballed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float GimbalLimit { get; set; }
 
       The gimbal limiter of the engine. A value between 0 and 1.
       Returns 0 if the gimbal is locked.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool GimbalOverride { get; set; }
 
@@ -2699,7 +2587,7 @@ Engine
       The override is automatically released if the controlling client disconnects or the
       vessel changes. Has no effect if the engine is not gimballed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: System.Tuple<double,double,double> GimbalActuation { get; set; }
 
@@ -2709,16 +2597,16 @@ Engine
       and :prop:`Engine.GimbalLimit`. When the gimbal is not being overridden,
       returns the current actuation.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+   .. property:: AxisRange AvailableTorque { get; }
 
       The available torque, in Newton meters, that can be produced by this engine,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
       Returns zero if the engine is inactive, or not gimballed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool CanReverseThrust { get; }
 
@@ -2728,7 +2616,7 @@ Engine
       ``false`` for engines whose reverser is not recognized, as KSP provides no
       standard way to detect one.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool ThrustReversed { get; set; }
 
@@ -2736,18 +2624,86 @@ Engine
       direction of thrust. While the reverser is still moving, this reports
       the state it is moving to, so a read immediately after a set returns
       the value that was set and setting the same value again has no effect.
-      Raises an exception if the engine does not have a thrust reverser
+      Throws an exception if the engine does not have a thrust reverser
       (see :prop:`Engine.CanReverseThrust`).
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void ToggleThrustReversal()
+   .. function:: void ToggleThrustReversal()
 
-      Toggle the engine's thrust reverser. Raises an exception if the engine
+      Toggle the engine's thrust reverser. Throws an exception if the engine
       does not have a thrust reverser (see :prop:`Engine.CanReverseThrust`).
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
+
+   .. property:: bool HasRealFuels { get; }
+
+      Whether the engine is managed by
+      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      The remaining properties in this section are only available when it is.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: int Ignitions { get; }
+
+      The number of times the engine can still be ignited, or -1 if it can be ignited an
+      unlimited number of times. Throws an exception if the engine is not managed by
+      RealFuels (see :prop:`Engine.HasRealFuels`).
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: System.Collections.Generic.IDictionary<string,double> IgnitionResources { get; }
+
+      The resources the engine consumes each time it ignites, keyed by resource name, with
+      the amount of each that is required. The engine uses up an ignition and fails to
+      light if they are not available. Throws an exception if the engine is not managed by
+      RealFuels (see :prop:`Engine.HasRealFuels`).
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: bool HasUllage { get; }
+
+      Whether the engine's propellant is subject to ullage, so that it must be settled
+      before the engine will run reliably. Throws an exception if the engine is not
+      managed by RealFuels (see :prop:`Engine.HasRealFuels`).
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: double PropellantStability { get; }
+
+      How settled the propellant feeding the engine is, from 0 (fully unsettled) to 1
+      (fully settled). Acceleration along the engine's thrust axis settles it, and
+      coasting and rotation unsettle it. Throws an exception if the engine is not managed
+      by RealFuels (see :prop:`Engine.HasRealFuels`).
+
+      :Game Scenes: Flight
+
+   .. property:: double PropellantReliability { get; }
+
+      The probability that the propellant feeding the engine behaves normally, from 0 to 1.
+      This is :prop:`Engine.PropellantStability` scaled by the game's ullage difficulty
+      setting, and is the value RealFuels itself tests against when deciding whether the
+      engine runs. Throws an exception if the engine is not managed by RealFuels
+      (see :prop:`Engine.HasRealFuels`).
+
+      :Game Scenes: Flight
+
+   .. property:: bool PressureFed { get; }
+
+      Whether the engine is fed by tank pressure rather than by a pump, and so needs to
+      draw from a highly pressurized tank. Throws an exception if the engine is not
+      managed by RealFuels (see :prop:`Engine.HasRealFuels`).
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: bool HasFeedPressure { get; }
+
+      Whether the tanks feeding the engine supply the pressure it needs. Always
+      ``true`` for an engine that is not pressure fed. Throws an exception if the
+      engine is not managed by RealFuels (see :prop:`Engine.HasRealFuels`).
+
+      :Game Scenes: Flight
 
 
 
@@ -2759,64 +2715,64 @@ Engine
 
       The name of the propellant.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: double CurrentAmount { get; }
 
       The current amount of propellant consumed in the current physics update.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: double CurrentRequirement { get; }
 
       The required amount of propellant for the current physics update.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: double TotalResourceAvailable { get; }
 
       The total amount of the underlying resource currently reachable given
       resource flow rules.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: double TotalResourceCapacity { get; }
 
       The total vehicle capacity for the underlying propellant resource,
       restricted by resource flow rules.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool IgnoreForIsp { get; }
 
       If this propellant should be ignored when calculating required mass flow
       given specific impulse.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool IgnoreForThrustCurve { get; }
 
       If this propellant should be ignored for thrust curve calculations.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool DrawStackGauge { get; }
 
       If this propellant has a stack gauge or not.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool IsDeprived { get; }
 
       If this propellant is deprived.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Ratio { get; }
 
       The propellant ratio.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -2832,133 +2788,138 @@ Experiment
 
       The part object for this experiment.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: string Name { get; }
 
       Internal name of the experiment, as used in
       `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: string Title { get; }
 
       Title of the experiment, as shown on the in-game UI.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Run()
+   .. function:: void Run()
 
       Run the experiment.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Transmit()
+   .. function:: void Transmit()
 
       Transmit all experimental data contained by this part.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Dump()
+   .. function:: void Dump()
 
       Dump the experimental data contained by the experiment.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Reset()
+   .. function:: void Reset()
 
       Reset the experiment.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Deployed { get; }
 
       Whether the experiment has been deployed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Rerunnable { get; }
 
       Whether the experiment can be re-run.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Inoperable { get; }
 
       Whether the experiment is inoperable.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool HasData { get; }
 
       Whether the experiment contains data.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: System.Collections.Generic.IList<ScienceData> Data { get; }
 
       The data contained in this experiment.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: string Biome { get; }
 
       The name of the biome the experiment is currently in.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Available { get; }
 
       Determines if the experiment is available given the current conditions.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. property:: ScienceSubject ScienceSubject { get; }
+   .. property:: ScienceSubject? ScienceSubject { get; }
 
       Containing information on the corresponding specific science result for the current
       conditions. Returns ``null`` if the experiment is unavailable.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
-.. class:: ScienceData
+.. struct:: ScienceData
 
    Obtained by calling :prop:`Experiment.Data`.
+
+   .. function:: ScienceData(float dataAmount, float scienceValue, float transmitValue)
+
+      Construct a ScienceData from the values of its fields.
+
 
    .. property:: float DataAmount { get; }
 
       Data amount.
 
-      :Game Scenes: All
-
    .. property:: float ScienceValue { get; }
 
       Science value.
-
-      :Game Scenes: All
 
    .. property:: float TransmitValue { get; }
 
       Transmit value.
 
-      :Game Scenes: All
 
-
-
-.. class:: ScienceSubject
+.. struct:: ScienceSubject
 
    Obtained by calling :prop:`Experiment.ScienceSubject`.
 
+   .. function:: ScienceSubject(string id, string title, bool isComplete, float science, float scienceCap, float dataScale, float subjectValue, float scientificValue)
+
+      Construct a ScienceSubject from the values of its fields.
+
+
+   .. property:: string Id { get; }
+
+      The identifier of the subject, e.g. ``crewReport@KerbinSrfLandedLaunchPad``.
+
    .. property:: string Title { get; }
 
-      Title of science subject, displayed in science archives
-
-      :Game Scenes: All
+      The title of the subject, as shown in the science archives.
 
    .. property:: bool IsComplete { get; }
 
@@ -2969,40 +2930,27 @@ Experiment
       has produced data, and how valuable it is, use :prop:`Experiment.HasData` and
       :prop:`ScienceData.TransmitValue`.
 
-      :Game Scenes: All
-
    .. property:: float Science { get; }
 
       Amount of science already earned from this subject, not updated until after
       transmission/recovery.
 
-      :Game Scenes: All
-
    .. property:: float ScienceCap { get; }
 
       Total science allowable for this subject.
-
-      :Game Scenes: All
 
    .. property:: float DataScale { get; }
 
       Multiply science value by this to determine data amount in mits.
 
-      :Game Scenes: All
-
    .. property:: float SubjectValue { get; }
 
       Multiplier for specific Celestial Body/Experiment Situation combination.
-
-      :Game Scenes: All
 
    .. property:: float ScientificValue { get; }
 
       Diminishing value multiplier for decreasing the science value returned from repeated
       experiments.
-
-      :Game Scenes: All
-
 
 
 Fairing
@@ -3018,20 +2966,20 @@ Fairing
 
       The part object for this fairing.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: void Jettison()
+   .. function:: void Jettison()
 
       Jettison the fairing. Has no effect if it has already been jettisoned.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Jettisoned { get; }
 
       Whether the fairing has been jettisoned.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -3047,31 +2995,31 @@ Intake
 
       The part object for this intake.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Open { get; set; }
 
       Whether the intake is open.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Speed { get; }
 
       Speed of the flow into the intake, in :math:`m/s`.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Flow { get; }
 
       The rate of flow into the intake, in units of resource per second.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Area { get; }
 
       The area of the intake's opening, in square meters.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -3087,25 +3035,25 @@ Leg
 
       The part object for this landing leg.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: DeployableState State { get; }
 
       The current state of the landing leg.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Deployable { get; }
 
       Whether the leg is deployable.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Deployed { get; set; }
 
       Whether the landing leg is deployed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
@@ -3117,7 +3065,7 @@ Leg
 
       Returns whether the leg is touching the ground.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -3133,14 +3081,14 @@ Launch Clamp
 
       The part object for this launch clamp.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: void Release()
+   .. function:: void Release()
 
       Releases the docking clamp. Has no effect if the clamp has already been released.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -3156,37 +3104,37 @@ Light
 
       The part object for this light.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Active { get; set; }
 
       Whether the light is switched on.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. property:: System.Tuple<float,float,float> Color { get; set; }
+   .. property:: StdLib.ColorRGB Color { get; set; }
 
-      The color of the light, as an RGB triple.
+      The color of the light.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Blink { get; set; }
 
       Whether blinking is enabled.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float BlinkRate { get; set; }
 
       The blink rate of the light.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float PowerUsage { get; }
 
       The current power usage, in units of charge per second.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -3202,72 +3150,72 @@ Parachute
 
       The part object for this parachute.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. method:: void Deploy()
+   .. function:: void Deploy()
 
       Deploys the parachute. This has no effect if the parachute has already
       been deployed.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Deployed { get; }
 
       Whether the parachute has been deployed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Arm()
+   .. function:: void Arm()
 
       Deploys the parachute. This has no effect if the parachute has already
       been armed or deployed.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Armed { get; }
 
       Whether the parachute has been armed or deployed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Cut()
+   .. function:: void Cut()
 
       Cuts the parachute.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: ParachuteState State { get; }
 
       The current state of the parachute.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float DeployAltitude { get; set; }
 
       The altitude at which the parachute will full deploy, in meters.
       Only applicable to stock parachutes.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float DeployMinPressure { get; set; }
 
       The minimum pressure at which the parachute will semi-deploy, in atmospheres.
       Only applicable to stock parachutes.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: ParachuteSafeState SafeState { get; }
 
       Whether it is currently safe to deploy the parachute, given the vessel's
       flight conditions. Computed by KSP from the current airspeed, pressure and
       temperature. Only applicable to stock parachutes.
-      Note that KSP reports :enum:`ParachuteSafeState.Unsafe` for the first
+      Note that KSP reports :value:`ParachuteSafeState.Unsafe` for the first
       second after the vessel unpacks, before its thermal data is valid.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -3276,28 +3224,28 @@ Parachute
    The state of a parachute. See :prop:`Parachute.State`.
 
 
-   .. value:: Stowed
+   .. enumerator:: Stowed
 
       The parachute is safely tucked away inside its housing.
 
 
-   .. value:: Armed
+   .. enumerator:: Armed
 
       The parachute is armed for deployment.
 
 
-   .. value:: SemiDeployed
+   .. enumerator:: SemiDeployed
 
       The parachute has been deployed and is providing some drag,
       but is not fully deployed yet. (Stock parachutes only)
 
 
-   .. value:: Deployed
+   .. enumerator:: Deployed
 
       The parachute is fully deployed.
 
 
-   .. value:: Cut
+   .. enumerator:: Cut
 
       The parachute has been cut.
 
@@ -3308,22 +3256,22 @@ Parachute
    The safety state of deploying a parachute. See :prop:`Parachute.SafeState`.
 
 
-   .. value:: Safe
+   .. enumerator:: Safe
 
       The parachute is safe to deploy.
 
 
-   .. value:: Risky
+   .. enumerator:: Risky
 
       Deploying the parachute is risky, and it may break off.
 
 
-   .. value:: Unsafe
+   .. enumerator:: Unsafe
 
       The parachute is unsafe to deploy, and will break off.
 
 
-   .. value:: None
+   .. enumerator:: None
 
       The safety state is not available, because the vessel is not in an
       atmosphere or the parachute has already been deployed or cut.
@@ -3342,31 +3290,31 @@ Radiator
 
       The part object for this radiator.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Deployable { get; }
 
       Whether the radiator is deployable.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Deployed { get; set; }
 
       For a deployable radiator, ``true`` if the radiator is extended.
       If the radiator is not deployable, this is always ``true``.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: DeployableState State { get; }
 
       The current state of the radiator.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
 
-         A fixed radiator is always :enum:`DeployableState.Deployed`.
+         A fixed radiator is always :value:`DeployableState.Deployed`.
 
 
 
@@ -3382,15 +3330,15 @@ Resource Converter
 
       The part object for this converter.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: int Count { get; }
 
       The number of converters in the part.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: string Name(int index)
+   .. function:: string Name(int index)
 
       The name of the specified converter.
 
@@ -3398,9 +3346,9 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: bool Active(int index)
+   .. function:: bool Active(int index)
 
       True if the specified converter is active.
 
@@ -3408,9 +3356,9 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Start(int index)
+   .. function:: void Start(int index)
 
       Start the specified converter.
 
@@ -3418,9 +3366,9 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Stop(int index)
+   .. function:: void Stop(int index)
 
       Stop the specified converter.
 
@@ -3428,9 +3376,9 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: ResourceConverterState State(int index)
+   .. function:: ResourceConverterState State(int index)
 
       The state of the specified converter.
 
@@ -3438,9 +3386,9 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: string StatusInfo(int index)
+   .. function:: string StatusInfo(int index)
 
       Status information for the specified converter.
       This is the full status message shown in the in-game UI.
@@ -3449,9 +3397,9 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<string> Inputs(int index)
+   .. function:: System.Collections.Generic.IList<string> Inputs(int index)
 
       List of the names of resources consumed by the specified converter.
 
@@ -3459,9 +3407,9 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<string> Outputs(int index)
+   .. function:: System.Collections.Generic.IList<string> Outputs(int index)
 
       List of the names of resources produced by the specified converter.
 
@@ -3469,25 +3417,25 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float OptimumCoreTemperature { get; }
 
       The core temperature at which the converter will operate with peak efficiency, in Kelvin.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float CoreTemperature { get; }
 
       The core temperature of the converter, in Kelvin.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float ThermalEfficiency { get; }
 
       The thermal efficiency of the converter, as a percentage of its maximum.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -3496,32 +3444,32 @@ Resource Converter
    The state of a resource converter. See :meth:`ResourceConverter.State`.
 
 
-   .. value:: Running
+   .. enumerator:: Running
 
       Converter is running.
 
 
-   .. value:: Idle
+   .. enumerator:: Idle
 
       Converter is idle.
 
 
-   .. value:: MissingResource
+   .. enumerator:: MissingResource
 
       Converter is missing a required resource.
 
 
-   .. value:: StorageFull
+   .. enumerator:: StorageFull
 
       No available storage for output resource.
 
 
-   .. value:: Capacity
+   .. enumerator:: Capacity
 
       At preset resource capacity.
 
 
-   .. value:: Unknown
+   .. enumerator:: Unknown
 
       Unknown state. Possible with modified resource converters.
       In this case, check :meth:`ResourceConverter.StatusInfo` for more information.
@@ -3540,32 +3488,32 @@ Resource Harvester
 
       The part object for this harvester.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: DeployableState State { get; }
 
       The deployment state of the harvester. Whether it is drilling is
       reported separately by :prop:`ResourceHarvester.Active`.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
 
-         A harvester is never :enum:`DeployableState.Broken`, as the game
+         A harvester is never :value:`DeployableState.Broken`, as the game
          does not track damage for them.
 
    .. property:: bool Deployed { get; set; }
 
       Whether the harvester is deployed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Active { get; set; }
 
       Whether the harvester is actively drilling.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
@@ -3580,25 +3528,25 @@ Resource Harvester
 
       The rate at which the drill is extracting ore, in units per second.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float ThermalEfficiency { get; }
 
       The thermal efficiency of the drill, as a percentage of its maximum.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float CoreTemperature { get; }
 
       The core temperature of the drill, in Kelvin.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float OptimumCoreTemperature { get; }
 
       The core temperature at which the drill will operate with peak efficiency, in Kelvin.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -3614,43 +3562,43 @@ Reaction Wheel
 
       The part object for this reaction wheel.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Active { get; set; }
 
       Whether the reaction wheel is active.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Broken { get; }
 
       Whether the reaction wheel is broken.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+   .. property:: AxisRange AvailableTorque { get; }
 
       The available torque, in Newton meters, that can be produced by this reaction wheel,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
       Returns zero if the reaction wheel is inactive or broken.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> MaxTorque { get; }
+   .. property:: AxisRange MaxTorque { get; }
 
       The maximum torque, in Newton meters, that can be produced by this reaction wheel,
       when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
       These axes correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float AuthorityLimiter { get; set; }
 
       The authority limiter for the reaction wheel, as a percentage of maximum torque.
       A value between 0 and 1.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -3666,15 +3614,15 @@ Resource Drain
 
       The part object for this resource drain.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: System.Collections.Generic.IList<Resource> AvailableResources { get; }
 
       List of available resources.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void SetResource(Resource resource, bool enabled)
+   .. function:: void SetResource(Resource resource, bool enabled)
 
       Whether the given resource should be drained.
 
@@ -3683,9 +3631,9 @@ Resource Drain
 
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: bool CheckResource(Resource resource)
+   .. function:: bool CheckResource(Resource resource)
 
       Whether the provided resource is enabled for draining.
 
@@ -3693,45 +3641,45 @@ Resource Drain
 
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: DrainMode DrainMode { get; set; }
 
       The drain mode.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MinRate { get; }
 
       Minimum possible drain rate
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MaxRate { get; }
 
       Maximum possible drain rate.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Rate { get; set; }
 
       Current drain rate.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Start()
+   .. function:: void Start()
 
       Activates resource draining for all enabled parts.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Stop()
+   .. function:: void Stop()
 
       Turns off resource draining.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -3741,12 +3689,12 @@ Resource Drain
    See :prop:`ResourceDrain.DrainMode`.
 
 
-   .. value:: Part
+   .. enumerator:: Part
 
       Drains from the parent part.
 
 
-   .. value:: Vessel
+   .. enumerator:: Vessel
 
       Drains from all available parts.
 
@@ -3764,53 +3712,53 @@ Robotic Controller
 
       The part object for this controller.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Enabled { get; set; }
 
       Whether the controller is enabled.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Playing { get; }
 
       Whether the controller's sequence is currently playing.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Position { get; set; }
 
       The current position along the sequence, in seconds.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Length { get; }
 
       The length of the sequence, in seconds.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float PlaySpeed { get; }
 
       The speed at which the sequence is played back, as a multiple of normal speed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Play()
+   .. function:: void Play()
 
       Start playing the controller's sequence.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void Stop()
+   .. function:: void Stop()
 
       Stop playing the controller's sequence.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: bool HasPart(Part part)
+   .. function:: bool HasPart(Part part)
 
       Whether the controller has a part.
 
@@ -3818,16 +3766,16 @@ Robotic Controller
 
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<System.Collections.Generic.IList<string>> Axes()
+   .. function:: System.Collections.Generic.IList<RoboticAxis> Axes()
 
       The axes for the controller.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: bool AddAxis(Module module, string fieldName)
+   .. function:: bool AddAxis(Module module, string fieldName)
 
       Add an axis to the controller.
 
@@ -3837,9 +3785,9 @@ Robotic Controller
        * **fieldName** -- The name of the axis field, as returned by :meth:`RoboticController.Axes`.
 
       :returns: Returns ``true`` if the axis is added successfully.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: bool AddKeyFrame(Module module, string fieldName, float time, float value)
+   .. function:: bool AddKeyFrame(Module module, string fieldName, float time, float value)
 
       Add key frame value for controller axis.
 
@@ -3851,9 +3799,9 @@ Robotic Controller
        * **value** -- The value of the key frame.
 
       :returns: Returns ``true`` if the key frame is added successfully.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: bool ClearAxis(Module module, string fieldName)
+   .. function:: bool ClearAxis(Module module, string fieldName)
 
       Clear axis.
 
@@ -3863,8 +3811,30 @@ Robotic Controller
        * **fieldName** -- The name of the axis field, as returned by :meth:`RoboticController.Axes`.
 
       :returns: Returns ``true`` if the axis is cleared successfully.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
+
+
+.. struct:: RoboticAxis
+
+   An axis of a robotic controller.
+
+   .. note::
+
+      See :meth:`RoboticController.Axes`.
+
+   .. function:: RoboticAxis(Module module, string fieldName)
+
+      Construct a RoboticAxis from the values of its fields.
+
+
+   .. property:: Module Module { get; }
+
+      The part module the axis belongs to.
+
+   .. property:: string FieldName { get; }
+
+      The name of the field the axis controls.
 
 
 Robotic Hinge
@@ -3879,68 +3849,68 @@ Robotic Hinge
 
       The part object for this robotic hinge.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float TargetAngle { get; set; }
 
       Target angle.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float CurrentAngle { get; }
 
       Current angle.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MinAngle { get; set; }
 
       The minimum angle the hinge can move to, in degrees.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MaxAngle { get; set; }
 
       The maximum angle the hinge can move to, in degrees.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Rate { get; set; }
 
       Target movement rate in degrees per second.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Damping { get; set; }
 
       Damping percentage.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Locked { get; set; }
 
       Lock movement.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool MotorEngaged { get; set; }
 
       Whether the motor is engaged.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool IsMoving { get; }
 
       Whether the servo is currently moving.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void MoveHome()
+   .. function:: void MoveHome()
 
       Move hinge to its built position.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -3956,68 +3926,68 @@ Robotic Piston
 
       The part object for this robotic piston.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float TargetExtension { get; set; }
 
       Target extension of the piston.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float CurrentExtension { get; }
 
       Current extension of the piston.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MinExtension { get; set; }
 
       The minimum extension of the piston, in meters.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MaxExtension { get; set; }
 
       The maximum extension of the piston, in meters.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Rate { get; set; }
 
       Target movement rate in meters per second.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Damping { get; set; }
 
       Damping percentage.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Locked { get; set; }
 
       Lock movement.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool MotorEngaged { get; set; }
 
       Whether the motor is engaged.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool IsMoving { get; }
 
       Whether the servo is currently moving.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void MoveHome()
+   .. function:: void MoveHome()
 
       Move piston to its built position.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -4033,75 +4003,75 @@ Robotic Rotation
 
       The part object for this robotic rotation servo.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float TargetAngle { get; set; }
 
       Target angle.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float CurrentAngle { get; }
 
       Current angle.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MinAngle { get; set; }
 
       The minimum angle the servo can rotate to, in degrees.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MaxAngle { get; set; }
 
       The maximum angle the servo can rotate to, in degrees.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool AllowFullRotation { get; set; }
 
       Whether the servo is allowed to rotate freely through a full revolution,
       ignoring the angle limits.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Rate { get; set; }
 
       Target movement rate in degrees per second.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float Damping { get; set; }
 
       Damping percentage.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Locked { get; set; }
 
       Lock Movement
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool MotorEngaged { get; set; }
 
       Whether the motor is engaged.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool IsMoving { get; }
 
       Whether the servo is currently moving.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: void MoveHome()
+   .. function:: void MoveHome()
 
       Move rotation servo to its built position.
 
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -4117,61 +4087,61 @@ Robotic Rotor
 
       The part object for this robotic rotor.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float TargetRPM { get; set; }
 
       Target RPM.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float CurrentRPM { get; }
 
       Current RPM.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Inverted { get; set; }
 
       Whether the rotor direction is inverted.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float TorqueLimit { get; set; }
 
       Torque limit percentage.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MaxTorque { get; set; }
 
       The maximum torque the rotor can generate, in kilonewtons.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float BrakePercentage { get; set; }
 
       The percentage of braking force applied to the rotor.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Locked { get; set; }
 
       Lock movement.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool MotorEngaged { get; set; }
 
       Whether the motor is engaged.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool IsMoving { get; }
 
       Whether the rotor is currently moving.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -4187,7 +4157,7 @@ RCS
 
       The part object for this RCS.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Active { get; }
 
@@ -4197,49 +4167,49 @@ RCS
       (:prop:`RCS.Enabled`), or it is covered by a fairing
       (:prop:`Part.Shielded`) and cannot thrust while shielded.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Enabled { get; set; }
 
       Whether the RCS thrusters are enabled.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool PitchEnabled { get; set; }
 
       Whether the RCS thruster will fire when pitch control input is given.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool YawEnabled { get; set; }
 
       Whether the RCS thruster will fire when yaw control input is given.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool RollEnabled { get; set; }
 
       Whether the RCS thruster will fire when roll control input is given.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool ForwardEnabled { get; set; }
 
       Whether the RCS thruster will fire when pitch control input is given.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool UpEnabled { get; set; }
 
       Whether the RCS thruster will fire when yaw control input is given.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool RightEnabled { get; set; }
 
       Whether the RCS thruster will fire when roll control input is given.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool InputOverride { get; set; }
 
@@ -4248,15 +4218,16 @@ RCS
       :prop:`RCS.RotationOverride` and :prop:`RCS.TranslationOverride` instead of the
       normal control inputs. The override is automatically released if the
       controlling client disconnects or the vessel changes.
+      Precision mode leaves an overridden block at full thrust.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: System.Tuple<double,double,double> RotationOverride { get; set; }
 
       The rotation demand applied when :prop:`RCS.InputOverride` is enabled, in the pitch,
       roll and yaw axes. Each component is a normalized control input between -1 and 1.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: System.Tuple<double,double,double> TranslationOverride { get; set; }
 
@@ -4264,25 +4235,73 @@ RCS
       right, up and forward axes. Each component is a normalized control input between -1
       and 1.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
+   .. property:: AxisRange AvailableTorque { get; }
 
       The available torque, in Newton meters, that can be produced by this RCS,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
       Returns zero if RCS is disable.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableForce { get; }
+
+      .. note::
+
+         Precision mode weakens the block, and the available torque follows it. A block
+         driven by :prop:`RCS.InputOverride` is exempt, so :meth:`RCS.OverrideWrench`
+         can report the larger torque an override reaches.
+
+   .. property:: AxisRange AvailableForce { get; }
 
       The available force, in Newtons, that can be produced by this RCS,
       in the positive and negative x, y and z axes of the vessel. These axes
       correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
       Returns zero if RCS is disabled.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the block, and the available force follows it. A block
+         driven by :prop:`RCS.InputOverride` is exempt, so :meth:`RCS.OverrideWrench`
+         can report the larger force an override reaches.
+
+   .. property:: System.Tuple<double,double,double> Force { get; }
+
+      The force being applied by the RCS thrusters, in Newtons. The vector is in the
+      vessel's reference frame (:prop:`Vessel.ReferenceFrame`).
+      Returns zero if the RCS is inactive.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Tuple<double,double,double> Torque { get; }
+
+      The torque being applied by the RCS thrusters about the vessel's center of mass,
+      in Newton meters. The vector is in the vessel's reference frame
+      (:prop:`Vessel.ReferenceFrame`). Returns zero if the RCS is inactive.
+
+      :Game Scenes: Flight
+
+   .. function:: Wrench OverrideWrench(System.Tuple<double,double,double> rotation, System.Tuple<double,double,double> translation)
+
+      The force and torque the given demands would produce, in Newtons and Newton meters.
+
+      :parameters:
+
+       * **rotation** -- A rotation demand, as set by :prop:`RCS.RotationOverride`.
+       * **translation** -- A translation demand, as set by :prop:`RCS.TranslationOverride`.
+
+      :returns: The force, and the torque about the vessel's center of mass, in the vessel's reference frame (:prop:`Vessel.ReferenceFrame`), or zero if the RCS is inactive.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out full thrust, which
+         :prop:`RCS.Force` and :prop:`RCS.Torque` include.
 
    .. property:: float AvailableThrust { get; }
 
@@ -4291,7 +4310,7 @@ RCS
       Takes the thrusters current :prop:`RCS.ThrustLimit` and atmospheric conditions
       into account.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MaxThrust { get; }
 
@@ -4299,64 +4318,64 @@ RCS
       in Newtons, with the :prop:`RCS.ThrustLimit` set to 100%.
       Takes atmospheric conditions into account.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float MaxVacuumThrust { get; }
 
       The maximum amount of thrust that can be produced by the RCS thrusters when active
       in a vacuum, in Newtons.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float ThrustLimit { get; set; }
 
       The thrust limiter of the thruster. A value between 0 and 1.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: System.Collections.Generic.IList<Thruster> Thrusters { get; }
 
       A list of thrusters, one of each nozzel in the RCS part.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float SpecificImpulse { get; }
 
       The current specific impulse of the RCS, in seconds. Returns zero
       if the RCS is not active.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float VacuumSpecificImpulse { get; }
 
       The vacuum specific impulse of the RCS, in seconds.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: float KerbinSeaLevelSpecificImpulse { get; }
 
       The specific impulse of the RCS at sea level on Kerbin, in seconds.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: System.Collections.Generic.IList<string> Propellants { get; }
 
       The names of resources that the RCS consumes.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: System.Collections.Generic.IDictionary<string,float> PropellantRatios { get; }
 
       The ratios of resources that the RCS consumes. A dictionary mapping resource names
       to the ratios at which they are consumed by the RCS.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool HasFuel { get; }
 
       Whether the RCS has fuel available.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -4372,19 +4391,19 @@ Sensor
 
       The part object for this sensor.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Active { get; set; }
 
       Whether the sensor is active.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: string Value { get; }
 
       The current value of the sensor.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
@@ -4412,39 +4431,39 @@ Solar Panel
 
       The part object for this solar panel.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Deployable { get; }
 
       Whether the solar panel is deployable.
 
-      :Game Scenes: All
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: bool Deployed { get; set; }
 
       Whether the solar panel is extended.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: DeployableState State { get; }
 
       The current state of the solar panel.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float EnergyFlow { get; }
 
       The current amount of energy being generated by the solar panel, in
       units of charge per second.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: float SunExposure { get; }
 
       The current amount of sunlight that is incident on the solar panel,
       as a percentage. A value between 0 and 1.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -4467,9 +4486,15 @@ Thruster
 
       The :prop:`Thruster.Part` that contains this thruster.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> ThrustPosition(ReferenceFrame referenceFrame)
+   .. property:: float Thrust { get; }
+
+      The thrust being produced by the thruster, in Newtons.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Tuple<double,double,double> ThrustPosition(ReferenceFrame referenceFrame)
 
       The position at which the thruster generates thrust, in the given reference frame.
       For gimballed engines, this takes into account the current rotation of the gimbal.
@@ -4479,9 +4504,9 @@ Thruster
        * **referenceFrame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> ThrustDirection(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> ThrustDirection(ReferenceFrame referenceFrame)
 
       The direction of the force generated by the thruster, in the given reference frame.
       This is opposite to the direction in which the thruster expels propellant.
@@ -4492,7 +4517,7 @@ Thruster
        * **referenceFrame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: ReferenceFrame ThrustReferenceFrame { get; }
 
@@ -4507,15 +4532,15 @@ Thruster
       * The y-axis points along the thrust direction.
       * The x-axis and z-axis are perpendicular to the thrust direction.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: bool Gimballed { get; }
 
       Whether the thruster is gimballed.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> GimbalPosition(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> GimbalPosition(ReferenceFrame referenceFrame)
 
       Position around which the gimbal pivots.
 
@@ -4524,15 +4549,15 @@ Thruster
        * **referenceFrame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: System.Tuple<double,double,double> GimbalAngle { get; }
 
       The current gimbal angle in the pitch, roll and yaw axes, in degrees.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> InitialThrustPosition(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> InitialThrustPosition(ReferenceFrame referenceFrame)
 
       The position at which the thruster generates thrust, when the engine is in its
       initial position (no gimballing), in the given reference frame.
@@ -4542,7 +4567,7 @@ Thruster
        * **referenceFrame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
       .. note::
@@ -4550,7 +4575,7 @@ Thruster
          This position can move when the gimbal rotates. This is because the thrust position and
          gimbal position are not necessarily the same.
 
-   .. method:: System.Tuple<double,double,double> InitialThrustDirection(ReferenceFrame referenceFrame)
+   .. function:: System.Tuple<double,double,double> InitialThrustDirection(ReferenceFrame referenceFrame)
 
       The direction of the force generated by the thruster, when the engine is in its
       initial position (no gimballing), in the given reference frame.
@@ -4561,7 +4586,7 @@ Thruster
        * **referenceFrame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-      :Game Scenes: All
+      :Game Scenes: Flight
 
 
 
@@ -4794,27 +4819,27 @@ Wheel
    The state of the motor on a powered wheel. See :prop:`Wheel.MotorState`.
 
 
-   .. value:: Idle
+   .. enumerator:: Idle
 
       The motor is idle.
 
 
-   .. value:: Running
+   .. enumerator:: Running
 
       The motor is running.
 
 
-   .. value:: Disabled
+   .. enumerator:: Disabled
 
       The motor is disabled.
 
 
-   .. value:: Inoperable
+   .. enumerator:: Inoperable
 
       The motor is inoperable.
 
 
-   .. value:: NotEnoughResources
+   .. enumerator:: NotEnoughResources
 
       The motor does not have enough resources to run.
 
@@ -4885,7 +4910,7 @@ returns ``null``.
 The following C# example uses these attributes to perform a
 depth-first traversal over all of the parts in a vessel:
 
-.. literalinclude:: /scripts/services/space-center/TreeTraversal.cs
+.. literalinclude:: /scripts/api/space-center/parts/TreeTraversal.cs
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -4932,7 +4957,7 @@ consider to be *axially* attached to nothing.
 The following C# example does a depth-first traversal as before,
 but also prints out the attachment mode used by the part:
 
-.. literalinclude:: /scripts/services/space-center/AttachmentModes.cs
+.. literalinclude:: /scripts/api/space-center/parts/AttachmentModes.cs
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -5027,11 +5052,7 @@ Staging
 For vessel-level summaries (delta-v, thrust, fuel, and resources grouped per
 stage), use the :rst:ref:`csharp-api-stage` class via
 :prop:`Vessel.Stages` and
-:prop:`Vessel.DecoupleStages`. Legacy helpers
-:meth:`Parts.InStage`,
-:meth:`Parts.InDecoupleStage`, and
-:meth:`Vessel.ResourcesInDecoupleStage` remain available but
-are deprecated.
+:prop:`Vessel.DecoupleStages`.
 
 .. only:: html
 

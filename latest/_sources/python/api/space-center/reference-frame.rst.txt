@@ -18,8 +18,8 @@ ReferenceFrame
 
    .. note::
 
-      This class does not contain any properties or methods. It is only
-      used as a parameter to other functions.
+      Apart from being created and removed, a reference frame is only used as a
+      parameter to other functions.
 
    .. staticmethod:: create_relative(reference_frame, [position = (0.0, 0.0, 0.0)], [rotation = (0.0, 0.0, 0.0, 1.0)], [velocity = (0.0, 0.0, 0.0)], [angular_velocity = (0.0, 0.0, 0.0)])
 
@@ -34,15 +34,22 @@ ReferenceFrame
       :rtype: :class:`ReferenceFrame`
    
 
+      .. note::
+
+         Each call returns a new frame, which is kept until :meth:`ReferenceFrame.remove` is
+         called on it or the client that created it disconnects, so a script that
+         creates one repeatedly, for example once per update, should remove each one
+         when it is finished with it.
+
    .. staticmethod:: create_hybrid(position, [rotation = None], [velocity = None], [angular_velocity = None])
 
       Create a hybrid reference frame. This is a custom reference frame
       whose components inherited from other reference frames.
 
       :param ReferenceFrame position: The reference frame providing the position of the origin.
-      :param ReferenceFrame rotation: The reference frame providing the rotation of the frame.
-      :param ReferenceFrame velocity: The reference frame providing the linear velocity of the frame.
-      :param ReferenceFrame angular_velocity: The reference frame providing the angular velocity of the frame.
+      :param ReferenceFrame or None rotation: The reference frame providing the rotation of the frame.
+      :param ReferenceFrame or None velocity: The reference frame providing the linear velocity of the frame.
+      :param ReferenceFrame or None angular_velocity: The reference frame providing the angular velocity of the frame.
       :rtype: :class:`ReferenceFrame`
    
 
@@ -51,3 +58,24 @@ ReferenceFrame
          The *position* reference frame is required but all other
          reference frames are optional. If omitted, they are set to the
          *position* reference frame.
+
+         Each call returns a new frame, which is kept until :meth:`ReferenceFrame.remove` is
+         called on it or the client that created it disconnects, so a script that
+         creates one repeatedly, for example once per update, should remove each one
+         when it is finished with it.
+
+   .. method:: remove()
+
+      Remove the reference frame, releasing the memory the server holds for it.
+
+   
+
+      .. note::
+
+         Only a frame created by :meth:`ReferenceFrame.create_relative` or
+         :meth:`ReferenceFrame.create_hybrid` can be removed. Every other frame belongs to
+         something in the game, and the server holds one of each.
+
+         Any further use of this object throws an exception, as does use of a frame
+         built on it, which cannot be evaluated without it. A frame belongs to the
+         client that created it, and is removed when that client disconnects.

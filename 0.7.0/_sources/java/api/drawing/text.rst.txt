@@ -1,0 +1,144 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.Drawing
+
+Text
+====
+
+
+.. type:: public class Text
+
+   Text. Created using :meth:`addText(String, SpaceCenter.ReferenceFrame, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Quartet<Double,Double,Double,Double>, boolean)`.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getPosition()
+
+   .. method:: void setPosition(org.javatuples.Triplet<Double,Double,Double> value)
+
+      Position of the text.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> getRotation()
+
+   .. method:: void setRotation(org.javatuples.Quartet<Double,Double,Double,Double> value)
+
+      Rotation of the text as a quaternion.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: boolean getFaceCamera()
+
+   .. method:: void setFaceCamera(boolean value)
+
+      Whether the text turns to face the camera, in place of its :meth:`Text.getRotation()`.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: SpaceCenter.ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(SpaceCenter.ReferenceFrame value)
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: void remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: String getContent()
+
+   .. method:: void setContent(String value)
+
+      The text string
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: String getFont()
+
+   .. method:: void setFont(String value)
+
+      Name of the font
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: static java.util.List<String> availableFonts(Connection connection)
+
+      A list of all available fonts.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: int getSize()
+
+   .. method:: void setSize(int value)
+
+      Font size.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: float getCharacterSize()
+
+   .. method:: void setCharacterSize(float value)
+
+      Character size.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: UI.FontStyle getStyle()
+
+   .. method:: void setStyle(UI.FontStyle value)
+
+      Font style.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: StdLib.ColorRGB getColor()
+
+   .. method:: void setColor(StdLib.ColorRGB value)
+
+      Set the color
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: String getMaterial()
+
+   .. method:: void setMaterial(String value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: UI.TextAlignment getAlignment()
+
+   .. method:: void setAlignment(UI.TextAlignment value)
+
+      Alignment.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: float getLineSpacing()
+
+   .. method:: void setLineSpacing(float value)
+
+      Line spacing.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: UI.TextAnchor getAnchor()
+
+   .. method:: void setAnchor(UI.TextAnchor value)
+
+      Anchor.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

@@ -1,0 +1,29 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: LIDAR
+
+LIDAR
+=====
+
+
+.. module:: LIDAR
+
+LaserDist service.
+
+
+.. attribute:: available: boolean
+
+   Check if the LaserDist API is available.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: boolean
+
+
+
+
+.. staticmethod:: laser(part)
+
+   Get a LaserDist part.
+
+   :param SpaceCenter.Part part:
+   :rtype: :class:`LIDAR.Laser`

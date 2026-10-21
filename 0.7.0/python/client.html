@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Python Client &#8212; kRPC v0.7.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../_static/documentation_options.js?v=fe7df9b0"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'python/client';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.7.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <script src="../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.7.0/python/client.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="KRPC API" href="api/krpc.html" />
+    <link rel="prev" title="Python" href="../python.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.7.0" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Python Client</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/krpc/krpc.html">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="api/stdlib.html">Standard Library</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/space-center.html">SpaceCenter API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/space-center.html">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/editor.html">Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/flight.html">Flight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/control.html">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/arc.html">Arc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/box.html">Box</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/circle.html">Circle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/map-marker.html">MapMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/orbit-path.html">OrbitPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/point.html">Point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/polyline.html">Polyline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/sphere.html">Sphere</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/size-fitter.html">Size Fitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/lidar.html">LIDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/lidar/lidar.html">LIDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/debug.html">Debug API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/debug/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../python.html" class="nav-link">Python</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Python Client</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="python-client">
+<h1>Python Client<a class="headerlink" href="#python-client" title="Link to this heading">#</a></h1>
+<p>This client provides a Python API for interacting with a kRPC server.</p>
+<section id="installing-the-library">
+<h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Link to this heading">#</a></h2>
+<p>The library can be found on <a class="reference external" href="https://pypi.python.org/pypi/krpc">PyPI</a> or
+<a class="reference external" href="https://github.com/krpc/krpc/releases">downloaded from GitHub</a>.</p>
+<p>To install using pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>krpc
+</pre></div>
+</div>
+</section>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
+<p>The <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> function is used to open a connection to a server. It returns a connection
+object (of type <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>) through which you can interact with the server. The
+following example connects to a server running on the local machine, queries its version and prints
+it out:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This function also accepts arguments that specify what address and port numbers to connect to, and
+an optional descriptive name for the connection which is displayed in the kRPC window in the
+game. For example:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"My Example Program"</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="s2">"192.168.1.10"</span><span class="p">,</span> <span class="n">rpc_port</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">stream_port</span><span class="o">=</span><span class="mi">1001</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="calling-remote-procedures">
+<h2>Calling Remote Procedures<a class="headerlink" href="#calling-remote-procedures" title="Link to this heading">#</a></h2>
+<p>The kRPC server provides <em>procedures</em> that a client can run. These procedures are arranged in groups
+called <em>services</em> to keep things organized. When connecting, the Python client interrogates the
+server to discover what procedures it provides, and dynamically creates class types, methods,
+properties etc. to call them.</p>
+<p>The following example demonstrates how to invoke remote procedures using the Python client. It calls
+<a class="reference internal" href="api/space-center/space-center.html#SpaceCenter.active_vessel" title="SpaceCenter.active_vessel"><code class="xref py py-attr docutils literal notranslate"><span class="pre">SpaceCenter.active_vessel</span></code></a> to get an object representing the active vessel (of type
+<a class="reference internal" href="api/space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a>). It sets the name of the vessel and then prints out its altitude:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+
+<span class="n">vessel</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">"My Vessel"</span>
+
+<span class="n">flight_info</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">flight_info</span><span class="o">.</span><span class="n">mean_altitude</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Many procedures return an object identifying something in the game, such as a vessel or
+a part. See <a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a> for how such an object
+behaves when a game is loaded or what it identifies is destroyed.</p>
+<p>All of the functionality provided by the <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code> service is accessible via
+<code class="docutils literal notranslate"><span class="pre">conn.space_center</span></code>. To explore the functionality provided by a service, you can use the
+<code class="docutils literal notranslate"><span class="pre">help()</span></code> function from an interactive terminal. For example, running <code class="docutils literal notranslate"><span class="pre">help(conn.space_center)</span></code>
+will list all of the classes, enumerations, procedures and properties provides by the
+<code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code> service. This works similarly for class types, for example:
+<code class="docutils literal notranslate"><span class="pre">help(conn.space_center.Vessel)</span></code>.</p>
+</section>
+<section id="deprecated-members">
+<h2>Deprecated Members<a class="headerlink" href="#deprecated-members" title="Link to this heading">#</a></h2>
+<p>Some members of the server’s API are deprecated, and may be removed in a future release. Calling
+one emits a <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> naming the replacement to use instead. The deprecation is also
+noted in the member’s docstring. Python hides <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> by default; run Python with
+<code class="docutils literal notranslate"><span class="pre">-W</span> <span class="pre">default</span></code> or use the <code class="docutils literal notranslate"><span class="pre">warnings</span></code> module to see them.</p>
+</section>
+<section id="server-side-functions">
+<h2>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h2>
+<p>A server side function is code that runs inside the game, on the server. Pass a Python function or
+lambda to <a class="reference internal" href="#krpc.client.Client.run" title="krpc.client.Client.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">krpc.client.Client.run()</span></code></a> to compile it into a server side function, run it once and
+return its value. Every value it reads comes from the same physics tick. For example, the following
+reads the vessel’s altitude and speed together:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">)</span>
+
+<span class="c1"># Run the lambda on the server, so both values come from the same physics tick</span>
+<span class="n">altitude</span><span class="p">,</span> <span class="n">speed</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="p">(</span><span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span><span class="p">,</span> <span class="n">flight</span><span class="o">.</span><span class="n">speed</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude:"</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span> <span class="s2">"m, speed:"</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="s2">"m/s"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">run</span></code> for a function with effects, such as setting a property. An event or a function stream
+evaluates its function on every update, repeating the effects.</p>
+<p><a class="reference internal" href="#python-client-compiling-functions"><span class="std std-ref">Compiling Server Side Functions</span></a> describes what a function can contain. The <a class="reference internal" href="../tutorials/server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">server
+side functions tutorial</span></a> shows how to build larger functions.</p>
+</section>
+<section id="streaming-data">
+<span id="python-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
+<p>A common use case for kRPC is to continuously extract data from the game. The naive approach to do
+this would be to repeatedly call a remote procedure, such as in the following which repeatedly
+prints the position of the active vessel:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">refframe</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">reference_frame</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">position</span><span class="p">(</span><span class="n">refframe</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This approach requires significant communication overhead as request/response messages are
+repeatedly sent between the client and server. kRPC provides a more efficient mechanism to achieve
+this, called <em>streams</em>.</p>
+<p>A stream repeatedly executes a procedure on the server (with a fixed set of argument values) and
+sends the result to the client. It only requires a single message to be sent to the server to
+establish the stream, which will then continuously send data to the client until the stream is
+closed.</p>
+<p>The following example does the same thing as above using streams:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">refframe</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">reference_frame</span>
+<span class="n">position</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">refframe</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">position</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>It calls <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">krpc.client.Client.add_stream()</span></code></a> once at the start of the program to create the
+stream, and then repeatedly prints the position returned by the stream. The stream is automatically
+closed when the client disconnects.</p>
+<p>Streams can also be created using the <code class="docutils literal notranslate"><span class="pre">with</span></code> statement, which ensures that the stream is closed
+after leaving the block:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">refframe</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">reference_frame</span>
+<span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">position</span><span class="p">,</span> <span class="n">refframe</span><span class="p">)</span> <span class="k">as</span> <span class="n">position</span><span class="p">:</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">position</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>A stream can be created for any procedure that returns a value. This includes both method calls and
+attribute accesses. The examples above demonstrated how to stream method calls. Attributes can be
+streamed as follows:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">flight_info</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span>
+<span class="n">altitude</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">flight_info</span><span class="p">,</span> <span class="s2">"mean_altitude"</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">altitude</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>A stream can be created for any function call (except property setters). The most recent value of a
+stream can be obtained by calling <a class="reference internal" href="#krpc.stream.Stream.__call__" title="krpc.stream.Stream.__call__"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.stream.Stream.__call__()</span></code></a>. A stream can be stopped and
+removed from the server by calling <a class="reference internal" href="#krpc.stream.Stream.remove" title="krpc.stream.Stream.remove"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.stream.Stream.remove()</span></code></a> on the stream object. All of a
+clients streams are automatically stopped when it disconnects.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A stream runs on the server until you remove it or the connection closes, even once the stream
+object is garbage collected. Each call to <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> adds another stream.</p>
+</div>
+<section id="synchronizing-with-stream-updates">
+<h3>Synchronizing with Stream Updates<a class="headerlink" href="#synchronizing-with-stream-updates" title="Link to this heading">#</a></h3>
+<p>A common use case for kRPC is to wait until the value returned by a method or attribute changes, and
+then take some action. kRPC provides two mechanisms to do this efficiently: <em>condition variables</em>
+and <em>callbacks</em>.</p>
+<section id="condition-variables">
+<h4>Condition Variables<a class="headerlink" href="#condition-variables" title="Link to this heading">#</a></h4>
+<p>Each stream has a condition variable associated with it, that is notified whenever the value of the
+stream changes. The condition variables are instances of <code class="docutils literal notranslate"><span class="pre">threading.Condition</span></code> from the Python
+standard library. These can be used to block the current thread of execution until the value of the
+stream changes.</p>
+<p>The following example waits until the abort button is pressed in game, by waiting for the value of
+<code class="docutils literal notranslate"><span class="pre">vessel.control.abort</span></code> to change to true:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="p">,</span> <span class="s2">"abort"</span><span class="p">)</span> <span class="k">as</span> <span class="n">abort</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">abort</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">abort</span><span class="p">():</span>
+            <span class="n">abort</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This code creates a stream, acquires a lock on the streams condition variable (using a <code class="docutils literal notranslate"><span class="pre">with</span></code>
+statement) and then repeatedly checks the value of <code class="docutils literal notranslate"><span class="pre">abort</span></code>. It leaves the loop when it changes to
+true.</p>
+<p>The body of the loop calls <code class="docutils literal notranslate"><span class="pre">wait</span></code> on the stream, which causes the program to block until the value
+changes. This prevents the loop from ‘spinning’ and so it does not consume processing resources
+whilst waiting.</p>
+<p>The example code above uses a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement to acquire the lock on the condition variable. This
+can also be done explicitly using <code class="docutils literal notranslate"><span class="pre">acquire</span></code> and <code class="docutils literal notranslate"><span class="pre">release</span></code>:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="k">with</span> <span class="n">conn</span><span class="o">.</span><span class="n">stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="p">,</span> <span class="s2">"abort"</span><span class="p">)</span> <span class="k">as</span> <span class="n">abort</span><span class="p">:</span>
+    <span class="n">abort</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">abort</span><span class="p">():</span>
+        <span class="n">abort</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+    <span class="n">abort</span><span class="o">.</span><span class="n">condition</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="callbacks">
+<h4>Callbacks<a class="headerlink" href="#callbacks" title="Link to this heading">#</a></h4>
+<p>Streams allow you to register callback functions that are called whenever the value of the stream
+changes. Callback functions should take a single argument, which is the new value of the stream, and
+should return nothing.</p>
+<p>For example the following program registers two callbacks that are invoked when the value of
+<code class="docutils literal notranslate"><span class="pre">vessel.conrol.abort</span></code> changes:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">abort</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="p">,</span> <span class="s2">"abort"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_abort1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Abort 1 called with a value of"</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_abort2</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Abort 2 called with a value of"</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+
+<span class="n">abort</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span><span class="n">check_abort1</span><span class="p">)</span>
+<span class="n">abort</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span><span class="n">check_abort2</span><span class="p">)</span>
+
+<span class="c1"># Keep the program running...</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>A callback added to a stream that already has a value is called with that value straight away.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The callback function may be called from a different thread than the one that created the
+stream. Any changes to shared state must therefore be protected with appropriate
+synchronization.</p>
+</div>
+</section>
+<section id="stream-endings">
+<h4>Stream Endings<a class="headerlink" href="#stream-endings" title="Link to this heading">#</a></h4>
+<p>The following example streams the temperature of a part until the part is destroyed:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">temperature</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="s2">"temperature"</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">temperature</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">temperature</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Temperature"</span><span class="p">,</span> <span class="n">temperature</span><span class="p">())</span>
+<span class="k">except</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">ObjectDestroyedException</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"The part was destroyed"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once a stream ends, calling the stream or waiting on it raises the exception that ended it. A stream
+ends when its procedure raises an exception, when the server removes it, when you remove it, or when
+the connection closes.</p>
+<p>A stream that the server removes, such as an event that has finished, ends with
+<code class="docutils literal notranslate"><span class="pre">StreamRemovedException</span></code> from the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service. A stream you remove ends with <code class="docutils literal notranslate"><span class="pre">StreamError</span></code>,
+and a closed connection with <code class="docutils literal notranslate"><span class="pre">ConnectionError</span></code>.</p>
+<p>An exception for an object that is not loaded, or a procedure not available in the game scene,
+holds the stream instead. It resumes once the object or scene is available.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="../tutorials/object-lifetime.html"><span class="doc">Object Lifetime</span></a></p>
+</div>
+<p>To handle an ending in a callback, add an end callback with
+<a class="reference internal" href="#krpc.stream.Stream.add_end_callback" title="krpc.stream.Stream.add_end_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">krpc.stream.Stream.add_end_callback()</span></code></a>. It is called once, with the exception.</p>
+</section>
+</section>
+<section id="streaming-server-side-functions">
+<h3>Streaming Server Side Functions<a class="headerlink" href="#streaming-server-side-functions" title="Link to this heading">#</a></h3>
+<p>Pass a Python function or lambda to <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">krpc.client.Client.add_stream()</span></code></a> to stream its value,
+computed on the server. The server evaluates the function on each stream update, within one physics
+tick. The value can be any type the server can send, including collections and objects. For example,
+the following streams the vessel’s altitude in kilometers:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span>
+
+<span class="c1"># Stream the vessel's altitude in kilometers, computed on the server</span>
+<span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude:"</span><span class="p">,</span> <span class="n">stream</span><span class="p">(),</span> <span class="s2">"km"</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Each call to <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> creates a separate stream, which evaluates the function again on each
+update.</p>
+<p>A function stream or event ends on any exception its function raises. This includes
+<code class="docutils literal notranslate"><span class="pre">ObjectNotLoadedException</span></code> from the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service, raised while the game loads or when a vessel
+unloads. To keep a function running through a load, catch the exception in the function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">altitude_km</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">/</span> <span class="mi">1000</span>
+    <span class="k">except</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">ObjectNotLoadedException</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span>
+
+
+<span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">altitude_km</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For an event, the handler returns <code class="docutils literal notranslate"><span class="pre">False</span></code> so the event does not fire.</p>
+</section>
+</section>
+<section id="events">
+<span id="python-client-events"></span><h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
+<p>Some procedures return event objects of type <a class="reference internal" href="#krpc.event.Event" title="krpc.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.event.Event</span></code></a>. These allow you to wait
+until an event occurs, by calling <a class="reference internal" href="#krpc.event.Event.wait" title="krpc.event.Event.wait"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.event.Event.wait</span></code></a>. Under the hood, these are
+implemented using streams and condition variables.</p>
+<p>A call to <code class="docutils literal notranslate"><span class="pre">wait</span></code> returns straight away if the event has fired since the previous call on the same
+event object, so no firing is missed between two calls. Several firings between two calls make
+<code class="docutils literal notranslate"><span class="pre">wait</span></code> return once.</p>
+<p>You can also create a custom event from a Python function or lambda. The following creates an event
+that triggers when <code class="docutils literal notranslate"><span class="pre">mean_altitude</span> <span class="pre">&gt;</span> <span class="pre">1000</span></code>:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span>
+
+<span class="c1"># Create an event that triggers when the lambda returns true</span>
+<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">)</span>
+
+<span class="c1"># Wait on the event</span>
+<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The same event can be built by hand from <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> nodes, with the expression API:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span>
+
+<span class="c1"># Convert a remote procedure call to a message,</span>
+<span class="c1"># so it can be passed to the server</span>
+<span class="n">mean_altitude</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">flight</span><span class="p">,</span> <span class="s2">"mean_altitude"</span><span class="p">)</span>
+
+<span class="c1"># Build the function on the server</span>
+<span class="n">expr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">greater_than</span><span class="p">(</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">mean_altitude</span><span class="p">),</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">constant_double</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Create an event from the function</span>
+<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+
+<span class="c1"># Wait on the event</span>
+<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude reached 1000m"</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="compiling-server-side-functions">
+<span id="python-client-compiling-functions"></span><h2>Compiling Server Side Functions<a class="headerlink" href="#compiling-server-side-functions" title="Link to this heading">#</a></h2>
+<p>Pass a Python function or lambda to <a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">krpc.client.Client.compile()</span></code></a> to compile it into a server
+side function. <a class="reference internal" href="#krpc.client.Client.add_event" title="krpc.client.Client.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">krpc.client.Client.add_event()</span></code></a>, <a class="reference internal" href="#krpc.client.Client.add_stream" title="krpc.client.Client.add_stream"><code class="xref py py-meth docutils literal notranslate"><span class="pre">krpc.client.Client.add_stream()</span></code></a> and
+<a class="reference internal" href="#krpc.client.Client.run" title="krpc.client.Client.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">krpc.client.Client.run()</span></code></a> take the result, and run it without compiling it again. The following
+compiles a function once, and runs it every second:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">resources</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span><span class="o">.</span><span class="n">resources</span>
+
+<span class="c1"># Compile the function once. Its remote procedure calls</span>
+<span class="c1"># are made again each time the function runs</span>
+<span class="n">fuel_fraction</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+    <span class="k">lambda</span><span class="p">:</span> <span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">)</span> <span class="o">/</span> <span class="n">resources</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="s2">"LiquidFuel"</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="c1"># Run the compiled function as often as needed</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Fuel:"</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">fuel_fraction</span><span class="p">))</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Given a Python function or lambda, <code class="docutils literal notranslate"><span class="pre">add_event</span></code>, <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> and <code class="docutils literal notranslate"><span class="pre">run</span></code> compile it again on
+every call, so its captured variables take their current values. A compiled function keeps the
+values from when it was compiled. Compiling makes a remote procedure call per node.</p>
+<p>To use a function repeatedly, compile it once with <code class="docutils literal notranslate"><span class="pre">compile</span></code> and pass the result. <code class="docutils literal notranslate"><span class="pre">compile</span></code>
+also compiles the function on the server, so its first run is as fast as later ones.</p>
+<p><code class="docutils literal notranslate"><span class="pre">compile</span></code> also works as a decorator, which replaces the function with its compiled form:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@conn</span><span class="o">.</span><span class="n">compile</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">altitude_km</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">/</span> <span class="mi">1000</span>
+
+
+<span class="n">stream</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">altitude_km</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">def</span></code> can take parameters, each with a type annotation. <code class="docutils literal notranslate"><span class="pre">run</span></code> passes its arguments to them,
+with defaults and keyword arguments as in Python:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@conn</span><span class="o">.</span><span class="n">compile</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">altitude_above</span><span class="p">(</span><span class="n">height</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">-</span> <span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="n">scale</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">altitude_above</span><span class="p">,</span> <span class="mi">70000</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">altitude_above</span><span class="p">,</span> <span class="mi">70000</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Only a <code class="docutils literal notranslate"><span class="pre">def</span></code> takes parameters. An event or a function stream runs its function with no arguments.
+Passing <code class="docutils literal notranslate"><span class="pre">add_event</span></code> or <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> a <code class="docutils literal notranslate"><span class="pre">def</span></code> with parameters raises
+<a class="reference internal" href="#krpc.error.FunctionCompilationError" title="krpc.error.FunctionCompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.FunctionCompilationError</span></code></a>, and a compiled function with parameters raises
+<code class="docutils literal notranslate"><span class="pre">StreamError</span></code>.</p>
+<p>The compiler translates the function’s source code into a server side function that computes
+the same result on the server:</p>
+<ul class="simple">
+<li><p>Attribute accesses and method calls on remote objects and services become calls in the
+function, made again on each evaluation. This includes calls on the elements of a collection
+in a comprehension. The procedures of the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> service cannot be called.</p></li>
+<li><p>Captured variables, literals and any sub-expression that makes no remote call are evaluated
+once, when the function is compiled, and embedded as constants. A client side function called
+there must not make a remote procedure call, as it would make it only once.</p></li>
+<li><p>Operators, conditional expressions (<code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">if</span> <span class="pre">condition</span> <span class="pre">else</span> <span class="pre">b</span></code>), indexing, slices without a
+step, f-strings without format specifiers, <code class="docutils literal notranslate"><span class="pre">in</span></code>, <code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">None</span></code> and <code class="docutils literal notranslate"><span class="pre">is</span> <span class="pre">not</span> <span class="pre">None</span></code> compile to
+the matching expression operators. So do tuple, list, set and dictionary displays.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/</span></code> is true division, <code class="docutils literal notranslate"><span class="pre">//</span></code> is floor division, and the result of <code class="docutils literal notranslate"><span class="pre">%</span></code> takes the sign of
+the divisor, as in Python.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">and</span></code> and <code class="docutils literal notranslate"><span class="pre">or</span></code> short-circuit on the server, and produce the operand that decides the
+result. <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> and <code class="docutils literal notranslate"><span class="pre">|</span></code> evaluate both operands.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">+</span></code> adds numbers, and concatenates two strings or two lists. The other arithmetic operators
+and the ordering comparisons take numbers only.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">==</span></code>, <code class="docutils literal notranslate"><span class="pre">!=</span></code> and <code class="docutils literal notranslate"><span class="pre">in</span></code> take values of the same kind. Numbers of different types widen to a
+common type.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> takes its type from where it is used: a parameter, the other branch of a
+conditional, the other elements of a list, the function’s other returns, or the variable’s
+other assignments. Elsewhere, give it a type with an annotation or <code class="docutils literal notranslate"><span class="pre">typing.cast</span></code>, for
+example <code class="docutils literal notranslate"><span class="pre">cast(Optional[str],</span> <span class="pre">None)</span></code>.</p></li>
+<li><p>Comprehensions compile to the server’s collection operations, including dictionary
+comprehensions and several <code class="docutils literal notranslate"><span class="pre">for</span></code> clauses with conditions.</p></li>
+<li><p>The builtin functions <code class="docutils literal notranslate"><span class="pre">len</span></code>, <code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">any</span></code>, <code class="docutils literal notranslate"><span class="pre">all</span></code>, <code class="docutils literal notranslate"><span class="pre">reversed</span></code>, <code class="docutils literal notranslate"><span class="pre">abs</span></code>, <code class="docutils literal notranslate"><span class="pre">round</span></code>,
+<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">range</span></code>, <code class="docutils literal notranslate"><span class="pre">enumerate</span></code> and <code class="docutils literal notranslate"><span class="pre">zip</span></code> of two collections compile
+to server side operations. <code class="docutils literal notranslate"><span class="pre">sorted</span></code>, <code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">max</span></code> take an optional <code class="docutils literal notranslate"><span class="pre">key</span></code> lambda.
+<code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">max</span></code> take a collection or several values, which are numbers unless a <code class="docutils literal notranslate"><span class="pre">key</span></code> is
+given. <code class="docutils literal notranslate"><span class="pre">sorted</span></code> also orders strings and tuples.</p></li>
+<li><p>The string methods <code class="docutils literal notranslate"><span class="pre">upper</span></code>, <code class="docutils literal notranslate"><span class="pre">lower</span></code>, <code class="docutils literal notranslate"><span class="pre">strip</span></code>, <code class="docutils literal notranslate"><span class="pre">lstrip</span></code>, <code class="docutils literal notranslate"><span class="pre">rstrip</span></code>, <code class="docutils literal notranslate"><span class="pre">replace</span></code>,
+<code class="docutils literal notranslate"><span class="pre">split</span></code>, <code class="docutils literal notranslate"><span class="pre">find</span></code>, <code class="docutils literal notranslate"><span class="pre">startswith</span></code>, <code class="docutils literal notranslate"><span class="pre">endswith</span></code> and <code class="docutils literal notranslate"><span class="pre">join</span></code> compile to server side
+operations. <code class="docutils literal notranslate"><span class="pre">strip</span></code>, <code class="docutils literal notranslate"><span class="pre">lstrip</span></code> and <code class="docutils literal notranslate"><span class="pre">rstrip</span></code> take no argument, and <code class="docutils literal notranslate"><span class="pre">split</span></code> takes a
+separator.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">math</span></code> module function with server side arguments compiles to a <code class="docutils literal notranslate"><span class="pre">StdLib</span></code> procedure.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">print</span></code> writes a line to the game’s log with <code class="docutils literal notranslate"><span class="pre">StdLib.print</span></code>. An argument computed on the
+server is a string, a number or a bool. A constant argument is formatted on the client, as
+<code class="docutils literal notranslate"><span class="pre">str()</span></code> formats it. <code class="docutils literal notranslate"><span class="pre">sep</span></code> is a constant.</p></li>
+<li><p>Iterating over a dictionary iterates over its keys, and <code class="docutils literal notranslate"><span class="pre">in</span></code> tests its keys. A string cannot
+be iterated over. <code class="docutils literal notranslate"><span class="pre">d.items()</span></code>
+gives its key and value pairs, <code class="docutils literal notranslate"><span class="pre">d.keys()</span></code> its keys and <code class="docutils literal notranslate"><span class="pre">d.values()</span></code> its values.</p></li>
+<li><p>A comprehension target can unpack a tuple, as in <code class="docutils literal notranslate"><span class="pre">[key</span> <span class="pre">for</span> <span class="pre">key,</span> <span class="pre">value</span> <span class="pre">in</span> <span class="pre">d.items()]</span></code>.</p></li>
+<li><p>A condition tests truth as Python does. <code class="docutils literal notranslate"><span class="pre">None</span></code> is false, a number is true when it is not
+zero, and a string, bytes or a collection when it is not empty. Any other value is true.</p></li>
+<li><p>Reading an attribute of a structure a service defines reads that field of it on the server.
+Calling the structure type builds one there, with its field values given by position, by
+field name, or both.</p></li>
+</ul>
+<p>A Python function can also contain statements, which run on the server. This one shuts down
+the engines that have run out of fuel, and returns how many it shut down:</p>
+<div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">shut_down_empty_engines</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">engines</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">engine</span><span class="o">.</span><span class="n">active</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">engine</span><span class="o">.</span><span class="n">has_fuel</span><span class="p">:</span>
+            <span class="n">engine</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">count</span>
+
+
+<span class="c1"># The function runs on the server, within a single physics tick</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">shut_down_empty_engines</span><span class="p">),</span> <span class="s2">"engines shut down"</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A function body can contain:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">if</span></code>, <code class="docutils literal notranslate"><span class="pre">elif</span></code> and <code class="docutils literal notranslate"><span class="pre">else</span></code>, <code class="docutils literal notranslate"><span class="pre">while</span></code> and <code class="docutils literal notranslate"><span class="pre">for</span></code> loops with <code class="docutils literal notranslate"><span class="pre">break</span></code> and <code class="docutils literal notranslate"><span class="pre">continue</span></code>,
+and early returns.</p></li>
+<li><p>Local variables, and assignment expressions (<code class="docutils literal notranslate"><span class="pre">:=</span></code>).</p></li>
+<li><p>Assignment to the properties of remote objects and services.</p></li>
+<li><p>Remote calls written as statements, for their effects.</p></li>
+<li><p>Assignment that unpacks a tuple, as in <code class="docutils literal notranslate"><span class="pre">a,</span> <span class="pre">b</span> <span class="pre">=</span> <span class="pre">b,</span> <span class="pre">a</span></code>, and a <code class="docutils literal notranslate"><span class="pre">for</span></code> target that does.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">+=</span></code> and the other augmented assignments. <code class="docutils literal notranslate"><span class="pre">+=</span></code> on a list extends it in place.</p></li>
+<li><p>Assignment to a list or dictionary element.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">append</span></code> on a list and <code class="docutils literal notranslate"><span class="pre">add</span></code> on a set.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">del</span></code> of a list index or a dictionary key, <code class="docutils literal notranslate"><span class="pre">remove</span></code> on a list or a set, <code class="docutils literal notranslate"><span class="pre">discard</span></code> on a
+set, and <code class="docutils literal notranslate"><span class="pre">clear</span></code> on any collection.</p></li>
+<li><p>Local function definitions with annotated parameter types, and lambdas without parameters
+assigned to names. Calls to them run on the server.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">raise</span></code>, and <code class="docutils literal notranslate"><span class="pre">try</span></code> with <code class="docutils literal notranslate"><span class="pre">except</span></code> and <code class="docutils literal notranslate"><span class="pre">finally</span></code> clauses.</p></li>
+</ul>
+<p>Local variables and functions follow these rules:</p>
+<ul class="simple">
+<li><p>A variable takes its type from its first assignment. Annotate an assignment of an empty
+collection, for example <code class="docutils literal notranslate"><span class="pre">result:</span> <span class="pre">list[int]</span> <span class="pre">=</span> <span class="pre">[]</span></code>. An empty collection passed as an argument,
+or used beside a typed value, takes that type.</p></li>
+<li><p>An annotation names <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code> or <code class="docutils literal notranslate"><span class="pre">str</span></code>, a <code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">set</span></code>, <code class="docutils literal notranslate"><span class="pre">dict</span></code> or
+<code class="docutils literal notranslate"><span class="pre">tuple</span></code> of types, or a class, enumeration or structure a service defines.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">typing.cast(T,</span> <span class="pre">value)</span></code> converts the value to <code class="docutils literal notranslate"><span class="pre">T</span></code> on the server. A float cast to <code class="docutils literal notranslate"><span class="pre">int</span></code>
+is truncated toward zero, where assigning it to an <code class="docutils literal notranslate"><span class="pre">int</span></code> variable is an error.</p></li>
+<li><p>A variable assigned <code class="docutils literal notranslate"><span class="pre">None</span></code> can hold <code class="docutils literal notranslate"><span class="pre">None</span></code>. A variable holding a string, an object or a
+collection can also be <code class="docutils literal notranslate"><span class="pre">None</span></code> when a value assigned to it can.</p></li>
+<li><p>An annotation such as <code class="docutils literal notranslate"><span class="pre">Optional[int]</span></code> or <code class="docutils literal notranslate"><span class="pre">int</span> <span class="pre">|</span> <span class="pre">None</span></code> allows <code class="docutils literal notranslate"><span class="pre">None</span></code> for any type.
+Assigning <code class="docutils literal notranslate"><span class="pre">None</span></code> to a variable or a parameter annotated with a type that does not allow it is
+an error.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">None</span></code> reaching a variable, a parameter or a set that does not take one raises an error
+when the function runs.</p></li>
+<li><p>A name assigned anywhere in the function is local to all of it, as in Python.</p></li>
+<li><p>Reading a variable is an error unless every path to the read assigns it first. An assignment
+in a loop or a <code class="docutils literal notranslate"><span class="pre">try</span></code> body does not count after the loop or the <code class="docutils literal notranslate"><span class="pre">try</span></code>.</p></li>
+<li><p>A local function reads a variable when it is called, so the variable can be assigned after the
+function’s definition, if every path to each call assigns it.</p></li>
+<li><p>A captured collection is copied to the server, so assigning to or deleting one of its
+elements is an error.</p></li>
+<li><p>A captured variable declared <code class="docutils literal notranslate"><span class="pre">nonlocal</span></code> in the function is a state variable. It starts
+with the value it holds when the function is compiled. A compiled function keeps its value
+between runs, as does a stream or an event. The value belongs to the compiled function, so two
+streams of one function advance it twice per update. A function compiled again on each call
+starts it again. A local function cannot declare one.</p></li>
+<li><p>A state variable’s type comes from its starting value. To give it another type, cast it in
+a statement of the function’s body before any other use of it, for example
+<code class="docutils literal notranslate"><span class="pre">values</span> <span class="pre">=</span> <span class="pre">cast(List[int],</span> <span class="pre">values)</span></code> for a list that starts empty, or
+<code class="docutils literal notranslate"><span class="pre">last</span> <span class="pre">=</span> <span class="pre">cast(Optional[float],</span> <span class="pre">last)</span></code> for a value that starts as <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p>A local function defined or redefined in a nested block can only be called within that
+block.</p></li>
+<li><p>A function that returns a value must end with a <code class="docutils literal notranslate"><span class="pre">return</span></code> or <code class="docutils literal notranslate"><span class="pre">raise</span></code> statement, an <code class="docutils literal notranslate"><span class="pre">if</span></code>
+or <code class="docutils literal notranslate"><span class="pre">try</span></code> that returns or raises on every path, or a <code class="docutils literal notranslate"><span class="pre">while</span> <span class="pre">True</span></code> loop with no <code class="docutils literal notranslate"><span class="pre">break</span></code>.</p></li>
+</ul>
+<p>Exceptions map to the exceptions the server raises:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">raise</span></code> takes an exception a service declares, or one of the builtins below.</p></li>
+<li><p>An exception a service declares is named by its class, such as
+<code class="docutils literal notranslate"><span class="pre">conn.krpc.ObjectNotLoadedException</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code> stands for <code class="docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ValueError</span></code> stands for the three argument exceptions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TypeError</span></code>, <code class="docutils literal notranslate"><span class="pre">KeyError</span></code>, <code class="docutils literal notranslate"><span class="pre">IndexError</span></code>, <code class="docutils literal notranslate"><span class="pre">ZeroDivisionError</span></code>, <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>,
+<code class="docutils literal notranslate"><span class="pre">TimeoutError</span></code> and <code class="docutils literal notranslate"><span class="pre">OverflowError</span></code> stand for the matching kRPC exceptions.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">raise</span> <span class="pre">Exception</span></code> raises a <code class="docutils literal notranslate"><span class="pre">KRPC.Error</span></code>, with the message <code class="docutils literal notranslate"><span class="pre">str()</span></code> gives its argument.</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">except</span></code> clause naming a base class, such as <code class="docutils literal notranslate"><span class="pre">LookupError</span></code>, catches the exceptions
+derived from it. <code class="docutils literal notranslate"><span class="pre">except</span> <span class="pre">RuntimeError</span></code> catches every other exception the services declare,
+apart from <code class="docutils literal notranslate"><span class="pre">KRPC.Error</span></code>.</p></li>
+<li><p>An <code class="docutils literal notranslate"><span class="pre">except</span></code> clause can name a tuple of exceptions. Its <code class="docutils literal notranslate"><span class="pre">as</span></code> name holds the exception’s
+message.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">except</span> <span class="pre">Exception</span></code>, a bare <code class="docutils literal notranslate"><span class="pre">except</span></code> and a tuple naming <code class="docutils literal notranslate"><span class="pre">Exception</span></code> catch every exception.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">break</span></code>, <code class="docutils literal notranslate"><span class="pre">continue</span></code> or <code class="docutils literal notranslate"><span class="pre">return</span></code> cannot leave a <code class="docutils literal notranslate"><span class="pre">finally</span></code> clause.</p></li>
+</ul>
+<p>Some results differ from Python’s, as the server computes with fixed size numbers and its own
+collection operations:</p>
+<ul class="simple">
+<li><p>Integer arithmetic wraps around on overflow.</p></li>
+<li><p>A 32-bit unsigned integer a procedure returns is negated, or inverted with <code class="docutils literal notranslate"><span class="pre">~</span></code>, as a 64-bit
+signed integer, so the result is negative as in Python. A 64-bit unsigned integer cannot be
+negated or inverted.</p></li>
+<li><p>A float passed where an integer is expected is an error. Convert it with <code class="docutils literal notranslate"><span class="pre">int()</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">int()</span></code>, <code class="docutils literal notranslate"><span class="pre">round()</span></code>, <code class="docutils literal notranslate"><span class="pre">math.floor</span></code> and <code class="docutils literal notranslate"><span class="pre">math.ceil</span></code> of a float give a 32-bit integer.</p></li>
+<li><p>A float divided by zero gives <code class="docutils literal notranslate"><span class="pre">inf</span></code> or <code class="docutils literal notranslate"><span class="pre">nan</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sum</span></code> adds floats in order, where Python 3.12 and later compensates for rounding. For
+example, <code class="docutils literal notranslate"><span class="pre">sum([0.1]</span> <span class="pre">*</span> <span class="pre">10)</span></code> gives <code class="docutils literal notranslate"><span class="pre">0.9999999999999999</span></code>.</p></li>
+<li><p>A math function outside its domain gives <code class="docutils literal notranslate"><span class="pre">nan</span></code> or <code class="docutils literal notranslate"><span class="pre">inf</span></code> where Python raises an error. For
+example, <code class="docutils literal notranslate"><span class="pre">math.sqrt(-1)</span></code> gives <code class="docutils literal notranslate"><span class="pre">nan</span></code> and <code class="docutils literal notranslate"><span class="pre">math.log(0)</span></code> gives <code class="docutils literal notranslate"><span class="pre">-inf</span></code>.</p></li>
+<li><p>A generator expression is computed in full where it is written. <code class="docutils literal notranslate"><span class="pre">any</span></code> and <code class="docutils literal notranslate"><span class="pre">all</span></code> stop early
+only over a generator expression written as their argument.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sum</span></code>, <code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">max</span></code> skip a <code class="docutils literal notranslate"><span class="pre">None</span></code> among the values, and <code class="docutils literal notranslate"><span class="pre">sorted</span></code> puts it first.
+Python raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> for each.</p></li>
+<li><p>A negative index counts from the end only when it is a constant. A negative power of an
+integer is a fraction only when the power is a constant. A slice bound cannot be a negative
+constant.</p></li>
+<li><p>The keys of a dictionary are integers, strings or <code class="docutils literal notranslate"><span class="pre">bool</span></code> values.</p></li>
+<li><p>Bytes cannot be indexed, measured with <code class="docutils literal notranslate"><span class="pre">len</span></code> or searched with <code class="docutils literal notranslate"><span class="pre">in</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str()</span></code> and an f-string take a string, a number or a bool. A float uses the server’s
+formatting, so <code class="docutils literal notranslate"><span class="pre">1.0</span></code> becomes <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+</ul>
+<p>A construct with no server side equivalent raises <a class="reference internal" href="#krpc.error.FunctionCompilationError" title="krpc.error.FunctionCompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.FunctionCompilationError</span></code></a>
+naming it. Examples are a format specifier, <code class="docutils literal notranslate"><span class="pre">str.format</span></code>, and a call to a client side function
+with server side arguments.</p>
+<p>Reading a stream inside a function is an error, as the stream would be read once, when the
+function is compiled. So is a call to a client side function written as a statement, such as
+<code class="docutils literal notranslate"><span class="pre">time.sleep(1)</span></code>.</p>
+<p>A Python function passed to <code class="docutils literal notranslate"><span class="pre">add_event</span></code> or <code class="docutils literal notranslate"><span class="pre">add_stream</span></code> without <code class="docutils literal notranslate"><span class="pre">compile</span></code> is an error when it
+makes no remote procedure call and uses no state variable, as its value is the same on every update.</p>
+</section>
+<section id="client-api-reference">
+<h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="krpc.connect">
+<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">rpc_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stream_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50001</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">use_pregenerated_stubs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
+<dd><p>This function creates a connection to a kRPC server. It returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>
+object, through which the server can be communicated with.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – A descriptive name for the connection. This is passed to the server and appears
+in the in-game server window.</p></li>
+<li><p><strong>address</strong> (<em>str</em>) – The address of the server to connect to. Can either be a hostname or an IP
+address in dotted decimal notation. Defaults to ‘127.0.0.1’.</p></li>
+<li><p><strong>rpc_port</strong> (<em>int</em>) – The port number of the RPC Server. Defaults to 50000. This should match the
+RPC port number of the server you want to connect to.</p></li>
+<li><p><strong>stream_port</strong> (<em>int</em>) – The port number of the Stream Server. Defaults to 50001. This should
+match the stream port number of the server you want to connect to.</p></li>
+<li><p><strong>use_pregenerated_stubs</strong> (<em>bool</em>) – Whether to use the pre-generated service stubs bundled with
+the client, which include type hints. If set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, or if the
+server provides a service with no bundled stub, the service is generated
+dynamically at runtime. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>timeout</strong> (<em>float</em>) – How many seconds to wait for a connection before giving up. Defaults to
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, which waits indefinitely. A network that drops a connection
+attempt rather than refusing it otherwise leaves the client waiting.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="krpc.connect_local">
+<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">rpc_path</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stream_path</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">use_pregenerated_stubs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect_local" title="Link to this definition">#</a></dt>
+<dd><p>This function creates a connection to a kRPC server running on the same machine, over unix
+domain sockets rather than TCP/IP. It returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a> object, just as
+<a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> does, and the connection behaves identically thereafter.</p>
+<p>Use this when the script runs on the same machine as the game and the server is configured to
+use the local socket protocol. A script that makes many calls in quick succession completes
+more of them per physics update. A script that makes a call and then waits runs at the game’s
+update rate either way.</p>
+<p>Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows Server
+2019 or later. Python’s socket module does not expose the address family on Windows, so the
+client opens the socket through winsock itself.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – A descriptive name for the connection. This is passed to the server and appears
+in the in-game server window.</p></li>
+<li><p><strong>rpc_path</strong> (<em>str</em>) – The path of the socket the RPC server is listening on. This should match
+the RPC socket path shown in the in-game server window. Defaults to the
+path the server uses unless it was configured with another.</p></li>
+<li><p><strong>stream_path</strong> (<em>str</em>) – The path of the socket the Stream Server is listening on. This should
+match the stream socket path shown in the in-game server window.
+Defaults as <code class="docutils literal notranslate"><span class="pre">rpc_path</span></code> does. Pass <code class="docutils literal notranslate"><span class="pre">None</span></code> to connect without stream
+support.</p></li>
+<li><p><strong>use_pregenerated_stubs</strong> (<em>bool</em>) – As for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="krpc.get_object_id">
+<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">get_object_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.get_object_id" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of a remote object on the server, e.g. to pass to
+<a class="reference internal" href="api/krpc/expressions.html#KRPC.Expression.constant_object" title="KRPC.Expression.constant_object"><code class="xref py py-meth docutils literal notranslate"><span class="pre">KRPC.Expression.constant_object()</span></code></a>. Raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if the object is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> – The remote object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="krpc.client.Client">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.client.</span></span><span class="sig-name descname"><span class="pre">Client</span></span><a class="headerlink" href="#krpc.client.Client" title="Link to this definition">#</a></dt>
+<dd><p>This class provides the interface for communicating with the server. It is dynamically populated
+with all the functionality provided by the server. Instances of this class should be obtained by
+calling <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.client.Client.add_stream">
+<span class="sig-name descname"><span class="pre">add_stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.add_stream" title="Link to this definition">#</a></dt>
+<dd><p>Create a stream for the remote procedure <em>func</em> called with arguments <em>args</em> and <em>kwargs</em>.
+Returns a <a class="reference internal" href="#krpc.stream.Stream" title="krpc.stream.Stream"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.stream.Stream</span></code></a> object. Each call creates a new stream.</p>
+<p><em>func</em> can also be a server side function, which the stream evaluates on each update. It
+is a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> object, or a Python function or lambda that is compiled with
+<a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call. A server side function takes no arguments. A function with
+no result, or a compiled function with parameters, raises <code class="docutils literal notranslate"><span class="pre">StreamError</span></code>. Any other value
+raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.client.Client.stream">
+<span class="sig-name descname"><span class="pre">stream</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.stream" title="Link to this definition">#</a></dt>
+<dd><p>Allows use of the <code class="docutils literal notranslate"><span class="pre">with</span></code> statement to create a stream and automatically remove it from the
+server when it goes out of scope. The remote procedure or server side function to be
+streamed should be passed as <em>func</em>, and its arguments as <em>args</em> and <em>kwargs</em>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.client.Client.compile">
+<span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.compile" title="Link to this definition">#</a></dt>
+<dd><p>Compile a Python function or lambda into a server side function, a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code>
+object. A <code class="docutils literal notranslate"><span class="pre">def</span></code> can take parameters, each with a type annotation. Can be used as a
+decorator. Raises <a class="reference internal" href="#krpc.error.FunctionCompilationError" title="krpc.error.FunctionCompilationError"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.error.FunctionCompilationError</span></code></a> for a construct with no
+server side equivalent. See <a class="reference internal" href="#python-client-compiling-functions"><span class="std std-ref">Compiling Server Side Functions</span></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.client.Client.add_event">
+<span class="sig-name descname"><span class="pre">add_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.add_event" title="Link to this definition">#</a></dt>
+<dd><p>Create an event from a server side function that evaluates to a boolean value. The
+function can also be a Python function or lambda that takes no arguments, which is
+compiled with <a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call. Returns a
+<a class="reference internal" href="#krpc.event.Event" title="krpc.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.event.Event</span></code></a> object.</p>
+<p>Raises <code class="docutils literal notranslate"><span class="pre">StreamError</span></code> without a stream connection, and for a compiled function with
+parameters. A function that does not evaluate to a boolean value raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>,
+and a value that is not a function raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.client.Client.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.run" title="Link to this definition">#</a></dt>
+<dd><p>Run a function on the server, within a single physics tick, and return the value it
+produces. The value is <code class="docutils literal notranslate"><span class="pre">None</span></code> when the function has no result or its result is null.
+The function is a <code class="docutils literal notranslate"><span class="pre">KRPC.Expression</span></code> object, or a Python function or lambda, which is
+compiled with <a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call. The arguments are passed to the function’s
+parameters. A function built with the expression API takes positional arguments only.
+This is the intended way to run a function with side effects once, where an event or a
+stream runs it on every update.</p>
+<p>Raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code> for a value that is not a function, and for an argument its parameter
+cannot take, naming the argument’s position.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="krpc.client.Client.stream_update_condition">
+<span class="sig-name descname"><span class="pre">stream_update_condition</span></span><a class="headerlink" href="#krpc.client.Client.stream_update_condition" title="Link to this definition">#</a></dt>
+<dd><p>A condition variable (of type <code class="docutils literal notranslate"><span class="pre">threading.Condition</span></code>) that is notified whenever a stream
+update finishes processing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.client.Client.wait_for_stream_update">
+<span class="sig-name descname"><span class="pre">wait_for_stream_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.wait_for_stream_update" title="Link to this definition">#</a></dt>
+<dd><p>This method blocks until a stream update finishes processing or the operation times out.</p>
+<p>The stream update condition variable must be locked before calling this method.</p>
+<p>If <em>timeout</em> is specified and is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, it should be a floating point number specifying
+the timeout in seconds for the operation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.client.Client.add_stream_update_callback">
+<span class="sig-name descname"><span class="pre">add_stream_update_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.add_stream_update_callback" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback function that is invoked whenever a stream update finishes processing.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The callback function may be called from a different thread than the one that created the
+stream. Any changes to shared state must therefore be protected with appropriate
+synchronization.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.client.Client.remove_stream_update_callback">
+<span class="sig-name descname"><span class="pre">remove_stream_update_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.remove_stream_update_callback" title="Link to this definition">#</a></dt>
+<dd><p>Removes a stream update callback function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.client.Client.get_call">
+<span class="sig-name descname"><span class="pre">get_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.get_call" title="Link to this definition">#</a></dt>
+<dd><p>Converts a call to function <em>func</em> with arguments <em>args</em> and <em>kwargs</em> into a message
+object. This allows descriptions of procedure calls to be passed to the server, for example
+when constructing custom events. See <a class="reference internal" href="#python-client-events"><span class="std std-ref">Events</span></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.client.Client.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.close" title="Link to this definition">#</a></dt>
+<dd><p>Closes the connection to the server.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="krpc.client.Client.krpc">
+<span class="sig-name descname"><span class="pre">krpc</span></span><a class="headerlink" href="#krpc.client.Client.krpc" title="Link to this definition">#</a></dt>
+<dd><p>The basic KRPC service, providing interaction with basic functionality of the server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#krpc.client.KRPC" title="krpc.client.KRPC"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.KRPC</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="krpc.client.KRPC">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.client.</span></span><span class="sig-name descname"><span class="pre">KRPC</span></span><a class="headerlink" href="#krpc.client.KRPC" title="Link to this definition">#</a></dt>
+<dd><p>This class provides access to the basic server functionality provided by the <a class="reference internal" href="api/krpc/krpc.html#module-KRPC" title="KRPC"><code class="xref py py-class docutils literal notranslate"><span class="pre">KRPC</span></code></a>
+service. An instance can be obtained by calling <a class="reference internal" href="#krpc.client.Client.krpc" title="krpc.client.Client.krpc"><code class="xref py py-attr docutils literal notranslate"><span class="pre">krpc.client.Client.krpc</span></code></a>.</p>
+<p>See <a class="reference internal" href="api/krpc/krpc.html#module-KRPC" title="KRPC"><code class="xref py py-class docutils literal notranslate"><span class="pre">KRPC</span></code></a> for full documentation of this class.</p>
+<p>Some of this functionality is used internally by the python client (for example to create and
+remove streams) and therefore does not need to be used directly from application code.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="krpc.error.FunctionCompilationError">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.error.</span></span><span class="sig-name descname"><span class="pre">FunctionCompilationError</span></span><a class="headerlink" href="#krpc.error.FunctionCompilationError" title="Link to this definition">#</a></dt>
+<dd><p>Raised when a Python function cannot be compiled into a server side function. The error
+message names the unsupported construct. See <a class="reference internal" href="#python-client-compiling-functions"><span class="std std-ref">Compiling Server Side Functions</span></a>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="krpc.stream.Stream">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.stream.</span></span><span class="sig-name descname"><span class="pre">Stream</span></span><a class="headerlink" href="#krpc.stream.Stream" title="Link to this definition">#</a></dt>
+<dd><p>This class represents a stream. See <a class="reference internal" href="#python-client-streams"><span class="std std-ref">Streaming Data</span></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="krpc.stream.Stream.rate">
+<span class="sig-name descname"><span class="pre">rate</span></span><a class="headerlink" href="#krpc.stream.Stream.rate" title="Link to this definition">#</a></dt>
+<dd><p>The update rate of the stream in Hertz. When set to zero, the rate is unlimited.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.stream.Stream.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.stream.Stream.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Returns the most recent value for the stream, waiting for the first value if none has arrived
+yet. Raises the exception that ended the stream, if it has ended, such as an exception thrown
+by the remote procedure.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="krpc.stream.Stream.condition">
+<span class="sig-name descname"><span class="pre">condition</span></span><a class="headerlink" href="#krpc.stream.Stream.condition" title="Link to this definition">#</a></dt>
+<dd><p>A condition variable (of type <code class="docutils literal notranslate"><span class="pre">threading.Condition</span></code>) that is notified whenever the value of
+the stream changes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.stream.Stream.wait">
+<span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.stream.Stream.wait" title="Link to this definition">#</a></dt>
+<dd><p>This method blocks until the value of the stream changes or the operation times out. Returns
+<code class="docutils literal notranslate"><span class="pre">True</span></code> if the value changed, and <code class="docutils literal notranslate"><span class="pre">False</span></code> on a timeout.</p>
+<p>The streams condition variable must be locked before calling this method.</p>
+<p>If <em>timeout</em> is specified and is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, it should be a floating point number specifying
+the timeout in seconds for the operation.</p>
+<p>Raises the exception that ended the stream, if it ends before or during the wait.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.stream.Stream.add_callback">
+<span class="sig-name descname"><span class="pre">add_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.stream.Stream.add_callback" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback function that is invoked whenever the value of the stream changes. The
+callback function should take one argument, which is passed the new value of the stream. If
+the stream already has a value, the callback is invoked with it straight away.
+An error from the stream does not invoke the callback. Calling the stream raises it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The callback function may be called from a different thread than the one that created the
+stream. Any changes to shared state must therefore be protected with appropriate
+synchronization.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.stream.Stream.remove_callback">
+<span class="sig-name descname"><span class="pre">remove_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.stream.Stream.remove_callback" title="Link to this definition">#</a></dt>
+<dd><p>Removes a callback function from the stream.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.stream.Stream.add_end_callback">
+<span class="sig-name descname"><span class="pre">add_end_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.stream.Stream.add_end_callback" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback function that is invoked once when the stream ends. The callback function
+should take one argument, which is passed the exception that ended the stream. It is
+invoked straight away if the stream has already ended.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.stream.Stream.remove_end_callback">
+<span class="sig-name descname"><span class="pre">remove_end_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.stream.Stream.remove_end_callback" title="Link to this definition">#</a></dt>
+<dd><p>Removes an end callback function from the stream.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.stream.Stream.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.stream.Stream.remove" title="Link to this definition">#</a></dt>
+<dd><p>Removes the stream from the server. Other streams of the same call are not affected.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="krpc.event.Event">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">krpc.event.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><a class="headerlink" href="#krpc.event.Event" title="Link to this definition">#</a></dt>
+<dd><p>This class represents an event. See <a class="reference internal" href="#python-client-events"><span class="std std-ref">Events</span></a>. It is wrapper around a stream of
+type <code class="docutils literal notranslate"><span class="pre">bool</span></code> that indicates when the event occurs.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="krpc.event.Event.condition">
+<span class="sig-name descname"><span class="pre">condition</span></span><a class="headerlink" href="#krpc.event.Event.condition" title="Link to this definition">#</a></dt>
+<dd><p>The condition variable (of type <code class="docutils literal notranslate"><span class="pre">threading.Condition</span></code>) that is notified whenever the event
+occurs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.event.Event.wait">
+<span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.event.Event.wait" title="Link to this definition">#</a></dt>
+<dd><p>This method blocks until the event occurs or the operation times out. It returns straight
+away if the event has occurred since the previous call on this event object. Returns
+<code class="docutils literal notranslate"><span class="pre">True</span></code> if the event occurred, and <code class="docutils literal notranslate"><span class="pre">False</span></code> on a timeout.</p>
+<p>The events condition variable must be locked before calling this method.</p>
+<p>If <em>timeout</em> is specified and is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, it should be a floating point number specifying
+the timeout in seconds for the operation.</p>
+<p>Raises the exception that ended the event, if it ends before or during the wait.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.event.Event.add_callback">
+<span class="sig-name descname"><span class="pre">add_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.event.Event.add_callback" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback function that is invoked whenever the event occurs. The callback function
+should be a function that takes zero arguments. It is invoked straight away if the event
+has occurred since the previous call to <a class="reference internal" href="#krpc.event.Event.wait" title="krpc.event.Event.wait"><code class="xref py py-meth docutils literal notranslate"><span class="pre">krpc.event.Event.wait()</span></code></a> on this event
+object, and the event’s callbacks have not been invoked for it. A callback added after the
+event has ended is not invoked for an earlier firing. An error from the event does not invoke
+the callback. Waiting on the event raises it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.event.Event.remove_callback">
+<span class="sig-name descname"><span class="pre">remove_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.event.Event.remove_callback" title="Link to this definition">#</a></dt>
+<dd><p>Removes a callback function from the event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.event.Event.add_end_callback">
+<span class="sig-name descname"><span class="pre">add_end_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.event.Event.add_end_callback" title="Link to this definition">#</a></dt>
+<dd><p>Adds a callback function that is invoked once when the event ends, with the exception that
+ended it. It is invoked straight away if the event has already ended.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.event.Event.remove_end_callback">
+<span class="sig-name descname"><span class="pre">remove_end_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.event.Event.remove_end_callback" title="Link to this definition">#</a></dt>
+<dd><p>Removes an end callback function from the event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="krpc.event.Event.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.event.Event.remove" title="Link to this definition">#</a></dt>
+<dd><p>Removes the event from the server.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="krpc.event.Event.stream">
+<span class="sig-name descname"><span class="pre">stream</span></span><a class="headerlink" href="#krpc.event.Event.stream" title="Link to this definition">#</a></dt>
+<dd><p>Returns the underlying stream for the event.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="numeric-limits">
+<h2>Numeric Limits<a class="headerlink" href="#numeric-limits" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">krpc.limits</span></code> module names the extremes of the numeric types kRPC carries over the wire.
+Python integers are unbounded, and Python floats are C doubles, so the standard library covers
+<code class="docutils literal notranslate"><span class="pre">DOUBLE</span></code> alone. A service can declare one of these limits as a parameter’s default value, and
+the generated stub then names the constant from this module.</p>
+<p>The minimum of an unsigned type is <code class="docutils literal notranslate"><span class="pre">0</span></code>, so it has no constant.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="krpc.limits.DOUBLE_MAX">
+<span class="sig-prename descclassname"><span class="pre">krpc.limits.</span></span><span class="sig-name descname"><span class="pre">DOUBLE_MAX</span></span><a class="headerlink" href="#krpc.limits.DOUBLE_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.limits.DOUBLE_LOWEST">
+<span class="sig-prename descclassname"><span class="pre">krpc.limits.</span></span><span class="sig-name descname"><span class="pre">DOUBLE_LOWEST</span></span><a class="headerlink" href="#krpc.limits.DOUBLE_LOWEST" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative finite 64-bit float.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="krpc.limits.FLOAT_MAX">
+<span class="sig-prename descclassname"><span class="pre">krpc.limits.</span></span><span class="sig-name descname"><span class="pre">FLOAT_MAX</span></span><a class="headerlink" href="#krpc.limits.FLOAT_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.limits.FLOAT_LOWEST">
+<span class="sig-prename descclassname"><span class="pre">krpc.limits.</span></span><span class="sig-name descname"><span class="pre">FLOAT_LOWEST</span></span><a class="headerlink" href="#krpc.limits.FLOAT_LOWEST" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative finite 32-bit float.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="krpc.limits.SINT32_MAX">
+<span class="sig-prename descclassname"><span class="pre">krpc.limits.</span></span><span class="sig-name descname"><span class="pre">SINT32_MAX</span></span><a class="headerlink" href="#krpc.limits.SINT32_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.limits.SINT32_MIN">
+<span class="sig-prename descclassname"><span class="pre">krpc.limits.</span></span><span class="sig-name descname"><span class="pre">SINT32_MIN</span></span><a class="headerlink" href="#krpc.limits.SINT32_MIN" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative 32-bit signed integer.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="krpc.limits.SINT64_MAX">
+<span class="sig-prename descclassname"><span class="pre">krpc.limits.</span></span><span class="sig-name descname"><span class="pre">SINT64_MAX</span></span><a class="headerlink" href="#krpc.limits.SINT64_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.limits.SINT64_MIN">
+<span class="sig-prename descclassname"><span class="pre">krpc.limits.</span></span><span class="sig-name descname"><span class="pre">SINT64_MIN</span></span><a class="headerlink" href="#krpc.limits.SINT64_MIN" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative 64-bit signed integer.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="krpc.limits.UINT32_MAX">
+<span class="sig-prename descclassname"><span class="pre">krpc.limits.</span></span><span class="sig-name descname"><span class="pre">UINT32_MAX</span></span><a class="headerlink" href="#krpc.limits.UINT32_MAX" title="Link to this definition">#</a></dt>
+<dd><p>The largest 32-bit unsigned integer.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="krpc.limits.UINT64_MAX">
+<span class="sig-prename descclassname"><span class="pre">krpc.limits.</span></span><span class="sig-name descname"><span class="pre">UINT64_MAX</span></span><a class="headerlink" href="#krpc.limits.UINT64_MAX" title="Link to this definition">#</a></dt>
+<dd><p>The largest 64-bit unsigned integer.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../python.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Python</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="api/krpc.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">KRPC API</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-library">Installing the Library</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-members">Deprecated Members</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-side-functions">Server Side Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#callbacks">Callbacks</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#stream-endings">Stream Endings</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-server-side-functions">Streaming Server Side Functions</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compiling-server-side-functions">Compiling Server Side Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numeric-limits">Numeric Limits</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/python/client.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

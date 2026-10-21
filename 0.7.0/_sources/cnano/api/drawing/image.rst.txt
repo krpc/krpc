@@ -1,0 +1,35 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Image
+=====
+
+
+.. type:: krpc_Drawing_Image_t
+
+   An image that markers can be drawn with. Created using :func:`krpc_Drawing_AddImage`.
+
+   .. note::
+
+      An image is kept across scene changes, until it is removed or the client that
+      created it disconnects.
+
+   .. function:: krpc_error_t krpc_Drawing_Image_Width(krpc_connection_t connection, int32_t * returnValue, krpc_Drawing_Image_t instance)
+
+      The width of the image, in pixels.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Image_Height(krpc_connection_t connection, int32_t * returnValue, krpc_Drawing_Image_t instance)
+
+      The height of the image, in pixels.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_Drawing_Image_Remove(krpc_connection_t connection, krpc_Drawing_Image_t instance)
+
+      Remove the image. A marker drawn with it goes back to its own icon.
+
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

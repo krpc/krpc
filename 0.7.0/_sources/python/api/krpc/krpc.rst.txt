@@ -1,0 +1,419 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KRPC
+
+KRPC
+====
+
+
+
+
+
+
+
+
+
+
+
+.. module:: KRPC
+
+Main kRPC service, used by clients to interact with basic server functionality.
+
+
+.. staticmethod:: get_client_id()
+
+   Returns the identifier for the current client.
+
+   :rtype: bytes
+   
+
+
+
+
+.. staticmethod:: get_client_name()
+
+   Returns the name of the current client.
+   This is an empty string if the client has no name.
+
+   :rtype: str
+   
+
+
+
+
+.. attribute:: clients
+
+   The RPC clients that are currently connected to the server.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: list(:class:`ClientInfo`)
+   
+
+
+
+
+.. staticmethod:: get_status()
+
+   Returns some information about the server, such as the version.
+
+   :rtype: :class:`krpc.schema.KRPC.Status`
+   
+
+
+
+
+.. staticmethod:: get_services()
+
+   Returns information on all services, procedures, classes, properties etc. provided by the server.
+   Can be used by client libraries to automatically create functionality such as stubs.
+
+   :rtype: :class:`krpc.schema.KRPC.Services`
+   
+
+
+
+
+.. staticmethod:: add_function_stream(function)
+
+   Add a stream of the value a server side function computes on each update.
+
+   :param Expression function:
+   :rtype: :class:`krpc.schema.KRPC.Stream`
+   
+
+   .. note::
+
+      Each call adds a new stream, with values of the type given by
+      :attr:`Expression.return_type`. Any exception from the function ends the
+      stream, including one for an object that is not loaded. A procedure that pauses
+      execution to resume on a later tick produces an error on the stream.
+
+
+
+
+.. staticmethod:: hold_tick()
+
+   Hold the game on its current physics tick until :meth:`release_tick` is called
+   or the hold times out. Every call made in between is executed before the game
+   advances, so a read, compute and write all happen in the state of one tick.
+
+   
+
+   .. note::
+
+      The game renders no frame, takes no input and runs no physics while the tick is
+      held. Keep a hold as short as possible, and release it even when the code between
+      the two calls fails.
+
+      A tick is held once, so this waits for the next tick when the current one has
+      already been released. One client holds the tick at a time, and only a client
+      making a call can hold it: a stream or an event cannot.
+
+      A hold ends by itself when it times out, when the client disconnects, and when the
+      client calls a procedure that takes more than one tick to finish, such as staging
+      or warping. Stream updates are sent once the tick is released, so waiting for a
+      stream or an event inside a hold waits out the timeout.
+
+
+
+
+.. staticmethod:: release_tick()
+
+   Let the game move on from the tick that :meth:`hold_tick` held it on. Does
+   nothing when no tick is held, which is the case once a hold has timed out.
+
+   
+
+
+
+
+.. staticmethod:: next_tick()
+
+   Let the game move on from the tick being held and hold the one after it, so that a
+   program acts on consecutive physics ticks. Holds the soonest tick it can if no tick
+   is currently being held.
+
+   
+
+   .. note::
+
+      A release and a hold made as two separate calls let the game advance between them.
+      This takes the next tick without that gap. Call it at the top of a loop that has to
+      act on every tick, work, and come back to it.
+
+      The game advances one tick per call, so it runs at the rate of the loop for as long
+      as the loop runs. End the loop with :meth:`release_tick`.
+
+      Every limit of :meth:`hold_tick` applies, the timeout included. A hold lost to
+      the timeout is not reported, and the next call takes whatever tick it lands on.
+
+
+
+
+.. staticmethod:: compile_function(function)
+
+   Compile a server side function, so that running, streaming or adding it as an
+   event does not compile it.
+
+   :param Expression function:
+   
+
+   .. note::
+
+      Compiling a large function takes time on the game's main thread. Compiling it
+      in advance keeps that time out of its first run.
+
+
+
+
+.. staticmethod:: run_function(function, [arguments = []])
+
+   Run a server side function once, within a single physics tick, and return
+   the value it produces.
+
+   :param Expression function: The function to run.
+   :param list arguments: The encoded arguments, one per parameter.
+   :returns: The encoded value of the function, or no bytes for a function with no value.
+   :rtype: bytes or None
+   
+
+   .. note::
+
+      The arguments are encoded at the types given by :attr:`Expression.parameter_types`.
+      Throws an exception if a procedure the function calls pauses execution, and the
+      effects up to the pause remain.
+
+
+
+
+.. attribute:: game_scene
+
+   The current game scene. Setting this switches the game to the given
+   scene, or opens/closes the corresponding facility for the pseudo-scenes.
+   Scene changes happen asynchronously: setting this property returns
+   immediately, and clients should poll it until it reports the requested
+   scene. Setting it to :attr:`GameScene.flight` resumes the save's
+   active vessel, and fails if there is none. Moving between
+   :attr:`GameScene.editor_vab` and :attr:`GameScene.editor_sph`
+   keeps the vessel that is being constructed, as the game's own switch
+   editor button does. Leaving flight saves the game first, unless the game
+   cannot be saved, e.g. while under acceleration.
+
+   :Attribute: Can be read or written
+   :rtype: :class:`GameScene`
+   
+
+
+
+
+.. attribute:: paused
+
+   Whether the game is paused.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: game_state_loads
+
+   The number of game states that have finished loading.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: int
+   
+
+   .. note::
+
+      Increases once a game load, quickload, revert or scene change has finished.
+
+
+
+
+
+.. class:: GameScene
+
+   The game scene. See :attr:`game_scene`.
+
+
+   .. data:: space_center
+
+      The game scene showing the Kerbal Space Center buildings.
+
+
+   .. data:: flight
+
+      The game scene showing a vessel in flight (or on the launchpad/runway).
+
+
+   .. data:: tracking_station
+
+      The tracking station.
+
+
+   .. data:: editor_vab
+
+      The Vehicle Assembly Building.
+
+
+   .. data:: editor_sph
+
+      The Space Plane Hangar.
+
+
+   .. data:: mission_builder
+
+      The mission builder.
+
+
+   .. data:: astronaut_complex
+
+      The astronaut complex. This is a pseudo-scene, shown when the
+      astronaut complex facility is open within the space center scene.
+
+
+   .. data:: mission_control
+
+      Mission control. This is a pseudo-scene, shown when the
+      mission control facility is open within the space center scene.
+
+
+   .. data:: research_and_development
+
+      Research and development. This is a pseudo-scene, shown when the
+      research and development facility is open within the space center scene.
+
+
+   .. data:: administration
+
+      The administration facility. This is a pseudo-scene, shown when the
+      administration facility is open within the space center scene.
+
+
+
+.. class:: ClientInfo(id, name, address)
+
+   A client connected to the server.
+
+   .. note::
+
+      See :attr:`clients`.
+   .. attribute:: id
+
+      The identifier of the client.
+
+      :rtype: bytes
+
+   .. attribute:: name
+
+      The name of the client, or an empty string if it has no name.
+
+      :rtype: str
+
+   .. attribute:: address
+
+      The address of the client.
+
+      :rtype: str
+
+
+.. class:: InvalidOperationException
+
+   A method call was made to a method that is invalid
+   given the current state of the object.
+
+
+
+.. class:: ArgumentException
+
+   A method was invoked where at least one of the passed arguments does not
+   meet the parameter specification of the method.
+
+
+
+.. class:: ArgumentNullException
+
+   A null reference was passed to a method that does not accept it as a valid argument.
+
+
+
+.. class:: ArgumentOutOfRangeException
+
+   The value of an argument is outside the allowable range of values as defined by the invoked method.
+
+
+
+.. class:: NullReferenceException
+
+   A value was null where its type does not allow one.
+
+
+
+.. class:: KeyNotFoundException
+
+   A key was not found in a dictionary.
+
+
+
+.. class:: IndexOutOfRangeException
+
+   An index was outside the bounds of a collection, string or array.
+
+
+
+.. class:: DivideByZeroException
+
+   An integer was divided by zero.
+
+
+
+.. class:: NotSupportedException
+
+   A method was invoked that is not supported.
+
+
+
+.. class:: TimeoutException
+
+   An operation did not complete in the time allotted to it.
+
+
+
+.. class:: OverflowException
+
+   An arithmetic or conversion operation overflowed.
+
+
+
+.. class:: ObjectDestroyedException
+
+   The game object that a service object refers to no longer exists,
+   so the object cannot be used. For example, the part it represents
+   was destroyed, or the vessel it belongs to was recovered.
+
+
+
+.. class:: ObjectNotLoadedException
+
+   The game object that a service object refers to exists, but is not loaded.
+   For example, the game is loading, or the vessel carrying the part is unloaded.
+
+
+
+.. class:: UnsupportedSceneException
+
+   The procedure is not available in the current game scene.
+
+
+
+.. class:: StreamRemovedException
+
+   A stream was removed by the server, e.g. an event that has finished.
+
+
+
+.. class:: Error
+
+   A general error, described by its message.

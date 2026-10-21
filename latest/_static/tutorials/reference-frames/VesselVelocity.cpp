@@ -7,7 +7,7 @@
 int main() {
   krpc::Client connection = krpc::connect("Vessel velocity");
   krpc::services::SpaceCenter spaceCenter(&connection);
-  auto vessel = spaceCenter.active_vessel();
+  auto vessel = spaceCenter.active_vessel().value();
   auto ref_frame = krpc::services::SpaceCenter::ReferenceFrame::create_hybrid(
     connection,
     vessel.orbit().body().reference_frame(),

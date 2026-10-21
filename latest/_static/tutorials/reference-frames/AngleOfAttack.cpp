@@ -11,7 +11,7 @@ static const double pi = 3.1415926535897;
 int main() {
   krpc::Client conn = krpc::connect("Angle of attack");
   krpc::services::SpaceCenter space_center(&conn);
-  auto vessel = space_center.active_vessel();
+  auto vessel = space_center.active_vessel().value();
 
   while (true) {
     auto d = vessel.direction(vessel.orbit().body().reference_frame());

@@ -1,0 +1,736 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.StdLib
+
+Standard Library
+================
+
+
+.. class:: StdLib
+
+   A standard library of mathematics and printing for server side functions, and of the
+   colors other services use.
+
+   .. note::
+
+      Vectors are position and direction tuples, and rotations are unit quaternion tuples
+      in the order x, y, z, w the SpaceCenter service uses. Angles are in radians unless
+      stated otherwise.
+
+   .. property:: double Pi { get; }
+
+      The constant pi.
+
+      :Game Scenes: All
+
+   .. property:: double E { get; }
+
+      The constant e, the base of the natural logarithm.
+
+      :Game Scenes: All
+
+   .. function:: double Abs(double x)
+
+      The absolute value of a number.
+
+      :parameters:
+
+       * **x** -- The number.
+
+      :Game Scenes: All
+
+   .. function:: int Sign(double x)
+
+      The sign of a number: -1 if it is negative, 1 if it is positive,
+      and 0 if it is zero or not a number.
+
+      :parameters:
+
+       * **x** -- The number.
+
+      :Game Scenes: All
+
+   .. function:: double CopySign(double x, double y)
+
+      The magnitude of the first number with the sign of the second.
+
+      :parameters:
+
+       * **x** -- The number giving the magnitude.
+       * **y** -- The number giving the sign.
+
+      :Game Scenes: All
+
+   .. function:: bool IsNan(double x)
+
+      Whether a number is not a number.
+
+      :parameters:
+
+       * **x** -- The number.
+
+      :Game Scenes: All
+
+   .. function:: bool IsFinite(double x)
+
+      Whether a number is neither infinite nor not a number.
+
+      :parameters:
+
+       * **x** -- The number.
+
+      :Game Scenes: All
+
+   .. function:: double Floor(double x)
+
+      The largest whole number less than or equal to the given number.
+
+      :parameters:
+
+       * **x** -- The number.
+
+      :Game Scenes: All
+
+   .. function:: double Ceiling(double x)
+
+      The smallest whole number greater than or equal to the given number.
+
+      :parameters:
+
+       * **x** -- The number.
+
+      :Game Scenes: All
+
+   .. function:: double Round(double x, int digits = 0)
+
+      The given number rounded to the given number of decimal places,
+      with a halfway value rounded to the nearer even number.
+
+      :parameters:
+
+       * **x** -- The number.
+       * **digits** -- The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the rounded value is too large for a double.
+
+   .. function:: double RoundHalfAwayFromZero(double x, int digits = 0)
+
+      The given number rounded to the given number of decimal places,
+      with a halfway value rounded away from zero.
+
+      :parameters:
+
+       * **x** -- The number.
+       * **digits** -- The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the rounded value is too large for a double.
+
+   .. function:: double RoundHalfUp(double x, int digits = 0)
+
+      The given number rounded to the given number of decimal places,
+      with a halfway value rounded toward positive infinity.
+
+      :parameters:
+
+       * **x** -- The number.
+       * **digits** -- The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the rounded value is too large for a double.
+
+   .. function:: double Sqrt(double x)
+
+      The square root of a number.
+
+      :parameters:
+
+       * **x** -- The number.
+
+      :Game Scenes: All
+
+   .. function:: double Hypot(double x, double y)
+
+      The length of the hypotenuse of a right triangle with the given sides.
+
+      :parameters:
+
+       * **x** -- The first side.
+       * **y** -- The second side.
+
+      :Game Scenes: All
+
+   .. function:: double Sin(double x)
+
+      The sine of an angle, in radians.
+
+      :parameters:
+
+       * **x** -- The angle.
+
+      :Game Scenes: All
+
+   .. function:: double Cos(double x)
+
+      The cosine of an angle, in radians.
+
+      :parameters:
+
+       * **x** -- The angle.
+
+      :Game Scenes: All
+
+   .. function:: double Tan(double x)
+
+      The tangent of an angle, in radians.
+
+      :parameters:
+
+       * **x** -- The angle.
+
+      :Game Scenes: All
+
+   .. function:: double Asin(double x)
+
+      The angle, in radians, whose sine is the given number.
+
+      :parameters:
+
+       * **x** -- The number.
+
+      :Game Scenes: All
+
+   .. function:: double Acos(double x)
+
+      The angle, in radians, whose cosine is the given number.
+
+      :parameters:
+
+       * **x** -- The number.
+
+      :Game Scenes: All
+
+   .. function:: double Atan(double x)
+
+      The angle, in radians, whose tangent is the given number.
+
+      :parameters:
+
+       * **x** -- The number.
+
+      :Game Scenes: All
+
+   .. function:: double Atan2(double y, double x)
+
+      The angle, in radians, between the positive x axis and the point (x, y).
+
+      :parameters:
+
+       * **y** -- The y coordinate.
+       * **x** -- The x coordinate.
+
+      :Game Scenes: All
+
+   .. function:: double Log(double x, double newBase = 2.718281828459045)
+
+      The logarithm of a number, natural unless another base is given.
+
+      :parameters:
+
+       * **x** -- The number.
+       * **newBase** -- The base of the logarithm.
+
+      :Game Scenes: All
+
+   .. function:: double Log10(double x)
+
+      The base 10 logarithm of a number.
+
+      :parameters:
+
+       * **x** -- The number.
+
+      :Game Scenes: All
+
+   .. function:: double Exp(double x)
+
+      The number e raised to the given power.
+
+      :parameters:
+
+       * **x** -- The power.
+
+      :Game Scenes: All
+
+   .. function:: double Min(double x, double y)
+
+      The smaller of two numbers.
+
+      :parameters:
+
+       * **x** -- The first number.
+       * **y** -- The second number.
+
+      :Game Scenes: All
+
+   .. function:: double Max(double x, double y)
+
+      The larger of two numbers.
+
+      :parameters:
+
+       * **x** -- The first number.
+       * **y** -- The second number.
+
+      :Game Scenes: All
+
+   .. function:: double Clamp(double x, double min, double max)
+
+      The given number limited to the given range.
+
+      :parameters:
+
+       * **x** -- The number.
+       * **min** -- The minimum of the range.
+       * **max** -- The maximum of the range.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the minimum is greater than the maximum.
+
+   .. function:: double Lerp(double a, double b, double t)
+
+      Linear interpolation between two numbers.
+
+      :parameters:
+
+       * **a** -- The number when t is 0.
+       * **b** -- The number when t is 1.
+       * **t** -- The interpolation parameter.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The parameter is not limited to the range 0 to 1, and a value outside it
+         extrapolates.
+
+   .. function:: double InverseLerp(double a, double b, double x)
+
+      The interpolation parameter of a number between two others,
+      limited to the range 0 to 1.
+
+      :parameters:
+
+       * **a** -- The number at 0.
+       * **b** -- The number at 1.
+       * **x** -- The number.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Returns 0 if the two numbers are equal.
+
+   .. function:: double DegreesToRadians(double x)
+
+      The angle in radians of an angle in degrees.
+
+      :parameters:
+
+       * **x** -- The angle in degrees.
+
+      :Game Scenes: All
+
+   .. function:: double RadiansToDegrees(double x)
+
+      The angle in degrees of an angle in radians.
+
+      :parameters:
+
+       * **x** -- The angle in radians.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> VectorAdd(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+
+      The sum of two vectors.
+
+      :parameters:
+
+       * **u** -- The first vector.
+       * **v** -- The second vector.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> VectorSubtract(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+
+      The difference of two vectors.
+
+      :parameters:
+
+       * **u** -- The first vector.
+       * **v** -- The second vector.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> VectorScale(System.Tuple<double,double,double> v, double scale)
+
+      A vector scaled by a number.
+
+      :parameters:
+
+       * **v** -- The vector.
+       * **scale** -- The scaling factor.
+
+      :Game Scenes: All
+
+   .. function:: double VectorDot(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+
+      The dot product of two vectors.
+
+      :parameters:
+
+       * **u** -- The first vector.
+       * **v** -- The second vector.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> VectorCross(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+
+      The cross product of two vectors.
+
+      :parameters:
+
+       * **u** -- The first vector.
+       * **v** -- The second vector.
+
+      :Game Scenes: All
+
+   .. function:: double VectorMagnitude(System.Tuple<double,double,double> v)
+
+      The magnitude (length) of a vector.
+
+      :parameters:
+
+       * **v** -- The vector.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> VectorNormalize(System.Tuple<double,double,double> v)
+
+      A vector scaled to a magnitude of 1.
+
+      :parameters:
+
+       * **v** -- The vector.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the vector is zero.
+
+   .. function:: double VectorDistance(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+
+      The distance between two positions.
+
+      :parameters:
+
+       * **u** -- The first position.
+       * **v** -- The second position.
+
+      :Game Scenes: All
+
+   .. function:: double VectorAngle(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+
+      The angle between two vectors, in radians, between 0 and pi.
+
+      :parameters:
+
+       * **u** -- The first vector.
+       * **v** -- The second vector.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if either vector is zero.
+
+   .. function:: System.Tuple<double,double,double> VectorLerp(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v, double t)
+
+      Linear interpolation between two vectors.
+
+      :parameters:
+
+       * **u** -- The vector when t is 0.
+       * **v** -- The vector when t is 1.
+       * **t** -- The interpolation parameter.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The parameter is not limited to the range 0 to 1, and a value outside it
+         extrapolates.
+
+   .. function:: System.Tuple<double,double,double,double> QuaternionMultiply(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double,double> r)
+
+      The composition of two rotations: the rotation r followed by the
+      rotation q.
+
+      :parameters:
+
+       * **q** -- The second rotation.
+       * **r** -- The first rotation.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if either quaternion is zero.
+
+   .. function:: System.Tuple<double,double,double,double> QuaternionInverse(System.Tuple<double,double,double,double> q)
+
+      The inverse of a rotation.
+
+      :parameters:
+
+       * **q** -- The rotation.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the quaternion is zero.
+
+   .. function:: System.Tuple<double,double,double> QuaternionRotateVector(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double> v)
+
+      A vector rotated by a rotation.
+
+      :parameters:
+
+       * **q** -- The rotation.
+       * **v** -- The vector.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the quaternion is zero.
+
+   .. function:: System.Tuple<double,double,double,double> QuaternionFromAxisAngle(System.Tuple<double,double,double> axis, double angle)
+
+      The rotation about an axis by an angle.
+
+      :parameters:
+
+       * **axis** -- The axis of rotation.
+       * **angle** -- The angle of rotation, in radians.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the axis is zero.
+
+   .. function:: AxisAngle QuaternionToAxisAngle(System.Tuple<double,double,double,double> q)
+
+      The axis and angle of a rotation.
+
+      :parameters:
+
+       * **q** -- The rotation.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the quaternion is zero.
+
+   .. function:: System.Tuple<double,double,double,double> QuaternionFromToRotation(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
+
+      The shortest rotation that takes one direction onto another.
+
+      :parameters:
+
+       * **u** -- The direction to rotate from.
+       * **v** -- The direction to rotate to.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Opposite directions give a half turn about an arbitrary perpendicular axis.
+         Throws an exception if either vector is zero.
+
+   .. function:: System.Tuple<double,double,double,double> QuaternionLookRotation(System.Tuple<double,double,double> forward, System.Tuple<double,double,double> up)
+
+      The rotation that takes the z axis onto a forward direction, and the y axis
+      toward an up direction.
+
+      :parameters:
+
+       * **forward** -- The direction of the z axis.
+       * **up** -- The direction the y axis points toward.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The up direction need not be perpendicular to the forward direction. Throws an
+         exception if either vector is zero, or if they are parallel.
+
+   .. function:: double QuaternionAngle(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double,double> r)
+
+      The angle of the rotation that takes one rotation to another,
+      in radians, between 0 and pi.
+
+      :parameters:
+
+       * **q** -- The first rotation.
+       * **r** -- The second rotation.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if either quaternion is zero.
+
+   .. function:: System.Tuple<double,double,double,double> QuaternionSlerp(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double,double> r, double t)
+
+      Spherical linear interpolation between two rotations.
+
+      :parameters:
+
+       * **q** -- The rotation when t is 0.
+       * **r** -- The rotation when t is 1.
+       * **t** -- The interpolation parameter.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The parameter is not limited to the range 0 to 1, and a value outside it
+         extrapolates. Throws an exception if either quaternion is zero.
+
+   .. function:: void Print(string message)
+
+      Writes a message to the game's log, for debugging.
+
+      :parameters:
+
+       * **message** -- The message.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         A function evaluated by a stream or an event prints on every update. The message is
+         written at the Info level, so a server log level of Warning or Error hides it.
+
+
+
+.. struct:: AxisAngle
+
+   A rotation as an axis and an angle.
+
+   .. note::
+
+      See :meth:`StdLib.QuaternionToAxisAngle <StdLib.StdLib.QuaternionToAxisAngle>`.
+
+   .. function:: AxisAngle(System.Tuple<double,double,double> axis, double angle)
+
+      Construct a AxisAngle from the values of its fields.
+
+
+   .. property:: System.Tuple<double,double,double> Axis { get; }
+
+      The axis of the rotation, as a unit vector, or zero for no rotation.
+
+   .. property:: double Angle { get; }
+
+      The angle of the rotation, in radians between 0 and pi.
+
+
+.. struct:: ColorRGB
+
+   A color, as red, green and blue components between 0 and 1.
+
+   .. function:: ColorRGB(float r, float g, float b)
+
+      Construct a ColorRGB from the values of its fields.
+
+
+   .. property:: float R { get; }
+
+      The red component.
+
+   .. property:: float G { get; }
+
+      The green component.
+
+   .. property:: float B { get; }
+
+      The blue component.
+
+
+.. struct:: ColorRGBA
+
+   A color, as red, green, blue and alpha components between 0 and 1.
+
+   .. note::
+
+      An alpha of 0 is fully transparent and 1 is fully opaque.
+
+   .. function:: ColorRGBA(float r, float g, float b, float a)
+
+      Construct a ColorRGBA from the values of its fields.
+
+
+   .. property:: float R { get; }
+
+      The red component.
+
+   .. property:: float G { get; }
+
+      The green component.
+
+   .. property:: float B { get; }
+
+      The blue component.
+
+   .. property:: float A { get; }
+
+      The alpha component.

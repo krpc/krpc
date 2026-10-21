@@ -1,0 +1,369 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KRPC
+
+KRPC
+====
+
+
+
+
+
+
+
+
+
+
+
+.. type:: public class KRPC
+
+   Main kRPC service, used by clients to interact with basic server functionality.
+
+   .. method:: byte[] getClientID()
+
+      Returns the identifier for the current client.
+
+   
+
+   .. method:: String getClientName()
+
+      Returns the name of the current client.
+      This is an empty string if the client has no name.
+
+   
+
+   .. method:: java.util.List<ClientInfo> getClients()
+
+
+      The RPC clients that are currently connected to the server.
+
+   
+
+   .. method:: krpc.schema.KRPC.Status getStatus()
+
+      Returns some information about the server, such as the version.
+
+   
+
+   .. method:: krpc.schema.KRPC.Services getServices()
+
+      Returns information on all services, procedures, classes, properties etc. provided by the server.
+      Can be used by client libraries to automatically create functionality such as stubs.
+
+   
+
+   .. method:: krpc.schema.KRPC.Stream addFunctionStream(Expression function)
+
+      Add a stream of the value a server side function computes on each update.
+
+      :param Expression function:
+   
+
+      .. note::
+
+         Each call adds a new stream, with values of the type given by
+         :meth:`Expression.getReturnType()`. Any exception from the function ends the
+         stream, including one for an object that is not loaded. A procedure that pauses
+         execution to resume on a later tick produces an error on the stream.
+
+   .. method:: void holdTick()
+
+      Hold the game on its current physics tick until :meth:`releaseTick()` is called
+      or the hold times out. Every call made in between is executed before the game
+      advances, so a read, compute and write all happen in the state of one tick.
+
+   
+
+      .. note::
+
+         The game renders no frame, takes no input and runs no physics while the tick is
+         held. Keep a hold as short as possible, and release it even when the code between
+         the two calls fails.
+
+         A tick is held once, so this waits for the next tick when the current one has
+         already been released. One client holds the tick at a time, and only a client
+         making a call can hold it: a stream or an event cannot.
+
+         A hold ends by itself when it times out, when the client disconnects, and when the
+         client calls a procedure that takes more than one tick to finish, such as staging
+         or warping. Stream updates are sent once the tick is released, so waiting for a
+         stream or an event inside a hold waits out the timeout.
+
+   .. method:: void releaseTick()
+
+      Let the game move on from the tick that :meth:`holdTick()` held it on. Does
+      nothing when no tick is held, which is the case once a hold has timed out.
+
+   
+
+   .. method:: void nextTick()
+
+      Let the game move on from the tick being held and hold the one after it, so that a
+      program acts on consecutive physics ticks. Holds the soonest tick it can if no tick
+      is currently being held.
+
+   
+
+      .. note::
+
+         A release and a hold made as two separate calls let the game advance between them.
+         This takes the next tick without that gap. Call it at the top of a loop that has to
+         act on every tick, work, and come back to it.
+
+         The game advances one tick per call, so it runs at the rate of the loop for as long
+         as the loop runs. End the loop with :meth:`releaseTick()`.
+
+         Every limit of :meth:`holdTick()` applies, the timeout included. A hold lost to
+         the timeout is not reported, and the next call takes whatever tick it lands on.
+
+   .. method:: void compileFunction(Expression function)
+
+      Compile a server side function, so that running, streaming or adding it as an
+      event does not compile it.
+
+      :param Expression function:
+   
+
+      .. note::
+
+         Compiling a large function takes time on the game's main thread. Compiling it
+         in advance keeps that time out of its first run.
+
+   .. method:: byte[] runFunction(Expression function, java.util.List<byte[]> arguments)
+
+      Run a server side function once, within a single physics tick, and return
+      the value it produces.
+
+      :param Expression function: The function to run.
+      :param java.util.List<byte[]> arguments: The encoded arguments, one per parameter.
+      :returns: The encoded value of the function, or no bytes for a function with no value.
+   
+
+      .. note::
+
+         The arguments are encoded at the types given by :meth:`Expression.getParameterTypes()`.
+         Throws an exception if a procedure the function calls pauses execution, and the
+         effects up to the pause remain.
+
+   .. method:: GameScene getGameScene()
+
+   .. method:: void setGameScene(GameScene value)
+
+      The current game scene. Setting this switches the game to the given
+      scene, or opens/closes the corresponding facility for the pseudo-scenes.
+      Scene changes happen asynchronously: setting this property returns
+      immediately, and clients should poll it until it reports the requested
+      scene. Setting it to :meth:`GameScene.FLIGHT` resumes the save's
+      active vessel, and fails if there is none. Moving between
+      :meth:`GameScene.EDITOR_VAB` and :meth:`GameScene.EDITOR_SPH`
+      keeps the vessel that is being constructed, as the game's own switch
+      editor button does. Leaving flight saves the game first, unless the game
+      cannot be saved, e.g. while under acceleration.
+
+   
+
+   .. method:: boolean getPaused()
+
+   .. method:: void setPaused(boolean value)
+
+      Whether the game is paused.
+
+   
+
+   .. method:: int getGameStateLoads()
+
+
+      The number of game states that have finished loading.
+
+   
+
+      .. note::
+
+         Increases once a game load, quickload, revert or scene change has finished.
+
+
+
+.. type:: public enum GameScene
+
+   The game scene. See :meth:`getGameScene()`.
+
+
+   .. field:: public GameScene SPACE_CENTER
+
+      The game scene showing the Kerbal Space Center buildings.
+
+
+   .. field:: public GameScene FLIGHT
+
+      The game scene showing a vessel in flight (or on the launchpad/runway).
+
+
+   .. field:: public GameScene TRACKING_STATION
+
+      The tracking station.
+
+
+   .. field:: public GameScene EDITOR_VAB
+
+      The Vehicle Assembly Building.
+
+
+   .. field:: public GameScene EDITOR_SPH
+
+      The Space Plane Hangar.
+
+
+   .. field:: public GameScene MISSION_BUILDER
+
+      The mission builder.
+
+
+   .. field:: public GameScene ASTRONAUT_COMPLEX
+
+      The astronaut complex. This is a pseudo-scene, shown when the
+      astronaut complex facility is open within the space center scene.
+
+
+   .. field:: public GameScene MISSION_CONTROL
+
+      Mission control. This is a pseudo-scene, shown when the
+      mission control facility is open within the space center scene.
+
+
+   .. field:: public GameScene RESEARCH_AND_DEVELOPMENT
+
+      Research and development. This is a pseudo-scene, shown when the
+      research and development facility is open within the space center scene.
+
+
+   .. field:: public GameScene ADMINISTRATION
+
+      The administration facility. This is a pseudo-scene, shown when the
+      administration facility is open within the space center scene.
+
+
+
+.. type:: public class ClientInfo
+
+   A client connected to the server.
+
+   .. note::
+
+      See :meth:`getClients()`.
+
+   .. constructor:: public ClientInfo(byte[] id, String name, String address)
+
+      Construct a ClientInfo from the values of its fields.
+
+
+   .. method:: byte[] getId()
+
+      The identifier of the client.
+
+   .. method:: String getName()
+
+      The name of the client, or an empty string if it has no name.
+
+   .. method:: String getAddress()
+
+      The address of the client.
+
+
+.. type:: public class InvalidOperationException
+
+   A method call was made to a method that is invalid
+   given the current state of the object.
+
+
+
+.. type:: public class ArgumentException
+
+   A method was invoked where at least one of the passed arguments does not
+   meet the parameter specification of the method.
+
+
+
+.. type:: public class ArgumentNullException
+
+   A null reference was passed to a method that does not accept it as a valid argument.
+
+
+
+.. type:: public class ArgumentOutOfRangeException
+
+   The value of an argument is outside the allowable range of values as defined by the invoked method.
+
+
+
+.. type:: public class NullReferenceException
+
+   A value was null where its type does not allow one.
+
+
+
+.. type:: public class KeyNotFoundException
+
+   A key was not found in a dictionary.
+
+
+
+.. type:: public class IndexOutOfRangeException
+
+   An index was outside the bounds of a collection, string or array.
+
+
+
+.. type:: public class DivideByZeroException
+
+   An integer was divided by zero.
+
+
+
+.. type:: public class NotSupportedException
+
+   A method was invoked that is not supported.
+
+
+
+.. type:: public class TimeoutException
+
+   An operation did not complete in the time allotted to it.
+
+
+
+.. type:: public class OverflowException
+
+   An arithmetic or conversion operation overflowed.
+
+
+
+.. type:: public class ObjectDestroyedException
+
+   The game object that a service object refers to no longer exists,
+   so the object cannot be used. For example, the part it represents
+   was destroyed, or the vessel it belongs to was recovered.
+
+
+
+.. type:: public class ObjectNotLoadedException
+
+   The game object that a service object refers to exists, but is not loaded.
+   For example, the game is loading, or the vessel carrying the part is unloaded.
+
+
+
+.. type:: public class UnsupportedSceneException
+
+   The procedure is not available in the current game scene.
+
+
+
+.. type:: public class StreamRemovedException
+
+   A stream was removed by the server, e.g. an event that has finished.
+
+
+
+.. type:: public class Error
+
+   A general error, described by its message.

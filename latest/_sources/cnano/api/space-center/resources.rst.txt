@@ -10,16 +10,16 @@ Resources
 
    Represents the collection of resources stored in a vessel, stage or part.
    Created by calling :func:`krpc_SpaceCenter_Vessel_Resources`,
-   :func:`krpc_SpaceCenter_Vessel_ResourcesInDecoupleStage` or
-   :func:`krpc_SpaceCenter_Part_Resources`.
+   :func:`krpc_SpaceCenter_Stage_Resources`, :func:`krpc_SpaceCenter_EditorVessel_Resources`
+   or :func:`krpc_SpaceCenter_Part_Resources`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resources_All(krpc_connection_t connection, krpc_list_object_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_All(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Resources_t instance)
 
       All the individual resources that can be stored.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resources_WithResource(krpc_connection_t connection, krpc_list_object_t * result, const char * name)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_WithResource(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Resources_t instance, const char * name)
 
       All the individual resources with the given name that can be stored.
 
@@ -27,15 +27,15 @@ Resources
 
 
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Names(krpc_connection_t connection, krpc_list_string_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Names(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_SpaceCenter_Resources_t instance)
 
       A list of resource names that can be stored.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resources_HasResource(krpc_connection_t connection, bool * result, const char * name)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_HasResource(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Resources_t instance, const char * name)
 
       Check whether the named resource can be stored.
 
@@ -43,9 +43,9 @@ Resources
 
        * **name** -- The name of the resource.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Amount(krpc_connection_t connection, float * result, const char * name)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Amount(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Resources_t instance, const char * name)
 
       Returns the amount of a resource that is currently stored.
 
@@ -53,9 +53,9 @@ Resources
 
        * **name** -- The name of the resource.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Max(krpc_connection_t connection, float * result, const char * name)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Max(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Resources_t instance, const char * name)
 
       Returns the amount of a resource that can be stored.
 
@@ -63,9 +63,9 @@ Resources
 
        * **name** -- The name of the resource.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Density(krpc_connection_t connection, float * result, const char * name)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Density(krpc_connection_t connection, float * returnValue, const char * name)
 
       Returns the density of a resource, in :math:`kg/l`.
 
@@ -73,9 +73,9 @@ Resources
 
        * **name** -- The name of the resource.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resources_FlowMode(krpc_connection_t connection, krpc_SpaceCenter_ResourceFlowMode_t * result, const char * name)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_FlowMode(krpc_connection_t connection, krpc_SpaceCenter_ResourceFlowMode_t * returnValue, const char * name)
 
       Returns the flow mode of a resource.
 
@@ -83,14 +83,14 @@ Resources
 
        * **name** -- The name of the resource.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Enabled(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Resources_set_Enabled(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_Enabled(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Resources_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resources_set_Enabled(krpc_connection_t connection, krpc_SpaceCenter_Resources_t instance, bool value)
 
       Whether use of all the resources are enabled.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -105,48 +105,48 @@ Resources
    An individual resource stored within a part.
    Created using methods in the :type:`krpc_SpaceCenter_Resources_t` class.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Name(krpc_connection_t connection, char * * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_Resource_t instance)
 
       The name of the resource.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_Resource_t instance)
 
       The part containing the resource.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Amount(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Amount(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Resource_t instance)
 
       The amount of the resource that is currently stored in the part.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Max(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Max(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Resource_t instance)
 
       The total amount of the resource that can be stored in the part.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Density(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Density(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Resource_t instance)
 
       The density of the resource, in :math:`kg/l`.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resource_FlowMode(krpc_connection_t connection, krpc_SpaceCenter_ResourceFlowMode_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_FlowMode(krpc_connection_t connection, krpc_SpaceCenter_ResourceFlowMode_t * returnValue, krpc_SpaceCenter_Resource_t instance)
 
       The flow mode of the resource.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Enabled(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_Resource_set_Enabled(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_Enabled(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Resource_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Resource_set_Enabled(krpc_connection_t connection, krpc_SpaceCenter_Resource_t instance, bool value)
 
       Whether use of this resource is enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -154,7 +154,7 @@ Resources
 
    Transfer resources between parts.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Start(krpc_connection_t connection, krpc_SpaceCenter_ResourceTransfer_t * result, krpc_SpaceCenter_Part_t fromPart, krpc_SpaceCenter_Part_t toPart, const char * resource, float maxAmount)
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Start(krpc_connection_t connection, krpc_SpaceCenter_ResourceTransfer_t * returnValue, krpc_SpaceCenter_Part_t fromPart, krpc_SpaceCenter_Part_t toPart, const char * resource, float maxAmount)
 
       Start transferring a resource transfer between a pair of parts. The transfer will move
       at most *maxAmount* units of the resource, depending on how much of
@@ -174,19 +174,45 @@ Resources
 
       .. note::
 
-         The transfer is canceled if the client that started it disconnects;
-         a canceled transfer is marked as complete.
+         Use :func:`krpc_SpaceCenter_ResourceTransfer_Cancel` to stop the transfer before it finishes; a canceled
+         transfer is marked as complete. Use :func:`krpc_SpaceCenter_ResourceTransfer_Remove` to release the memory
+         the server holds for a transfer that is done with. A transfer is stopped and
+         removed if the client that started it disconnects, or if the flight it runs in
+         is left.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Amount(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Cancel(krpc_connection_t connection, krpc_SpaceCenter_ResourceTransfer_t instance)
+
+      Cancel the transfer. No more of the resource is moved and
+      :func:`krpc_SpaceCenter_ResourceTransfer_Complete` becomes true.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Remove(krpc_connection_t connection, krpc_SpaceCenter_ResourceTransfer_t instance)
+
+      Remove the transfer, releasing the memory the server holds for it. The
+      transfer is canceled if it has not finished.
+
+
+   
+
+      .. note::
+
+         Any further use of this object throws an exception. A transfer that is left is
+         held until the parts it runs between are gone, the flight it runs in is left,
+         or the client that started it disconnects, whichever comes first; the first of
+         those may be the rest of the flight away.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Amount(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_ResourceTransfer_t instance)
 
       The amount of the resource that has been transferred.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Complete(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Complete(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_ResourceTransfer_t instance)
 
       Whether the transfer has completed. Also becomes true if the transfer is
-      canceled because the client that started it disconnected.
+      canceled by calling :func:`krpc_SpaceCenter_ResourceTransfer_Cancel`.
 
    
 

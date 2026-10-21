@@ -1,5 +1,6 @@
 import math
 import time
+
 import krpc
 
 conn = krpc.connect(name="Pitch/Heading/Roll")
@@ -33,7 +34,6 @@ def angle_between_vectors(u, v):
 
 
 while True:
-
     vessel_direction = vessel.direction(vessel.surface_reference_frame)
 
     # Get the direction of the vessel in the horizon plane

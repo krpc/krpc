@@ -5,170 +5,348 @@
 Expressions
 ===========
 
+The nodes a server side function is built from, and the types they work with. See the
+:rst:ref:`server side functions tutorial <tutorial-server-side-functions>` for how a function is
+assembled and run.
+
 
 .. type:: public class Expression
 
    A server side expression.
 
+   .. note::
+
+      Numeric operands of differing types are converted to a common type.
+
+   .. method:: Type getReturnType()
+
+
+      The type of the value the expression evaluates to. Throws an exception if the
+      value cannot be sent to a client.
+
+   
+
+      .. note::
+
+         A function created with :meth:`Expression.lambda(java.util.List<Expression>, Expression)` evaluates to the value it returns. A
+         lazily evaluated collection, such as from :meth:`Expression.select(Expression, Expression)`, is sent once
+         converted by :meth:`Expression.toList(Expression)` or :meth:`Expression.toSet(Expression)`.
+
+   .. method:: boolean getHasReturnType()
+
+
+      Whether the expression evaluates to a value.
+
+   
+
+      .. note::
+
+         An expression with no value has no :meth:`Expression.getReturnType()`. An empty
+         collection and no value both encode to an empty sequence of bytes.
+
+   .. method:: java.util.List<Type> getParameterTypes()
+
+
+      The types of the function's parameters.
+
+   
+
+      .. note::
+
+         Empty for a function that is not created with :meth:`Expression.lambda(java.util.List<Expression>, Expression)`.
+
    .. method:: static Expression constantDouble(Connection connection, double value)
 
       A constant value of double precision floating point type.
 
-      :param double value:
+      :param double value: The value.
    
 
    .. method:: static Expression constantFloat(Connection connection, float value)
 
       A constant value of single precision floating point type.
 
-      :param float value:
+      :param float value: The value.
    
 
    .. method:: static Expression constantInt(Connection connection, int value)
 
       A constant value of integer type.
 
-      :param int value:
+      :param int value: The value.
+   
+
+   .. method:: static Expression constantLong(Connection connection, long value)
+
+      A constant value of long integer type.
+
+      :param long value: The value.
+   
+
+   .. method:: static Expression constantUInt(Connection connection, int value)
+
+      A constant value of unsigned integer type.
+
+      :param int value: The value.
+   
+
+   .. method:: static Expression constantULong(Connection connection, long value)
+
+      A constant value of unsigned long integer type.
+
+      :param long value: The value.
    
 
    .. method:: static Expression constantBool(Connection connection, boolean value)
 
       A constant value of boolean type.
 
-      :param boolean value:
+      :param boolean value: The value.
    
 
    .. method:: static Expression constantString(Connection connection, String value)
 
       A constant value of string type.
 
-      :param String value:
+      :param String value: The value.
    
+
+   .. method:: static Expression constantBytes(Connection connection, byte[] value)
+
+      A constant value of bytes type.
+
+      :param byte[] value: The value.
+   
+
+   .. method:: static Expression constantEnum(Connection connection, String service, String name, int value)
+
+      A constant value of an enumeration a service defines.
+
+      :param String service: The name of the service the enumeration is defined in.
+      :param String name: The name of the enumeration.
+      :param int value: The value of the member of the enumeration.
+   
+
+   .. method:: static Expression constantNull(Connection connection, Type type)
+
+      A null constant of the given type.
+
+      :param Type type: The type of the value.
+   
+
+      .. note::
+
+         The type is made nullable, as by :meth:`Type.nullableType(Type)`.
+
+   .. method:: static Expression constantObject(Connection connection, long value)
+
+      A constant object, an instance of a class a service defines.
+
+      :param long value: The object identifier of the object.
+   
+
+      .. note::
+
+         The object is given by its object identifier.
 
    .. method:: static Expression call(Connection connection, krpc.schema.KRPC.ProcedureCall call)
 
       An RPC call.
 
-      :param krpc.schema.KRPC.ProcedureCall call:
+      :param krpc.schema.KRPC.ProcedureCall call: The procedure call.
    
+
+      .. note::
+
+         The instance the call is made on, and the values of its arguments, are fixed
+         when the expression is created. A call to a procedure with no return value is
+         evaluated for its effects, as a statement in a :meth:`Expression.block(java.util.List<Expression>)`. A collection the
+         procedure returns is copied, as a client would receive it.
+
+   .. method:: static Expression callWithArguments(Connection connection, krpc.schema.KRPC.ProcedureCall call, java.util.Map<Integer,Expression> args)
+
+      An RPC call, where some or all of the arguments are computed by expressions.
+
+      :param krpc.schema.KRPC.ProcedureCall call: The RPC to call.
+      :param java.util.Map<Integer,Expression> args: Expressions computing the call's arguments, by position.
+   
+
+      .. note::
+
+         Position 0 is the instance of a class method or property. A position with no
+         expression takes the argument encoded in the call, or the parameter's default. A
+         collection the procedure returns is copied, as a client would receive it.
 
    .. method:: static Expression equal(Connection connection, Expression arg0, Expression arg1)
 
       Equality comparison.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
+
+      .. note::
+
+         Collections, tuples, bytes and structures compare by their contents. Throws an
+         exception if the operands are of unrelated types.
 
    .. method:: static Expression notEqual(Connection connection, Expression arg0, Expression arg1)
 
       Inequality comparison.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
+
+      .. note::
+
+         Collections, tuples, bytes and structures compare by their contents. Throws an
+         exception if the operands are of unrelated types.
 
    .. method:: static Expression greaterThan(Connection connection, Expression arg0, Expression arg1)
 
       Greater than numerical comparison.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
 
    .. method:: static Expression greaterThanOrEqual(Connection connection, Expression arg0, Expression arg1)
 
       Greater than or equal numerical comparison.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
 
    .. method:: static Expression lessThan(Connection connection, Expression arg0, Expression arg1)
 
       Less than numerical comparison.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
 
    .. method:: static Expression lessThanOrEqual(Connection connection, Expression arg0, Expression arg1)
 
       Less than or equal numerical comparison.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
+   
+
+   .. method:: static Expression isNull(Connection connection, Expression value)
+
+      Whether a value is null. Throws an exception if the type of the value cannot be null.
+
+      :param Expression value: The value.
    
 
    .. method:: static Expression and(Connection connection, Expression arg0, Expression arg1)
 
-      Boolean and operator.
+      Logical or bitwise and, which evaluates both operands.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
 
    .. method:: static Expression or(Connection connection, Expression arg0, Expression arg1)
 
-      Boolean or operator.
+      Logical or bitwise or, which evaluates both operands.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
+   
+
+   .. method:: static Expression conditionalAnd(Connection connection, Expression arg0, Expression arg1)
+
+      Logical and, which evaluates the second operand only when the first is true.
+
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
+   
+
+   .. method:: static Expression conditionalOr(Connection connection, Expression arg0, Expression arg1)
+
+      Logical or, which evaluates the second operand only when the first is false.
+
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
 
    .. method:: static Expression exclusiveOr(Connection connection, Expression arg0, Expression arg1)
 
-      Boolean exclusive-or operator.
+      Logical or bitwise exclusive or.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
 
    .. method:: static Expression not(Connection connection, Expression arg)
 
-      Boolean negation operator.
+      Logical or bitwise negation.
 
-      :param Expression arg:
+      :param Expression arg: The operand.
    
+
+   .. method:: static Expression negate(Connection connection, Expression arg)
+
+      Numerical negation, which negates a uint as a long.
+
+      :param Expression arg: The operand.
+   
+
+   .. method:: static Expression conditional(Connection connection, Expression condition, Expression ifTrue, Expression ifFalse)
+
+      The second argument if the condition is true, and the third argument otherwise.
+
+      :param Expression condition: The boolean condition.
+      :param Expression ifTrue: The value when the condition is true.
+      :param Expression ifFalse: The value when the condition is false.
+   
+
+      .. note::
+
+         Throws an exception if the two values have no common type.
 
    .. method:: static Expression add(Connection connection, Expression arg0, Expression arg1)
 
       Numerical addition.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
 
    .. method:: static Expression subtract(Connection connection, Expression arg0, Expression arg1)
 
       Numerical subtraction.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
 
    .. method:: static Expression multiply(Connection connection, Expression arg0, Expression arg1)
 
       Numerical multiplication.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
 
    .. method:: static Expression divide(Connection connection, Expression arg0, Expression arg1)
 
       Numerical division.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
 
    .. method:: static Expression modulo(Connection connection, Expression arg0, Expression arg1)
 
       Numerical modulo operator.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
       :returns: The remainder of arg0 divided by arg1
    
 
@@ -176,52 +354,77 @@ Expressions
 
       Numerical power operator.
 
-      :param Expression arg0:
-      :param Expression arg1:
-      :returns: arg0 raised to the power of arg1, with type of arg0
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
+      :returns: arg0 raised to the power of arg1, at the common type of the operands
    
 
    .. method:: static Expression leftShift(Connection connection, Expression arg0, Expression arg1)
 
       Bitwise left shift.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
+
+      .. note::
+
+         Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
+         for a 64-bit value.
 
    .. method:: static Expression rightShift(Connection connection, Expression arg0, Expression arg1)
 
       Bitwise right shift.
 
-      :param Expression arg0:
-      :param Expression arg1:
+      :param Expression arg0: The first operand.
+      :param Expression arg1: The second operand.
    
+
+      .. note::
+
+         Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
+         for a 64-bit value.
 
    .. method:: static Expression cast(Connection connection, Expression arg, Type type)
 
-      Perform a cast to the given type.
+      A value cast to the given type.
 
-      :param Expression arg:
+      :param Expression arg: The value to cast.
       :param Type type: Type to cast the argument to.
    
 
+      .. note::
+
+         A tuple or collection is cast element by element.
+
    .. method:: static Expression parameter(Connection connection, String name, Type type)
 
-      A named parameter of type double.
+      A named parameter of a function.
 
       :param String name: The name of the parameter.
       :param Type type: The type of the parameter.
       :returns: A named parameter.
    
 
-   .. method:: static Expression function(Connection connection, java.util.List<Expression> parameters, Expression body)
+      .. note::
 
-      A function.
+         A value is bound to it by name with :meth:`Expression.invoke(Expression, java.util.Map<String,Expression>)`, or by its position in
+         the parameters of a :meth:`Expression.lambda(java.util.List<Expression>, Expression)`.
+
+   .. method:: static Expression lambda(Connection connection, java.util.List<Expression> parameters, Expression body)
+
+      A function with the given parameters and body.
 
       :param java.util.List<Expression> parameters: The parameters of the function.
       :param Expression body: The body of the function.
       :returns: A function.
    
+
+      .. note::
+
+         The body is an expression or a block of statements, and a body with no value is
+         evaluated for its effects. A :meth:`Expression.return_(Expression)` or :meth:`Expression.returnNothing()`
+         statement ends the evaluation.
 
    .. method:: static Expression invoke(Connection connection, Expression function, java.util.Map<String,Expression> args)
 
@@ -232,42 +435,357 @@ Expressions
       :returns: A function call.
    
 
+   .. method:: static Expression block(Connection connection, java.util.List<Expression> statements)
+
+      A block of statements, whose value is that of its last statement.
+
+      :param java.util.List<Expression> statements: The statements.
+   
+
+   .. method:: static Expression blockWithVariables(Connection connection, java.util.List<Expression> variables, java.util.List<Expression> statements)
+
+      A block of statements with local variables.
+
+      :param java.util.List<Expression> variables: The local variables of the block.
+      :param java.util.List<Expression> statements: The statements.
+   
+
+      .. note::
+
+         The value of the block is that of its last statement. The variables are in scope
+         for the statements of the block, including within nested functions.
+
+   .. method:: static Expression variable(Connection connection, String name, Type type)
+
+      A local variable, declared by :meth:`Expression.blockWithVariables(java.util.List<Expression>, java.util.List<Expression>)`.
+
+      :param String name: The name of the variable.
+      :param Type type: The type of the variable.
+      :returns: A local variable.
+   
+
+   .. method:: static Expression stateVariable(Connection connection, String name, Expression initialValue)
+
+      A variable that keeps its value between evaluations of a function.
+
+      :param String name: The name of the variable.
+      :param Expression initialValue: The initial value of the variable.
+      :returns: A state variable.
+   
+
+      .. note::
+
+         The initial value is evaluated once, when the variable is created, and gives the
+         variable its type. The value belongs to the variable, so every function that
+         contains it shares it.
+
+   .. method:: static Expression assign(Connection connection, Expression variable, Expression value)
+
+      An assignment to a local variable, state variable or function parameter.
+
+      :param Expression variable: The variable to assign to.
+      :param Expression value: The value to assign.
+   
+
+      .. note::
+
+         The value's type must be assignable to the variable's type. A numeric value of a
+         different type is widened, and narrowing it requires a cast.
+
+   .. method:: static Expression ifThen(Connection connection, Expression condition, Expression body)
+
+      An if statement, with no value.
+
+      :param Expression condition: The boolean condition.
+      :param Expression body: The statement evaluated when the condition is true.
+   
+
+      .. note::
+
+         Use :meth:`Expression.conditional(Expression, Expression, Expression)` for an if-then-else that produces a value.
+
+   .. method:: static Expression ifThenElse(Connection connection, Expression condition, Expression body, Expression elseBody)
+
+      An if-else statement, with no value.
+
+      :param Expression condition: The boolean condition.
+      :param Expression body: The statement evaluated when the condition is true.
+      :param Expression elseBody: The statement evaluated when the condition is false.
+   
+
+      .. note::
+
+         Use :meth:`Expression.conditional(Expression, Expression, Expression)` for an if-then-else that produces a value.
+
+   .. method:: static Expression while_(Connection connection, Expression condition, Expression body)
+
+      A while loop, which evaluates the body while the condition is true.
+
+      :param Expression condition: The boolean condition.
+      :param Expression body: The statement evaluated on each iteration.
+   
+
+      .. note::
+
+         A :meth:`Expression.break_()` or :meth:`Expression.continue_()` in the body applies to this loop.
+
+   .. method:: static Expression forEach(Connection connection, Expression variable, Expression collection, Expression body)
+
+      A loop that evaluates the body once for each value of a collection.
+
+      :param Expression variable: The loop variable.
+      :param Expression collection: The collection to iterate over.
+      :param Expression body: The statement evaluated on each iteration.
+   
+
+      .. note::
+
+         The loop variable is a local variable declared by an enclosing
+         :meth:`Expression.blockWithVariables(java.util.List<Expression>, java.util.List<Expression>)`, or a parameter of an enclosing :meth:`Expression.lambda(java.util.List<Expression>, Expression)`.
+         A :meth:`Expression.break_()` or :meth:`Expression.continue_()` in the body applies to this loop.
+
+   .. method:: static Expression break_(Connection connection)
+
+      A break statement, which ends the enclosing loop.
+
+   
+
+   .. method:: static Expression continue_(Connection connection)
+
+      A continue statement, which skips to the next iteration of the enclosing loop.
+
+   
+
+   .. method:: static Expression return_(Connection connection, Expression value)
+
+      A return statement, which ends the enclosing function with a value.
+
+      :param Expression value: The value to return.
+   
+
+   .. method:: static Expression returnNothing(Connection connection)
+
+      A return statement, which ends the enclosing function with no value.
+
+   
+
+   .. method:: static Expression throw_(Connection connection, String service, String name, Expression message)
+
+      A throw statement, which raises the named exception.
+
+      :param String service: The name of the service the exception is defined in.
+      :param String name: The name of the exception.
+      :param Expression message: The message of the exception.
+   
+
+      .. note::
+
+         The client receives the exception as an error from the function, or from the stream
+         or event evaluating it. Throws an exception if the service does not declare it.
+
+   .. method:: static Expression tryCatch(Connection connection, Expression body, String service, String name, Expression message, Expression handler)
+
+      A try-catch statement that handles the named exception.
+
+      :param Expression body: The statement to evaluate.
+      :param String service: The name of the service the exception is defined in.
+      :param String name: The name of the exception.
+      :param Expression message: A string variable assigned the exception's message, or null.
+      :param Expression handler: The statement evaluated when the exception is caught.
+   
+
+      .. note::
+
+         Only an exception a service declares can be named, and :meth:`Expression.tryCatchAll(Expression, Expression, Expression)`
+         handles any exception. Throws an exception if the service does not declare it.
+
+   .. method:: static Expression tryCatchAll(Connection connection, Expression body, Expression message, Expression handler)
+
+      A try-catch statement that handles any exception.
+
+      :param Expression body: The statement to evaluate.
+      :param Expression message: A string variable assigned the exception's message, or null.
+      :param Expression handler: The statement evaluated when an exception is caught.
+   
+
+   .. method:: static Expression tryFinally(Connection connection, Expression body, Expression finalizer)
+
+      A try-finally statement.
+
+      :param Expression body: The statement to evaluate.
+      :param Expression finalizer: The statement evaluated after the body.
+   
+
+      .. note::
+
+         The finalizer is evaluated after the body, whether or not the body raises an
+         exception. A break, continue or return cannot leave the finalizer.
+
    .. method:: static Expression createTuple(Connection connection, java.util.List<Expression> elements)
 
-      Construct a tuple.
+      A tuple of the given elements. Throws an exception if there are no elements or more
+      than seven.
 
       :param java.util.List<Expression> elements: The elements.
       :returns: The tuple.
    
 
+   .. method:: static Expression createStruct(Connection connection, Type type, java.util.List<Expression> fieldValues)
+
+      A structure with the given field values. Throws an exception if the field values do
+      not match its fields.
+
+      :param Type type: The type of the structure.
+      :param java.util.List<Expression> fieldValues: The values of the structure's fields, in the order the structure declares them.
+      :returns: The structure.
+   
+
    .. method:: static Expression createList(Connection connection, java.util.List<Expression> values)
 
-      Construct a list.
+      A list of the given values, with numbers widened to their common type. Throws an
+      exception if there are no values.
 
-      :param java.util.List<Expression> values: The value. Should all be of the same type.
+      :param java.util.List<Expression> values: The values.
       :returns: The list.
    
 
    .. method:: static Expression createSet(Connection connection, java.util.Set<Expression> values)
 
-      Construct a set.
+      A set of the given values, with numbers widened to their common type. Throws an
+      exception if there are no values, or a value is null.
 
-      :param java.util.Set<Expression> values: The values. Should all be of the same type.
+      :param java.util.Set<Expression> values: The values.
       :returns: The set.
    
 
+      .. note::
+
+         The values are evaluated in an unspecified order.
+
    .. method:: static Expression createDictionary(Connection connection, java.util.List<Expression> keys, java.util.List<Expression> values)
 
-      Construct a dictionary, from a list of corresponding keys and values.
+      A dictionary of the given keys and corresponding values, with numbers widened to
+      their common type. Throws an exception if there are no keys, the counts differ, the
+      keys are not of a valid key type, or a key is null.
 
-      :param java.util.List<Expression> keys: The keys. Should all be of the same type.
-      :param java.util.List<Expression> values: The values. Should all be of the same type.
+      :param java.util.List<Expression> keys: The keys.
+      :param java.util.List<Expression> values: The values.
       :returns: The dictionary.
+   
+
+      .. note::
+
+         A repeated key takes the last of its values.
+
+   .. method:: static Expression createEmptyList(Connection connection, Type valueType)
+
+      An empty list of the given value type.
+
+      :param Type valueType: The type of the values the list holds.
+      :returns: The empty list.
+   
+
+   .. method:: static Expression createEmptySet(Connection connection, Type valueType)
+
+      An empty set of the given value type. Throws an exception if the value type is
+      nullable.
+
+      :param Type valueType: The type of the values the set holds.
+      :returns: The empty set.
+   
+
+   .. method:: static Expression createEmptyDictionary(Connection connection, Type keyType, Type valueType)
+
+      An empty dictionary of the given key and value types. Throws an exception if the
+      key type is nullable or not a valid key type.
+
+      :param Type keyType: The type of the dictionary's keys.
+      :param Type valueType: The type of the dictionary's values.
+      :returns: The empty dictionary.
+   
+
+   .. method:: static Expression append(Connection connection, Expression collection, Expression value)
+
+      A statement adding a value to a list or a set.
+
+      :param Expression collection: The list or set to add to.
+      :param Expression value: The value to add.
+   
+
+      .. note::
+
+         The value goes on the end of a list. A set holding the value is left unchanged.
+
+   .. method:: static Expression set(Connection connection, Expression collection, Expression index, Expression value)
+
+      A statement setting an element of a list, or an entry of a dictionary.
+
+      :param Expression collection: The list or dictionary.
+      :param Expression index: The index of the element, counting from zero, or the key of the entry.
+      :param Expression value: The value to set.
+   
+
+      .. note::
+
+         A key the dictionary does not hold is added. Throws an exception if the index
+         is out of range for the list.
+
+   .. method:: static Expression remove(Connection connection, Expression collection, Expression value)
+
+      A removal of a value from a list or a set, or of an entry from a dictionary.
+
+      :param Expression collection: The list, set or dictionary.
+      :param Expression value: The value to remove, or the key of the entry to remove.
+      :returns: Whether the collection held the value.
+   
+
+      .. note::
+
+         The first occurrence is removed from a list.
+
+   .. method:: static Expression removeAt(Connection connection, Expression list, Expression index)
+
+      A statement removing the element at an index of a list.
+
+      :param Expression list: The list.
+      :param Expression index: The index of the element, counting from zero.
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. method:: static Expression clear(Connection connection, Expression collection)
+
+      A statement removing every value from a list or a set, or every entry from a dictionary.
+
+      :param Expression collection: The list, set or dictionary.
+   
+
+   .. method:: static Expression dictionaryKeys(Connection connection, Expression dictionary)
+
+      The keys of a dictionary, as a list.
+
+      :param Expression dictionary: The dictionary.
+      :returns: The keys of the dictionary.
+   
+
+      .. note::
+
+         The collection operations take the keys of a dictionary from here, and its values
+         from :meth:`Expression.dictionaryValues(Expression)`.
+
+   .. method:: static Expression dictionaryValues(Connection connection, Expression dictionary)
+
+      The values of a dictionary, as a list.
+
+      :param Expression dictionary: The dictionary.
+      :returns: The values of the dictionary.
    
 
    .. method:: static Expression toList(Connection connection, Expression arg)
 
-      Convert a collection to a list.
+      A collection as a list.
 
       :param Expression arg: The collection.
       :returns: The collection as a list.
@@ -275,24 +793,228 @@ Expressions
 
    .. method:: static Expression toSet(Connection connection, Expression arg)
 
-      Convert a collection to a set.
+      A collection as a set.
 
       :param Expression arg: The collection.
       :returns: The collection as a set.
    
 
+      .. note::
+
+         Throws an exception if a value is null.
+
+   .. method:: static Expression buildDictionary(Connection connection, Expression arg, Expression keyFunc, Expression valueFunc)
+
+      A dictionary built from a collection, with a key and a value computed from each
+      element.
+
+      :param Expression arg: The list or set.
+      :param Expression keyFunc: The function computing an element's key.
+      :param Expression valueFunc: The function computing an element's value.
+      :returns: The dictionary.
+   
+
+      .. note::
+
+         A repeated key takes the last of its values.
+
    .. method:: static Expression get(Connection connection, Expression arg, Expression index)
 
-      Access an element in a tuple, list or dictionary.
+      An element of a tuple, list or dictionary.
 
       :param Expression arg: The tuple, list or dictionary.
-      :param Expression index: The index of the element to access. A zero indexed integer for a tuple or list, or a key for a dictionary.
+      :param Expression index: The index or key of the element.
       :returns: The element.
+   
+
+      .. note::
+
+         A tuple takes a constant integer index, a list a zero indexed integer and a
+         dictionary a key. Throws an exception if the index is out of range or the key is
+         missing, and for a tuple when the expression is created.
+
+   .. method:: static Expression getField(Connection connection, Expression arg, String name)
+
+      The value of a field of a structure. Throws an exception if the value is not a
+      structure, or has no field of the given name.
+
+      :param Expression arg: The structure.
+      :param String name: The name of the field to access.
+      :returns: The value of the field.
+   
+
+   .. method:: static Expression convertToString(Connection connection, Expression arg)
+
+      The string representation of a value.
+
+      :param Expression arg: The value to convert.
+      :returns: The string representation of the value.
+   
+
+      .. note::
+
+         A value other than a number, boolean, string or enumeration converts as .NET
+         formats it, which for a collection is the name of its type. Throws an exception if
+         the value is null.
+
+   .. method:: static Expression stringConcat(Connection connection, java.util.List<Expression> args)
+
+      The concatenation of strings.
+
+      :param java.util.List<Expression> args: The strings to concatenate, in order.
+      :returns: The concatenated string.
+   
+
+      .. note::
+
+         Use :meth:`Expression.convertToString(Expression)` to convert other values to strings.
+
+   .. method:: static Expression stringLength(Connection connection, Expression arg)
+
+      The number of characters in a string.
+
+      :param Expression arg: The string.
+      :returns: The length of the string.
+   
+
+   .. method:: static Expression stringGet(Connection connection, Expression arg, Expression index)
+
+      The character at the given position in a string, as a string of length one.
+
+      :param Expression arg: The string.
+      :param Expression index: The position of the character, counting from zero.
+      :returns: The character at the given position.
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. method:: static Expression stringSubstring(Connection connection, Expression arg, Expression start, Expression length)
+
+      Part of a string.
+
+      :param Expression arg: The string.
+      :param Expression start: The position to start at, counting from zero.
+      :param Expression length: The number of characters to take.
+      :returns: The substring.
+   
+
+      .. note::
+
+         Throws an exception if the start or the length is out of range.
+
+   .. method:: static Expression stringIndexOf(Connection connection, Expression arg, Expression value)
+
+      The position of the first occurrence of one string within another.
+
+      :param Expression arg: The string to search.
+      :param Expression value: The string to search for.
+      :returns: The position of the value, counting from zero, or -1 if it does not occur.
+   
+
+   .. method:: static Expression stringContains(Connection connection, Expression arg, Expression value)
+
+      Whether one string occurs within another.
+
+      :param Expression arg: The string to search.
+      :param Expression value: The string to search for.
+      :returns: Whether the value occurs in the string.
+   
+
+   .. method:: static Expression stringStartsWith(Connection connection, Expression arg, Expression value)
+
+      Whether a string starts with another.
+
+      :param Expression arg: The string to test.
+      :param Expression value: The string to test for.
+      :returns: Whether the string starts with the value.
+   
+
+   .. method:: static Expression stringEndsWith(Connection connection, Expression arg, Expression value)
+
+      Whether a string ends with another.
+
+      :param Expression arg: The string to test.
+      :param Expression value: The string to test for.
+      :returns: Whether the string ends with the value.
+   
+
+   .. method:: static Expression stringToUpper(Connection connection, Expression arg)
+
+      A string in upper case, independently of the game's language.
+
+      :param Expression arg: The string.
+      :returns: The string in upper case.
+   
+
+   .. method:: static Expression stringToLower(Connection connection, Expression arg)
+
+      A string in lower case, independently of the game's language.
+
+      :param Expression arg: The string.
+      :returns: The string in lower case.
+   
+
+   .. method:: static Expression stringTrim(Connection connection, Expression arg)
+
+      A string with white space removed from both ends.
+
+      :param Expression arg: The string.
+      :returns: The trimmed string.
+   
+
+   .. method:: static Expression stringTrimStart(Connection connection, Expression arg)
+
+      A string with white space removed from its start.
+
+      :param Expression arg: The string.
+      :returns: The trimmed string.
+   
+
+   .. method:: static Expression stringTrimEnd(Connection connection, Expression arg)
+
+      A string with white space removed from its end.
+
+      :param Expression arg: The string.
+      :returns: The trimmed string.
+   
+
+   .. method:: static Expression stringReplace(Connection connection, Expression arg, Expression oldValue, Expression newValue)
+
+      A string with every occurrence of one string replaced by another.
+
+      :param Expression arg: The string to search.
+      :param Expression oldValue: The string to replace.
+      :param Expression newValue: The string to replace it with.
+      :returns: The string with the replacements made.
+   
+
+      .. note::
+
+         Throws an exception if the string to replace is empty.
+
+   .. method:: static Expression stringSplit(Connection connection, Expression arg, Expression separator)
+
+      The parts of a string separated by another string.
+
+      :param Expression arg: The string to split.
+      :param Expression separator: The string that separates the parts.
+      :returns: The parts of the string.
+   
+
+   .. method:: static Expression stringJoin(Connection connection, Expression separator, Expression values)
+
+      Strings joined together, separated by another string.
+
+      :param Expression separator: The string to put between the values.
+      :param Expression values: The strings to join.
+      :returns: The joined string.
    
 
    .. method:: static Expression count(Connection connection, Expression arg)
 
-      Number of elements in a collection.
+      The number of values in a collection.
 
       :param Expression arg: The list, set or dictionary.
       :returns: The number of elements in the collection.
@@ -300,7 +1022,7 @@ Expressions
 
    .. method:: static Expression sum(Connection connection, Expression arg)
 
-      Sum all elements of a collection.
+      The sum of the values of a collection.
 
       :param Expression arg: The list or set.
       :returns: The sum of the elements in the collection.
@@ -308,67 +1030,114 @@ Expressions
 
    .. method:: static Expression max(Connection connection, Expression arg)
 
-      Maximum of all elements in a collection.
+      The largest value of a collection.
 
       :param Expression arg: The list or set.
-      :returns: The maximum elements in the collection.
+      :returns: The largest value in the collection.
    
+
+      .. note::
+
+         Throws an exception if the collection is empty and its values are not nullable.
 
    .. method:: static Expression min(Connection connection, Expression arg)
 
-      Minimum of all elements in a collection.
+      The smallest value of a collection.
 
       :param Expression arg: The list or set.
-      :returns: The minimum elements in the collection.
+      :returns: The smallest value in the collection.
    
+
+      .. note::
+
+         Throws an exception if the collection is empty and its values are not nullable.
 
    .. method:: static Expression average(Connection connection, Expression arg)
 
-      Minimum of all elements in a collection.
+      The average of the values of a collection.
 
       :param Expression arg: The list or set.
-      :returns: The minimum elements in the collection.
+      :returns: The average of the elements in the collection.
    
+
+      .. note::
+
+         Throws an exception if the collection is empty and its values are not nullable.
 
    .. method:: static Expression select(Connection connection, Expression arg, Expression func)
 
-      Run a function on every element in the collection.
+      The result of a function for each value of a collection.
 
       :param Expression arg: The list or set.
-      :param Expression func: The function.
-      :returns: The modified collection.
+      :param Expression func: The function, taking an element of the collection.
+      :returns: The collection of function results.
    
+
+      .. note::
+
+         The result is lazily evaluated. :meth:`Expression.toList(Expression)` makes it concrete.
 
    .. method:: static Expression where(Connection connection, Expression arg, Expression func)
 
-      Run a function on every element in the collection.
+      The values of a collection for which a predicate function returns true.
 
       :param Expression arg: The list or set.
-      :param Expression func: The function.
-      :returns: The modified collection.
+      :param Expression func: The predicate function, taking an element of the collection.
+      :returns: The filtered collection.
    
+
+      .. note::
+
+         The result is lazily evaluated. :meth:`Expression.toList(Expression)` makes it concrete.
+
+   .. method:: static Expression selectMany(Connection connection, Expression arg, Expression func)
+
+      The values of the collections a function returns for each value of a collection,
+      flattened into one.
+
+      :param Expression arg: The list or set.
+      :param Expression func: The function, taking an element of the collection and returning a collection.
+      :returns: The flattened collection of function results.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :meth:`Expression.toList(Expression)` makes it concrete.
 
    .. method:: static Expression contains(Connection connection, Expression arg, Expression value)
 
-      Determine if a collection contains a value.
+      Whether a collection contains a value.
 
       :param Expression arg: The collection.
       :param Expression value: The value to look for.
-      :returns: Whether the collection contains a value.
+      :returns: Whether the collection contains the value.
+   
+
+   .. method:: static Expression containsKey(Connection connection, Expression dictionary, Expression key)
+
+      Whether a dictionary contains a key.
+
+      :param Expression dictionary: The dictionary.
+      :param Expression key: The key to look for.
+      :returns: Whether the dictionary contains the key.
    
 
    .. method:: static Expression aggregate(Connection connection, Expression arg, Expression func)
 
-      Applies an accumulator function over a sequence.
+      The result of applying an accumulator function over a collection.
 
       :param Expression arg: The collection.
       :param Expression func: The accumulator function.
       :returns: The accumulated value.
    
 
+      .. note::
+
+         Throws an exception if the collection is empty.
+
    .. method:: static Expression aggregateWithSeed(Connection connection, Expression arg, Expression seed, Expression func)
 
-      Applies an accumulator function over a sequence, with a given seed.
+      The result of applying an accumulator function over a collection, starting from a seed.
 
       :param Expression arg: The collection.
       :param Expression seed: The seed value.
@@ -376,27 +1145,65 @@ Expressions
       :returns: The accumulated value.
    
 
+      .. note::
+
+         The seed widens to the type of the accumulated value, the function's result.
+
    .. method:: static Expression concat(Connection connection, Expression arg1, Expression arg2)
 
-      Concatenate two sequences.
+      The values of one collection followed by those of another.
 
-      :param Expression arg1: The first sequence.
-      :param Expression arg2: The second sequence.
-      :returns: The first sequence followed by the second sequence.
+      :param Expression arg1: The first collection.
+      :param Expression arg2: The second collection.
+      :returns: The first collection followed by the second.
    
+
+      .. note::
+
+         The result is lazily evaluated. :meth:`Expression.toList(Expression)` makes it concrete.
+
+   .. method:: static Expression skip(Connection connection, Expression arg, Expression count)
+
+      A collection without its first count values.
+
+      :param Expression arg: The collection.
+      :param Expression count: The number of values to skip.
+      :returns: The collection without its first count values.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :meth:`Expression.toList(Expression)` makes it concrete.
+
+   .. method:: static Expression take(Connection connection, Expression arg, Expression count)
+
+      The first count values of a collection.
+
+      :param Expression arg: The collection.
+      :param Expression count: The number of values to take.
+      :returns: The first count values of the collection.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :meth:`Expression.toList(Expression)` makes it concrete.
 
    .. method:: static Expression orderBy(Connection connection, Expression arg, Expression key)
 
-      Order a collection using a key function.
+      The values of a collection ordered by the key a function produces for each of them.
 
       :param Expression arg: The collection to order.
-      :param Expression key: A function that takes a value from the collection and generates a key to sort on.
+      :param Expression key: A function producing the key to order values by.
       :returns: The ordered collection.
    
 
+      .. note::
+
+         The result is lazily evaluated. :meth:`Expression.toList(Expression)` makes it concrete.
+
    .. method:: static Expression all(Connection connection, Expression arg, Expression predicate)
 
-      Determine whether all items in a collection satisfy a boolean predicate.
+      Whether a predicate function returns true for every value of a collection.
 
       :param Expression arg: The collection.
       :param Expression predicate: The predicate function.
@@ -405,43 +1212,413 @@ Expressions
 
    .. method:: static Expression any(Connection connection, Expression arg, Expression predicate)
 
-      Determine whether any item in a collection satisfies a boolean predicate.
+      Whether a predicate function returns true for any value of a collection.
 
       :param Expression arg: The collection.
       :param Expression predicate: The predicate function.
       :returns: Whether any item satisfies the predicate.
    
 
+   .. method:: static Expression first(Connection connection, Expression arg)
+
+      The first value of a collection.
+
+      :param Expression arg: The collection.
+      :returns: The first value.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. method:: static Expression last(Connection connection, Expression arg)
+
+      The last value of a collection.
+
+      :param Expression arg: The collection.
+      :returns: The last value.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. method:: static Expression elementAt(Connection connection, Expression arg, Expression index)
+
+      The value at the given position in a collection.
+
+      :param Expression arg: The collection.
+      :param Expression index: The position of the value, counting from zero.
+      :returns: The value at the given position.
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. method:: static Expression minBy(Connection connection, Expression arg, Expression key)
+
+      The value of a collection with the smallest key.
+
+      :param Expression arg: The collection.
+      :param Expression key: A function producing the key to compare values by.
+      :returns: The value with the smallest key.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. method:: static Expression maxBy(Connection connection, Expression arg, Expression key)
+
+      The value of a collection with the largest key.
+
+      :param Expression arg: The collection.
+      :param Expression key: A function producing the key to compare values by.
+      :returns: The value with the largest key.
+   
+
+      .. note::
+
+         Throws an exception if the collection is empty.
+
+   .. method:: static Expression distinct(Connection connection, Expression arg)
+
+      The values of a collection with duplicates removed, keeping the first
+      occurrence of each.
+
+      :param Expression arg: The collection.
+      :returns: The distinct values of the collection.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :meth:`Expression.toList(Expression)` makes it concrete.
+
+   .. method:: static Expression reverse(Connection connection, Expression arg)
+
+      The values of a collection in the opposite order.
+
+      :param Expression arg: The collection.
+      :returns: The reversed collection.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :meth:`Expression.toList(Expression)` makes it concrete.
+
+   .. method:: static Expression union(Connection connection, Expression arg1, Expression arg2)
+
+      The values in either of two collections, with duplicates removed.
+
+      :param Expression arg1: The first collection.
+      :param Expression arg2: The second collection.
+      :returns: The union of the two collections.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :meth:`Expression.toList(Expression)` makes it concrete.
+
+   .. method:: static Expression intersect(Connection connection, Expression arg1, Expression arg2)
+
+      The values in both of two collections, with duplicates removed.
+
+      :param Expression arg1: The first collection.
+      :param Expression arg2: The second collection.
+      :returns: The intersection of the two collections.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :meth:`Expression.toList(Expression)` makes it concrete.
+
+   .. method:: static Expression except(Connection connection, Expression arg1, Expression arg2)
+
+      The values of the first collection that are not in the second, with
+      duplicates removed.
+
+      :param Expression arg1: The first collection.
+      :param Expression arg2: The second collection.
+      :returns: The difference between the two collections.
+   
+
+      .. note::
+
+         The result is lazily evaluated. :meth:`Expression.toList(Expression)` makes it concrete.
+
+   .. method:: static Expression zip(Connection connection, Expression arg1, Expression arg2, Expression func)
+
+      The results of a function applied to the values of two collections in pairs.
+
+      :param Expression arg1: The first collection.
+      :param Expression arg2: The second collection.
+      :param Expression func: A function combining a value from each collection.
+      :returns: The combined collection.
+   
+
+      .. note::
+
+         The result is as long as the shorter of the two collections. It is lazily
+         evaluated, and :meth:`Expression.toList(Expression)` makes it concrete.
+
+   .. method:: static Expression groupBy(Connection connection, Expression arg, Expression key)
+
+      The values of a collection grouped by the key a function produces for each of them.
+
+      :param Expression arg: The collection.
+      :param Expression key: A function producing the key to group values by.
+      :returns: A dictionary of each key to the values that produced it.
+   
+
 
 
 .. type:: public class Type
 
-   A server side expression.
+   The type of a value a procedure takes or returns.
 
    .. method:: static Type double_(Connection connection)
 
-      Double type.
+      A double precision floating point number type.
 
    
 
    .. method:: static Type float_(Connection connection)
 
-      Float type.
+      A single precision floating point number type.
 
    
 
    .. method:: static Type int_(Connection connection)
 
-      Int type.
+      A signed 32-bit integer type.
+
+   
+
+   .. method:: static Type long_(Connection connection)
+
+      A signed 64-bit integer type.
+
+   
+
+   .. method:: static Type uInt(Connection connection)
+
+      An unsigned 32-bit integer type.
+
+   
+
+   .. method:: static Type uLong(Connection connection)
+
+      An unsigned 64-bit integer type.
 
    
 
    .. method:: static Type bool(Connection connection)
 
-      Bool type.
+      A boolean type.
 
    
 
    .. method:: static Type string(Connection connection)
 
-      String type.
+      A string type.
+
+   
+
+   .. method:: static Type bytes(Connection connection)
+
+      A byte sequence type.
+
+   
+
+   .. method:: static Type classType(Connection connection, String service, String name)
+
+      The type of a class defined by a service.
+
+      :param String service: The name of the service the class is defined in.
+      :param String name: The name of the class.
+   
+
+   .. method:: static Type enumerationType(Connection connection, String service, String name)
+
+      The type of an enumeration defined by a service.
+
+      :param String service: The name of the service the enumeration is defined in.
+      :param String name: The name of the enumeration.
+   
+
+   .. method:: static Type structType(Connection connection, String service, String name)
+
+      The type of a structure defined by a service.
+
+      :param String service: The name of the service the structure is defined in.
+      :param String name: The name of the structure.
+   
+
+   .. method:: static Type tupleType(Connection connection, java.util.List<Type> valueTypes)
+
+      A tuple type. Throws an exception if there are no element types or more than seven.
+
+      :param java.util.List<Type> valueTypes: The types of the elements of the tuple.
+   
+
+   .. method:: static Type listType(Connection connection, Type valueType)
+
+      A list type.
+
+      :param Type valueType: The type of the elements of the list.
+   
+
+   .. method:: static Type setType(Connection connection, Type valueType)
+
+      A set type. Throws an exception if the element type is nullable.
+
+      :param Type valueType: The type of the elements of the set.
+   
+
+   .. method:: static Type dictionaryType(Connection connection, Type keyType, Type valueType)
+
+      A dictionary type. Throws an exception if the key type is nullable or not a valid
+      key type.
+
+      :param Type keyType: The type of the keys of the dictionary.
+      :param Type valueType: The type of the values of the dictionary.
+   
+
+   .. method:: static Type nullableType(Connection connection, Type valueType)
+
+      A nullable type, holding a value of the given type or null.
+
+      :param Type valueType: The type of the value.
+   
+
+   .. method:: TypeCode getCode()
+
+
+      The kind of the type.
+
+   
+
+   .. method:: String getService()
+
+
+      The service a class, enumeration or structure type is defined in, or an empty string.
+
+   
+
+   .. method:: String getName()
+
+
+      The name of a class, enumeration or structure type, or an empty string.
+
+   
+
+   .. method:: java.util.List<Type> getTypes()
+
+
+      The types of the elements of a tuple, list, set or dictionary type.
+
+   
+
+      .. note::
+
+         The value types of a tuple, the value type of a list or set, or the key and value
+         types of a dictionary. An empty list for any other type.
+
+   .. method:: boolean getNullable()
+
+
+      Whether a value of the type may be null.
+
+   
+
+      .. note::
+
+         Any type can be nullable. A string or class value of a type that is not nullable
+         is never null.
+
+
+
+.. type:: public enum TypeCode
+
+   The kind of a type, with the values of the communication protocol's type codes.
+
+
+   .. field:: public TypeCode DOUBLE
+
+      A double precision floating point number.
+
+
+   .. field:: public TypeCode FLOAT
+
+      A single precision floating point number.
+
+
+   .. field:: public TypeCode S_INT32
+
+      A signed 32-bit integer.
+
+
+   .. field:: public TypeCode S_INT64
+
+      A signed 64-bit integer.
+
+
+   .. field:: public TypeCode U_INT32
+
+      An unsigned 32-bit integer.
+
+
+   .. field:: public TypeCode U_INT64
+
+      An unsigned 64-bit integer.
+
+
+   .. field:: public TypeCode BOOL
+
+      A boolean.
+
+
+   .. field:: public TypeCode STRING
+
+      A string.
+
+
+   .. field:: public TypeCode BYTES
+
+      A sequence of bytes.
+
+
+   .. field:: public TypeCode CLASS
+
+      A class defined by a service.
+
+
+   .. field:: public TypeCode ENUMERATION
+
+      An enumeration defined by a service.
+
+
+   .. field:: public TypeCode STRUCT
+
+      A structure defined by a service.
+
+
+   .. field:: public TypeCode TUPLE
+
+      A tuple, with the types of its values in :meth:`Type.getTypes()`.
+
+
+   .. field:: public TypeCode LIST
+
+      A list, with the type of its values in :meth:`Type.getTypes()`.
+
+
+   .. field:: public TypeCode SET
+
+      A set, with the type of its values in :meth:`Type.getTypes()`.
+
+
+   .. field:: public TypeCode DICTIONARY
+
+      A dictionary, with the types of its keys and values in :meth:`Type.getTypes()`.

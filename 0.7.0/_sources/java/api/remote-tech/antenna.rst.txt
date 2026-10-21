@@ -1,0 +1,92 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.RemoteTech
+
+Antenna
+=======
+
+
+.. type:: public class Antenna
+
+   A RemoteTech antenna. Obtained by calling :meth:`Comms.getAntennas()` or :meth:`antenna(SpaceCenter.Part)`.
+
+   .. method:: SpaceCenter.Part getPart()
+
+
+      Get the part containing this antenna.
+
+   
+
+   .. method:: boolean getHasConnection()
+
+
+      Whether the antenna has a connection.
+
+   
+
+   .. method:: Target getTarget()
+
+   .. method:: void setTarget(Target value)
+
+      The object that the antenna is targetting.
+      This property can be used to set the target to :meth:`Target.NONE` or :meth:`Target.ACTIVE_VESSEL`.
+      To set the target to a celestial body, ground station or vessel see :meth:`Antenna.getTargetBody()`,
+      :meth:`Antenna.getTargetGroundStation()` and :meth:`Antenna.getTargetVessel()`.
+
+   
+
+   .. method:: SpaceCenter.CelestialBody getTargetBody()
+
+   .. method:: void setTargetBody(SpaceCenter.CelestialBody value)
+
+      The celestial body the antenna is targetting.
+
+   
+
+   .. method:: String getTargetGroundStation()
+
+   .. method:: void setTargetGroundStation(String value)
+
+      The ground station the antenna is targetting.
+
+   
+
+   .. method:: SpaceCenter.Vessel getTargetVessel()
+
+   .. method:: void setTargetVessel(SpaceCenter.Vessel value)
+
+      The vessel the antenna is targetting.
+
+   
+
+
+
+.. type:: public enum Target
+
+   The type of object an antenna is targetting.
+   See :meth:`Antenna.getTarget()`.
+
+
+   .. field:: public Target ACTIVE_VESSEL
+
+      The active vessel.
+
+
+   .. field:: public Target CELESTIAL_BODY
+
+      A celestial body.
+
+
+   .. field:: public Target GROUND_STATION
+
+      A ground station.
+
+
+   .. field:: public Target VESSEL
+
+      A specific vessel.
+
+
+   .. field:: public Target NONE
+
+      No target.

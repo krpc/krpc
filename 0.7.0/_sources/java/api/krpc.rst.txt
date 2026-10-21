@@ -1,0 +1,12 @@
+.. default-domain:: java
+.. highlight:: java
+
+KRPC API
+========
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   krpc/krpc
+   krpc/expressions

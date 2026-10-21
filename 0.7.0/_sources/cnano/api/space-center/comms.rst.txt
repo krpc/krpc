@@ -1,0 +1,127 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Communications
+==============
+
+
+.. type:: krpc_SpaceCenter_Comms_t
+
+   Used to interact with CommNet for a given vessel.
+   Obtained by calling :func:`krpc_SpaceCenter_Vessel_Comms`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Comms_CanCommunicate(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Comms_t instance)
+
+      Whether the vessel can communicate with KSC.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Comms_CanTransmitScience(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Comms_t instance)
+
+      Whether the vessel can transmit science data to KSC.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Comms_SignalStrength(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Comms_t instance)
+
+      Signal strength to KSC.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Comms_SignalDelay(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Comms_t instance)
+
+      Signal delay to KSC in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Comms_Power(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Comms_t instance)
+
+      The combined power of all active antennae on the vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Comms_ControlPath(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Comms_t instance)
+
+      The communication path used to control the vessel.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: krpc_SpaceCenter_CommLink_t
+
+   Represents a communication link between two nodes in the network.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_Type(krpc_connection_t connection, krpc_SpaceCenter_CommLinkType_t * returnValue, krpc_SpaceCenter_CommLink_t instance)
+
+      The type of link.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_SignalStrength(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_CommLink_t instance)
+
+      Signal strength of the link.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_Start(krpc_connection_t connection, krpc_SpaceCenter_CommNode_t * returnValue, krpc_SpaceCenter_CommLink_t instance)
+
+      Start point of the link.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CommLink_End(krpc_connection_t connection, krpc_SpaceCenter_CommNode_t * returnValue, krpc_SpaceCenter_CommLink_t instance)
+
+      End point of the link.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_CommLinkType_t
+
+   The type of a communication link.
+   See :func:`krpc_SpaceCenter_CommLink_Type`.
+
+
+   .. macro:: KRPC_SPACECENTER_COMMLINKTYPE_HOME
+
+      Link is to a base station on Kerbin.
+
+
+   .. macro:: KRPC_SPACECENTER_COMMLINKTYPE_CONTROL
+
+      Link is to a control source, for example a manned spacecraft.
+
+
+   .. macro:: KRPC_SPACECENTER_COMMLINKTYPE_RELAY
+
+      Link is to a relay satellite.
+
+
+
+.. type:: krpc_SpaceCenter_CommNode_t
+
+   Represents a communication node in the network. For example, a vessel or the KSC.
+
+
+   .. member:: char * name
+
+      Name of the communication node.
+
+   .. member:: bool is_home
+
+      Whether the communication node is on Kerbin.
+
+   .. member:: bool is_control_point
+
+      Whether the communication node is a control point, for example a manned vessel.
+
+   .. member:: bool is_vessel
+
+      Whether the communication node is a vessel.
+
+   .. member:: krpc_nullable_object_t vessel
+
+      The vessel for this communication node, or null if the node is not a vessel.

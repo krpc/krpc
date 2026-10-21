@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -137,21 +137,21 @@ Contracts
 
       :Game Scenes: All
 
-   .. method:: void Accept()
+   .. function:: void Accept()
 
       Accept an offered contract.
 
 
       :Game Scenes: All
 
-   .. method:: void Cancel()
+   .. function:: void Cancel()
 
       Cancel an active contract.
 
 
       :Game Scenes: All
 
-   .. method:: void Decline()
+   .. function:: void Decline()
 
       Decline an offered contract.
 
@@ -235,52 +235,52 @@ Contracts
    The state of a contract. See :prop:`Contract.State`.
 
 
-   .. value:: Active
+   .. enumerator:: Active
 
       The contract is active.
 
 
-   .. value:: Canceled
+   .. enumerator:: Canceled
 
       The contract has been canceled.
 
 
-   .. value:: Completed
+   .. enumerator:: Completed
 
       The contract has been completed.
 
 
-   .. value:: DeadlineExpired
+   .. enumerator:: DeadlineExpired
 
       The deadline for the contract has expired.
 
 
-   .. value:: Declined
+   .. enumerator:: Declined
 
       The contract has been declined.
 
 
-   .. value:: Failed
+   .. enumerator:: Failed
 
       The contract has been failed.
 
 
-   .. value:: Generated
+   .. enumerator:: Generated
 
       The contract has been generated.
 
 
-   .. value:: Offered
+   .. enumerator:: Offered
 
       The contract has been offered to the player.
 
 
-   .. value:: OfferExpired
+   .. enumerator:: OfferExpired
 
       The contract was offered to the player, but the offer expired.
 
 
-   .. value:: Withdrawn
+   .. enumerator:: Withdrawn
 
       The contract has been withdrawn.
 

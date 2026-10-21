@@ -1,0 +1,437 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+Contracts
+=========
+
+
+.. class:: ContractManager
+
+   Contracts manager.
+   Obtained by calling :attr:`contract_manager`.
+
+   .. attribute:: types
+
+      A list of all contract types.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: set(str)
+   
+
+   .. attribute:: all_contracts
+
+      A list of all contracts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Contract`)
+   
+
+   .. attribute:: active_contracts
+
+      A list of all active contracts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Contract`)
+   
+
+   .. attribute:: offered_contracts
+
+      A list of all offered, but unaccepted, contracts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Contract`)
+   
+
+   .. attribute:: completed_contracts
+
+      A list of all completed contracts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Contract`)
+   
+
+   .. attribute:: failed_contracts
+
+      A list of all failed contracts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Contract`)
+   
+
+
+
+.. class:: Contract
+
+   A contract. Can be accessed using :attr:`contract_manager`.
+
+   .. attribute:: type
+
+      Type of the contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: title
+
+      Title of the contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: description
+
+      Description of the contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: notes
+
+      Notes for the contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: synopsis
+
+      Synopsis for the contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: keywords
+
+      Keywords for the contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+   
+
+   .. attribute:: state
+
+      State of the contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ContractState`
+   
+
+   .. attribute:: seen
+
+      Whether the contract has been seen.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: read
+
+      Whether the contract has been read.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: active
+
+      Whether the contract is active.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: failed
+
+      Whether the contract has been failed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: can_be_canceled
+
+      Whether the contract can be canceled.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: can_be_declined
+
+      Whether the contract can be declined.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: can_be_failed
+
+      Whether the contract can be failed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. method:: accept()
+
+      Accept an offered contract.
+
+   
+
+   .. method:: cancel()
+
+      Cancel an active contract.
+
+   
+
+   .. method:: decline()
+
+      Decline an offered contract.
+
+   
+
+   .. attribute:: funds_advance
+
+      Funds received when accepting the contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: funds_completion
+
+      Funds received on completion of the contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: funds_failure
+
+      Funds lost if the contract is failed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: reputation_completion
+
+      Reputation gained on completion of the contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: reputation_failure
+
+      Reputation lost if the contract is failed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: science_completion
+
+      Science gained on completion of the contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: parameters
+
+      Parameters for the contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`ContractParameter`)
+   
+
+   .. attribute:: date_accepted
+
+      Universal time at which the contract was accepted, in seconds.
+      Zero if the contract has not been accepted.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: date_deadline
+
+      Universal time by which the contract must be completed, in seconds.
+      Zero if the contract has no deadline.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: date_expire
+
+      Universal time at which the contract offer expires, in seconds.
+      Zero if the contract has no expiry date.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: date_finished
+
+      Universal time at which the contract was completed or failed, in seconds.
+      Zero if the contract has not finished or KSP did not record a finish time.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: ContractState
+
+   The state of a contract. See :attr:`Contract.state`.
+
+
+   .. data:: active
+
+      The contract is active.
+
+
+   .. data:: canceled
+
+      The contract has been canceled.
+
+
+   .. data:: completed
+
+      The contract has been completed.
+
+
+   .. data:: deadline_expired
+
+      The deadline for the contract has expired.
+
+
+   .. data:: declined
+
+      The contract has been declined.
+
+
+   .. data:: failed
+
+      The contract has been failed.
+
+
+   .. data:: generated
+
+      The contract has been generated.
+
+
+   .. data:: offered
+
+      The contract has been offered to the player.
+
+
+   .. data:: offer_expired
+
+      The contract was offered to the player, but the offer expired.
+
+
+   .. data:: withdrawn
+
+      The contract has been withdrawn.
+
+
+
+.. class:: ContractParameter
+
+   A contract parameter. See :attr:`Contract.parameters`.
+
+   .. attribute:: title
+
+      Title of the parameter.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: notes
+
+      Notes for the parameter.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: children
+
+      Child contract parameters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`ContractParameter`)
+   
+
+   .. attribute:: completed
+
+      Whether the parameter has been completed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: failed
+
+      Whether the parameter has been failed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: optional
+
+      Whether the contract parameter is optional.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: funds_completion
+
+      Funds received on completion of the contract parameter.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: funds_failure
+
+      Funds lost if the contract parameter is failed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: reputation_completion
+
+      Reputation gained on completion of the contract parameter.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: reputation_failure
+
+      Reputation lost if the contract parameter is failed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: science_completion
+
+      Science gained on completion of the contract parameter.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float

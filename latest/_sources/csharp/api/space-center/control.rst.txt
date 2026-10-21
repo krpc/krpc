@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -19,6 +19,21 @@ Control
       and the custom axes) are zeroed when all clients that have set one or more of
       these inputs are no longer connected. The throttle is an exception: it keeps
       its value when clients disconnect.
+
+      A kerbal on EVA is a vessel, and is driven by these same controls. The
+      translation inputs move it: :prop:`Control.Forward` and :prop:`Control.Right` walk
+      it about, relative to the direction it is facing, and all three translate its
+      jetpack once that is deployed. Walking is not throttled by the size of the
+      input, only started by it. The rotation inputs turn it, at a rate proportional
+      to the input: :prop:`Control.Yaw` steers it as it walks, and all three turn its
+      jetpack. Turning the jetpack releases the kerbal from the orientation it was
+      holding; it stops and holds its new orientation once the input returns to zero.
+      :prop:`Control.RCS` deploys and stows the jetpack and :prop:`Control.Lights`
+      switches the helmet lamp. The remaining controls do nothing for a kerbal.
+      A kerbal is also sent out and brought back in from here: with
+      :meth:`CrewMember.EVA` and :meth:`Control.Board`, and
+      :meth:`Control.GrabLadder` and :meth:`Control.ReleaseLadder` for the ladders it
+      passes on the way.
 
    .. property:: ControlSource Source { get; }
 
@@ -98,6 +113,13 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         For a kerbal on EVA this is whether its jetpack is deployed. Deploying it
+         requires the kerbal to have one and to be the active vessel; otherwise
+         setting this does nothing.
+
    .. property:: bool ReactionWheels { get; set; }
 
       Returns whether all reactive wheels on the vessel are active,
@@ -135,6 +157,12 @@ Control
       The state of the lights.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         For a kerbal on EVA this is its helmet lamp. Switching it requires the
+         kerbal to be the active vessel; otherwise setting this does nothing.
 
    .. property:: bool Brakes { get; set; }
 
@@ -324,6 +352,23 @@ Control
 
       :Game Scenes: Flight
 
+   .. property:: bool PrecisionMode { get; set; }
+
+      Whether precision control mode is enabled.
+      Equivalent to the Caps Lock key.
+      This is a game setting rather than a vessel setting,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, precision mode is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the RCS thrust that the control inputs produce. A block
+         driven by :prop:`RCS.InputOverride` is exempt.
+
    .. property:: float Forward { get; set; }
 
       The state of the forward translational control.
@@ -440,7 +485,7 @@ Control
 
       :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<Vessel> ActivateNextStage()
+   .. function:: System.Collections.Generic.IList<Vessel> ActivateNextStage()
 
       Activates the next stage. Equivalent to pressing the space bar in-game.
 
@@ -467,38 +512,38 @@ Control
 
          This is equivalent to locking the staging using Alt+L
 
-   .. method:: bool GetActionGroup(uint group)
+   .. function:: bool GetActionGroup(uint group)
 
       Returns ``true`` if the given action group is enabled.
 
       :parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
       :Game Scenes: Flight
 
-   .. method:: void SetActionGroup(uint group, bool state)
+   .. function:: void SetActionGroup(uint group, bool state)
 
       Sets the state of the given action group.
 
       :parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
 
       :Game Scenes: Flight
 
-   .. method:: void ToggleActionGroup(uint group)
+   .. function:: void ToggleActionGroup(uint group)
 
       Toggles the state of the given action group.
 
       :parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
       :Game Scenes: Flight
 
-   .. method:: System.Collections.Generic.IList<ActionGroupAction> GetActionGroupActions(uint group)
+   .. function:: System.Collections.Generic.IList<ActionGroupAction> GetActionGroupActions(uint group)
 
       Returns a list of all the part actions that are assigned to the given action group.
       Each entry identifies the part, the part module, and the action's name and identifier.
@@ -506,7 +551,7 @@ Control
 
       :parameters:
 
-       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
 
       :Game Scenes: Flight
 
@@ -517,7 +562,7 @@ Control
          When the Extended Action Groups mod is installed, the assignments are queried from
          the mod instead, so that actions assigned to its additional groups are included.
 
-   .. method:: Node AddNode(double ut, float prograde = 0.0f, float normal = 0.0f, float radial = 0.0f)
+   .. function:: Node AddNode(double ut, float prograde = 0.0f, float normal = 0.0f, float radial = 0.0f)
 
       Creates a maneuver node at the given universal time, and returns a
       :type:`Node` object that can be used to modify it.
@@ -539,25 +584,91 @@ Control
 
       :Game Scenes: Flight
 
-   .. method:: void RemoveNodes()
+   .. function:: void RemoveNodes()
 
       Remove all maneuver nodes.
 
 
       :Game Scenes: Flight
 
+   .. property:: Part Airlock { get; }
+
+      The part whose hatch the kerbal is standing at, and so the one
+      :meth:`Control.Board` would put it in. ``null`` if it is not at a hatch or the
+      vessel is not a kerbal on EVA.
+
+      :Game Scenes: Flight
+
+   .. function:: void Board()
+
+      Climb into the part whose hatch the kerbal is standing at, ending the EVA. The
+      kerbal takes a seat in that part and its own vessel ceases to exist. If the
+      kerbal was the active vessel, the game switches to the vessel it boarded.
 
 
-.. class:: ActionGroupAction
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A kerbal can only board through a hatch it is already at, which
+         :prop:`Control.Airlock` reports; it does not walk to one. Throws an exception if
+         the vessel is not a kerbal on EVA, if the kerbal is not at a hatch, if boarding
+         is disabled for the game, if the part has no free seat, or if the kerbal is
+         carrying science data that the part cannot store, as the game asks what to do
+         with it in that case.
+
+   .. property:: Part Ladder { get; }
+
+      The ladder the kerbal is holding on to, or ``null`` if it is not holding one
+      or the vessel is not a kerbal on EVA.
+
+      :Game Scenes: Flight
+
+   .. function:: void GrabLadder()
+
+      Take hold of the ladder the kerbal is standing at, as pressing the grab key
+      in-game does. A kerbal can only take hold of a ladder it is already alongside;
+      it does not walk to one. :prop:`Control.Ladder` reports the one it ends up
+      holding. Does nothing if the kerbal is already holding a ladder.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vessel is not a kerbal on EVA, if there is no ladder
+         within reach, or if the kerbal is doing something it cannot grab a ladder from.
+
+   .. function:: void ReleaseLadder()
+
+      Let go of the ladder the kerbal is holding, as pressing the jump key in-game
+      does. Does nothing if it is not holding one.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vessel is not a kerbal on EVA.
+
+
+
+.. struct:: ActionGroupAction
 
    An action, belonging to a part module, that is assigned to an action group.
    Obtained by calling :meth:`Control.GetActionGroupActions`.
 
+   .. function:: ActionGroupAction(Part part, Module module, string name, string id)
+
+      Construct a ActionGroupAction from the values of its fields.
+
+
    .. property:: Part Part { get; }
 
       The part that the action acts on.
-
-      :Game Scenes: All
 
    .. property:: Module Module { get; }
 
@@ -566,20 +677,13 @@ Control
       the Extended Action Groups mod is installed, as it can assign actions defined
       directly on a part, rather than on one of its modules, to an action group.
 
-      :Game Scenes: All
-
    .. property:: string Name { get; }
 
       The human-readable name of the action, as shown in the action group editor.
 
-      :Game Scenes: All
-
    .. property:: string Id { get; }
 
       The non-localized identifier for the action.
-
-      :Game Scenes: All
-
 
 
 .. enum:: ControlState
@@ -588,17 +692,17 @@ Control
    See :prop:`Control.State`.
 
 
-   .. value:: Full
+   .. enumerator:: Full
 
       Full controllable.
 
 
-   .. value:: Partial
+   .. enumerator:: Partial
 
       Partially controllable.
 
 
-   .. value:: None
+   .. enumerator:: None
 
       Not controllable.
 
@@ -610,17 +714,17 @@ Control
    See :prop:`Control.Source`.
 
 
-   .. value:: Kerbal
+   .. enumerator:: Kerbal
 
       Vessel is controlled by a Kerbal.
 
 
-   .. value:: Probe
+   .. enumerator:: Probe
 
       Vessel is controlled by a probe core.
 
 
-   .. value:: None
+   .. enumerator:: None
 
       Vessel is not controlled.
 
@@ -631,52 +735,52 @@ Control
    The behavior of the SAS auto-pilot. See :prop:`AutoPilot.SASMode`.
 
 
-   .. value:: StabilityAssist
+   .. enumerator:: StabilityAssist
 
       Stability assist mode. Dampen out any rotation.
 
 
-   .. value:: Maneuver
+   .. enumerator:: Maneuver
 
       Point in the burn direction of the next maneuver node.
 
 
-   .. value:: Prograde
+   .. enumerator:: Prograde
 
       Point in the prograde direction.
 
 
-   .. value:: Retrograde
+   .. enumerator:: Retrograde
 
       Point in the retrograde direction.
 
 
-   .. value:: Normal
+   .. enumerator:: Normal
 
       Point in the orbit normal direction.
 
 
-   .. value:: AntiNormal
+   .. enumerator:: AntiNormal
 
       Point in the orbit anti-normal direction.
 
 
-   .. value:: Radial
+   .. enumerator:: Radial
 
       Point in the orbit radial direction.
 
 
-   .. value:: AntiRadial
+   .. enumerator:: AntiRadial
 
       Point in the orbit anti-radial direction.
 
 
-   .. value:: Target
+   .. enumerator:: Target
 
       Point in the direction of the current target.
 
 
-   .. value:: AntiTarget
+   .. enumerator:: AntiTarget
 
       Point away from the current target.
 
@@ -688,17 +792,17 @@ Control
    See :prop:`Control.SpeedMode`.
 
 
-   .. value:: Orbit
+   .. enumerator:: Orbit
 
       Speed is relative to the vessel's orbit.
 
 
-   .. value:: Surface
+   .. enumerator:: Surface
 
       Speed is relative to the surface of the body being orbited.
 
 
-   .. value:: Target
+   .. enumerator:: Target
 
       Speed is relative to the current target.
 
@@ -709,11 +813,11 @@ Control
    See :prop:`Control.InputMode`.
 
 
-   .. value:: Additive
+   .. enumerator:: Additive
 
       Control inputs are added to the vessels current control inputs.
 
 
-   .. value:: Override
+   .. enumerator:: Override
 
       Control inputs (when they are non-zero) override the vessels current control inputs.

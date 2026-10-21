@@ -58,7 +58,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The currently active vessel.
 
    :Attribute: Can be read or written
-   :rtype: :class:`SpaceCenter.Vessel`
+   :rtype: :class:`SpaceCenter.Vessel` or ``Types.none``
 
 
 
@@ -99,7 +99,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The currently targeted celestial body.
 
    :Attribute: Can be read or written
-   :rtype: :class:`SpaceCenter.CelestialBody`
+   :rtype: :class:`SpaceCenter.CelestialBody` or ``Types.none``
 
 
 
@@ -109,7 +109,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The currently targeted vessel.
 
    :Attribute: Can be read or written
-   :rtype: :class:`SpaceCenter.Vessel`
+   :rtype: :class:`SpaceCenter.Vessel` or ``Types.none``
 
 
 
@@ -119,7 +119,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    The currently targeted docking port.
 
    :Attribute: Can be read or written
-   :rtype: :class:`SpaceCenter.DockingPort`
+   :rtype: :class:`SpaceCenter.DockingPort` or ``Types.none``
 
 
 
@@ -143,25 +143,36 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: launch_vessel(craft_directory, name, launch_site, crew, [recover = True], [flag_url = ''])
+.. staticmethod:: launch_vessel(craft_directory, name, launch_site, [crew = Types.none], [recover = true], [flag_url = ''])
 
    Launch a vessel.
 
    :param string craft_directory: Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
    :param string name: Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
    :param string launch_site: Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
-   :param List crew: A list of names of Kerbals to place in the craft. Pass an empty list to use default crew assignments.
+   :param crew: The Kerbals to place in the craft, by name. Controls how the craft is crewed, as described in the remarks.
+   :type crew: List or ``Types.none``
    :param boolean recover: If true and there is a vessel on the launch site, recover it before launching.
    :param string flag_url: If not ``nil``, the asset URL of the mission flag to use for the launch.
 
    .. note::
+
+      The *crew* parameter controls how the craft is crewed:
+
+      * If ``nil``, the craft's default crew assignments are used.
+      * If an empty list, the craft is launched with no crew.
+      * Otherwise, the named Kerbals are placed in the craft in the order
+        given: the first name takes the first seat, the second name the next seat, and so on,
+        scanning the craft's parts in order. No other Kerbals are hired to fill remaining seats.
+        Throws an exception, without launching, if a name does not match an available Kerbal
+        or the craft has too few seats for the requested crew.
 
       Throws an exception if any of the games pre-flight checks fail.
 
 
 
 
-.. staticmethod:: launch_vessel_from_vab(name, [recover = True])
+.. staticmethod:: launch_vessel_from_vab(name, [recover = true])
 
    Launch a new vessel from the VAB onto the launchpad.
 
@@ -177,7 +188,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: launch_vessel_from_sph(name, [recover = True])
+.. staticmethod:: launch_vessel_from_sph(name, [recover = true])
 
    Launch a new vessel from the SPH onto the runway.
 
@@ -189,6 +200,16 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
       This is equivalent to calling :meth:`SpaceCenter.launch_vessel` with the craft directory
       set to "SPH" and the launch site set to "Runway".
       Throws an exception if any of the games pre-flight checks fail.
+
+
+
+
+.. attribute:: editor: SpaceCenter.Editor
+
+   The editor, for inspecting the vessel that is being constructed.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`SpaceCenter.Editor`
 
 
 
@@ -235,6 +256,23 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    .. note::
 
       This is the same as calling :meth:`SpaceCenter.load` with the name "quicksave".
+
+
+
+
+.. attribute:: can_save: boolean
+
+   Whether the game can be saved.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: boolean
+
+   .. note::
+
+      The game cannot be saved in some flight states, e.g. while under acceleration
+      or moving over the surface. Setting
+      :attr:`KRPC.game_scene <KRPC.KRPC.game_scene>` to leave flight saves the
+      game only when this is true.
 
 
 
@@ -316,6 +354,21 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. attribute:: buoyancy_scalar: number
+
+   The multiplier the game applies to every buoyant force.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: number
+
+   .. note::
+
+      Stock KSP sets it to 1.2. A buoyant force is a fifth larger than
+      `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
+
+
+
+
 .. attribute:: warp_rate: number
 
    The current warp rate. This is the rate at which time is passing for
@@ -356,6 +409,10 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    :Attribute: Can be read or written
    :rtype: number
 
+   .. note::
+
+      Outside the flight scene, every factor can be set.
+
 
 
 
@@ -381,6 +438,10 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    :param number factor: The warp factor to check.
    :rtype: boolean
 
+   .. note::
+
+      Outside the flight scene, every valid factor can be used.
+
 
 
 
@@ -394,10 +455,14 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    :Attribute: Read-only, cannot be set
    :rtype: number
 
+   .. note::
+
+      Outside the flight scene, this is the highest factor.
 
 
 
-.. staticmethod:: warp_to(ut, [max_rails_rate = 100000.0], [max_physics_rate = 2.0])
+
+.. staticmethod:: warp_to(ut, [max_rails_rate = 1e+05], [max_physics_rate = 2.0])
 
    Uses time acceleration to warp forward to a time in the future, specified
    by universal time *ut*. This call blocks until the desired
@@ -411,6 +476,11 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    :param number max_rails_rate: The maximum warp rate in regular "on-rails" time warp.
    :param number max_physics_rate: The maximum warp rate in physical time warp.
    :returns: When the time warp is complete.
+
+   .. note::
+
+      Outside the flight scene, only regular "on-rails" time warp is used.
+      Throws an exception if the game scene changes during the time warp.
 
 
 
@@ -493,14 +563,24 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    :param Tuple direction: Direction of the ray, as a unit vector.
    :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the position and direction are in.
    :returns: The part that was hit or ``nil`` if there was no hit.
-   :rtype: :class:`SpaceCenter.Part`
+   :rtype: :class:`SpaceCenter.Part` or ``Types.none``
 
 
 
 
 .. attribute:: far_available: boolean
 
-   Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_ is installed.
+   Whether `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_ is installed.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: boolean
+
+
+
+
+.. attribute:: real_fuels_available: boolean
+
+   Whether `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_ is installed.
 
    :Attribute: Read-only, cannot be set
    :rtype: boolean
@@ -524,17 +604,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    Find a Kerbal by name.
 
    :param string name:
-   :rtype: :class:`SpaceCenter.CrewMember`
-
-
-
-
-.. staticmethod:: load_space_center()
-
-   .. warning:: Deprecated. Set :attr:`KRPC.game_scene <KRPC.KRPC.game_scene>` instead.
-
-   Switch to the space center view.
-
+   :rtype: :class:`SpaceCenter.CrewMember` or ``Types.none``
 
 
 
@@ -810,27 +880,24 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    A place where craft can be launched from.
    More of these can be added with mods like Kerbal Konstructs.
 
+
    .. attribute:: name: string
 
       The name of the launch site.
 
-      :Attribute: Read-only, cannot be set
       :rtype: string
 
    .. attribute:: body: SpaceCenter.CelestialBody
 
       The celestial body the launch site is on.
 
-      :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.CelestialBody`
 
    .. attribute:: editor_facility: SpaceCenter.EditorFacility
 
       Which editor is normally used for this launch site.
 
-      :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.EditorFacility`
-
 
 
 .. class:: EditorFacility

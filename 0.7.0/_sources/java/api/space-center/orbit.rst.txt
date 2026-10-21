@@ -1,0 +1,615 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+Orbit
+=====
+
+
+.. type:: public class Orbit
+
+   Describes an orbit. For example, the orbit of a vessel, obtained by calling
+   :meth:`Vessel.getOrbit()`, or a celestial body, obtained by calling
+   :meth:`CelestialBody.getOrbit()`.
+
+   .. method:: static Orbit createFromPositionAndVelocity(Connection connection, CelestialBody body, org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Triplet<Double,Double,Double> velocity, double ut, ReferenceFrame referenceFrame)
+
+      Create the orbit that passes through a given position at a given velocity.
+      The orbit coasts freely under the gravity of the body being orbited, so it
+      describes where an object left to fall from that position and velocity would
+      be at any later time.
+
+      :param CelestialBody body: The celestial body being orbited.
+      :param org.javatuples.Triplet<Double,Double,Double> position: The position, as a position vector.
+      :param org.javatuples.Triplet<Double,Double,Double> velocity: The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.
+      :param double ut: The universal time, in seconds, at which the object is at *position* traveling at *velocity*.
+      :param ReferenceFrame referenceFrame: The reference frame that *position* and *velocity* are in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of *body*.
+   
+
+      .. note::
+
+         The orbit is a single conic around *body*. It never changes
+         sphere of influence, so :meth:`Orbit.getNextOrbit()` is ``null``, and no
+         atmosphere slows it. A vessel held on rails follows its own orbit exactly,
+         while one inside the physics bubble is simulated and drifts from it a little.
+
+         :meth:`Orbit.getRadius()`, :meth:`Orbit.getSpeed()`, :meth:`Orbit.position(ReferenceFrame)`,
+         :meth:`Orbit.velocity(ReferenceFrame)` and the like describe the orbit at
+         *ut* and stay there. Use :meth:`Orbit.radiusAt(double)`,
+         :meth:`Orbit.speedAt(double)`, :meth:`Orbit.positionAt(double, ReferenceFrame)`, :meth:`Orbit.velocityAt(double, ReferenceFrame)` and
+         :meth:`Orbit.trueAnomalyAtUT(double)` for another time, and
+         :meth:`Orbit.getReferenceFrame()` and :meth:`Orbit.getOrbitalReferenceFrame()` to follow
+         the orbit as time passes.
+
+         The orbit is held until :meth:`Orbit.remove()` is called on it or the client
+         that created it disconnects. Remove each one created by a script that creates
+         them repeatedly, for example once per update.
+
+   .. method:: static Orbit createFromOrbitalElements(Connection connection, CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+
+      Create the orbit with the given
+      `orbital elements <https://en.wikipedia.org/wiki/Orbital_elements>`_
+      around a given body. The orbit coasts freely under the gravity of that body,
+      so it describes where an object on it would be at any time.
+
+      :param CelestialBody body: The celestial body being orbited.
+      :param double semiMajorAxis: The semi-major axis of the orbit, in meters. Positive for an ellipse and negative for a hyperbola.
+      :param double eccentricity: The eccentricity of the orbit. Below one for an ellipse and above one for a hyperbola.
+      :param double inclination: The inclination of the orbit, in radians.
+      :param double longitudeOfAscendingNode: The longitude of the ascending node, in radians.
+      :param double argumentOfPeriapsis: The argument of periapsis, in radians.
+      :param double meanAnomalyAtEpoch: The mean anomaly at *epoch*, in radians.
+      :param double epoch: The universal time, in seconds, that *meanAnomalyAtEpoch* is measured at.
+   
+
+      .. note::
+
+         The orbit is a single conic around *body*. It never changes
+         sphere of influence, so :meth:`Orbit.getNextOrbit()` is ``null``, and no
+         atmosphere slows it.
+
+         The angles are measured against the reference plane and direction that
+         :meth:`Orbit.getInclination()`, :meth:`Orbit.getLongitudeOfAscendingNode()` and
+         :meth:`Orbit.getArgumentOfPeriapsis()` report them against.
+         :meth:`Orbit.referencePlaneNormal(ReferenceFrame)` and :meth:`Orbit.referencePlaneDirection(ReferenceFrame)`
+         give these as vectors in a reference frame.
+
+         :meth:`Orbit.getRadius()`, :meth:`Orbit.getSpeed()`, :meth:`Orbit.position(ReferenceFrame)`,
+         :meth:`Orbit.velocity(ReferenceFrame)` and the like describe the orbit at
+         *epoch* and stay there. Use :meth:`Orbit.radiusAt(double)`,
+         :meth:`Orbit.speedAt(double)`, :meth:`Orbit.positionAt(double, ReferenceFrame)`, :meth:`Orbit.velocityAt(double, ReferenceFrame)` and
+         :meth:`Orbit.trueAnomalyAtUT(double)` for another time, and
+         :meth:`Orbit.getReferenceFrame()` and :meth:`Orbit.getOrbitalReferenceFrame()` to follow
+         the orbit as time passes.
+
+         The orbit is held until :meth:`Orbit.remove()` is called on it or the client
+         that created it disconnects. Remove each one created by a script that creates
+         them repeatedly, for example once per update.
+
+   .. method:: void remove()
+
+      Remove the orbit, releasing the memory the server holds for it.
+
+   
+
+      .. note::
+
+         Only an orbit created by :meth:`Orbit.createFromPositionAndVelocity(CelestialBody, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, double, ReferenceFrame)` or
+         :meth:`Orbit.createFromOrbitalElements(CelestialBody, double, double, double, double, double, double, double)` can be removed. Every other orbit
+         belongs to something in the game, and the server holds one of each.
+
+         Any further use of this object throws an exception, as does use of a
+         reference frame defined against it. An orbit belongs to the client that
+         created it, and is removed when that client disconnects.
+
+   .. method:: CelestialBody getBody()
+
+
+      The celestial body (e.g. planet or moon) around which the object is orbiting.
+
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+
+      The reference frame that moves along the orbit, and is orientated in a fixed
+      direction.
+
+      * The origin is at the point the orbit has reached at the
+        current time.
+      * The axes do not rotate. They point in the same fixed
+        directions as those of
+        :meth:`CelestialBody.getNonRotatingReferenceFrame()` of
+        :meth:`Orbit.getBody()`.
+
+   
+
+      .. note::
+
+         For the orbit of a vessel, the origin is the point the vessel's orbit has
+         reached rather than the vessel's own center of mass. The two are a few meters
+         apart, as a vessel inside the physics bubble is simulated rather than being
+         held on its orbit.
+
+   .. method:: ReferenceFrame getOrbitalReferenceFrame()
+
+
+      The reference frame that moves along the orbit, and is orientated with its
+      prograde/normal/radial directions.
+
+      * The origin is at the point the orbit has reached at the
+        current time.
+      * The axes rotate with the orbital prograde/normal/radial
+        directions.
+      * The x-axis points in the orbital anti-radial direction.
+      * The y-axis points in the orbital prograde direction.
+      * The z-axis points in the orbital normal direction.
+
+   
+
+      .. note::
+
+         For the orbit of a vessel, the origin is the point the vessel's orbit has
+         reached rather than the vessel's own center of mass, which is what
+         :meth:`Vessel.getOrbitalReferenceFrame()` is centered on.
+
+   .. method:: double getApoapsis()
+
+
+      Gets the apoapsis of the orbit, in meters, from the center of mass
+      of the body being orbited.
+
+   
+
+      .. note::
+
+         For the apoapsis altitude reported on the in-game map view,
+         use :meth:`Orbit.getApoapsisAltitude()`.
+
+   .. method:: double getPeriapsis()
+
+
+      The periapsis of the orbit, in meters, from the center of mass
+      of the body being orbited.
+
+   
+
+      .. note::
+
+         For the periapsis altitude reported on the in-game map view,
+         use :meth:`Orbit.getPeriapsisAltitude()`.
+
+   .. method:: double getApoapsisAltitude()
+
+
+      The apoapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+   
+
+      .. note::
+
+         This is equal to :meth:`Orbit.getApoapsis()` minus the equatorial radius of the body.
+
+   .. method:: double getPeriapsisAltitude()
+
+
+      The periapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+   
+
+      .. note::
+
+         This is equal to :meth:`Orbit.getPeriapsis()` minus the equatorial radius of the body.
+
+   .. method:: double getSemiMajorAxis()
+
+
+      The semi-major axis of the orbit, in meters.
+
+   
+
+   .. method:: double getSemiMinorAxis()
+
+
+      The semi-minor axis of the orbit, in meters.
+
+   
+
+   .. method:: double getSemiLatusRectum()
+
+
+      The semi-latus rectum of the orbit, in meters.
+
+   
+
+   .. method:: double getRadius()
+
+
+      The current radius of the orbit, in meters. This is the distance between the center
+      of mass of the object in orbit, and the center of mass of the body around which it
+      is orbiting.
+
+   
+
+      .. note::
+
+         This value will change over time if the orbit is elliptical.
+
+   .. method:: double getAltitude()
+
+
+      The current altitude of the object, in meters above the sea level of the body
+      being orbited.
+
+   
+
+      .. note::
+
+         This is equal to :meth:`Orbit.getRadius()` minus the equatorial radius of the body.
+
+   .. method:: double radiusAt(double ut)
+
+      The orbital radius at the given time, in meters.
+
+      :param double ut: The universal time to measure the radius at.
+   
+
+   .. method:: double radiusAtTrueAnomaly(double trueAnomaly)
+
+      The orbital radius at the point in the orbit given by the true anomaly.
+
+      :param double trueAnomaly: The true anomaly.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
+
+      The position the orbit has reached at the current time, in the given reference
+      frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
+      :returns: The position as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> positionAt(double ut, ReferenceFrame referenceFrame)
+
+      The position at a given time, in the specified reference frame.
+
+      :param double ut: The universal time to measure the position at.
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
+      :returns: The position as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> positionAtTrueAnomaly(double trueAnomaly, ReferenceFrame referenceFrame)
+
+      The position at the point in the orbit given by the true anomaly, in the specified
+      reference frame.
+
+      :param double trueAnomaly: The true anomaly.
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
+      :returns: The position as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> velocity(ReferenceFrame referenceFrame)
+
+      The velocity the orbit has reached at the current time, in the given reference
+      frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> velocityAt(double ut, ReferenceFrame referenceFrame)
+
+      The velocity at a given time, in the specified reference frame.
+
+      :param double ut: The universal time to measure the velocity at.
+      :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> velocityAtTrueAnomaly(double trueAnomaly, ReferenceFrame referenceFrame)
+
+      The velocity at the point in the orbit given by the true anomaly, in the specified
+      reference frame.
+
+      :param double trueAnomaly: The true anomaly.
+      :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+   
+
+   .. method:: double getSpeed()
+
+
+      The current orbital speed of the object in meters per second.
+
+   
+
+      .. note::
+
+         This value will change over time if the orbit is elliptical.
+
+   .. method:: double speedAt(double ut)
+
+      The orbital speed at the given time, in meters per second.
+
+      :param double ut: The universal time to measure the speed at.
+   
+
+   .. method:: double speedAtRadius(double radius)
+
+      The orbital speed at the given orbital radius, in meters per second.
+
+      :param double radius: The orbital radius in meters.
+   
+
+      .. note::
+
+         This is the vis-viva speed. A radius the orbit never reaches is accepted. On
+         an ellipse the speed is ``NaN`` above twice the semi-major axis.
+
+   .. method:: double speedAtTrueAnomaly(double trueAnomaly)
+
+      The orbital speed at the point in the orbit given by the true anomaly, in meters
+      per second.
+
+      :param double trueAnomaly: The true anomaly.
+   
+
+   .. method:: double getSpecificEnergy()
+
+
+      The specific orbital energy, in Joules per kilogram (equivalently,
+      meters squared per second squared).
+
+   
+
+      .. note::
+
+         This is the sum of the orbit's specific kinetic and potential energy, and
+         is negative for a bound (elliptical) orbit.
+
+   .. method:: double getSpecificAngularMomentum()
+
+
+      The specific relative angular momentum, in meters squared per second.
+
+   
+
+   .. method:: double getPeriod()
+
+
+      The orbital period, in seconds.
+
+   
+
+   .. method:: double getMeanMotion()
+
+
+      The mean motion, in radians per second.
+
+   
+
+   .. method:: double getTimeToApoapsis()
+
+
+      The time until the object reaches apoapsis, in seconds.
+
+   
+
+   .. method:: double getTimeToPeriapsis()
+
+
+      The time until the object reaches periapsis, in seconds.
+
+   
+
+   .. method:: double getEccentricity()
+
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+   
+
+   .. method:: double getInclination()
+
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit,
+      in radians.
+
+   
+
+   .. method:: double getLongitudeOfAscendingNode()
+
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+   
+
+      .. note::
+
+         For a near-equatorial orbit, the ascending node is ill-defined and
+         this value may vary erratically over time.
+
+   .. method:: double getArgumentOfPeriapsis()
+
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+   
+
+      .. note::
+
+         For a near-circular orbit, the periapsis is ill-defined and
+         this value may vary erratically over time.
+
+   .. method:: double getMeanAnomalyAtEpoch()
+
+
+      The `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+   
+
+   .. method:: double getEpoch()
+
+
+      The universal time, in seconds, at which the
+      `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_
+      is measured.
+
+   
+
+   .. method:: double getMeanAnomaly()
+
+
+      The `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+   
+
+   .. method:: double meanAnomalyAtUT(double ut)
+
+      The mean anomaly at the given time.
+
+      :param double ut: The universal time in seconds.
+   
+
+   .. method:: double getEccentricAnomaly()
+
+
+      The `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_.
+
+   
+
+   .. method:: double eccentricAnomalyAtUT(double ut)
+
+      The eccentric anomaly at the given universal time.
+
+      :param double ut: The universal time, in seconds.
+   
+
+   .. method:: double getTrueAnomaly()
+
+
+      The `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_.
+
+   
+
+   .. method:: double trueAnomalyAtUT(double ut)
+
+      The true anomaly at the given time.
+
+      :param double ut: The universal time in seconds.
+   
+
+   .. method:: double trueAnomalyAtRadius(double radius)
+
+      The true anomaly at the given orbital radius.
+
+      :param double radius: The orbital radius in meters.
+   
+
+   .. method:: double uTAtTrueAnomaly(double trueAnomaly)
+
+      The universal time, in seconds, corresponding to the given true anomaly.
+
+      :param double trueAnomaly: True anomaly.
+   
+
+   .. method:: double trueAnomalyAtAN(Orbit target)
+
+      The true anomaly of the ascending node with the given target orbit.
+
+      :param Orbit target: Target orbit.
+   
+
+   .. method:: double trueAnomalyAtDN(Orbit target)
+
+      The true anomaly of the descending node with the given target orbit.
+
+      :param Orbit target: Target orbit.
+   
+
+   .. method:: double getOrbitalSpeed()
+
+
+      .. warning:: Deprecated. Use :meth:`Orbit.getSpeed()` instead.
+
+      The current orbital speed in meters per second.
+
+   
+
+   .. method:: double orbitalSpeedAt(double ut)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.speedAt(double)` instead.
+
+      The orbital speed at the given time, in meters per second.
+
+      :param double ut: The universal time to measure the speed at.
+   
+
+   .. method:: double getOrbitalEnergy()
+
+
+      .. warning:: Deprecated. Use :meth:`Orbit.getSpecificEnergy()` instead.
+
+      The specific orbital energy of the orbit, in Joules per kilogram.
+
+   
+
+   .. method:: static org.javatuples.Triplet<Double,Double,Double> referencePlaneNormal(Connection connection, ReferenceFrame referenceFrame)
+
+      The direction that is normal to the orbits reference plane,
+      in the given reference frame.
+      The reference plane is the plane from which the orbits inclination is measured.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+   
+
+   .. method:: static org.javatuples.Triplet<Double,Double,Double> referencePlaneDirection(Connection connection, ReferenceFrame referenceFrame)
+
+      The direction from which the orbits longitude of ascending node is measured,
+      in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+   
+
+   .. method:: double relativeInclination(Orbit target)
+
+      Relative inclination of this orbit and the target orbit, in radians.
+
+      :param Orbit target: Target orbit.
+   
+
+   .. method:: double getTimeToSOIChange()
+
+
+      The time until the object changes sphere of influence, in seconds. Returns ``NaN``
+      if the object is not going to change sphere of influence.
+
+   
+
+   .. method:: Orbit getNextOrbit()
+
+
+      If the object is going to change sphere of influence in the future, returns the new
+      orbit after the change. Otherwise returns ``null``.
+
+   
+
+   .. method:: ClosestApproach nextClosestApproach(Orbit target)
+
+      The next closest approach to a target orbit.
+
+      :param Orbit target: Target orbit.
+   
+
+   .. method:: java.util.List<ClosestApproach> closestApproaches(Orbit target, int orbits)
+
+      A list of the closest approaches to a target orbit, one for each of the next
+      *orbits* orbital periods.
+
+      :param Orbit target: Target orbit.
+      :param int orbits: The number of future orbits to search.

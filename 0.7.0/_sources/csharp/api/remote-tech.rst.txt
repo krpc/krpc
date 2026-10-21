@@ -1,0 +1,25 @@
+.. default-domain:: cs
+.. highlight:: csharp
+
+RemoteTech API
+==============
+
+Provides RPCs to interact with the `RemoteTech`_ mod. Provides the following classes:
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   remote-tech/remote-tech
+   remote-tech/comms
+   remote-tech/antenna
+
+Example
+-------
+
+The following example sets the target of a dish on the active vessel then prints
+out the signal delay to the active vessel.
+
+.. literalinclude:: /scripts/api/remote-tech/RemoteTechExample.cs
+
+.. _RemoteTech: https://forum.kerbalspaceprogram.com/topic/139167-111-remotetech-v199-2020-12-19/

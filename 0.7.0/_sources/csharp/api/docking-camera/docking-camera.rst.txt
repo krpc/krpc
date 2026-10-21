@@ -1,0 +1,27 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.DockingCamera
+
+DockingCamera
+=============
+
+
+.. class:: DockingCamera
+
+   Camera service.
+
+   .. property:: bool Available { get; }
+
+      Check if the Camera API is available.
+
+      :Game Scenes: All
+
+   .. function:: Camera Camera(SpaceCenter.Part part)
+
+      Get a Camera part.
+
+      :parameters:
+
+
+
+      :Game Scenes: All

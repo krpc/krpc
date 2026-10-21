@@ -37,12 +37,22 @@ Parts
 
       .. note:: See the discussion on :rst:ref:`cpp-api-parts-trees-of-parts`.
 
-   .. function:: Part controlling()
-   .. function:: void set_controlling(Part value)
+   .. function:: std::optional<Part> controlling()
+   .. function:: void set_controlling(std::optional<Part> value)
 
       The part from which the vessel is controlled.
+      Returns ``NULL`` if the vessel has no control point, in which case it is
+      oriented by its root part.
 
-   
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A vessel gets no control point when it is created by a decoupler or an undocking
+         and none of its parts is a command module with crew aboard. A probe core does not
+         give it one either. Assign this property to choose the control point, which is
+         equivalent to "Control From Here" in game.
 
    .. function:: std::vector<Part> with_name(std::string name)
 
@@ -84,38 +94,6 @@ Parts
 
 
    
-
-   .. function:: std::vector<Part> in_stage(int32_t stage)
-
-      .. warning:: Deprecated. Use :func:`Stage::parts` from the object returned by :func:`Vessel::stage_at` instead.
-
-      A list of all parts that are activated in the given *stage*.
-
-      :Parameters:
-
-
-
-   
-
-      .. note:: Deprecated. Use :func:`Vessel::stage_at` and
-                :func:`Stage::parts` instead. See the discussion on
-                :rst:ref:`cpp-api-parts-staging`.
-
-   .. function:: std::vector<Part> in_decouple_stage(int32_t stage)
-
-      .. warning:: Deprecated. Use :func:`Stage::parts` from the object returned by :func:`Vessel::decouple_stage_at` instead.
-
-      A list of all parts that are decoupled in the given *stage*.
-
-      :Parameters:
-
-
-
-   
-
-      .. note:: Deprecated. Use :func:`Vessel::decouple_stage_at` and
-                :func:`Stage::parts` instead. See the discussion on
-                :rst:ref:`cpp-api-parts-staging`.
 
    .. function:: std::vector<Module> modules_with_name(std::string module_name)
 
@@ -340,15 +318,17 @@ Part
    .. function:: void set_tag(std::string value)
 
       The name tag for the part. Can be set to a custom string using the
-      in-game user interface.
+      in-game user interface. Throws an exception if no name tag part module is installed.
 
    
 
       .. note::
 
-         This string is shared with
-         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_
-         if it is installed.
+         The name tag part module is provided by
+         `KSPCommunityPartModules <https://github.com/KSPModdingLibs/KSPCommunityPartModules>`_
+         0.5 or later, or by
+         `kOS <https://forum.kerbalspaceprogram.com/topic/165628-ksp-112x-kos-v1400-kos-scriptable-autopilot-system/>`_,
+         which shares this string.
 
    .. function:: std::string flag_url()
    .. function:: void set_flag_url(std::string value)
@@ -362,18 +342,19 @@ Part
 
       Whether the part is highlighted.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
          The highlighting is removed when the client that enabled it disconnects.
 
-   .. function:: std::tuple<double, double, double> highlight_color()
-   .. function:: void set_highlight_color(std::tuple<double, double, double> value)
+   .. function:: StdLib::ColorRGB highlight_color()
+   .. function:: void set_highlight_color(StdLib::ColorRGB value)
 
-      The color used to highlight the part, as an RGB triple.
+      The color used to highlight the part.
 
-   
+      :Game Scenes: Flight
 
    .. function:: double cost()
 
@@ -385,9 +366,9 @@ Part
 
       The vessel that contains this part.
 
-   
+      :Game Scenes: Flight
 
-   .. function:: Part parent()
+   .. function:: std::optional<Part> parent()
 
       The parts parent. Returns ``NULL`` if the part does not have a parent.
       This, in combination with :func:`Part::children`, can be used to traverse the vessels
@@ -468,13 +449,140 @@ Part
 
       Whether the part is shielded from the exterior of the vessel, for example by a fairing.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float dynamic_pressure()
 
       The dynamic pressure acting on the part, in Pascals.
 
-   
+      :Game Scenes: Flight
+
+   .. function:: float static_pressure()
+
+      The static pressure acting on the part, in Pascals. Below the waterline this
+      includes the pressure of the water.
+
+      :Game Scenes: Flight
+
+   .. function:: double displacement()
+
+      The volume of water the part displaces when fully submerged, in :math:`m^3`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         See :func:`Part::displaced_volume` for the volume it is displacing now.
+
+   .. function:: float buoyancy_multiplier()
+
+      The multiplier applied to the buoyant force on the part. One for most parts.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: double buoyant_force_at(double density, double gravity)
+
+      The buoyant force on the part when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :Parameters:
+
+       * **density** -- The density of the fluid, in :math:`kg/m^3`.
+       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Applies :func:`buoyancy_scalar` and
+         :func:`Part::buoyancy_multiplier`, so the result is what the game would do to the
+         part rather than what
+         `Archimedes' principle <https://en.wikipedia.org/wiki/Archimedes%27_principle>`_ alone gives.
+
+   .. function:: bool splashed()
+
+      Whether the part is in contact with water.
+
+      :Game Scenes: Flight
+
+   .. function:: double submerged_portion()
+
+      The fraction of the part below the waterline, between 0 and 1.
+
+      :Game Scenes: Flight
+
+   .. function:: double displaced_volume()
+
+      The volume of water the part is displacing, in :math:`m^3`.
+
+      :Game Scenes: Flight
+
+   .. function:: double depth()
+
+      The depth of the part below the waterline, in meters, measured at
+      :func:`Part::center_of_displacement`. Negative above the waterline. Returns zero
+      if the body the vessel is at has no ocean.
+
+      :Game Scenes: Flight
+
+   .. function:: double min_depth()
+
+      The depth of the shallowest point of the part below the waterline, in meters.
+      Returns zero if the body the vessel is at has no ocean.
+
+      :Game Scenes: Flight
+
+   .. function:: double max_depth()
+
+      The depth of the deepest point of the part below the waterline, in meters.
+      Returns zero if the body the vessel is at has no ocean.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game ramps the buoyant force in over the first fraction of a meter of this
+         depth.
+
+   .. function:: float submerged_dynamic_pressure()
+
+      The dynamic pressure of the water acting on the part, in Pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: double submerged_drag_multiplier()
+
+      The multiplier applied to the drag on the part while it is submerged.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game sets this high on splashdown and eases it down as the part moves through
+         the water. It climbs back once the part slows to a crawl, so a hull under way
+         reads lower than one lying still.
+
+   .. function:: double submerged_lift_multiplier()
+
+      The multiplier applied to the lift on the part while it is submerged.
+
+      :Game Scenes: Flight
+
+   .. function:: float water_angular_drag_multiplier()
+
+      The multiplier applied to the angular drag on the part while it is submerged.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Part of the part's configuration rather than a live readout, so it reads the same
+         in the editor and at a body with no ocean.
 
    .. function:: double impact_tolerance()
 
@@ -486,13 +594,13 @@ Part
 
       Temperature of the part, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: double skin_temperature()
 
       Temperature of the skin of the part, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: double max_temperature()
 
@@ -506,26 +614,37 @@ Part
 
    
 
+   .. function:: double max_pressure()
+
+      Maximum pressure that the part can survive, in Pascals.
+
+   
+
+      .. note::
+
+         With part pressure limits enabled in the difficulty settings, the part is destroyed
+         when :func:`Part::static_pressure` plus :func:`Part::dynamic_pressure` exceeds this.
+
    .. function:: float thermal_mass()
 
       A measure of how much energy it takes to increase the internal temperature of the part,
       in Joules per Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float thermal_skin_mass()
 
       A measure of how much energy it takes to increase the skin temperature of the part,
       in Joules per Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float thermal_resource_mass()
 
       A measure of how much energy it takes to increase the temperature of the resources
       contained in the part, in Joules per Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float thermal_conduction_flux()
 
@@ -534,7 +653,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is
       losing heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float thermal_convection_flux()
 
@@ -543,7 +662,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is
       losing heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float thermal_radiation_flux()
 
@@ -552,7 +671,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is
       losing heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float thermal_internal_flux()
 
@@ -562,7 +681,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is losing
       heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float thermal_skin_to_internal_flux()
 
@@ -571,7 +690,7 @@ Part
       A positive value means the part's internals are gaining heat energy,
       and negative means its skin is gaining heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. function:: int32_t crew_capacity()
 
@@ -583,13 +702,13 @@ Part
 
       The crew members occupying the part.
 
-   
+      :Game Scenes: Flight
 
    .. function:: uint32_t available_seats()
 
       How many open seats the part has.
 
-   
+      :Game Scenes: Flight
 
    .. function:: Resources resources()
 
@@ -614,7 +733,8 @@ Part
       The parts that are connected to this part via fuel lines, where the direction of the
       fuel line is into this part.
 
-   
+      :Game Scenes: Flight
+
 
       .. note:: See the discussion on :rst:ref:`cpp-api-parts-fuel-lines`.
 
@@ -623,7 +743,8 @@ Part
       The parts that are connected to this part via fuel lines, where the direction of the
       fuel line is out of this part.
 
-   
+      :Game Scenes: Flight
+
 
       .. note:: See the discussion on :rst:ref:`cpp-api-parts-fuel-lines`.
 
@@ -633,7 +754,7 @@ Part
 
    
 
-   .. function:: Antenna antenna()
+   .. function:: std::optional<Antenna> antenna()
 
       An :func:`Part::antenna` if the part is an antenna, otherwise ``NULL``.
 
@@ -644,38 +765,38 @@ Part
          If RemoteTech is installed, this will always return ``NULL``.
          To interact with RemoteTech antennas, use the RemoteTech service APIs.
 
-   .. function:: CargoBay cargo_bay()
+   .. function:: std::optional<CargoBay> cargo_bay()
 
       A :func:`Part::cargo_bay` if the part is a cargo bay, otherwise ``NULL``.
 
    
 
-   .. function:: ControlSurface control_surface()
+   .. function:: std::optional<ControlSurface> control_surface()
 
       A :func:`Part::control_surface` if the part is an aerodynamic control surface,
       otherwise ``NULL``.
 
    
 
-   .. function:: Decoupler decoupler()
+   .. function:: std::optional<Decoupler> decoupler()
 
       A :func:`Part::decoupler` if the part is a decoupler, otherwise ``NULL``.
 
    
 
-   .. function:: DockingPort docking_port()
+   .. function:: std::optional<DockingPort> docking_port()
 
       A :func:`Part::docking_port` if the part is a docking port, otherwise ``NULL``.
 
    
 
-   .. function:: Engine engine()
+   .. function:: std::optional<Engine> engine()
 
       An :func:`Part::engine` if the part is an engine, otherwise ``NULL``.
 
    
 
-   .. function:: Experiment experiment()
+   .. function:: std::optional<Experiment> experiment()
 
       An :func:`Part::experiment` if the part contains a
       single science experiment, otherwise ``NULL``.
@@ -687,19 +808,19 @@ Part
          Throws an exception if the part contains more than one experiment.
          In that case, use :func:`Part::experiments` to get the list of experiments in the part.
 
-   .. function:: std::vector<Experiment> experiments()
+   .. function:: std::optional<std::vector<Experiment>> experiments()
 
       A list of :func:`Part::experiment` objects that the part contains.
 
    
 
-   .. function:: Fairing fairing()
+   .. function:: std::optional<Fairing> fairing()
 
       A :func:`Part::fairing` if the part is a fairing, otherwise ``NULL``.
 
    
 
-   .. function:: Intake intake()
+   .. function:: std::optional<Intake> intake()
 
       An :func:`Part::intake` if the part is an intake, otherwise ``NULL``.
 
@@ -711,112 +832,112 @@ Part
          of engine, including liquid fuel rockets, solid rocket boosters and jet engines.
          For RCS thrusters see :func:`Part::rcs`.
 
-   .. function:: Leg leg()
+   .. function:: std::optional<Leg> leg()
 
       A :func:`Part::leg` if the part is a landing leg, otherwise ``NULL``.
 
    
 
-   .. function:: LaunchClamp launch_clamp()
+   .. function:: std::optional<LaunchClamp> launch_clamp()
 
       A :func:`Part::launch_clamp` if the part is a launch clamp, otherwise ``NULL``.
 
    
 
-   .. function:: Light light()
+   .. function:: std::optional<Light> light()
 
       A :func:`Part::light` if the part is a light, otherwise ``NULL``.
 
    
 
-   .. function:: Parachute parachute()
+   .. function:: std::optional<Parachute> parachute()
 
       A :func:`Part::parachute` if the part is a parachute, otherwise ``NULL``.
 
    
 
-   .. function:: Radiator radiator()
+   .. function:: std::optional<Radiator> radiator()
 
       A :func:`Part::radiator` if the part is a radiator, otherwise ``NULL``.
 
    
 
-   .. function:: ResourceDrain resource_drain()
+   .. function:: std::optional<ResourceDrain> resource_drain()
 
       A :func:`Part::resource_drain` if the part is a resource drain, otherwise ``NULL``.
 
    
 
-   .. function:: RCS rcs()
+   .. function:: std::optional<RCS> rcs()
 
       A :func:`Part::rcs` if the part is an RCS block/thruster, otherwise ``NULL``.
 
    
 
-   .. function:: ReactionWheel reaction_wheel()
+   .. function:: std::optional<ReactionWheel> reaction_wheel()
 
       A :func:`Part::reaction_wheel` if the part is a reaction wheel, otherwise ``NULL``.
 
    
 
-   .. function:: ResourceConverter resource_converter()
+   .. function:: std::optional<ResourceConverter> resource_converter()
 
       A :func:`Part::resource_converter` if the part is a resource converter,
       otherwise ``NULL``.
 
    
 
-   .. function:: ResourceHarvester resource_harvester()
+   .. function:: std::optional<ResourceHarvester> resource_harvester()
 
       A :func:`Part::resource_harvester` if the part is a resource harvester,
       otherwise ``NULL``.
 
    
 
-   .. function:: RoboticController robotic_controller()
+   .. function:: std::optional<RoboticController> robotic_controller()
 
       A :func:`Part::robotic_controller` if the part is a robotic controller,
       otherwise ``NULL``.
 
    
 
-   .. function:: RoboticHinge robotic_hinge()
+   .. function:: std::optional<RoboticHinge> robotic_hinge()
 
       A :func:`Part::robotic_hinge` if the part is a robotic hinge, otherwise ``NULL``.
 
    
 
-   .. function:: RoboticPiston robotic_piston()
+   .. function:: std::optional<RoboticPiston> robotic_piston()
 
       A :func:`Part::robotic_piston` if the part is a robotic piston, otherwise ``NULL``.
 
    
 
-   .. function:: RoboticRotation robotic_rotation()
+   .. function:: std::optional<RoboticRotation> robotic_rotation()
 
       A :func:`Part::robotic_rotation` if the part is a robotic rotation servo, otherwise ``NULL``.
 
    
 
-   .. function:: RoboticRotor robotic_rotor()
+   .. function:: std::optional<RoboticRotor> robotic_rotor()
 
       A :func:`Part::robotic_rotor` if the part is a robotic rotor, otherwise ``NULL``.
 
    
 
-   .. function:: Sensor sensor()
+   .. function:: std::optional<Sensor> sensor()
 
       A :func:`Part::sensor` if the part is a sensor, otherwise ``NULL``.
 
    
 
-   .. function:: SolarPanel solar_panel()
+   .. function:: std::optional<SolarPanel> solar_panel()
 
       A :func:`Part::solar_panel` if the part is a solar panel, otherwise ``NULL``.
 
    
 
-   .. function:: Wheel wheel()
+   .. function:: std::optional<Wheel> wheel()
 
       A :func:`Part::wheel` if the part is a wheel, otherwise ``NULL``.
 
@@ -831,7 +952,8 @@ Part
        * **reference_frame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
 
       .. note::
 
@@ -842,16 +964,16 @@ Part
    .. function:: std::tuple<double, double, double> center_of_mass(ReferenceFrame reference_frame)
 
       The position of the parts center of mass in the given reference frame.
-      If the part is physicsless, this is equivalent to :func:`Part::position`.
+      If the part is physicsless in flight, this is equivalent to :func:`Part::position`.
 
       :Parameters:
 
        * **reference_frame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> bounding_box(ReferenceFrame reference_frame)
+   .. function:: BoundingBox bounding_box(ReferenceFrame reference_frame)
 
       The axis-aligned bounding box of the part in the given reference frame.
 
@@ -859,14 +981,16 @@ Part
 
        * **reference_frame** -- The reference frame that the returned position vectors are in.
 
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
-   
+      :returns: The positions of the minimum and maximum vertices of the box.
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
 
       .. note::
 
-         This is computed from the collision mesh of the part.
-         If the part is not collidable, the box has zero volume and is centered on
-         the :func:`Part::position` of the part.
+         This is computed from the meshes that make up the parts model, and covers only
+         this part - the models of any child parts are excluded.
+         If the part has no visible model, the box has zero volume and is centered on
+         the :func:`Part::center_of_mass` of the part.
 
    .. function:: std::tuple<double, double, double> direction(ReferenceFrame reference_frame)
 
@@ -877,7 +1001,7 @@ Part
        * **reference_frame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::tuple<double, double, double> velocity(ReferenceFrame reference_frame)
 
@@ -888,7 +1012,7 @@ Part
        * **reference_frame** -- The reference frame that the returned velocity vector is in.
 
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double, double> rotation(ReferenceFrame reference_frame)
 
@@ -899,7 +1023,7 @@ Part
        * **reference_frame** -- The reference frame that the returned rotation is in.
 
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::tuple<double, double, double> lift(ReferenceFrame reference_frame)
 
@@ -911,7 +1035,8 @@ Part
        * **reference_frame** -- The reference frame that the returned vector is in.
 
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -927,26 +1052,74 @@ Part
        * **reference_frame** -- The reference frame that the returned vector is in.
 
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
          Not available when the Ferram Aerospace Research mod is installed.
 
+   .. function:: std::tuple<double, double, double> center_of_buoyancy(ReferenceFrame reference_frame)
+
+      The point the buoyant force on the part acts at, in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A submerged part reports the point the game applied the force at, which it shifts
+         towards the submerged part of the hull. Any other part reports its configured
+         center of buoyancy.
+
+   .. function:: std::tuple<double, double, double> center_of_displacement(ReferenceFrame reference_frame)
+
+      The point the depth of the part is measured at, in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: std::tuple<double, double, double> buoyant_force(ReferenceFrame reference_frame)
+
+      The buoyant force currently acting on the part.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned vector is in.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The buoyant force on its own. The water drag and lift the game applies alongside
+         it are reported by :func:`Part::submerged_drag_multiplier` and
+         :func:`Part::submerged_lift_multiplier`.
+
    .. function:: std::tuple<double, double, double> moment_of_inertia()
 
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
-      in the parts reference frame (:func:`Part::reference_frame`).
+      in the parts center of mass reference frame (:func:`Part::center_of_mass_reference_frame`).
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::vector<double> inertia_tensor()
 
-      The inertia tensor of the part in the parts reference frame
-      (:func:`Part::reference_frame`).
+      The inertia tensor of the part around its center of mass, in the parts center of
+      mass reference frame (:func:`Part::center_of_mass_reference_frame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: ReferenceFrame reference_frame()
 
@@ -958,7 +1131,8 @@ Part
       * The axes rotate with the part.
       * The x, y and z axis directions depend on the design of the part.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
 
       .. note::
 
@@ -981,7 +1155,8 @@ Part
       * The axes rotate with the part.
       * The x, y and z axis directions depend on the design of the part.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
 
       .. note::
 
@@ -990,6 +1165,8 @@ Part
          :func:`DockingPort::reference_frame`.
 
    .. function:: Force add_force(std::tuple<double, double, double> force, std::tuple<double, double, double> position, ReferenceFrame reference_frame)
+
+      .. warning:: Deprecated. Use ``Debug.AddForce`` instead.
 
       Exert a constant force on the part, acting at the given position.
 
@@ -1000,13 +1177,16 @@ Part
        * **reference_frame** -- The reference frame that the force and position are in.
 
       :returns: An object that can be used to remove or modify the force.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
          The force is removed when the client that added it disconnects.
 
    .. function:: void instantaneous_force(std::tuple<double, double, double> force, std::tuple<double, double, double> position, ReferenceFrame reference_frame)
+
+      .. warning:: Deprecated. Use ``Debug.InstantaneousForce`` instead.
 
       Exert an instantaneous force on the part, acting at the given position.
 
@@ -1016,7 +1196,8 @@ Part
        * **position** -- The position at which the force acts, as a vector.
        * **reference_frame** -- The reference frame that the force and position are in.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1026,11 +1207,39 @@ Part
 
       Whether the part is glowing.
 
-   
+      :Game Scenes: Flight
 
    .. function:: AutoStrutMode auto_strut_mode()
 
       Auto-strut mode.
+
+   
+
+   .. function:: bool has_real_fuels_tank()
+
+      Whether the part is a fuel tank managed by
+      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      The remaining properties in this section are only available when it is.
+
+   
+
+   .. function:: bool highly_pressurized()
+
+      Whether the tank is highly pressurized, which is what a pressure-fed engine needs to
+      draw from (see :func:`Engine::pressure_fed`). Throws an exception if the part is
+      not a RealFuels fuel tank (see :func:`Part::has_real_fuels_tank`).
+
+   
+
+   .. function:: double boiloff_rate()
+
+      The rate at which the tank's cryogenic contents are boiling off, in kilograms per
+      second of in-game time, measured over the last update RealFuels computed it in.
+      The contents keep boiling off under time warp, where that update covers a much
+      longer span of in-game time than a physics frame does. The rate is zero for a
+      tank holding nothing cryogenic, for one still being fed by a launch clamp, whose
+      temperature RealFuels holds down instead, and in the editor. Throws an exception
+      if the part is not a RealFuels fuel tank (see :func:`Part::has_real_fuels_tank`).
 
    
 
@@ -1080,13 +1289,13 @@ Part
 
 .. class:: Force
 
-   Obtained by calling :func:`Part::add_force`.
+   Obtained by calling ``Debug.AddForce``.
 
    .. function:: Part part()
 
       The part that this force is applied to.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> force_vector()
    .. function:: void set_force_vector(std::tuple<double, double, double> value)
@@ -1094,7 +1303,7 @@ Part
       The force vector, in Newtons.
 
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> position()
    .. function:: void set_position(std::tuple<double, double, double> value)
@@ -1102,21 +1311,26 @@ Part
       The position at which the force acts, in reference frame :func:`Force::reference_frame`.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. function:: ReferenceFrame reference_frame()
    .. function:: void set_reference_frame(ReferenceFrame value)
 
       The reference frame of the force vector and position.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void remove()
 
       Remove the force.
 
 
-   
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Any further use of this object throws an exception.
 
 
 
@@ -1177,345 +1391,6 @@ Module
 
       A list of all the actions of the module. These are the parts actions that can be assigned
       to action groups in the in-game editor.
-
-   
-
-   .. function:: std::map<std::string, std::string> fields()
-
-      .. warning:: Deprecated. Use :func:`Module::field_list` instead, filtering by :func:`PartField::visible`.
-
-      The modules field names and their associated values, as a dictionary.
-      These are the values visible in the right-click menu of the part.
-
-   
-
-      .. note::
-
-         Throws an exception if there is more than one field with the same name.
-         In that case, use :func:`Module::fields_by_id` to get the fields by identifier.
-
-   .. function:: std::map<std::string, std::string> fields_by_id()
-
-      .. warning:: Deprecated. Use :func:`Module::field_list` instead, filtering by :func:`PartField::visible`.
-
-      The modules field identifiers and their associated values, as a dictionary.
-      These are the values visible in the right-click menu of the part.
-
-   
-
-   .. function:: bool has_field(std::string name)
-
-      .. warning:: Deprecated. Filter :func:`Module::field_list` by :func:`PartField::gui_name` instead.
-
-      Returns ``true`` if the module has a field with the given name.
-
-      :Parameters:
-
-       * **name** -- Name of the field.
-
-   
-
-   .. function:: bool has_field_with_id(std::string id)
-
-      .. warning:: Deprecated. Filter :func:`Module::field_list` by :func:`PartField::name` instead.
-
-      Returns ``true`` if the module has a field with the given identifier.
-
-      :Parameters:
-
-       * **id** -- Identifier of the field.
-
-   
-
-   .. function:: std::string get_field(std::string name)
-
-      .. warning:: Deprecated. Filter :func:`Module::field_list` by :func:`PartField::gui_name` and read :func:`PartField::value` instead.
-
-      Returns the value of a field with the given name.
-
-      :Parameters:
-
-       * **name** -- Name of the field.
-
-   
-
-   .. function:: std::string get_field_by_id(std::string id)
-
-      .. warning:: Deprecated. Filter :func:`Module::field_list` by :func:`PartField::name` and read :func:`PartField::value` instead.
-
-      Returns the value of a field with the given identifier.
-
-      :Parameters:
-
-       * **id** -- Identifier of the field.
-
-   
-
-   .. function:: void set_field_int(std::string name, int32_t value)
-
-      .. warning:: Deprecated. Set :func:`PartField::int_value` instead.
-
-      Set the value of a field to the given integer number.
-
-      :Parameters:
-
-       * **name** -- Name of the field.
-       * **value** -- Value to set.
-
-   
-
-   .. function:: void set_field_int_by_id(std::string id, int32_t value)
-
-      .. warning:: Deprecated. Set :func:`PartField::int_value` instead.
-
-      Set the value of a field to the given integer number.
-
-      :Parameters:
-
-       * **id** -- Identifier of the field.
-       * **value** -- Value to set.
-
-   
-
-   .. function:: void set_field_float(std::string name, float value)
-
-      .. warning:: Deprecated. Set :func:`PartField::float_value` instead.
-
-      Set the value of a field to the given floating point number.
-
-      :Parameters:
-
-       * **name** -- Name of the field.
-       * **value** -- Value to set.
-
-   
-
-   .. function:: void set_field_float_by_id(std::string id, float value)
-
-      .. warning:: Deprecated. Set :func:`PartField::float_value` instead.
-
-      Set the value of a field to the given floating point number.
-
-      :Parameters:
-
-       * **id** -- Identifier of the field.
-       * **value** -- Value to set.
-
-   
-
-   .. function:: void set_field_string(std::string name, std::string value)
-
-      .. warning:: Deprecated. Set :func:`PartField::value` instead.
-
-      Set the value of a field to the given string.
-
-      :Parameters:
-
-       * **name** -- Name of the field.
-       * **value** -- Value to set.
-
-   
-
-   .. function:: void set_field_string_by_id(std::string id, std::string value)
-
-      .. warning:: Deprecated. Set :func:`PartField::value` instead.
-
-      Set the value of a field to the given string.
-
-      :Parameters:
-
-       * **id** -- Identifier of the field.
-       * **value** -- Value to set.
-
-   
-
-   .. function:: void set_field_bool(std::string name, bool value)
-
-      .. warning:: Deprecated. Set :func:`PartField::bool_value` instead.
-
-      Set the value of a field to true or false.
-
-      :Parameters:
-
-       * **name** -- Name of the field.
-       * **value** -- Value to set.
-
-   
-
-   .. function:: void set_field_bool_by_id(std::string id, bool value)
-
-      .. warning:: Deprecated. Set :func:`PartField::bool_value` instead.
-
-      Set the value of a field to true or false.
-
-      :Parameters:
-
-       * **id** -- Identifier of the field.
-       * **value** -- Value to set.
-
-   
-
-   .. function:: void reset_field(std::string name)
-
-      .. warning:: Deprecated. Use :func:`PartField::reset` instead.
-
-      Set the value of a field to its original value.
-
-      :Parameters:
-
-       * **name** -- Name of the field.
-
-   
-
-   .. function:: void reset_field_by_id(std::string id)
-
-      .. warning:: Deprecated. Use :func:`PartField::reset` instead.
-
-      Set the value of a field to its original value.
-
-      :Parameters:
-
-       * **id** -- Identifier of the field.
-
-   
-
-      .. note::
-
-         The original value is the value the field had when the part was loaded.
-
-   .. function:: std::vector<std::string> events()
-
-      .. warning:: Deprecated. Use :func:`Module::event_list` instead, filtering by :func:`PartEvent::visible` and :func:`PartEvent::active`.
-
-      A list of the names of all of the modules events. Events are the clickable buttons
-      visible in the right-click menu of the part.
-
-   
-
-   .. function:: std::vector<std::string> events_by_id()
-
-      .. warning:: Deprecated. Use :func:`Module::event_list` instead, filtering by :func:`PartEvent::visible` and :func:`PartEvent::active`.
-
-      A list of the identifiers of all of the modules events. Events are the clickable buttons
-      visible in the right-click menu of the part.
-
-   
-
-   .. function:: bool has_event(std::string name)
-
-      .. warning:: Deprecated. Filter :func:`Module::event_list` by :func:`PartEvent::gui_name` instead.
-
-      ``true`` if the module has an event with the given name.
-
-      :Parameters:
-
-
-
-   
-
-   .. function:: bool has_event_with_id(std::string id)
-
-      .. warning:: Deprecated. Filter :func:`Module::event_list` by :func:`PartEvent::name` instead.
-
-      ``true`` if the module has an event with the given identifier.
-
-      :Parameters:
-
-
-
-   
-
-   .. function:: void trigger_event(std::string name)
-
-      .. warning:: Deprecated. Filter :func:`Module::event_list` by :func:`PartEvent::gui_name` and call :func:`PartEvent::trigger` instead.
-
-      Trigger the named event. Equivalent to clicking the button in the right-click menu
-      of the part.
-
-      :Parameters:
-
-
-
-   
-
-   .. function:: void trigger_event_by_id(std::string id)
-
-      .. warning:: Deprecated. Filter :func:`Module::event_list` by :func:`PartEvent::name` and call :func:`PartEvent::trigger` instead.
-
-      Trigger the event with the given identifier.
-      Equivalent to clicking the button in the right-click menu of the part.
-
-      :Parameters:
-
-
-
-   
-
-   .. function:: std::vector<std::string> actions()
-
-      .. warning:: Deprecated. Use :func:`Module::action_list` instead.
-
-      A list of all the names of the modules actions. These are the parts actions that can
-      be assigned to action groups in the in-game editor.
-
-   
-
-   .. function:: std::vector<std::string> actions_by_id()
-
-      .. warning:: Deprecated. Use :func:`Module::action_list` instead.
-
-      A list of all the identifiers of the modules actions. These are the parts actions
-      that can be assigned to action groups in the in-game editor.
-
-   
-
-   .. function:: bool has_action(std::string name)
-
-      .. warning:: Deprecated. Filter :func:`Module::action_list` by :func:`PartAction::gui_name` instead.
-
-      ``true`` if the part has an action with the given name.
-
-      :Parameters:
-
-
-
-   
-
-   .. function:: bool has_action_with_id(std::string id)
-
-      .. warning:: Deprecated. Filter :func:`Module::action_list` by :func:`PartAction::name` instead.
-
-      ``true`` if the part has an action with the given identifier.
-
-      :Parameters:
-
-
-
-   
-
-   .. function:: void set_action(std::string name, bool value = true)
-
-      .. warning:: Deprecated. Filter :func:`Module::action_list` by :func:`PartAction::gui_name` and set :func:`PartAction::set_activated` instead.
-
-      Set the value of an action with the given name.
-
-      :Parameters:
-
-
-
-
-   
-
-   .. function:: void set_action_by_id(std::string id, bool value = true)
-
-      .. warning:: Deprecated. Filter :func:`Module::action_list` by :func:`PartAction::name` and set :func:`PartAction::set_activated` instead.
-
-      Set the value of an action with the given identifier.
-
-      :Parameters:
-
-
-
 
    
 
@@ -1650,12 +1525,12 @@ Module
       An integer field. Access using :func:`PartField::int_value`.
 
 
-   .. enumerator:: float__
+   .. enumerator:: float_
 
       A single precision floating point field. Access using :func:`PartField::float_value`.
 
 
-   .. enumerator:: double__
+   .. enumerator:: double_
 
       A double precision floating point field. Access using :func:`PartField::double_value`.
 
@@ -1874,26 +1749,27 @@ Antenna
 
       The part object for this antenna.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: DeployableState state()
 
       The current state of the antenna.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool deployable()
 
       Whether the antenna is deployable.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool deployed()
    .. function:: void set_deployed(bool value)
 
       Whether the antenna is deployed.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1904,65 +1780,65 @@ Antenna
 
       Whether data can be transmitted by this antenna.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void transmit()
 
       Transmit data.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: void cancel()
 
       Cancel current transmission of data.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool allow_partial()
    .. function:: void set_allow_partial(bool value)
 
       Whether partial data transmission is permitted.
 
-   
+      :Game Scenes: Flight
 
    .. function:: double power()
 
       The power of the antenna.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool combinable()
 
       Whether the antenna can be combined with other antennae on the vessel
       to boost the power.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: double combinable_exponent()
 
       Exponent used to calculate the combined power of multiple antennae on a vessel.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float packet_interval()
 
       Interval between sending packets in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float packet_size()
 
       Amount of data sent per packet in Mits.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: double packet_resource_cost()
 
       Units of electric charge consumed per packet sent.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -1978,13 +1854,14 @@ Cargo Bay
 
       The part object for this cargo bay.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: DeployableState state()
 
       The state of the cargo bay.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2000,7 +1877,7 @@ Cargo Bay
 
       Whether the cargo bay is open.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2016,28 +1893,28 @@ Control Surface
 
       The part object for this control surface.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool pitch_enabled()
    .. function:: void set_pitch_enabled(bool value)
 
       Whether the control surface has pitch control enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool yaw_enabled()
    .. function:: void set_yaw_enabled(bool value)
 
       Whether the control surface has yaw control enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool roll_enabled()
    .. function:: void set_roll_enabled(bool value)
 
       Whether the control surface has roll control enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float authority_limiter()
    .. function:: void set_authority_limiter(float value)
@@ -2045,21 +1922,49 @@ Control Surface
       The authority limiter for the control surface, which controls how far the
       control surface will move.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool inverted()
    .. function:: void set_inverted(bool value)
 
       Whether the control surface movement is inverted.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool deployed()
    .. function:: void set_deployed(bool value)
 
-      Whether the control surface has been fully deployed.
+      Whether the control surface has been fully deployed. Throws an exception if set
+      while :func:`ControlSurface::deflection_override` is enabled, which holds the surface deployed.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: float deploy_angle()
+   .. function:: void set_deploy_angle(float value)
+
+      The deploy angle of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Applied when :func:`ControlSurface::deployed` is true, and clamped to the range given by
+         :func:`ControlSurface::min_deploy_angle` and :func:`ControlSurface::max_deploy_angle`. While
+         :func:`ControlSurface::deflection_override` is enabled, :func:`ControlSurface::deflection` drives the
+         angle. A value set here takes effect when the override is released.
+
+   .. function:: float min_deploy_angle()
+
+      The minimum :func:`ControlSurface::deploy_angle` of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: float max_deploy_angle()
+
+      The maximum :func:`ControlSurface::deploy_angle` of the control surface, in degrees.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool deflection_override()
    .. function:: void set_deflection_override(bool value)
@@ -2070,7 +1975,7 @@ Control Surface
       The prior state is restored when the override is released, when the
       controlling client disconnects, or when the vessel changes.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float deflection()
    .. function:: void set_deflection(float value)
@@ -2078,21 +1983,21 @@ Control Surface
       The deflection command applied when :func:`ControlSurface::deflection_override` is enabled, as a
       value between -1 and 1, mapped onto the surface's deploy angle range.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float surface_area()
 
       Surface area of the control surface in :math:`m^2`.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+   .. function:: AxisRange available_torque()
 
       The available torque, in Newton meters, that can be produced by this control surface,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :func:`Vessel::reference_frame`.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2108,7 +2013,7 @@ Decoupler
 
       The part object for this decoupler.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: Vessel decouple()
 
@@ -2116,7 +2021,8 @@ Decoupler
       Throws an exception if the decoupler has already fired.
 
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2128,31 +2034,31 @@ Decoupler
 
       Whether the decoupler has fired.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool staged()
 
       Whether the decoupler is enabled in the staging sequence.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float impulse()
 
       The impulse that the decoupler imparts when it is fired, in Newton seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool is_omni_decoupler()
 
       Whether the decoupler is an omni-decoupler (e.g. stack separator)
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
-   .. function:: Part attached_part()
+   .. function:: std::optional<Part> attached_part()
 
       The part attached to this decoupler's explosive node.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -2214,20 +2120,20 @@ Docking Port
 
       The part object for this docking port.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: DockingPortState state()
 
       The current state of the docking port.
 
-   
+      :Game Scenes: Flight
 
-   .. function:: Part docked_part()
+   .. function:: std::optional<Part> docked_part()
 
       The part that this docking port is docked to. Returns ``NULL`` if this
       docking port is not docked to anything.
 
-   
+      :Game Scenes: Flight
 
    .. function:: Vessel undock()
 
@@ -2236,7 +2142,8 @@ Docking Port
       Throws an exception if the docking port is not docked to anything.
 
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2249,13 +2156,13 @@ Docking Port
       The distance a docking port must move away when it undocks before it
       becomes ready to dock with another port, in meters.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool has_shield()
 
       Whether the docking port has a shield.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool shielded()
    .. function:: void set_shielded(bool value)
@@ -2267,39 +2174,39 @@ Docking Port
       closed, and when set to ``false`` the shield is opened. If the docking
       port does not have a shield, setting this attribute has no effect.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool can_rotate()
 
       Whether the docking port can be commanded to rotate while docked.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float maximum_rotation()
 
       Maximum rotation angle in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float minimum_rotation()
 
       Minimum rotation angle in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float rotation_target()
    .. function:: void set_rotation_target(float value)
 
       Rotation target angle in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool rotation_locked()
    .. function:: void set_rotation_locked(bool value)
 
       Lock rotation. When locked, allows auto-strut to work across the joint.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> position(ReferenceFrame reference_frame)
 
@@ -2310,7 +2217,7 @@ Docking Port
        * **reference_frame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> direction(ReferenceFrame reference_frame)
 
@@ -2321,7 +2228,7 @@ Docking Port
        * **reference_frame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double, double> rotation(ReferenceFrame reference_frame)
 
@@ -2332,7 +2239,7 @@ Docking Port
        * **reference_frame** -- The reference frame that the returned rotation is in.
 
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
-   
+      :Game Scenes: Flight
 
    .. function:: ReferenceFrame reference_frame()
 
@@ -2345,7 +2252,8 @@ Docking Port
       * The y-axis points in the direction the docking port is facing.
       * The z-axis points out of the bottom off the docking port.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2423,7 +2331,7 @@ Engine
 
       The part object for this engine.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool active()
    .. function:: void set_active(bool value)
@@ -2431,13 +2339,13 @@ Engine
       Whether the engine is active. Setting this attribute may have no effect,
       depending on :func:`Engine::can_shutdown` and :func:`Engine::can_restart`.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float thrust()
 
       The current amount of thrust being produced by the engine, in Newtons.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float available_thrust()
 
@@ -2447,7 +2355,7 @@ Engine
       Takes the engine's current :func:`Engine::thrust_limit` and atmospheric conditions
       into account.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float available_thrust_at(double pressure)
 
@@ -2460,14 +2368,14 @@ Engine
 
        * **pressure** -- Atmospheric pressure in atmospheres
 
-   
+      :Game Scenes: Flight
 
    .. function:: float max_thrust()
 
       The amount of thrust, in Newtons, that would be produced by the engine
       when activated and fueled, with its throttle and throttle limiter set to 100%.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float max_thrust_at(double pressure)
 
@@ -2479,7 +2387,7 @@ Engine
 
        * **pressure** -- Atmospheric pressure in atmospheres
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float max_vacuum_thrust()
 
@@ -2488,7 +2396,7 @@ Engine
       when activated, :func:`Engine::thrust_limit` is set to 100%, the main
       vessel's throttle is set to 100% and the engine is in a vacuum.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float thrust_limit()
    .. function:: void set_thrust_limit(float value)
@@ -2497,13 +2405,14 @@ Engine
       attribute may have no effect, for example the thrust limit for a solid
       rocket booster cannot be changed in flight.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::vector<Thruster> thrusters()
 
       The components of the engine that generate thrust.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2517,7 +2426,7 @@ Engine
       The current specific impulse of the engine, in seconds. Returns zero
       if the engine is not active.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float specific_impulse_at(double pressure)
 
@@ -2528,32 +2437,33 @@ Engine
 
        * **pressure** -- Atmospheric pressure in atmospheres
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float vacuum_specific_impulse()
 
       The vacuum specific impulse of the engine, in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float kerbin_sea_level_specific_impulse()
 
       The specific impulse of the engine at sea level on Kerbin, in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::vector<std::string> propellant_names()
 
       The names of the propellants that the engine consumes.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::map<std::string, float> propellant_ratios()
 
       The ratio of resources that the engine consumes. A dictionary mapping resource names
       to the ratio at which they are consumed by the engine.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2564,13 +2474,13 @@ Engine
 
       The propellants that the engine consumes.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool has_fuel()
 
       Whether the engine has any fuel available.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool flameout()
 
@@ -2580,7 +2490,7 @@ Engine
       vessel with drop tanks or asparagus staging some engines can flame out
       while others keep burning.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float throttle()
    .. function:: void set_throttle(float value)
@@ -2593,7 +2503,7 @@ Engine
       When the engine's independent throttle is enabled
       (see :func:`Engine::independent_throttle`), can be used to set the throttle percentage.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool throttle_locked()
 
@@ -2601,14 +2511,14 @@ Engine
       this is ``true`` for liquid fueled rockets, and ``false`` for solid rocket
       boosters.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool independent_throttle()
    .. function:: void set_independent_throttle(bool value)
 
       Whether the independent throttle is enabled for the engine.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool can_restart()
 
@@ -2616,61 +2526,61 @@ Engine
       returns ``false``. For example, this is ``true`` for liquid fueled rockets
       and ``false`` for solid rocket boosters.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool can_shutdown()
 
       Whether the engine can be shutdown once activated. For example, this is
       ``true`` for liquid fueled rockets and ``false`` for solid rocket boosters.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool has_modes()
 
       Whether the engine has multiple modes of operation.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::string mode()
    .. function:: void set_mode(std::string value)
 
       The name of the current engine mode.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::map<std::string, Engine> modes()
 
       The available modes for the engine.
       A dictionary mapping mode names to :class:`Engine` objects.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void toggle_mode()
 
       Toggle the current engine mode.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool auto_mode_switch()
    .. function:: void set_auto_mode_switch(bool value)
 
       Whether the engine will automatically switch modes.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool gimballed()
 
       Whether the engine is gimballed.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float gimbal_range()
 
       The range over which the gimbal can move, in degrees.
       Returns 0 if the engine is not gimballed.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool gimbal_locked()
    .. function:: void set_gimbal_locked(bool value)
@@ -2678,7 +2588,7 @@ Engine
       Whether the engines gimbal is locked in place. Setting this attribute has
       no effect if the engine is not gimballed.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float gimbal_limit()
    .. function:: void set_gimbal_limit(float value)
@@ -2686,7 +2596,7 @@ Engine
       The gimbal limiter of the engine. A value between 0 and 1.
       Returns 0 if the gimbal is locked.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool gimbal_override()
    .. function:: void set_gimbal_override(bool value)
@@ -2697,7 +2607,7 @@ Engine
       The override is automatically released if the controlling client disconnects or the
       vessel changes. Has no effect if the engine is not gimballed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> gimbal_actuation()
    .. function:: void set_gimbal_actuation(std::tuple<double, double, double> value)
@@ -2708,16 +2618,16 @@ Engine
       and :func:`Engine::gimbal_limit`. When the gimbal is not being overridden,
       returns the current actuation.
 
-   
+      :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+   .. function:: AxisRange available_torque()
 
       The available torque, in Newton meters, that can be produced by this engine,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :func:`Vessel::reference_frame`.
       Returns zero if the engine is inactive, or not gimballed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool can_reverse_thrust()
 
@@ -2727,7 +2637,7 @@ Engine
       ``false`` for engines whose reverser is not recognized, as KSP provides no
       standard way to detect one.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool thrust_reversed()
    .. function:: void set_thrust_reversed(bool value)
@@ -2736,18 +2646,86 @@ Engine
       direction of thrust. While the reverser is still moving, this reports
       the state it is moving to, so a read immediately after a set returns
       the value that was set and setting the same value again has no effect.
-      Raises an exception if the engine does not have a thrust reverser
+      Throws an exception if the engine does not have a thrust reverser
       (see :func:`Engine::can_reverse_thrust`).
 
-   
+      :Game Scenes: Flight
 
    .. function:: void toggle_thrust_reversal()
 
-      Toggle the engine's thrust reverser. Raises an exception if the engine
+      Toggle the engine's thrust reverser. Throws an exception if the engine
       does not have a thrust reverser (see :func:`Engine::can_reverse_thrust`).
 
 
-   
+      :Game Scenes: Flight
+
+   .. function:: bool has_real_fuels()
+
+      Whether the engine is managed by
+      `RealFuels <https://forum.kerbalspaceprogram.com/topic/58236-18-real-fuels/>`_.
+      The remaining properties in this section are only available when it is.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: int32_t ignitions()
+
+      The number of times the engine can still be ignited, or -1 if it can be ignited an
+      unlimited number of times. Throws an exception if the engine is not managed by
+      RealFuels (see :func:`Engine::has_real_fuels`).
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: std::map<std::string, double> ignition_resources()
+
+      The resources the engine consumes each time it ignites, keyed by resource name, with
+      the amount of each that is required. The engine uses up an ignition and fails to
+      light if they are not available. Throws an exception if the engine is not managed by
+      RealFuels (see :func:`Engine::has_real_fuels`).
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: bool has_ullage()
+
+      Whether the engine's propellant is subject to ullage, so that it must be settled
+      before the engine will run reliably. Throws an exception if the engine is not
+      managed by RealFuels (see :func:`Engine::has_real_fuels`).
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: double propellant_stability()
+
+      How settled the propellant feeding the engine is, from 0 (fully unsettled) to 1
+      (fully settled). Acceleration along the engine's thrust axis settles it, and
+      coasting and rotation unsettle it. Throws an exception if the engine is not managed
+      by RealFuels (see :func:`Engine::has_real_fuels`).
+
+      :Game Scenes: Flight
+
+   .. function:: double propellant_reliability()
+
+      The probability that the propellant feeding the engine behaves normally, from 0 to 1.
+      This is :func:`Engine::propellant_stability` scaled by the game's ullage difficulty
+      setting, and is the value RealFuels itself tests against when deciding whether the
+      engine runs. Throws an exception if the engine is not managed by RealFuels
+      (see :func:`Engine::has_real_fuels`).
+
+      :Game Scenes: Flight
+
+   .. function:: bool pressure_fed()
+
+      Whether the engine is fed by tank pressure rather than by a pump, and so needs to
+      draw from a highly pressurized tank. Throws an exception if the engine is not
+      managed by RealFuels (see :func:`Engine::has_real_fuels`).
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: bool has_feed_pressure()
+
+      Whether the tanks feeding the engine supply the pressure it needs. Always
+      ``true`` for an engine that is not pressure fed. Throws an exception if the
+      engine is not managed by RealFuels (see :func:`Engine::has_real_fuels`).
+
+      :Game Scenes: Flight
 
 
 
@@ -2759,64 +2737,64 @@ Engine
 
       The name of the propellant.
 
-   
+      :Game Scenes: Flight
 
    .. function:: double current_amount()
 
       The current amount of propellant consumed in the current physics update.
 
-   
+      :Game Scenes: Flight
 
    .. function:: double current_requirement()
 
       The required amount of propellant for the current physics update.
 
-   
+      :Game Scenes: Flight
 
    .. function:: double total_resource_available()
 
       The total amount of the underlying resource currently reachable given
       resource flow rules.
 
-   
+      :Game Scenes: Flight
 
    .. function:: double total_resource_capacity()
 
       The total vehicle capacity for the underlying propellant resource,
       restricted by resource flow rules.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool ignore_for_isp()
 
       If this propellant should be ignored when calculating required mass flow
       given specific impulse.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool ignore_for_thrust_curve()
 
       If this propellant should be ignored for thrust curve calculations.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool draw_stack_gauge()
 
       If this propellant has a stack gauge or not.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool is_deprived()
 
       If this propellant is deprived.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float ratio()
 
       The propellant ratio.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2832,177 +2810,163 @@ Experiment
 
       The part object for this experiment.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::string name()
 
       Internal name of the experiment, as used in
       `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::string title()
 
       Title of the experiment, as shown on the in-game UI.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void run()
 
       Run the experiment.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: void transmit()
 
       Transmit all experimental data contained by this part.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: void dump()
 
       Dump the experimental data contained by the experiment.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: void reset()
 
       Reset the experiment.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool deployed()
 
       Whether the experiment has been deployed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool rerunnable()
 
       Whether the experiment can be re-run.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool inoperable()
 
       Whether the experiment is inoperable.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool has_data()
 
       Whether the experiment contains data.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::vector<ScienceData> data()
 
       The data contained in this experiment.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::string biome()
 
       The name of the biome the experiment is currently in.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool available()
 
       Determines if the experiment is available given the current conditions.
 
-   
+      :Game Scenes: Flight
 
-   .. function:: ScienceSubject science_subject()
+   .. function:: std::optional<ScienceSubject> science_subject()
 
       Containing information on the corresponding specific science result for the current
       conditions. Returns ``NULL`` if the experiment is unavailable.
 
-   
+      :Game Scenes: Flight
 
 
 
-.. class:: ScienceData
+.. namespace:: krpc::services::SpaceCenter
+.. struct:: ScienceData
 
    Obtained by calling :func:`Experiment::data`.
 
-   .. function:: float data_amount()
+
+   .. member:: float data_amount
 
       Data amount.
 
-   
-
-   .. function:: float science_value()
+   .. member:: float science_value
 
       Science value.
 
-   
-
-   .. function:: float transmit_value()
+   .. member:: float transmit_value
 
       Transmit value.
 
-   
 
-
-
-.. class:: ScienceSubject
+.. namespace:: krpc::services::SpaceCenter
+.. struct:: ScienceSubject
 
    Obtained by calling :func:`Experiment::science_subject`.
 
-   .. function:: std::string title()
 
-      Title of science subject, displayed in science archives
+   .. member:: std::string id
 
-   
+      The identifier of the subject, e.g. ``crewReport@KerbinSrfLandedLaunchPad``.
 
-   .. function:: bool is_complete()
+   .. member:: std::string title
+
+      The title of the subject, as shown in the science archives.
+
+   .. member:: bool is_complete
 
       Whether the subject has been fully researched. This is true once the science banked for
-      the subject reaches the science cap. As the banked science (see :func:`ScienceSubject::science`) is
+      the subject reaches the science cap. As the banked science (see :member:`ScienceSubject::science`) is
       only updated after transmission/recovery, this reflects fully mining the subject over
       repeated experiments, not whether a single run has produced data. To check whether a run
       has produced data, and how valuable it is, use :func:`Experiment::has_data` and
-      :func:`ScienceData::transmit_value`.
+      :member:`ScienceData::transmit_value`.
 
-   
-
-   .. function:: float science()
+   .. member:: float science
 
       Amount of science already earned from this subject, not updated until after
       transmission/recovery.
 
-   
-
-   .. function:: float science_cap()
+   .. member:: float science_cap
 
       Total science allowable for this subject.
 
-   
-
-   .. function:: float data_scale()
+   .. member:: float data_scale
 
       Multiply science value by this to determine data amount in mits.
 
-   
-
-   .. function:: float subject_value()
+   .. member:: float subject_value
 
       Multiplier for specific Celestial Body/Experiment Situation combination.
 
-   
-
-   .. function:: float scientific_value()
+   .. member:: float scientific_value
 
       Diminishing value multiplier for decreasing the science value returned from repeated
       experiments.
-
-   
-
 
 
 Fairing
@@ -3018,20 +2982,20 @@ Fairing
 
       The part object for this fairing.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: void jettison()
 
       Jettison the fairing. Has no effect if it has already been jettisoned.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool jettisoned()
 
       Whether the fairing has been jettisoned.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3047,32 +3011,32 @@ Intake
 
       The part object for this intake.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool open()
    .. function:: void set_open(bool value)
 
       Whether the intake is open.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float speed()
 
       Speed of the flow into the intake, in :math:`m/s`.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float flow()
 
       The rate of flow into the intake, in units of resource per second.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float area()
 
       The area of the intake's opening, in square meters.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -3088,26 +3052,27 @@ Leg
 
       The part object for this landing leg.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: DeployableState state()
 
       The current state of the landing leg.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool deployable()
 
       Whether the leg is deployable.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool deployed()
    .. function:: void set_deployed(bool value)
 
       Whether the landing leg is deployed.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3118,7 +3083,7 @@ Leg
 
       Returns whether the leg is touching the ground.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3134,14 +3099,14 @@ Launch Clamp
 
       The part object for this launch clamp.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: void release()
 
       Releases the docking clamp. Has no effect if the clamp has already been released.
 
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3157,41 +3122,41 @@ Light
 
       The part object for this light.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool active()
    .. function:: void set_active(bool value)
 
       Whether the light is switched on.
 
-   
+      :Game Scenes: Flight
 
-   .. function:: std::tuple<float, float, float> color()
-   .. function:: void set_color(std::tuple<float, float, float> value)
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
 
-      The color of the light, as an RGB triple.
+      The color of the light.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool blink()
    .. function:: void set_blink(bool value)
 
       Whether blinking is enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float blink_rate()
    .. function:: void set_blink_rate(float value)
 
       The blink rate of the light.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float power_usage()
 
       The current power usage, in units of charge per second.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3207,7 +3172,7 @@ Parachute
 
       The part object for this parachute.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: void deploy()
 
@@ -3215,13 +3180,13 @@ Parachute
       been deployed.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool deployed()
 
       Whether the parachute has been deployed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void arm()
 
@@ -3229,26 +3194,26 @@ Parachute
       been armed or deployed.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool armed()
 
       Whether the parachute has been armed or deployed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void cut()
 
       Cuts the parachute.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: ParachuteState state()
 
       The current state of the parachute.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float deploy_altitude()
    .. function:: void set_deploy_altitude(float value)
@@ -3256,7 +3221,7 @@ Parachute
       The altitude at which the parachute will full deploy, in meters.
       Only applicable to stock parachutes.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float deploy_min_pressure()
    .. function:: void set_deploy_min_pressure(float value)
@@ -3264,7 +3229,7 @@ Parachute
       The minimum pressure at which the parachute will semi-deploy, in atmospheres.
       Only applicable to stock parachutes.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: ParachuteSafeState safe_state()
 
@@ -3274,7 +3239,7 @@ Parachute
       Note that KSP reports :enumerator:`ParachuteSafeState::unsafe` for the first
       second after the vessel unpacks, before its thermal data is valid.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3351,13 +3316,13 @@ Radiator
 
       The part object for this radiator.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool deployable()
 
       Whether the radiator is deployable.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool deployed()
    .. function:: void set_deployed(bool value)
@@ -3365,13 +3330,14 @@ Radiator
       For a deployable radiator, ``true`` if the radiator is extended.
       If the radiator is not deployable, this is always ``true``.
 
-   
+      :Game Scenes: Flight
 
    .. function:: DeployableState state()
 
       The current state of the radiator.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3391,13 +3357,13 @@ Resource Converter
 
       The part object for this converter.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: int32_t count()
 
       The number of converters in the part.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::string name(int32_t index)
 
@@ -3407,7 +3373,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool active(int32_t index)
 
@@ -3417,7 +3383,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void start(int32_t index)
 
@@ -3427,7 +3393,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void stop(int32_t index)
 
@@ -3437,7 +3403,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: ResourceConverterState state(int32_t index)
 
@@ -3447,7 +3413,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::string status_info(int32_t index)
 
@@ -3458,7 +3424,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::vector<std::string> inputs(int32_t index)
 
@@ -3468,7 +3434,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::vector<std::string> outputs(int32_t index)
 
@@ -3478,25 +3444,25 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float optimum_core_temperature()
 
       The core temperature at which the converter will operate with peak efficiency, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float core_temperature()
 
       The core temperature of the converter, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float thermal_efficiency()
 
       The thermal efficiency of the converter, as a percentage of its maximum.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3550,14 +3516,15 @@ Resource Harvester
 
       The part object for this harvester.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: DeployableState state()
 
       The deployment state of the harvester. Whether it is drilling is
       reported separately by :func:`ResourceHarvester::active`.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3569,14 +3536,15 @@ Resource Harvester
 
       Whether the harvester is deployed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool active()
    .. function:: void set_active(bool value)
 
       Whether the harvester is actively drilling.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3590,25 +3558,25 @@ Resource Harvester
 
       The rate at which the drill is extracting ore, in units per second.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float thermal_efficiency()
 
       The thermal efficiency of the drill, as a percentage of its maximum.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float core_temperature()
 
       The core temperature of the drill, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float optimum_core_temperature()
 
       The core temperature at which the drill will operate with peak efficiency, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3624,37 +3592,37 @@ Reaction Wheel
 
       The part object for this reaction wheel.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool active()
    .. function:: void set_active(bool value)
 
       Whether the reaction wheel is active.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool broken()
 
       Whether the reaction wheel is broken.
 
-   
+      :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+   .. function:: AxisRange available_torque()
 
       The available torque, in Newton meters, that can be produced by this reaction wheel,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :func:`Vessel::reference_frame`.
       Returns zero if the reaction wheel is inactive or broken.
 
-   
+      :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> max_torque()
+   .. function:: AxisRange max_torque()
 
       The maximum torque, in Newton meters, that can be produced by this reaction wheel,
       when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
       These axes correspond to the coordinate axes of the :func:`Vessel::reference_frame`.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float authority_limiter()
    .. function:: void set_authority_limiter(float value)
@@ -3662,7 +3630,7 @@ Reaction Wheel
       The authority limiter for the reaction wheel, as a percentage of maximum torque.
       A value between 0 and 1.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -3678,13 +3646,13 @@ Resource Drain
 
       The part object for this resource drain.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::vector<Resource> available_resources()
 
       List of available resources.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void set_resource(Resource resource, bool enabled)
 
@@ -3695,7 +3663,7 @@ Resource Drain
 
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool check_resource(Resource resource)
 
@@ -3705,47 +3673,47 @@ Resource Drain
 
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: DrainMode drain_mode()
    .. function:: void set_drain_mode(DrainMode value)
 
       The drain mode.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float min_rate()
 
       Minimum possible drain rate
 
-   
+      :Game Scenes: Flight
 
    .. function:: float max_rate()
 
       Maximum possible drain rate.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float rate()
    .. function:: void set_rate(float value)
 
       Current drain rate.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void start()
 
       Activates resource draining for all enabled parts.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: void stop()
 
       Turns off resource draining.
 
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3779,53 +3747,53 @@ Robotic Controller
 
       The part object for this controller.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool enabled()
    .. function:: void set_enabled(bool value)
 
       Whether the controller is enabled.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool playing()
 
       Whether the controller's sequence is currently playing.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float position()
    .. function:: void set_position(float value)
 
       The current position along the sequence, in seconds.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float length()
 
       The length of the sequence, in seconds.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float play_speed()
 
       The speed at which the sequence is played back, as a multiple of normal speed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void play()
 
       Start playing the controller's sequence.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: void stop()
 
       Stop playing the controller's sequence.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool has_part(Part part)
 
@@ -3835,14 +3803,14 @@ Robotic Controller
 
 
 
-   
+      :Game Scenes: Flight
 
-   .. function:: std::vector<std::vector<std::string>> axes()
+   .. function:: std::vector<RoboticAxis> axes()
 
       The axes for the controller.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool add_axis(Module module, std::string field_name)
 
@@ -3854,7 +3822,7 @@ Robotic Controller
        * **field_name** -- The name of the axis field, as returned by :func:`RoboticController::axes`.
 
       :returns: Returns ``true`` if the axis is added successfully.
-   
+      :Game Scenes: Flight
 
    .. function:: bool add_key_frame(Module module, std::string field_name, float time, float value)
 
@@ -3868,7 +3836,7 @@ Robotic Controller
        * **value** -- The value of the key frame.
 
       :returns: Returns ``true`` if the key frame is added successfully.
-   
+      :Game Scenes: Flight
 
    .. function:: bool clear_axis(Module module, std::string field_name)
 
@@ -3880,8 +3848,25 @@ Robotic Controller
        * **field_name** -- The name of the axis field, as returned by :func:`RoboticController::axes`.
 
       :returns: Returns ``true`` if the axis is cleared successfully.
-   
+      :Game Scenes: Flight
 
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. struct:: RoboticAxis
+
+   An axis of a robotic controller.
+
+   .. note::
+
+      See :func:`RoboticController::axes`.
+   .. member:: Module module
+
+      The part module the axis belongs to.
+
+   .. member:: std::string field_name
+
+      The name of the field the axis controls.
 
 
 Robotic Hinge
@@ -3896,75 +3881,75 @@ Robotic Hinge
 
       The part object for this robotic hinge.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float target_angle()
    .. function:: void set_target_angle(float value)
 
       Target angle.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float current_angle()
 
       Current angle.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float min_angle()
    .. function:: void set_min_angle(float value)
 
       The minimum angle the hinge can move to, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float max_angle()
    .. function:: void set_max_angle(float value)
 
       The maximum angle the hinge can move to, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float rate()
    .. function:: void set_rate(float value)
 
       Target movement rate in degrees per second.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float damping()
    .. function:: void set_damping(float value)
 
       Damping percentage.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool locked()
    .. function:: void set_locked(bool value)
 
       Lock movement.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool motor_engaged()
    .. function:: void set_motor_engaged(bool value)
 
       Whether the motor is engaged.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool is_moving()
 
       Whether the servo is currently moving.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void move_home()
 
       Move hinge to its built position.
 
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3980,75 +3965,75 @@ Robotic Piston
 
       The part object for this robotic piston.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float target_extension()
    .. function:: void set_target_extension(float value)
 
       Target extension of the piston.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float current_extension()
 
       Current extension of the piston.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float min_extension()
    .. function:: void set_min_extension(float value)
 
       The minimum extension of the piston, in meters.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float max_extension()
    .. function:: void set_max_extension(float value)
 
       The maximum extension of the piston, in meters.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float rate()
    .. function:: void set_rate(float value)
 
       Target movement rate in meters per second.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float damping()
    .. function:: void set_damping(float value)
 
       Damping percentage.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool locked()
    .. function:: void set_locked(bool value)
 
       Lock movement.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool motor_engaged()
    .. function:: void set_motor_engaged(bool value)
 
       Whether the motor is engaged.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool is_moving()
 
       Whether the servo is currently moving.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void move_home()
 
       Move piston to its built position.
 
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4064,34 +4049,34 @@ Robotic Rotation
 
       The part object for this robotic rotation servo.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float target_angle()
    .. function:: void set_target_angle(float value)
 
       Target angle.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float current_angle()
 
       Current angle.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float min_angle()
    .. function:: void set_min_angle(float value)
 
       The minimum angle the servo can rotate to, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float max_angle()
    .. function:: void set_max_angle(float value)
 
       The maximum angle the servo can rotate to, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool allow_full_rotation()
    .. function:: void set_allow_full_rotation(bool value)
@@ -4099,48 +4084,48 @@ Robotic Rotation
       Whether the servo is allowed to rotate freely through a full revolution,
       ignoring the angle limits.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float rate()
    .. function:: void set_rate(float value)
 
       Target movement rate in degrees per second.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float damping()
    .. function:: void set_damping(float value)
 
       Damping percentage.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool locked()
    .. function:: void set_locked(bool value)
 
       Lock Movement
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool motor_engaged()
    .. function:: void set_motor_engaged(bool value)
 
       Whether the motor is engaged.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool is_moving()
 
       Whether the servo is currently moving.
 
-   
+      :Game Scenes: Flight
 
    .. function:: void move_home()
 
       Move rotation servo to its built position.
 
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4156,68 +4141,68 @@ Robotic Rotor
 
       The part object for this robotic rotor.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float target_rpm()
    .. function:: void set_target_rpm(float value)
 
       Target RPM.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float current_rpm()
 
       Current RPM.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool inverted()
    .. function:: void set_inverted(bool value)
 
       Whether the rotor direction is inverted.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float torque_limit()
    .. function:: void set_torque_limit(float value)
 
       Torque limit percentage.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float max_torque()
    .. function:: void set_max_torque(float value)
 
       The maximum torque the rotor can generate, in kilonewtons.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float brake_percentage()
    .. function:: void set_brake_percentage(float value)
 
       The percentage of braking force applied to the rotor.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool locked()
    .. function:: void set_locked(bool value)
 
       Lock movement.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool motor_engaged()
    .. function:: void set_motor_engaged(bool value)
 
       Whether the motor is engaged.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool is_moving()
 
       Whether the rotor is currently moving.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4233,7 +4218,7 @@ RCS
 
       The part object for this RCS.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool active()
 
@@ -4243,56 +4228,56 @@ RCS
       (:func:`RCS::enabled`), or it is covered by a fairing
       (:func:`Part::shielded`) and cannot thrust while shielded.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool enabled()
    .. function:: void set_enabled(bool value)
 
       Whether the RCS thrusters are enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool pitch_enabled()
    .. function:: void set_pitch_enabled(bool value)
 
       Whether the RCS thruster will fire when pitch control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool yaw_enabled()
    .. function:: void set_yaw_enabled(bool value)
 
       Whether the RCS thruster will fire when yaw control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool roll_enabled()
    .. function:: void set_roll_enabled(bool value)
 
       Whether the RCS thruster will fire when roll control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool forward_enabled()
    .. function:: void set_forward_enabled(bool value)
 
       Whether the RCS thruster will fire when pitch control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool up_enabled()
    .. function:: void set_up_enabled(bool value)
 
       Whether the RCS thruster will fire when yaw control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool right_enabled()
    .. function:: void set_right_enabled(bool value)
 
       Whether the RCS thruster will fire when roll control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool input_override()
    .. function:: void set_input_override(bool value)
@@ -4302,8 +4287,9 @@ RCS
       :func:`RCS::rotation_override` and :func:`RCS::translation_override` instead of the
       normal control inputs. The override is automatically released if the
       controlling client disconnects or the vessel changes.
+      Precision mode leaves an overridden block at full thrust.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> rotation_override()
    .. function:: void set_rotation_override(std::tuple<double, double, double> value)
@@ -4311,7 +4297,7 @@ RCS
       The rotation demand applied when :func:`RCS::input_override` is enabled, in the pitch,
       roll and yaw axes. Each component is a normalized control input between -1 and 1.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> translation_override()
    .. function:: void set_translation_override(std::tuple<double, double, double> value)
@@ -4320,25 +4306,73 @@ RCS
       right, up and forward axes. Each component is a normalized control input between -1
       and 1.
 
-   
+      :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+   .. function:: AxisRange available_torque()
 
       The available torque, in Newton meters, that can be produced by this RCS,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :func:`Vessel::reference_frame`.
       Returns zero if RCS is disable.
 
-   
+      :Game Scenes: Flight
 
-   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_force()
+
+      .. note::
+
+         Precision mode weakens the block, and the available torque follows it. A block
+         driven by :func:`RCS::input_override` is exempt, so :func:`RCS::override_wrench`
+         can report the larger torque an override reaches.
+
+   .. function:: AxisRange available_force()
 
       The available force, in Newtons, that can be produced by this RCS,
       in the positive and negative x, y and z axes of the vessel. These axes
       correspond to the coordinate axes of the :func:`Vessel::reference_frame`.
       Returns zero if RCS is disabled.
 
-   
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Precision mode weakens the block, and the available force follows it. A block
+         driven by :func:`RCS::input_override` is exempt, so :func:`RCS::override_wrench`
+         can report the larger force an override reaches.
+
+   .. function:: std::tuple<double, double, double> force()
+
+      The force being applied by the RCS thrusters, in Newtons. The vector is in the
+      vessel's reference frame (:func:`Vessel::reference_frame`).
+      Returns zero if the RCS is inactive.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> torque()
+
+      The torque being applied by the RCS thrusters about the vessel's center of mass,
+      in Newton meters. The vector is in the vessel's reference frame
+      (:func:`Vessel::reference_frame`). Returns zero if the RCS is inactive.
+
+      :Game Scenes: Flight
+
+   .. function:: Wrench override_wrench(std::tuple<double, double, double> rotation, std::tuple<double, double, double> translation)
+
+      The force and torque the given demands would produce, in Newtons and Newton meters.
+
+      :Parameters:
+
+       * **rotation** -- A rotation demand, as set by :func:`RCS::rotation_override`.
+       * **translation** -- A translation demand, as set by :func:`RCS::translation_override`.
+
+      :returns: The force, and the torque about the vessel's center of mass, in the vessel's reference frame (:func:`Vessel::reference_frame`), or zero if the RCS is inactive.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The demands do not have to be applied. The prediction leaves out full thrust, which
+         :func:`RCS::force` and :func:`RCS::torque` include.
 
    .. function:: float available_thrust()
 
@@ -4347,7 +4381,7 @@ RCS
       Takes the thrusters current :func:`RCS::thrust_limit` and atmospheric conditions
       into account.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float max_thrust()
 
@@ -4355,65 +4389,65 @@ RCS
       in Newtons, with the :func:`RCS::thrust_limit` set to 100%.
       Takes atmospheric conditions into account.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float max_vacuum_thrust()
 
       The maximum amount of thrust that can be produced by the RCS thrusters when active
       in a vacuum, in Newtons.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float thrust_limit()
    .. function:: void set_thrust_limit(float value)
 
       The thrust limiter of the thruster. A value between 0 and 1.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::vector<Thruster> thrusters()
 
       A list of thrusters, one of each nozzel in the RCS part.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float specific_impulse()
 
       The current specific impulse of the RCS, in seconds. Returns zero
       if the RCS is not active.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float vacuum_specific_impulse()
 
       The vacuum specific impulse of the RCS, in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: float kerbin_sea_level_specific_impulse()
 
       The specific impulse of the RCS at sea level on Kerbin, in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::vector<std::string> propellants()
 
       The names of resources that the RCS consumes.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::map<std::string, float> propellant_ratios()
 
       The ratios of resources that the RCS consumes. A dictionary mapping resource names
       to the ratios at which they are consumed by the RCS.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool has_fuel()
 
       Whether the RCS has fuel available.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4429,20 +4463,21 @@ Sensor
 
       The part object for this sensor.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool active()
    .. function:: void set_active(bool value)
 
       Whether the sensor is active.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::string value()
 
       The current value of the sensor.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -4469,40 +4504,40 @@ Solar Panel
 
       The part object for this solar panel.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool deployable()
 
       Whether the solar panel is deployable.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: bool deployed()
    .. function:: void set_deployed(bool value)
 
       Whether the solar panel is extended.
 
-   
+      :Game Scenes: Flight
 
    .. function:: DeployableState state()
 
       The current state of the solar panel.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float energy_flow()
 
       The current amount of energy being generated by the solar panel, in
       units of charge per second.
 
-   
+      :Game Scenes: Flight
 
    .. function:: float sun_exposure()
 
       The current amount of sunlight that is incident on the solar panel,
       as a percentage. A value between 0 and 1.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4525,7 +4560,13 @@ Thruster
 
       The :func:`Thruster::part` that contains this thruster.
 
-   
+      :Game Scenes: Flight
+
+   .. function:: float thrust()
+
+      The thrust being produced by the thruster, in Newtons.
+
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> thrust_position(ReferenceFrame reference_frame)
 
@@ -4537,7 +4578,7 @@ Thruster
        * **reference_frame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> thrust_direction(ReferenceFrame reference_frame)
 
@@ -4550,7 +4591,7 @@ Thruster
        * **reference_frame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-   
+      :Game Scenes: Flight
 
    .. function:: ReferenceFrame thrust_reference_frame()
 
@@ -4565,13 +4606,13 @@ Thruster
       * The y-axis points along the thrust direction.
       * The x-axis and z-axis are perpendicular to the thrust direction.
 
-   
+      :Game Scenes: Flight
 
    .. function:: bool gimballed()
 
       Whether the thruster is gimballed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> gimbal_position(ReferenceFrame reference_frame)
 
@@ -4582,13 +4623,13 @@ Thruster
        * **reference_frame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> gimbal_angle()
 
       The current gimbal angle in the pitch, roll and yaw axes, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<double, double, double> initial_thrust_position(ReferenceFrame reference_frame)
 
@@ -4600,7 +4641,8 @@ Thruster
        * **reference_frame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -4618,7 +4660,7 @@ Thruster
        * **reference_frame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-   
+      :Game Scenes: Flight
 
 
 
@@ -4957,7 +4999,7 @@ returns ``NULL``.
 The following C++ example uses these attributes to perform a
 depth-first traversal over all of the parts in a vessel:
 
-.. literalinclude:: /scripts/services/space-center/TreeTraversal.cpp
+.. literalinclude:: /scripts/api/space-center/parts/TreeTraversal.cpp
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -5004,7 +5046,7 @@ consider to be *axially* attached to nothing.
 The following C++ example does a depth-first traversal as before,
 but also prints out the attachment mode used by the part:
 
-.. literalinclude:: /scripts/services/space-center/AttachmentModes.cpp
+.. literalinclude:: /scripts/api/space-center/parts/AttachmentModes.cpp
 
 When this code is execute using the craft file for the example vessel pictured
 above, the following is printed out::
@@ -5099,11 +5141,7 @@ Staging
 For vessel-level summaries (delta-v, thrust, fuel, and resources grouped per
 stage), use the :rst:ref:`cpp-api-stage` class via
 :func:`Vessel::stages` and
-:func:`Vessel::decouple_stages`. Legacy helpers
-:func:`Parts::in_stage`,
-:func:`Parts::in_decouple_stage`, and
-:func:`Vessel::resources_in_decouple_stage` remain available but
-are deprecated.
+:func:`Vessel::decouple_stages`.
 
 .. only:: html
 

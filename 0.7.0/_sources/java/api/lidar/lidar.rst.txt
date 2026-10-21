@@ -1,0 +1,24 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.LIDAR
+
+LIDAR
+=====
+
+
+.. type:: public class LIDAR
+
+   LaserDist service.
+
+   .. method:: boolean getAvailable()
+
+
+      Check if the LaserDist API is available.
+
+   
+
+   .. method:: Laser laser(SpaceCenter.Part part)
+
+      Get a LaserDist part.
+
+      :param SpaceCenter.Part part:

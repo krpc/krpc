@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.SpaceCenter
 
@@ -18,7 +18,7 @@ Waypoints
 
       :Game Scenes: All
 
-   .. method:: Waypoint AddWaypoint(double latitude, double longitude, CelestialBody body, string name)
+   .. function:: Waypoint AddWaypoint(double latitude, double longitude, CelestialBody body, string name)
 
       Creates a waypoint at the given position at ground level, and returns a
       :type:`Waypoint` object that can be used to modify it.
@@ -32,7 +32,7 @@ Waypoints
 
       :Game Scenes: All
 
-   .. method:: Waypoint AddWaypointAtAltitude(double latitude, double longitude, double altitude, CelestialBody body, string name)
+   .. function:: Waypoint AddWaypointAtAltitude(double latitude, double longitude, double altitude, CelestialBody body, string name)
 
       Creates a waypoint at the given position and altitude, and returns a
       :type:`Waypoint` object that can be used to modify it.
@@ -165,9 +165,14 @@ Waypoints
 
       :Game Scenes: Flight
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Removes the waypoint.
 
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         Any further use of this object throws an exception.

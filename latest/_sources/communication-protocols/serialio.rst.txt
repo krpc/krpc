@@ -4,8 +4,14 @@ Protocol Buffers over Serial IO
 This communication protocol allows microcontrollers and other devices that communicate over a serial
 port to interact with a kRPC server, for example an Arduino.
 
-.. note:: If a client library is available for your language, you do not need to implement this
-          protocol.
+.. note::
+
+   If a client library is available for your language, you do not need to implement this protocol.
+
+.. note::
+
+   The serial IO protocol carries RPCs only. Streams and events are not available, and the stream
+   procedures, such as ``KRPC.AddStream`` and ``KRPC.RemoveStream``, return an error.
 
 Configuring the Server
 ----------------------
@@ -40,72 +46,50 @@ Unlike the TCP/IP and WebSockets protocols, all messages sent to the server afte
 connection handshake are wrapped in a ``MultiplexedRequest`` message, and all messages received
 from the server after the handshake are wrapped in a ``MultiplexedResponse`` message:
 
-.. code-block:: protobuf
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message MultiplexedRequest {
+   :end-at: StreamUpdate stream_update = 2;
+   :append: }
 
-   message MultiplexedRequest {
-     ConnectionRequest connection_request = 1;
-     Request request = 2;
-   }
-
-   message MultiplexedResponse {
-     Response response = 1;
-     StreamUpdate stream_update = 2;
-   }
+The server leaves the ``stream_update`` field of a ``MultiplexedResponse`` unset.
 
 Connecting to the Server
 ------------------------
 
-There is a single serial port connection for both RPC calls and stream updates. To establish a
-connection, a client must do the following:
+There is a single serial port connection for RPC calls. To establish a connection, a client must
+do the following:
 
 1. Open a connection to the serial port.
 
 2. Send a ``MultiplexedRequest`` message to the server with its ``connection_request`` field
    populated. The ``ConnectionRequest`` message is defined as:
 
-   .. code-block:: protobuf
+   .. literalinclude:: /communication-protocols/krpc.proto
+      :language: protobuf
+      :start-at: message ConnectionRequest {
+      :end-before: message ConnectionResponse {
 
-      message ConnectionRequest {
-        Type type = 1;
-        string client_name = 2;
-        bytes client_identifier = 3;
-        enum Type {
-          RPC = 0;
-          STREAM = 1;
-        };
-      }
-
-   The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``client_name`` field can
-   be set to the name of the client to display on the in-game UI. The ``client_identifier`` should
-   be left blank.
+   The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``protocol_version``
+   field to 1. The ``client_name`` field can be set to the name of the client to display on the
+   in-game UI. The ``client_identifier`` should be left blank.
 
 3. Receive a ``ConnectionResponse`` message from the server. This message is defined as:
 
-   .. code-block:: protobuf
-
-      message ConnectionResponse {
-        Status status = 1;
-        enum Status {
-          OK = 0;
-          MALFORMED_MESSAGE = 1;
-          TIMEOUT = 2;
-          WRONG_TYPE = 3;
-        }
-        string message = 2;
-        bytes client_identifier = 3;
-      }
+   .. literalinclude:: /communication-protocols/krpc.proto
+      :language: protobuf
+      :start-at: message ConnectionResponse {
+      :end-before: // Messages for calling remote procedures
 
    If the ``status`` field is set to ``ConnectionResponse.OK`` then the connection was successful.
    If not, the ``message`` field contains a description of what went wrong.
 
-Receiving Stream Updates
-------------------------
+   The ``protocol_version`` field contains the version of the protocol the server accepted. A
+   server from before kRPC 0.7 leaves it as 0. See :ref:`communication-protocol-version`.
 
-Clients can receive :ref:`communication-protocol-streams` over the same serial port connection used
-for RPC calls. Stream updates arrive as ``MultiplexedResponse`` messages with the ``stream_update``
-field populated. After sending an RPC request, the client should inspect each received
-``MultiplexedResponse`` to determine whether it contains a ``response`` (the result of an RPC call)
-or a ``stream_update`` (a stream result).
+   The server waits up to 3 seconds for the complete connection request message to arrive after
+   its first bytes are received. If it does not arrive in time, the server responds with the
+   ``TIMEOUT`` status.
 
 Invoking Remote Procedures
 --------------------------
@@ -116,6 +100,27 @@ To send a procedure call, wrap the ``Request`` message in a ``MultiplexedRequest
 ``request`` field. Receive the result as a ``MultiplexedResponse`` and read the ``Response`` from
 its ``response`` field.
 
+.. _communication-protocol-serialio-buffering:
+
+Buffering and Data Rates
+------------------------
+
+A serial port carries data far more slowly than the game produces it. At the default 9600 baud it
+carries roughly a thousand bytes per second. The server therefore buffers up to a megabyte of data
+in each direction, and the two directions behave differently when their buffer fills:
+
+* Data received from the port is buffered until the game reads it. When the buffer fills, the
+  server stops reading from the port until the game catches up. The data is kept, and the port
+  carries it more slowly.
+
+* Data written by the game is buffered until the port has sent it. The game writes only responses,
+  so this buffer fills when a client sends requests faster than it reads their responses. The
+  server then drops the connection and stops. It can be started again from the in-game
+  configuration window.
+
+To keep the write buffer from filling, read each response before sending the next request. A higher
+baud rate moves more data through the port.
+
 Examples
 --------
 
@@ -123,5 +128,5 @@ The following Python code connects to a server on serial port ``/dev/ttyUSB0`` u
 "Jeb". It then invokes the ``KRPC.GetStatus`` RPC, receives and decodes the result, and prints out
 the server version number from the response.
 
-.. literalinclude:: /scripts/communication-protocol-serialio.py
+.. literalinclude:: /scripts/communication-protocols/serialio/RPC.py
    :language: python

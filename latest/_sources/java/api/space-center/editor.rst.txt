@@ -1,0 +1,561 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+.. _java-api-editor:
+
+Editor
+======
+
+
+.. type:: public class Editor
+
+   Provides access to the vehicle assembly building and space plane hangar.
+   Obtained by calling :meth:`getEditor()`.
+
+   .. method:: EditorFacility getFacility()
+
+
+      The editor that is currently open.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: EditorVessel getVessel()
+
+
+      The vessel that is being constructed.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An editor that has not had a vessel loaded into it holds an empty vessel, with
+         no parts, rather than nothing at all.
+
+   .. method:: void loadVessel(String craftDirectory, String name)
+
+      Load a vessel from a craft file into the editor, replacing the vessel that
+      is currently being constructed.
+
+      :param String craftDirectory: Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
+      :param String name: Name of the vessel to load. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The vessel is loaded into whichever editor is open, regardless of which
+         directory it came from. Its delta-v figures are recalculated in the
+         background afterwards; see :meth:`EditorVessel.getDeltaVReady()`.
+
+   .. method:: void launchVessel(String launchSite, java.util.List<String> crew, boolean recover, String flagUrl)
+
+      Launch the vessel that is being constructed, from the given launch site.
+
+      :param String launchSite: Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+      :param java.util.List<String> crew: The Kerbals to place in the vessel, by name. Controls how the vessel is crewed, as described in the remarks.
+      :param boolean recover: If true and there is a vessel on the launch site, recover it before launching.
+      :param String flagUrl: If not ``null``, the asset URL of the mission flag to use for the launch.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The vessel being constructed is not a craft file, so it is written to the editor's
+         auto-saved craft file and that is launched, as the game's own launch button does.
+         The vessel's own craft file, if it was loaded from one, is left alone.
+         The *crew* parameter works as it does for
+         :meth:`launchVessel(String, String, String, java.util.List<String>, boolean, String)`, and takes precedence over the crew assigned
+         in the editor.
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. method:: CelestialBody getDeltaVBody()
+
+   .. method:: void setDeltaVBody(CelestialBody value)
+
+      The body whose gravity and atmosphere the vessel's delta-v, thrust, TWR and
+      specific impulse figures assume.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This and :meth:`Editor.getDeltaVAltitude()` are what :meth:`EditorVessel.getDeltaV()`,
+         :meth:`Stage.getDeltaV()` and the other current-situation figures are
+         computed for. The body sets the gravity the thrust-to-weight ratios are
+         against, and, with the altitude, the atmospheric pressure and density the
+         specific impulses and thrusts are against.
+         This is global game state rather than editor state: the same setting backs
+         the game's delta-v readout in flight, and it persists across scene changes.
+         Setting it asks the game to re-run the simulation and returns straight away;
+         the figures are out of date until :meth:`EditorVessel.getDeltaVReady()` is
+         true again.
+
+   .. method:: double getDeltaVAltitude()
+
+   .. method:: void setDeltaVAltitude(double value)
+
+      The altitude above :meth:`Editor.getDeltaVBody()`, in meters, that the vessel's
+      delta-v, thrust, TWR and specific impulse figures assume. The atmospheric
+      pressure and density at this altitude are what the figures are computed for,
+      so raising it from zero to above the body's atmosphere moves them from the
+      vessel's sea-level figures to its vacuum ones.
+      Setting it asks the game to re-run the simulation and returns straight away;
+      the figures are out of date until :meth:`EditorVessel.getDeltaVReady()` is
+      true again.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: DeltaVSituation getDeltaVSituation()
+
+   .. method:: void setDeltaVSituation(DeltaVSituation value)
+
+      Which situation the game's own delta-v readout shows figures for.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This selects which column the game's own delta-v app displays, and nothing
+         else. It does not affect anything kRPC reports: the current-situation
+         figures follow :meth:`Editor.getDeltaVBody()` and :meth:`Editor.getDeltaVAltitude()`
+         whatever this is set to, and the sea-level and vacuum figures are reported
+         directly as :meth:`EditorVessel.getSeaLevelDeltaV()` and
+         :meth:`EditorVessel.getVacuumDeltaV()`. It is here for completeness with the
+         app.
+
+
+
+.. type:: public enum DeltaVSituation
+
+   The situation the game's own delta-v readout shows figures for.
+   See :meth:`Editor.getDeltaVSituation()`.
+
+
+   .. field:: public DeltaVSituation SEA_LEVEL
+
+      At sea level on the selected body.
+
+
+   .. field:: public DeltaVSituation ALTITUDE
+
+      At the selected altitude on the selected body.
+
+
+   .. field:: public DeltaVSituation VACUUM
+
+      In vacuum.
+
+
+
+.. type:: public class EditorVessel
+
+   The vessel that is being constructed in the editor.
+   Obtained by calling :meth:`Editor.getVessel()`.
+
+   .. method:: String getName()
+
+   .. method:: void setName(String value)
+
+      The name of the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: String getDescription()
+
+   .. method:: void setDescription(String value)
+
+      The description of the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: EditorFacility getFacility()
+
+
+      The editor the vessel is in.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This is the editor the vessel is currently loaded into, not the one it was
+         designed in. A vessel moved from the vehicle assembly building to the space
+         plane hangar reports the space plane hangar.
+
+   .. method:: float getMass()
+
+
+      The total mass of the vessel, including resources and crew, in kg.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: float getDryMass()
+
+
+      The total mass of the vessel, excluding resources, in kg.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getMomentOfInertia()
+
+
+      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The inertia values in the returned 3-tuple are around the
+      pitch, roll and yaw directions respectively.
+      This corresponds to the vessels reference frame (:meth:`EditorVessel.getReferenceFrame()`).
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: java.util.List<Double> getInertiaTensor()
+
+
+      The inertia tensor of the vessel around its center of mass,
+      in the vessels reference frame (:meth:`EditorVessel.getReferenceFrame()`).
+      Returns the 3x3 matrix as a list of elements, in row-major order.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the vessel.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes rotate with the vessel.
+      * The x-axis points out to the right of the vessel.
+      * The y-axis points in the forward direction of the vessel.
+      * The z-axis points out of the bottom off the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The axes are those of the root part. This is the frame
+         :meth:`Vessel.getReferenceFrame()` gives at launch, with the root part as the
+         control point.
+
+   .. method:: ReferenceFrame getSurfaceReferenceFrame()
+
+
+      The reference frame that is fixed relative to the vessel,
+      and orientated with the vertical of the editor.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are fixed in the editor.
+      * The x-axis points upwards.
+      * The y-axis and z-axis are horizontal.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This is the vessel as it stands in the editor, and as it stands at launch. The
+         editor has no north or east, so the horizontal axes are fixed in the editor.
+
+   .. method:: SimulatedFlight flight(ReferenceFrame referenceFrame)
+
+      Returns a :type:`SimulatedFlight` object that can be used to simulate the
+      vessel in flight, in the specified reference frame.
+
+      :param ReferenceFrame referenceFrame: Reference frame. Defaults to the simulated surface reference frame (:meth:`SimulatedFlight.getSurfaceReferenceFrame()`), and follows it when it is set.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Each call returns a new object, which is kept until the game leaves the editor.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
+
+      The position of the center of mass of the vessel, in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: BoundingBox boundingBox(ReferenceFrame referenceFrame)
+
+      The axis-aligned bounding box of the vessel in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vectors are in.
+      :returns: The positions of the minimum and maximum vertices of the box.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
+
+      The rotation of the vessel, in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned rotation is in.
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> direction(ReferenceFrame referenceFrame)
+
+      The direction in which the vessel is pointing, in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: float getCost()
+
+
+      The total cost of the vessel, including resources, in funds.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: int getCrewCapacity()
+
+
+      The total number of crew that the vessel can hold.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: Parts getParts()
+
+
+      A :type:`Parts` object, that can be used to interact with the parts
+      that make up the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note:: Only the parts of :type:`Part` that describe the design are
+                available in the editor. Those that need a vessel in flight or running physics,
+                such as the thermal members, are restricted to the flight scene.
+                :meth:`Part.position(ReferenceFrame)`, :meth:`Part.centerOfMass(ReferenceFrame)`,
+                :meth:`Part.direction(ReferenceFrame)`, :meth:`Part.rotation(ReferenceFrame)`,
+                :meth:`Part.boundingBox(ReferenceFrame)`, the part's reference frames,
+                :meth:`Part.getMomentOfInertia()` and
+                :meth:`Part.getInertiaTensor()` are available.
+
+   .. method:: Resources getResources()
+
+
+      A :meth:`EditorVessel.getResources()` object for the resources the vessel can hold.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note:: This is a view of what the vessel can hold as designed. The flow-state
+                members work, as they are part of the design, but nothing here reports how
+                a resource would be drawn on in flight.
+
+   .. method:: java.util.List<Stage> getStages()
+
+
+      Activation (burn) stages for the vessel, in ascending stage order. This does
+      not include the -1 stage (parts with no staging icon), as it carries no
+      delta-v; use :meth:`EditorVessel.stageAt(int)` with -1 to get those parts.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: Stage stageAt(int stage)
+
+      The activation stage with the given number. Pass -1 to get the parts that are
+      never activated (those with no staging icon).
+
+      :param int stage: Get activation stage at this index.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: java.util.List<Stage> getDecoupleStages()
+
+
+      Decouple stages for the vessel, in ascending stage order. The -1 stage,
+      containing the parts that are never decoupled and remain on the vessel, is
+      included first when any such parts exist.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: Stage decoupleStageAt(int stage)
+
+      The decouple stage with the given number. Pass -1 to get the parts that are
+      never decoupled and remain on the vessel after all stages have fired.
+
+      :param int stage: Get decouple stage at this index.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: boolean getDeltaVReady()
+
+
+      Whether the stock delta-v figures for the vessel have been calculated.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The game recalculates them in the background whenever the vessel changes, and
+         whenever :meth:`Editor.getDeltaVBody()` or :meth:`Editor.getDeltaVAltitude()`
+         is set, and they are out of date until it has finished. Reading
+         :meth:`EditorVessel.getDeltaV()`, or any delta-v member of a :type:`Stage`, before
+         then raises an error rather than returning a stale figure. Poll this after
+         changing anything the figures depend on.
+
+   .. method:: float getDeltaV()
+
+
+      Total delta-v for the vessel in the situation the game's delta-v readout
+      assumes, in m/s. See :meth:`Editor.getDeltaVBody()`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: float getVacuumDeltaV()
+
+
+      Total vacuum delta-v for the vessel, in m/s.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: float getSeaLevelDeltaV()
+
+
+      Total sea-level delta-v for the vessel, in m/s.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: float getBurnTime()
+
+
+      Total burn time for the vessel, in seconds.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+
+.. type:: public class SimulatedFlight
+
+   Used to simulate the vessel in the editor in flight. The counterpart of
+   :type:`Flight`. All of the information returned by this class is given in
+   the reference frame passed to :meth:`EditorVessel.flight(ReferenceFrame)`, or in
+   :meth:`SimulatedFlight.getSurfaceReferenceFrame()` if none was passed.
+   Obtained by calling :meth:`EditorVessel.flight(ReferenceFrame)`.
+
+   .. note::
+
+      The simulated attitude is set by :meth:`SimulatedFlight.getSurfaceReferenceFrame()`, and belongs to
+      this object. The vessel is read from the editor on each call, so the object follows
+      every edit.
+
+   .. method:: ReferenceFrame getSurfaceReferenceFrame()
+
+   .. method:: void setSurfaceReferenceFrame(ReferenceFrame value)
+
+      The reference frame of the surface the vessel is simulated over. Its x-axis
+      points upwards, and gravity acts along the negative x-axis. Defaults to
+      :meth:`EditorVessel.getSurfaceReferenceFrame()`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         Only the rotation of the frame is used. A frame created relative to
+         :meth:`EditorVessel.getReferenceFrame()` follows the vessel as it is edited.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getCenterOfMass()
+
+
+      The position of the center of mass of the vessel,
+      in the reference frame :type:`ReferenceFrame`
+
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> getRotation()
+
+
+      The rotation of the vessel, in the reference frame :type:`ReferenceFrame`
+
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getDirection()
+
+
+      The direction that the vessel is pointing in,
+      in the reference frame :type:`ReferenceFrame`.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: float getPitch()
+
+
+      The pitch of the vessel relative to the horizon, in degrees.
+      A value between -90° and +90°.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°). For an always-defined attitude use :meth:`SimulatedFlight.getRotation()` or
+         :meth:`SimulatedFlight.getDirection()`.
+
+   .. method:: float getRoll()
+
+
+      The roll of the vessel relative to the horizon, in degrees.
+      A value between -180° and +180°.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°). For an always-defined attitude use :meth:`SimulatedFlight.getRotation()`.
+
+   .. method:: double getDisplacement()
+
+
+      The volume of water the vessel displaces when fully submerged, in
+      :math:`m^3`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getFullySubmergedCenterOfBuoyancy()
+
+
+      The point the buoyant force acts through with the vessel fully submerged, in
+      reference frame :type:`ReferenceFrame`. Returns ``null`` if no part of
+      the vessel displaces any water.
+
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         A hull at rest carries this on the same vertical line as
+         :meth:`SimulatedFlight.getCenterOfMass()`.
+
+   .. method:: double buoyantForceAt(double density, double gravity)
+
+      The buoyant force on the vessel when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :param double density: The density of the fluid, in :math:`kg/m^3`.
+      :param double gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> buoyantTorqueAt(double density, double gravity)
+
+      The torque the buoyant force exerts about the vessel's center of mass when fully
+      submerged in a fluid of the given density, in reference frame
+      :type:`ReferenceFrame`. Gravity acts along the negative x-axis of
+      :meth:`SimulatedFlight.getSurfaceReferenceFrame()`.
+
+      :param double density: The density of the fluid, in :math:`kg/m^3`.
+      :param double gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :Game Scenes: Editor Vab, Editor Sph

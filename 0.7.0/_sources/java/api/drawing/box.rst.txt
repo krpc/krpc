@@ -1,0 +1,82 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.Drawing
+
+Box
+===
+
+
+.. type:: public class Box
+
+   The edges of a box. Created using :meth:`addBox(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, org.javatuples.Quartet<Double,Double,Double,Double>, boolean)`.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getCenter()
+
+   .. method:: void setCenter(org.javatuples.Triplet<Double,Double,Double> value)
+
+      Position of the center of the box.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getSize()
+
+   .. method:: void setSize(org.javatuples.Triplet<Double,Double,Double> value)
+
+      Lengths of the sides of the box along its x, y and z axes, in meters.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> getRotation()
+
+   .. method:: void setRotation(org.javatuples.Quartet<Double,Double,Double,Double> value)
+
+      Rotation of the box, as a quaternion.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: SpaceCenter.ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(SpaceCenter.ReferenceFrame value)
+
+      Reference frame for the position and rotation of the box.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: StdLib.ColorRGB getColor()
+
+   .. method:: void setColor(StdLib.ColorRGB value)
+
+      The color of the edges.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: float getThickness()
+
+   .. method:: void setThickness(float value)
+
+      The thickness of the edges.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: String getMaterial()
+
+   .. method:: void setMaterial(String value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
+
+   .. method:: void remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph

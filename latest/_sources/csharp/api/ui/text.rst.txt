@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.UI
 
@@ -8,13 +8,26 @@ Text
 
 .. class:: Text
 
-   A text label. See :meth:`Panel.AddText`.
+   A text label.
+   Added to a :type:`Canvas` or a :type:`Panel`.
 
    .. property:: RectTransform RectTransform { get; }
 
-      The rect transform for the text.
+      The rect transform for the UI object.
 
       :Game Scenes: All
+
+   .. property:: LayoutElement LayoutElement { get; }
+
+      How much space the UI object asks a layout for.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
 
    .. property:: bool Visible { get; set; }
 
@@ -22,9 +35,25 @@ Text
 
       :Game Scenes: All
 
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
    .. property:: string Content { get; set; }
 
       The text string
+
+      :Game Scenes: All
+
+   .. property:: bool WordWrap { get; set; }
+
+      Whether the text wraps onto further lines when it is wider than the space it
+      has. Text that does not wrap carries on past the edge, and its preferred size
+      is that of a single line, so a changing value leaves a layout in place.
 
       :Game Scenes: All
 
@@ -33,6 +62,12 @@ Text
       Name of the font
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Empty if the game provided no font to draw the text with, in which case it is
+         not drawn. See :prop:`Text.AvailableFonts` for the names that can be set.
 
    .. property:: System.Collections.Generic.IList<string> AvailableFonts { get; }
 
@@ -52,9 +87,9 @@ Text
 
       :Game Scenes: All
 
-   .. property:: System.Tuple<double,double,double> Color { get; set; }
+   .. property:: StdLib.ColorRGBA Color { get; set; }
 
-      Set the color
+      The color the text is drawn in.
 
       :Game Scenes: All
 
@@ -70,7 +105,7 @@ Text
 
       :Game Scenes: All
 
-   .. method:: void Remove()
+   .. function:: void Remove()
 
       Remove the UI object.
 
@@ -84,22 +119,22 @@ Text
    Font style.
 
 
-   .. value:: Normal
+   .. enumerator:: Normal
 
       Normal.
 
 
-   .. value:: Bold
+   .. enumerator:: Bold
 
       Bold.
 
 
-   .. value:: Italic
+   .. enumerator:: Italic
 
       Italic.
 
 
-   .. value:: BoldAndItalic
+   .. enumerator:: BoldAndItalic
 
       Bold and italic.
 
@@ -110,17 +145,17 @@ Text
    Text alignment.
 
 
-   .. value:: Left
+   .. enumerator:: Left
 
       Left aligned.
 
 
-   .. value:: Right
+   .. enumerator:: Right
 
       Right aligned.
 
 
-   .. value:: Center
+   .. enumerator:: Center
 
       Center aligned.
 
@@ -131,46 +166,46 @@ Text
    Text alignment.
 
 
-   .. value:: LowerCenter
+   .. enumerator:: LowerCenter
 
       Lower center.
 
 
-   .. value:: LowerLeft
+   .. enumerator:: LowerLeft
 
       Lower left.
 
 
-   .. value:: LowerRight
+   .. enumerator:: LowerRight
 
       Lower right.
 
 
-   .. value:: MiddleCenter
+   .. enumerator:: MiddleCenter
 
       Middle center.
 
 
-   .. value:: MiddleLeft
+   .. enumerator:: MiddleLeft
 
       Middle left.
 
 
-   .. value:: MiddleRight
+   .. enumerator:: MiddleRight
 
       Middle right.
 
 
-   .. value:: UpperCenter
+   .. enumerator:: UpperCenter
 
       Upper center.
 
 
-   .. value:: UpperLeft
+   .. enumerator:: UpperLeft
 
       Upper left.
 
 
-   .. value:: UpperRight
+   .. enumerator:: UpperRight
 
       Upper right.

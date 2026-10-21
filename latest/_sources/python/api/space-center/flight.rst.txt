@@ -77,6 +77,17 @@ Flight
       :rtype: float
       :Game Scenes: Flight
 
+   .. attribute:: surface_normal
+
+      The normal to the surface under the vessel, in the reference frame
+      :class:`ReferenceFrame`. This describes the slope of the terrain,
+      and points straight up when the vessel is over water.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The normal as a unit vector.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
    .. attribute:: velocity
 
       The velocity of the vessel, in the reference frame :class:`ReferenceFrame`.
@@ -165,8 +176,9 @@ Flight
 
       .. note::
 
-         An absolute Euler angle, ill-conditioned when the vessel points near vertical (pitch →
-         ±90°), where heading and roll become ambiguous. For an always-defined attitude use
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°), where heading and roll become ambiguous. For an always-defined
+         attitude use
          :attr:`Flight.rotation` or :attr:`Flight.direction`.
 
    .. attribute:: heading
@@ -181,8 +193,9 @@ Flight
 
       .. note::
 
-         An absolute Euler angle, undefined when the vessel points near vertical (pitch → ±90°).
-         For an always-defined attitude use :attr:`Flight.rotation` or :attr:`Flight.direction`.
+         An absolute Euler angle, undefined when the vessel points near vertical (a pitch near
+         -90° or +90°). For an always-defined attitude use :attr:`Flight.rotation` or
+         :attr:`Flight.direction`.
 
    .. attribute:: roll
 
@@ -196,8 +209,9 @@ Flight
 
       .. note::
 
-         An absolute Euler angle, ill-conditioned when the vessel points near vertical (pitch →
-         ±90°), where the vertical-plane reference vanishes. For an always-defined attitude use
+         An absolute Euler angle, ill-conditioned when the vessel points near vertical (a pitch
+         near -90° or +90°), where the vertical-plane reference vanishes. For an always-defined
+         attitude use
          :attr:`Flight.rotation`; for a well-defined roll use the auto-pilot's
          ``TargetRoll`` / ``RollError`` against a chosen up reference.
 
@@ -305,7 +319,7 @@ Flight
 
       The dynamic pressure acting on the vessel, in Pascals. This is a measure of the
       strength of the aerodynamic forces. It is equal to
-      ½ · air density · velocity².
+      :math:`\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2`.
       It is commonly denoted :math:`Q`.
 
       :Attribute: Read-only, cannot be set
@@ -314,15 +328,158 @@ Flight
 
    .. attribute:: static_pressure
 
-      The static atmospheric pressure acting on the vessel, in Pascals.
+      The static pressure acting on the vessel, in Pascals.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Below the waterline this includes the pressure of the water above the vessel's
+         center of mass.
+
    .. attribute:: static_pressure_at_msl
 
       The static atmospheric pressure at mean sea level, in Pascals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: displacement
+
+      The volume of water the vessel displaces when fully submerged, in
+      :math:`m^3`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: displaced_volume
+
+      The volume of water the vessel is displacing, in :math:`m^3`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: submerged_portion
+
+      The fraction of the vessel below the waterline, between 0 and 1. This is
+      :attr:`Flight.displaced_volume` over :attr:`Flight.displacement`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: center_of_buoyancy
+
+      The point the total buoyant force on the vessel acts through, in reference frame
+      :class:`ReferenceFrame`. Returns ``None`` if no part of the vessel is in
+      the water.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float) or None
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A hull at rest carries this on the same vertical line as
+         :attr:`Flight.center_of_mass`. A horizontal offset between the two turns the weight
+         and the buoyancy into a couple that rolls or pitches the vessel.
+
+   .. attribute:: buoyant_force
+
+      The total buoyant force acting on the vessel, in reference frame
+      :class:`ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A vessel floating at rest carries a buoyant force equal to its weight.
+
+   .. attribute:: buoyant_acceleration
+
+      The acceleration of the vessel due to the buoyant force acting on it
+      (:attr:`Flight.buoyant_force` divided by the vessel's mass),
+      in reference frame :class:`ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`m/s^2`.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: buoyant_torque
+
+      The torque the buoyant force exerts on the vessel about its center of mass,
+      in reference frame :class:`ReferenceFrame`.
+
+      :Attribute: Read-only, cannot be set
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: fully_submerged_center_of_buoyancy
+
+      The point the buoyant force acts through with the vessel fully submerged, in
+      reference frame :class:`ReferenceFrame`. Returns ``None`` if no part of
+      the vessel displaces any water.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float) or None
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The point is fixed relative to the hull. :attr:`Flight.center_of_buoyancy` moves as
+         the vessel rides the waves.
+
+   .. method:: buoyant_force_at(density, gravity)
+
+      The buoyant force on the vessel when fully submerged in a fluid of the given
+      density, in Newtons.
+
+      :param float density: The density of the fluid, in :math:`kg/m^3`.
+      :param float gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. method:: buoyant_torque_at(density, gravity)
+
+      The torque the buoyant force exerts about the vessel's center of mass when fully
+      submerged in a fluid of the given density, in reference frame
+      :class:`ReferenceFrame`. Gravity acts towards the center of the body.
+
+      :param float density: The density of the fluid, in :math:`kg/m^3`.
+      :param float gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: depth
+
+      The depth of the center of mass of the vessel below the waterline, in meters.
+      Negative above the waterline.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: submerged_dynamic_pressure
+
+      The dynamic pressure of the water acting on the vessel, in Pascals.
+      Returns zero if no part of the vessel is below the waterline.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -338,6 +495,14 @@ Flight
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
 
+
+      .. note::
+
+         This is the force the aerodynamics model actually applied to the vessel on the
+         last physics frame, summed over its parts, so it points where the air pushes the
+         vessel whatever the vessel's orientation. It equals :attr:`Flight.lift` plus
+         :attr:`Flight.side_force` plus :attr:`Flight.drag`.
+
    .. attribute:: aerodynamic_torque
 
       The net aerodynamic torque currently acting on the vessel about its center of
@@ -352,14 +517,11 @@ Flight
 
       .. note::
 
-         This is the live counterpart to :attr:`Flight.aerodynamic_force`: it reconstructs
-         the per-part aerodynamic forces and application points that the game applied on
-         the current physics frame and levers them about the center of mass, rather than
-         re-simulating them for hypothetical conditions the way
+         This is the live counterpart to :attr:`Flight.aerodynamic_force`: it is the torque
+         the aerodynamics model applied on the current physics frame, taken about the
+         center of mass, rather than one re-simulated for hypothetical conditions the way
          :meth:`Flight.simulate_aerodynamic_torque_at` does. It is intended for validating the
-         simulator against the live game state. Not available when
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
-         is installed, as FAR does not expose a live per-frame torque.
+         simulator against the live game state.
 
    .. method:: simulate_aerodynamic_force_at(body, position, velocity, rotation)
 
@@ -406,7 +568,7 @@ Flight
 
          The position, velocity, rotation and angular velocity arguments, and the returned
          torque, are all expressed in reference frame :class:`ReferenceFrame`. When
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
+         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_
          is installed the angular velocity argument is ignored.
          Atmospheric temperature and density are evaluated at the current universal time.
 
@@ -428,8 +590,8 @@ Flight
       :param tuple rotation: The orientation of the vessel, in reference frame :class:`ReferenceFrame`, in the same form as :meth:`Vessel.rotation`. Pass the vessel's current rotation to evaluate the wrench at its current orientation.
       :param tuple angular_velocity: The angular velocity of the vessel, in reference frame :class:`ReferenceFrame`. This adds the solid-body rotation term to each part's local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping force and torque. Pass a zero vector to evaluate the static wrench relative to the reference frame.
       :param float ut: The universal time used for the atmospheric ephemeris. It selects the body/Sun geometry used for temperature and density, but does not change or propagate :class:`ReferenceFrame` or any of the state arguments.
-      :returns: A pair containing the aerodynamic force in newtons followed by the aerodynamic torque in newton-meters about the vessel's center of mass. Both are vectors in reference frame :class:`ReferenceFrame`.
-      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+      :returns: The aerodynamic force, and the aerodynamic torque about the vessel's center of mass. Both are vectors in reference frame :class:`ReferenceFrame`.
+      :rtype: :class:`Wrench`
       :Game Scenes: Flight
 
 
@@ -443,7 +605,7 @@ Flight
 
          This is an instantaneous rigid-body result based on the vessel's current parts,
          drag cubes and control-surface state. When
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
+         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_
          is installed the angular velocity and *ut* arguments are ignored.
 
    .. attribute:: lift
@@ -456,6 +618,32 @@ Flight
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The part of :attr:`Flight.aerodynamic_force` that acts across the air stream and
+         towards the top of the vessel: perpendicular to the air stream, in the plane the
+         vessel's nose and its top sit in. A vessel flying with sideslip is also pushed out
+         of that plane, and that part of the force is :attr:`Flight.side_force`. Zero for a
+         vessel flying exactly sideways, which has no such plane to speak of.
+
+   .. attribute:: side_force
+
+      The aerodynamic side force currently acting on the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The part of :attr:`Flight.aerodynamic_force` that acts across the air stream and out
+         of the vessel's side, which is what the air does to a vessel flying with sideslip.
+         It is perpendicular to both :attr:`Flight.lift` and :attr:`Flight.drag`, and the
+         three of them sum to :attr:`Flight.aerodynamic_force`.
+
    .. attribute:: drag
 
       The `aerodynamic drag <https://en.wikipedia.org/wiki/Aerodynamic_force>`_ currently acting on the vessel.
@@ -464,6 +652,12 @@ Flight
       :returns: A vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The part of :attr:`Flight.aerodynamic_force` along the air stream, opposing the
+         vessel's motion through the air.
 
    .. attribute:: aerodynamic_acceleration
 
@@ -525,7 +719,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
 
    .. attribute:: true_air_speed
 
@@ -601,7 +795,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
 
    .. attribute:: drag_coefficient
 
@@ -615,7 +809,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
 
    .. attribute:: lift_coefficient
 
@@ -629,7 +823,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
 
    .. attribute:: ballistic_coefficient
 
@@ -642,7 +836,7 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
 
    .. attribute:: thrust_specific_fuel_consumption
 
@@ -658,4 +852,23 @@ Flight
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/topic/19321-131-ferram-aerospace-research-v01591-liepmann-4218/>`_.
+
+
+
+.. class:: Wrench(force, torque)
+
+   A force and a torque that act together.
+
+
+   .. attribute:: force
+
+      The force, in Newtons.
+
+      :rtype: tuple(float, float, float)
+
+   .. attribute:: torque
+
+      The torque, in Newton meters.
+
+      :rtype: tuple(float, float, float)

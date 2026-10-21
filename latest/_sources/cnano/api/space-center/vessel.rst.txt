@@ -12,27 +12,27 @@ Vessel
    orbital and flight data, manipulating control inputs and managing resources.
    Created using :func:`krpc_SpaceCenter_ActiveVessel` or :func:`krpc_SpaceCenter_Vessels`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Name(krpc_connection_t connection, char * * result)
-   .. function:: void krpc_SpaceCenter_Vessel_set_Name(const char * value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_set_Name(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t instance, const char * value)
 
       The name of the vessel.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Type(krpc_connection_t connection, krpc_SpaceCenter_VesselType_t * result)
-   .. function:: void krpc_SpaceCenter_Vessel_set_Type(krpc_SpaceCenter_VesselType_t value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Type(krpc_connection_t connection, krpc_SpaceCenter_VesselType_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_set_Type(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t instance, krpc_SpaceCenter_VesselType_t value)
 
       The type of the vessel.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Situation(krpc_connection_t connection, krpc_SpaceCenter_VesselSituation_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Situation(krpc_connection_t connection, krpc_SpaceCenter_VesselSituation_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The situation the vessel is in.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Loaded(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Loaded(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       Whether the vessel is loaded, i.e. its parts are instantiated in the scene
       because it is within loading range of the active vessel. A vessel that is not
@@ -40,7 +40,7 @@ Vessel
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Packed(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Packed(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       Whether the vessel is packed (on-rails). A packed vessel has its physics
       simulation suspended and follows its orbit analytically. A vessel that is not
@@ -48,11 +48,11 @@ Vessel
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_PhysicsRange(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_Vessel_set_PhysicsRange(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_PhysicsRange(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_set_PhysicsRange(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t instance, float value)
 
       The distance from the active vessel, in meters, out to which this vessel keeps running
-      its physics simulation — and so stays controllable, able to burn its engines and
+      its physics simulation, and so stays controllable, able to burn its engines and
       respond to its autopilot. Setting this raises the vessel out of the stock physics
       bubble, so that it keeps flying while the active vessel is far away. Set to zero to
       restore the game's default range.
@@ -63,7 +63,7 @@ Vessel
       .. note::
 
          This always reports the vessel's live range, so reading it when no range has been set
-         gives the game's default for the vessel's current :func:`krpc_SpaceCenter_Vessel_Situation` — which is
+         gives the game's default for the vessel's current :func:`krpc_SpaceCenter_Vessel_Situation`, which is
          much shorter than the distance at which the vessel unloads. In orbit a vessel is put
          on rails just 350m away, long before it unloads at 2.5km, and a vessel on rails
          produces no thrust and ignores control input even though it is still loaded.
@@ -74,7 +74,7 @@ Vessel
          between it keeps whichever state it is already in.
 
          The requested range applies in every situation. The game's own defaults are not
-         uniform — a vessel flying in atmosphere stays loaded out to 22.5km — so setting a
+         uniform, and a vessel flying in atmosphere stays loaded out to 22.5km, so setting a
          small range can shorten the range such a vessel would otherwise have had.
 
          A range lasts until it is set back to zero or the game is exited. Unlike most state a
@@ -86,32 +86,63 @@ Vessel
          accumulates positional error that can destroy it. Raise the range on the vessels that
          need it, by as little as they need.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Recoverable(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Recoverable(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       Whether the vessel is recoverable.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Recover(krpc_connection_t connection)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Recover(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t instance)
 
-      Recover the vessel.
+      Recover the vessel. The crew return to the astronaut complex, and the funds and
+      science the vessel is worth are awarded.
 
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MET(krpc_connection_t connection, double * result)
+      .. note::
+
+         Recovering the active vessel ends the flight and returns to the space center, as
+         pressing recover in game does. When a non-active vessel is recovered the current scene
+         is unaffected, and the mission completion dialog is not shown, so a script flying
+         several vessels keeps control of the rest of them.
+
+         Returns immediately, does not wait for the vessel to be recovered.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Terminate(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t instance)
+
+      Terminate the vessel. The vessel and its parts are removed from the game, and its
+      crew are lost, as when the vessel is terminated from the tracking station. Nothing
+      is recovered: no funds, no science and no crew.
+
+
+   
+
+      .. note::
+
+         The crew are reported missing, and return to the astronaut complex once their
+         respawn timer expires, or never if the game is set up so that missing crews do
+         not respawn.
+
+         The active vessel cannot be terminated, because the vessel being flown cannot be
+         taken out of the scene it is being flown in. Switch to another vessel first, or
+         use :func:`krpc_SpaceCenter_Vessel_Recover`, which ends the flight and returns to the space center.
+
+         Returns immediately, does not wait for the vessel to be terminated.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MET(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The mission elapsed time in seconds.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Biome(krpc_connection_t connection, char * * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Biome(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The name of the biome the vessel is currently in.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Flight(krpc_connection_t connection, krpc_SpaceCenter_Flight_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Flight(krpc_connection_t connection, krpc_SpaceCenter_Flight_t * returnValue, krpc_SpaceCenter_Vessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       Returns a :func:`krpc_SpaceCenter_Vessel_Flight` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.
@@ -130,13 +161,13 @@ Vessel
                 for examples of getting :rst:ref:`the orbital and surface speeds of a
                 vessel <tutorial-reference-frames-vessel-speed>`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Orbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Orbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The current orbit of the vessel.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Control(krpc_connection_t connection, krpc_SpaceCenter_Control_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Control(krpc_connection_t connection, krpc_SpaceCenter_Control_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       Returns a :func:`krpc_SpaceCenter_Vessel_Control` object that can be used to manipulate
       the vessel's control inputs. For example, its pitch/yaw/roll controls,
@@ -144,65 +175,46 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Comms(krpc_connection_t connection, krpc_SpaceCenter_Comms_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Comms(krpc_connection_t connection, krpc_SpaceCenter_Comms_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       Returns a :func:`krpc_SpaceCenter_Vessel_Comms` object that can be used to interact
       with CommNet for this vessel.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AutoPilot(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AutoPilot(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       An :func:`krpc_SpaceCenter_Vessel_AutoPilot` object, that can be used to perform
       simple auto-piloting of the vessel.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_CrewCapacity(krpc_connection_t connection, int32_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_CrewCapacity(krpc_connection_t connection, int32_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The number of crew that can occupy the vessel.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_CrewCount(krpc_connection_t connection, int32_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_CrewCount(krpc_connection_t connection, int32_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The number of crew that are occupying the vessel.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Crew(krpc_connection_t connection, krpc_list_object_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Crew(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The crew in the vessel.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Resources(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Resources(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       A :func:`krpc_SpaceCenter_Vessel_Resources` object, that can used to get information
       about resources stored in the vessel.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_ResourcesInDecoupleStage(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * result, int32_t stage, bool cumulative)
-
-      .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_Stage_Resources` from the object returned by :func:`krpc_SpaceCenter_Vessel_DecoupleStageAt` instead.
-
-      Returns a :func:`krpc_SpaceCenter_Vessel_Resources` object, that can used to get
-      information about resources stored in a given *stage*.
-
-      :Parameters:
-
-       * **stage** -- Get resources for parts that are decoupled in this stage.
-       * **cumulative** -- When ``false``, returns the resources for parts decoupled in just the given stage. When ``true`` returns the resources decoupled in the given stage and all subsequent stages combined.
-
-      :Game Scenes: Flight
-
-
-      .. note:: Deprecated. Use :func:`krpc_SpaceCenter_Vessel_DecoupleStageAt`
-                and :func:`krpc_SpaceCenter_Stage_Resources` instead. For details on
-                stage numbering, see the discussion on :rst:ref:`cnano-api-parts-staging`.
-
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Stages(krpc_connection_t connection, krpc_list_object_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Stages(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       Activation (burn) stages for this vessel, in ascending stage order. This does
       not include the -1 stage (parts with no staging icon), as it carries no
@@ -214,7 +226,7 @@ Vessel
       .. note:: Lists activation stages only (``decouple`` is ``false``). See also
                 :rst:ref:`cnano-api-parts-staging`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_StageAt(krpc_connection_t connection, krpc_SpaceCenter_Stage_t * result, int32_t stage)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_StageAt(krpc_connection_t connection, krpc_SpaceCenter_Stage_t * returnValue, krpc_SpaceCenter_Vessel_t instance, int32_t stage)
 
       The activation stage with the given number. Pass -1 to get the parts that are
       never activated (those with no staging icon).
@@ -225,7 +237,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_DecoupleStages(krpc_connection_t connection, krpc_list_object_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_DecoupleStages(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       Decouple stages for this vessel, in ascending stage order. The -1 stage,
       containing the parts that are never decoupled and remain on the vessel, is
@@ -236,7 +248,7 @@ Vessel
 
       .. note:: Lists decouple stages only. Delta-v is not defined on these stages.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_DecoupleStageAt(krpc_connection_t connection, krpc_SpaceCenter_Stage_t * result, int32_t stage)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_DecoupleStageAt(krpc_connection_t connection, krpc_SpaceCenter_Stage_t * returnValue, krpc_SpaceCenter_Vessel_t instance, int32_t stage)
 
       The decouple stage with the given number. Pass -1 to get the parts that are
       never decoupled and remain on the vessel after all stages have fired.
@@ -247,7 +259,28 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_DeltaV(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_DeltaVReady(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Vessel_t instance)
+
+      Whether the vessel's delta-v figures are current.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game calculates delta-v for the active vessel alone, over the several ticks
+         after the vessel changes. A delta-v member reports the figures from the last
+         calculation, and waits only when the game has calculated none.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_RecalculateDeltaV(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t instance)
+
+      Recalculates the vessel's delta-v figures, and waits until they are current.
+      Throws an exception if the vessel is not the active vessel.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_DeltaV(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       Total delta-v for the vessel in the current situation, in m/s.
 
@@ -256,43 +289,43 @@ Vessel
 
       .. note:: Requires the stock delta-v display to be ready. Units are meters per second.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_VacuumDeltaV(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_VacuumDeltaV(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       Total vacuum delta-v for the vessel, in m/s.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_SeaLevelDeltaV(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_SeaLevelDeltaV(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       Total sea-level delta-v for the vessel, in m/s.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_BurnTime(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_BurnTime(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       Total burn time for the vessel, in seconds.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Parts(krpc_connection_t connection, krpc_SpaceCenter_Parts_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Parts(krpc_connection_t connection, krpc_SpaceCenter_Parts_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       A :type:`krpc_SpaceCenter_Parts_t` object, that can used to interact with the parts that make up this vessel.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Mass(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Mass(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The total mass of the vessel, including resources, in kg.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_DryMass(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_DryMass(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The total mass of the vessel, excluding resources, in kg.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Thrust(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Thrust(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The total thrust currently being produced by the vessel's engines, in
       Newtons. This is computed by summing :func:`krpc_SpaceCenter_Engine_Thrust` for
@@ -300,7 +333,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableThrust(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableThrust(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       Gets the total available thrust that can be produced by the vessel's
       active engines, in Newtons. This is computed by summing
@@ -308,7 +341,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableThrustAt(krpc_connection_t connection, float * result, double pressure)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableThrustAt(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance, double pressure)
 
       Gets the total available thrust that can be produced by the vessel's
       active engines, in Newtons. This is computed by summing
@@ -321,7 +354,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MaxThrust(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MaxThrust(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The total maximum thrust that can be produced by the vessel's active
       engines, in Newtons. This is computed by summing
@@ -329,7 +362,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MaxThrustAt(krpc_connection_t connection, float * result, double pressure)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MaxThrustAt(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance, double pressure)
 
       The total maximum thrust that can be produced by the vessel's active
       engines, in Newtons. This is computed by summing
@@ -342,7 +375,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MaxVacuumThrust(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MaxVacuumThrust(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The total maximum thrust that can be produced by the vessel's active
       engines when the vessel is in a vacuum, in Newtons. This is computed by
@@ -350,7 +383,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Acceleration(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Acceleration(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The acceleration currently produced by the vessel's engines, in
       :math:`m/s^2`. This is :func:`krpc_SpaceCenter_Vessel_Thrust` divided by the
@@ -358,7 +391,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableAcceleration(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableAcceleration(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The total available acceleration that can be produced by the vessel's
       active engines, in :math:`m/s^2`. This is :func:`krpc_SpaceCenter_Vessel_AvailableThrust`
@@ -366,7 +399,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableAccelerationAt(krpc_connection_t connection, float * result, double pressure)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableAccelerationAt(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance, double pressure)
 
       The total available acceleration that can be produced by the vessel's
       active engines, in :math:`m/s^2`. This is :func:`krpc_SpaceCenter_Vessel_AvailableThrustAt`
@@ -378,7 +411,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MaxAcceleration(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MaxAcceleration(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The total maximum acceleration that can be produced by the vessel's active
       engines, in :math:`m/s^2`. This is :func:`krpc_SpaceCenter_Vessel_MaxThrust` divided by
@@ -386,7 +419,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MaxAccelerationAt(krpc_connection_t connection, float * result, double pressure)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MaxAccelerationAt(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance, double pressure)
 
       The total maximum acceleration that can be produced by the vessel's active
       engines, in :math:`m/s^2`. This is :func:`krpc_SpaceCenter_Vessel_MaxThrustAt` divided by
@@ -398,7 +431,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MaxVacuumAcceleration(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MaxVacuumAcceleration(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The total maximum acceleration that can be produced by the vessel's active
       engines when the vessel is in a vacuum, in :math:`m/s^2`. This is
@@ -406,14 +439,14 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_SpecificImpulse(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_SpecificImpulse(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The combined specific impulse of all active engines, in seconds. This is computed using the formula
       `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_SpecificImpulseAt(krpc_connection_t connection, float * result, double pressure)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_SpecificImpulseAt(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance, double pressure)
 
       The combined specific impulse of all active engines, in seconds. This is computed using the formula
       `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
@@ -425,14 +458,14 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_VacuumSpecificImpulse(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_VacuumSpecificImpulse(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The combined vacuum specific impulse of all active engines, in seconds. This is computed using the formula
       `described here <https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines>`_.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_KerbinSeaLevelSpecificImpulse(krpc_connection_t connection, float * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_KerbinSeaLevelSpecificImpulse(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The combined specific impulse of all active engines at sea level on Kerbin, in seconds.
       This is computed using the formula
@@ -440,7 +473,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MomentOfInertia(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MomentOfInertia(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
       The inertia values in the returned 3-tuple are around the
@@ -449,15 +482,15 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_InertiaTensor(krpc_connection_t connection, krpc_list_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_InertiaTensor(krpc_connection_t connection, krpc_list_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The inertia tensor of the vessel around its center of mass,
       in the vessels reference frame (:func:`krpc_SpaceCenter_Vessel_ReferenceFrame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
-   
+      :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableTorque(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum torque that the vessel generates. Includes contributions from
       reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
@@ -467,7 +500,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableReactionWheelTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableReactionWheelTorque(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum torque that the currently active and powered reaction wheels can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -476,7 +509,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSTorque(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum torque that the currently active RCS thrusters can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -485,7 +518,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSForce(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSForce(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum force that the currently active RCS thrusters can generate.
       Returns the forces in :math:`N` along each of the coordinate axes of the
@@ -494,7 +527,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum acceleration that the currently active RCS thrusters can generate.
       This is :func:`krpc_SpaceCenter_Vessel_AvailableRCSForce` divided by the vessel's :func:`krpc_SpaceCenter_Vessel_Mass`.
@@ -504,7 +537,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableEngineTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableEngineTorque(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum torque that the currently active and gimballed engines can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -513,7 +546,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableControlSurfaceTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableControlSurfaceTorque(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum torque that the aerodynamic control surfaces can generate.
       Returns the torques in :math:`N.m` around each of the coordinate axes of the
@@ -522,7 +555,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableOtherTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableOtherTorque(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum torque that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate.
@@ -532,7 +565,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableAngularAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableAngularAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum angular acceleration that the vessel can generate. Includes contributions
       from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
@@ -543,7 +576,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableReactionWheelAngularAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableReactionWheelAngularAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum angular acceleration that the currently active and powered reaction wheels
       can generate. This is :func:`krpc_SpaceCenter_Vessel_AvailableReactionWheelTorque` divided by the vessel's
@@ -554,7 +587,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSAngularAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableRCSAngularAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum angular acceleration that the currently active RCS thrusters can generate.
       This is :func:`krpc_SpaceCenter_Vessel_AvailableRCSTorque` divided by the vessel's :func:`krpc_SpaceCenter_Vessel_MomentOfInertia`.
@@ -564,7 +597,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableEngineAngularAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableEngineAngularAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum angular acceleration that the currently active and gimballed engines can
       generate. This is :func:`krpc_SpaceCenter_Vessel_AvailableEngineTorque` divided by the vessel's
@@ -575,7 +608,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableControlSurfaceAngularAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableControlSurfaceAngularAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum angular acceleration that the aerodynamic control surfaces can generate.
       This is :func:`krpc_SpaceCenter_Vessel_AvailableControlSurfaceTorque` divided by the vessel's
@@ -586,7 +619,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableOtherAngularAcceleration(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableOtherAngularAcceleration(krpc_connection_t connection, krpc_SpaceCenter_AxisRange_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate. This is :func:`krpc_SpaceCenter_Vessel_AvailableOtherTorque` divided
@@ -597,7 +630,7 @@ Vessel
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The reference frame that is fixed relative to the vessel,
       and orientated with the vessel.
@@ -621,7 +654,7 @@ Vessel
 
          Vessel reference frame origin and axes for the Kerbal-X rocket
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_OrbitalReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_OrbitalReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The reference frame that is fixed relative to the vessel,
       and orientated with the vessels orbital prograde/normal/radial directions.
@@ -644,7 +677,7 @@ Vessel
 
          Vessel orbital reference frame origin and axes
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_SurfaceReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_SurfaceReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The reference frame that is fixed relative to the vessel,
       and orientated with the surface of the body being orbited.
@@ -673,7 +706,7 @@ Vessel
 
          Vessel surface reference frame origin and axes
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_SurfaceVelocityReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_SurfaceVelocityReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 
       The reference frame that is fixed relative to the vessel,
       and orientated with the velocity vector of the vessel relative
@@ -695,7 +728,80 @@ Vessel
 
          Vessel surface velocity reference frame origin and axes
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_OrbitSpeedReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+
+      The reference frame that the navball measures speed against in 'orbit' mode.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are those of :func:`krpc_SpaceCenter_Vessel_OrbitalReferenceFrame`, which are
+        the directions the navball marks in this mode: the x-axis points in the orbital
+        anti-radial direction, the y-axis in the orbital prograde direction and the z-axis in
+        the orbital normal direction.
+      * The frame moves with the body being orbited, but does not rotate
+        with it.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The velocity of the vessel in this frame is the one the navball shows in 'orbit' mode:
+         :func:`krpc_SpaceCenter_Flight_Speed` is the speed it displays, and :func:`krpc_SpaceCenter_Flight_Velocity`
+         points along the y-axis, towards its prograde marker.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_SurfaceSpeedReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+
+      The reference frame that the navball measures speed against in 'surface' mode.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are the directions the navball marks in this mode, in the
+        same arrangement as :func:`krpc_SpaceCenter_Vessel_OrbitalReferenceFrame`: the y-axis points in the
+        direction the vessel is moving relative to the surface, which is where the prograde
+        marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+        anti-radial, pointing towards the body and perpendicular to the other
+        two.
+      * The frame moves with the surface of the body being orbited, so it
+        rotates with the body.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The velocity of the vessel in this frame is the one the navball shows in 'surface' mode:
+         :func:`krpc_SpaceCenter_Flight_Speed` is the speed it displays, and :func:`krpc_SpaceCenter_Flight_Velocity`
+         points along the y-axis, towards its prograde marker. The velocity gives the frame its
+         orientation, so, as with :func:`krpc_SpaceCenter_Vessel_SurfaceVelocityReferenceFrame`, the frame is
+         singular and raises an error when the vessel is stationary relative to the surface.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_TargetSpeedReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
+
+      The reference frame that the navball measures speed against in 'target' mode.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are the directions the navball marks in this mode, in the
+        same arrangement as :func:`krpc_SpaceCenter_Vessel_OrbitalReferenceFrame`: the y-axis points in the
+        direction the vessel is moving relative to the target, which is where the prograde
+        marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+        anti-radial, pointing towards the body being orbited and perpendicular to the other
+        two.
+      * The frame moves with the vessels target.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The velocity of the vessel in this frame is the one the navball shows in 'target' mode:
+         :func:`krpc_SpaceCenter_Flight_Speed` is the speed it displays, and :func:`krpc_SpaceCenter_Flight_Velocity`
+         points along the y-axis, towards its prograde marker.
+         The target is the one set for the active vessel, via for example
+         :func:`krpc_SpaceCenter_TargetVessel` or :func:`krpc_SpaceCenter_TargetBody`.
+         This is undefined when no target is set. The velocity gives the frame its orientation,
+         so it is also singular, and raises an error, when the vessel matches the velocity of
+         its target.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The position of the center of mass of the vessel, in the given reference frame.
 
@@ -706,7 +812,7 @@ Vessel
       :returns: The position as a vector.
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_BoundingBox(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_BoundingBox(krpc_connection_t connection, krpc_SpaceCenter_BoundingBox_t * returnValue, krpc_SpaceCenter_Vessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The axis-aligned bounding box of the vessel in the given reference frame.
 
@@ -714,10 +820,10 @@ Vessel
 
        * **referenceFrame** -- The reference frame that the returned position vectors are in.
 
-      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+      :returns: The positions of the minimum and maximum vertices of the box.
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The velocity of the center of mass of the vessel, in the given reference frame.
 
@@ -728,7 +834,7 @@ Vessel
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The rotation of the vessel, in the given reference frame.
 
@@ -739,7 +845,7 @@ Vessel
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The direction in which the vessel is pointing, in the given reference frame.
 
@@ -750,7 +856,7 @@ Vessel
       :returns: The direction as a unit vector.
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AngularVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AngularVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Vessel_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The angular velocity of the vessel, in the given reference frame.
 
@@ -761,6 +867,35 @@ Vessel
       :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.
       :Game Scenes: Flight
 
+
+
+.. type:: krpc_SpaceCenter_AxisRange_t
+
+   The largest value of a quantity, such as a torque or a force, in the positive and the
+   negative direction of each of three axes.
+
+
+   .. member:: krpc_tuple_double_double_double_t positive
+
+      The value in the positive direction of each axis.
+
+   .. member:: krpc_tuple_double_double_double_t negative
+
+      The value in the negative direction of each axis, which is zero or less.
+
+
+.. type:: krpc_SpaceCenter_BoundingBox_t
+
+   An axis-aligned bounding box, as the positions of its minimum and maximum vertices.
+
+
+   .. member:: krpc_tuple_double_double_double_t min
+
+      The position of the minimum vertex of the box.
+
+   .. member:: krpc_tuple_double_double_double_t max
+
+      The position of the maximum vertex of the box.
 
 
 .. type:: krpc_SpaceCenter_VesselType_t
@@ -906,110 +1041,136 @@ Vessel
 
    Represents crew in a vessel. Can be obtained using :func:`krpc_SpaceCenter_Vessel_Crew`.
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Name(krpc_connection_t connection, char * * result)
-   .. function:: void krpc_SpaceCenter_CrewMember_set_Name(const char * value)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Name(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_CrewMember_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_set_Name(krpc_connection_t connection, krpc_SpaceCenter_CrewMember_t instance, const char * value)
 
       The crew members name.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Type(krpc_connection_t connection, krpc_SpaceCenter_CrewMemberType_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Type(krpc_connection_t connection, krpc_SpaceCenter_CrewMemberType_t * returnValue, krpc_SpaceCenter_CrewMember_t instance)
 
       The type of crew member.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_OnMission(krpc_connection_t connection, bool * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_OnMission(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_CrewMember_t instance)
 
       Whether the crew member is on a mission.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Courage(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_CrewMember_set_Courage(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Courage(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_CrewMember_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_set_Courage(krpc_connection_t connection, krpc_SpaceCenter_CrewMember_t instance, float value)
 
       The crew members courage.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Stupidity(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_CrewMember_set_Stupidity(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Stupidity(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_CrewMember_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_set_Stupidity(krpc_connection_t connection, krpc_SpaceCenter_CrewMember_t instance, float value)
 
       The crew members stupidity.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Experience(krpc_connection_t connection, float * result)
-   .. function:: void krpc_SpaceCenter_CrewMember_set_Experience(float value)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Experience(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_CrewMember_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_set_Experience(krpc_connection_t connection, krpc_SpaceCenter_CrewMember_t instance, float value)
 
       The crew members experience.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Badass(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_CrewMember_set_Badass(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Badass(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_CrewMember_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_set_Badass(krpc_connection_t connection, krpc_SpaceCenter_CrewMember_t instance, bool value)
 
       Whether the crew member is a badass.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Veteran(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_SpaceCenter_CrewMember_set_Veteran(bool value)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Veteran(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_CrewMember_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_set_Veteran(krpc_connection_t connection, krpc_SpaceCenter_CrewMember_t instance, bool value)
 
       Whether the crew member is a veteran.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Trait(krpc_connection_t connection, char * * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Trait(krpc_connection_t connection, char * * returnValue, krpc_SpaceCenter_CrewMember_t instance)
 
       The crew member's job.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Gender(krpc_connection_t connection, krpc_SpaceCenter_CrewMemberGender_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Gender(krpc_connection_t connection, krpc_SpaceCenter_CrewMemberGender_t * returnValue, krpc_SpaceCenter_CrewMember_t instance)
 
       The crew member's gender.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_RosterStatus(krpc_connection_t connection, krpc_SpaceCenter_RosterStatus_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_RosterStatus(krpc_connection_t connection, krpc_SpaceCenter_RosterStatus_t * returnValue, krpc_SpaceCenter_CrewMember_t instance)
 
       The crew member's current roster status.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * returnValue, krpc_SpaceCenter_CrewMember_t instance)
 
       The part containing the crew member. Returns ``nullptr`` if the crew member is not
       occupying a part, or the vessel containing the part is not loaded.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_SuitType(krpc_connection_t connection, krpc_SpaceCenter_SuitType_t * result)
-   .. function:: void krpc_SpaceCenter_CrewMember_set_SuitType(krpc_SpaceCenter_SuitType_t value)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_EVA(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * returnValue, krpc_SpaceCenter_CrewMember_t instance)
+
+      Send the crew member outside on EVA, through the hatch of the part it is in, and
+      return the vessel it becomes. The game switches to that vessel, which can then be
+      walked around and flown using its :func:`krpc_SpaceCenter_Vessel_Control`, and brought back
+      in with :func:`krpc_SpaceCenter_Control_Board`. The kerbal climbs out onto the ladder by the
+      hatch, if there is one.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if EVA is disabled for the game, if the crew member is not in
+         a loaded vessel, if it is already on EVA, or if every hatch out of the part it is
+         in is obstructed.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_SuitType(krpc_connection_t connection, krpc_SpaceCenter_SuitType_t * returnValue, krpc_SpaceCenter_CrewMember_t instance)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_set_SuitType(krpc_connection_t connection, krpc_SpaceCenter_CrewMember_t instance, krpc_SpaceCenter_SuitType_t value)
 
       The crew member's suit type.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_CareerLogFlights(krpc_connection_t connection, krpc_list_int32_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_CareerLog(krpc_connection_t connection, krpc_list_SpaceCenter_FlightLogEntry_t * returnValue, krpc_SpaceCenter_CrewMember_t instance)
 
-      The flight IDs for each entry in the career flight log.
-
-   
-
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_CareerLogTypes(krpc_connection_t connection, krpc_list_string_t * result)
-
-      The type for each entry in the career flight log.
+      The entries in the crew member's career flight log.
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_CareerLogTargets(krpc_connection_t connection, krpc_list_string_t * result)
 
-      The body name for each entry in the career flight log.
 
-   
+.. type:: krpc_SpaceCenter_FlightLogEntry_t
 
+   An entry in a crew member's career flight log.
+
+   .. note::
+
+      See :func:`krpc_SpaceCenter_CrewMember_CareerLog`.
+   .. member:: int32_t flight
+
+      The flight identifier of the entry.
+
+   .. member:: char * type
+
+      The type of the entry, e.g. ``Orbit`` or ``Land``.
+
+   .. member:: char * target
+
+      The name of the body the entry is for.
 
 
 .. type:: krpc_SpaceCenter_CrewMemberType_t

@@ -1,0 +1,709 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::StdLib
+
+Standard Library
+================
+
+
+.. namespace:: krpc::services
+.. class:: StdLib : public krpc::Service
+
+   A standard library of mathematics and printing for server side functions, and of the
+   colors other services use.
+
+   .. note::
+
+      Vectors are position and direction tuples, and rotations are unit quaternion tuples
+      in the order x, y, z, w the SpaceCenter service uses. Angles are in radians unless
+      stated otherwise.
+
+   .. function:: StdLib(krpc::Client* client)
+
+      Construct an instance of this service.
+
+   .. function:: double pi()
+
+      The constant pi.
+
+   
+
+   .. function:: double e()
+
+      The constant e, the base of the natural logarithm.
+
+   
+
+   .. function:: double abs(double x)
+
+      The absolute value of a number.
+
+      :Parameters:
+
+       * **x** -- The number.
+
+   
+
+   .. function:: int32_t sign(double x)
+
+      The sign of a number: -1 if it is negative, 1 if it is positive,
+      and 0 if it is zero or not a number.
+
+      :Parameters:
+
+       * **x** -- The number.
+
+   
+
+   .. function:: double copy_sign(double x, double y)
+
+      The magnitude of the first number with the sign of the second.
+
+      :Parameters:
+
+       * **x** -- The number giving the magnitude.
+       * **y** -- The number giving the sign.
+
+   
+
+   .. function:: bool is_nan(double x)
+
+      Whether a number is not a number.
+
+      :Parameters:
+
+       * **x** -- The number.
+
+   
+
+   .. function:: bool is_finite(double x)
+
+      Whether a number is neither infinite nor not a number.
+
+      :Parameters:
+
+       * **x** -- The number.
+
+   
+
+   .. function:: double floor(double x)
+
+      The largest whole number less than or equal to the given number.
+
+      :Parameters:
+
+       * **x** -- The number.
+
+   
+
+   .. function:: double ceiling(double x)
+
+      The smallest whole number greater than or equal to the given number.
+
+      :Parameters:
+
+       * **x** -- The number.
+
+   
+
+   .. function:: double round(double x, int32_t digits = 0)
+
+      The given number rounded to the given number of decimal places,
+      with a halfway value rounded to the nearer even number.
+
+      :Parameters:
+
+       * **x** -- The number.
+       * **digits** -- The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+
+   
+
+      .. note::
+
+         Throws an exception if the rounded value is too large for a double.
+
+   .. function:: double round_half_away_from_zero(double x, int32_t digits = 0)
+
+      The given number rounded to the given number of decimal places,
+      with a halfway value rounded away from zero.
+
+      :Parameters:
+
+       * **x** -- The number.
+       * **digits** -- The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+
+   
+
+      .. note::
+
+         Throws an exception if the rounded value is too large for a double.
+
+   .. function:: double round_half_up(double x, int32_t digits = 0)
+
+      The given number rounded to the given number of decimal places,
+      with a halfway value rounded toward positive infinity.
+
+      :Parameters:
+
+       * **x** -- The number.
+       * **digits** -- The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+
+   
+
+      .. note::
+
+         Throws an exception if the rounded value is too large for a double.
+
+   .. function:: double sqrt(double x)
+
+      The square root of a number.
+
+      :Parameters:
+
+       * **x** -- The number.
+
+   
+
+   .. function:: double hypot(double x, double y)
+
+      The length of the hypotenuse of a right triangle with the given sides.
+
+      :Parameters:
+
+       * **x** -- The first side.
+       * **y** -- The second side.
+
+   
+
+   .. function:: double sin(double x)
+
+      The sine of an angle, in radians.
+
+      :Parameters:
+
+       * **x** -- The angle.
+
+   
+
+   .. function:: double cos(double x)
+
+      The cosine of an angle, in radians.
+
+      :Parameters:
+
+       * **x** -- The angle.
+
+   
+
+   .. function:: double tan(double x)
+
+      The tangent of an angle, in radians.
+
+      :Parameters:
+
+       * **x** -- The angle.
+
+   
+
+   .. function:: double asin(double x)
+
+      The angle, in radians, whose sine is the given number.
+
+      :Parameters:
+
+       * **x** -- The number.
+
+   
+
+   .. function:: double acos(double x)
+
+      The angle, in radians, whose cosine is the given number.
+
+      :Parameters:
+
+       * **x** -- The number.
+
+   
+
+   .. function:: double atan(double x)
+
+      The angle, in radians, whose tangent is the given number.
+
+      :Parameters:
+
+       * **x** -- The number.
+
+   
+
+   .. function:: double atan2(double y, double x)
+
+      The angle, in radians, between the positive x axis and the point (x, y).
+
+      :Parameters:
+
+       * **y** -- The y coordinate.
+       * **x** -- The x coordinate.
+
+   
+
+   .. function:: double log(double x, double new_base = 2.718281828459045)
+
+      The logarithm of a number, natural unless another base is given.
+
+      :Parameters:
+
+       * **x** -- The number.
+       * **new_base** -- The base of the logarithm.
+
+   
+
+   .. function:: double log10(double x)
+
+      The base 10 logarithm of a number.
+
+      :Parameters:
+
+       * **x** -- The number.
+
+   
+
+   .. function:: double exp(double x)
+
+      The number e raised to the given power.
+
+      :Parameters:
+
+       * **x** -- The power.
+
+   
+
+   .. function:: double min(double x, double y)
+
+      The smaller of two numbers.
+
+      :Parameters:
+
+       * **x** -- The first number.
+       * **y** -- The second number.
+
+   
+
+   .. function:: double max(double x, double y)
+
+      The larger of two numbers.
+
+      :Parameters:
+
+       * **x** -- The first number.
+       * **y** -- The second number.
+
+   
+
+   .. function:: double clamp(double x, double min, double max)
+
+      The given number limited to the given range.
+
+      :Parameters:
+
+       * **x** -- The number.
+       * **min** -- The minimum of the range.
+       * **max** -- The maximum of the range.
+
+   
+
+      .. note::
+
+         Throws an exception if the minimum is greater than the maximum.
+
+   .. function:: double lerp(double a, double b, double t)
+
+      Linear interpolation between two numbers.
+
+      :Parameters:
+
+       * **a** -- The number when t is 0.
+       * **b** -- The number when t is 1.
+       * **t** -- The interpolation parameter.
+
+   
+
+      .. note::
+
+         The parameter is not limited to the range 0 to 1, and a value outside it
+         extrapolates.
+
+   .. function:: double inverse_lerp(double a, double b, double x)
+
+      The interpolation parameter of a number between two others,
+      limited to the range 0 to 1.
+
+      :Parameters:
+
+       * **a** -- The number at 0.
+       * **b** -- The number at 1.
+       * **x** -- The number.
+
+   
+
+      .. note::
+
+         Returns 0 if the two numbers are equal.
+
+   .. function:: double degrees_to_radians(double x)
+
+      The angle in radians of an angle in degrees.
+
+      :Parameters:
+
+       * **x** -- The angle in degrees.
+
+   
+
+   .. function:: double radians_to_degrees(double x)
+
+      The angle in degrees of an angle in radians.
+
+      :Parameters:
+
+       * **x** -- The angle in radians.
+
+   
+
+   .. function:: std::tuple<double, double, double> vector_add(std::tuple<double, double, double> u, std::tuple<double, double, double> v)
+
+      The sum of two vectors.
+
+      :Parameters:
+
+       * **u** -- The first vector.
+       * **v** -- The second vector.
+
+   
+
+   .. function:: std::tuple<double, double, double> vector_subtract(std::tuple<double, double, double> u, std::tuple<double, double, double> v)
+
+      The difference of two vectors.
+
+      :Parameters:
+
+       * **u** -- The first vector.
+       * **v** -- The second vector.
+
+   
+
+   .. function:: std::tuple<double, double, double> vector_scale(std::tuple<double, double, double> v, double scale)
+
+      A vector scaled by a number.
+
+      :Parameters:
+
+       * **v** -- The vector.
+       * **scale** -- The scaling factor.
+
+   
+
+   .. function:: double vector_dot(std::tuple<double, double, double> u, std::tuple<double, double, double> v)
+
+      The dot product of two vectors.
+
+      :Parameters:
+
+       * **u** -- The first vector.
+       * **v** -- The second vector.
+
+   
+
+   .. function:: std::tuple<double, double, double> vector_cross(std::tuple<double, double, double> u, std::tuple<double, double, double> v)
+
+      The cross product of two vectors.
+
+      :Parameters:
+
+       * **u** -- The first vector.
+       * **v** -- The second vector.
+
+   
+
+   .. function:: double vector_magnitude(std::tuple<double, double, double> v)
+
+      The magnitude (length) of a vector.
+
+      :Parameters:
+
+       * **v** -- The vector.
+
+   
+
+   .. function:: std::tuple<double, double, double> vector_normalize(std::tuple<double, double, double> v)
+
+      A vector scaled to a magnitude of 1.
+
+      :Parameters:
+
+       * **v** -- The vector.
+
+   
+
+      .. note::
+
+         Throws an exception if the vector is zero.
+
+   .. function:: double vector_distance(std::tuple<double, double, double> u, std::tuple<double, double, double> v)
+
+      The distance between two positions.
+
+      :Parameters:
+
+       * **u** -- The first position.
+       * **v** -- The second position.
+
+   
+
+   .. function:: double vector_angle(std::tuple<double, double, double> u, std::tuple<double, double, double> v)
+
+      The angle between two vectors, in radians, between 0 and pi.
+
+      :Parameters:
+
+       * **u** -- The first vector.
+       * **v** -- The second vector.
+
+   
+
+      .. note::
+
+         Throws an exception if either vector is zero.
+
+   .. function:: std::tuple<double, double, double> vector_lerp(std::tuple<double, double, double> u, std::tuple<double, double, double> v, double t)
+
+      Linear interpolation between two vectors.
+
+      :Parameters:
+
+       * **u** -- The vector when t is 0.
+       * **v** -- The vector when t is 1.
+       * **t** -- The interpolation parameter.
+
+   
+
+      .. note::
+
+         The parameter is not limited to the range 0 to 1, and a value outside it
+         extrapolates.
+
+   .. function:: std::tuple<double, double, double, double> quaternion_multiply(std::tuple<double, double, double, double> q, std::tuple<double, double, double, double> r)
+
+      The composition of two rotations: the rotation r followed by the
+      rotation q.
+
+      :Parameters:
+
+       * **q** -- The second rotation.
+       * **r** -- The first rotation.
+
+   
+
+      .. note::
+
+         Throws an exception if either quaternion is zero.
+
+   .. function:: std::tuple<double, double, double, double> quaternion_inverse(std::tuple<double, double, double, double> q)
+
+      The inverse of a rotation.
+
+      :Parameters:
+
+       * **q** -- The rotation.
+
+   
+
+      .. note::
+
+         Throws an exception if the quaternion is zero.
+
+   .. function:: std::tuple<double, double, double> quaternion_rotate_vector(std::tuple<double, double, double, double> q, std::tuple<double, double, double> v)
+
+      A vector rotated by a rotation.
+
+      :Parameters:
+
+       * **q** -- The rotation.
+       * **v** -- The vector.
+
+   
+
+      .. note::
+
+         Throws an exception if the quaternion is zero.
+
+   .. function:: std::tuple<double, double, double, double> quaternion_from_axis_angle(std::tuple<double, double, double> axis, double angle)
+
+      The rotation about an axis by an angle.
+
+      :Parameters:
+
+       * **axis** -- The axis of rotation.
+       * **angle** -- The angle of rotation, in radians.
+
+   
+
+      .. note::
+
+         Throws an exception if the axis is zero.
+
+   .. function:: AxisAngle quaternion_to_axis_angle(std::tuple<double, double, double, double> q)
+
+      The axis and angle of a rotation.
+
+      :Parameters:
+
+       * **q** -- The rotation.
+
+   
+
+      .. note::
+
+         Throws an exception if the quaternion is zero.
+
+   .. function:: std::tuple<double, double, double, double> quaternion_from_to_rotation(std::tuple<double, double, double> u, std::tuple<double, double, double> v)
+
+      The shortest rotation that takes one direction onto another.
+
+      :Parameters:
+
+       * **u** -- The direction to rotate from.
+       * **v** -- The direction to rotate to.
+
+   
+
+      .. note::
+
+         Opposite directions give a half turn about an arbitrary perpendicular axis.
+         Throws an exception if either vector is zero.
+
+   .. function:: std::tuple<double, double, double, double> quaternion_look_rotation(std::tuple<double, double, double> forward, std::tuple<double, double, double> up)
+
+      The rotation that takes the z axis onto a forward direction, and the y axis
+      toward an up direction.
+
+      :Parameters:
+
+       * **forward** -- The direction of the z axis.
+       * **up** -- The direction the y axis points toward.
+
+   
+
+      .. note::
+
+         The up direction need not be perpendicular to the forward direction. Throws an
+         exception if either vector is zero, or if they are parallel.
+
+   .. function:: double quaternion_angle(std::tuple<double, double, double, double> q, std::tuple<double, double, double, double> r)
+
+      The angle of the rotation that takes one rotation to another,
+      in radians, between 0 and pi.
+
+      :Parameters:
+
+       * **q** -- The first rotation.
+       * **r** -- The second rotation.
+
+   
+
+      .. note::
+
+         Throws an exception if either quaternion is zero.
+
+   .. function:: std::tuple<double, double, double, double> quaternion_slerp(std::tuple<double, double, double, double> q, std::tuple<double, double, double, double> r, double t)
+
+      Spherical linear interpolation between two rotations.
+
+      :Parameters:
+
+       * **q** -- The rotation when t is 0.
+       * **r** -- The rotation when t is 1.
+       * **t** -- The interpolation parameter.
+
+   
+
+      .. note::
+
+         The parameter is not limited to the range 0 to 1, and a value outside it
+         extrapolates. Throws an exception if either quaternion is zero.
+
+   .. function:: void print(std::string message)
+
+      Writes a message to the game's log, for debugging.
+
+      :Parameters:
+
+       * **message** -- The message.
+
+   
+
+      .. note::
+
+         A function evaluated by a stream or an event prints on every update. The message is
+         written at the Info level, so a server log level of Warning or Error hides it.
+
+
+
+.. namespace:: krpc::services::StdLib
+.. struct:: AxisAngle
+
+   A rotation as an axis and an angle.
+
+   .. note::
+
+      See :func:`quaternion_to_axis_angle`.
+   .. member:: std::tuple<double, double, double> axis
+
+      The axis of the rotation, as a unit vector, or zero for no rotation.
+
+   .. member:: double angle
+
+      The angle of the rotation, in radians between 0 and pi.
+
+
+.. namespace:: krpc::services::StdLib
+.. struct:: ColorRGB
+
+   A color, as red, green and blue components between 0 and 1.
+
+
+   .. member:: float r
+
+      The red component.
+
+   .. member:: float g
+
+      The green component.
+
+   .. member:: float b
+
+      The blue component.
+
+
+.. namespace:: krpc::services::StdLib
+.. struct:: ColorRGBA
+
+   A color, as red, green, blue and alpha components between 0 and 1.
+
+   .. note::
+
+      An alpha of 0 is fully transparent and 1 is fully opaque.
+   .. member:: float r
+
+      The red component.
+
+   .. member:: float g
+
+      The green component.
+
+   .. member:: float b
+
+      The blue component.
+
+   .. member:: float a
+
+      The alpha component.

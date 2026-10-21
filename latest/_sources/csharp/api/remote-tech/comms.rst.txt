@@ -1,4 +1,4 @@
-.. default-domain:: csharp
+.. default-domain:: cs
 .. highlight:: csharp
 .. namespace:: KRPC.Client.Services.RemoteTech
 
@@ -52,7 +52,7 @@ Comms
 
       :Game Scenes: All
 
-   .. method:: double SignalDelayToVessel(SpaceCenter.Vessel other)
+   .. function:: double SignalDelayToVessel(SpaceCenter.Vessel other)
 
       The signal delay between the this vessel and another vessel, in seconds.
 

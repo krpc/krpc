@@ -9,7 +9,7 @@ KerbalAlarmClock
 .. module:: KerbalAlarmClock
 
 This service provides functionality to interact with
-`Kerbal Alarm Clock <https://forum.kerbalspaceprogram.com/index.php?/topic/22809-13x-kerbal-alarm-clock-v3850-may-30/>`_.
+`Kerbal Alarm Clock <https://forum.kerbalspaceprogram.com/topic/22809-112x-kerbal-alarm-clock-v31300-april-10/>`_.
 
 
 .. attribute:: available
@@ -41,7 +41,7 @@ This service provides functionality to interact with
    only returns one of them.
 
    :param str name: Name of the alarm to search for.
-   :rtype: :class:`Alarm`
+   :rtype: :class:`Alarm` or None
    
 
 

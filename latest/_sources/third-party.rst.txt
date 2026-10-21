@@ -4,7 +4,7 @@ Other Clients, Services and Scripts
 This page links to clients, services, scripts, tools and other useful things for
 kRPC that have been made by others. If you want your own project added to this
 page, please feel free to ask `on the forum
-<https://forum.kerbalspaceprogram.com/index.php?/topic/130742-130-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-v0310-15th-september-2017/>`_.
+<https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/>`_.
 
 Clients
 -------
@@ -29,11 +29,9 @@ Services
 Scripts/Tools/Libraries etc.
 ----------------------------
 
-* `kIPC <https://forum.kerbalspaceprogram.com/index.php?/topic/142979-113-kipc-inter-processor-communication-between-kos-and-krpc-v020-beta-now-available/>`_ -
+* `kIPC <https://forum.kerbalspaceprogram.com/topic/142979-113-kipc-inter-processor-communication-between-kos-and-krpc-v020-beta-now-available/>`_ -
   Inter-Process(or) Communication between kOS and KRPC
 * `kautopilly <https://github.com/Cheaterman/kautopilly>`_ -- an autopilot primarily intended for planes.
-* `KNav <https://github.com/Vivero/KNav>`_ -- a flexible platform for implementing computer-assisted navigation and control of vessels.
-* `wernher <https://github.com/theodoregoetz/wernher>`_ -- a toolkit for flight control and orbit analysis.
 * `A small logging script. <https://gist.github.com/fat-lobyte/4326afa551fa04dd028f>`_
 * `Universal Powered Guidance <https://github.com/denebwang/ksp_UPG>`_
 * `Flight control software for rockets and torchships <https://github.com/object-Object/kRPC-or-Bust>`_

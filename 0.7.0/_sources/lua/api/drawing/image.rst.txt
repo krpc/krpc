@@ -1,0 +1,34 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Drawing
+
+Image
+=====
+
+
+.. class:: Image
+
+   An image that markers can be drawn with. Created using :meth:`Drawing.add_image`.
+
+   .. note::
+
+      An image is kept across scene changes, until it is removed or the client that
+      created it disconnects.
+
+   .. attribute:: width: number
+
+      The width of the image, in pixels.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: height: number
+
+      The height of the image, in pixels.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. method:: remove()
+
+      Remove the image. A marker drawn with it goes back to its own icon.

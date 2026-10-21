@@ -1,0 +1,220 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::UI
+
+Text
+====
+
+
+.. class:: Text
+
+   A text label.
+   Added to a :class:`Canvas` or a :class:`Panel`.
+
+   .. function:: RectTransform rect_transform()
+
+      The rect transform for the UI object.
+
+   
+
+   .. function:: LayoutElement layout_element()
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the UI object is visible.
+
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. function:: std::string content()
+   .. function:: void set_content(std::string value)
+
+      The text string
+
+   
+
+   .. function:: bool word_wrap()
+   .. function:: void set_word_wrap(bool value)
+
+      Whether the text wraps onto further lines when it is wider than the space it
+      has. Text that does not wrap carries on past the edge, and its preferred size
+      is that of a single line, so a changing value leaves a layout in place.
+
+   
+
+   .. function:: std::string font()
+   .. function:: void set_font(std::string value)
+
+      Name of the font
+
+   
+
+      .. note::
+
+         Empty if the game provided no font to draw the text with, in which case it is
+         not drawn. See :func:`Text::available_fonts` for the names that can be set.
+
+   .. function:: std::vector<std::string> available_fonts()
+
+      A list of all available fonts.
+
+   
+
+   .. function:: int32_t size()
+   .. function:: void set_size(int32_t value)
+
+      Font size.
+
+   
+
+   .. function:: FontStyle style()
+   .. function:: void set_style(FontStyle value)
+
+      Font style.
+
+   
+
+   .. function:: StdLib::ColorRGBA color()
+   .. function:: void set_color(StdLib::ColorRGBA value)
+
+      The color the text is drawn in.
+
+   
+
+   .. function:: TextAnchor alignment()
+   .. function:: void set_alignment(TextAnchor value)
+
+      Alignment.
+
+   
+
+   .. function:: float line_spacing()
+   .. function:: void set_line_spacing(float value)
+
+      Line spacing.
+
+   
+
+   .. function:: void remove()
+
+      Remove the UI object.
+
+
+   
+
+
+
+.. namespace:: krpc::services::UI
+.. enum-struct:: FontStyle
+
+   Font style.
+
+
+   .. enumerator:: normal
+
+      Normal.
+
+
+   .. enumerator:: bold
+
+      Bold.
+
+
+   .. enumerator:: italic
+
+      Italic.
+
+
+   .. enumerator:: bold_and_italic
+
+      Bold and italic.
+
+
+
+.. namespace:: krpc::services::UI
+.. enum-struct:: TextAlignment
+
+   Text alignment.
+
+
+   .. enumerator:: left
+
+      Left aligned.
+
+
+   .. enumerator:: right
+
+      Right aligned.
+
+
+   .. enumerator:: center
+
+      Center aligned.
+
+
+
+.. namespace:: krpc::services::UI
+.. enum-struct:: TextAnchor
+
+   Text alignment.
+
+
+   .. enumerator:: lower_center
+
+      Lower center.
+
+
+   .. enumerator:: lower_left
+
+      Lower left.
+
+
+   .. enumerator:: lower_right
+
+      Lower right.
+
+
+   .. enumerator:: middle_center
+
+      Middle center.
+
+
+   .. enumerator:: middle_left
+
+      Middle left.
+
+
+   .. enumerator:: middle_right
+
+      Middle right.
+
+
+   .. enumerator:: upper_center
+
+      Upper center.
+
+
+   .. enumerator:: upper_left
+
+      Upper left.
+
+
+   .. enumerator:: upper_right
+
+      Upper right.

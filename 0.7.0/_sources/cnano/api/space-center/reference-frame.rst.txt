@@ -1,0 +1,86 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+ReferenceFrame
+==============
+
+
+.. type:: krpc_SpaceCenter_ReferenceFrame_t
+
+   Represents a reference frame for positions, rotations and
+   velocities. Contains:
+
+   * The position of the origin.
+   * The directions of the x, y and z axes.
+   * The linear velocity of the frame.
+   * The angular velocity of the frame.
+
+   .. note::
+
+      Apart from being created and removed, a reference frame is only used as a
+      parameter to other functions.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ReferenceFrame_CreateRelative(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_double_t * rotation, const krpc_tuple_double_double_double_t * velocity, const krpc_tuple_double_double_double_t * angularVelocity)
+
+      Create a relative reference frame. This is a custom reference frame
+      whose components offset the components of a parent reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The parent reference frame on which to base this reference frame.
+       * **position** -- The offset of the position of the origin, as a position vector. Defaults to :math:`(0, 0, 0)`
+       * **rotation** -- The rotation to apply to the parent frames rotation, as a quaternion of the form :math:`(x, y, z, w)`. Defaults to :math:`(0, 0, 0, 1)` (i.e. no rotation)
+       * **velocity** -- The linear velocity to offset the parent frame by, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second. Defaults to :math:`(0, 0, 0)`.
+       * **angularVelocity** -- The angular velocity to offset the parent frame by, as a vector. This vector points in the direction of the axis of rotation, and its magnitude is the speed of the rotation in radians per second. Defaults to :math:`(0, 0, 0)`.
+
+   
+
+      .. note::
+
+         Each call returns a new frame, which is kept until :func:`krpc_SpaceCenter_ReferenceFrame_Remove` is
+         called on it or the client that created it disconnects, so a script that
+         creates one repeatedly, for example once per update, should remove each one
+         when it is finished with it.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ReferenceFrame_CreateHybrid(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * returnValue, krpc_SpaceCenter_ReferenceFrame_t position, krpc_SpaceCenter_ReferenceFrame_t rotation, krpc_SpaceCenter_ReferenceFrame_t velocity, krpc_SpaceCenter_ReferenceFrame_t angularVelocity)
+
+      Create a hybrid reference frame. This is a custom reference frame
+      whose components inherited from other reference frames.
+
+      :Parameters:
+
+       * **position** -- The reference frame providing the position of the origin.
+       * **rotation** -- The reference frame providing the rotation of the frame.
+       * **velocity** -- The reference frame providing the linear velocity of the frame.
+       * **angularVelocity** -- The reference frame providing the angular velocity of the frame.
+
+   
+
+      .. note::
+
+         The *position* reference frame is required but all other
+         reference frames are optional. If omitted, they are set to the
+         *position* reference frame.
+
+         Each call returns a new frame, which is kept until :func:`krpc_SpaceCenter_ReferenceFrame_Remove` is
+         called on it or the client that created it disconnects, so a script that
+         creates one repeatedly, for example once per update, should remove each one
+         when it is finished with it.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ReferenceFrame_Remove(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t instance)
+
+      Remove the reference frame, releasing the memory the server holds for it.
+
+
+   
+
+      .. note::
+
+         Only a frame created by :func:`krpc_SpaceCenter_ReferenceFrame_CreateRelative` or
+         :func:`krpc_SpaceCenter_ReferenceFrame_CreateHybrid` can be removed. Every other frame belongs to
+         something in the game, and the server holds one of each.
+
+         Any further use of this object throws an exception, as does use of a frame
+         built on it, which cannot be evaluated without it. A frame belongs to the
+         client that created it, and is removed when that client disconnects.

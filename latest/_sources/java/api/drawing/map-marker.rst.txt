@@ -1,0 +1,221 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.Drawing
+
+MapMarker
+=========
+
+
+.. type:: public class MapMarker
+
+   A marker drawn in the map view, with one of the game's own map icons. Created using
+   :meth:`addMapMarker(org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, MapMarkerIcon, String, boolean)`.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getPosition()
+
+   .. method:: void setPosition(org.javatuples.Triplet<Double,Double,Double> value)
+
+      Position of the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: SpaceCenter.ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(SpaceCenter.ReferenceFrame value)
+
+      Reference frame that the position of the marker is in.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the marker is visible.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: MapMarkerIcon getIcon()
+
+   .. method:: void setIcon(MapMarkerIcon value)
+
+      The icon that the marker is drawn with.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: Image getImage()
+
+   .. method:: void setImage(Image value)
+
+      The image that the marker is drawn with in place of its icon, or null to draw the
+      icon.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: String getCaption()
+
+   .. method:: void setCaption(String value)
+
+      The caption shown when the mouse is over the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: StdLib.ColorRGB getColor()
+
+   .. method:: void setColor(StdLib.ColorRGB value)
+
+      The color of the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+   .. method:: void remove()
+
+      Remove the marker.
+
+      :Game Scenes: Flight, Tracking Station
+
+
+
+.. type:: public enum MapMarkerIcon
+
+   The icon a :type:`MapMarker` is drawn with, from the game's own map icons.
+
+
+   .. field:: public MapMarkerIcon GENERIC
+
+      A plain marker.
+
+
+   .. field:: public MapMarkerIcon CELESTIAL_BODY
+
+      A celestial body.
+
+
+   .. field:: public MapMarkerIcon APOAPSIS
+
+      An apoapsis.
+
+
+   .. field:: public MapMarkerIcon PERIAPSIS
+
+      A periapsis.
+
+
+   .. field:: public MapMarkerIcon ASCENDING_NODE
+
+      An ascending node.
+
+
+   .. field:: public MapMarkerIcon DESCENDING_NODE
+
+      A descending node.
+
+
+   .. field:: public MapMarkerIcon MANEUVER_NODE
+
+      A maneuver node.
+
+
+   .. field:: public MapMarkerIcon ENCOUNTER
+
+      An encounter with a sphere of influence.
+
+
+   .. field:: public MapMarkerIcon ESCAPE
+
+      An escape from a sphere of influence.
+
+
+   .. field:: public MapMarkerIcon IMPACT
+
+      An impact with the surface.
+
+
+   .. field:: public MapMarkerIcon CLOSE_APPROACH
+
+      A closest approach to a target.
+
+
+   .. field:: public MapMarkerIcon INTERSECT
+
+      An intersection with the orbit of a target.
+
+
+   .. field:: public MapMarkerIcon SHIP
+
+      A ship.
+
+
+   .. field:: public MapMarkerIcon PROBE
+
+      A probe.
+
+
+   .. field:: public MapMarkerIcon RELAY
+
+      A relay.
+
+
+   .. field:: public MapMarkerIcon STATION
+
+      A station.
+
+
+   .. field:: public MapMarkerIcon BASE
+
+      A base.
+
+
+   .. field:: public MapMarkerIcon LANDER
+
+      A lander.
+
+
+   .. field:: public MapMarkerIcon ROVER
+
+      A rover.
+
+
+   .. field:: public MapMarkerIcon PLANE
+
+      A plane.
+
+
+   .. field:: public MapMarkerIcon EVA
+
+      A kerbal on EVA.
+
+
+   .. field:: public MapMarkerIcon FLAG
+
+      A flag.
+
+
+   .. field:: public MapMarkerIcon DEBRIS
+
+      Debris.
+
+
+   .. field:: public MapMarkerIcon SPACE_OBJECT
+
+      An asteroid or comet.
+
+
+   .. field:: public MapMarkerIcon DEPLOYED_SCIENCE
+
+      Deployed science equipment.
+
+
+   .. field:: public MapMarkerIcon LAUNCH_SITE
+
+      A launch site.
+
+
+   .. field:: public MapMarkerIcon RUNWAY
+
+      A runway.
+
+
+   .. field:: public MapMarkerIcon KSC
+
+      The Kerbal Space Center.

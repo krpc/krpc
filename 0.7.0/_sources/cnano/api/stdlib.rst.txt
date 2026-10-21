@@ -1,0 +1,853 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Standard Library
+================
+
+
+A standard library of mathematics and printing for server side functions, and of the
+colors other services use.
+
+.. note::
+
+   Vectors are position and direction tuples, and rotations are unit quaternion tuples
+   in the order x, y, z, w the SpaceCenter service uses. Angles are in radians unless
+   stated otherwise.
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Pi(krpc_connection_t connection, double * returnValue)
+
+   The constant pi.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_E(krpc_connection_t connection, double * returnValue)
+
+   The constant e, the base of the natural logarithm.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Abs(krpc_connection_t connection, double * returnValue, double x)
+
+   The absolute value of a number.
+
+   :Parameters:
+
+    * **x** -- The number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Sign(krpc_connection_t connection, int32_t * returnValue, double x)
+
+   The sign of a number: -1 if it is negative, 1 if it is positive,
+   and 0 if it is zero or not a number.
+
+   :Parameters:
+
+    * **x** -- The number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_CopySign(krpc_connection_t connection, double * returnValue, double x, double y)
+
+   The magnitude of the first number with the sign of the second.
+
+   :Parameters:
+
+    * **x** -- The number giving the magnitude.
+    * **y** -- The number giving the sign.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_IsNan(krpc_connection_t connection, bool * returnValue, double x)
+
+   Whether a number is not a number.
+
+   :Parameters:
+
+    * **x** -- The number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_IsFinite(krpc_connection_t connection, bool * returnValue, double x)
+
+   Whether a number is neither infinite nor not a number.
+
+   :Parameters:
+
+    * **x** -- The number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Floor(krpc_connection_t connection, double * returnValue, double x)
+
+   The largest whole number less than or equal to the given number.
+
+   :Parameters:
+
+    * **x** -- The number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Ceiling(krpc_connection_t connection, double * returnValue, double x)
+
+   The smallest whole number greater than or equal to the given number.
+
+   :Parameters:
+
+    * **x** -- The number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Round(krpc_connection_t connection, double * returnValue, double x, int32_t digits)
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded to the nearer even number.
+
+   :Parameters:
+
+    * **x** -- The number.
+    * **digits** -- The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+
+   
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_RoundHalfAwayFromZero(krpc_connection_t connection, double * returnValue, double x, int32_t digits)
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded away from zero.
+
+   :Parameters:
+
+    * **x** -- The number.
+    * **digits** -- The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+
+   
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_RoundHalfUp(krpc_connection_t connection, double * returnValue, double x, int32_t digits)
+
+   The given number rounded to the given number of decimal places,
+   with a halfway value rounded toward positive infinity.
+
+   :Parameters:
+
+    * **x** -- The number.
+    * **digits** -- The number of decimal places to round to. Negative to round to tens, hundreds and beyond.
+
+   
+
+   .. note::
+
+      Throws an exception if the rounded value is too large for a double.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Sqrt(krpc_connection_t connection, double * returnValue, double x)
+
+   The square root of a number.
+
+   :Parameters:
+
+    * **x** -- The number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Hypot(krpc_connection_t connection, double * returnValue, double x, double y)
+
+   The length of the hypotenuse of a right triangle with the given sides.
+
+   :Parameters:
+
+    * **x** -- The first side.
+    * **y** -- The second side.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Sin(krpc_connection_t connection, double * returnValue, double x)
+
+   The sine of an angle, in radians.
+
+   :Parameters:
+
+    * **x** -- The angle.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Cos(krpc_connection_t connection, double * returnValue, double x)
+
+   The cosine of an angle, in radians.
+
+   :Parameters:
+
+    * **x** -- The angle.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Tan(krpc_connection_t connection, double * returnValue, double x)
+
+   The tangent of an angle, in radians.
+
+   :Parameters:
+
+    * **x** -- The angle.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Asin(krpc_connection_t connection, double * returnValue, double x)
+
+   The angle, in radians, whose sine is the given number.
+
+   :Parameters:
+
+    * **x** -- The number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Acos(krpc_connection_t connection, double * returnValue, double x)
+
+   The angle, in radians, whose cosine is the given number.
+
+   :Parameters:
+
+    * **x** -- The number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Atan(krpc_connection_t connection, double * returnValue, double x)
+
+   The angle, in radians, whose tangent is the given number.
+
+   :Parameters:
+
+    * **x** -- The number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Atan2(krpc_connection_t connection, double * returnValue, double y, double x)
+
+   The angle, in radians, between the positive x axis and the point (x, y).
+
+   :Parameters:
+
+    * **y** -- The y coordinate.
+    * **x** -- The x coordinate.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Log(krpc_connection_t connection, double * returnValue, double x, double newBase)
+
+   The logarithm of a number, natural unless another base is given.
+
+   :Parameters:
+
+    * **x** -- The number.
+    * **newBase** -- The base of the logarithm.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Log10(krpc_connection_t connection, double * returnValue, double x)
+
+   The base 10 logarithm of a number.
+
+   :Parameters:
+
+    * **x** -- The number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Exp(krpc_connection_t connection, double * returnValue, double x)
+
+   The number e raised to the given power.
+
+   :Parameters:
+
+    * **x** -- The power.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Min(krpc_connection_t connection, double * returnValue, double x, double y)
+
+   The smaller of two numbers.
+
+   :Parameters:
+
+    * **x** -- The first number.
+    * **y** -- The second number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Max(krpc_connection_t connection, double * returnValue, double x, double y)
+
+   The larger of two numbers.
+
+   :Parameters:
+
+    * **x** -- The first number.
+    * **y** -- The second number.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Clamp(krpc_connection_t connection, double * returnValue, double x, double min, double max)
+
+   The given number limited to the given range.
+
+   :Parameters:
+
+    * **x** -- The number.
+    * **min** -- The minimum of the range.
+    * **max** -- The maximum of the range.
+
+   
+
+   .. note::
+
+      Throws an exception if the minimum is greater than the maximum.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Lerp(krpc_connection_t connection, double * returnValue, double a, double b, double t)
+
+   Linear interpolation between two numbers.
+
+   :Parameters:
+
+    * **a** -- The number when t is 0.
+    * **b** -- The number when t is 1.
+    * **t** -- The interpolation parameter.
+
+   
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_InverseLerp(krpc_connection_t connection, double * returnValue, double a, double b, double x)
+
+   The interpolation parameter of a number between two others,
+   limited to the range 0 to 1.
+
+   :Parameters:
+
+    * **a** -- The number at 0.
+    * **b** -- The number at 1.
+    * **x** -- The number.
+
+   
+
+   .. note::
+
+      Returns 0 if the two numbers are equal.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_DegreesToRadians(krpc_connection_t connection, double * returnValue, double x)
+
+   The angle in radians of an angle in degrees.
+
+   :Parameters:
+
+    * **x** -- The angle in degrees.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_RadiansToDegrees(krpc_connection_t connection, double * returnValue, double x)
+
+   The angle in degrees of an angle in radians.
+
+   :Parameters:
+
+    * **x** -- The angle in radians.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_VectorAdd(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+
+   The sum of two vectors.
+
+   :Parameters:
+
+    * **u** -- The first vector.
+    * **v** -- The second vector.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_VectorSubtract(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+
+   The difference of two vectors.
+
+   :Parameters:
+
+    * **u** -- The first vector.
+    * **v** -- The second vector.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_VectorScale(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * v, double scale)
+
+   A vector scaled by a number.
+
+   :Parameters:
+
+    * **v** -- The vector.
+    * **scale** -- The scaling factor.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_VectorDot(krpc_connection_t connection, double * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+
+   The dot product of two vectors.
+
+   :Parameters:
+
+    * **u** -- The first vector.
+    * **v** -- The second vector.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_VectorCross(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+
+   The cross product of two vectors.
+
+   :Parameters:
+
+    * **u** -- The first vector.
+    * **v** -- The second vector.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_VectorMagnitude(krpc_connection_t connection, double * returnValue, const krpc_tuple_double_double_double_t * v)
+
+   The magnitude (length) of a vector.
+
+   :Parameters:
+
+    * **v** -- The vector.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_VectorNormalize(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * v)
+
+   A vector scaled to a magnitude of 1.
+
+   :Parameters:
+
+    * **v** -- The vector.
+
+   
+
+   .. note::
+
+      Throws an exception if the vector is zero.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_VectorDistance(krpc_connection_t connection, double * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+
+   The distance between two positions.
+
+   :Parameters:
+
+    * **u** -- The first position.
+    * **v** -- The second position.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_VectorAngle(krpc_connection_t connection, double * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+
+   The angle between two vectors, in radians, between 0 and pi.
+
+   :Parameters:
+
+    * **u** -- The first vector.
+    * **v** -- The second vector.
+
+   
+
+   .. note::
+
+      Throws an exception if either vector is zero.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_VectorLerp(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v, double t)
+
+   Linear interpolation between two vectors.
+
+   :Parameters:
+
+    * **u** -- The vector when t is 0.
+    * **v** -- The vector when t is 1.
+    * **t** -- The interpolation parameter.
+
+   
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_QuaternionMultiply(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_double_t * r)
+
+   The composition of two rotations: the rotation r followed by the
+   rotation q.
+
+   :Parameters:
+
+    * **q** -- The second rotation.
+    * **r** -- The first rotation.
+
+   
+
+   .. note::
+
+      Throws an exception if either quaternion is zero.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_QuaternionInverse(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_double_t * q)
+
+   The inverse of a rotation.
+
+   :Parameters:
+
+    * **q** -- The rotation.
+
+   
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_QuaternionRotateVector(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_t * v)
+
+   A vector rotated by a rotation.
+
+   :Parameters:
+
+    * **q** -- The rotation.
+    * **v** -- The vector.
+
+   
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_QuaternionFromAxisAngle(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * axis, double angle)
+
+   The rotation about an axis by an angle.
+
+   :Parameters:
+
+    * **axis** -- The axis of rotation.
+    * **angle** -- The angle of rotation, in radians.
+
+   
+
+   .. note::
+
+      Throws an exception if the axis is zero.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_QuaternionToAxisAngle(krpc_connection_t connection, krpc_StdLib_AxisAngle_t * returnValue, const krpc_tuple_double_double_double_double_t * q)
+
+   The axis and angle of a rotation.
+
+   :Parameters:
+
+    * **q** -- The rotation.
+
+   
+
+   .. note::
+
+      Throws an exception if the quaternion is zero.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_QuaternionFromToRotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
+
+   The shortest rotation that takes one direction onto another.
+
+   :Parameters:
+
+    * **u** -- The direction to rotate from.
+    * **v** -- The direction to rotate to.
+
+   
+
+   .. note::
+
+      Opposite directions give a half turn about an arbitrary perpendicular axis.
+      Throws an exception if either vector is zero.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_QuaternionLookRotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * forward, const krpc_tuple_double_double_double_t * up)
+
+   The rotation that takes the z axis onto a forward direction, and the y axis
+   toward an up direction.
+
+   :Parameters:
+
+    * **forward** -- The direction of the z axis.
+    * **up** -- The direction the y axis points toward.
+
+   
+
+   .. note::
+
+      The up direction need not be perpendicular to the forward direction. Throws an
+      exception if either vector is zero, or if they are parallel.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_QuaternionAngle(krpc_connection_t connection, double * returnValue, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_double_t * r)
+
+   The angle of the rotation that takes one rotation to another,
+   in radians, between 0 and pi.
+
+   :Parameters:
+
+    * **q** -- The first rotation.
+    * **r** -- The second rotation.
+
+   
+
+   .. note::
+
+      Throws an exception if either quaternion is zero.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_QuaternionSlerp(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_double_t * r, double t)
+
+   Spherical linear interpolation between two rotations.
+
+   :Parameters:
+
+    * **q** -- The rotation when t is 0.
+    * **r** -- The rotation when t is 1.
+    * **t** -- The interpolation parameter.
+
+   
+
+   .. note::
+
+      The parameter is not limited to the range 0 to 1, and a value outside it
+      extrapolates. Throws an exception if either quaternion is zero.
+
+
+
+
+.. function:: krpc_error_t krpc_StdLib_Print(krpc_connection_t connection, const char * message)
+
+   Writes a message to the game's log, for debugging.
+
+   :Parameters:
+
+    * **message** -- The message.
+
+   
+
+   .. note::
+
+      A function evaluated by a stream or an event prints on every update. The message is
+      written at the Info level, so a server log level of Warning or Error hides it.
+
+
+
+
+
+.. type:: krpc_StdLib_AxisAngle_t
+
+   A rotation as an axis and an angle.
+
+   .. note::
+
+      See :func:`krpc_StdLib_QuaternionToAxisAngle`.
+   .. member:: krpc_tuple_double_double_double_t axis
+
+      The axis of the rotation, as a unit vector, or zero for no rotation.
+
+   .. member:: double angle
+
+      The angle of the rotation, in radians between 0 and pi.
+
+
+.. type:: krpc_StdLib_ColorRGB_t
+
+   A color, as red, green and blue components between 0 and 1.
+
+
+   .. member:: float r
+
+      The red component.
+
+   .. member:: float g
+
+      The green component.
+
+   .. member:: float b
+
+      The blue component.
+
+
+.. type:: krpc_StdLib_ColorRGBA_t
+
+   A color, as red, green, blue and alpha components between 0 and 1.
+
+   .. note::
+
+      An alpha of 0 is fully transparent and 1 is fully opaque.
+   .. member:: float r
+
+      The red component.
+
+   .. member:: float g
+
+      The green component.
+
+   .. member:: float b
+
+      The blue component.
+
+   .. member:: float a
+
+      The alpha component.

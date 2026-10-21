@@ -7,10 +7,10 @@ KerbalAlarmClock
 
 
 This service provides functionality to interact with
-`Kerbal Alarm Clock <https://forum.kerbalspaceprogram.com/index.php?/topic/22809-13x-kerbal-alarm-clock-v3850-may-30/>`_.
+`Kerbal Alarm Clock <https://forum.kerbalspaceprogram.com/topic/22809-112x-kerbal-alarm-clock-v31300-april-10/>`_.
 
 
-.. function:: krpc_error_t krpc_KerbalAlarmClock_Available(krpc_connection_t connection, bool * result)
+.. function:: krpc_error_t krpc_KerbalAlarmClock_Available(krpc_connection_t connection, bool * returnValue)
 
    Whether Kerbal Alarm Clock is available.
 
@@ -19,7 +19,7 @@ This service provides functionality to interact with
 
 
 
-.. function:: krpc_error_t krpc_KerbalAlarmClock_Alarms(krpc_connection_t connection, krpc_list_object_t * result)
+.. function:: krpc_error_t krpc_KerbalAlarmClock_Alarms(krpc_connection_t connection, krpc_list_object_t * returnValue)
 
    A list of all the alarms.
 
@@ -28,7 +28,7 @@ This service provides functionality to interact with
 
 
 
-.. function:: krpc_error_t krpc_KerbalAlarmClock_AlarmWithName(krpc_connection_t connection, krpc_KerbalAlarmClock_Alarm_t * result, const char * name)
+.. function:: krpc_error_t krpc_KerbalAlarmClock_AlarmWithName(krpc_connection_t connection, krpc_KerbalAlarmClock_Alarm_t * returnValue, const char * name)
 
    Get the alarm with the given *name*, or ``nullptr``
    if no alarms have that name. If more than one alarm has the name,
@@ -43,7 +43,7 @@ This service provides functionality to interact with
 
 
 
-.. function:: krpc_error_t krpc_KerbalAlarmClock_AlarmsWithType(krpc_connection_t connection, krpc_list_object_t * result, krpc_KerbalAlarmClock_AlarmType_t type)
+.. function:: krpc_error_t krpc_KerbalAlarmClock_AlarmsWithType(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KerbalAlarmClock_AlarmType_t type)
 
    Get a list of alarms of the specified *type*.
 
@@ -56,7 +56,7 @@ This service provides functionality to interact with
 
 
 
-.. function:: krpc_error_t krpc_KerbalAlarmClock_CreateAlarm(krpc_connection_t connection, krpc_KerbalAlarmClock_Alarm_t * result, krpc_KerbalAlarmClock_AlarmType_t type, const char * name, double ut)
+.. function:: krpc_error_t krpc_KerbalAlarmClock_CreateAlarm(krpc_connection_t connection, krpc_KerbalAlarmClock_Alarm_t * returnValue, krpc_KerbalAlarmClock_AlarmType_t type, const char * name, double ut)
 
    Create a new alarm and return it.
 
