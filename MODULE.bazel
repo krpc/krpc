@@ -277,25 +277,25 @@ http_archive(
 http_archive(
     name = "csharp_system_io_ports",
     build_file_content = "exports_files(['lib/net10.0/System.IO.Ports.dll', 'runtimes/unix/lib/net10.0/System.IO.Ports.dll', 'runtimes/win/lib/net10.0/System.IO.Ports.dll'])",
-    sha256 = "16ba49c61240865d879f8000f31161fc9ea3827031a8f525100edf0d60f8a7ef",
+    sha256 = "d3ffe6417b0e1989fa60650f73be49bc76bba410f7a86f7dd5afd096521e1554",
     type = "zip",
-    url = "https://www.nuget.org/api/v2/package/System.IO.Ports/10.0.12",
+    url = "https://www.nuget.org/api/v2/package/System.IO.Ports/10.0.13",
 )
 
 http_archive(
     name = "csharp_system_io_ports_native_linux_x64",
     build_file_content = "exports_files(['runtimes/linux-x64/native/libSystem.IO.Ports.Native.so'])",
-    sha256 = "31c013d50dfeaa3aa2ab415b33c2d25018ccee68ebe4fe2721828a73ba756489",
+    sha256 = "24804052e6c74d3df354cb630dcf6860c7c9eb567c4f78d5d82437b000587b6e",
     type = "zip",
-    url = "https://www.nuget.org/api/v2/package/runtime.linux-x64.runtime.native.System.IO.Ports/10.0.12",
+    url = "https://www.nuget.org/api/v2/package/runtime.linux-x64.runtime.native.System.IO.Ports/10.0.13",
 )
 
 http_archive(
     name = "csharp_netanalyzers",
     build_file_content = "exports_files(['analyzers/dotnet/cs/Microsoft.CodeAnalysis.NetAnalyzers.dll', 'analyzers/dotnet/cs/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll'])",
-    sha256 = "5538974c6e8dfd0e2d860a195b338b7b36a8538419911b03e4513e6fb1ed6ba5",
+    sha256 = "2c96a39f96c00f12c1e5847c2c7ab061184c58887563e7f80aabb916ed43ce40",
     type = "zip",
-    url = "https://www.nuget.org/api/v2/package/Microsoft.CodeAnalysis.NetAnalyzers/10.0.401",
+    url = "https://www.nuget.org/api/v2/package/Microsoft.CodeAnalysis.NetAnalyzers/10.0.402",
 )
 
 http_archive(
@@ -475,9 +475,9 @@ http_archive(
 http_archive(
     name = "lua_argparse",
     build_file = "//tools/build/lua:argparse.BUILD",
-    sha256 = "d344e49404c3e7b3e7fa4fe6741c106f25909d9b24923cb08dcceda1f9754809",
-    strip_prefix = "argparse-0.7.1",
-    url = "https://github.com/luarocks/argparse/archive/refs/tags/0.7.1.tar.gz",
+    sha256 = "d2ae8066939420957bb6d580c6a6b8176c4f05419eca318e48d90a670fe2f59e",
+    strip_prefix = "argparse-0.7.2",
+    url = "https://github.com/luarocks/argparse/archive/refs/tags/0.7.2.tar.gz",
 )
 
 # ----------------------- Module Manager -------------------------------------------------
