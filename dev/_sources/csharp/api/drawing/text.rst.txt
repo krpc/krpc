@@ -59,7 +59,7 @@ Text
 
       :Game Scenes: Flight, Tracking Station, Editor Vab, Editor Sph
 
-   .. function:: static System.Collections.Generic.IList<string> AvailableFonts(IConnection connection, )
+   .. function:: static System.Collections.Generic.IList<string> AvailableFonts(IConnection connection)
 
       A list of all available fonts.
 

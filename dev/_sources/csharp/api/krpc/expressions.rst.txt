@@ -713,14 +713,14 @@ assembled and run.
          :meth:`Expression.BlockWithVariables`, or a parameter of an enclosing :meth:`Expression.Lambda`.
          A :meth:`Expression.Break` or :meth:`Expression.Continue` in the body applies to this loop.
 
-   .. function:: static Expression Break(IConnection connection, )
+   .. function:: static Expression Break(IConnection connection)
 
       A break statement, which ends the enclosing loop.
 
 
       :Game Scenes: All
 
-   .. function:: static Expression Continue(IConnection connection, )
+   .. function:: static Expression Continue(IConnection connection)
 
       A continue statement, which skips to the next iteration of the enclosing loop.
 
@@ -737,7 +737,7 @@ assembled and run.
 
       :Game Scenes: All
 
-   .. function:: static Expression ReturnNothing(IConnection connection, )
+   .. function:: static Expression ReturnNothing(IConnection connection)
 
       A return statement, which ends the enclosing function with no value.
 
@@ -1806,63 +1806,63 @@ assembled and run.
 
    The type of a value a procedure takes or returns.
 
-   .. function:: static Type Double(IConnection connection, )
+   .. function:: static Type Double(IConnection connection)
 
       A double precision floating point number type.
 
 
       :Game Scenes: All
 
-   .. function:: static Type Float(IConnection connection, )
+   .. function:: static Type Float(IConnection connection)
 
       A single precision floating point number type.
 
 
       :Game Scenes: All
 
-   .. function:: static Type Int(IConnection connection, )
+   .. function:: static Type Int(IConnection connection)
 
       A signed 32-bit integer type.
 
 
       :Game Scenes: All
 
-   .. function:: static Type Long(IConnection connection, )
+   .. function:: static Type Long(IConnection connection)
 
       A signed 64-bit integer type.
 
 
       :Game Scenes: All
 
-   .. function:: static Type UInt(IConnection connection, )
+   .. function:: static Type UInt(IConnection connection)
 
       An unsigned 32-bit integer type.
 
 
       :Game Scenes: All
 
-   .. function:: static Type ULong(IConnection connection, )
+   .. function:: static Type ULong(IConnection connection)
 
       An unsigned 64-bit integer type.
 
 
       :Game Scenes: All
 
-   .. function:: static Type Bool(IConnection connection, )
+   .. function:: static Type Bool(IConnection connection)
 
       A boolean type.
 
 
       :Game Scenes: All
 
-   .. function:: static Type String(IConnection connection, )
+   .. function:: static Type String(IConnection connection)
 
       A string type.
 
 
       :Game Scenes: All
 
-   .. function:: static Type Bytes(IConnection connection, )
+   .. function:: static Type Bytes(IConnection connection)
 
       A byte sequence type.
 

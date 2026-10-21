@@ -703,10 +703,10 @@
                 <article class="bd-article">
                   
   <section id="control">
-<h1>Control<a class="headerlink" href="#control" title="Link to this heading">#</a></h1>
+<span id="namespace-KRPC.Client.Services.SpaceCenter"></span><h1>Control<a class="headerlink" href="#control" title="Link to this heading">#</a></h1>
 <dl class="cs class">
 <dt class="sig sig-object cs" id="class-KRPC.Client.Services.SpaceCenter.Control">
-<span class="property"><span class="pre">class</span> </span><span class="sig-name descname"><span class="pre">Control</span></span><a class="headerlink" href="#class-KRPC.Client.Services.SpaceCenter.Control" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Control</span></span><a class="headerlink" href="#class-KRPC.Client.Services.SpaceCenter.Control" title="Link to this definition">#</a></dt>
 <dd><p>Used to manipulate the controls of a vessel. This includes adjusting the
 throttle, enabling/disabling systems such as SAS and RCS, or altering the
 direction in which the vessel is pointing.
@@ -734,7 +734,7 @@ passes on the way.</p>
 </div>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Source">
-<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.ControlSource" title="enum: KRPC.Client.Services.SpaceCenter.ControlSource"><span class="pre">ControlSource</span></a> <span class="sig-name descname"><span class="pre">Source</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Source" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.ControlSource" title="enum: KRPC.Client.Services.SpaceCenter.ControlSource"><span class="pre">ControlSource</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Source</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Source" title="Link to this definition">#</a></dt>
 <dd><p>The source of the vessels control, for example by a kerbal or a probe core.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -745,7 +745,7 @@ passes on the way.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.State">
-<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.ControlState" title="enum: KRPC.Client.Services.SpaceCenter.ControlState"><span class="pre">ControlState</span></a> <span class="sig-name descname"><span class="pre">State</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.State" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.ControlState" title="enum: KRPC.Client.Services.SpaceCenter.ControlState"><span class="pre">ControlState</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">State</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.State" title="Link to this definition">#</a></dt>
 <dd><p>The control state of the vessel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -756,7 +756,7 @@ passes on the way.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.SAS">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">SAS</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.SAS" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SAS</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.SAS" title="Link to this definition">#</a></dt>
 <dd><p>The state of SAS.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -773,7 +773,7 @@ auto-pilot holds SAS off for as long as it is flying the vessel.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.SASMode">
-<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.SASMode" title="enum: KRPC.Client.Services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">SASMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.SASMode" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.SASMode" title="enum: KRPC.Client.Services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SASMode</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.SASMode" title="Link to this definition">#</a></dt>
 <dd><p>The current <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Control.SASMode" title="property: KRPC.Client.Services.SpaceCenter.Control.SASMode"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Control.SASMode</span></code></a>.
 These modes are equivalent to the mode buttons to
 the left of the navball that appear when SAS is enabled.</p>
@@ -790,7 +790,7 @@ the left of the navball that appear when SAS is enabled.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.SpeedMode">
-<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.SpeedMode" title="enum: KRPC.Client.Services.SpaceCenter.SpeedMode"><span class="pre">SpeedMode</span></a> <span class="sig-name descname"><span class="pre">SpeedMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.SpeedMode" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.SpeedMode" title="enum: KRPC.Client.Services.SpaceCenter.SpeedMode"><span class="pre">SpeedMode</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SpeedMode</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.SpeedMode" title="Link to this definition">#</a></dt>
 <dd><p>The current <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Control.SpeedMode" title="property: KRPC.Client.Services.SpaceCenter.Control.SpeedMode"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Control.SpeedMode</span></code></a> of the navball.
 This is the mode displayed next to the speed at the top of the navball.</p>
 <dl class="field-list simple">
@@ -802,7 +802,7 @@ This is the mode displayed next to the speed at the top of the navball.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.EngineGimbals">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">EngineGimbals</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.EngineGimbals" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">EngineGimbals</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.EngineGimbals" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all gimballed engines on the vessel have gimbal enabled,
 and sets the gimbal enabled state of all gimballed engines.
 See <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Engine.GimbalLocked" title="property: KRPC.Client.Services.SpaceCenter.Engine.GimbalLocked"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Engine.GimbalLocked</span></code></a>.</p>
@@ -815,7 +815,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.ThrustReversers">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">ThrustReversers</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.ThrustReversers" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ThrustReversers</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.ThrustReversers" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all engines with a thrust reverser on the vessel have
 their thrust reverser engaged, and sets the thrust reverser state of all
 such engines.
@@ -829,7 +829,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.AeroSurfaces">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">AeroSurfaces</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.AeroSurfaces" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AeroSurfaces</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.AeroSurfaces" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
 and sets the pitch, yaw and roll enabled state of all control surfaces.
 See <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.ControlSurface.PitchEnabled" title="property: KRPC.Client.Services.SpaceCenter.ControlSurface.PitchEnabled"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">ControlSurface.PitchEnabled</span></code></a>,
@@ -844,7 +844,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.RCS">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">RCS</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.RCS" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">RCS</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.RCS" title="Link to this definition">#</a></dt>
 <dd><p>The state of RCS.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -861,7 +861,7 @@ setting this does nothing.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.ReactionWheels">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">ReactionWheels</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.ReactionWheels" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ReactionWheels</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.ReactionWheels" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all reactive wheels on the vessel are active,
 and sets the active state of all reaction wheels.
 See <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.ReactionWheel.Active" title="property: KRPC.Client.Services.SpaceCenter.ReactionWheel.Active"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">ReactionWheel.Active</span></code></a>.</p>
@@ -874,7 +874,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Gear">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">Gear</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Gear" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Gear</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Gear" title="Link to this definition">#</a></dt>
 <dd><p>The state of the landing gear/legs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -885,7 +885,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Legs">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">Legs</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Legs" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Legs</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Legs" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all landing legs on the vessel are deployed,
 and sets the deployment state of all landing legs.
 Does not include wheels (for example landing gear).
@@ -899,7 +899,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Wheels">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">Wheels</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Wheels" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Wheels</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Wheels" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all wheels on the vessel are deployed,
 and sets the deployment state of all wheels.
 Does not include landing legs.
@@ -913,7 +913,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Lights">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">Lights</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Lights" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Lights</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Lights" title="Link to this definition">#</a></dt>
 <dd><p>The state of the lights.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -929,7 +929,7 @@ kerbal to be the active vessel; otherwise setting this does nothing.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Brakes">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">Brakes</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Brakes" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Brakes</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Brakes" title="Link to this definition">#</a></dt>
 <dd><p>The state of the wheel brakes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -940,7 +940,7 @@ kerbal to be the active vessel; otherwise setting this does nothing.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Antennas">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">Antennas</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Antennas" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Antennas</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Antennas" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all antennas on the vessel are deployed,
 and sets the deployment state of all antennas.
 See <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Antenna.Deployed" title="property: KRPC.Client.Services.SpaceCenter.Antenna.Deployed"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Antenna.Deployed</span></code></a>.</p>
@@ -953,7 +953,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.CargoBays">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">CargoBays</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.CargoBays" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">CargoBays</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.CargoBays" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether any of the cargo bays on the vessel are open,
 and sets the open state of all cargo bays.
 See <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.CargoBay.Open" title="property: KRPC.Client.Services.SpaceCenter.CargoBay.Open"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">CargoBay.Open</span></code></a>.</p>
@@ -966,7 +966,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Intakes">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">Intakes</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Intakes" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Intakes</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Intakes" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all of the air intakes on the vessel are open,
 and sets the open state of all air intakes.
 See <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Intake.Open" title="property: KRPC.Client.Services.SpaceCenter.Intake.Open"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Intake.Open</span></code></a>.</p>
@@ -979,7 +979,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Parachutes">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">Parachutes</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Parachutes" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Parachutes</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Parachutes" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all parachutes on the vessel are deployed,
 and sets the deployment state of all parachutes.
 Cannot be set to <code class="docutils literal notranslate"><span class="pre">false</span></code>.
@@ -993,7 +993,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Radiators">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">Radiators</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Radiators" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Radiators</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Radiators" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all radiators on the vessel are deployed,
 and sets the deployment state of all radiators.
 See <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Radiator.Deployed" title="property: KRPC.Client.Services.SpaceCenter.Radiator.Deployed"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Radiator.Deployed</span></code></a>.</p>
@@ -1006,7 +1006,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.ResourceHarvesters">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">ResourceHarvesters</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.ResourceHarvesters" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ResourceHarvesters</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.ResourceHarvesters" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all of the resource harvesters on the vessel are deployed,
 and sets the deployment state of all resource harvesters.
 See <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.ResourceHarvester.Deployed" title="property: KRPC.Client.Services.SpaceCenter.ResourceHarvester.Deployed"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">ResourceHarvester.Deployed</span></code></a>.</p>
@@ -1019,7 +1019,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.ResourceHarvestersActive">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">ResourceHarvestersActive</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.ResourceHarvestersActive" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ResourceHarvestersActive</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.ResourceHarvestersActive" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether any of the resource harvesters on the vessel are active,
 and sets the active state of all resource harvesters.
 See <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.ResourceHarvester.Active" title="property: KRPC.Client.Services.SpaceCenter.ResourceHarvester.Active"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">ResourceHarvester.Active</span></code></a>.</p>
@@ -1032,7 +1032,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.SolarPanels">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">SolarPanels</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.SolarPanels" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SolarPanels</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.SolarPanels" title="Link to this definition">#</a></dt>
 <dd><p>Returns whether all solar panels on the vessel are deployed,
 and sets the deployment state of all solar panels.
 See <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.SolarPanel.Deployed" title="property: KRPC.Client.Services.SpaceCenter.SolarPanel.Deployed"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">SolarPanel.Deployed</span></code></a>.</p>
@@ -1045,7 +1045,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Abort">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">Abort</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Abort" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Abort</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Abort" title="Link to this definition">#</a></dt>
 <dd><p>The state of the abort action group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1056,7 +1056,7 @@ See <a class="reference internal" href="parts.html#property-KRPC.Client.Services
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Throttle">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Throttle</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Throttle" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Throttle</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Throttle" title="Link to this definition">#</a></dt>
 <dd><p>The state of the throttle. A value between 0 and 1.
 Unlike the other control inputs, the throttle is not zeroed when the
 clients that set it disconnect.</p>
@@ -1076,7 +1076,7 @@ a set returns the previously applied value rather than the value just set.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.InputMode">
-<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.ControlInputMode" title="enum: KRPC.Client.Services.SpaceCenter.ControlInputMode"><span class="pre">ControlInputMode</span></a> <span class="sig-name descname"><span class="pre">InputMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.InputMode" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.ControlInputMode" title="enum: KRPC.Client.Services.SpaceCenter.ControlInputMode"><span class="pre">ControlInputMode</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">InputMode</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.InputMode" title="Link to this definition">#</a></dt>
 <dd><p>Sets the behavior of the pitch, yaw, roll and translation control inputs.
 When set to additive, these inputs are added to the vessels current inputs.
 This mode is the default.
@@ -1092,7 +1092,7 @@ they are set.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Pitch">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Pitch</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Pitch" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Pitch</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Pitch" title="Link to this definition">#</a></dt>
 <dd><p>The state of the pitch control.
 A value between -1 and 1.
 Equivalent to the w and s keys.</p>
@@ -1112,7 +1112,7 @@ a set returns the previously applied value rather than the value just set.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Yaw">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Yaw</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Yaw" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Yaw</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Yaw" title="Link to this definition">#</a></dt>
 <dd><p>The state of the yaw control.
 A value between -1 and 1.
 Equivalent to the a and d keys.</p>
@@ -1132,7 +1132,7 @@ a set returns the previously applied value rather than the value just set.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Roll">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Roll</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Roll" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Roll</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Roll" title="Link to this definition">#</a></dt>
 <dd><p>The state of the roll control.
 A value between -1 and 1.
 Equivalent to the q and e keys.</p>
@@ -1152,7 +1152,7 @@ a set returns the previously applied value rather than the value just set.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.PitchTrim">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">PitchTrim</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.PitchTrim" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">PitchTrim</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.PitchTrim" title="Link to this definition">#</a></dt>
 <dd><p>The state of the pitch trim.
 A value between -1 and 1.
 Equivalent to the Alt+W and Alt+S keys.
@@ -1169,7 +1169,7 @@ when clients disconnect.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.YawTrim">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">YawTrim</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.YawTrim" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">YawTrim</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.YawTrim" title="Link to this definition">#</a></dt>
 <dd><p>The state of the yaw trim.
 A value between -1 and 1.
 Equivalent to the Alt+A and Alt+D keys.
@@ -1186,7 +1186,7 @@ when clients disconnect.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.RollTrim">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">RollTrim</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.RollTrim" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">RollTrim</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.RollTrim" title="Link to this definition">#</a></dt>
 <dd><p>The state of the roll trim.
 A value between -1 and 1.
 Equivalent to the Alt+Q and Alt+E keys.
@@ -1203,7 +1203,7 @@ when clients disconnect.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.PrecisionMode">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">PrecisionMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.PrecisionMode" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">PrecisionMode</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.PrecisionMode" title="Link to this definition">#</a></dt>
 <dd><p>Whether precision control mode is enabled.
 Equivalent to the Caps Lock key.
 This is a game setting rather than a vessel setting,
@@ -1224,7 +1224,7 @@ driven by <a class="reference internal" href="parts.html#property-KRPC.Client.Se
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Forward">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Forward</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Forward" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Forward</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Forward" title="Link to this definition">#</a></dt>
 <dd><p>The state of the forward translational control.
 A value between -1 and 1.
 Equivalent to the h and n keys.</p>
@@ -1244,7 +1244,7 @@ a set returns the previously applied value rather than the value just set.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Up">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Up</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Up" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Up</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Up" title="Link to this definition">#</a></dt>
 <dd><p>The state of the up translational control.
 A value between -1 and 1.
 Equivalent to the i and k keys.</p>
@@ -1264,7 +1264,7 @@ a set returns the previously applied value rather than the value just set.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Right">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">Right</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Right" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Right</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Right" title="Link to this definition">#</a></dt>
 <dd><p>The state of the right translational control.
 A value between -1 and 1.
 Equivalent to the j and l keys.</p>
@@ -1284,7 +1284,7 @@ a set returns the previously applied value rather than the value just set.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.WheelThrottle">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">WheelThrottle</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.WheelThrottle" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">WheelThrottle</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.WheelThrottle" title="Link to this definition">#</a></dt>
 <dd><p>The state of the wheel throttle.
 A value between -1 and 1.
 A value of 1 rotates the wheels forwards, a value of -1 rotates
@@ -1305,7 +1305,7 @@ a set returns the previously applied value rather than the value just set.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.WheelSteering">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">WheelSteering</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.WheelSteering" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">WheelSteering</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.WheelSteering" title="Link to this definition">#</a></dt>
 <dd><p>The state of the wheel steering.
 A value between -1 and 1.
 A value of 1 steers to the left, and a value of -1 steers to the right.</p>
@@ -1325,7 +1325,7 @@ a set returns the previously applied value rather than the value just set.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.CustomAxis01">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">CustomAxis01</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.CustomAxis01" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">CustomAxis01</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.CustomAxis01" title="Link to this definition">#</a></dt>
 <dd><p>The state of CustomAxis01.
 A value between -1 and 1.</p>
 <dl class="field-list simple">
@@ -1337,7 +1337,7 @@ A value between -1 and 1.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.CustomAxis02">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">CustomAxis02</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.CustomAxis02" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">CustomAxis02</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.CustomAxis02" title="Link to this definition">#</a></dt>
 <dd><p>The state of CustomAxis02.
 A value between -1 and 1.</p>
 <dl class="field-list simple">
@@ -1349,7 +1349,7 @@ A value between -1 and 1.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.CustomAxis03">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">CustomAxis03</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.CustomAxis03" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">CustomAxis03</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.CustomAxis03" title="Link to this definition">#</a></dt>
 <dd><p>The state of CustomAxis03.
 A value between -1 and 1.</p>
 <dl class="field-list simple">
@@ -1361,7 +1361,7 @@ A value between -1 and 1.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.CustomAxis04">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <span class="sig-name descname"><span class="pre">CustomAxis04</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.CustomAxis04" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">CustomAxis04</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.CustomAxis04" title="Link to this definition">#</a></dt>
 <dd><p>The state of CustomAxis04.
 A value between -1 and 1.</p>
 <dl class="field-list simple">
@@ -1373,7 +1373,7 @@ A value between -1 and 1.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.CurrentStage">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a> <span class="sig-name descname"><span class="pre">CurrentStage</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.CurrentStage" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">CurrentStage</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.CurrentStage" title="Link to this definition">#</a></dt>
 <dd><p>The current stage of the vessel. Corresponds to the stage number in
 the in-game UI.</p>
 <dl class="field-list simple">
@@ -1385,7 +1385,7 @@ the in-game UI.</p>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Control.ActivateNextStage">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="vessel.html#class-KRPC.Client.Services.SpaceCenter.Vessel" title="class: KRPC.Client.Services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">ActivateNextStage</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.ActivateNextStage" title="Link to this definition">#</a></dt>
+<span id="function-KRPC.Client.Services.SpaceCenter.Control.ActivateNextStage()"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="vessel.html#class-KRPC.Client.Services.SpaceCenter.Vessel" title="class: KRPC.Client.Services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">ActivateNextStage</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.ActivateNextStage" title="Link to this definition">#</a></dt>
 <dd><p>Activates the next stage. Equivalent to pressing the space bar in-game.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -1406,7 +1406,7 @@ Throws an exception if staging is locked.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.StageLock">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">StageLock</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.StageLock" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">StageLock</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.StageLock" title="Link to this definition">#</a></dt>
 <dd><p>Whether staging is locked on the vessel.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1421,7 +1421,7 @@ Throws an exception if staging is locked.</p>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Control.GetActionGroup">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <span class="sig-name descname"><span class="pre">GetActionGroup</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a> <em><span class="pre">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.GetActionGroup" title="Link to this definition">#</a></dt>
+<span id="function-KRPC.Client.Services.SpaceCenter.Control.GetActionGroup(uint)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">GetActionGroup</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">group</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.GetActionGroup" title="Link to this definition">#</a></dt>
 <dd><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the given action group is enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1437,7 +1437,7 @@ Throws an exception if staging is locked.</p>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Control.SetActionGroup">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">SetActionGroup</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a> <em><span class="pre">group</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a> <em><span class="pre">state</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.SetActionGroup" title="Link to this definition">#</a></dt>
+<span id="function-KRPC.Client.Services.SpaceCenter.Control.SetActionGroup(uint,bool)"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">SetActionGroup</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">group</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="n"><span class="pre">state</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.SetActionGroup" title="Link to this definition">#</a></dt>
 <dd><p>Sets the state of the given action group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1453,7 +1453,7 @@ Throws an exception if staging is locked.</p>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Control.ToggleActionGroup">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">ToggleActionGroup</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a> <em><span class="pre">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.ToggleActionGroup" title="Link to this definition">#</a></dt>
+<span id="function-KRPC.Client.Services.SpaceCenter.Control.ToggleActionGroup(uint)"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">ToggleActionGroup</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">group</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.ToggleActionGroup" title="Link to this definition">#</a></dt>
 <dd><p>Toggles the state of the given action group.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1469,7 +1469,7 @@ Throws an exception if staging is locked.</p>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Control.GetActionGroupActions">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#struct-KRPC.Client.Services.SpaceCenter.ActionGroupAction" title="struct: KRPC.Client.Services.SpaceCenter.ActionGroupAction"><span class="pre">ActionGroupAction</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">GetActionGroupActions</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a> <em><span class="pre">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.GetActionGroupActions" title="Link to this definition">#</a></dt>
+<span id="function-KRPC.Client.Services.SpaceCenter.Control.GetActionGroupActions(uint)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#struct-KRPC.Client.Services.SpaceCenter.ActionGroupAction" title="struct: KRPC.Client.Services.SpaceCenter.ActionGroupAction"><span class="pre">ActionGroupAction</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetActionGroupActions</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">group</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.GetActionGroupActions" title="Link to this definition">#</a></dt>
 <dd><p>Returns a list of all the part actions that are assigned to the given action group.
 Each entry identifies the part, the part module, and the action’s name and identifier.
 Returns an empty list if no actions are assigned to the group.</p>
@@ -1493,7 +1493,7 @@ the mod instead, so that actions assigned to its additional groups are included.
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Control.AddNode">
-<a class="reference internal" href="node.html#class-KRPC.Client.Services.SpaceCenter.Node" title="class: KRPC.Client.Services.SpaceCenter.Node"><span class="pre">Node</span></a> <span class="sig-name descname"><span class="pre">AddNode</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a> <em><span class="pre">ut</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">prograde</span></em><em> <span class="pre">=</span> <span class="pre">0.0f</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">normal</span></em><em> <span class="pre">=</span> <span class="pre">0.0f</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a> <em><span class="pre">radial</span></em><em> <span class="pre">=</span> <span class="pre">0.0f</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.AddNode" title="Link to this definition">#</a></dt>
+<span id="function-KRPC.Client.Services.SpaceCenter.Control.AddNode(double,float,float,float)"></span><a class="reference internal" href="node.html#class-KRPC.Client.Services.SpaceCenter.Node" title="class: KRPC.Client.Services.SpaceCenter.Node"><span class="pre">Node</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AddNode</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="n"><span class="pre">ut</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="n"><span class="pre">prograde</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0f</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="n"><span class="pre">normal</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0f</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="n"><span class="pre">radial</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0f</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.AddNode" title="Link to this definition">#</a></dt>
 <dd><p>Creates a maneuver node at the given universal time, and returns a
 <a class="reference internal" href="node.html#class-KRPC.Client.Services.SpaceCenter.Node" title="class: KRPC.Client.Services.SpaceCenter.Node"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Node</span></code></a> object that can be used to modify it.
 Optionally sets the magnitude of the delta-v for the maneuver node
@@ -1515,7 +1515,7 @@ in the prograde, normal and radial directions.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Nodes">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="node.html#class-KRPC.Client.Services.SpaceCenter.Node" title="class: KRPC.Client.Services.SpaceCenter.Node"><span class="pre">Node</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Nodes</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Nodes" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="node.html#class-KRPC.Client.Services.SpaceCenter.Node" title="class: KRPC.Client.Services.SpaceCenter.Node"><span class="pre">Node</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Nodes</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Nodes" title="Link to this definition">#</a></dt>
 <dd><p>Returns a list of all existing maneuver nodes, ordered by time from first to last.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1526,7 +1526,7 @@ in the prograde, normal and radial directions.</p>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Control.RemoveNodes">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">RemoveNodes</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.RemoveNodes" title="Link to this definition">#</a></dt>
+<span id="function-KRPC.Client.Services.SpaceCenter.Control.RemoveNodes()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">RemoveNodes</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.RemoveNodes" title="Link to this definition">#</a></dt>
 <dd><p>Remove all maneuver nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -1537,7 +1537,7 @@ in the prograde, normal and radial directions.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Airlock">
-<a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Part" title="class: KRPC.Client.Services.SpaceCenter.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">Airlock</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Airlock" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Part" title="class: KRPC.Client.Services.SpaceCenter.Part"><span class="pre">Part</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Airlock</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Airlock" title="Link to this definition">#</a></dt>
 <dd><p>The part whose hatch the kerbal is standing at, and so the one
 <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Control.Board" title="function: KRPC.Client.Services.SpaceCenter.Control.Board"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Control.Board</span></code></a> would put it in. <code class="docutils literal notranslate"><span class="pre">null</span></code> if it is not at a hatch or the
 vessel is not a kerbal on EVA.</p>
@@ -1550,7 +1550,7 @@ vessel is not a kerbal on EVA.</p>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Control.Board">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Board</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.Board" title="Link to this definition">#</a></dt>
+<span id="function-KRPC.Client.Services.SpaceCenter.Control.Board()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Board</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.Board" title="Link to this definition">#</a></dt>
 <dd><p>Climb into the part whose hatch the kerbal is standing at, ending the EVA. The
 kerbal takes a seat in that part and its own vessel ceases to exist. If the
 kerbal was the active vessel, the game switches to the vessel it boarded.</p>
@@ -1572,7 +1572,7 @@ with it in that case.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Control.Ladder">
-<a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Part" title="class: KRPC.Client.Services.SpaceCenter.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">Ladder</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Ladder" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Part" title="class: KRPC.Client.Services.SpaceCenter.Part"><span class="pre">Part</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Ladder</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Control.Ladder" title="Link to this definition">#</a></dt>
 <dd><p>The ladder the kerbal is holding on to, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it is not holding one
 or the vessel is not a kerbal on EVA.</p>
 <dl class="field-list simple">
@@ -1584,7 +1584,7 @@ or the vessel is not a kerbal on EVA.</p>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Control.GrabLadder">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">GrabLadder</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.GrabLadder" title="Link to this definition">#</a></dt>
+<span id="function-KRPC.Client.Services.SpaceCenter.Control.GrabLadder()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">GrabLadder</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.GrabLadder" title="Link to this definition">#</a></dt>
 <dd><p>Take hold of the ladder the kerbal is standing at, as pressing the grab key
 in-game does. A kerbal can only take hold of a ladder it is already alongside;
 it does not walk to one. <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Control.Ladder" title="property: KRPC.Client.Services.SpaceCenter.Control.Ladder"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Control.Ladder</span></code></a> reports the one it ends up
@@ -1603,7 +1603,7 @@ within reach, or if the kerbal is doing something it cannot grab a ladder from.<
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.Control.ReleaseLadder">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">ReleaseLadder</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.ReleaseLadder" title="Link to this definition">#</a></dt>
+<span id="function-KRPC.Client.Services.SpaceCenter.Control.ReleaseLadder()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">ReleaseLadder</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.Control.ReleaseLadder" title="Link to this definition">#</a></dt>
 <dd><p>Let go of the ladder the kerbal is holding, as pressing the jump key in-game
 does. Does nothing if it is not holding one.</p>
 <dl class="field-list simple">
@@ -1621,24 +1621,24 @@ does. Does nothing if it is not holding one.</p>
 
 <dl class="cs struct">
 <dt class="sig sig-object cs" id="struct-KRPC.Client.Services.SpaceCenter.ActionGroupAction">
-<span class="property"><span class="pre">struct</span> </span><span class="sig-name descname"><span class="pre">ActionGroupAction</span></span><a class="headerlink" href="#struct-KRPC.Client.Services.SpaceCenter.ActionGroupAction" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">struct</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ActionGroupAction</span></span><a class="headerlink" href="#struct-KRPC.Client.Services.SpaceCenter.ActionGroupAction" title="Link to this definition">#</a></dt>
 <dd><p>An action, belonging to a part module, that is assigned to an action group.
 Obtained by calling <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.Control.GetActionGroupActions" title="function: KRPC.Client.Services.SpaceCenter.Control.GetActionGroupActions"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Control.GetActionGroupActions</span></code></a>.</p>
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.ActionGroupAction.ActionGroupAction">
-<span class="sig-name descname"><span class="pre">ActionGroupAction</span></span> <span class="sig-paren">(</span><a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Part" title="class: KRPC.Client.Services.SpaceCenter.Part"><span class="pre">Part</span></a> <em><span class="pre">part</span></em>, <a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Module" title="class: KRPC.Client.Services.SpaceCenter.Module"><span class="pre">Module</span></a> <em><span class="pre">module</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">name</span></em>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <em><span class="pre">id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.ActionGroupAction.ActionGroupAction" title="Link to this definition">#</a></dt>
+<span id="function-KRPC.Client.Services.SpaceCenter.ActionGroupAction.ActionGroupAction(Part,Module,string,string)"></span><span class="sig-name descname"><span class="pre">ActionGroupAction</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Part" title="class: KRPC.Client.Services.SpaceCenter.Part"><span class="pre">Part</span></a><span class="w"> </span><span class="n"><span class="pre">part</span></span>, <a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Module" title="class: KRPC.Client.Services.SpaceCenter.Module"><span class="pre">Module</span></a><span class="w"> </span><span class="n"><span class="pre">module</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.ActionGroupAction.ActionGroupAction" title="Link to this definition">#</a></dt>
 <dd><p>Construct a ActionGroupAction from the values of its fields.</p>
 </dd></dl>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ActionGroupAction.Part">
-<a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Part" title="class: KRPC.Client.Services.SpaceCenter.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">Part</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ActionGroupAction.Part" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Part" title="class: KRPC.Client.Services.SpaceCenter.Part"><span class="pre">Part</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Part</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ActionGroupAction.Part" title="Link to this definition">#</a></dt>
 <dd><p>The part that the action acts on.</p>
 </dd></dl>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ActionGroupAction.Module">
-<a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Module" title="class: KRPC.Client.Services.SpaceCenter.Module"><span class="pre">Module</span></a> <span class="sig-name descname"><span class="pre">Module</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ActionGroupAction.Module" title="Link to this definition">#</a></dt>
+<a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Module" title="class: KRPC.Client.Services.SpaceCenter.Module"><span class="pre">Module</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Module</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ActionGroupAction.Module" title="Link to this definition">#</a></dt>
 <dd><p>The part module that the action belongs to. Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> for a
 part-level action that is not associated with a module. This only occurs when
 the Extended Action Groups mod is installed, as it can assign actions defined
@@ -1647,13 +1647,13 @@ directly on a part, rather than on one of its modules, to an action group.</p>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ActionGroupAction.Name">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <span class="sig-name descname"><span class="pre">Name</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ActionGroupAction.Name" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Name</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ActionGroupAction.Name" title="Link to this definition">#</a></dt>
 <dd><p>The human-readable name of the action, as shown in the action group editor.</p>
 </dd></dl>
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ActionGroupAction.Id">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a> <span class="sig-name descname"><span class="pre">Id</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ActionGroupAction.Id" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Id</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ActionGroupAction.Id" title="Link to this definition">#</a></dt>
 <dd><p>The non-localized identifier for the action.</p>
 </dd></dl>
 
@@ -1661,7 +1661,7 @@ directly on a part, rather than on one of its modules, to an action group.</p>
 
 <dl class="cs enum">
 <dt class="sig sig-object cs" id="enum-KRPC.Client.Services.SpaceCenter.ControlState">
-<span class="property"><span class="pre">enum</span> </span><span class="sig-name descname"><span class="pre">ControlState</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.ControlState" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">enum</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ControlState</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.ControlState" title="Link to this definition">#</a></dt>
 <dd><p>The control state of a vessel.
 See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Control.State" title="property: KRPC.Client.Services.SpaceCenter.Control.State"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Control.State</span></code></a>.</p>
 <dl class="cs enumerator">
@@ -1686,7 +1686,7 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 
 <dl class="cs enum">
 <dt class="sig sig-object cs" id="enum-KRPC.Client.Services.SpaceCenter.ControlSource">
-<span class="property"><span class="pre">enum</span> </span><span class="sig-name descname"><span class="pre">ControlSource</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.ControlSource" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">enum</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ControlSource</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.ControlSource" title="Link to this definition">#</a></dt>
 <dd><p>The control source of a vessel.
 See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Control.Source" title="property: KRPC.Client.Services.SpaceCenter.Control.Source"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Control.Source</span></code></a>.</p>
 <dl class="cs enumerator">
@@ -1711,7 +1711,7 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 
 <dl class="cs enum">
 <dt class="sig sig-object cs" id="enum-KRPC.Client.Services.SpaceCenter.SASMode">
-<span class="property"><span class="pre">enum</span> </span><span class="sig-name descname"><span class="pre">SASMode</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.SASMode" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">enum</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">SASMode</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.SASMode" title="Link to this definition">#</a></dt>
 <dd><p>The behavior of the SAS auto-pilot. See <a class="reference internal" href="auto-pilot.html#property-KRPC.Client.Services.SpaceCenter.AutoPilot.SASMode" title="property: KRPC.Client.Services.SpaceCenter.AutoPilot.SASMode"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">AutoPilot.SASMode</span></code></a>.</p>
 <dl class="cs enumerator">
 <dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.SpaceCenter.SASMode.StabilityAssist">
@@ -1777,7 +1777,7 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 
 <dl class="cs enum">
 <dt class="sig sig-object cs" id="enum-KRPC.Client.Services.SpaceCenter.SpeedMode">
-<span class="property"><span class="pre">enum</span> </span><span class="sig-name descname"><span class="pre">SpeedMode</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.SpeedMode" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">enum</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">SpeedMode</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.SpeedMode" title="Link to this definition">#</a></dt>
 <dd><p>The mode of the speed reported in the navball.
 See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Control.SpeedMode" title="property: KRPC.Client.Services.SpaceCenter.Control.SpeedMode"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Control.SpeedMode</span></code></a>.</p>
 <dl class="cs enumerator">
@@ -1802,7 +1802,7 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 
 <dl class="cs enum">
 <dt class="sig sig-object cs" id="enum-KRPC.Client.Services.SpaceCenter.ControlInputMode">
-<span class="property"><span class="pre">enum</span> </span><span class="sig-name descname"><span class="pre">ControlInputMode</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.ControlInputMode" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">enum</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ControlInputMode</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.ControlInputMode" title="Link to this definition">#</a></dt>
 <dd><p>See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Control.InputMode" title="property: KRPC.Client.Services.SpaceCenter.Control.InputMode"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Control.InputMode</span></code></a>.</p>
 <dl class="cs enumerator">
 <dt class="sig sig-object cs" id="enumerator-KRPC.Client.Services.SpaceCenter.ControlInputMode.Additive">
