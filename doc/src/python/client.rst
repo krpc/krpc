@@ -506,6 +506,14 @@ Client API Reference
                            support.
    :param bool use_pregenerated_stubs: As for :func:`krpc.connect`.
 
+.. function:: krpc.get_object_id(obj)
+
+   The identifier of a remote object on the server, e.g. to pass to
+   :meth:`KRPC.Expression.constant_object`. Raises ``ValueError`` if the object is ``None``.
+
+   :param obj: The remote object.
+   :rtype: int
+
 .. class:: krpc.client.Client
 
    This class provides the interface for communicating with the server. It is dynamically populated
