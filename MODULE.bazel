@@ -475,9 +475,9 @@ http_archive(
 http_archive(
     name = "lua_argparse",
     build_file = "//tools/build/lua:argparse.BUILD",
-    sha256 = "d344e49404c3e7b3e7fa4fe6741c106f25909d9b24923cb08dcceda1f9754809",
-    strip_prefix = "argparse-0.7.1",
-    url = "https://github.com/luarocks/argparse/archive/refs/tags/0.7.1.tar.gz",
+    sha256 = "d2ae8066939420957bb6d580c6a6b8176c4f05419eca318e48d90a670fe2f59e",
+    strip_prefix = "argparse-0.7.2",
+    url = "https://github.com/luarocks/argparse/archive/refs/tags/0.7.2.tar.gz",
 )
 
 # ----------------------- Module Manager -------------------------------------------------
