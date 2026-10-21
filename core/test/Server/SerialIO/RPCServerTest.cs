@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using Google.Protobuf;
 using KRPC.Server;
 using KRPC.Server.SerialIO;
 using KRPC.Server.ProtocolBuffers;
@@ -71,6 +72,42 @@ namespace KRPC.Test.Server.SerialIO
 
             TestingTools.CheckConnectionResponse (responseStream.ToArray (), 75, Status.WrongType,
                 "Connection request was for a stream server, but this is an rpc server.", 0);
+        }
+
+        [Test]
+        public void NoConnectionRequest ()
+        {
+            byte[] connectionMessage;
+            using (var buffer = new MemoryStream ()) {
+                var codedStream = new CodedOutputStream (buffer, true);
+                codedStream.WriteMessage (new KRPC.Schema.KRPC.MultiplexedRequest ());
+                codedStream.Flush ();
+                connectionMessage = buffer.ToArray ();
+            }
+
+            var responseStream = new MemoryStream ();
+            var stream = new TestStream (new MemoryStream (connectionMessage), responseStream);
+
+            // Create mock byte server and client
+            var mockByteServer = new Mock<IServer<byte,byte>> ();
+            var byteServer = mockByteServer.Object;
+            var mockByteClient = new Mock<IClient<byte,byte>> ();
+            mockByteClient.Setup (x => x.Stream).Returns (stream);
+            var byteClient = mockByteClient.Object;
+
+            var server = new KRPC.Server.SerialIO.RPCServer (byteServer);
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
+            server.Start ();
+
+            // Fire a client connection event
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
+
+            Assert.IsFalse (eventArgs.Request.ShouldAllow);
+            Assert.IsTrue (eventArgs.Request.ShouldDeny);
+
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 41, Status.MalformedMessage,
+                "Expected a ConnectionRequest message", 0);
         }
 
         [Test]
