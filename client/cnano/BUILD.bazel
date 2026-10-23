@@ -5,7 +5,12 @@ load("//tools/build:cog.bzl", "cog_test")
 load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:nanopb.bzl", "protobuf_nanopb")
-load("//tools/krpctools:clientgen.bzl", "clientgen_cnano")
+load("//tools/krpctools:clientgen.bzl", "clientgen_services")
+
+services = clientgen_services(
+    "cnano",
+    outs = {"TestService": "test/services/test_service.h"},
+)
 
 name = "krpc-cnano-%s" % version
 
@@ -24,22 +29,11 @@ pkg_zip(
         "src/krpc.options",
         ":cmake",
         ":protobuf",
-        ":services-debug",
-        ":services-dockingcamera",
-        ":services-drawing",
-        ":services-infernalrobotics",
-        ":services-kerbalalarmclock",
-        ":services-krpc",
-        ":services-lidar",
-        ":services-remotetech",
-        ":services-spacecenter",
-        ":services-stdlib",
-        ":services-ui",
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:version",
         "//protobuf:krpc.proto",
-    ],
+    ] + services,
     path_map = {
         "client/cnano/": "%s/" % name,
         "client/cnano/src/krpc.options": "%s/protobuf/krpc.options" % name,
@@ -58,108 +52,9 @@ genrule(
     cmd = "sed 's/%VERSION%/" + cmake_version + '/g\' "$<" > "$@"',
 )
 
-clientgen_cnano(
-    name = "services-krpc",
-    defs = "//core:ServiceDefinitions",
-    service = "KRPC",
-)
-
-clientgen_cnano(
-    name = "services-spacecenter",
-    defs = "//service/SpaceCenter:ServiceDefinitions",
-    service = "SpaceCenter",
-    deps = [":services-stdlib"],
-)
-
-clientgen_cnano(
-    name = "services-drawing",
-    defs = "//service/Drawing:ServiceDefinitions",
-    service = "Drawing",
-    deps = [
-        ":services-spacecenter",
-        ":services-stdlib",
-        ":services-ui",
-    ],
-)
-
-clientgen_cnano(
-    name = "services-infernalrobotics",
-    defs = "//service/InfernalRobotics:ServiceDefinitions",
-    service = "InfernalRobotics",
-    deps = [":services-spacecenter"],
-)
-
-clientgen_cnano(
-    name = "services-kerbalalarmclock",
-    defs = "//service/KerbalAlarmClock:ServiceDefinitions",
-    service = "KerbalAlarmClock",
-    deps = [":services-spacecenter"],
-)
-
-clientgen_cnano(
-    name = "services-remotetech",
-    defs = "//service/RemoteTech:ServiceDefinitions",
-    service = "RemoteTech",
-    deps = [":services-spacecenter"],
-)
-
-clientgen_cnano(
-    name = "services-ui",
-    defs = "//service/UI:ServiceDefinitions",
-    service = "UI",
-    deps = [":services-stdlib"],
-)
-
-clientgen_cnano(
-    name = "services-stdlib",
-    defs = "//core:StdLibServiceDefinitions",
-    service = "StdLib",
-)
-
-clientgen_cnano(
-    name = "services-lidar",
-    defs = "//service/LiDAR:ServiceDefinitions",
-    service = "LIDAR",
-    deps = [":services-spacecenter"],
-)
-
-clientgen_cnano(
-    name = "services-dockingcamera",
-    defs = "//service/DockingCamera:ServiceDefinitions",
-    service = "DockingCamera",
-    deps = [":services-spacecenter"],
-)
-
-clientgen_cnano(
-    name = "services-debug",
-    defs = "//service/Debug:ServiceDefinitions",
-    service = "Debug",
-    deps = [":services-spacecenter"],
-)
-
-clientgen_cnano(
-    name = "services-test-service",
-    out = "test/services/test_service.h",
-    defs = "//tools/TestServer:ServiceDefinitions",
-    service = "TestService",
-    deps = [":services-krpc"],
-)
-
 srcs = glob(["src/**/*.c"])
 
-hdrs = glob(["include/**/*.h"]) + [
-    ":services-krpc",
-    ":services-spacecenter",
-    ":services-drawing",
-    ":services-infernalrobotics",
-    ":services-kerbalalarmclock",
-    ":services-remotetech",
-    ":services-stdlib",
-    ":services-ui",
-    ":services-lidar",
-    ":services-debug",
-    ":services-dockingcamera",
-]
+hdrs = glob(["include/**/*.h"]) + services
 
 cc_library(
     name = "krpc_cnano",
@@ -259,7 +154,7 @@ cc_test(
         "test/test_encoder.cpp",
         "test/test_utils.cpp",
         "test/testing_tools.hpp",
-        ":services-test-service",
+        ":services-testservice",
     ],
     includes = ["test"],
     deps = [
@@ -381,7 +276,7 @@ client_test(
 client_test_srcs = [
     "test/server_test.hpp",
     "test/test_client.cpp",
-    ":services-test-service",
+    ":services-testservice",
 ]
 
 cc_binary(
@@ -427,7 +322,7 @@ cc_binary(
     name = "benchmark",
     srcs = [
         "benchmark/benchmark.c",
-        ":services-test-service",
+        ":services-testservice",
     ],
     includes = ["test"],
     visibility = ["//tools/benchmarks:__pkg__"],
@@ -438,7 +333,7 @@ cc_binary(
     name = "benchmark-localsocket",
     srcs = [
         "benchmark/benchmark.c",
-        ":services-test-service",
+        ":services-testservice",
     ],
     includes = ["test"],
     visibility = ["//tools/benchmarks:__pkg__"],

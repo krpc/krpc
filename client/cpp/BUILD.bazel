@@ -4,9 +4,14 @@ load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:cpp.bzl", "protobuf_cpp")
-load("//tools/krpctools:clientgen.bzl", "clientgen_cpp")
+load("//tools/krpctools:clientgen.bzl", "clientgen_services")
 
 exports_files(["CHANGELOG.md"])
+
+services = clientgen_services(
+    "cpp",
+    outs = {"TestService": "test/services/test_service.hpp"},
+)
 
 name = "krpc-cpp-%s" % version
 
@@ -24,22 +29,11 @@ pkg_zip(
         "LICENSE",
         "README.txt",
         ":cmake",
-        ":services-debug",
-        ":services-dockingcamera",
-        ":services-drawing",
-        ":services-infernalrobotics",
-        ":services-kerbalalarmclock",
-        ":services-krpc",
-        ":services-lidar",
-        ":services-remotetech",
-        ":services-spacecenter",
-        ":services-stdlib",
-        ":services-ui",
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:version",
         "//protobuf:krpc.proto",
-    ],
+    ] + services,
     path_map = {
         "client/cpp/": "%s/" % name,
         "COPYING": "%s/COPYING" % name,
@@ -57,108 +51,9 @@ genrule(
     cmd = "sed 's/%VERSION%/" + cmake_version + '/g\' "$<" > "$@"',
 )
 
-clientgen_cpp(
-    name = "services-krpc",
-    defs = "//core:ServiceDefinitions",
-    service = "KRPC",
-)
-
-clientgen_cpp(
-    name = "services-spacecenter",
-    defs = "//service/SpaceCenter:ServiceDefinitions",
-    service = "SpaceCenter",
-    deps = [":services-stdlib"],
-)
-
-clientgen_cpp(
-    name = "services-drawing",
-    defs = "//service/Drawing:ServiceDefinitions",
-    service = "Drawing",
-    deps = [
-        ":services-spacecenter",
-        ":services-stdlib",
-        ":services-ui",
-    ],
-)
-
-clientgen_cpp(
-    name = "services-infernalrobotics",
-    defs = "//service/InfernalRobotics:ServiceDefinitions",
-    service = "InfernalRobotics",
-    deps = [":services-spacecenter"],
-)
-
-clientgen_cpp(
-    name = "services-kerbalalarmclock",
-    defs = "//service/KerbalAlarmClock:ServiceDefinitions",
-    service = "KerbalAlarmClock",
-    deps = [":services-spacecenter"],
-)
-
-clientgen_cpp(
-    name = "services-remotetech",
-    defs = "//service/RemoteTech:ServiceDefinitions",
-    service = "RemoteTech",
-    deps = [":services-spacecenter"],
-)
-
-clientgen_cpp(
-    name = "services-ui",
-    defs = "//service/UI:ServiceDefinitions",
-    service = "UI",
-    deps = [":services-stdlib"],
-)
-
-clientgen_cpp(
-    name = "services-stdlib",
-    defs = "//core:StdLibServiceDefinitions",
-    service = "StdLib",
-)
-
-clientgen_cpp(
-    name = "services-lidar",
-    defs = "//service/LiDAR:ServiceDefinitions",
-    service = "LIDAR",
-    deps = [":services-spacecenter"],
-)
-
-clientgen_cpp(
-    name = "services-dockingcamera",
-    defs = "//service/DockingCamera:ServiceDefinitions",
-    service = "DockingCamera",
-    deps = [":services-spacecenter"],
-)
-
-clientgen_cpp(
-    name = "services-debug",
-    defs = "//service/Debug:ServiceDefinitions",
-    service = "Debug",
-    deps = [":services-spacecenter"],
-)
-
-clientgen_cpp(
-    name = "services-test-service",
-    out = "test/services/test_service.hpp",
-    defs = "//tools/TestServer:ServiceDefinitions",
-    service = "TestService",
-    deps = [":services-krpc"],
-)
-
 srcs = glob(["src/*.cpp"])
 
-hdrs = glob(["include/**/*.hpp"]) + [
-    ":services-krpc",
-    ":services-spacecenter",
-    ":services-drawing",
-    ":services-infernalrobotics",
-    ":services-kerbalalarmclock",
-    ":services-remotetech",
-    ":services-stdlib",
-    ":services-ui",
-    ":services-lidar",
-    ":services-debug",
-    ":services-dockingcamera",
-]
+hdrs = glob(["include/**/*.hpp"]) + services
 
 cc_library(
     name = "krpc",
@@ -204,7 +99,7 @@ cc_test(
         "test/test_encode_decode.cpp",
         "test/test_encoder.cpp",
         "test/test_hash.cpp",
-        ":services-test-service",
+        ":services-testservice",
     ],
     includes = ["test"],
     deps = [
@@ -270,7 +165,7 @@ test_srcs = [
     "test/test_object.cpp",
     "test/test_services.cpp",
     "test/test_stream.cpp",
-    ":services-test-service",
+    ":services-testservice",
     "test/server_test.hpp",
 ]
 
@@ -291,7 +186,7 @@ cc_binary(
     name = "benchmark",
     srcs = [
         "benchmark/benchmark.cpp",
-        ":services-test-service",
+        ":services-testservice",
     ],
     includes = ["test"],
     visibility = ["//tools/benchmarks:__pkg__"],

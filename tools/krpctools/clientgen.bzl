@@ -1,5 +1,8 @@
 " clientgen tool "
 
+load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
+load(":services.bzl", "SERVICES")
+
 ClientgenInfo = provider(
     doc = "The generated code of a service, the path it is included by, and the " +
           "definitions it was generated from",
@@ -131,4 +134,64 @@ def clientgen_python(name, service, defs, out = None, deps = []):
         deps = deps,
         out = out,
         language = "python",
+    )
+
+_CLIENTGEN = {
+    "cnano": clientgen_cnano,
+    "cpp": clientgen_cpp,
+    "csharp": clientgen_csharp,
+    "java": clientgen_java,
+    "python": clientgen_python,
+}
+
+def _target(service):
+    return ":services-%s" % service.lower()
+
+def clientgen_services(language, outs = {}):
+    """Declares a services-<name> target per service in SERVICES, generating its code.
+
+    Args:
+        language: the language to generate.
+        outs: the output path of a service, by name, where it is not the language's default.
+
+    Returns:
+        The targets of the services a release ships, which leaves out the test service.
+    """
+    for service in SERVICES:
+        _CLIENTGEN[language](
+            name = _target(service.name)[1:],
+            service = service.name,
+            defs = service.defs,
+            out = outs.get(service.name),
+            deps = [_target(dep) for dep in service.deps],
+        )
+    return [_target(service.name) for service in SERVICES if not service.test]
+
+def clientgen_python_init(name, template, out):
+    """Expands the template of the Python services module, which declares every service.
+
+    Args:
+        name: the target name.
+        template: the template, with placeholders for the generated lines.
+        out: the output path.
+    """
+    imports = ["from krpc.services.%s import %s" % (s.name.lower(), s.name) for s in SERVICES]
+    imports = sorted(imports, key = lambda x: x.split(" ")[1])
+    expand_template(
+        name = name,
+        template = template,
+        out = out,
+        substitutions = {
+            "{TYPE_CHECKING_IMPORTS}": "\n    ".join(imports),
+            "{IMPORTS}": "\n        ".join(imports),
+            "{UNAVAILABLE}": "\n        ".join(["%s = _unavailable" % s.name for s in SERVICES]),
+            "{ATTRIBUTES}": "\n        ".join([
+                "self.%s: %s = %s(self)" % (_snake_case(s.name), s.name, s.name)
+                for s in SERVICES
+            ]),
+            "{SERVICES}": "\n            ".join([
+                '"%s": self.%s,' % (s.name, _snake_case(s.name))
+                for s in SERVICES
+            ]),
+        },
     )
