@@ -35,7 +35,7 @@ class localsocket_transport {
     // room than a path named after the test would take, so it goes in a short temporary
     // directory of its own
     directory = make_directory();
-    path = (directory / "rpc").string();
+    path = (directory / "krpc.sock").string();
     server.reset(new echo_server<local_stream>(local_stream::endpoint(path)));
   }
 

@@ -14,35 +14,20 @@
 
 #include "services/test_service.hpp"
 
-/** A connection a test can shut down, which stands in for the server closing it. */
-template <typename Base>
-class shutdown_connection : public Base {
- public:
-  using Base::Base;
-  void shutdown() {
-    asio::error_code error;
-    this->socket.shutdown(asio::socket_base::shutdown_both, error);
-  }
-};
-
 class server_test : public ::testing::Test {
  public:
   server_test();
   /** Connect over whichever transport the harness started the server with, which it tells
-      us about by port or by socket path. The rpc and stream arguments name which of the
-      server's two endpoints each connection should go to, so a test can deliberately
-      connect them the wrong way round. */
-  krpc::Client connect(const std::string& name = "C++ClientTest", const std::string& rpc = "rpc",
-                       const std::string& stream = "stream");
+      us about by port or by socket path. */
+  krpc::Client connect(const std::string& name = "C++ClientTest");
   /** A client of the test's own, which the test closes by destroying it. Sets shutdown, if
-      given, to a function that shuts down the client's stream connection. */
+      given, to a function that shuts down the client's connection, which stands in for the
+      server closing it. */
   std::unique_ptr<krpc::Client> connect_client(std::function<void()>* shutdown = nullptr);
   /** Whether condition becomes true within ten seconds. */
   static bool eventually(const std::function<bool()>& condition);
-  int get_rpc_port() const;
-  int get_stream_port() const;
-  const char* get_rpc_path() const;
-  const char* get_stream_path() const;
+  int get_port() const;
+  const char* get_path() const;
   /** A port nothing is listening on, for the tests that connect to the wrong one. Binding a
       port and giving it straight back leaves one that a connection is refused on, and leaves
       it in the range the system hands out. A port derived from the server's own can land
@@ -60,34 +45,19 @@ class server_test : public ::testing::Test {
 
 inline server_test::server_test() : conn(connect()), krpc(&conn), test_service(&conn) {}
 
-inline krpc::Client server_test::connect(const std::string& name, const std::string& rpc,
-                                         const std::string& stream) {
-  if (get_rpc_path() != nullptr)
-    return krpc::connect_local(name, rpc == "rpc" ? get_rpc_path() : get_stream_path(),
-                               stream == "rpc" ? get_rpc_path() : get_stream_path());
-  return krpc::connect(name, "localhost", rpc == "rpc" ? get_rpc_port() : get_stream_port(),
-                       stream == "rpc" ? get_rpc_port() : get_stream_port());
+inline krpc::Client server_test::connect(const std::string& name) {
+  if (get_path() != nullptr) return krpc::connect_local(name, get_path());
+  return krpc::connect(name, "localhost", get_port());
 }
 
 inline std::unique_ptr<krpc::Client> server_test::connect_client(std::function<void()>* shutdown) {
-  std::shared_ptr<krpc::Connection> rpc;
-  std::shared_ptr<krpc::Connection> stream;
-  std::function<void()> shutdown_stream;
-  if (get_rpc_path() != nullptr) {
-    rpc = std::make_shared<krpc::LocalConnection>(get_rpc_path());
-    auto connection =
-        std::make_shared<shutdown_connection<krpc::LocalConnection>>(get_stream_path());
-    shutdown_stream = [connection] { connection->shutdown(); };
-    stream = connection;
-  } else {
-    rpc = std::make_shared<krpc::Connection>("localhost", get_rpc_port());
-    auto connection =
-        std::make_shared<shutdown_connection<krpc::Connection>>("localhost", get_stream_port());
-    shutdown_stream = [connection] { connection->shutdown(); };
-    stream = connection;
-  }
-  if (shutdown != nullptr) *shutdown = shutdown_stream;
-  return std::make_unique<krpc::Client>("C++ClientTest", rpc, stream);
+  std::shared_ptr<krpc::Connection> connection;
+  if (get_path() != nullptr)
+    connection = std::make_shared<krpc::LocalConnection>(get_path());
+  else
+    connection = std::make_shared<krpc::Connection>("localhost", get_port());
+  if (shutdown != nullptr) *shutdown = [connection] { connection->shutdown_both(); };
+  return std::make_unique<krpc::Client>("C++ClientTest", connection);
 }
 
 inline bool server_test::eventually(const std::function<bool()>& condition) {
@@ -99,18 +69,13 @@ inline bool server_test::eventually(const std::function<bool()>& condition) {
   return true;
 }
 
-inline const char* server_test::get_rpc_path() const { return std::getenv("RPC_PATH"); }
-
-inline const char* server_test::get_stream_path() const { return std::getenv("STREAM_PATH"); }
-
-inline int server_test::get_rpc_port() const {
-  char* env_rpc_port = std::getenv("RPC_PORT");
-  return env_rpc_port == nullptr ? 50000 : std::stoi(env_rpc_port);
+inline const char* server_test::get_path() const {
+  return std::getenv("KRPC_TEST_LOCALSOCKET_PATH");
 }
 
-inline int server_test::get_stream_port() const {
-  char* env_stream_port = std::getenv("STREAM_PORT");
-  return env_stream_port == nullptr ? 50001 : std::stoi(env_stream_port);
+inline int server_test::get_port() const {
+  char* env_port = std::getenv("KRPC_TEST_TCPIP_PORT");
+  return env_port == nullptr ? 50000 : std::stoi(env_port);
 }
 
 inline int server_test::unused_port() {

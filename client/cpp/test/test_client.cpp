@@ -71,45 +71,23 @@ TEST_F(test_client, test_version) {
   ASSERT_TRUE(is_version(status.version().c_str())) << status.version();
 }
 
-// These connect by port, so they are skipped where the server is listening on socket paths:
-// there is no port to get wrong then, and the one they would fall back on is a guess that
-// says nothing about the client.
-TEST_F(test_client, test_wrong_rpc_port) {
-  if (get_rpc_path() != nullptr) GTEST_SKIP() << "the server is listening on socket paths";
-  ASSERT_THROW(krpc::connect("C++ClientTestWrongRpcPort", "localhost", unused_port(),
-                             get_stream_port(), connect_timeout),
+// This connects by port, so it is skipped where the server is listening on socket paths: there
+// is no port to get wrong then, and the one it would fall back on is a guess that says nothing
+// about the client.
+TEST_F(test_client, test_wrong_port) {
+  if (get_path() != nullptr) GTEST_SKIP() << "the server is listening on socket paths";
+  ASSERT_THROW(krpc::connect("C++ClientTestWrongPort", "localhost", unused_port(), connect_timeout),
                std::exception);
 }
 
-TEST_F(test_client, test_wrong_stream_port) {
-  if (get_rpc_path() != nullptr) GTEST_SKIP() << "the server is listening on socket paths";
-  ASSERT_THROW(krpc::connect("C++ClientTestWrongStreamPort", "localhost", get_rpc_port(),
-                             unused_port(), connect_timeout),
-               std::exception);
-}
-
-TEST_F(test_client, test_wrong_rpc_server) {
-  auto fn = [this]() { connect("C++ClientTestWrongRpcServer", "stream", "stream"); };
-  ASSERT_THROW(fn(), krpc::ConnectionError);
-  try {
-    fn();
-  } catch (krpc::ConnectionError& e) {
-    ASSERT_STREQ(e.what(),
-                 "Connection request was for the rpc server, but this is the stream server. "
-                 "Did you connect to the wrong port number or socket path?");
-  }
-}
-
-TEST_F(test_client, test_wrong_stream_server) {
-  auto fn = [this]() { connect("C++ClientTestWrongStreamServer", "rpc", "rpc"); };
-  ASSERT_THROW(fn(), krpc::ConnectionError);
-  try {
-    fn();
-  } catch (krpc::ConnectionError& e) {
-    ASSERT_STREQ(e.what(),
-                 "Connection request was for the stream server, but this is the rpc server. "
-                 "Did you connect to the wrong port number or socket path?");
-  }
+TEST_F(test_client, test_calls_after_the_connection_fails_raise) {
+  std::function<void()> shutdown;
+  auto client = connect_client(&shutdown);
+  krpc::services::KRPC service(client.get());
+  ASSERT_NO_THROW(service.get_status());
+  // Stands in for the server closing the connection
+  shutdown();
+  ASSERT_THROW(service.get_status(), krpc::ConnectionError);
 }
 
 TEST_F(test_client, test_value_parameters) {

@@ -470,14 +470,14 @@ TEST_F(test_event, test_two_late_callbacks_do_not_both_replay_a_firing) {
   ASSERT_EQ(0, second.load());
 }
 
-// The firing is still given to a wait
-TEST_F(test_event, test_callback_added_after_the_event_ends_is_not_called) {
+// A server ending keeps an unseen firing, for a late callback and for a wait
+TEST_F(test_event, test_callback_added_after_the_event_ends_is_called) {
   auto timer = on_timer(&conn, 100, 1);
   ASSERT_TRUE(eventually([&timer] { return timer.stream->has_ended(); }));
   ASSERT_EQ(1, timer.stream->get_fired());
   std::atomic<int> calls(0);
   timer.event.add_callback([&calls] { calls++; });
-  ASSERT_EQ(0, calls.load());
+  ASSERT_EQ(1, calls.load());
   ASSERT_TRUE(timer.event.wait());
   EXPECT_THROW(timer.event.wait(), krpc::services::KRPC::StreamRemovedException);
 }

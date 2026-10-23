@@ -399,13 +399,3 @@ TEST_F(test_function_stream, test_return_type) {
   ASSERT_EQ("TestService", obj_type.service());
   ASSERT_EQ("TestClass", obj_type.name());
 }
-
-TEST_F(test_function_stream, test_function_stream_without_a_stream_connection) {
-  // A stream port of zero connects without streams, which connect_local cannot express
-  if (get_rpc_path() != nullptr) GTEST_SKIP();
-  auto client = krpc::connect("NoStreams", "localhost", get_rpc_port(), 0);
-  auto expr = Expr::constant_int(client, 1);
-  ASSERT_THROW(krpc::add_stream<int32_t>(expr), krpc::StreamError);
-  krpc::services::TestService service(&client);
-  ASSERT_THROW(service.string_property_stream(), krpc::StreamError);
-}

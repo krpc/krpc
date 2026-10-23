@@ -15,17 +15,16 @@
 
 namespace krpc {
 
-Client connect(const std::string& name, const std::string& address, unsigned int rpc_port,
-               unsigned int stream_port, std::chrono::milliseconds timeout) {
-  return Client(name, address, rpc_port, stream_port, timeout);
+Client connect(const std::string& name, const std::string& address, unsigned int port,
+               std::chrono::milliseconds timeout, std::chrono::milliseconds handshake_timeout) {
+  return Client(name, address, port, timeout, handshake_timeout);
 }
 
 namespace {
 
-/** The name of the user running this process, which the fallback path below is named after
-    so that sockets are neither shared between accounts nor left in a directory anyone can
-    write to. USER is only a hint, and is unset in a process started without a login shell,
-    so the account database is asked first. */
+/** The name of the user running this process. The fallback path below is named after it so
+    that accounts do not share a socket. USER is only a hint, and is unset in a process
+    started without a login shell, so the account database is asked first. */
 std::string user_name() {
 #ifdef _WIN32
   const char* user = std::getenv("USERNAME");
@@ -37,19 +36,19 @@ std::string user_name() {
   if (user == nullptr || user[0] == '\0')
     throw ConnectionError(
         "could not work out which user this is, so there is no default socket path to "
-        "connect to; pass the paths the server window shows instead");
+        "connect to; pass the path the server window shows instead");
   return user;
 }
 
-/** A default path for a socket of the given name, matching the one the server uses unless
-    it was configured with another. Windows has no runtime directory for this, so its
-    per-user application data directory stands in.
+/** The default socket path, matching the one the server uses unless it was configured with
+    another. Windows has no runtime directory for this, so its per-user application data
+    directory stands in.
 
     The server works the same path out for itself, so the two only meet if they agree on
     every step. The fallback therefore names a fixed directory rather than the temporary
     one, which TMPDIR moves for the client and not the server. Windows always names a
     directory in LOCALAPPDATA and so never reaches the fallback. */
-std::string default_path(const std::string& name) {
+std::string default_path() {
 #ifdef _WIN32
   const char* separator = "\\";
   const char* directory = std::getenv("LOCALAPPDATA");
@@ -64,18 +63,16 @@ std::string default_path(const std::string& name) {
   const char* temporary = "/tmp";
 #endif
   if (directory != nullptr && directory[0] != '\0')
-    return std::string(directory) + separator + "krpc" + separator + name;
-  return std::string(temporary) + separator + "krpc-" + user_name() + separator + name;
+    return std::string(directory) + separator + "krpc.sock";
+  return std::string(temporary) + separator + "krpc-" + user_name() + ".sock";
 }
 
 }  // namespace
 
-Client connect_local(const std::string& name, const std::string& rpc_path,
-                     const std::string& stream_path) {
-  return Client(
-      name, std::make_shared<LocalConnection>(rpc_path.empty() ? default_path("rpc") : rpc_path),
-      std::make_shared<LocalConnection>(stream_path.empty() ? default_path("stream")
-                                                            : stream_path));
+Client connect_local(const std::string& name, const std::string& path,
+                     std::chrono::milliseconds handshake_timeout) {
+  return Client(name, std::make_shared<LocalConnection>(path.empty() ? default_path() : path),
+                handshake_timeout);
 }
 
 }  // namespace krpc

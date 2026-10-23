@@ -1,6 +1,10 @@
 #include "krpc/client.hpp"
 
+#include <exception>
+#include <locale>
 #include <memory>
+#include <sstream>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -10,6 +14,7 @@
 #include "krpc/decoder.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
+#include "krpc/session.hpp"
 #include "krpc/stream_manager.hpp"
 
 namespace krpc {
@@ -17,7 +22,61 @@ namespace krpc {
 class StreamImpl;
 
 namespace {
-constexpr unsigned int PROTOCOL_VERSION = 1;
+
+constexpr unsigned int PROTOCOL_VERSION = 2;
+
+/** A duration as a number of seconds, e.g. "5 seconds" or "0.5 seconds". */
+std::string format_seconds(std::chrono::milliseconds duration) {
+  std::ostringstream out;
+  out.imbue(std::locale::classic());
+  out << static_cast<double>(duration.count()) / 1000.0
+      << (duration == std::chrono::seconds(1) ? " second" : " seconds");
+  return out.str();
+}
+
+/** Send the connection request, and check the server's response to it. */
+void handshake(Connection* connection, const std::string& name, std::chrono::milliseconds timeout) {
+  schema::Message request;
+  request.mutable_connection_request()->set_client_name(name);
+  request.mutable_connection_request()->set_protocol_version(PROTOCOL_VERSION);
+  connection->send(encoder::encode_message_with_size(request));
+  schema::Message message;
+  try {
+    // The stall timeout applies from the next message
+    connection->receive_message(message, timeout, std::chrono::milliseconds::zero());
+  } catch (const TimeoutError&) {
+    throw ConnectionError("The server did not answer the connection request within " +
+                          format_seconds(timeout));
+  } catch (const EncodingError&) {
+    throw ConnectionError("Failed to parse the server's response to the connection request");
+  } catch (const std::exception& exn) {
+    std::throw_with_nested(ConnectionError(std::string("Connection failed: ") + exn.what()));
+  }
+  if (message.has_disconnect()) {
+    const auto& disconnect = message.disconnect();
+    auto reason = schema::Disconnect::Reason_Name(disconnect.reason());
+    auto text = "The server ended the connection (" + reason + ")";
+    if (!disconnect.message().empty()) text += ": " + disconnect.message();
+    throw ConnectionError(text, "", reason);
+  }
+  if (!message.has_connection_response())
+    throw ConnectionError(
+        message.content_case() == schema::Message::CONTENT_NOT_SET
+            ? "Expected a response to the connection request, got a message of an unknown kind"
+            : "Expected a response to the connection request, got another message");
+  const auto& response = message.connection_response();
+  if (response.status() != schema::ConnectionResponse::OK) {
+    auto status = schema::ConnectionResponse::Status_Name(response.status());
+    auto text = "The server refused the connection (" + status + ")";
+    if (!response.message().empty()) text += ": " + response.message();
+    throw ConnectionError(text, status);
+  }
+  if (response.protocol_version() != PROTOCOL_VERSION)
+    throw ConnectionError("The server does not support protocol version " +
+                          std::to_string(PROTOCOL_VERSION) +
+                          ". Use a client from the same kRPC release as the server.");
+}
+
 }  // namespace
 
 Client::Client()
@@ -27,109 +86,76 @@ Client::Client()
       exception_throwers_lock(new std::mutex),
       function_types_lock(new std::mutex) {}
 
-Client::Client(const std::string& name, const std::string& address, unsigned int rpc_port,
-               unsigned int stream_port, std::chrono::milliseconds timeout)
-    : Client(name, std::make_shared<Connection>(address, rpc_port, timeout),
-             stream_port == 0 ? nullptr
-                              : std::make_shared<Connection>(address, stream_port, timeout)) {}
+Client::Client(const std::string& name, const std::string& address, unsigned int port,
+               std::chrono::milliseconds timeout, std::chrono::milliseconds handshake_timeout)
+    : Client(name, std::make_shared<Connection>(address, port, timeout), handshake_timeout) {}
 
-Client::Client(const std::string& name, std::shared_ptr<Connection> rpc,
-               const std::shared_ptr<Connection>& stream)
+Client::Client(const std::string& name, const std::shared_ptr<Connection>& connection,
+               std::chrono::milliseconds handshake_timeout)
     : Client() {
-  // Connect to RPC server
-  rpc_connection = std::move(rpc);
-  rpc_connection->connect();
-  schema::ConnectionRequest request;
-  request.set_type(schema::ConnectionRequest::RPC);
-  request.set_client_name(name);
-  request.set_protocol_version(PROTOCOL_VERSION);
-  rpc_connection->send(encoder::encode_message_with_size(request));
-  schema::ConnectionResponse response;
-  rpc_connection->receive_message(response);
-  if (response.status() != schema::ConnectionResponse::OK)
-    throw ConnectionError(response.message());
-  if (response.protocol_version() != PROTOCOL_VERSION)
-    throw ConnectionError("The server does not support protocol version " +
-                          std::to_string(PROTOCOL_VERSION) +
-                          ". Use a client from the same kRPC release as the server.");
-
-  // Connect to Stream server. Only once the rpc connection has been accepted, so that a
-  // rejected connection does not leave a second one behind.
-  if (stream) {
-    stream->connect();
-    schema::ConnectionRequest request;
-    request.set_type(schema::ConnectionRequest::STREAM);
-    request.set_protocol_version(PROTOCOL_VERSION);
-    request.set_client_identifier(response.client_identifier());
-    stream->send(encoder::encode_message_with_size(request));
-    schema::ConnectionResponse response;
-    stream->receive_message(response);
-    if (response.status() != schema::ConnectionResponse::OK)
-      throw ConnectionError(response.message());
-    stream_manager = StreamManager::create(this, stream);
+  if (handshake_timeout.count() < 0)
+    throw std::invalid_argument("The handshake timeout must not be negative");
+  try {
+    connection->connect();
+  } catch (const ConnectionError&) {
+    throw;
+  } catch (const std::exception& exn) {
+    std::throw_with_nested(
+        ConnectionError(std::string("Failed to connect to the server: ") + exn.what()));
   }
+  try {
+    handshake(connection.get(), name, handshake_timeout);
+  } catch (...) {
+    connection->close();
+    throw;
+  }
+  stream_manager = StreamManager::create(this, connection);
 }
 
 schema::ProcedureResult Client::invoke(const schema::Request& request) {
-  std::lock_guard<std::mutex> lock_guard(*lock);
   return this->send_request(request);
 }
 
 schema::ProcedureResult Client::invoke(const schema::ProcedureCall& call) {
-  std::lock_guard<std::mutex> lock_guard(*lock);
-  request_buffer.Clear();
+  schema::Request request;
   // Copied because the call is received by const reference and a Request owns its calls, so it
   // cannot be moved in. CopyFrom also stays correct if ProcedureCall gains fields.
-  request_buffer.add_calls()->CopyFrom(call);
-  return this->send_request(request_buffer);
+  request.add_calls()->CopyFrom(call);
+  return this->send_request(std::move(request));
 }
 
 schema::ProcedureResult Client::invoke(std::string_view service, std::string_view procedure,
                                        const std::vector<encoder::Value>& args) {
-  std::lock_guard<std::mutex> lock_guard(*lock);
-  request_buffer.Clear();
-  schema::ProcedureCall* call = request_buffer.add_calls();
-  call->set_service(service);
-  call->set_procedure(procedure);
-  add_arguments(call, args);
-  return this->send_request(request_buffer);
+  return this->send_request(build_request(service, procedure, args));
 }
 
 schema::ProcedureResult Client::invoke(std::string_view service, std::string_view procedure,
                                        const std::vector<encoder::Value>& args, Returns returns) {
-  std::lock_guard<std::mutex> lock_guard(*lock);
-  request_buffer.Clear();
-  schema::ProcedureCall* call = request_buffer.add_calls();
-  call->set_service(service);
-  call->set_procedure(procedure);
-  add_arguments(call, args);
-  return this->send_request(request_buffer, &returns);
+  return this->send_request(build_request(service, procedure, args), &returns);
 }
 
-// Send a request and return the result it is answered by. Called with lock held, which makes
-// the response and the bytes the request is written as safe to keep from one call to the next.
-schema::ProcedureResult Client::send_request(const schema::Request& request,
-                                             const Returns* returns) {
-  // Looked up before the request is sent, as listing the services makes a call of its own
-  std::vector<Returns> looked_up;
-  if (stream_manager && returns == nullptr) {
-    for (const auto& call : request.calls())
-      looked_up.push_back(lookup_returns(call.service(), call.procedure()));
-  }
-  encoder::encode_message_with_size(request, &request_data);
-  rpc_connection->send(request_data);
-  rpc_connection->receive_message(response_buffer);
+// Send a request and return the result it is answered by. The reader registers a stream or an
+// event a call adds before it reads the stream's first update.
+schema::ProcedureResult Client::send_request(schema::Request request, const Returns* returns) {
+  check_stream_connection();
+  std::vector<Session::Adds> adds;
+  auto to_adds = [](Returns value) {
+    return value == Returns::stream  ? Session::Adds::stream
+           : value == Returns::event ? Session::Adds::event
+                                     : Session::Adds::nothing;
+  };
   if (returns != nullptr) {
-    note_stream_id(0, *returns);
+    adds.push_back(to_adds(*returns));
   } else {
-    for (int i = 0; i < static_cast<int>(looked_up.size()); i++) note_stream_id(i, looked_up[i]);
+    // Looked up before the request is sent, as listing the services makes a call of its own
+    for (const auto& call : request.calls())
+      adds.push_back(to_adds(lookup_returns(call.service(), call.procedure())));
   }
-  note_removed_streams(request);
+  auto response = stream_manager->get_session().call(std::move(request), std::move(adds));
 
-  if (response_buffer.has_error()) throw_exception(response_buffer.error());
+  if (response.has_error()) throw_exception(response.error());
 
-  // Moved out of the response, which is about to be reused.
-  schema::ProcedureResult result = std::move(*response_buffer.mutable_results(0));
+  schema::ProcedureResult result = std::move(*response.mutable_results(0));
 
   if (result.has_error()) throw_exception(result.error());
 
@@ -137,77 +163,48 @@ schema::ProcedureResult Client::send_request(const schema::Request& request,
 }
 
 // What a procedure returns, from the server's list of services, which is fetched by the first
-// call. Called with lock held.
+// call.
 Client::Returns Client::lookup_returns(const std::string& service, const std::string& procedure) {
+  bool listed;
+  {
+    std::lock_guard<std::mutex> lock_guard(*lock);
+    listed = listed_returns->listed;
+  }
+  // Fetched without the lock held, so threads racing on the first call each fetch the list
+  ReturnsByProcedure fetched;
+  if (!listed) fetched = list_returns();
+  std::lock_guard<std::mutex> lock_guard(*lock);
+  // Listed once, even if the listing fails
   if (!listed_returns->listed) {
-    // Listed once, even if the listing fails
     listed_returns->listed = true;
-    list_returns();
+    listed_returns->returns = std::move(fetched);
   }
   auto returns = listed_returns->returns.find(std::make_pair(service, procedure));
   return returns == listed_returns->returns.end() ? Returns::value : returns->second;
 }
 
-// Store the procedures the server lists that return a new stream or event. Called with lock
-// held, before the buffers are used for the call being made.
-void Client::list_returns() {
-  schema::Request request;
-  auto* call = request.add_calls();
-  call->set_service("KRPC");
-  call->set_procedure("GetServices");
-  rpc_connection->send(encoder::encode_message_with_size(request));
+// The procedures the server lists that return a new stream or event
+Client::ReturnsByProcedure Client::list_returns() {
+  ReturnsByProcedure result;
   schema::Response response;
-  rpc_connection->receive_message(response);
+  try {
+    response = stream_manager->get_session().call(build_request("KRPC", "GetServices"), {});
+  } catch (const ConnectionError&) {
+    return result;
+  }
   if (response.has_error() || response.results_size() == 0 || response.results(0).has_error())
-    return;
+    return result;
   schema::Services services;
-  if (!services.ParseFromString(response.results(0).value())) return;
+  if (!services.ParseFromString(response.results(0).value())) return result;
   for (const auto& service : services.services()) {
     for (const auto& procedure : service.procedures()) {
       auto code = procedure.return_type().code();
       if (code != schema::Type::STREAM && code != schema::Type::EVENT) continue;
-      listed_returns->returns[std::make_pair(service.name(), procedure.name())] =
+      result[std::make_pair(service.name(), procedure.name())] =
           code == schema::Type::EVENT ? Returns::event : Returns::stream;
     }
   }
-}
-
-// Note the id of a new stream, returned by the call at index, with the stream manager. Called
-// with lock held, so ids are noted in the order the replies arrive, and the manager keeps the
-// latest value and an ending sent for a stream before it is registered.
-void Client::note_stream_id(int index, Returns returns) {
-  if (returns == Returns::value || !stream_manager || response_buffer.has_error() ||
-      index >= response_buffer.results_size())
-    return;
-  const auto& result = response_buffer.results(index);
-  if (result.has_error() || result.is_null()) return;
-  // A reply that fails to parse fails again where the caller decodes it
-  if (returns == Returns::event) {
-    schema::Event message;
-    if (message.ParseFromString(result.value())) stream_manager->note_issued(message.stream().id());
-  } else {
-    schema::Stream message;
-    if (message.ParseFromString(result.value())) stream_manager->note_issued(message.id());
-  }
-}
-
-// Note the ids of the streams the server has removed for a request, whichever way the request
-// was made. Called with lock held, so ids are noted in the order the replies arrive.
-void Client::note_removed_streams(const schema::Request& request) {
-  if (!stream_manager || response_buffer.has_error()) return;
-  for (int i = 0; i < request.calls_size() && i < response_buffer.results_size(); i++) {
-    const auto& call = request.calls(i);
-    if (call.service() != "KRPC" || call.procedure() != "RemoveStream" ||
-        response_buffer.results(i).has_error())
-      continue;
-    for (const auto& argument : call.arguments()) {
-      if (argument.position() != 0) continue;
-      // Decodes, as the server has decoded it for a call that succeeded
-      uint64_t id = 0;
-      decoder::decode(id, argument.value(), this);
-      stream_manager->note_removed(id);
-    }
-  }
+  return result;
 }
 
 void Client::add_arguments(schema::ProcedureCall* call, const std::vector<encoder::Value>& args) {
@@ -297,7 +294,7 @@ void Client::throw_exception(const schema::Error& error) const {
 }
 
 void Client::check_stream_connection() const {
-  if (!stream_manager) throw StreamError("Not connected to stream server");
+  if (!stream_manager) throw StreamError("Not connected to a server");
 }
 
 StreamManager& Client::streams() const {
@@ -311,8 +308,6 @@ std::shared_ptr<StreamImpl> Client::add_stream(const schema::ProcedureCall& call
 
 std::shared_ptr<StreamImpl> Client::get_stream(uint64_t id) { return streams().get_stream(id); }
 
-void Client::remove_stream(uint64_t id) { streams().remove_stream(id); }
-
 Condition& Client::get_stream_update_condition() const { return streams().get_update_condition(); }
 
 std::unique_lock<RecursiveMutex>& Client::get_stream_update_condition_lock() const {
@@ -324,6 +319,8 @@ void Client::acquire_stream_update() { streams().acquire_update(); }
 void Client::release_stream_update() { streams().release_update(); }
 
 void Client::wait_for_stream_update(double timeout) {
+  // Set before the close wakes the waiters, so a wait that starts after the wake returns
+  if (streams().is_closed()) return;
   if (timeout < 0) {
     streams().get_update_condition().wait();
   } else {

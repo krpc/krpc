@@ -10,6 +10,8 @@
 
 namespace krpc {
 
+class Condition;
+
 /** A mutex that the thread holding it can lock again, and that records which thread holds it.
     Each lock is matched by an unlock. */
 class RecursiveMutex {
@@ -51,10 +53,14 @@ class RecursiveMutex {
     std::unique_lock<std::mutex>* state_lock;
     std::size_t levels;
   };
+  /** Notify the condition waiting for a release, with state locked. */
+  void notify_released();
   mutable std::mutex state;
   std::condition_variable unlocked;
   std::thread::id owner;
   std::size_t depth = 0;
+  // The condition to notify once the holder lets go, set by notify_all_when_free
+  Condition* notify_on_release = nullptr;
 };
 
 /** A condition variable over a RecursiveMutex. A wait releases every level of the calling
@@ -91,8 +97,12 @@ class Condition {
                   const std::chrono::time_point<Clock, Duration>& deadline, Predicate done);
   void notify_one();
   void notify_all();
+  /** Notify every waiter now if no thread holds the mutex, or else once the thread holding it
+      lets go of it or waits. A thread that cannot take the mutex wakes its waiters this way. */
+  void notify_all_when_free();
 
  private:
+  friend class RecursiveMutex;
   RecursiveMutex& mutex;
   std::condition_variable condition;
 };
@@ -143,6 +153,7 @@ inline void RecursiveMutex::unlock() {
                             "krpc::RecursiveMutex unlocked by a thread that does not hold it");
   if (--depth > 0) return;
   owner = std::thread::id();
+  notify_released();
   unlocked.notify_one();
 }
 
@@ -158,6 +169,7 @@ inline std::size_t RecursiveMutex::release_all(const std::unique_lock<std::mutex
   auto levels = depth;
   depth = 0;
   owner = std::thread::id();
+  notify_released();
   unlocked.notify_one();
   return levels;
 }
@@ -169,11 +181,13 @@ inline void RecursiveMutex::restore(std::unique_lock<std::mutex>* state_lock, st
 }
 
 // The waiter holds the mutex's state from releasing the mutex until it waits, so a thread that
-// takes the mutex to change what the waiter checks notifies only once the waiter is waiting
+// takes the mutex to change what the waiter checks notifies only once the waiter is waiting. A
+// notification left for the release is also for the waiter, which returns at once.
 inline void Condition::wait() {
   std::unique_lock<std::mutex> state_lock(mutex.state);
+  bool notified = mutex.notify_on_release == this;
   RecursiveMutex::Released released(&mutex, &state_lock);
-  condition.wait(state_lock);
+  if (!notified) condition.wait(state_lock);
 }
 
 template <typename Rep, typename Period>
@@ -185,7 +199,9 @@ template <typename Clock, typename Duration>
 inline std::cv_status Condition::wait_until(
     const std::chrono::time_point<Clock, Duration>& deadline) {
   std::unique_lock<std::mutex> state_lock(mutex.state);
+  bool notified = mutex.notify_on_release == this;
   RecursiveMutex::Released released(&mutex, &state_lock);
+  if (notified) return std::cv_status::no_timeout;
   return condition.wait_until(state_lock, deadline);
 }
 
@@ -244,6 +260,20 @@ inline void Condition::notify_one() {
 inline void Condition::notify_all() {
   std::lock_guard<std::mutex> state_lock(mutex.state);
   condition.notify_all();
+}
+
+inline void Condition::notify_all_when_free() {
+  std::lock_guard<std::mutex> state_lock(mutex.state);
+  if (mutex.depth == 0)
+    condition.notify_all();
+  else
+    mutex.notify_on_release = this;
+}
+
+inline void RecursiveMutex::notify_released() {
+  if (notify_on_release == nullptr) return;
+  notify_on_release->condition.notify_all();
+  notify_on_release = nullptr;
 }
 
 }  // namespace krpc

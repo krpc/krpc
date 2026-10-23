@@ -3,10 +3,12 @@
 #include <algorithm>
 #include <atomic>
 #include <chrono>  // NOLINT(build/c++11)
+#include <cmath>
 #include <exception>
 #include <iostream>
 #include <memory>
 #include <string>
+#include <thread>  // NOLINT(build/c++11)
 #include <utility>
 
 #include "krpc/client.hpp"
@@ -42,6 +44,15 @@ StreamImpl::StreamImpl(Client* client, uint64_t id,
       next_end_callback_tag(0),
       _rate(0) {}
 
+StreamImpl::~StreamImpl() {
+  if (ending) return;
+  try {
+    if (auto held_manager = manager.lock()) held_manager->drop_stream(id);
+  } catch (...) {  // NOLINT(bugprone-empty-catch)
+    // The connection closing also removes the stream
+  }
+}
+
 Client* StreamImpl::get_client() const { return client; }
 
 uint64_t StreamImpl::get_id() const { return id; }
@@ -57,16 +68,34 @@ void StreamImpl::set_rate(float value) {
 }
 
 std::string StreamImpl::get_data(bool* is_null) {
+  bool held = condition_mutex.held_by_this_thread();
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  if (ending) std::rethrow_exception(ending);
-  if (!updated) throw StreamError("Stream has no value");
-  *is_null = _is_null;
-  return data;
+  if (ending_visible()) std::rethrow_exception(ending);
+  if (!(held ? announced : updated)) throw StreamError("Stream has no value");
+  seen[std::this_thread::get_id()] = held ? announced_version : version;
+  *is_null = held ? announced_is_null : _is_null;
+  return held ? announced_data : data;
+}
+
+uint64_t StreamImpl::get_seen_version() const {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  auto it = seen.find(std::this_thread::get_id());
+  return it == seen.end() ? 0 : it->second;
+}
+
+void StreamImpl::announce(const std::string& data, bool is_null, uint64_t version) {
+  {
+    std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    announced_data = data;
+    announced_is_null = is_null;
+    announced_version = version;
+    announced.store(true);
+  }
+  condition.notify_all();
 }
 
 void StreamImpl::set_value(const std::string& data, bool is_null) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  // Stored before the flag, as a reader checks the flag with no lock held
   this->data = data;
   this->_is_null = is_null;
   updated.store(true);
@@ -74,7 +103,9 @@ void StreamImpl::set_value(const std::string& data, bool is_null) {
   if (is_firing(data, is_null)) fired++;
 }
 
-bool StreamImpl::has_updated() const { return updated; }
+bool StreamImpl::has_updated() const {
+  return condition_mutex.held_by_this_thread() ? announced : updated;
+}
 
 uint64_t StreamImpl::get_version() const {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
@@ -91,32 +122,66 @@ bool StreamImpl::has_ended() const {
   return ending != nullptr;
 }
 
+bool StreamImpl::is_ended_by_client() const {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  return ended_by_client;
+}
+
+bool StreamImpl::is_ending_announced() const {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  return announced_ending != nullptr;
+}
+
+bool StreamImpl::ending_visible() const {
+  if (!ending) return false;
+  if (ending == announced_ending || !condition_mutex.held_by_this_thread()) return true;
+  auto held_manager = manager.lock();
+  return !held_manager || held_manager->is_closed();
+}
+
 void StreamImpl::throw_if_ended() const {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  if (ending) std::rethrow_exception(ending);
+  if (ending_visible()) std::rethrow_exception(ending);
+}
+
+StreamImpl::EndCallbacks StreamImpl::set_ending(const std::exception_ptr& ending, bool announce,
+                                                bool by_client) {
+  std::lock_guard<std::recursive_mutex> update_guard(*update_lock);
+  EndCallbacks result;
+  if (this->ending) return result;
+  this->ending = ending;
+  ended_by_client = by_client;
+  if (announce) announced_ending = ending;
+  result.swap(end_callbacks);
+  return result;
+}
+
+void StreamImpl::announce_ending() {
+  {
+    std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    announced_ending = ending;
+  }
+  condition.notify_all();
 }
 
 StreamImpl::EndCallbacks StreamImpl::end(const std::exception_ptr& ending) {
   std::lock_guard<RecursiveMutex> held(condition_mutex);
-  EndCallbacks result;
-  {
-    std::lock_guard<std::recursive_mutex> update_guard(*update_lock);
-    if (this->ending) return result;
-    this->ending = ending;
-    result.swap(end_callbacks);
-  }
+  auto result = set_ending(ending, true, true);
   condition.notify_all();
   return result;
 }
 
 bool StreamImpl::wait(double timeout, const std::function<bool()>& done) {
+  if (std::isnan(timeout) || timeout < 0)
+    throw std::invalid_argument("The timeout must not be negative or NaN");
+  bool infinite = std::isinf(timeout);
   // Clamped so that the deadline does not overflow the clock
   auto duration = std::chrono::duration<double>(std::min(timeout, 1e9));
   auto deadline = std::chrono::steady_clock::now() +
                   std::chrono::duration_cast<std::chrono::steady_clock::duration>(duration);
   while (!done()) {
     throw_if_ended();
-    if (timeout < 0) {
+    if (infinite) {
       condition.wait();
       continue;
     }
@@ -149,7 +214,9 @@ void StreamImpl::call(const std::shared_ptr<CallbackEntry>& callback, uint64_t v
   std::lock_guard<RecursiveMutex> running(callback->lock, std::adopt_lock);
   {
     std::lock_guard<std::recursive_mutex> guard(*update_lock);
-    if (ending || !note_passed(callback.get(), version)) return;
+    // A late event callback is passed an unseen firing after a server ending
+    bool ended = ending && (!added || ended_by_client);
+    if (ended || !note_passed(callback.get(), version)) return;
     callback->adding = added;
   }
   // invoke reports what a callback throws, so the adding thread always passes on the queue
@@ -172,20 +239,44 @@ bool StreamImpl::enter_on_update_thread(CallbackEntry* callback, uint64_t versio
 }
 
 void StreamImpl::call_missed(CallbackEntry* callback) {
-  while (true) {
-    CallbackEntry::Value value;
+  std::deque<CallbackEntry::Value> missed;
+  {
+    std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    missed.swap(callback->missed);
+    callback->adding = false;
+    callback->draining = true;
+  }
+  for (const auto& value : missed) {
     {
       std::lock_guard<std::recursive_mutex> guard(*update_lock);
-      if (callback->missed.empty()) {
-        callback->adding = false;
-        return;
-      }
-      value = std::move(callback->missed.front());
-      callback->missed.pop_front();
+      if (ended_by_client) break;
       if (!note_passed(callback, value.version)) continue;
     }
     invoke(*callback, value.data, value.is_null);
   }
+  EndCallbacks end_callbacks;
+  std::exception_ptr deferred;
+  {
+    std::lock_guard<std::recursive_mutex> guard(*update_lock);
+    callback->draining = false;
+    end_callbacks.swap(callback->end_callbacks);
+    deferred = callback->ending;
+    callback->ending = nullptr;
+  }
+  if (deferred) call_end_callbacks(end_callbacks, deferred);
+}
+
+bool StreamImpl::defer_ending(const EndCallbacks& callbacks, const std::exception_ptr& ending) {
+  std::lock_guard<std::recursive_mutex> guard(*update_lock);
+  for (const auto& entry : this->callbacks) {
+    auto& callback = entry.second;
+    if (callback->adding || callback->draining) {
+      callback->end_callbacks = callbacks;
+      callback->ending = ending;
+      return true;
+    }
+  }
+  return false;
 }
 
 bool StreamImpl::note_passed(CallbackEntry* callback, uint64_t version) {
@@ -198,8 +289,7 @@ bool StreamImpl::note_passed(CallbackEntry* callback, uint64_t version) {
   return true;
 }
 
-// An exception leaving the update thread calls std::terminate, so anything a callback throws is
-// reported
+// Anything a callback throws is reported, and the dispatcher thread runs on
 void StreamImpl::invoke(const CallbackEntry& callback, const std::string& data, bool is_null) {
   try {
     callback.callback(data, is_null);
@@ -250,7 +340,7 @@ int StreamImpl::add_event_callback(const Callback& callback, uint64_t seen) {
 
 uint64_t StreamImpl::reserve_replay(uint64_t seen) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  if (ending || fired <= std::max({seen, callbacks_fired, replaying})) return 0;
+  if (ended_by_client || fired <= std::max({seen, callbacks_fired, replaying})) return 0;
   replaying = fired;
   return fired;
 }
@@ -263,9 +353,14 @@ void StreamImpl::replay(const std::shared_ptr<CallbackEntry>& callback, uint64_t
   if (replaying == fired) replaying = 0;
 }
 
+// The callback is destroyed once the lock is released, as it can hold the last copy of the client
 void StreamImpl::remove_callback(int tag) {
+  std::shared_ptr<CallbackEntry> removed;
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  callbacks.erase(tag);
+  auto it = callbacks.find(tag);
+  if (it == callbacks.end()) return;
+  removed = std::move(it->second);
+  callbacks.erase(it);
 }
 
 int StreamImpl::add_end_callback(const EndCallback& callback) {
@@ -284,8 +379,12 @@ int StreamImpl::add_end_callback(const EndCallback& callback) {
 }
 
 void StreamImpl::remove_end_callback(int tag) {
+  EndCallback removed;
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
-  end_callbacks.erase(tag);
+  auto it = end_callbacks.find(tag);
+  if (it == end_callbacks.end()) return;
+  removed = std::move(it->second);
+  end_callbacks.erase(it);
 }
 
 void StreamImpl::remove() {

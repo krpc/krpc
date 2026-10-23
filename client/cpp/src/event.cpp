@@ -32,7 +32,9 @@ bool Event::wait(double timeout) {
   _stream.check_exists();
   auto& impl = _stream.impl;
   std::lock_guard<RecursiveMutex> held(impl->get_condition_mutex());
-  // A firing not yet seen returns before an ending is thrown
+  // A remove or a close discards an unseen firing
+  if (impl->is_ended_by_client()) impl->throw_if_ended();
+  // A firing not yet seen returns before a server ending is thrown
   auto last_seen = seen;
   if (!impl->wait(timeout, [&impl, last_seen] { return impl->get_fired() > last_seen; }))
     return false;

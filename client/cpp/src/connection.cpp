@@ -11,6 +11,8 @@
 #include <asio/read.hpp>  // IWYU pragma: keep
 #include <asio/steady_timer.hpp>
 #include <asio/write.hpp>  // IWYU pragma: keep
+#include <climits>
+#include <cstdint>
 #include <cstring>
 #include <exception>
 #include <memory>
@@ -26,6 +28,10 @@
 
 #include "krpc/decoder.hpp"
 #include "krpc/error.hpp"
+
+#ifndef _WIN32
+#include <poll.h>
+#endif
 
 namespace krpc {
 
@@ -101,8 +107,8 @@ void Connection::connect() {
       failure = std::current_exception();
       continue;
     }
-    // The protocol is strictly request and response, so holding a write back to coalesce it with
-    // a later one can only add latency.
+    // A message is sent as soon as it is written, so holding a write back to coalesce it with a
+    // later one can only add latency.
     socket.set_option(asio::ip::tcp::no_delay(true));
     return;
   }
@@ -128,6 +134,22 @@ void Connection::close() {
   consumed = 0;
 }
 
+void Connection::shutdown_send() {
+  try {
+    socket.shutdown(asio::socket_base::shutdown_send);
+  } catch (const asio::system_error&) {  // NOLINT(bugprone-empty-catch)
+    // A connection that has already closed has nothing to shut down
+  }
+}
+
+void Connection::shutdown_both() {
+  try {
+    socket.shutdown(asio::socket_base::shutdown_both);
+  } catch (const asio::system_error&) {  // NOLINT(bugprone-empty-catch)
+    // A connection that has already closed has nothing to shut down
+  }
+}
+
 void Connection::send(const char* data, size_t length) {
   asio::write(socket, asio::buffer(data, length));
 }
@@ -145,15 +167,92 @@ void Connection::receive_message(google::protobuf::MessageLite& message) {
     throw EncodingError("Failed to decode message");
 }
 
-std::pair<const char*, size_t> Connection::buffered_message() {
+void Connection::receive_message(google::protobuf::MessageLite& message,
+                                 std::chrono::milliseconds timeout,
+                                 std::chrono::milliseconds stall_timeout) {
+  auto [data, size] = this->buffered_message(timeout, stall_timeout);
+  if (!message.ParseFromArray(data, static_cast<int>(size)))
+    throw EncodingError("Failed to decode message");
+}
+
+bool Connection::wait_readable(std::chrono::milliseconds timeout) {
+  return poll(timeout == std::chrono::milliseconds::zero()
+                  ? -1
+                  : static_cast<int>(std::min<int64_t>(timeout.count(), INT_MAX)));
+}
+
+bool Connection::poll(int milliseconds) {
+  // A failed wait counts as readable, and the read that follows finds the failure
+#ifdef _WIN32
+  WSAPOLLFD fd = {socket.native_handle(), POLLRDNORM, 0};
+  return WSAPoll(&fd, 1, milliseconds) != 0;
+#else
+  pollfd fd = {socket.native_handle(), POLLIN, 0};
+  return ::poll(&fd, 1, milliseconds) != 0;
+#endif
+}
+
+bool Connection::message_buffered() const {
+  uint32_t size = 0;
+  size_t prefix_length = 0;
+  try {
+    return decoder::decode_size_prefix(buffer.data() + consumed, available(), &size,
+                                       &prefix_length) &&
+           available() >= prefix_length + size;
+  } catch (const EncodingError&) {
+    // Read as a message, so that the read reports it
+    return true;
+  }
+}
+
+bool Connection::discard(std::chrono::milliseconds timeout) {
+  filled = 0;
+  consumed = 0;
+  try {
+    return fill(timeout);
+  } catch (const std::exception&) {
+    return false;
+  }
+}
+
+std::pair<const char*, size_t> Connection::buffered_message(
+    std::chrono::milliseconds timeout, std::chrono::milliseconds stall_timeout) {
   // Read until the buffer holds a size prefix and the whole message it describes. A message
   // longer than a read is read through the buffer as well: the extra copy costs one memcpy,
   // where reading its body straight into its own storage costs a system call every time.
+  auto deadline = std::chrono::steady_clock::now() + timeout;
+  // A read with nothing partly received blocks, and only a partial message is timed. Without a
+  // timeout that costs no timer.
+  auto wait = [&]() {
+    // The stall clock runs from the last byte received, which an earlier read may have taken
+    auto limit = std::chrono::milliseconds::zero();
+    if (available() > 0 && stall_timeout != std::chrono::milliseconds::zero()) {
+      limit = stall_timeout - std::chrono::duration_cast<std::chrono::milliseconds>(
+                                  std::chrono::steady_clock::now() - progress);
+      if (limit < std::chrono::milliseconds(1)) limit = std::chrono::milliseconds(1);
+    }
+    bool stall = limit != std::chrono::milliseconds::zero();
+    if (timeout != std::chrono::milliseconds::zero()) {
+      auto remaining = std::chrono::duration_cast<std::chrono::milliseconds>(
+          deadline - std::chrono::steady_clock::now());
+      if (remaining < std::chrono::milliseconds(1)) remaining = std::chrono::milliseconds(1);
+      if (limit == std::chrono::milliseconds::zero() || remaining < limit) {
+        limit = remaining;
+        stall = false;
+      }
+    }
+    if (limit == std::chrono::milliseconds::zero()) {
+      this->fill();
+    } else if (!this->fill(limit)) {
+      if (stall) throw TimeoutError("A message from the server stalled");
+      throw TimeoutError("Timed out waiting for data from the server");
+    }
+  };
   uint32_t size = 0;
   size_t prefix_length = 0;
   while (!decoder::decode_size_prefix(buffer.data() + consumed, available(), &size, &prefix_length))
-    this->fill();
-  while (available() < prefix_length + size) this->fill();
+    wait();
+  while (available() < prefix_length + size) wait();
   consumed += prefix_length;
   const char* message = buffer.data() + consumed;
   consumed += size;
@@ -170,6 +269,50 @@ void Connection::fill() {
   }
   if (buffer.size() - filled < READ_SIZE) buffer.resize(filled + READ_SIZE);
   filled += socket.read_some(asio::buffer(&buffer[filled], buffer.size() - filled));
+  progress = std::chrono::steady_clock::now();
+}
+
+bool Connection::fill(std::chrono::milliseconds timeout) {
+  if (consumed > 0) {
+    std::memmove(buffer.data(), buffer.data() + consumed, available());
+    filled -= consumed;
+    consumed = 0;
+  }
+  if (buffer.size() - filled < READ_SIZE) buffer.resize(filled + READ_SIZE);
+
+  size_t read = 0;
+  bool timer_complete = false;
+  asio::steady_timer timer(socket.get_executor());
+  timer.expires_after(timeout);
+  timer.async_wait([&timer_complete](const asio::error_code& error) {
+    if (!error) timer_complete = true;
+  });
+
+  bool read_complete = false;
+  asio::error_code read_error;
+  socket.async_read_some(
+      asio::buffer(&buffer[filled], buffer.size() - filled),
+      [&read, &read_complete, &read_error](const asio::error_code& error, size_t length) {
+        read = length;
+        read_error = error;
+        read_complete = true;
+      });
+
+  io_context.restart();
+  while (io_context.run_one()) {
+    if (read_complete)
+      timer.cancel();
+    else if (timer_complete)
+      socket.cancel();
+  }
+
+  if (read == 0 && read_error) {
+    if (read_error == asio::error::operation_aborted) return false;
+    throw asio::system_error(read_error);
+  }
+  filled += read;
+  if (read > 0) progress = std::chrono::steady_clock::now();
+  return read > 0;
 }
 
 void Connection::take(char* data, size_t length) {

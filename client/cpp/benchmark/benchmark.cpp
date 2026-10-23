@@ -5,13 +5,12 @@
 // environment where it is listening and over which transport, and reads the JSON printed here.
 // See tools/benchmarks/run_client.py for the contract.
 
-#include <krpc.hpp>
-
 #include <algorithm>
 #include <chrono>
 #include <cstdlib>
 #include <functional>
 #include <iostream>
+#include <krpc.hpp>
 #include <sstream>
 #include <string>
 #include <utility>
@@ -73,14 +72,9 @@ int port(const char* name, int fallback) {
 // Connect over whichever transport the runner started the server with, named by socket path or
 // by port. Both are measured, as the transport is part of what a call costs.
 krpc::Client connect_to_server() {
-  const char* rpc_path = std::getenv("RPC_PATH");
-  if (rpc_path != nullptr) {
-    const char* stream_path = std::getenv("STREAM_PATH");
-    return krpc::connect_local("cpp_client_benchmark", rpc_path,
-                               stream_path == nullptr ? "" : stream_path);
-  }
-  return krpc::connect("cpp_client_benchmark", "localhost", port("RPC_PORT", 50000),
-                       port("STREAM_PORT", 50001));
+  const char* path = std::getenv("KRPC_TEST_LOCALSOCKET_PATH");
+  if (path != nullptr) return krpc::connect_local("cpp_client_benchmark", path);
+  return krpc::connect("cpp_client_benchmark", "localhost", port("KRPC_TEST_TCPIP_PORT", 50000));
 }
 
 // Call for a short while and return the milliseconds one call took.
@@ -113,8 +107,7 @@ Settled settle(const std::function<void()>& call) {
       auto split = chunks.end() - kSettleChunks;
       double recent = *std::min_element(split, chunks.end());
       double earlier = *std::min_element(chunks.begin(), split);
-      if (recent >= earlier * (1 - kSettleTolerance))
-        return {recent, true};
+      if (recent >= earlier * (1 - kSettleTolerance)) return {recent, true};
     }
   }
   // The chunks it got through, which is fewer than a settle compares when a single chunk ran
@@ -133,8 +126,7 @@ std::pair<std::vector<double>, bool> timed_loop(const std::function<void()>& cal
   std::vector<double> samples;
   for (int sample = 0; sample < kSamples; sample++) {
     auto loop = clock_type::now();
-    for (long i = 0; i < iterations; i++)
-      call();
+    for (long i = 0; i < iterations; i++) call();
     samples.push_back(seconds_since(loop) * 1e3 / iterations);
   }
   return {samples, warm.settled};
@@ -155,11 +147,9 @@ void emit(const std::vector<Case>& cases) {
     out << (i == 0 ? "" : ", ") << "{\"case\": " << quote(item.name)
         << ", \"unit\": " << quote(item.unit) << ", \"rate\": " << quote(item.rate)
         << ", \"note\": " << quote(item.note) << ", \"samples\": [";
-    for (size_t j = 0; j < item.samples.size(); j++)
-      out << (j == 0 ? "" : ", ") << item.samples[j];
+    for (size_t j = 0; j < item.samples.size(); j++) out << (j == 0 ? "" : ", ") << item.samples[j];
     out << "]";
-    if (!item.settled)
-      out << ", \"settled\": false";
+    if (!item.settled) out << ", \"settled\": false";
     out << "}";
   }
   out << "]}";
@@ -174,16 +164,15 @@ int main() {
 
   std::vector<int32_t> values;
   values.reserve(kListValues);
-  for (int i = 0; i < kListValues; i++)
-    values.push_back(i);
+  for (int i = 0; i < kListValues; i++) values.push_back(i);
   std::ostringstream list_name;
   list_name << "round trip, list of " << kListValues << " values";
 
   std::vector<Case> cases{
-    round_trip("round trip", [&] { test_service.float_to_string(3.14159f); }),
-    round_trip("round trip, 3 arguments",
-               [&] { test_service.add_multiple_values(3.14159f, 1, 2); }),
-    round_trip(list_name.str(), [&] { test_service.increment_list(values); }),
+      round_trip("round trip", [&] { test_service.float_to_string(3.14159f); }),
+      round_trip("round trip, 3 arguments",
+                 [&] { test_service.add_multiple_values(3.14159f, 1, 2); }),
+      round_trip(list_name.str(), [&] { test_service.increment_list(values); }),
   };
 
   emit(cases);
