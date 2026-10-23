@@ -300,7 +300,7 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
         doc = _documentation(exception, name)
 
         def register(types: Types) -> None:
-            types.exception_type(name, exception.name, doc)
+            types.exception_type(name, exception.name, doc, exception.mapped_type)
 
         return register
 
@@ -596,7 +596,9 @@ class ServiceBase(DynamicType):
     @classmethod
     def _add_service_exception(cls, exception: KRPC.Exception) -> None:
         """Add an exception type"""
-        exception_type = cls._client._types.exception_type(cls._name, exception.name)
+        exception_type = cls._client._types.exception_type(
+            cls._name, exception.name, mapped_type=exception.mapped_type
+        )
         setattr(cls, exception.name, exception_type)
 
     @classmethod

@@ -238,6 +238,9 @@ class Generator(Generic[LanguageT]):
                 "deprecated_reason": self.parse_deprecation_reason(
                     exception.get("deprecated_reason", "")
                 ),
+                "native": self.language.native_exception(
+                    exception.get("mapped_type", "")
+                ),
             }
 
         for name, procedure in self._get_defs("procedures"):

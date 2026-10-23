@@ -124,7 +124,7 @@ class ClientInfo(NamedTuple):
     """
 
 
-class ArgumentException(RuntimeError):
+class ArgumentException(ValueError):
     """
     A method was invoked where at least one of the passed arguments does not
     meet the parameter specification of the method.
@@ -133,7 +133,7 @@ class ArgumentException(RuntimeError):
     _class_name = 'ArgumentException'
 
 
-class ArgumentNullException(RuntimeError):
+class ArgumentNullException(ValueError):
     """
     A null reference was passed to a method that does not accept it as a valid argument.
     """
@@ -141,7 +141,7 @@ class ArgumentNullException(RuntimeError):
     _class_name = 'ArgumentNullException'
 
 
-class ArgumentOutOfRangeException(RuntimeError):
+class ArgumentOutOfRangeException(ValueError):
     """
     The value of an argument is outside the allowable range of values as defined by the invoked method.
     """
@@ -149,7 +149,7 @@ class ArgumentOutOfRangeException(RuntimeError):
     _class_name = 'ArgumentOutOfRangeException'
 
 
-class DivideByZeroException(RuntimeError):
+class DivideByZeroException(ZeroDivisionError):
     """
     An integer was divided by zero.
     """
@@ -165,7 +165,7 @@ class Error(RuntimeError):
     _class_name = 'Error'
 
 
-class IndexOutOfRangeException(RuntimeError):
+class IndexOutOfRangeException(IndexError):
     """
     An index was outside the bounds of a collection, string or array.
     """
@@ -182,7 +182,7 @@ class InvalidOperationException(RuntimeError):
     _class_name = 'InvalidOperationException'
 
 
-class KeyNotFoundException(RuntimeError):
+class KeyNotFoundException(KeyError):
     """
     A key was not found in a dictionary.
     """
@@ -190,7 +190,7 @@ class KeyNotFoundException(RuntimeError):
     _class_name = 'KeyNotFoundException'
 
 
-class NotSupportedException(RuntimeError):
+class NotSupportedException(NotImplementedError):
     """
     A method was invoked that is not supported.
     """
@@ -198,7 +198,7 @@ class NotSupportedException(RuntimeError):
     _class_name = 'NotSupportedException'
 
 
-class NullReferenceException(RuntimeError):
+class NullReferenceException(TypeError):
     """
     A value was null where its type does not allow one.
     """
@@ -225,7 +225,7 @@ class ObjectNotLoadedException(RuntimeError):
     _class_name = 'ObjectNotLoadedException'
 
 
-class OverflowException(RuntimeError):
+class OverflowException(OverflowError):
     """
     An arithmetic or conversion operation overflowed.
     """
@@ -241,7 +241,7 @@ class StreamRemovedException(RuntimeError):
     _class_name = 'StreamRemovedException'
 
 
-class TimeoutException(RuntimeError):
+class TimeoutException(TimeoutError):
     """
     An operation did not complete in the time allotted to it.
     """

@@ -45,7 +45,7 @@ class {{struct_name}}(NamedTuple):
 
 {% endfor %}
 {% for exception_name, exception in exceptions.items() %}
-class {{exception_name}}(RuntimeError):
+class {{exception_name}}({{ exception.native or 'RuntimeError' }}):
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
 {% endif %}
     _service_name = '{{ service_name }}'

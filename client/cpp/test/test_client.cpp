@@ -521,7 +521,7 @@ TEST_F(test_client, test_invalid_operation_exception) {
                krpc::services::KRPC::InvalidOperationException);
   try {
     test_service.throw_invalid_operation_exception();
-  } catch (std::runtime_error& e) {
+  } catch (std::logic_error& e) {
     EXPECT_THAT(e.what(), testing::HasSubstr("Invalid operation"));
   }
 }
@@ -592,6 +592,24 @@ TEST_F(test_client, test_mapped_exceptions) {
   check_mapped_exception<KRPC::NotSupportedException>(conn, krpc, "NotSupportedException");
   check_mapped_exception<KRPC::TimeoutException>(conn, krpc, "TimeoutException");
   check_mapped_exception<KRPC::OverflowException>(conn, krpc, "OverflowException");
+}
+
+// The exceptions with a standard equivalent derive from it, and the rest from RPCError
+TEST_F(test_client, test_mapped_exception_bases) {
+  using krpc::services::KRPC;
+  static_assert(std::is_base_of<std::logic_error, KRPC::InvalidOperationException>::value, "");
+  static_assert(std::is_base_of<std::invalid_argument, KRPC::ArgumentException>::value, "");
+  static_assert(std::is_base_of<std::invalid_argument, KRPC::ArgumentNullException>::value, "");
+  static_assert(std::is_base_of<std::out_of_range, KRPC::ArgumentOutOfRangeException>::value, "");
+  static_assert(std::is_base_of<krpc::RPCError, KRPC::NullReferenceException>::value, "");
+  static_assert(std::is_base_of<std::out_of_range, KRPC::KeyNotFoundException>::value, "");
+  static_assert(std::is_base_of<std::out_of_range, KRPC::IndexOutOfRangeException>::value, "");
+  static_assert(std::is_base_of<std::domain_error, KRPC::DivideByZeroException>::value, "");
+  static_assert(std::is_base_of<krpc::RPCError, KRPC::NotSupportedException>::value, "");
+  static_assert(std::is_base_of<krpc::RPCError, KRPC::TimeoutException>::value, "");
+  static_assert(std::is_base_of<std::overflow_error, KRPC::OverflowException>::value, "");
+  static_assert(std::is_base_of<krpc::RPCError, KRPC::Error>::value, "");
+  ASSERT_THROW(test_service.throw_argument_exception(), std::invalid_argument);
 }
 
 TEST_F(test_client, test_line_endings) {

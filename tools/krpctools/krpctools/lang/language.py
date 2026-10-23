@@ -108,6 +108,11 @@ class Language:
     def parse_default_value(self, value, typ) -> str | None:
         return None
 
+    def native_exception(self, mapped_type: str) -> str | None:
+        """The language's own exception that an exception with the given mapped type stands
+        for, or None if there is none"""
+        return None
+
     def parse_special_value(self, value, typ):
         """The language's source for value, if it is a special value the language names,
         otherwise None."""

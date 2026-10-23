@@ -316,12 +316,12 @@ public class FunctionStreamTest {
           connection, fails, Expression.constantInt(connection, 0)));
       event.addCallback(() -> {});
       synchronized (stream.getCondition()) {
-        assertThrows(UnsupportedOperationException.class, () -> stream.waitForUpdate());
+        assertThrows(IllegalStateException.class, () -> stream.waitForUpdate());
       }
       synchronized (event.getCondition()) {
-        assertThrows(UnsupportedOperationException.class, () -> event.waitFor());
+        assertThrows(IllegalStateException.class, () -> event.waitFor());
       }
-      assertThrows(UnsupportedOperationException.class, () -> stream.get());
+      assertThrows(IllegalStateException.class, () -> stream.get());
       // The callbacks run on the update thread after it notifies the condition
       Thread.sleep(200);
       assertEquals(Collections.emptyList(), uncaught);

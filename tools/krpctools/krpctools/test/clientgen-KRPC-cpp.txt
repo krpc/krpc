@@ -5,6 +5,7 @@
 #include <limits>
 #include <map>
 #include <set>
+#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -36,33 +37,33 @@ class KRPC : public Service {
    * A method was invoked where at least one of the passed arguments does not
    * meet the parameter specification of the method.
    */
-  class ArgumentException : public ::krpc::RPCError {
+  class ArgumentException : public std::invalid_argument {
    public:
-    inline explicit ArgumentException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit ArgumentException(const std::string& msg) : std::invalid_argument(msg) {}
   };
 
   /**
    * A null reference was passed to a method that does not accept it as a valid argument.
    */
-  class ArgumentNullException : public ::krpc::RPCError {
+  class ArgumentNullException : public std::invalid_argument {
    public:
-    inline explicit ArgumentNullException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit ArgumentNullException(const std::string& msg) : std::invalid_argument(msg) {}
   };
 
   /**
    * The value of an argument is outside the allowable range of values as defined by the invoked method.
    */
-  class ArgumentOutOfRangeException : public ::krpc::RPCError {
+  class ArgumentOutOfRangeException : public std::out_of_range {
    public:
-    inline explicit ArgumentOutOfRangeException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit ArgumentOutOfRangeException(const std::string& msg) : std::out_of_range(msg) {}
   };
 
   /**
    * An integer was divided by zero.
    */
-  class DivideByZeroException : public ::krpc::RPCError {
+  class DivideByZeroException : public std::domain_error {
    public:
-    inline explicit DivideByZeroException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit DivideByZeroException(const std::string& msg) : std::domain_error(msg) {}
   };
 
   /**
@@ -76,26 +77,26 @@ class KRPC : public Service {
   /**
    * An index was outside the bounds of a collection, string or array.
    */
-  class IndexOutOfRangeException : public ::krpc::RPCError {
+  class IndexOutOfRangeException : public std::out_of_range {
    public:
-    inline explicit IndexOutOfRangeException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit IndexOutOfRangeException(const std::string& msg) : std::out_of_range(msg) {}
   };
 
   /**
    * A method call was made to a method that is invalid
    * given the current state of the object.
    */
-  class InvalidOperationException : public ::krpc::RPCError {
+  class InvalidOperationException : public std::logic_error {
    public:
-    inline explicit InvalidOperationException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit InvalidOperationException(const std::string& msg) : std::logic_error(msg) {}
   };
 
   /**
    * A key was not found in a dictionary.
    */
-  class KeyNotFoundException : public ::krpc::RPCError {
+  class KeyNotFoundException : public std::out_of_range {
    public:
-    inline explicit KeyNotFoundException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit KeyNotFoundException(const std::string& msg) : std::out_of_range(msg) {}
   };
 
   /**
@@ -136,9 +137,9 @@ class KRPC : public Service {
   /**
    * An arithmetic or conversion operation overflowed.
    */
-  class OverflowException : public ::krpc::RPCError {
+  class OverflowException : public std::overflow_error {
    public:
-    inline explicit OverflowException(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit OverflowException(const std::string& msg) : std::overflow_error(msg) {}
   };
 
   /**

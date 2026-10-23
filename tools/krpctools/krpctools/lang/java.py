@@ -114,6 +114,24 @@ class JavaLanguage(Language):
     def get_tuple_class_name(cls, value_types):
         return cls.tuple_types[len(value_types) - 1]
 
+    # The exceptions the mapped types are thrown as. TimeoutException is checked, so a
+    # timeout is thrown as the generated exception
+    native_exceptions = {
+        "System.InvalidOperationException": "java.lang.IllegalStateException",
+        "System.ArgumentException": "java.lang.IllegalArgumentException",
+        "System.ArgumentNullException": "java.lang.IllegalArgumentException",
+        "System.ArgumentOutOfRangeException": "java.lang.IllegalArgumentException",
+        "System.NullReferenceException": "java.lang.NullPointerException",
+        "System.Collections.Generic.KeyNotFoundException": "java.util.NoSuchElementException",
+        "System.IndexOutOfRangeException": "java.lang.IndexOutOfBoundsException",
+        "System.DivideByZeroException": "java.lang.ArithmeticException",
+        "System.NotSupportedException": "java.lang.UnsupportedOperationException",
+        "System.OverflowException": "java.lang.ArithmeticException",
+    }
+
+    def native_exception(self, mapped_type: str) -> str | None:
+        return self.native_exceptions.get(mapped_type)
+
     def parse_name(self, name):
         return super().parse_name(lower_camel_case(name))
 

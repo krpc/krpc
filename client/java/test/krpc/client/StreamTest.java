@@ -343,9 +343,9 @@ public class StreamTest {
       List<Integer> values = Collections.synchronizedList(new ArrayList<Integer>());
       stream.addCallback((Integer value) -> values.add(value));
       synchronized (stream.getCondition()) {
-        assertThrows(UnsupportedOperationException.class, () -> stream.waitForUpdate());
+        assertThrows(IllegalStateException.class, () -> stream.waitForUpdate());
       }
-      assertThrows(UnsupportedOperationException.class, () -> stream.get());
+      assertThrows(IllegalStateException.class, () -> stream.get());
       // The callbacks run on the update thread after it notifies the condition
       Thread.sleep(200);
       assertEquals(Collections.emptyList(), values);
@@ -456,7 +456,7 @@ public class StreamTest {
     try {
       stream.get();
       fail();
-    } catch (UnsupportedOperationException exn) {
+    } catch (IllegalStateException exn) {
     }
   }
 
@@ -473,7 +473,7 @@ public class StreamTest {
         pause();
         stream.get();
       }
-    } catch (UnsupportedOperationException exn) {
+    } catch (IllegalStateException exn) {
     }
   }
 
@@ -747,19 +747,19 @@ public class StreamTest {
     List<Exception> ended = Collections.synchronizedList(new ArrayList<Exception>());
     stream.addEndCallback(ended::add);
     synchronized (stream.getCondition()) {
-      assertThrows(UnsupportedOperationException.class, () -> stream.waitForUpdate());
+      assertThrows(IllegalStateException.class, () -> stream.waitForUpdate());
       assertThrows(
-          UnsupportedOperationException.class, () -> stream.waitForUpdateWithTimeout(1));
+          IllegalStateException.class, () -> stream.waitForUpdateWithTimeout(1));
     }
-    assertThrows(UnsupportedOperationException.class, () -> stream.get());
+    assertThrows(IllegalStateException.class, () -> stream.get());
     awaitSize(ended, 1);
-    assertTrue(ended.get(0) instanceof UnsupportedOperationException);
+    assertTrue(ended.get(0) instanceof IllegalStateException);
     // Added after the end, so called straight away
     stream.addEndCallback(ended::add);
     assertEquals(2, ended.size());
     // Already removed by the server, so this does nothing
     stream.remove();
-    assertThrows(UnsupportedOperationException.class, () -> stream.get());
+    assertThrows(IllegalStateException.class, () -> stream.get());
   }
 
   @Test(timeout = 30000)

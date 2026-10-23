@@ -33,6 +33,7 @@ return {% if is_static %}_client.{% else %}this->_client->{% endif %}build_call(
 #include <limits>
 #include <map>
 #include <set>
+#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -77,9 +78,9 @@ class {{ service_name }} : public Service {
 
 {% if exception.documentation %}{{ exception.documentation | indent(width=2) }}
 {% endif %}
-  class {% if exception.deprecated %}[[deprecated{% if exception.deprecated_reason %}("{{ exception.deprecated_reason }}"){% endif %}]] {% endif %}{{ exception_name }} : public ::krpc::RPCError {
+  class {% if exception.deprecated %}[[deprecated{% if exception.deprecated_reason %}("{{ exception.deprecated_reason }}"){% endif %}]] {% endif %}{{ exception_name }} : public {{ exception.native or '::krpc::RPCError' }} {
    public:
-    inline explicit {{ exception_name }}(const std::string& msg) : ::krpc::RPCError(msg) {}
+    inline explicit {{ exception_name }}(const std::string& msg) : {{ exception.native or '::krpc::RPCError' }}(msg) {}
   };
   {% endfor %}
   {% endif %}

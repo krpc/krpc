@@ -471,7 +471,13 @@ class StructField(Appendable):
 
 class ExceptionNode(Appendable):
     def __init__(
-        self, service_name, name, documentation, deprecated=False, deprecated_reason=""
+        self,
+        service_name,
+        name,
+        documentation,
+        deprecated=False,
+        deprecated_reason="",
+        mapped_type="",
     ):
         super().__init__()
         self.service_name = service_name
@@ -480,4 +486,5 @@ class ExceptionNode(Appendable):
         self.documentation = documentation
         self.deprecated = deprecated
         self.deprecated_reason = deprecated_reason
+        self.mapped_type = mapped_type
         self.cref = "T:%s.%s" % (service_name, name)

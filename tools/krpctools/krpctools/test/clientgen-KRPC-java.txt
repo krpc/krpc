@@ -273,19 +273,19 @@ public class KRPC {
     }
 
     private void addExceptionTypes(Connection connection) {
-        connection.addExceptionType("KRPC", "ArgumentException", ArgumentException.class);
-        connection.addExceptionType("KRPC", "ArgumentNullException", ArgumentNullException.class);
-        connection.addExceptionType("KRPC", "ArgumentOutOfRangeException", ArgumentOutOfRangeException.class);
-        connection.addExceptionType("KRPC", "DivideByZeroException", DivideByZeroException.class);
+        connection.addExceptionType("KRPC", "ArgumentException", java.lang.IllegalArgumentException.class);
+        connection.addExceptionType("KRPC", "ArgumentNullException", java.lang.IllegalArgumentException.class);
+        connection.addExceptionType("KRPC", "ArgumentOutOfRangeException", java.lang.IllegalArgumentException.class);
+        connection.addExceptionType("KRPC", "DivideByZeroException", java.lang.ArithmeticException.class);
         connection.addExceptionType("KRPC", "Error", Error.class);
-        connection.addExceptionType("KRPC", "IndexOutOfRangeException", IndexOutOfRangeException.class);
-        connection.addExceptionType("KRPC", "InvalidOperationException", InvalidOperationException.class);
-        connection.addExceptionType("KRPC", "KeyNotFoundException", KeyNotFoundException.class);
-        connection.addExceptionType("KRPC", "NotSupportedException", NotSupportedException.class);
-        connection.addExceptionType("KRPC", "NullReferenceException", NullReferenceException.class);
+        connection.addExceptionType("KRPC", "IndexOutOfRangeException", java.lang.IndexOutOfBoundsException.class);
+        connection.addExceptionType("KRPC", "InvalidOperationException", java.lang.IllegalStateException.class);
+        connection.addExceptionType("KRPC", "KeyNotFoundException", java.util.NoSuchElementException.class);
+        connection.addExceptionType("KRPC", "NotSupportedException", java.lang.UnsupportedOperationException.class);
+        connection.addExceptionType("KRPC", "NullReferenceException", java.lang.NullPointerException.class);
         connection.addExceptionType("KRPC", "ObjectDestroyedException", ObjectDestroyedException.class);
         connection.addExceptionType("KRPC", "ObjectNotLoadedException", ObjectNotLoadedException.class);
-        connection.addExceptionType("KRPC", "OverflowException", OverflowException.class);
+        connection.addExceptionType("KRPC", "OverflowException", java.lang.ArithmeticException.class);
         connection.addExceptionType("KRPC", "StreamRemovedException", StreamRemovedException.class);
         connection.addExceptionType("KRPC", "TimeoutException", TimeoutException.class);
         connection.addExceptionType("KRPC", "UnsupportedSceneException", UnsupportedSceneException.class);
