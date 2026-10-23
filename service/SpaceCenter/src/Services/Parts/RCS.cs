@@ -190,7 +190,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The available torque, in Newton meters, that can be produced by this RCS,
+        /// The available torque, in <unit>N.m</unit>, that can be produced by this RCS,
         /// in the positive and negative pitch, roll and yaw axes of the vessel. These axes
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// Returns zero if RCS is disable.
@@ -249,7 +249,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The torque being applied by the RCS thrusters about the vessel's center of mass,
-        /// in Newton meters. The vector is in the vessel's reference frame
+        /// in <unit>N.m</unit>. The vector is in the vessel's reference frame
         /// (<see cref="Vessel.ReferenceFrame"/>). Returns zero if the RCS is inactive.
         /// </summary>
         [KRPCProperty]
@@ -258,7 +258,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The force and torque the given demands would produce, in Newtons and Newton meters.
+        /// The force and torque the given demands would produce, in Newtons and <unit>N.m</unit>.
         /// </summary>
         /// <returns>The force, and the torque about the vessel's center of mass, in the vessel's
         /// reference frame (<see cref="Vessel.ReferenceFrame"/>), or zero if the RCS is

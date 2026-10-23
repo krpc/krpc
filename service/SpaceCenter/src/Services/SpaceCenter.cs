@@ -720,7 +720,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The value of the <a href="https://en.wikipedia.org/wiki/Gravitational_constant">
-        /// gravitational constant</a> G in <math>N(m/kg)^2</math>.
+        /// gravitational constant</a> G in <unit>N(m/kg)^2</unit>.
         /// </summary>
         [KRPCProperty]
         public static double G {
@@ -1065,12 +1065,12 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Converts a rotation from one reference frame to another.
         /// </summary>
-        /// <param name="rotation">Rotation, as a quaternion of the form <math>(x, y, z, w)</math>,
+        /// <param name="rotation">Rotation, as a quaternion of the form <c>(x, y, z, w)</c>,
         /// in reference frame <paramref name="from"/>.</param>
         /// <param name="from">The reference frame that the rotation is in.</param>
         /// <param name="to">The reference frame to covert the rotation to.</param>
         /// <returns>The corresponding rotation, as a quaternion of the form
-        /// <math>(x, y, z, w)</math>, in reference frame <paramref name="to"/>.</returns>
+        /// <c>(x, y, z, w)</c>, in reference frame <paramref name="to"/>.</returns>
         [KRPCProcedure]
         public static Tuple4 TransformRotation (Tuple4 rotation, ReferenceFrame from, ReferenceFrame to)
         {
@@ -1086,7 +1086,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="position">Position, as a vector, in reference frame
         /// <paramref name="from"/>.</param>
         /// <param name="velocity">Velocity, as a vector that points in the direction of travel and
-        /// whose magnitude is the speed in meters per second, in reference frame
+        /// whose magnitude is the speed in <unit>m/s</unit>, in reference frame
         /// <paramref name="from"/>.</param>
         /// <param name="from">The reference frame that the position and velocity are in.</param>
         /// <param name="to">The reference frame to covert the velocity to.</param>

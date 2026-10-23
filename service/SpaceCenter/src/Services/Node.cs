@@ -148,7 +148,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The magnitude of the maneuver nodes delta-v in the prograde direction,
-        /// in meters per second.
+        /// in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public double Prograde {
@@ -161,7 +161,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The magnitude of the maneuver nodes delta-v in the normal direction,
-        /// in meters per second.
+        /// in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public double Normal {
@@ -174,7 +174,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The magnitude of the maneuver nodes delta-v in the radial direction,
-        /// in meters per second.
+        /// in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public double Radial {
@@ -186,7 +186,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The delta-v of the maneuver node, in meters per second.
+        /// The delta-v of the maneuver node, in <unit>m/s</unit>.
         /// </summary>
         /// <remarks>
         /// Does not change when executing the maneuver node. See <see cref="RemainingDeltaV"/>.
@@ -202,7 +202,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the remaining delta-v of the maneuver node, in meters per second. Changes as the
+        /// Gets the remaining delta-v of the maneuver node, in <unit>m/s</unit>. Changes as the
         /// node is executed. This is equivalent to the delta-v reported in-game.
         /// </summary>
         [KRPCProperty]
@@ -216,7 +216,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="referenceFrame">The reference frame that the returned vector is in.
         /// Defaults to <see cref="Vessel.OrbitalReferenceFrame"/>.</param>
         /// <returns>A vector whose direction is the direction of the maneuver node burn, and
-        /// magnitude is the delta-v of the burn in meters per second.
+        /// magnitude is the delta-v of the burn in <unit>m/s</unit>.
         /// </returns>
         /// <remarks>
         /// Does not change when executing the maneuver node. See <see cref="RemainingBurnVector"/>.
@@ -235,7 +235,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="referenceFrame">The reference frame that the returned vector is in.
         /// Defaults to <see cref="Vessel.OrbitalReferenceFrame"/>.</param>
         /// <returns>A vector whose direction is the direction of the maneuver node burn, and
-        /// magnitude is the delta-v of the burn in meters per second.
+        /// magnitude is the delta-v of the burn in <unit>m/s</unit>.
         /// </returns>
         /// <remarks>
         /// Changes as the maneuver node is executed. See <see cref="BurnVector"/>.
@@ -339,7 +339,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The rotation of the maneuver nodes burn.
         /// </summary>
-        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <returns>The rotation as a quaternion of the form <c>(x, y, z, w)</c>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// rotation is in.</param>
         [KRPCMethod]

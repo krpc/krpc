@@ -292,7 +292,8 @@ namespace KRPC.InfernalRobotics
         }
 
         /// <summary>
-        /// The rate at which the servo consumes electric charge, in units per second, when moving.
+        /// The rate at which the servo consumes electric charge, in <unit>units/s</unit>,
+        /// when moving.
         /// </summary>
         [KRPCProperty]
         public float ElectricChargeRequired {

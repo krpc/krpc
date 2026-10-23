@@ -481,17 +481,17 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="referenceFrame">The parent reference frame on which to
         /// base this reference frame.</param>
         /// <param name="position">The offset of the position of the origin,
-        /// as a position vector. Defaults to <math>(0, 0, 0)</math></param>
+        /// as a position vector. Defaults to <c>(0, 0, 0)</c></param>
         /// <param name="rotation">The rotation to apply to the parent frames rotation,
-        /// as a quaternion of the form <math>(x, y, z, w)</math>.
-        /// Defaults to <math>(0, 0, 0, 1)</math> (i.e. no rotation)</param>
+        /// as a quaternion of the form <c>(x, y, z, w)</c>.
+        /// Defaults to <c>(0, 0, 0, 1)</c> (i.e. no rotation)</param>
         /// <param name="velocity">The linear velocity to offset the parent frame by,
         /// as a vector pointing in the direction of travel, whose magnitude is the speed in
-        /// meters per second. Defaults to <math>(0, 0, 0)</math>.</param>
+        /// <unit>m/s</unit>. Defaults to <c>(0, 0, 0)</c>.</param>
         /// <param name="angularVelocity">The angular velocity to offset the parent frame by,
         /// as a vector. This vector points in the direction of the axis of rotation,
-        /// and its magnitude is the speed of the rotation in radians per second.
-        /// Defaults to <math>(0, 0, 0)</math>.</param>
+        /// and its magnitude is the speed of the rotation in <unit>rad/s</unit>.
+        /// Defaults to <c>(0, 0, 0)</c>.</param>
         /// <remarks>
         /// Each call returns a new frame, which is kept until <see cref="Remove"/> is
         /// called on it or the client that created it disconnects, so a script that
@@ -968,7 +968,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Returns the rotational velocity of the reference frame in world-space.
         /// Vector points in direction of axis of rotation
-        /// Vector's magnitude is the speed of rotation in radians per second
+        /// Vector's magnitude is the speed of rotation in <unit>rad/s</unit>
         /// </summary>
         public Vector3d AngularVelocity {
             get {

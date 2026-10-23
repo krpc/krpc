@@ -23,7 +23,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 Force { get; set; }
 
         /// <summary>
-        /// The torque, in Newton meters.
+        /// The torque, in <unit>N.m</unit>.
         /// </summary>
         [KRPCProperty]
         public Tuple3 Torque { get; set; }

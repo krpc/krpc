@@ -654,7 +654,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The available torque, in Newton meters, that can be produced by this engine,
+        /// The available torque, in <unit>N.m</unit>, that can be produced by this engine,
         /// in the positive and negative pitch, roll and yaw axes of the vessel. These axes
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// Returns zero if the engine is inactive, or not gimballed.

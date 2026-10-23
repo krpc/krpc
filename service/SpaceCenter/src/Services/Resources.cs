@@ -260,7 +260,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Returns the density of a resource, in <math>kg/l</math>.
+        /// Returns the density of a resource, in <unit>kg/l</unit>.
         /// </summary>
         /// <param name="name">The name of the resource.</param>
         [KRPCMethod]

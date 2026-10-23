@@ -324,7 +324,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The volume of water the part displaces when fully submerged, in <math>m^3</math>.
+        /// The volume of water the part displaces when fully submerged, in <unit>m^3</unit>.
         /// </summary>
         /// <remarks>
         /// See <see cref="DisplacedVolume"/> for the volume it is displacing now.
@@ -346,8 +346,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The buoyant force on the part when fully submerged in a fluid of the given
         /// density, in Newtons.
         /// </summary>
-        /// <param name="density">The density of the fluid, in <math>kg/m^3</math>.</param>
-        /// <param name="gravity">The acceleration due to gravity, in <math>m/s^2</math>.</param>
+        /// <param name="density">The density of the fluid, in <unit>kg/m^3</unit>.</param>
+        /// <param name="gravity">The acceleration due to gravity, in <unit>m/s^2</unit>.</param>
         /// <remarks>
         /// Applies <see cref="SpaceCenter.BuoyancyScalar"/> and
         /// <see cref="BuoyancyMultiplier"/>, so the result is what the game would do to the
@@ -381,7 +381,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The volume of water the part is displacing, in <math>m^3</math>.
+        /// The volume of water the part is displacing, in <unit>m^3</unit>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public double DisplacedVolume {
@@ -477,7 +477,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The impact tolerance of the part, in meters per second.
+        /// The impact tolerance of the part, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public double ImpactTolerance {
@@ -1040,7 +1040,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The linear velocity of the part in the given reference frame.
         /// </summary>
         /// <returns>The velocity as a vector. The vector points in the direction of travel,
-        /// and its magnitude is the speed of the body in meters per second.</returns>
+        /// and its magnitude is the speed of the body in <unit>m/s</unit>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// velocity vector is in.</param>
         [KRPCMethod (GameScene = GameScene.Flight)]
@@ -1053,7 +1053,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The rotation of the part, in the given reference frame.
         /// </summary>
-        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <returns>The rotation as a quaternion of the form <c>(x, y, z, w)</c>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// rotation is in.</param>
         [KRPCMethod (GameScene = GameScene.Flight | GameScene.Editor)]
@@ -1179,7 +1179,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The moment of inertia of the part in <math>kg.m^2</math> around its center of mass
+        /// The moment of inertia of the part in <unit>kg.m^2</unit> around its center of mass
         /// in the parts center of mass reference frame (<see cref="CenterOfMassReferenceFrame"/>).
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]

@@ -374,7 +374,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The current orbital speed of the object in meters per second.
+        /// The current orbital speed of the object in <unit>m/s</unit>.
         /// </summary>
         /// <remarks>
         /// This value will change over time if the orbit is elliptical.
@@ -385,12 +385,13 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The specific orbital energy, in Joules per kilogram (equivalently,
-        /// meters squared per second squared).
+        /// The specific orbital energy, in <unit>J/kg</unit>.
         /// </summary>
         /// <remarks>
-        /// This is the sum of the orbit's specific kinetic and potential energy, and
-        /// is negative for a bound (elliptical) orbit.
+        /// This is the sum of the orbit's specific kinetic and potential energy,
+        /// <math>v^2/2 - \mu/r</math>, where <math>v</math> is the orbital speed,
+        /// <math>\mu</math> the gravitational parameter of the body and <math>r</math> the
+        /// orbital radius. It is negative for a bound (elliptical) orbit.
         /// </remarks>
         [KRPCProperty]
         public double SpecificEnergy {
@@ -398,7 +399,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The specific relative angular momentum, in meters squared per second.
+        /// The specific relative angular momentum, in <unit>m^2/s</unit>.
         /// </summary>
         [KRPCProperty]
         public double SpecificAngularMomentum {
@@ -414,7 +415,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The mean motion, in radians per second.
+        /// The mean motion, in <unit>rad/s</unit>.
         /// </summary>
         [KRPCProperty]
         public double MeanMotion {
@@ -533,7 +534,7 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="body">The celestial body being orbited.</param>
         /// <param name="position">The position, as a position vector.</param>
         /// <param name="velocity">The velocity, as a vector pointing in the direction of
-        /// travel, whose magnitude is the speed in meters per second.</param>
+        /// travel, whose magnitude is the speed in <unit>m/s</unit>.</param>
         /// <param name="ut">The universal time, in seconds, at which the object is at
         /// <paramref name="position"/> traveling at <paramref name="velocity"/>.</param>
         /// <param name="referenceFrame">The reference frame that
@@ -819,7 +820,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The current orbital speed in meters per second.
+        /// The current orbital speed in <unit>m/s</unit>.
         /// </summary>
         [Obsolete ("Use <see cref='Speed'/> instead.")]
         [KRPCProperty]
@@ -828,7 +829,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The orbital speed at the given time, in meters per second.
+        /// The orbital speed at the given time, in <unit>m/s</unit>.
         /// </summary>
         /// <param name="ut">The universal time to measure the speed at.</param>
         [Obsolete ("Use <see cref='SpeedAt'/> instead.")]
@@ -839,7 +840,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The specific orbital energy of the orbit, in Joules per kilogram.
+        /// The specific orbital energy of the orbit, in <unit>J/kg</unit>.
         /// </summary>
         [Obsolete ("Use <see cref='SpecificEnergy'/> instead.")]
         [KRPCProperty]
@@ -858,7 +859,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The orbital speed at the given time, in meters per second.
+        /// The orbital speed at the given time, in <unit>m/s</unit>.
         /// </summary>
         /// <param name="ut">The universal time to measure the speed at.</param>
         [KRPCMethod]
@@ -868,7 +869,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The orbital speed at the given orbital radius, in meters per second.
+        /// The orbital speed at the given orbital radius, in <unit>m/s</unit>.
         /// </summary>
         /// <param name="radius">The orbital radius in meters.</param>
         /// <remarks>
@@ -882,8 +883,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The orbital speed at the point in the orbit given by the true anomaly, in meters
-        /// per second.
+        /// The orbital speed at the point in the orbit given by the true anomaly, in
+        /// <unit>m/s</unit>.
         /// </summary>
         /// <param name="trueAnomaly">The true anomaly.</param>
         [KRPCMethod]
@@ -931,7 +932,7 @@ namespace KRPC.SpaceCenter.Services
         /// frame.
         /// </summary>
         /// <returns>The velocity as a vector. The vector points in the direction of
-        /// travel, and its magnitude is the speed in meters per second.</returns>
+        /// travel, and its magnitude is the speed in <unit>m/s</unit>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned velocity vector
         /// is in. Defaults to <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
         /// <see cref="Body"/>.</param>
@@ -961,7 +962,7 @@ namespace KRPC.SpaceCenter.Services
         /// The velocity at a given time, in the specified reference frame.
         /// </summary>
         /// <returns>The velocity as a vector. The vector points in the direction of
-        /// travel, and its magnitude is the speed in meters per second.</returns>
+        /// travel, and its magnitude is the speed in <unit>m/s</unit>.</returns>
         /// <param name="ut">The universal time to measure the velocity at.</param>
         /// <param name="referenceFrame">The reference frame that the returned velocity vector
         /// is in. Defaults to <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
@@ -996,7 +997,7 @@ namespace KRPC.SpaceCenter.Services
         /// reference frame.
         /// </summary>
         /// <returns>The velocity as a vector. The vector points in the direction of
-        /// travel, and its magnitude is the speed in meters per second.</returns>
+        /// travel, and its magnitude is the speed in <unit>m/s</unit>.</returns>
         /// <param name="trueAnomaly">The true anomaly.</param>
         /// <param name="referenceFrame">The reference frame that the returned velocity vector
         /// is in. Defaults to <see cref="CelestialBody.NonRotatingReferenceFrame"/> of

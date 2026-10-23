@@ -109,7 +109,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Target movement rate in degrees per second.
+        /// Target movement rate in <unit>\degree/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float Rate

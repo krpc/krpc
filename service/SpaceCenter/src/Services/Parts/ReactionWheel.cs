@@ -100,7 +100,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The available torque, in Newton meters, that can be produced by this reaction wheel,
+        /// The available torque, in <unit>N.m</unit>, that can be produced by this reaction wheel,
         /// in the positive and negative pitch, roll and yaw axes of the vessel. These axes
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// Returns zero if the reaction wheel is inactive or broken.
@@ -111,7 +111,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+        /// The maximum torque, in <unit>N.m</unit>, that can be produced by this reaction wheel,
         /// when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
         /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// </summary>

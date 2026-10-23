@@ -25,7 +25,7 @@ namespace KRPC.Service.StdLib
         public Tuple3 Axis { get; set; }
 
         /// <summary>
-        /// The angle of the rotation, in radians between 0 and pi.
+        /// The angle of the rotation, in radians between 0 and <math>\pi</math>.
         /// </summary>
         [KRPCProperty]
         public double Angle { get; set; }

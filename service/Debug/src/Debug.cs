@@ -113,7 +113,7 @@ namespace KRPC.Debug
         /// <param name="latitude">Latitude in degrees.</param>
         /// <param name="longitude">Longitude in degrees.</param>
         /// <param name="altitude">Altitude in meters above sea level.</param>
-        /// <param name="speed">Airspeed in meters per second, relative to the surface.</param>
+        /// <param name="speed">Airspeed in <unit>m/s</unit>, relative to the surface.</param>
         /// <param name="heading">Compass heading to point along, in degrees (90 is east).</param>
         /// <param name="pitch">Pitch above the horizon, in degrees. Defaults to 0 (level).</param>
         /// <param name="roll">Roll, in degrees. Defaults to 0 (wings level).</param>
@@ -191,7 +191,7 @@ namespace KRPC.Debug
         /// This is the inverse of <see cref="SpaceCenter.Services.Vessel.Velocity"/> in the same
         /// reference frame.
         /// </remarks>
-        /// <param name="velocity">Velocity in meters per second.</param>
+        /// <param name="velocity">Velocity in <unit>m/s</unit>.</param>
         /// <param name="referenceFrame">Reference frame the velocity is in. Defaults to the
         /// reference frame of the body being orbited, which rotates with it, so a zero velocity
         /// leaves the vessel at rest relative to the ground.</param>
@@ -303,7 +303,7 @@ namespace KRPC.Debug
         /// The whole vessel is put into a rigid rotation about its center of mass, so it spins in
         /// place rather than shearing apart or translating.
         /// </remarks>
-        /// <param name="angularVelocity">Angular velocity, in radians per second. The direction
+        /// <param name="angularVelocity">Angular velocity, in <unit>rad/s</unit>. The direction
         /// is the axis of rotation and the magnitude is the rate.</param>
         /// <param name="referenceFrame">Reference frame the angular velocity is in. Defaults to
         /// the vessel's surface reference frame.</param>

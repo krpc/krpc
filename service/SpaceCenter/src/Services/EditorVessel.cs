@@ -82,7 +82,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The total mass of the vessel, including resources and crew, in kg.
+        /// The total mass of the vessel, including resources and crew, in <unit>kg</unit>.
         /// </summary>
         [KRPCProperty]
         public float Mass {
@@ -94,7 +94,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The total mass of the vessel, excluding resources, in kg.
+        /// The total mass of the vessel, excluding resources, in <unit>kg</unit>.
         /// </summary>
         [KRPCProperty]
         public float DryMass {
@@ -196,7 +196,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The rotation of the vessel, in the given reference frame.
         /// </summary>
-        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <returns>The rotation as a quaternion of the form <c>(x, y, z, w)</c>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// rotation is in.</param>
         [KRPCMethod]
@@ -230,7 +230,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The moment of inertia of the vessel around its center of mass in <math>kg.m^2</math>.
+        /// The moment of inertia of the vessel around its center of mass in <unit>kg.m^2</unit>.
         /// The inertia values in the returned 3-tuple are around the
         /// pitch, roll and yaw directions respectively.
         /// This corresponds to the vessels reference frame (<see cref="ReferenceFrame"/>).
@@ -364,7 +364,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Total delta-v for the vessel in the situation the game's delta-v readout
-        /// assumes, in m/s. See <see cref="Editor.DeltaVBody"/>.
+        /// assumes, in <unit>m/s</unit>. See <see cref="Editor.DeltaVBody"/>.
         /// </summary>
         [KRPCProperty]
         public float DeltaV {
@@ -372,7 +372,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Total vacuum delta-v for the vessel, in m/s.
+        /// Total vacuum delta-v for the vessel, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float VacuumDeltaV {
@@ -380,7 +380,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Total sea-level delta-v for the vessel, in m/s.
+        /// Total sea-level delta-v for the vessel, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float SeaLevelDeltaV {

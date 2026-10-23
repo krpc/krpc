@@ -76,7 +76,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Speed of the flow into the intake, in <math>m/s</math>.
+        /// Speed of the flow into the intake, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float Speed {
@@ -92,7 +92,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The area of the intake's opening, in square meters.
+        /// The area of the intake's opening, in <unit>m^2</unit>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float Area {

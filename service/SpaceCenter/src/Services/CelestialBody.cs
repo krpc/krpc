@@ -88,7 +88,9 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The <a href="https://en.wikipedia.org/wiki/Standard_gravitational_parameter">standard
-        /// gravitational parameter</a> of the body in <math>m^3s^{-2}</math>.
+        /// gravitational parameter</a> of the body in <unit>m^3.s^{-2}</unit>.
+        /// This is <math>GM</math>, where <math>G</math> is the gravitational constant and
+        /// <math>M</math> the mass of the body.
         /// </summary>
         [KRPCProperty]
         public double GravitationalParameter {
@@ -97,7 +99,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The acceleration due to gravity at sea level (mean altitude) on the body,
-        /// in <math>m/s^2</math>.
+        /// in <unit>m/s^2</unit>.
         /// </summary>
         [KRPCProperty]
         public double SurfaceGravity {
@@ -113,7 +115,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The rotational speed of the body, in radians per second.
+        /// The rotational speed of the body, in <unit>rad/s</unit>.
         /// </summary>
         [KRPCProperty]
         public double RotationalSpeed {
@@ -122,7 +124,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The current rotation angle of the body, in radians.
-        /// A value between 0 and 2 pi.
+        /// A value between 0 and <math>2\pi</math>.
         /// </summary>
         [KRPCProperty]
         public double RotationAngle {
@@ -131,7 +133,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The initial rotation angle of the body (at UT 0), in radians.
-        /// A value between 0 and 2 pi.
+        /// A value between 0 and <math>2\pi</math>.
         /// </summary>
         [KRPCProperty]
         public double InitialRotation {
@@ -492,7 +494,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The density of the body's ocean, in <math>kg/m^3</math>.
+        /// The density of the body's ocean, in <unit>kg/m^3</unit>.
         /// Returns zero if the body has no ocean.
         /// </summary>
         [KRPCProperty]
@@ -501,7 +503,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The atmospheric density at the given position, in <math>kg/m^3</math>,
+        /// The atmospheric density at the given position, in <unit>kg/m^3</unit>,
         /// in the given reference frame.
         /// </summary>
         /// <param name="position">The position vector at which to measure the density.</param>
@@ -536,7 +538,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Gets the air density, in <math>kg/m^3</math>, for the specified
+        /// Gets the air density, in <unit>kg/m^3</unit>, for the specified
         /// altitude above sea level, in meters.
         /// </summary>
         /// <remarks>
@@ -692,7 +694,7 @@ namespace KRPC.SpaceCenter.Services
         /// The linear velocity of the body, in the specified reference frame.
         /// </summary>
         /// <returns>The velocity as a vector. The vector points in the direction of travel,
-        /// and its magnitude is the speed of the body in meters per second.</returns>
+        /// and its magnitude is the speed of the body in <unit>m/s</unit>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// velocity vector is in.</param>
         [KRPCMethod]
@@ -704,7 +706,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The rotation of the body, in the specified reference frame.
         /// </summary>
-        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <returns>The rotation as a quaternion of the form <c>(x, y, z, w)</c>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// rotation is in.</param>
         [KRPCMethod]
@@ -731,7 +733,7 @@ namespace KRPC.SpaceCenter.Services
         /// The angular velocity of the body in the specified reference frame.
         /// </summary>
         /// <returns>The angular velocity as a vector. The magnitude of the vector is the rotational
-        /// speed of the body, in radians per second. The direction of the vector indicates the axis
+        /// speed of the body, in <unit>rad/s</unit>. The direction of the vector indicates the axis
         /// of rotation, using the right-hand rule.</returns>
         /// <param name="referenceFrame">The reference frame the returned
         /// angular velocity is in.</param>

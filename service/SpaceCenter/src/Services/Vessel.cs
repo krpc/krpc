@@ -503,7 +503,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Total delta-v for the vessel in the current situation, in m/s.
+        /// Total delta-v for the vessel in the current situation, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public float DeltaV {
@@ -511,7 +511,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Total vacuum delta-v for the vessel, in m/s.
+        /// Total vacuum delta-v for the vessel, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public float VacuumDeltaV {
@@ -519,7 +519,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Total sea-level delta-v for the vessel, in m/s.
+        /// Total sea-level delta-v for the vessel, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public float SeaLevelDeltaV {
@@ -543,7 +543,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The total mass of the vessel, including resources, in kg.
+        /// The total mass of the vessel, including resources, in <unit>kg</unit>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public float Mass {
@@ -551,7 +551,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The total mass of the vessel, excluding resources, in kg.
+        /// The total mass of the vessel, excluding resources, in <unit>kg</unit>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public float DryMass {
@@ -630,7 +630,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The acceleration currently produced by the vessel's engines, in
-        /// <math>m/s^2</math>. This is <see cref="Thrust"/> divided by the
+        /// <unit>m/s^2</unit>. This is <see cref="Thrust"/> divided by the
         /// vessel's <see cref="Mass"/>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
@@ -640,7 +640,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The total available acceleration that can be produced by the vessel's
-        /// active engines, in <math>m/s^2</math>. This is <see cref="AvailableThrust"/>
+        /// active engines, in <unit>m/s^2</unit>. This is <see cref="AvailableThrust"/>
         /// divided by the vessel's <see cref="Mass"/>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
@@ -650,7 +650,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The total available acceleration that can be produced by the vessel's
-        /// active engines, in <math>m/s^2</math>. This is <see cref="AvailableThrustAt"/>
+        /// active engines, in <unit>m/s^2</unit>. This is <see cref="AvailableThrustAt"/>
         /// divided by the vessel's <see cref="Mass"/>. Takes the given pressure into account.
         /// </summary>
         /// <param name="pressure">Atmospheric pressure in atmospheres</param>
@@ -662,7 +662,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The total maximum acceleration that can be produced by the vessel's active
-        /// engines, in <math>m/s^2</math>. This is <see cref="MaxThrust"/> divided by
+        /// engines, in <unit>m/s^2</unit>. This is <see cref="MaxThrust"/> divided by
         /// the vessel's <see cref="Mass"/>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
@@ -672,7 +672,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The total maximum acceleration that can be produced by the vessel's active
-        /// engines, in <math>m/s^2</math>. This is <see cref="MaxThrustAt"/> divided by
+        /// engines, in <unit>m/s^2</unit>. This is <see cref="MaxThrustAt"/> divided by
         /// the vessel's <see cref="Mass"/>. Takes the given pressure into account.
         /// </summary>
         /// <param name="pressure">Atmospheric pressure in atmospheres</param>
@@ -684,7 +684,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The total maximum acceleration that can be produced by the vessel's active
-        /// engines when the vessel is in a vacuum, in <math>m/s^2</math>. This is
+        /// engines when the vessel is in a vacuum, in <unit>m/s^2</unit>. This is
         /// <see cref="MaxVacuumThrust"/> divided by the vessel's <see cref="Mass"/>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
@@ -752,7 +752,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The moment of inertia of the vessel around its center of mass in <math>kg.m^2</math>.
+        /// The moment of inertia of the vessel around its center of mass in <unit>kg.m^2</unit>.
         /// The inertia values in the returned 3-tuple are around the
         /// pitch, roll and yaw directions respectively.
         /// This corresponds to the vessels reference frame (<see cref="ReferenceFrame"/>).
@@ -811,7 +811,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The maximum torque that the vessel generates. Includes contributions from
         /// reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
-        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// Returns the torques in <unit>N.m</unit> around each of the coordinate axes of the
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
@@ -822,7 +822,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The maximum torque that the currently active and powered reaction wheels can generate.
-        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// Returns the torques in <unit>N.m</unit> around each of the coordinate axes of the
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
@@ -833,7 +833,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The maximum torque that the currently active RCS thrusters can generate.
-        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// Returns the torques in <unit>N.m</unit> around each of the coordinate axes of the
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
@@ -844,7 +844,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The maximum force that the currently active RCS thrusters can generate.
-        /// Returns the forces in <math>N</math> along each of the coordinate axes of the
+        /// Returns the forces in <unit>N</unit> along each of the coordinate axes of the
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the right, forward and bottom directions of the vessel.
         /// </summary>
@@ -856,7 +856,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The maximum acceleration that the currently active RCS thrusters can generate.
         /// This is <see cref="AvailableRCSForce"/> divided by the vessel's <see cref="Mass"/>.
-        /// Returns the accelerations in <math>m/s^2</math> along each of the coordinate axes of the
+        /// Returns the accelerations in <unit>m/s^2</unit> along each of the coordinate axes of the
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the right, forward and bottom directions of the vessel.
         /// </summary>
@@ -871,7 +871,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The maximum torque that the currently active and gimballed engines can generate.
-        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// Returns the torques in <unit>N.m</unit> around each of the coordinate axes of the
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
@@ -882,7 +882,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The maximum torque that the aerodynamic control surfaces can generate.
-        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// Returns the torques in <unit>N.m</unit> around each of the coordinate axes of the
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
@@ -894,7 +894,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The maximum torque that parts (excluding reaction wheels, gimballed engines,
         /// RCS and control surfaces) can generate.
-        /// Returns the torques in <math>N.m</math> around each of the coordinate axes of the
+        /// Returns the torques in <unit>N.m</unit> around each of the coordinate axes of the
         /// vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
@@ -907,7 +907,7 @@ namespace KRPC.SpaceCenter.Services
         /// The maximum angular acceleration that the vessel can generate. Includes contributions
         /// from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
         /// This is <see cref="AvailableTorque"/> divided by the vessel's <see cref="MomentOfInertia"/>.
-        /// Returns the angular accelerations in <math>rad/s^2</math> around each of the coordinate
+        /// Returns the angular accelerations in <unit>rad/s^2</unit> around each of the coordinate
         /// axes of the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
@@ -920,7 +920,7 @@ namespace KRPC.SpaceCenter.Services
         /// The maximum angular acceleration that the currently active and powered reaction wheels
         /// can generate. This is <see cref="AvailableReactionWheelTorque"/> divided by the vessel's
         /// <see cref="MomentOfInertia"/>.
-        /// Returns the angular accelerations in <math>rad/s^2</math> around each of the coordinate
+        /// Returns the angular accelerations in <unit>rad/s^2</unit> around each of the coordinate
         /// axes of the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
@@ -932,7 +932,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The maximum angular acceleration that the currently active RCS thrusters can generate.
         /// This is <see cref="AvailableRCSTorque"/> divided by the vessel's <see cref="MomentOfInertia"/>.
-        /// Returns the angular accelerations in <math>rad/s^2</math> around each of the coordinate
+        /// Returns the angular accelerations in <unit>rad/s^2</unit> around each of the coordinate
         /// axes of the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
@@ -945,7 +945,7 @@ namespace KRPC.SpaceCenter.Services
         /// The maximum angular acceleration that the currently active and gimballed engines can
         /// generate. This is <see cref="AvailableEngineTorque"/> divided by the vessel's
         /// <see cref="MomentOfInertia"/>.
-        /// Returns the angular accelerations in <math>rad/s^2</math> around each of the coordinate
+        /// Returns the angular accelerations in <unit>rad/s^2</unit> around each of the coordinate
         /// axes of the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
@@ -958,7 +958,7 @@ namespace KRPC.SpaceCenter.Services
         /// The maximum angular acceleration that the aerodynamic control surfaces can generate.
         /// This is <see cref="AvailableControlSurfaceTorque"/> divided by the vessel's
         /// <see cref="MomentOfInertia"/>.
-        /// Returns the angular accelerations in <math>rad/s^2</math> around each of the coordinate
+        /// Returns the angular accelerations in <unit>rad/s^2</unit> around each of the coordinate
         /// axes of the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
@@ -971,7 +971,7 @@ namespace KRPC.SpaceCenter.Services
         /// The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
         /// RCS and control surfaces) can generate. This is <see cref="AvailableOtherTorque"/> divided
         /// by the vessel's <see cref="MomentOfInertia"/>.
-        /// Returns the angular accelerations in <math>rad/s^2</math> around each of the coordinate
+        /// Returns the angular accelerations in <unit>rad/s^2</unit> around each of the coordinate
         /// axes of the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// These axes are equivalent to the pitch, roll and yaw axes of the vessel.
         /// </summary>
@@ -1243,7 +1243,7 @@ namespace KRPC.SpaceCenter.Services
         /// The velocity of the center of mass of the vessel, in the given reference frame.
         /// </summary>
         /// <returns>The velocity as a vector. The vector points in the direction of travel,
-        /// and its magnitude is the speed of the body in meters per second.</returns>
+        /// and its magnitude is the speed of the body in <unit>m/s</unit>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// velocity vector is in.</param>
         [KRPCMethod (GameScene = GameScene.Flight)]
@@ -1258,7 +1258,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The rotation of the vessel, in the given reference frame.
         /// </summary>
-        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <returns>The rotation as a quaternion of the form <c>(x, y, z, w)</c>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// rotation is in.</param>
         [KRPCMethod (GameScene = GameScene.Flight)]
@@ -1283,7 +1283,7 @@ namespace KRPC.SpaceCenter.Services
         /// The angular velocity of the vessel, in the given reference frame.
         /// </summary>
         /// <returns>The angular velocity as a vector. The magnitude of the vector is the rotational
-        /// speed of the vessel, in radians per second. The direction of the vector indicates the
+        /// speed of the vessel, in <unit>rad/s</unit>. The direction of the vector indicates the
         /// axis of rotation, using the right-hand rule.</returns>
         /// <param name="referenceFrame">The reference frame the returned
         /// angular velocity is in.</param>

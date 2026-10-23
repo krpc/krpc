@@ -117,7 +117,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The rotation of the vessel, in the reference frame <see cref="ReferenceFrame"/>
         /// </summary>
-        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <returns>The rotation as a quaternion of the form <c>(x, y, z, w)</c>.</returns>
         [KRPCProperty]
         public Tuple4 Rotation {
             get { return VesselRotation.ToTuple (); }
@@ -162,7 +162,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The volume of water the vessel displaces when fully submerged, in
-        /// <math>m^3</math>.
+        /// <unit>m^3</unit>.
         /// </summary>
         [KRPCProperty]
         public double Displacement {
@@ -193,8 +193,8 @@ namespace KRPC.SpaceCenter.Services
         /// The buoyant force on the vessel when fully submerged in a fluid of the given
         /// density, in Newtons.
         /// </summary>
-        /// <param name="density">The density of the fluid, in <math>kg/m^3</math>.</param>
-        /// <param name="gravity">The acceleration due to gravity, in <math>m/s^2</math>.</param>
+        /// <param name="density">The density of the fluid, in <unit>kg/m^3</unit>.</param>
+        /// <param name="gravity">The acceleration due to gravity, in <unit>m/s^2</unit>.</param>
         [KRPCMethod]
         public double BuoyantForceAt (double density, double gravity)
         {
@@ -209,9 +209,9 @@ namespace KRPC.SpaceCenter.Services
         /// <see cref="SurfaceReferenceFrame"/>.
         /// </summary>
         /// <returns>A vector pointing along the axis of the torque, with its magnitude
-        /// equal to the strength of the torque in newton-meters.</returns>
-        /// <param name="density">The density of the fluid, in <math>kg/m^3</math>.</param>
-        /// <param name="gravity">The acceleration due to gravity, in <math>m/s^2</math>.</param>
+        /// equal to the strength of the torque in <unit>N.m</unit>.</returns>
+        /// <param name="density">The density of the fluid, in <unit>kg/m^3</unit>.</param>
+        /// <param name="gravity">The acceleration due to gravity, in <unit>m/s^2</unit>.</param>
         [KRPCMethod]
         public Tuple3 BuoyantTorqueAt (double density, double gravity)
         {

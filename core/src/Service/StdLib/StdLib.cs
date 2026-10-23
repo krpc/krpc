@@ -282,7 +282,7 @@ namespace KRPC.Service.StdLib
         }
 
         /// <summary>
-        /// The angle, in radians, between the positive x axis and the point (x, y).
+        /// The angle, in radians, between the positive x axis and the point <c>(x, y)</c>.
         /// </summary>
         /// <param name="y">The y coordinate.</param>
         /// <param name="x">The x coordinate.</param>
@@ -551,7 +551,7 @@ namespace KRPC.Service.StdLib
         }
 
         /// <summary>
-        /// The angle between two vectors, in radians, between 0 and pi.
+        /// The angle between two vectors, in radians, between 0 and <math>\pi</math>.
         /// </summary>
         /// <remarks>
         /// Throws an exception if either vector is zero.
@@ -777,7 +777,7 @@ namespace KRPC.Service.StdLib
 
         /// <summary>
         /// The angle of the rotation that takes one rotation to another,
-        /// in radians, between 0 and pi.
+        /// in radians, between 0 and <math>\pi</math>.
         /// </summary>
         /// <remarks>
         /// Throws an exception if either quaternion is zero.
