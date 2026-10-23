@@ -1,3 +1,4 @@
+#include <gmock/gmock-matchers.h>
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
 
@@ -396,7 +397,7 @@ TEST_F(test_stream, test_custom_exception_immediately) {
   try {
     s();
   } catch (krpc::services::TestService::CustomException& e) {
-    ASSERT_STREQ(e.what(), "A custom kRPC exception");
+    ASSERT_THAT(e.what(), testing::StartsWith("A custom kRPC exception\nServer stack trace:\n"));
   }
 }
 
@@ -415,7 +416,7 @@ TEST_F(test_stream, test_custom_exception_later) {
   try {
     s();
   } catch (krpc::services::TestService::CustomException& e) {
-    ASSERT_STREQ(e.what(), "A custom kRPC exception");
+    ASSERT_THAT(e.what(), testing::StartsWith("A custom kRPC exception\nServer stack trace:\n"));
   }
 }
 

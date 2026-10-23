@@ -274,6 +274,8 @@ void Client::set_function_parameter_types(uint64_t id, const std::vector<schema:
 }
 
 void Client::throw_exception(const schema::Error& error) const {
+  std::string message = error.description();
+  if (!error.stack_trace().empty()) message += "\nServer stack trace:\n" + error.stack_trace();
   if (!error.service().empty() && !error.name().empty()) {
     auto key = std::make_pair(error.service(), error.name());
     std::unique_lock<std::mutex> guard(*exception_throwers_lock);
@@ -282,15 +284,15 @@ void Client::throw_exception(const schema::Error& error) const {
       // The type is unknown here if the generated header for its service was never
       // instantiated in this translation unit, so nothing registered a thrower for it.
       // Report the error itself, named by its type on the server.
-      throw RPCError(error.service() + "." + error.name() + ": " + error.description());
+      throw RPCError(error.service() + "." + error.name() + ": " + message);
     }
     // Copy the thrower and release the lock before calling it: it throws, and it must not
     // be holding this lock while the exception propagates out through the caller.
     auto fn = thrower->second;
     guard.unlock();
-    fn(error.description());
+    fn(message);
   } else {
-    throw RPCError(error.description());
+    throw RPCError(message);
   }
 }
 
