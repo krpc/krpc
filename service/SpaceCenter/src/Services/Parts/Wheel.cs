@@ -275,7 +275,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The output of the motor. This is the torque currently being generated, in Newton meters.
+        /// The output of the motor. This is the torque currently being generated, in
+        /// <unit>N.m</unit>.
         /// </summary>
         [KRPCProperty]
         public float MotorOutput {

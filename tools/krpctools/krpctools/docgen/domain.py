@@ -1,6 +1,8 @@
 import os.path
 from typing import Generic, TypeVar
 
+from krpc.docmath import to_latex
+
 from ..lang.language import Language
 
 LanguageT = TypeVar("LanguageT", bound=Language)
@@ -69,4 +71,8 @@ class Domain(Generic[LanguageT]):
 
     @staticmethod
     def math(value):
-        return ":math:`%s`" % value
+        return ":math:`%s`" % to_latex(value)
+
+    @staticmethod
+    def unit(value):
+        return ":math:`%s`" % to_latex(value, unit=True)

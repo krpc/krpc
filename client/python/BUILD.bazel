@@ -218,6 +218,7 @@ unit_tests = [
     "krpc/test/test_attributes.py",
     "krpc/test/test_decoder.py",
     "krpc/test/test_definitions.py",
+    "krpc/test/test_docmath.py",
     "krpc/test/test_encodedecode.py",
     "krpc/test/test_encoder.py",
     "krpc/test/test_expressionutils.py",

@@ -8,6 +8,7 @@ from ..definitions import Definitions
 from ..docgen import process_file
 from ..docgen.domain import Domain
 from ..docgen.nodes import Service
+from .clientgentest import documented_enumeration
 
 # A mixin, so that the base class is not collected as a test case of its own
 if TYPE_CHECKING:
@@ -139,3 +140,15 @@ class DocGenTestCase(_Base):
             self.generate("BadService", self.load("UndeclaredEnumValue"))
         self.assertIn("BadService.Frob parameter mode", str(cm.exception))
         self.assertIn("7 is not a valid Mode", str(cm.exception))
+
+    def test_invalid_documentation_markup(self):
+        for summary, problem in [
+            ("<math>\\foo{x}</math>", "unsupported command '\\foo'"),
+            ("<unit>m/s^q</unit>", "'q' has no Unicode superscript form"),
+            ("<math>{x</math>", "unbalanced '{'"),
+            ("<bogus>y</bogus>", "unknown tag 'bogus'"),
+        ]:
+            with self.assertRaises(RuntimeError) as cm:
+                self.generate("BadService", documented_enumeration(summary))
+            self.assertIn(problem, str(cm.exception))
+            self.assertIn(summary, str(cm.exception))

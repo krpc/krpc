@@ -36,7 +36,8 @@ Enum ValueA documentation string.
 Enum ValueB documentation string.
 """
     value_c = 2, """
-Enum ValueC documentation string.
+Enum ValueC documentation string, in m/s², equal to
+½ ρ v².
 """
 
 

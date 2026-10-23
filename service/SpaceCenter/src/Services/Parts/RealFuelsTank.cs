@@ -63,7 +63,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The rate at which the tank's contents are boiling off, in kilograms per second.
+        /// The rate at which the tank's contents are boiling off, in <unit>kg/s</unit>.
         /// </summary>
         internal double BoiloffRate {
             get {

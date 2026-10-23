@@ -540,9 +540,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The threshold angular velocity, in rad/s, below which the vessel's angular
+        /// The threshold angular velocity, in <unit>rad/s</unit>, below which the vessel's angular
         /// velocity magnitude must fall for <see cref="Wait"/> to return.
-        /// Defaults to 0.05 rad/s.
+        /// Defaults to 0.05 <unit>rad/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float StoppingVelocityThreshold {
@@ -599,7 +599,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+        /// The per-axis attitude error <c>(pitch, yaw, roll)</c>, in degrees, between the vessel's current
         /// attitude and the commanded target. All three components come from one singularity-free
         /// residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
         /// of pitch/heading/roll angles). The scalar <see cref="PitchError"/>,
@@ -683,7 +683,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+        /// The per-axis attitude error <c>(pitch, yaw, roll)</c>, in degrees, between the vessel's current
         /// attitude and the target the auto-pilot is currently tracking (the slewed target, see
         /// <see cref="CurrentTargetRotation"/>). Like <see cref="AttitudeError"/> but relative to the
         /// current target, so it stays small while a smoothed change (see
@@ -770,10 +770,10 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
-        /// and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
-        /// that vessels with very high torque availability do not spin faster than desired.
-        /// Defaults to 1 rad/s for each axis.
+        /// The maximum angular velocity of the vessel, in <unit>rad/s</unit>, for each of the
+        /// pitch, roll and yaw axes. Limits the target angular velocity computed by the bang-bang
+        /// profile so that vessels with very high torque availability do not spin faster than
+        /// desired. Defaults to 1 <unit>rad/s</unit> for each axis.
         /// </summary>
         [KRPCProperty]
         public Tuple3 MaxAngularVelocity {
@@ -1006,10 +1006,11 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
-        /// bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
-        /// strongly; raising it keeps more control authority at the cost of allowing more wobble.
-        /// Defaults to 1 rad/s. This is an advanced tuning parameter.
+        /// The inner control loop bandwidth, in <unit>rad/s</unit>, that an axis is reduced
+        /// towards while the bandwidth-floor mitigation is engaged on it. Lowering it suppresses
+        /// oscillation more strongly; raising it keeps more control authority at the cost of
+        /// allowing more wobble. Defaults to 1 <unit>rad/s</unit>. This is an advanced tuning
+        /// parameter.
         /// </summary>
         [KRPCProperty]
         public double OscillationBandwidthFloor {

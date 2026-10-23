@@ -953,7 +953,8 @@ namespace KRPC.Client.Services.TestService
         /// </summary>
         ValueB = 1,
         /// <summary>
-        /// Enum ValueC documentation string.
+        /// Enum ValueC documentation string, in m/s², equal to
+        /// ½ ρ v².
         /// </summary>
         ValueC = 2
     }

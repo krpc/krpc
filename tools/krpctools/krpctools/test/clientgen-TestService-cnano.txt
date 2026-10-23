@@ -663,7 +663,8 @@ typedef enum {
    */
   KRPC_TESTSERVICE_TESTENUM_VALUEB = 1,
   /**
-   * Enum ValueC documentation string.
+   * Enum ValueC documentation string, in m/s², equal to
+   * ½ ρ v².
    */
   KRPC_TESTSERVICE_TESTENUM_VALUEC = 2
 } krpc_TestService_TestEnum_t;

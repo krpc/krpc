@@ -1,3 +1,6 @@
+import re
+from xml.sax.saxutils import escape, unescape
+
 from krpc.types import (
     DictionaryType,
     ListType,
@@ -8,7 +11,16 @@ from krpc.types import (
 
 from ..lang.csharp import CsharpLanguage
 from ..utils import as_type
+from .docparser import render_markup
 from .generator import Generator
+
+# The <math> and <unit> elements, which C# documentation tools do not know
+_MATH = re.compile(r"<(math|unit)>(.*?)</\1>", re.DOTALL)
+
+
+def _render_math(match):
+    source = unescape(match.group(2))
+    return escape(render_markup(match.group(1), source, match.string))
 
 
 class CsharpGenerator(Generator[CsharpLanguage]):
@@ -22,6 +34,7 @@ class CsharpGenerator(Generator[CsharpLanguage]):
     @staticmethod
     def parse_documentation(documentation):
         documentation = documentation.replace("<doc>", "").replace("</doc>", "").strip()
+        documentation = _MATH.sub(_render_math, documentation)
         if documentation == "":
             return ""
         lines = ["/// " + line for line in documentation.split("\n")]

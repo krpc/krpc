@@ -168,8 +168,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The relative speed of the objects at the closest approach, in meters per
-        /// second. This is the magnitude of <see cref="RelativeVelocity"/>, and does
+        /// The relative speed of the objects at the closest approach, in <unit>m/s</unit>.
+        /// This is the magnitude of <see cref="RelativeVelocity"/>, and does
         /// not depend on the choice of reference frame.
         /// </summary>
         [KRPCProperty]

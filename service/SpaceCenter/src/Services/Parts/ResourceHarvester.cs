@@ -148,7 +148,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             typeof (ModuleResourceHarvester).GetField ("_resFlow", BindingFlags.NonPublic | BindingFlags.Instance);
 
         /// <summary>
-        /// The rate at which the drill is extracting ore, in units per second.
+        /// The rate at which the drill is extracting ore, in <unit>units/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float ExtractionRate {

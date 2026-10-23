@@ -1,8 +1,10 @@
 import json
 import unittest
+import warnings
 from importlib.resources import files
 from typing import TYPE_CHECKING
 
+from ..clientgen.docparser import DocumentationMarkupWarning
 from ..clientgen.generator import Generator
 from ..definitions import Definitions
 
@@ -23,6 +25,27 @@ def _services(value):
     if isinstance(value.get("service"), str):
         names.add(value["service"])
     return names
+
+
+def documented_enumeration(summary):
+    """A service holding one enumeration, whose value has the given summary"""
+    doc = "<doc><summary>%s</summary></doc>" % summary
+    return {
+        "BadService": {
+            "id": 1,
+            "documentation": "",
+            "procedures": {},
+            "classes": {},
+            "enumerations": {
+                "Mode": {
+                    "documentation": "",
+                    "values": [{"name": "A", "value": 0, "documentation": doc}],
+                }
+            },
+            "exceptions": {},
+            "structs": {},
+        }
+    }
 
 
 class ClientGenTestCase(_Base):
@@ -116,3 +139,29 @@ class ClientGenTestCase(_Base):
             self.generate("BadService", self.load("UndeclaredEnumValue"))
         self.assertIn("BadService.Frob parameter mode", str(cm.exception))
         self.assertIn("7 is not a valid Mode", str(cm.exception))
+
+    def test_invalid_documentation_markup(self):
+        # Invalid markup is rendered as text, with a warning for each problem
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            actual = self.generate(
+                "BadService",
+                documented_enumeration(
+                    "Rate in <unit>m/s^q</unit>, <math>\\foo{x}</math> and <bogus>y</bogus>."
+                ),
+            )
+        self.assertIn("Rate in m/s^q, foo{x} and ", actual)
+        messages = {str(w.message) for w in caught}
+        self.assertTrue(all(w.category is DocumentationMarkupWarning for w in caught))
+        problems = [
+            "'q' has no Unicode superscript form",
+            "unsupported command '\\foo'",
+        ]
+        # C# documentation keeps its XML, so an unknown tag reaches it as written
+        if self.language != "csharp":
+            self.assertIn("foo{x} and y.", actual)
+            problems.append("unknown tag 'bogus'")
+        for problem in problems:
+            self.assertTrue(
+                any(problem in message for message in messages), (problem, messages)
+            )

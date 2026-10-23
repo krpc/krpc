@@ -270,7 +270,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The rotation of the docking port, in the given reference frame.
         /// </summary>
-        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <returns>The rotation as a quaternion of the form <c>(x, y, z, w)</c>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// rotation is in.</param>
         [KRPCMethod]

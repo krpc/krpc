@@ -252,7 +252,8 @@ namespace TestServer
             /// </summary>
             ValueB,
             /// <summary>
-            /// Enum ValueC documentation string.
+            /// Enum ValueC documentation string, in <unit>m/s^2</unit>, equal to
+            /// <math>\frac{1}{2} \rho v^2</math>.
             /// </summary>
             ValueC
         }

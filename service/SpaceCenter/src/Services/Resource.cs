@@ -90,7 +90,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The density of the resource, in <math>kg/l</math>.
+        /// The density of the resource, in <unit>kg/l</unit>.
         /// </summary>
         [KRPCProperty]
         public float Density {

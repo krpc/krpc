@@ -162,19 +162,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Delta-v for this stage in the current situation, in m/s.
+        /// Delta-v for this stage in the current situation, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float DeltaV => Figure (stage => stage.deltaVActual);
 
         /// <summary>
-        /// Vacuum delta-v for this stage, in m/s.
+        /// Vacuum delta-v for this stage, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float VacuumDeltaV => Figure (stage => stage.deltaVinVac);
 
         /// <summary>
-        /// Sea-level delta-v for this stage, in m/s.
+        /// Sea-level delta-v for this stage, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float SeaLevelDeltaV => Figure (stage => stage.deltaVatASL);
@@ -240,19 +240,19 @@ namespace KRPC.SpaceCenter.Services
         public float BurnTime => Figure (stage => (float)stage.stageBurnTime);
 
         /// <summary>
-        /// The mass of the vessel after the stage activates, in kg.
+        /// The mass of the vessel after the stage activates, in <unit>kg</unit>.
         /// </summary>
         [KRPCProperty]
         public float StartMass => Figure (stage => stage.startMass * 1000f);
 
         /// <summary>
-        /// The mass of the vessel when the stage burns out, in kg.
+        /// The mass of the vessel when the stage burns out, in <unit>kg</unit>.
         /// </summary>
         [KRPCProperty]
         public float EndMass => Figure (stage => stage.endMass * 1000f);
 
         /// <summary>
-        /// The dry mass of the vessel after the stage activates, in kg.
+        /// The dry mass of the vessel after the stage activates, in <unit>kg</unit>.
         /// </summary>
         /// <remarks>
         /// Includes the parts of all later stages.
@@ -261,7 +261,7 @@ namespace KRPC.SpaceCenter.Services
         public float DryMass => Figure (stage => stage.dryMass * 1000f);
 
         /// <summary>
-        /// The fuel mass of the vessel when the stage activates, in kg.
+        /// The fuel mass of the vessel when the stage activates, in <unit>kg</unit>.
         /// </summary>
         /// <remarks>
         /// Includes the fuel of all later stages, and the fuel left in the parts the stage

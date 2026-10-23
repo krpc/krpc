@@ -84,7 +84,8 @@ class TestService : public Service {
      */
     value_b = 1,
     /**
-     * Enum ValueC documentation string.
+     * Enum ValueC documentation string, in m/s², equal to
+     * ½ ρ v².
      */
     value_c = 2
   };

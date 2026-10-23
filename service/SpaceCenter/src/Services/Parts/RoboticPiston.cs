@@ -105,7 +105,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Target movement rate in meters per second.
+        /// Target movement rate in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float Rate {

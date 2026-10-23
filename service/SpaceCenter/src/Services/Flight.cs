@@ -165,7 +165,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// Net aerodynamic torque about the vessel's center of mass, in world space, in
-        /// newton-meters. This is a live readout that reconstructs the exact per-part
+        /// <unit>N.m</unit>. This is a live readout that reconstructs the exact per-part
         /// force and application-point pairs KSP applied on the current physics frame:
         /// cube drag (-dragVectorDir * dragScalar) at the part's center-of-pressure point,
         /// body lift from the bodyLiftLocalVector/bodyLiftLocalPosition values the
@@ -322,7 +322,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The current G force acting on the vessel in <math>g</math>.
+        /// The current G force acting on the vessel in <unit>g</unit>.
         /// </summary>
         [KRPCProperty]
         public float GForce {
@@ -400,14 +400,14 @@ namespace KRPC.SpaceCenter.Services
         /// The velocity of the vessel, in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         /// <returns>The velocity as a vector. The vector points in the direction of travel,
-        /// and its magnitude is the speed of the vessel in meters per second.</returns>
+        /// and its magnitude is the speed of the vessel in <unit>m/s</unit>.</returns>
         [KRPCProperty]
         public Tuple3 Velocity {
             get { return referenceFrame.VelocityFromWorldSpace (WorldCoM, WorldVelocity).ToTuple (); }
         }
 
         /// <summary>
-        /// The speed of the vessel in meters per second,
+        /// The speed of the vessel in <unit>m/s</unit>,
         /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         [KRPCProperty]
@@ -416,7 +416,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The horizontal speed of the vessel in meters per second,
+        /// The horizontal speed of the vessel in <unit>m/s</unit>,
         /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         [KRPCProperty]
@@ -429,7 +429,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The vertical speed of the vessel in meters per second,
+        /// The vertical speed of the vessel in <unit>m/s</unit>,
         /// in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         [KRPCProperty]
@@ -448,7 +448,8 @@ namespace KRPC.SpaceCenter.Services
         /// time derivative of <see cref="Velocity"/>.
         /// </summary>
         /// <returns>The acceleration as a vector. The vector points in the direction of the
-        /// acceleration, and its magnitude is the acceleration of the vessel in <math>m/s^2</math>.</returns>
+        /// acceleration, and its magnitude is the acceleration of the vessel in
+        /// <unit>m/s^2</unit>.</returns>
         [KRPCProperty]
         public Tuple3 Acceleration {
             // Use acceleration_immediate, the raw per-frame change in orbital velocity. The
@@ -470,7 +471,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The rotation of the vessel, in the reference frame <see cref="ReferenceFrame"/>
         /// </summary>
-        /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
+        /// <returns>The rotation as a quaternion of the form <c>(x, y, z, w)</c>.</returns>
         [KRPCProperty]
         public Tuple4 Rotation {
             get { return VesselRotation.ToTuple (); }
@@ -620,7 +621,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The current density of the atmosphere around the vessel, in <math>kg/m^3</math>.
+        /// The current density of the atmosphere around the vessel, in <unit>kg/m^3</unit>.
         /// </summary>
         [KRPCProperty]
         public float AtmosphereDensity {
@@ -631,8 +632,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The dynamic pressure acting on the vessel, in Pascals. This is a measure of the
-        /// strength of the aerodynamic forces. It is equal to
-        /// <math>\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2</math>.
+        /// strength of the aerodynamic forces. It is equal to <math>\frac{1}{2} \rho v^2</math>,
+        /// where <math>\rho</math> is the air density and <math>v</math> the velocity.
         /// It is commonly denoted <math>Q</math>.
         /// </summary>
         [KRPCProperty]
@@ -676,7 +677,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The volume of water the vessel displaces when fully submerged, in
-        /// <math>m^3</math>.
+        /// <unit>m^3</unit>.
         /// </summary>
         [KRPCProperty]
         public double Displacement {
@@ -689,7 +690,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The volume of water the vessel is displacing, in <math>m^3</math>.
+        /// The volume of water the vessel is displacing, in <unit>m^3</unit>.
         /// </summary>
         [KRPCProperty]
         public double DisplacedVolume {
@@ -778,7 +779,7 @@ namespace KRPC.SpaceCenter.Services
         /// in reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         /// <returns>A vector pointing in the direction that the vessel is accelerated,
-        /// with its magnitude equal to the acceleration in <math>m/s^2</math>.</returns>
+        /// with its magnitude equal to the acceleration in <unit>m/s^2</unit>.</returns>
         [KRPCProperty]
         public Tuple3 BuoyantAcceleration {
             get {
@@ -792,7 +793,7 @@ namespace KRPC.SpaceCenter.Services
         /// in reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         /// <returns>A vector pointing along the axis of the torque, with its magnitude
-        /// equal to the strength of the torque in newton-meters.</returns>
+        /// equal to the strength of the torque in <unit>N.m</unit>.</returns>
         [KRPCProperty]
         public Tuple3 BuoyantTorque {
             get {
@@ -834,8 +835,8 @@ namespace KRPC.SpaceCenter.Services
         /// The buoyant force on the vessel when fully submerged in a fluid of the given
         /// density, in Newtons.
         /// </summary>
-        /// <param name="density">The density of the fluid, in <math>kg/m^3</math>.</param>
-        /// <param name="gravity">The acceleration due to gravity, in <math>m/s^2</math>.</param>
+        /// <param name="density">The density of the fluid, in <unit>kg/m^3</unit>.</param>
+        /// <param name="gravity">The acceleration due to gravity, in <unit>m/s^2</unit>.</param>
         [KRPCMethod]
         public double BuoyantForceAt (double density, double gravity)
         {
@@ -849,9 +850,9 @@ namespace KRPC.SpaceCenter.Services
         /// <see cref="ReferenceFrame"/>. Gravity acts towards the center of the body.
         /// </summary>
         /// <returns>A vector pointing along the axis of the torque, with its magnitude
-        /// equal to the strength of the torque in newton-meters.</returns>
-        /// <param name="density">The density of the fluid, in <math>kg/m^3</math>.</param>
-        /// <param name="gravity">The acceleration due to gravity, in <math>m/s^2</math>.</param>
+        /// equal to the strength of the torque in <unit>N.m</unit>.</returns>
+        /// <param name="density">The density of the fluid, in <unit>kg/m^3</unit>.</param>
+        /// <param name="gravity">The acceleration due to gravity, in <unit>m/s^2</unit>.</param>
         [KRPCMethod]
         public Tuple3 BuoyantTorqueAt (double density, double gravity)
         {
@@ -930,10 +931,10 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The net aerodynamic torque currently acting on the vessel about its center of
         /// mass, in reference frame <see cref="ReferenceFrame"/>. The magnitude is in
-        /// newton-meters.
+        /// <unit>N.m</unit>.
         /// </summary>
         /// <returns>A vector pointing along the axis of the torque, with its magnitude
-        /// equal to the strength of the torque in newton-meters.</returns>
+        /// equal to the strength of the torque in <unit>N.m</unit>.</returns>
         /// <remarks>
         /// This is the live counterpart to <see cref="AerodynamicForce"/>: it is the torque
         /// the aerodynamics model applied on the current physics frame, taken about the
@@ -1101,7 +1102,7 @@ namespace KRPC.SpaceCenter.Services
         /// together giving the aerodynamic damping torque. Pass a zero vector to
         /// evaluate the static torque.</param>
         /// <returns>A vector pointing along the axis of the torque, with its magnitude equal
-        /// to the strength of the torque in newton-meters, in reference frame
+        /// to the strength of the torque in <unit>N.m</unit>, in reference frame
         /// <see cref="ReferenceFrame"/>.</returns>
         /// <remarks>
         /// The position, velocity, rotation and angular velocity arguments, and the returned
@@ -1178,7 +1179,7 @@ namespace KRPC.SpaceCenter.Services
         /// in reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         /// <returns>A vector pointing in the direction that the vessel is accelerated,
-        /// with its magnitude equal to the acceleration in <math>m/s^2</math>.</returns>
+        /// with its magnitude equal to the acceleration in <unit>m/s^2</unit>.</returns>
         [KRPCProperty]
         public Tuple3 AerodynamicAcceleration {
             get {
@@ -1193,7 +1194,7 @@ namespace KRPC.SpaceCenter.Services
         /// in reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         /// <returns>A vector pointing in the direction that the vessel is accelerated,
-        /// with its magnitude equal to the acceleration in <math>m/s^2</math>.</returns>
+        /// with its magnitude equal to the acceleration in <unit>m/s^2</unit>.</returns>
         [KRPCProperty]
         public Tuple3 LiftAcceleration {
             get {
@@ -1208,7 +1209,7 @@ namespace KRPC.SpaceCenter.Services
         /// in reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         /// <returns>A vector pointing in the direction that the vessel is accelerated,
-        /// with its magnitude equal to the acceleration in <math>m/s^2</math>.</returns>
+        /// with its magnitude equal to the acceleration in <unit>m/s^2</unit>.</returns>
         [KRPCProperty]
         public Tuple3 DragAcceleration {
             get {
@@ -1218,7 +1219,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The speed of sound, in the atmosphere around the vessel, in <math>m/s</math>.
+        /// The speed of sound, in the atmosphere around the vessel, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float SpeedOfSound {
@@ -1254,7 +1255,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The <a href="https://en.wikipedia.org/wiki/True_airspeed">true air speed</a>
-        /// of the vessel, in meters per second.
+        /// of the vessel, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float TrueAirSpeed {
@@ -1263,7 +1264,7 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The <a href="https://en.wikipedia.org/wiki/Equivalent_airspeed">equivalent air speed</a>
-        /// of the vessel, in meters per second.
+        /// of the vessel, in <unit>m/s</unit>.
         /// </summary>
         [KRPCProperty]
         public float EquivalentAirSpeed {
@@ -1274,7 +1275,7 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// An estimate of the current terminal velocity of the vessel, in meters per second.
+        /// An estimate of the current terminal velocity of the vessel, in <unit>m/s</unit>.
         /// This is the speed at which the drag forces cancel out the force of gravity.
         /// </summary>
         [KRPCProperty]

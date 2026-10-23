@@ -21,6 +21,7 @@ from krpc.definitions import (
     Definition,
     decode_default_value,
 )
+from krpc.docmath import to_text
 from krpc.types import (
     DefaultArgument,
     DynamicClassBase,
@@ -204,6 +205,8 @@ def _parse_documentation_node(
         if node.text in replace:
             return replace[node.text]
         return node.text or ""
+    if node.tag in ("math", "unit"):
+        return to_text(node.text or "", unit=node.tag == "unit")
     if node.tag == "list":
         content = "\n"
         for item in node:

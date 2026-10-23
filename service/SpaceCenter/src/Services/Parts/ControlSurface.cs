@@ -190,7 +190,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Surface area of the control surface in <math>m^2</math>.
+        /// Surface area of the control surface in <unit>m^2</unit>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float SurfaceArea {
@@ -198,7 +198,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The available torque, in Newton meters, that can be produced by this control surface,
+        /// The available torque, in <unit>N.m</unit>, that can be produced by this control surface,
         /// in the positive and negative pitch, roll and yaw axes of the vessel. These axes
         /// correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// </summary>

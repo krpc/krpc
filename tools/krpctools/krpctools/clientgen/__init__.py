@@ -4,6 +4,7 @@ import importlib
 import json
 import os
 import sys
+import warnings
 from importlib.resources import files
 
 from ..definitions import Definitions
@@ -12,8 +13,19 @@ from ..version import __version__
 from .cnano import CnanoGenerator
 from .cpp import CppGenerator
 from .csharp import CsharpGenerator
+from .docparser import DocumentationMarkupWarning
 from .java import JavaGenerator
 from .python import PythonGenerator
+
+_default_show_warning = warnings.showwarning
+
+
+def _show_warning(message, category, filename, lineno, file=None, line=None):
+    if issubclass(category, DocumentationMarkupWarning):
+        sys.stderr.write("Warning: %s\n" % message)
+    else:
+        _default_show_warning(message, category, filename, lineno, file, line)
+
 
 GENERATORS = {
     "csharp": CsharpGenerator,
@@ -73,6 +85,7 @@ def main():
         + "output the service definitions to the given JSON file",
     )
     args = parser.parse_args()
+    warnings.showwarning = _show_warning
 
     try:
         includes = {}

@@ -439,10 +439,6 @@ class PythonDocParser(DocParser):
         code = self.language.value_map.get(code, code)
         return "``%s``" % code
 
-    @staticmethod
-    def parse_math(node):
-        return "``%s``" % node.text
-
     def parse_list(self, node):
         lines = [
             " * " + self.parse_node(item[0], indent=3)[3:].rstrip() for item in node

@@ -329,10 +329,6 @@ class JavaDocParser(DocParser):
     def parse_c(node):
         return "{@code %s}" % node.text
 
-    @staticmethod
-    def parse_math(node):
-        return node.text
-
     def parse_list(self, node):
         content = [
             "<li>%s\n" % self.parse_node(item[0], indent=2)[2:].rstrip()

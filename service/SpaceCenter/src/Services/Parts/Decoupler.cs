@@ -112,7 +112,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The impulse that the decoupler imparts when it is fired, in Newton seconds.
+        /// The impulse that the decoupler imparts when it is fired, in <unit>N.s</unit>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float Impulse {

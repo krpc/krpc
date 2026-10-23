@@ -40,7 +40,8 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
             "Enum ValueB documentation string.", self.conn.test_service.TestEnum.value_b
         )
         self.check_doc(
-            "Enum ValueC documentation string.", self.conn.test_service.TestEnum.value_c
+            "Enum ValueC documentation string, in m/s\u00b2, equal to\n\u00bd \u03c1 v\u00b2.",
+            self.conn.test_service.TestEnum.value_c,
         )
 
     def test_deprecated(self) -> None:
