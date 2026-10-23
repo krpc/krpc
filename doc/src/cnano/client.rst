@@ -5,7 +5,8 @@ C-nano Client
 =============
 
 This client provides a C API for interacting with a kRPC server. It is intended for use on embedded
-systems with tight resource constraints, hence the "nano" in its name.
+systems with tight resource constraints, hence the "nano" in its name. It has no streams or events.
+For the full feature set from C, use the :doc:`C++ client </cpp/client>`.
 
 Installing
 ----------
