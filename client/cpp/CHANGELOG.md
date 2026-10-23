@@ -1,3 +1,10 @@
+## [v0.8.0] - unreleased
+
+- Exceptions
+  - **Breaking:** Derive the `KRPC` exceptions with a standard equivalent from it, e.g.
+    `ArgumentException` from `std::invalid_argument`, in place of `RPCError` (#1172)
+  - **Breaking:** Add the server stack trace to an exception's message (#1172)
+
 ## [v0.7.0]
 
 - Streams and events

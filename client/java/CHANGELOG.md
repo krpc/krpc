@@ -1,3 +1,9 @@
+## [v0.8.0] - unreleased
+
+- Exceptions
+  - **Breaking:** Throw `InvalidOperationException` as `IllegalStateException`, and
+    `ArgumentOutOfRangeException` as `IllegalArgumentException` (#1172)
+
 ## [v0.7.0]
 
 - Streams and events

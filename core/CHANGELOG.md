@@ -1,3 +1,9 @@
+## [v0.8.0] - unreleased
+
+- Exceptions
+  - Report the .NET exception each kRPC exception stands for, as `mapped_type` in
+    `KRPC.Exception` (#1172)
+
 ## [v0.7.0]
 
 - Server side functions

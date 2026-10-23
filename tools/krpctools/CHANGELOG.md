@@ -3,6 +3,8 @@
   `krpc-docgen` and written as Unicode text by `krpc-clientgen` (#1169)
 - Report invalid documentation markup as an error from `krpc-docgen`, and a warning from
   `krpc-clientgen` (#1169)
+- Write the `mapped_type` of each exception to the service definitions (#1172)
+- Generate Python, C++ and Java exceptions that stand for their language's equivalent (#1172)
 
 ## [v0.7.0]
 - **Breaking:** Require `--include` in `krpc-clientgen` for each service whose types a C++ or C
