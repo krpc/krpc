@@ -1,3 +1,8 @@
+## [v0.8.0] - unreleased
+
+- Write the units and formulas in service documentation as Unicode text in docstrings (#1169)
+- Fix a `SyntaxWarning` for an invalid escape sequence on importing the `SpaceCenter` stubs (#1169)
+
 ## [v0.7.0]
 
 - Streams and events

@@ -1,3 +1,9 @@
+## [v0.8.0] - unreleased
+- Add `<unit>` and a LaTeX subset for `<math>` to service documentation, typeset by
+  `krpc-docgen` and written as Unicode text by `krpc-clientgen` (#1169)
+- Report invalid documentation markup as an error from `krpc-docgen`, and a warning from
+  `krpc-clientgen` (#1169)
+
 ## [v0.7.0]
 - **Breaking:** Require `--include` in `krpc-clientgen` for each service whose types a C++ or C
   nano service uses, giving the path of its header (#1150)
