@@ -848,6 +848,7 @@ sphinx==9.1.1 \
     #   pydata-sphinx-theme
     #   sphinx-autobuild
     #   sphinx-csharp
+    #   sphinx-design
     #   sphinx-tabs
     #   sphinxcontrib-luadomain
     #   sphinxcontrib-spelling
@@ -858,6 +859,10 @@ sphinx-autobuild==2025.8.25 \
 sphinx-csharp==1.0.0 \
     --hash=sha256:06fa944ea206613fea8d3542c1fea666acb4e8389cfd36c930a9938cca396f79 \
     --hash=sha256:423c28e45ad9a1e36b770dc04b6e4cbb7d6afae497bd2014a788ffe171e5f2d1
+    # via -r tools/build/python/requirements.in
+sphinx-design==0.7.0 \
+    --hash=sha256:d2a3f5b19c24b916adb52f97c5f00efab4009ca337812001109084a740ec9b7a \
+    --hash=sha256:f82bf179951d58f55dca78ab3706aeafa496b741a91b1911d371441127d64282
     # via -r tools/build/python/requirements.in
 sphinx-tabs==3.5.0 \
     --hash=sha256:154be49de4d5c8249ea08c5d9bf88ca8f9c31e00a178305a93cbc33e000339e5 \
