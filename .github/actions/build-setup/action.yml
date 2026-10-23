@@ -7,7 +7,9 @@ runs:
   steps:
     # Suffix the version in config.bzl with the number of commits since the
     # last release, followed by the truncated sha. The count orders one dev
-    # build against another; the sha says which commit it came from.
+    # build against another; the sha says which commit it came from. The sha
+    # is prefixed with g, as git describe writes it, so that an all-digit sha
+    # is not normalized as a number in the Python version's local segment.
     - if: ${{ inputs.long-version == 'true' }}
       shell: python
       run: |
@@ -43,7 +45,7 @@ runs:
         for i, line in enumerate(lines):
             if line.startswith("version = "):
                 version = line.partition("=")[2].strip()[1:-1]
-                sha = os.environ["GITHUB_SHA"][:7]
+                sha = "g" + os.environ["GITHUB_SHA"][:7]
                 version += "-" + build + "-" + sha
                 lines[i] = 'version = "%s"\n' % version
                 break
