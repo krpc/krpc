@@ -1,5 +1,7 @@
 using System;
 using System.Runtime.Serialization;
+using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.Service.Scanner
 {
@@ -41,6 +43,11 @@ namespace KRPC.Service.Scanner
         public Type UnderlyingType { get; private set; }
 
         /// <summary>
+        /// The full name of the CLR exception type mapped onto the exception, or empty.
+        /// </summary>
+        public string MappedType { get; private set; }
+
+        /// <summary>
         /// Create an exception signature
         /// </summary>
         public ExceptionSignature (string serviceName, string className, Type exnType, string documentation, bool deprecated, string deprecatedReason)
@@ -51,6 +58,8 @@ namespace KRPC.Service.Scanner
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Deprecated = deprecated;
             DeprecatedReason = deprecatedReason;
+            var mappedType = Reflection.GetAttribute<KRPCExceptionAttribute> (exnType).MappedException;
+            MappedType = mappedType != null ? mappedType.FullName : string.Empty;
         }
 
         /// <summary>
@@ -63,6 +72,8 @@ namespace KRPC.Service.Scanner
                 info.AddValue ("deprecated", true);
                 info.AddValue ("deprecated_reason", DeprecatedReason);
             }
+            if (MappedType.Length > 0)
+                info.AddValue ("mapped_type", MappedType);
         }
     }
 }

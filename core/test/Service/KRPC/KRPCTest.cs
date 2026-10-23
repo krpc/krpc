@@ -192,6 +192,17 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void GetServicesExceptionMappedTypes ()
+        {
+            var services = global::KRPC.Service.KRPC.KRPC.GetServices ();
+            var exceptions = services.ServicesList.First (x => x.Name == "KRPC").Exceptions;
+            Assert.AreEqual ("System.ArgumentException", exceptions.First (x => x.Name == "ArgumentException").MappedType);
+            Assert.AreEqual ("System.Collections.Generic.KeyNotFoundException", exceptions.First (x => x.Name == "KeyNotFoundException").MappedType);
+            Assert.AreEqual (string.Empty, exceptions.First (x => x.Name == "Error").MappedType);
+            Assert.AreEqual (11, exceptions.Count (x => x.MappedType.Length > 0));
+        }
+
+        [Test]
         public void PauseUnpause ()
         {
             bool paused = false;

@@ -136,6 +136,7 @@ namespace KRPC.Service.KRPC
                         exn.Documentation = exnSignature.Documentation;
                     exn.Deprecated = exnSignature.Deprecated;
                     exn.DeprecatedReason = exnSignature.DeprecatedReason;
+                    exn.MappedType = exnSignature.MappedType;
                     service.Exceptions.Add (exn);
                 }
                 if (serviceSignature.Documentation.Length > 0)

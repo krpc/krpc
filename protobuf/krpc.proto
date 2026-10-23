@@ -160,6 +160,7 @@ message Exception {
   string documentation = 2;
   bool deprecated = 3;
   string deprecated_reason = 4;
+  string mapped_type = 5;
 }
 
 message Struct {
