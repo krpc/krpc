@@ -57,14 +57,14 @@ public class Event implements Comparable<Event> {
    * during the wait.
    */
   public void waitFor() throws RPCException, StreamException {
-    waitForUntil(Stream.deadline(-1));
+    waitForUntil(Stream.deadline(Double.POSITIVE_INFINITY));
   }
 
   /**
    * Wait until the event occurs, with a timeout in seconds. Returns straight away if the event
    * has occurred since the last wait on this event object. Returns true if the event occurred,
    * and false on a timeout. Throws the exception that ended the event, if it ends before or
-   * during the wait.
+   * during the wait. Throws IllegalArgumentException if the timeout is negative or NaN.
    */
   public boolean waitForWithTimeout(double timeout) throws RPCException, StreamException {
     return waitForUntil(Stream.deadline(timeout));
@@ -73,6 +73,10 @@ public class Event implements Comparable<Event> {
   /** A deadline of zero waits indefinitely. */
   private boolean waitForUntil(long deadline) throws RPCException, StreamException {
     StreamImpl impl = stream.stream;
+    // A remove or a close discards an unseen firing
+    if (impl.isEndedByClient()) {
+      impl.throwIfEnded();
+    }
     long seenOnEntry = seen;
     while (impl.getFired() <= seenOnEntry) {
       impl.throwIfEnded();
@@ -87,7 +91,8 @@ public class Event implements Comparable<Event> {
   /**
    * Add a callback that is invoked whenever the event occurs. It is invoked straight away if the
    * event has occurred since the last wait on this event object, and no callback has been invoked
-   * for it. A callback added after the event has ended is not invoked for an earlier firing. An
+   * for it. A callback added after the event is removed or its connection closes is not invoked
+   * for an earlier firing. An
    * error ends the event and does not invoke the callback.
    * Returns an integer tag for the callback which uniquely identifies it,
    * and allows it to be removed using removeCallback()

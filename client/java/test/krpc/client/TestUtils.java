@@ -19,50 +19,33 @@ class TestUtils {
   /** One of the endpoints a connection can be made to. */
   public enum Endpoint {
     RPC,
-    STREAM,
     /** An endpoint with no server listening on it. */
     NONE
   }
 
-  public static int getRpcPort() {
-    String envRpcPort = System.getenv("RPC_PORT");
-    return envRpcPort == null ? 50000 : Integer.parseInt(envRpcPort);
-  }
-
-  public static int getStreamPort() {
-    String envStreamPort = System.getenv("STREAM_PORT");
-    return envStreamPort == null ? 50001 : Integer.parseInt(envStreamPort);
+  public static int getTcpipPort() {
+    String envPort = System.getenv("KRPC_TEST_TCPIP_PORT");
+    return envPort == null ? 50000 : Integer.parseInt(envPort);
   }
 
   public static Connection connect() throws IOException {
-    return connect("JavaClientTest", Endpoint.RPC, Endpoint.STREAM);
+    return connect("JavaClientTest", Endpoint.RPC);
   }
 
   /**
    * Connect over whichever transport the harness started the server with, which it tells us
-   * about by port or by socket path. The rpc and stream arguments name which of the server's
-   * endpoints each connection should go to, so a test can deliberately connect them the wrong
-   * way round, or to somewhere nothing is listening.
+   * about by port or by socket path, or to somewhere nothing is listening.
    */
-  public static Connection connect(String name, Endpoint rpc, Endpoint stream)
-      throws IOException {
-    if (System.getenv("RPC_PATH") == null) {
-      Duration timeout =
-          rpc == Endpoint.NONE || stream == Endpoint.NONE ? CONNECT_TIMEOUT : Duration.ZERO;
-      return Connection.newInstance(name, "localhost", getPort(rpc), getPort(stream), timeout);
+  public static Connection connect(String name, Endpoint endpoint) throws IOException {
+    if (System.getenv("KRPC_TEST_LOCALSOCKET_PATH") == null) {
+      Duration timeout = endpoint == Endpoint.NONE ? CONNECT_TIMEOUT : Duration.ZERO;
+      return Connection.newInstance(name, "localhost", getPort(endpoint), timeout);
     }
-    return Connection.newLocalInstance(name, getPath(rpc), getPath(stream));
+    return Connection.newLocalInstance(name, getPath(endpoint));
   }
 
   private static int getPort(Endpoint endpoint) {
-    switch (endpoint) {
-      case RPC:
-        return getRpcPort();
-      case STREAM:
-        return getStreamPort();
-      default:
-        return unusedPort();
-    }
+    return endpoint == Endpoint.RPC ? getTcpipPort() : unusedPort();
   }
 
   /**
@@ -80,16 +63,9 @@ class TestUtils {
   }
 
   private static String getPath(Endpoint endpoint) {
-    String rpcPath = System.getenv("RPC_PATH");
-    switch (endpoint) {
-      case RPC:
-        return rpcPath;
-      case STREAM:
-        return System.getenv("STREAM_PATH");
-      default:
-        // A path that no socket was created at
-        return rpcPath + "-none";
-    }
+    String path = System.getenv("KRPC_TEST_LOCALSOCKET_PATH");
+    // A path that no socket was created at
+    return endpoint == Endpoint.RPC ? path : path + "-none";
   }
 
   /** The message for an event over the given stream id. */

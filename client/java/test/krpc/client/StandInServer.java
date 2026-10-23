@@ -8,6 +8,8 @@ import java.net.SocketAddress;
 import java.nio.channels.Channels;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import krpc.schema.KRPC;
 
 /**
@@ -23,6 +25,8 @@ class StandInServer implements AutoCloseable {
   private volatile boolean stopping;
   private volatile KRPC.ConnectionResponse.Status status = KRPC.ConnectionResponse.Status.OK;
   private volatile String message = "";
+  private volatile KRPC.Disconnect.Reason disconnectReason = null;
+  private final CountDownLatch disconnected = new CountDownLatch(1);
 
   StandInServer(ServerSocketChannel listeningChannel) {
     listener = listeningChannel;
@@ -38,11 +42,21 @@ class StandInServer implements AutoCloseable {
 
   /**
    * Answer the handshake with the given status and message, so that a test can have a
-   * connection refused as the server refuses one made to the wrong endpoint.
+   * connection refused.
    */
   public void refuseWith(KRPC.ConnectionResponse.Status refusedStatus, String refusedMessage) {
     status = refusedStatus;
     message = refusedMessage;
+  }
+
+  /** Answer a request by ending the connection, with the given reason. */
+  public void disconnectWith(KRPC.Disconnect.Reason reason) {
+    disconnectReason = reason;
+  }
+
+  /** Whether a client sends a disconnect within the given number of milliseconds. */
+  public boolean awaitDisconnect(long milliseconds) throws InterruptedException {
+    return disconnected.await(milliseconds, TimeUnit.MILLISECONDS);
   }
 
   @Override
@@ -77,12 +91,16 @@ class StandInServer implements AutoCloseable {
     try (SocketChannel socket = channel) {
       InputStream input = Channels.newInputStream(socket);
       OutputStream output = Channels.newOutputStream(socket);
-      KRPC.ConnectionRequest.parseDelimitedFrom(input);
-      KRPC.ConnectionResponse.newBuilder()
-          .setStatus(status)
-          .setMessage(message)
-          .setProtocolVersion(1)
-          .setClientIdentifier(ByteString.copyFrom(new byte[16]))
+      KRPC.Message request = KRPC.Message.parseDelimitedFrom(input);
+      if (request == null || !request.hasConnectionRequest()) {
+        return;
+      }
+      KRPC.Message.newBuilder()
+          .setConnectionResponse(KRPC.ConnectionResponse.newBuilder()
+              .setStatus(status)
+              .setMessage(message)
+              .setProtocolVersion(2)
+              .setClientIdentifier(ByteString.copyFrom(new byte[16])))
           .build()
           .writeDelimitedTo(output);
       output.flush();
@@ -92,11 +110,28 @@ class StandInServer implements AutoCloseable {
       // Every request is answered with an empty result, the same as a call returning
       // nothing gets back from a real server
       while (!stopping) {
-        if (KRPC.Request.parseDelimitedFrom(input) == null) {
+        KRPC.Message received = KRPC.Message.parseDelimitedFrom(input);
+        if (received == null) {
           return;
         }
-        KRPC.Response.newBuilder()
-            .addResults(KRPC.ProcedureResult.newBuilder().build())
+        if (received.hasDisconnect()) {
+          disconnected.countDown();
+          return;
+        }
+        if (disconnectReason != null) {
+          KRPC.Message.newBuilder()
+              .setDisconnect(KRPC.Disconnect.newBuilder()
+                  .setReason(disconnectReason)
+                  .setMessage("Bye"))
+              .build()
+              .writeDelimitedTo(output);
+          output.flush();
+          return;
+        }
+        KRPC.Message.newBuilder()
+            .setResponse(KRPC.Response.newBuilder()
+                .setId(received.getRequest().getId())
+                .addResults(KRPC.ProcedureResult.newBuilder()))
             .build()
             .writeDelimitedTo(output);
         output.flush();

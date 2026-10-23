@@ -112,14 +112,12 @@ public final class Benchmark {
    * costs.
    */
   private static Connection connect() throws IOException {
-    String rpcPath = System.getenv("RPC_PATH");
-    if (rpcPath != null) {
-      return Connection.newLocalInstance(
-          "java_client_benchmark", rpcPath, System.getenv("STREAM_PATH"));
+    String path = System.getenv("KRPC_TEST_LOCALSOCKET_PATH");
+    if (path != null) {
+      return Connection.newLocalInstance("java_client_benchmark", path);
     }
     return Connection.newInstance(
-        "java_client_benchmark", "localhost", port("RPC_PORT", 50000),
-        port("STREAM_PORT", 50001));
+        "java_client_benchmark", "localhost", port("KRPC_TEST_TCPIP_PORT", 50000));
   }
 
   private static double secondsSince(long start) {

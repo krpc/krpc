@@ -236,7 +236,7 @@ public class EventTest {
         Thread.sleep(10);
       }
       // Stands in for the server closing the connection
-      conn.streamManager.channel.close();
+      conn.session.channel.close();
       waiter.join();
       assertEquals(1, errors.size());
       assertTrue(errors.get(0).getCause() instanceof ConnectionException);

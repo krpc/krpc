@@ -45,14 +45,14 @@ public class LocalSocketConnectionTest extends ConnectionTestCase {
     // A socket path has to fit in the kernel's address structure, which leaves far less room
     // than the directory a test is run in takes up, so it goes in a short directory of its own
     directory = Files.createTempDirectory(socketDirectory(), "krpc-java-test");
-    path = directory.resolve("rpc");
+    path = directory.resolve("krpc.sock");
     return ServerSocketChannel.open(StandardProtocolFamily.UNIX)
         .bind(UnixDomainSocketAddress.of(path));
   }
 
   @Override
   protected Connection connect(String name) throws IOException {
-    return Connection.newLocalInstance(name, path.toString(), path.toString());
+    return Connection.newLocalInstance(name, path.toString());
   }
 
   @After
@@ -67,6 +67,6 @@ public class LocalSocketConnectionTest extends ConnectionTestCase {
   public void testConnectWhereNothingIsListening() {
     String missing = path.toString() + "-does-not-exist";
     assertThrows(IOException.class,
-        () -> Connection.newLocalInstance("JavaConnectionTestNoServer", missing, missing));
+        () -> Connection.newLocalInstance("JavaConnectionTestNoServer", missing));
   }
 }

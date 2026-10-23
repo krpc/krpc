@@ -80,13 +80,13 @@ public class Stream<T> implements Comparable<Stream<T>> {
    * before or during the wait.
    */
   public void waitForUpdate() throws RPCException, StreamException {
-    waitForUpdateUntil(deadline(-1));
+    waitForUpdateUntil(deadline(Double.POSITIVE_INFINITY));
   }
 
   /**
    * Wait until the next stream update, with a timeout in seconds. Returns true if the stream
    * updated, and false on a timeout. Throws the exception that ended the stream, if it ends
-   * before or during the wait.
+   * before or during the wait. Throws IllegalArgumentException if the timeout is negative or NaN.
    */
   public boolean waitForUpdateWithTimeout(double timeout) throws RPCException, StreamException {
     return waitForUpdateUntil(deadline(timeout));
@@ -95,8 +95,14 @@ public class Stream<T> implements Comparable<Stream<T>> {
   /** A deadline of zero waits indefinitely. */
   private boolean waitForUpdateUntil(long deadline) throws RPCException, StreamException {
     stream.throwIfEnded();
-    long version = stream.getVersion();
-    while (stream.getVersion() == version) {
+    // An ending that arrived while this thread held the condition is read as an update
+    boolean pendingEnding = stream.isEnded();
+    // Past the value this thread last read, which can be one not yet announced
+    long version = Math.max(stream.getAnnouncedVersion(), stream.getSeenVersion());
+    while (stream.getAnnouncedVersion() <= version) {
+      if (pendingEnding && stream.isEndingAnnounced()) {
+        return true;
+      }
       stream.throwIfEnded();
       if (!waitOn(stream.getCondition(), deadline)) {
         return false;
@@ -106,11 +112,15 @@ public class Stream<T> implements Comparable<Stream<T>> {
   }
 
   /**
-   * The deadline, in System.nanoTime() nanoseconds, for a timeout in seconds. Zero for a
-   * negative timeout, which waits indefinitely.
+   * The deadline, in System.nanoTime() nanoseconds, for a timeout in seconds. Zero for an
+   * infinite timeout, which waits indefinitely. Throws IllegalArgumentException for a negative or
+   * NaN timeout.
    */
   static long deadline(double timeout) {
-    if (timeout < 0) {
+    if (Double.isNaN(timeout) || timeout < 0) {
+      throw new IllegalArgumentException("The timeout must not be negative or NaN: " + timeout);
+    }
+    if (Double.isInfinite(timeout)) {
       return 0;
     }
     // Zero is reserved for no deadline
@@ -135,6 +145,7 @@ public class Stream<T> implements Comparable<Stream<T>> {
       condition.wait(remaining / 1000000, (int) (remaining % 1000000));
       return true;
     } catch (InterruptedException exn) {
+      Thread.currentThread().interrupt();
       throw new StreamException("wait was interrupted", exn);
     }
   }

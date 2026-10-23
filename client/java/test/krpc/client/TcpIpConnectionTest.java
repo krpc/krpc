@@ -19,6 +19,6 @@ public class TcpIpConnectionTest extends ConnectionTestCase {
   @Override
   protected Connection connect(String name) throws IOException {
     int port = ((InetSocketAddress) getServer().getAddress()).getPort();
-    return Connection.newInstance(name, "localhost", port, port);
+    return Connection.newInstance(name, "localhost", port);
   }
 }

@@ -3,6 +3,7 @@ package krpc.client;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.channels.ServerSocketChannel;
@@ -69,6 +70,21 @@ public abstract class ConnectionTestCase {
 
   @Test
   @SuppressWarnings("checkstyle:missingjavadocmethod")
+  public void testCloseFromAnInterruptedThread() throws IOException, InterruptedException {
+    Connection connection = connect("JavaConnectionTestInterrupted");
+    long start = System.nanoTime();
+    Thread.currentThread().interrupt();
+    connection.close();
+    long elapsed = (System.nanoTime() - start) / 1000000;
+    // Cleared here so the waits below and later tests are not cut short
+    assertTrue(Thread.interrupted());
+    assertTrue(server.awaitDisconnect(5000));
+    // The stand-in closes its side on the disconnect, which ends the wait for it
+    assertTrue("close took " + elapsed + " ms", elapsed < 900);
+  }
+
+  @Test
+  @SuppressWarnings("checkstyle:missingjavadocmethod")
   public void testCarriesOneCall() throws IOException, RPCException {
     // The stand-in answers every request, so this measures the request reaching it and the
     // response coming back, and not what the call means
@@ -92,10 +108,24 @@ public abstract class ConnectionTestCase {
   @Test
   @SuppressWarnings("checkstyle:missingjavadocmethod")
   public void testConnectionRefusedByTheServer() throws IOException {
-    server.refuseWith(KRPC.ConnectionResponse.Status.WRONG_TYPE,
-        "Connection request was for the wrong server");
+    server.refuseWith(KRPC.ConnectionResponse.Status.DENIED, "The connection was denied");
     ConnectionException exn =
         assertThrows(ConnectionException.class, () -> connect("JavaConnectionTestRefused"));
-    assertEquals("Connection request was for the wrong server", exn.getMessage());
+    assertEquals(
+        "The server refused the connection (DENIED): The connection was denied", exn.getMessage());
+    assertEquals(KRPC.ConnectionResponse.Status.DENIED, exn.getStatus());
+  }
+
+  @Test
+  @SuppressWarnings("checkstyle:missingjavadocmethod")
+  public void testConnectionEndedByTheServer() throws IOException {
+    server.disconnectWith(KRPC.Disconnect.Reason.REMOVED);
+    try (Connection connection = connect("JavaConnectionTestEnded")) {
+      RPCException exn = assertThrows(
+          RPCException.class, () -> connection.invoke("TestService", "TestProcedure"));
+      ConnectionException cause = (ConnectionException) exn.getCause();
+      assertEquals(KRPC.Disconnect.Reason.REMOVED, cause.getReason());
+      assertEquals("The server ended the connection (REMOVED): Bye", cause.getMessage());
+    }
   }
 }

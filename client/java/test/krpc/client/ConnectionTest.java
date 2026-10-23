@@ -51,30 +51,7 @@ public class ConnectionTest {
 
   @Test(expected = IOException.class)
   public void testNoServerOnRpcEndpoint() throws IOException {
-    TestUtils.connect("JavaClientTestNoRpcServer", Endpoint.NONE, Endpoint.STREAM);
-  }
-
-  @Test(expected = IOException.class)
-  public void testNoServerOnStreamEndpoint() throws IOException {
-    TestUtils.connect("JavaClientTestNoStreamServer", Endpoint.RPC, Endpoint.NONE);
-  }
-
-  @Test
-  public void testWrongRpcServer() {
-    ConnectionException e = assertThrows(ConnectionException.class, () ->
-        TestUtils.connect("JavaClientTestWrongRpcServer", Endpoint.STREAM, Endpoint.STREAM));
-    assertTrue(e.getMessage().contains(
-        "Connection request was for the rpc server, but this is the stream server. "
-        + "Did you connect to the wrong port number or socket path?"));
-  }
-
-  @Test
-  public void testWrongStreamServer() {
-    ConnectionException e = assertThrows(ConnectionException.class, () ->
-        TestUtils.connect("JavaClientTestWrongStreamServer", Endpoint.RPC, Endpoint.RPC));
-    assertTrue(e.getMessage().contains(
-        "Connection request was for the stream server, but this is the rpc server. "
-        + "Did you connect to the wrong port number or socket path?"));
+    TestUtils.connect("JavaClientTestNoRpcServer", Endpoint.NONE);
   }
 
   @Test
