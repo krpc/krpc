@@ -57,7 +57,7 @@ vessel and then prints out its altitude:
 .. literalinclude:: /scripts/java/client/RemoteProcedures.java
 
 Many procedures return an object identifying something in the game, such as a vessel or
-a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
+a part. See :doc:`Object Lifetime </user-guide/object-lifetime>` for how such an object
 behaves when a game is loaded or what it identifies is destroyed.
 
 Server Side Functions
@@ -72,7 +72,7 @@ example, the following reads the vessel's altitude and speed together:
 Use ``run`` for a function with effects, such as setting a property. An event or a function stream
 evaluates its function on every update, repeating the effects.
 
-The :rst:ref:`server side functions tutorial <tutorial-server-side-functions>` shows how to build
+The :rst:ref:`server side functions guide <server-side-functions>` shows how to build
 larger functions.
 
 .. _java-client-streams:
@@ -180,7 +180,7 @@ connection ends it with a ``StreamException`` whose cause is a ``ConnectionExcep
 An exception for an object that is not loaded, or a procedure not available in the game scene,
 holds the stream instead. It resumes once the object or scene is available.
 
-.. seealso:: :doc:`/tutorials/object-lifetime`
+.. seealso:: :doc:`/user-guide/object-lifetime`
 
 To handle an ending in a callback, add an end callback with :meth:`Stream.addEndCallback`. It is
 called once, with the exception.

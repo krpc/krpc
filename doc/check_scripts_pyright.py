@@ -27,7 +27,7 @@ CONFIG = "pyrightconfig.json"
 # - SwitchModes.py adds a handler's exception to a string. In a server side
 #   function the handler binds the exception's message, which is a string.
 ALLOWED = {
-    ("tutorials/server-side-functions/SwitchModes.py", "reportOperatorIssue"),
+    ("user-guide/server-side-functions/SwitchModes.py", "reportOperatorIssue"),
     ("tutorials/docking-guidance/DockingGuidance.py", "reportMissingImports"),
     ("tutorials/docking-guidance/DockingGuidance.py", "reportArgumentType"),
 }

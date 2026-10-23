@@ -121,8 +121,7 @@ Some general guidelines on using git and the structure of the repository:
 
 ## Writing Code
 
- * Details on how to set up a build environment and how to compile the project are detailed here:
-   https://krpc.github.io/krpc/compiling.html
+ * Development-Guide.md explains how to set up a build environment and compile the project.
  * Write readable code that is "self documenting", and if not add comments to explain complex
    code. Remember that someone else may need to fix or improve upon your code in future, so they
    need to be able to understand it!
@@ -151,7 +150,5 @@ Some general guidelines on using git and the structure of the repository:
 
 ## Further Resources
 
- * A high-level summary of how the kRPC server works: https://krpc.github.io/krpc/internals.html
- * How to write services for kRPC: https://krpc.github.io/krpc/extending.html
- * Documentation on the communication protocol:
-   https://krpc.github.io/krpc/communication-protocols.html
+ * The Developer Guide section of the documentation covers writing services and the communication
+   protocol: https://krpc.github.io/krpc

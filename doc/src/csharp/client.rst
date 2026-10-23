@@ -54,7 +54,7 @@ vessel and then prints out its altitude:
 .. literalinclude:: /scripts/csharp/client/RemoteProcedures.cs
 
 Many procedures return an object identifying something in the game, such as a vessel or
-a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
+a part. See :doc:`Object Lifetime </user-guide/object-lifetime>` for how such an object
 behaves when a game is loaded or what it identifies is destroyed.
 
 Server Side Functions
@@ -71,7 +71,7 @@ Use ``Run`` for a function with effects, such as a call of ``ActivateNextStage``
 function stream evaluates its function on every update, repeating the effects.
 
 :ref:`csharp-client-compiling-lambdas` describes what a function can contain. The :ref:`server side
-functions tutorial <tutorial-server-side-functions>` shows how to build larger functions.
+functions guide <server-side-functions>` shows how to build larger functions.
 
 .. _csharp-client-streams:
 
@@ -185,7 +185,7 @@ A stream that the server removes, such as an event that has finished, ends with
 An exception for an object that is not loaded, or a procedure not available in the game scene,
 holds the stream instead. It resumes once the object or scene is available.
 
-.. seealso:: :doc:`/tutorials/object-lifetime`
+.. seealso:: :doc:`/user-guide/object-lifetime`
 
 To handle an ending in a callback, add an end callback with :meth:`Stream.AddEndCallback`. It is
 called once, with the exception.

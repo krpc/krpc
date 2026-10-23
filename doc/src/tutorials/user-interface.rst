@@ -10,10 +10,10 @@ is shown while the mouse rests on the button.
 
 .. tabs::
 
-   .. tab:: C
+   .. tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.c
-         :language: c
+      .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.py
+         :language: python
 
    .. tab:: C#
 
@@ -25,6 +25,11 @@ is shown while the mouse rests on the button.
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.cpp
          :language: cpp
 
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.c
+         :language: c
+
    .. tab:: Java
 
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.java
@@ -34,8 +39,3 @@ is shown while the mouse rests on the button.
 
       .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.lua
          :language: lua
-
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/tutorials/user-interface/UserInterface.py
-         :language: python

@@ -26,11 +26,15 @@ extensions = [
     'sphinx.ext.graphviz',
     'sphinx.ext.todo',
     'sphinx.ext.extlinks',
+    'sphinx_design',
     'sphinx_tabs.tabs',
     'sphinxcontrib.luadomain',
     'sphinx_csharp',
     'javasphinx'
 ]
+
+# The home page card icons are left out of the PDF
+suppress_warnings = ['design.fa-build']
 
 # The spellchecker loads a native library through pyenchant, and only the
 # spelling builder has any use for it, so it is added when that builder asks
@@ -67,7 +71,7 @@ html_theme_options = {
     # Brand text in the header. The theme otherwise shows the full docstitle
     # ("kRPC vX.Y.Z documentation"); the version switcher already exposes the
     # version, so keep it out of the header.
-    'logo': {'text': 'kRPC Documentation'},
+    'logo': {'text': 'kRPC'},
     # Runtime version switcher. Each version's HTML is built once and frozen, so
     # the version list is not baked into the pages: every page fetches
     # switcher.json from a stable absolute URL at page-load time, and
@@ -82,9 +86,8 @@ html_theme_options = {
     'check_switcher': False,
     # Banner on pages that are not the preferred (newest release) version.
     'show_version_warning_banner': True,
-    # Show all six client languages in the header (getting-started, tutorials
-    # and the languages); the remaining sections collapse into "More".
-    'header_links_before_dropdown': 8,
+    # Every top-level section fits in the header, so nothing collapses into "More"
+    'header_links_before_dropdown': 6,
     # Footer commit link, rendered by _templates/build-info.html for dev builds.
     'footer_center': ['build-info'],
     'navbar_end': ['version-switcher', 'theme-switcher', 'navbar-icon-links'],

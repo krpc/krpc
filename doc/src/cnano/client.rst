@@ -5,7 +5,8 @@ C-nano Client
 =============
 
 This client provides a C API for interacting with a kRPC server. It is intended for use on embedded
-systems with tight resource constraints, hence the "nano" in its name.
+systems with tight resource constraints, hence the "nano" in its name. It has no streams or events.
+For the full feature set from C, use the :doc:`C++ client </cpp/client>`.
 
 Installing
 ----------
@@ -259,7 +260,7 @@ The following example demonstrates how to invoke remote procedures using the Cna
 .. literalinclude:: /scripts/cnano/client/RemoteProcedures.c
 
 Many procedures return an object identifying something in the game, such as a vessel or
-a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
+a part. See :doc:`Object Lifetime </user-guide/object-lifetime>` for how such an object
 behaves when a game is loaded or what it identifies is destroyed.
 
 .. _cnano-client-streams:
