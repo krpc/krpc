@@ -19,16 +19,8 @@ It also supports websockets and serialio (for example on Arduino).
    getting-started
    user-guide
    tutorials
-   cnano
-   csharp
-   cpp
-   java
-   lua
-   python
-   third-party
-   compiling
-   extending
-   communication-protocols
+   clients
+   developer-guide
    changelog
 
 The mod exposes most of KSPs API for controlling and interacting with rockets,
