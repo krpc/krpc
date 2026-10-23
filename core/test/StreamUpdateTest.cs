@@ -23,76 +23,6 @@ namespace KRPC.Test
             public string ErrorName;
         }
 
-        sealed class RecordingStream : global::KRPC.Server.Message.StreamStream
-        {
-            public RecordingStream () : base (null)
-            {
-            }
-
-            public List<List<SentResult>> Updates { get; } = new List<List<SentResult>> ();
-
-            public List<ulong> RemovedIds { get; } = new List<ulong> ();
-
-            public override void Write (StreamUpdate value)
-            {
-                var update = new List<SentResult> ();
-                foreach (var result in value.Results)
-                    update.Add (new SentResult {
-                        Id = result.Id,
-                        HasValue = result.Result.HasValue,
-                        Value = result.Result.Value,
-                        Error = result.Result.HasError ? result.Result.Error.Description : null,
-                        ErrorName = result.Result.HasError ? result.Result.Error.Name : null
-                    });
-                Updates.Add (update);
-            }
-
-            public override void Removed (ulong id)
-            {
-                RemovedIds.Add (id);
-            }
-        }
-
-        sealed class RecordingClient : IClient<NoMessage,StreamUpdate>
-        {
-            public RecordingClient (Guid guid)
-            {
-                Guid = guid;
-                Stream = new RecordingStream ();
-            }
-
-            public string Name { get { return "recording"; } }
-
-            public Guid Guid { get; private set; }
-
-            public string Address { get { return "recording"; } }
-
-            public bool Connected { get { return true; } }
-
-            public IStream<NoMessage,StreamUpdate> Stream { get; private set; }
-
-            public RecordingStream Recorded { get { return (RecordingStream)Stream; } }
-
-            public void Close ()
-            {
-            }
-
-            public bool Equals (IClient<NoMessage,StreamUpdate> other)
-            {
-                return other != null && Guid == other.Guid;
-            }
-
-            public override bool Equals (object obj)
-            {
-                return Equals (obj as IClient<NoMessage,StreamUpdate>);
-            }
-
-            public override int GetHashCode ()
-            {
-                return Guid.GetHashCode ();
-            }
-        }
-
         sealed class ConstantStream : global::KRPC.Service.Stream
         {
             readonly int value;
@@ -121,8 +51,9 @@ namespace KRPC.Test
 
         Core core;
         bool blockingRecv;
-        ScriptedClient rpcClient;
-        RecordingClient streamClient;
+        PinnedUpdateTime updateTime;
+        ScriptedClient client;
+        List<List<SentResult>> updates;
 
         [SetUp]
         public void SetUp ()
@@ -131,28 +62,39 @@ namespace KRPC.Test
             CallContext.GameScene = GameScene.Flight;
             blockingRecv = Configuration.Instance.BlockingRecv;
             Configuration.Instance.BlockingRecv = false;
-            rpcClient = new ScriptedClient (0, 0);
-            streamClient = new RecordingClient (rpcClient.Guid);
-            core.RPCClientConnected (rpcClient);
-            core.StreamClientConnected (streamClient);
+            updateTime = new PinnedUpdateTime ();
+            client = new ScriptedClient (0, 0);
+            updates = new List<List<SentResult>> ();
+            client.StreamUpdateWritten = value => {
+                var update = new List<SentResult> ();
+                foreach (var result in value.Results)
+                    update.Add (new SentResult {
+                        Id = result.Id,
+                        HasValue = result.Result.HasValue,
+                        Value = result.Result.Value,
+                        Error = result.Result.HasError ? result.Result.Error.Description : null,
+                        ErrorName = result.Result.HasError ? result.Result.Error.Name : null
+                    });
+                updates.Add (update);
+            };
+            core.ClientConnected (client);
         }
 
         [TearDown]
         public void TearDown ()
         {
-            core.StreamClientDisconnected (streamClient);
-            core.RPCClientDisconnected (rpcClient);
+            core.ClientDisconnected (client);
             Configuration.Instance.BlockingRecv = blockingRecv;
+            updateTime.Restore ();
         }
 
         ulong Add (global::KRPC.Service.Stream stream)
         {
-            return core.AddStream (rpcClient, stream);
+            return core.AddStream (client, stream);
         }
 
         List<SentResult> Update ()
         {
-            var updates = streamClient.Recorded.Updates;
             var count = updates.Count;
             core.Update ();
             Assert.LessOrEqual (updates.Count, count + 1);
@@ -176,7 +118,7 @@ namespace KRPC.Test
             Assert.AreEqual (42, ResultFor (update, working).Value);
 
             // The failed stream is removed once its error is sent
-            Assert.AreEqual (new List<ulong> { failing }, streamClient.Recorded.RemovedIds);
+            Assert.AreEqual (new List<ulong> { failing }, client.RemovedStreams);
             Assert.AreEqual (0, Update ().Count);
         }
 
@@ -196,7 +138,7 @@ namespace KRPC.Test
             Assert.AreEqual (2, update.Count);
             Assert.IsNotNull (ResultFor (update, failing).Error);
             Assert.AreEqual (42, ResultFor (update, working).Value);
-            Assert.AreEqual (new List<ulong> { failing }, streamClient.Recorded.RemovedIds);
+            Assert.AreEqual (new List<ulong> { failing }, client.RemovedStreams);
         }
 
         [Test]
@@ -274,7 +216,7 @@ namespace KRPC.Test
         public void ARateSetBeforeTheFirstUpdateDoesNotDelayIt ()
         {
             var id = Add (new ConstantStream (42));
-            core.SetStreamRate (rpcClient, id, 0.1f);
+            core.SetStreamRate (client, id, 0.1f);
             var update = Update ();
             Assert.AreEqual (1, update.Count);
             Assert.AreEqual (42, ResultFor (update, id).Value);
@@ -284,11 +226,11 @@ namespace KRPC.Test
         public void ManagementCallsOnAnEndedStreamDoNothing ()
         {
             var id = Add (new ConstantStream (42));
-            core.RemoveStream (rpcClient, id);
+            core.RemoveStream (client, id);
             Update ();
-            Assert.AreEqual (new List<ulong> { id }, streamClient.Recorded.RemovedIds);
-            core.RemoveStream (rpcClient, id);
-            core.SetStreamRate (rpcClient, id, 1);
+            Assert.AreEqual (new List<ulong> { id }, client.RemovedStreams);
+            core.RemoveStream (client, id);
+            core.SetStreamRate (client, id, 1);
             Assert.AreEqual (0, Update ().Count);
         }
 
@@ -296,8 +238,8 @@ namespace KRPC.Test
         public void ManagementCallsOnAnIdNeverIssuedThrow ()
         {
             var id = Add (new ConstantStream (42));
-            Assert.Throws<ArgumentException> (() => core.RemoveStream (rpcClient, id + 1));
-            Assert.Throws<ArgumentException> (() => core.SetStreamRate (rpcClient, id + 1, 1));
+            Assert.Throws<ArgumentException> (() => core.RemoveStream (client, id + 1));
+            Assert.Throws<ArgumentException> (() => core.SetStreamRate (client, id + 1, 1));
         }
 
         [Test]
@@ -309,7 +251,7 @@ namespace KRPC.Test
             var update = Update ();
             Assert.AreEqual (1, update.Count);
             Assert.AreEqual ("StreamRemovedException", ResultFor (update, id).ErrorName);
-            Assert.AreEqual (new List<ulong> { id }, streamClient.Recorded.RemovedIds);
+            Assert.AreEqual (new List<ulong> { id }, client.RemovedStreams);
         }
 
         [Test]
@@ -321,10 +263,10 @@ namespace KRPC.Test
             evnt.Remove ();
             var update = Update ();
             Assert.AreEqual (true, ResultFor (update, id).Value);
-            Assert.IsEmpty (streamClient.Recorded.RemovedIds);
+            Assert.IsEmpty (client.RemovedStreams);
             update = Update ();
             Assert.AreEqual ("StreamRemovedException", ResultFor (update, id).ErrorName);
-            Assert.AreEqual (new List<ulong> { id }, streamClient.Recorded.RemovedIds);
+            Assert.AreEqual (new List<ulong> { id }, client.RemovedStreams);
         }
 
         [Test]
@@ -338,7 +280,7 @@ namespace KRPC.Test
             var id = Add (evnt);
             Assert.AreEqual (true, ResultFor (Update (), id).Value);
             Assert.AreEqual ("StreamRemovedException", ResultFor (Update (), id).ErrorName);
-            Assert.AreEqual (new List<ulong> { id }, streamClient.Recorded.RemovedIds);
+            Assert.AreEqual (new List<ulong> { id }, client.RemovedStreams);
         }
 
         [Test]
@@ -366,7 +308,7 @@ namespace KRPC.Test
             mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Exactly (2));
 
             // Removing one leaves the other
-            core.RemoveStream (rpcClient, first);
+            core.RemoveStream (client, first);
             mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ("bar");
             update = Update ();
             Assert.AreEqual (1, update.Count);
@@ -386,7 +328,7 @@ namespace KRPC.Test
                 .Throws (new global::KRPC.Service.KRPC.ObjectNotLoadedException ("not loaded"));
             Assert.AreEqual (0, Update ().Count);
             Assert.AreEqual (0, Update ().Count);
-            Assert.IsEmpty (streamClient.Recorded.RemovedIds);
+            Assert.IsEmpty (client.RemovedStreams);
 
             // The value it holds is the one sent, so an equal value is not sent again
             mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ("foo");
@@ -406,7 +348,7 @@ namespace KRPC.Test
                 new ProcedureCall ("TestService", "get_PropertyAvailableInInheritedGameScene")));
             Assert.AreEqual (0, Update ().Count);
             Assert.AreEqual (0, Update ().Count);
-            Assert.IsEmpty (streamClient.Recorded.RemovedIds);
+            Assert.IsEmpty (client.RemovedStreams);
 
             CallContext.GameScene = GameScene.Flight;
             Assert.AreEqual ("foo", ResultFor (Update (), id).Value);
@@ -431,7 +373,7 @@ namespace KRPC.Test
             var id = Add (new ProcedureCallStream (call));
             for (var i = 0; i < 4; i++)
                 Assert.AreEqual (0, Update ().Count);
-            Assert.IsEmpty (streamClient.Recorded.RemovedIds);
+            Assert.IsEmpty (client.RemovedStreams);
 
             loaded = true;
             SentResult result = null;
@@ -486,7 +428,7 @@ namespace KRPC.Test
             loaded = true;
             fired = true;
             Assert.AreEqual (true, ResultFor (Update (), id).Value);
-            Assert.IsEmpty (streamClient.Recorded.RemovedIds);
+            Assert.IsEmpty (client.RemovedStreams);
         }
 
         [Test]
@@ -502,7 +444,7 @@ namespace KRPC.Test
             Assert.AreEqual (0, Update ().Count);
             available = true;
             Assert.AreEqual (true, ResultFor (Update (), id).Value);
-            Assert.IsEmpty (streamClient.Recorded.RemovedIds);
+            Assert.IsEmpty (client.RemovedStreams);
         }
     }
 }

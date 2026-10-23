@@ -10,7 +10,7 @@ namespace KRPC.Test
     // between calls, so the measurement is how many updates the calls are spread over
     sealed class ScriptedClient : IClient<Request,Response>
     {
-        sealed class ScriptedStream : IStream<Request,Response>
+        sealed class ScriptedStream : IMessageStream
         {
             readonly Queue<Request> pending;
             readonly int pollsBeforeReady;
@@ -51,6 +51,28 @@ namespace KRPC.Test
             public void Write (Response value)
             {
                 Written.Add (value);
+            }
+
+            public Action<StreamUpdate> StreamUpdateWritten { get; set; }
+
+            public IList<ulong> RemovedStreams { get; } = new List<ulong> ();
+
+            public void Write (StreamUpdate value)
+            {
+                if (StreamUpdateWritten != null)
+                    StreamUpdateWritten (value);
+            }
+
+            public void StreamRemoved (ulong id)
+            {
+                RemovedStreams.Add (id);
+            }
+
+            public DisconnectReason? DisconnectedWith { get; private set; }
+
+            public void Disconnect (DisconnectReason reason, string message)
+            {
+                DisconnectedWith = reason;
             }
 
             public ulong BytesRead { get { return 0; } }
@@ -131,6 +153,24 @@ namespace KRPC.Test
         }
 
         public IList<Response> Written { get { return stream.Written; } }
+
+        /// <summary>
+        /// The reason the server ended the session with, or null if it has not.
+        /// </summary>
+        public DisconnectReason? DisconnectedWith { get { return stream.DisconnectedWith; } }
+
+        /// <summary>
+        /// Called with each stream update written to the client.
+        /// </summary>
+        public Action<StreamUpdate> StreamUpdateWritten {
+            get { return stream.StreamUpdateWritten; }
+            set { stream.StreamUpdateWritten = value; }
+        }
+
+        /// <summary>
+        /// The ids of the streams removed for the client, in order.
+        /// </summary>
+        public IList<ulong> RemovedStreams { get { return stream.RemovedStreams; } }
 
         public string Name { get { return "ScriptedClient"; } }
 

@@ -62,6 +62,7 @@ namespace KRPC.UI
         const string serverOnlineText = "Server online";
         const string serverOfflineText = "Server offline";
         const string protocolText = "Protocol";
+        const string addressText = "Address";
         internal const string protobufOverTcpText = "Protobuf over TCP";
         internal const string protobufOverWebSocketsText = "Protobuf over WebSockets";
         internal const string protobufOverSerialIOText = "Protobuf over SerialIO";
@@ -286,7 +287,7 @@ namespace KRPC.UI
                 else
                     protocol = protobufOverSerialIOText;
                 DrawServerInfoRow (protocolText, protocol);
-                DrawServerInfoLines (server.Address);
+                DrawServerInfoRow (addressText, server.Address);
                 DrawServerInfoLines (server.Info);
                 DrawClients (server);
             }
@@ -339,7 +340,7 @@ namespace KRPC.UI
             GUILayout.EndHorizontal ();
         }
 
-        // Split a multi-line server detail string (e.g. Address or Info) into name/value
+        // Split a multi-line server detail string (e.g. Info) into name/value
         // rows, splitting each line on its "name = value" or "name: value" separator.
         // Lines with no separator are shown in the value column.
         void DrawServerInfoLines (string text)

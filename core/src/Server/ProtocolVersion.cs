@@ -1,5 +1,4 @@
 using System.Globalization;
-using KRPC.Utils;
 
 namespace KRPC.Server
 {
@@ -11,15 +10,14 @@ namespace KRPC.Server
         /// <summary>
         /// The protocol version of the server.
         /// </summary>
-        public const uint Current = 1;
+        public const uint Current = 2;
 
         /// <summary>
-        /// Whether the server accepts a client with the given protocol version. Version 0 is a
-        /// client that sent no version, and is served as the current version.
+        /// Whether the server accepts a client with the given protocol version.
         /// </summary>
         public static bool IsSupported (uint version)
         {
-            return version <= Current;
+            return version == Current;
         }
 
         /// <summary>
@@ -27,22 +25,12 @@ namespace KRPC.Server
         /// </summary>
         public static string UnsupportedMessage (uint version)
         {
+            if (version == 0)
+                return "The client sent no protocol version. The server supports protocol version " +
+                    Current.ToString (CultureInfo.InvariantCulture) + ".";
             return "Protocol version " + version.ToString (CultureInfo.InvariantCulture) +
-                " is not supported. The server supports protocol versions 0 to " +
+                " is not supported. The server supports protocol version " +
                 Current.ToString (CultureInfo.InvariantCulture) + ".";
-        }
-
-        /// <summary>
-        /// Log a warning for a client that sent no protocol version.
-        /// </summary>
-        public static void WarnIfUnversioned (uint version, string name, string address)
-        {
-            if (version != 0)
-                return;
-            Logger.WriteLine (
-                "Client '" + name + "' (" + address + ") sent no protocol version, " +
-                "and is served as protocol version " + Current.ToString (CultureInfo.InvariantCulture) +
-                ". It may be a client from before kRPC 0.7.", Logger.Severity.Warning);
         }
     }
 }

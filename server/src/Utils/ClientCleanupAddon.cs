@@ -4,7 +4,7 @@ using UnityEngine;
 namespace KRPC.Utils
 {
     /// <summary>
-    /// Base class for addons that hold in-game state on behalf of RPC clients. Gives up
+    /// Base class for addons that hold in-game state on behalf of clients. Gives up
     /// all of the addon's client-owned collections when the addon is created, which is on
     /// entering a game scene, and provides Sweep to release state owned by disconnected
     /// clients, so that a disconnecting client cannot leave the game in a stuck state.

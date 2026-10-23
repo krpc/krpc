@@ -13,9 +13,9 @@ namespace KRPC.Test.Server.LocalSocket
         [Test]
         public void Simple ()
         {
-            var endPoint = new UnixEndPoint ("/tmp/krpc/rpc");
-            Assert.AreEqual ("/tmp/krpc/rpc", endPoint.Path);
-            Assert.AreEqual ("/tmp/krpc/rpc", endPoint.ToString ());
+            var endPoint = new UnixEndPoint ("/tmp/krpc.sock");
+            Assert.AreEqual ("/tmp/krpc.sock", endPoint.Path);
+            Assert.AreEqual ("/tmp/krpc.sock", endPoint.ToString ());
             Assert.AreEqual (AddressFamily.Unix, endPoint.AddressFamily);
         }
 
@@ -60,10 +60,10 @@ namespace KRPC.Test.Server.LocalSocket
         [Test]
         public void RoundTripsThroughASocketAddress ()
         {
-            var endPoint = new UnixEndPoint ("/tmp/krpc/stream");
+            var endPoint = new UnixEndPoint ("/tmp/krpc.sock");
             var result = endPoint.Create (endPoint.Serialize ());
             Assert.AreEqual (endPoint, result);
-            Assert.AreEqual ("/tmp/krpc/stream", ((UnixEndPoint)result).Path);
+            Assert.AreEqual ("/tmp/krpc.sock", ((UnixEndPoint)result).Path);
         }
 
         [Test]
@@ -78,11 +78,9 @@ namespace KRPC.Test.Server.LocalSocket
         [Test]
         public void DefaultPathIsWithinALengthASocketAccepts ()
         {
-            foreach (var name in new [] { "rpc", "stream" }) {
-                var path = LocalSocketServer.DefaultPath (name);
-                Assert.IsTrue (path.EndsWith (name, StringComparison.Ordinal));
-                Assert.IsTrue (LocalSocketServer.PathLength (path) <= LocalSocketServer.MaximumPathLength);
-            }
+            var path = LocalSocketServer.DefaultPath ();
+            Assert.IsTrue (path.EndsWith (".sock", StringComparison.Ordinal));
+            Assert.IsTrue (LocalSocketServer.PathLength (path) <= LocalSocketServer.MaximumPathLength);
         }
 
         [Test]
@@ -96,8 +94,8 @@ namespace KRPC.Test.Server.LocalSocket
             try {
                 Environment.SetEnvironmentVariable ("XDG_RUNTIME_DIR", null);
                 Environment.SetEnvironmentVariable ("TMPDIR", "/somewhere/else");
-                Assert.AreEqual ("/tmp/krpc-" + Environment.UserName + "/rpc",
-                                 LocalSocketServer.DefaultPath ("rpc"));
+                Assert.AreEqual ("/tmp/krpc-" + Environment.UserName + ".sock",
+                                 LocalSocketServer.DefaultPath ());
             } finally {
                 Environment.SetEnvironmentVariable ("XDG_RUNTIME_DIR", runtimeDirectory);
                 Environment.SetEnvironmentVariable ("TMPDIR", temporaryDirectory);
@@ -112,8 +110,8 @@ namespace KRPC.Test.Server.LocalSocket
             var directory = Environment.GetEnvironmentVariable (variable);
             try {
                 Environment.SetEnvironmentVariable (variable, Path.Combine ("/run", "user"));
-                Assert.AreEqual (Path.Combine ("/run", "user", "krpc", "rpc"),
-                                 LocalSocketServer.DefaultPath ("rpc"));
+                Assert.AreEqual (Path.Combine ("/run", "user", "krpc.sock"),
+                                 LocalSocketServer.DefaultPath ());
             } finally {
                 Environment.SetEnvironmentVariable (variable, directory);
             }

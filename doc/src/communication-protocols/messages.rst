@@ -272,7 +272,7 @@ returns a Protocol Buffer message with the format:
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
    :start-at: message Status {
-   :end-before: // Multiplexed request messages
+   :end-at: uint32 protocol_version = 20;
 
 The ``version`` field contains the version string of the server. The
 ``protocol_version`` field contains the protocol version of the connection, which is 0

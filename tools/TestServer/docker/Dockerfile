@@ -9,11 +9,9 @@ COPY TestServer.zip ./
 RUN unzip TestServer.zip && rm TestServer.zip
 
 EXPOSE 50000
-EXPOSE 50001
 
 ENTRYPOINT [ \
   "dotnet", "./TestServer.dll", \
   "--bind", "0.0.0.0", \
-  "--rpc-port", "50000", \
-  "--stream-port", "50001"]
+  "--tcpip-port", "50000"]
 CMD []

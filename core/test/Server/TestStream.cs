@@ -4,7 +4,7 @@ using KRPC.Server;
 
 namespace KRPC.Test.Server
 {
-    sealed class TestStream : IStream<byte,byte>, IDisposable
+    sealed class TestStream : IStream<byte,byte>, IHalfClosableStream, IDisposable
     {
         MemoryStream outputStream;
         MemoryStream inputStream;
@@ -90,6 +90,8 @@ namespace KRPC.Test.Server
         public void Write (byte[] buffer, int offset, int size)
         {
             CheckDisposed ();
+            if (FailWrites)
+                throw new ServerException ("Write failed");
             if (Closed || outputStream == null)
                 throw new InvalidOperationException ();
             outputStream.Write (buffer, offset, size);
@@ -108,6 +110,21 @@ namespace KRPC.Test.Server
         }
 
         public bool Closed { get; set; }
+
+        /// <summary>
+        /// Whether a write throws, as on a connection the peer has reset.
+        /// </summary>
+        public bool FailWrites { get; set; }
+
+        /// <summary>
+        /// Whether the write side of the stream has been closed.
+        /// </summary>
+        public bool HalfClosed { get; private set; }
+
+        public void HalfClose ()
+        {
+            HalfClosed = true;
+        }
 
         public void Close ()
         {

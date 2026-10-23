@@ -453,7 +453,7 @@ static inline krpc_error_t krpc_KRPC_RunFunction(krpc_connection_t connection, k
 static inline krpc_error_t krpc_KRPC_SetStreamRate(krpc_connection_t connection, uint64_t id, float rate);
 
 /**
- * The RPC clients that are currently connected to the server.
+ * The clients that are currently connected to the server.
  */
 static inline krpc_error_t krpc_KRPC_Clients(krpc_connection_t connection, krpc_list_KRPC_ClientInfo_t * returnValue);
 

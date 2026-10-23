@@ -25,6 +25,7 @@ namespace KRPC.Server.ProtocolBuffers
         public static Schema.KRPC.Response ToProtobufMessage (this Response response)
         {
             var result = new Schema.KRPC.Response ();
+            result.Id = response.Id;
             if (response.HasError)
                 result.Error = response.Error.ToProtobufMessage ();
             result.Results.Add (response.Results.Select (ToProtobufMessage));
@@ -327,6 +328,7 @@ namespace KRPC.Server.ProtocolBuffers
         public static Request ToMessage (this Schema.KRPC.Request request)
         {
             var result = new Request ();
+            result.Id = request.Id;
             foreach (var call in request.Calls)
                 result.Calls.Add (call.ToMessage ());
             return result;

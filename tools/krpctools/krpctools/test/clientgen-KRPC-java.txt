@@ -518,7 +518,7 @@ public class KRPC {
     }
 
     /**
-     * The RPC clients that are currently connected to the server.
+     * The clients that are currently connected to the server.
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "KRPC", procedure = "get_Clients", types = _Types.class)

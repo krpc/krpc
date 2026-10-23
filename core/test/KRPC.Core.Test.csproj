@@ -40,6 +40,7 @@
     </Compile>
     <Compile Include="ConfigurationTest.cs" />
     <Compile Include="CoreTest.cs" />
+    <Compile Include="PinnedUpdateTime.cs" />
     <Compile Include="ScriptedClient.cs" />
     <Compile Include="Service\FunctionStreamTest.cs" />
     <Compile Include="Service\KRPC\ExpressionTest.Collections.cs" />
@@ -63,22 +64,17 @@
     <Compile Include="Server\HTTP\ResponseTest.cs" />
     <Compile Include="Server\ProtocolBuffers\EncoderTest.cs" />
     <Compile Include="Server\ProtocolBuffers\MessageExtensionsTest.cs" />
-    <Compile Include="Server\ProtocolBuffers\RPCServerTest.cs" />
-    <Compile Include="Server\ProtocolBuffers\RPCStreamTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\ServerTest.cs" />
     <Compile Include="Server\ProtocolBuffers\SchemaTest.cs" />
-    <Compile Include="Server\ProtocolBuffers\StreamServerTest.cs" />
-    <Compile Include="Server\ProtocolBuffers\StreamStreamTest.cs" />
-    <Compile Include="Server\ProtocolBuffers\TestingTools.cs" />
     <Compile Include="Server\SerialIO\BufferedPortTest.cs" />
     <Compile Include="Server\SerialIO\ByteBufferTest.cs" />
     <Compile Include="Server\SerialIO\ByteClientTest.cs" />
-    <Compile Include="Server\SerialIO\RPCServerTest.cs" />
-    <Compile Include="Server\SerialIO\RPCStreamTest.cs" />
-    <Compile Include="Server\SerialIO\TestingTools.cs" />
+    <Compile Include="Server\SerialIO\ServerTest.cs" />
     <Compile Include="Server\LocalSocket\AssumptionsTest.cs" />
     <Compile Include="Server\LocalSocket\LocalSocketServerTest.cs" />
     <Compile Include="Server\LocalSocket\UnixEndPointTest.cs" />
     <Compile Include="Server\LocalSocket\UnixSocketTest.cs" />
+    <Compile Include="Server\MessageHarness.cs" />
     <Compile Include="Server\TCP\AssumptionsTest.cs" />
     <Compile Include="Server\TCP\NetworkInformationTest.cs" />
     <Compile Include="Server\TCP\TCPClientTest.cs" />
@@ -87,10 +83,7 @@
     <Compile Include="Server\TestStream.cs" />
     <Compile Include="Server\WebSockets\FrameTest.cs" />
     <Compile Include="Server\WebSockets\HeaderTest.cs" />
-    <Compile Include="Server\WebSockets\RPCServerTest.cs" />
-    <Compile Include="Server\WebSockets\RPCStreamTest.cs" />
-    <Compile Include="Server\WebSockets\StreamServerTest.cs" />
-    <Compile Include="Server\WebSockets\StreamStreamTest.cs" />
+    <Compile Include="Server\WebSockets\ServerTest.cs" />
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
     <Compile Include="Service\ClassStaticMethodHandlerTest.cs" />
     <Compile Include="Service\DocumentationUtilsTest.cs" />

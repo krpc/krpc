@@ -123,7 +123,7 @@ def stop(process):
 
 
 def setting(output, name):
-    """Read a value the server reported, e.g. "rpc_port = 50000"."""
+    """Read a value the server reported, e.g. "tcpip_port = 50000"."""
     match = re.search(r"\b%s = (.+)" % name, output)
     if match is None:
         raise RuntimeError("the server did not report %s:\n%s" % (name, output))
@@ -189,18 +189,15 @@ def run(config):
             )
             # Transfers run on a background thread whose failures show up only in
             # the server's log, so ask for the detail needed to diagnose them.
-            arguments += ["--debug", "--port=" + server_port]
-            test_environment["PORT"] = client_port
+            arguments += ["--debug", "--serialio-port=" + server_port]
+            test_environment["KRPC_TEST_SERIALIO_PORT"] = client_port
         elif local_socket:
             # A socket address has to fit in the kernel's address structure, which
             # leaves far less room than the sandbox's own directories take up, so
-            # the sockets go in a short temporary directory of their own rather
+            # the socket goes in a short temporary directory of its own rather
             # than under the test's.
             sockets = tempfile.mkdtemp(dir=socket_directory())
-            arguments += [
-                "--rpc-path=" + os.path.join(sockets, "rpc"),
-                "--stream-path=" + os.path.join(sockets, "stream"),
-            ]
+            arguments += ["--localsocket-path=" + os.path.join(sockets, "krpc.sock")]
 
         server_process = start([server] + arguments, env=environment)
         reader = Reader(server_process, SERVER_READY)
@@ -210,23 +207,13 @@ def run(config):
             time.sleep(SERIAL_SETTLE_TIME)
             print("Server started, port = %s" % server_port)
         elif local_socket:
-            rpc_path = setting(reader.output, "rpc_path")
-            stream_path = setting(reader.output, "stream_path")
-            test_environment["RPC_PATH"] = rpc_path
-            test_environment["STREAM_PATH"] = stream_path
-            print(
-                "Server started, rpc socket = %s, stream socket = %s"
-                % (rpc_path, stream_path)
-            )
+            path = setting(reader.output, "localsocket_path")
+            test_environment["KRPC_TEST_LOCALSOCKET_PATH"] = path
+            print("Server started, socket = %s" % path)
         else:
-            rpc_port = setting(reader.output, "rpc_port")
-            stream_port = setting(reader.output, "stream_port")
-            test_environment["RPC_PORT"] = rpc_port
-            test_environment["STREAM_PORT"] = stream_port
-            print(
-                "Server started, rpc port = %s, stream port = %s"
-                % (rpc_port, stream_port)
-            )
+            port = setting(reader.output, "tcpip_port")
+            test_environment["KRPC_TEST_TCPIP_PORT"] = port
+            print("Server started, port = %s" % port)
 
         # Dump the server's output if the harness is killed, which is how the
         # test runner reports a timeout on the platforms that can signal it.

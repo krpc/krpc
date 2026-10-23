@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using KRPC.Server;
 using KRPC.Service;
 using KRPC.Service.Messages;
@@ -21,13 +23,18 @@ namespace KRPC
         /// </summary>
         public IList<Server.Server> Servers { get; private set; }
 
-        IDictionary<Guid, IClient<Request, Response>> rpcClients = new Dictionary<Guid, IClient<Request, Response>> ();
-        IDictionary<Guid, IClient<NoMessage, StreamUpdate>> streamClients = new Dictionary<Guid, IClient<NoMessage, StreamUpdate>> ();
+        IDictionary<Guid, IClient<Request, Response>> clients = new Dictionary<Guid, IClient<Request, Response>> ();
+        // The connected clients, polled for requests in the order they connected
         RoundRobinScheduler<IClient<Request,Response>> clientScheduler = new RoundRobinScheduler<IClient<Request, Response>> ();
+        // The calls to execute in this update: new requests, and calls the previous update yielded or deferred
         List<RequestContinuation> rpcContinuations = new List<RequestContinuation> ();
-        Dictionary<IClient<NoMessage,StreamUpdate>, Dictionary<ulong, Service.Stream>> streams = new Dictionary<IClient<NoMessage,StreamUpdate>, Dictionary<ulong, Service.Stream>> ();
-        Dictionary<IClient<NoMessage,StreamUpdate>, StreamUpdate> cachedStreamUpdates = new Dictionary<IClient<NoMessage,StreamUpdate>, StreamUpdate> ();
-        Dictionary<ulong, IClient<NoMessage, StreamUpdate>> removeStreams = new Dictionary<ulong, IClient<NoMessage, StreamUpdate>> ();
+        Dictionary<IClient<Request,Response>, Dictionary<ulong, Service.Stream>> streams = new Dictionary<IClient<Request,Response>, Dictionary<ulong, Service.Stream>> ();
+        // Each client's stream update message, reused on every update
+        Dictionary<IClient<Request,Response>, StreamUpdate> cachedStreamUpdates = new Dictionary<IClient<Request,Response>, StreamUpdate> ();
+        // The streams to remove, with their client, removed outside the loop over the streams
+        Dictionary<ulong, IClient<Request,Response>> removeStreams = new Dictionary<ulong, IClient<Request,Response>> ();
+        // The id of the next stream. Ids are shared by every client and never reused, so an id at or
+        // above this one was never issued
         ulong nextStreamId = 0;
 
         /// <summary>
@@ -81,17 +88,17 @@ namespace KRPC
         public event EventHandler<ServerStoppedEventArgs> OnServerStopped;
 
         /// <summary>
-        /// Event triggered when an RPC client is requesting a connection
+        /// Event triggered when a client is requesting a connection
         /// </summary>
         public event EventHandler<ClientRequestingConnectionEventArgs> OnClientRequestingConnection;
 
         /// <summary>
-        /// Event triggered when a RPC client has connected
+        /// Event triggered when a client has connected
         /// </summary>
         public event EventHandler<ClientConnectedEventArgs> OnClientConnected;
 
         /// <summary>
-        /// Event triggered when a RPC client has disconnected
+        /// Event triggered when a client has disconnected
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
 
@@ -106,16 +113,27 @@ namespace KRPC
         /// </summary>
         public event EventHandler OnAfterCalls;
 
-        internal void RPCClientConnected (IClient<Request,Response> client)
+        internal void ClientConnected (IClient<Request,Response> client)
         {
-            rpcClients [client.Guid] = client;
+            clients [client.Guid] = client;
             clientScheduler.Add (client);
+            streams [client] = new Dictionary<ulong, Service.Stream> ();
+            cachedStreamUpdates [client] = new StreamUpdate ();
             EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs (client));
         }
 
-        internal void RPCClientDisconnected (IClient<Request,Response> client)
+        internal void ClientDisconnected (IClient<Request,Response> client)
         {
-            rpcClients.Remove (client.Guid);
+            Dictionary<ulong, Service.Stream> clientStreams;
+            if (streams.TryGetValue (client, out clientStreams)) {
+                // Note: convert list of streams to remove to array as
+                // RemoveStreamInternal modifies the collection
+                foreach (var id in clientStreams.Keys.ToArray ())
+                    RemoveStreamInternal (client, id);
+                streams.Remove (client);
+                cachedStreamUpdates.Remove (client);
+            }
+            clients.Remove (client.Guid);
             // A client that goes away while holding the tick does not get to keep holding it.
             if (tickHoldClient != null && tickHoldClient.Guid == client.Guid)
                 ReleaseTickHold ();
@@ -123,36 +141,11 @@ namespace KRPC
             EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs (client));
         }
 
-        internal void StreamClientConnected (IClient<NoMessage,StreamUpdate> client)
-        {
-            streamClients [client.Guid] = client;
-            streams [client] = new Dictionary<ulong, Service.Stream>();
-            cachedStreamUpdates [client] = new StreamUpdate ();
-        }
-
-        internal void StreamClientDisconnected (IClient<NoMessage,StreamUpdate> client)
-        {
-            // Note: convert list of streams to remove to array as
-            // RemoveStreamInternal modifies the collection
-            foreach (var id in streams [client].Keys.ToArray ())
-                RemoveStreamInternal (client, id);
-            streamClients.Remove (client.Guid);
-            streams.Remove (client);
-            cachedStreamUpdates.Remove (client);
-        }
-
         /// <summary>
-        /// Get a list of all RPC clients connected to the server.
+        /// Get a list of all clients connected to the server.
         /// </summary>
-        public IEnumerable<IClient> RPCClients {
-            get { return rpcClients.Values.Cast<IClient> (); }
-        }
-
-        /// <summary>
-        /// Get a list of all Stream clients connected to the server.
-        /// </summary>
-        public IEnumerable<IClient> StreamClients {
-            get { return streamClients.Values.Cast<IClient> (); }
+        public IEnumerable<IClient> Clients {
+            get { return clients.Values.Cast<IClient> (); }
         }
 
         /// <summary>
@@ -398,9 +391,9 @@ namespace KRPC
             // many times the poll loop runs. OnAfterCalls is raised before the stream update,
             // so that streams observe what the handlers did.
             EventHandlerExtensions.Invoke (OnBeforeCalls, this);
-            RPCServerUpdate ();
+            UpdateRPCs ();
             EventHandlerExtensions.Invoke (OnAfterCalls, this);
-            StreamServerUpdate ();
+            UpdateStreams ();
 
             var timeElapsed = updateTimer.ElapsedSeconds ();
             var ticksElapsed = updateTimer.ElapsedTicks;
@@ -452,7 +445,7 @@ namespace KRPC
         List<RequestContinuation> rpcYieldedContinuations = new List<RequestContinuation> ();
 
         /// <summary>
-        /// Update the RPC server, called once every FixedUpdate.
+        /// Update the servers, called once every FixedUpdate.
         /// This method receives and executes RPCs, for up to MaxTimePerUpdate microseconds.
         /// RPCs are delayed to the next update if this time expires. If AdaptiveRateControl
         /// is true, MaxTimePerUpdate will be automatically adjusted to achieve a target framerate.
@@ -463,7 +456,7 @@ namespace KRPC
         /// executed until it releases the tick or its hold runs out of time, so that a program can
         /// read the game state, compute with it and write the result back within one tick.
         /// </summary>
-        void RPCServerUpdate ()
+        void UpdateRPCs ()
         {
             rpcTimer.Reset ();
             rpcTimer.Start ();
@@ -478,7 +471,7 @@ namespace KRPC
 
             rpcYieldedContinuations.Clear ();
             for (int i = 0; i < Servers.Count; i++)
-                Servers [i].RPCServer.Update ();
+                Servers [i].InnerServer.Update ();
 
             while (true) {
 
@@ -562,7 +555,7 @@ namespace KRPC
             executingRPCs = false;
             if (tickHoldClient != null) {
                 Logger.WriteLine (
-                    "Ending a hold on the tick left behind by client " + tickHoldClient.Address,
+                    "Ending a hold on the tick left behind by client " + tickHoldClient.Label (),
                     Logger.Severity.Error);
                 ReleaseTickHold ();
             }
@@ -583,22 +576,19 @@ namespace KRPC
         Stopwatch streamTimer = new Stopwatch ();
 
         /// <summary>
-        /// Update the Stream server. Executes all streaming RPCs and sends the results to clients (if they have changed).
+        /// Remove the streams queued for removal, update every stream, and write each client
+        /// a stream update holding the results that changed.
         /// </summary>
-        void StreamServerUpdate ()
+        void UpdateStreams ()
         {
             streamTimer.Reset ();
             streamTimer.Start ();
             uint rpcsExecuted = 0;
 
-            // Update stream servers
-            for (int i = 0; i < Servers.Count; i++)
-                Servers [i].StreamServer.Update ();
-
             if (removeStreams.Count > 0) {
                 foreach (var entry in removeStreams) {
-                    Logger.WriteLine("Removing stream " + entry.Key, Logger.Severity.Debug);
-                    RemoveStreamInternal(entry.Value, entry.Key);
+                    if (RemoveStreamInternal (entry.Value, entry.Key) && Logger.ShouldLog (Logger.Severity.Debug))
+                        Logger.WriteLine ("Removed stream " + entry.Key + " for client " + entry.Value.Label (), Logger.Severity.Debug);
                 }
                 removeStreams.Clear();
             }
@@ -606,15 +596,11 @@ namespace KRPC
             // Run stream continuations
             if (streams.Count > 0) {
                 foreach (var entry in streams) {
-                    var streamClient = entry.Key;
-                    var streamClientAddress = streamClient.Address;
-                    var id = streamClient.Guid;
+                    var client = entry.Key;
                     var clientStreams = entry.Value.Values;
                     if (clientStreams.Count == 0)
                         continue;
-                    if (!rpcClients.ContainsKey (id))
-                        continue;
-                    CallContext.Set (rpcClients [id]);
+                    CallContext.Set (client);
                     // Update streams
                     bool changed = false;
                     foreach (var stream in clientStreams) {
@@ -629,22 +615,23 @@ namespace KRPC
                     }
                     // If anything changed, produce an update
                     if (changed) {
-                        var streamUpdate = cachedStreamUpdates [streamClient];
+                        var streamUpdate = cachedStreamUpdates [client];
                         streamUpdate.Results.Clear ();
                         foreach (var stream in clientStreams) {
                             if (stream.Changed) {
                                 var result = stream.StreamResult;
                                 streamUpdate.Results.Add (result);
-                                if (result.Result.HasError)
-                                    removeStreams[stream.Id] = streamClient;
+                                if (result.Result.HasError) {
+                                    removeStreams[stream.Id] = client;
+                                    if (Logger.ShouldLog (Logger.Severity.Debug))
+                                        LogStreamEnded (client, stream.Id, result.Result.Error);
+                                }
                             }
                         }
-                        try {
-                            streamClient.Stream.Write (streamUpdate);
-                        } catch (ServerException exn) {
-                            Logger.WriteLine ("Failed to send stream update to client " + streamClientAddress + Environment.NewLine + exn, Logger.Severity.Error);
+                        var messageStream = client.Stream as IMessageStream;
+                        if (messageStream != null) {
+                            messageStream.Write (streamUpdate);
                         }
-                        Logger.WriteLine ("Sent stream update to client " + streamClientAddress, Logger.Severity.Debug);
                         foreach (var stream in clientStreams)
                             if (stream.Changed)
                                 stream.Sent ();
@@ -652,10 +639,8 @@ namespace KRPC
                 }
                 CallContext.Clear ();
                 if (removeStreams.Count > 0) {
-                    foreach (var entry in removeStreams) {
-                        Logger.WriteLine("Removing stream as it returned an error", Logger.Severity.Debug);
+                    foreach (var entry in removeStreams)
                         RemoveStreamInternal(entry.Value, entry.Key);
-                    }
                     removeStreams.Clear();
                 }
             }
@@ -666,36 +651,54 @@ namespace KRPC
         }
 
         /// <summary>
+        /// Log the end of a stream whose last update carries an error. An event that has
+        /// finished is the normal end, so only its description is given.
+        /// </summary>
+        static void LogStreamEnded (IClient<Request,Response> client, ulong id, Error error)
+        {
+            var finished = error.Service == "KRPC" && error.Name == "StreamRemovedException";
+            var text = new StringBuilder ("Removed stream " + id + " for client " + client.Label () + ": ");
+            if (finished) {
+                text.Append (error.Description);
+            } else {
+                text.Append ("failed: ");
+                text.Append (Describe (error));
+                AppendStackTrace (text, error);
+            }
+            Logger.WriteLine (text.ToString (), Logger.Severity.Debug);
+        }
+
+        /// <summary>
         /// Hold the game on the current tick for a client, so that the calls it makes next are
         /// executed in this tick rather than in later ones. Yields to the next tick if this one
         /// has already been held and let go.
         /// </summary>
-        internal void HoldTick (IClient rpcClient)
+        internal void HoldTick (IClient caller)
         {
-            if (rpcClient == null)
-                throw new ArgumentNullException (nameof (rpcClient));
+            if (caller == null)
+                throw new ArgumentNullException (nameof (caller));
             if (!executingRPCs)
                 throw new InvalidOperationException (
                     "The tick can only be held by a client making a call, " +
                     "not by a stream or an event");
             IClient<Request,Response> client;
-            if (!rpcClients.TryGetValue (rpcClient.Guid, out client))
+            if (!clients.TryGetValue (caller.Guid, out client))
                 throw new InvalidOperationException (
-                    "No RPC client is connected with this identifier");
+                    "No client is connected with this identifier");
             // Renewing a hold would let a client hold the game for as long as it liked
             if (TickHeld)
                 throw new InvalidOperationException (
-                    tickHoldClient.Guid == rpcClient.Guid
+                    tickHoldClient.Guid == caller.Guid
                     ? "This client is already holding the tick"
                     : "Another client is holding the tick");
             // One hold per tick. Holding a tick that has already been held and released would
             // defer it a second time, so the call waits for the next tick
             if (heldTick)
-                throw new YieldException<Action> (() => HoldTick (rpcClient));
+                throw new YieldException<Action> (() => HoldTick (caller));
             tickHoldClient = client;
             tickHoldDeadline = Stopwatch.GetTimestamp () +
                 StopwatchExtensions.MicrosecondsToTicks (Configuration.Instance.TickHoldTimeout);
-            Logger.WriteLine ("Client " + client.Address + " is holding the tick",
+            Logger.WriteLine ("Client " + client.Label () + " is holding the tick",
                               Logger.Severity.Debug);
         }
 
@@ -703,13 +706,13 @@ namespace KRPC
         /// Let the game move on from the current tick. Does nothing if the client is not
         /// holding it, which is what a client whose hold has already ended sees.
         /// </summary>
-        internal void ReleaseTick (IClient rpcClient)
+        internal void ReleaseTick (IClient caller)
         {
-            if (rpcClient == null)
-                throw new ArgumentNullException (nameof (rpcClient));
-            if (tickHoldClient == null || tickHoldClient.Guid != rpcClient.Guid)
+            if (caller == null)
+                throw new ArgumentNullException (nameof (caller));
+            if (tickHoldClient == null || tickHoldClient.Guid != caller.Guid)
                 return;
-            Logger.WriteLine ("Client " + tickHoldClient.Address + " released the tick",
+            Logger.WriteLine ("Client " + tickHoldClient.Label () + " released the tick",
                               Logger.Severity.Debug);
             ReleaseTickHold ();
         }
@@ -722,10 +725,10 @@ namespace KRPC
         /// update, ahead of anything the server has to be polled for, so there is no window for
         /// the game to advance through.
         /// </summary>
-        internal void NextTick (IClient rpcClient)
+        internal void NextTick (IClient caller)
         {
-            ReleaseTick (rpcClient);
-            HoldTick (rpcClient);
+            ReleaseTick (caller);
+            HoldTick (caller);
         }
 
         /// <summary>
@@ -739,7 +742,7 @@ namespace KRPC
                     return false;
                 if (Stopwatch.GetTimestamp () >= tickHoldDeadline) {
                     Logger.WriteLine (
-                        "Client " + tickHoldClient.Address + " held the tick for longer than the " +
+                        "Client " + tickHoldClient.Label () + " held the tick for longer than the " +
                         "timeout allows, so the game has moved on without it",
                         Logger.Severity.Warning);
                     ReleaseTickHold ();
@@ -747,9 +750,9 @@ namespace KRPC
                 }
                 // Clients are only reconciled between updates, so an update holding a tick
                 // checks for itself that the client is still connected
-                if (!rpcClients.ContainsKey (tickHoldClient.Guid) || !tickHoldClient.Connected) {
+                if (!clients.ContainsKey (tickHoldClient.Guid) || !tickHoldClient.Connected) {
                     Logger.WriteLine (
-                        "Client " + tickHoldClient.Address + " disconnected while holding the tick",
+                        "Client " + tickHoldClient.Label () + " disconnected while holding the tick",
                         Logger.Severity.Warning);
                     ReleaseTickHold ();
                     return false;
@@ -769,7 +772,7 @@ namespace KRPC
             if (tickHoldClient == null || tickHoldClient.Guid != client.Guid)
                 return;
             Logger.WriteLine (
-                "Client " + client.Address + " called a procedure that takes more than one " +
+                "Client " + client.Label () + " called a procedure that takes more than one " +
                 "update to finish while holding the tick, so the hold has ended",
                 Logger.Severity.Warning);
             ReleaseTickHold ();
@@ -784,19 +787,18 @@ namespace KRPC
         /// <summary>
         /// Add a stream to the server, with a new id.
         /// </summary>
-        internal ulong AddStream (IClient rpcClient, Service.Stream stream)
+        internal ulong AddStream (IClient caller, Service.Stream stream)
         {
-            var id = rpcClient.Guid;
-            if (!streamClients.ContainsKey (id))
-                throw new InvalidOperationException ("No stream client is connected for this RPC client");
-            var streamClient = streamClients [id];
+            IClient<Request,Response> client;
+            if (!clients.TryGetValue (caller.Guid, out client))
+                throw new InvalidOperationException ("No client is connected with this identifier");
 
             stream.Id = nextStreamId;
             nextStreamId++;
 
             var streamId = stream.Id;
-            streams [streamClient] [streamId] = stream;
-            Logger.WriteLine ("Added stream " + streamId + " for client " + streamClient.Address, Logger.Severity.Debug);
+            streams [client] [streamId] = stream;
+            Logger.WriteLine ("Added stream " + streamId + " for client " + client.Label (), Logger.Severity.Debug);
             StreamRPCs++;
             return streamId;
         }
@@ -804,51 +806,57 @@ namespace KRPC
         /// <summary>
         /// Set the update rate for a stream.
         /// </summary>
-        internal void SetStreamRate(IClient rpcClient, ulong streamId, float rate)
+        internal void SetStreamRate(IClient caller, ulong streamId, float rate)
         {
-            var stream = GetStream (rpcClient, streamId);
+            var stream = GetStream (caller, streamId);
             if (stream == null)
                 return;
             stream.Rate = rate;
-            Logger.WriteLine("Set rate for stream " + streamId, Logger.Severity.Debug);
+            if (Logger.ShouldLog (Logger.Severity.Debug))
+                Logger.WriteLine (
+                    "Set the rate of stream " + streamId + " for client " + caller.Label () + " to " +
+                    rate.ToString (CultureInfo.InvariantCulture) + " Hz", Logger.Severity.Debug);
         }
 
         /// <summary>
         /// Remove a stream from the server, for a given client.
         /// </summary>
-        internal void RemoveStream (IClient rpcClient, ulong streamId)
+        internal void RemoveStream (IClient caller, ulong streamId)
         {
-            if (GetStream (rpcClient, streamId) == null)
+            if (GetStream (caller, streamId) == null)
                 return;
-            removeStreams[streamId] = streamClients [rpcClient.Guid];
+            removeStreams[streamId] = clients [caller.Guid];
         }
 
         /// <summary>
         /// The client's stream with the given id, or null if the stream has ended.
         /// Throws an exception if the id has never been issued.
         /// </summary>
-        Service.Stream GetStream (IClient rpcClient, ulong streamId)
+        Service.Stream GetStream (IClient caller, ulong streamId)
         {
-            IClient<NoMessage,StreamUpdate> streamClient;
-            if (!streamClients.TryGetValue (rpcClient.Guid, out streamClient))
-                throw new InvalidOperationException ("No stream client is connected for this RPC client");
+            IClient<Request,Response> client;
+            if (!clients.TryGetValue (caller.Guid, out client))
+                throw new InvalidOperationException ("No client is connected with this identifier");
             if (streamId >= nextStreamId)
                 throw new ArgumentException ("No stream exists with id " + streamId, nameof (streamId));
             Service.Stream stream;
-            streams [streamClient].TryGetValue (streamId, out stream);
+            streams [client].TryGetValue (streamId, out stream);
             return stream;
         }
 
-        private void RemoveStreamInternal (IClient<NoMessage,StreamUpdate> client, ulong id)
+        /// <summary>
+        /// Remove a client's stream. Returns false if the client has no stream with the id.
+        /// </summary>
+        bool RemoveStreamInternal (IClient<Request,Response> client, ulong id)
         {
-            if (streams.ContainsKey (client) && streams [client].ContainsKey (id)) {
-                streams [client].Remove (id);
-                var stream = client.Stream as Server.Message.StreamStream;
-                if (stream != null)
-                    stream.Removed (id);
-                Logger.WriteLine ("Removed stream " + id + " for client " + client.Address, Logger.Severity.Debug);
-                StreamRPCs--;
-            }
+            if (!streams.ContainsKey (client) || !streams [client].ContainsKey (id))
+                return false;
+            streams [client].Remove (id);
+            var stream = client.Stream as IMessageStream;
+            if (stream != null)
+                stream.StreamRemoved (id);
+            StreamRPCs--;
+            return true;
         }
 
         HashSet<IClient<Request,Response>> pollRequestsCurrentClients = new HashSet<IClient<Request, Response>> ();
@@ -857,16 +865,12 @@ namespace KRPC
         /// Send a response carrying nothing but an error, for a request that could not be
         /// turned into a call to make.
         /// </summary>
-        static void SendErrorResponse (IClient<Request,Response> client, Error error)
+        static void SendErrorResponse (IClient<Request,Response> client, ulong id, Error error)
         {
             var response = new Response ();
+            response.Id = id;
             response.Error = error;
-            try {
-                client.Stream.Write (response);
-                Logger.WriteLine ("Sent error response to client " + client.Address + " (" + error + ")", Logger.Severity.Debug);
-            } catch (ServerException exn) {
-                Logger.WriteLine ("Failed to send error response to client " + client.Address + Environment.NewLine + exn, Logger.Severity.Error);
-            }
+            client.Stream.Write (response);
         }
 
         /// <summary>
@@ -891,36 +895,31 @@ namespace KRPC
                     if (!pollRequestsCurrentClients.Contains (client) && stream.DataAvailable) {
                         Request request = stream.Read ();
                         EventHandlerExtensions.Invoke (OnClientActivity, this, new ClientActivityEventArgs (client));
-                        if (Logger.ShouldLog (Logger.Severity.Debug)) {
-                            var calls = string.Join(
-                                ", ", request.Calls.Select(call => call.ServiceId > 0 ? call.ServiceId + "." + call.ProcedureId : call.Service + "." + call.Procedure).ToArray());
-                            Logger.WriteLine ("Received request from client " + client.Address + " (" + calls + ")", Logger.Severity.Debug);
-                        }
-                        var requestContinuation = new RequestContinuation (client, request);
-                        rpcContinuations.Add (requestContinuation);
-                        if (Logger.ShouldLog (Logger.Severity.Debug)) {
-                            var calls = string.Join(", ", requestContinuation.Calls.Select(call => call.Procedure.FullyQualifiedName).ToArray());
-                            Logger.WriteLine ("Decoded request from client " + client.Address + " (" + calls + ")", Logger.Severity.Debug);
-                        }
+                        rpcContinuations.Add (new RequestContinuation (client, request));
                     }
-                } catch (ClientDisconnectedException) {
-                    Logger.WriteLine ("Client " + client.Address + " disconnected");
-                    client.Stream.Close ();
-                    continue;
-                } catch (ServerException e) {
-                    Logger.WriteLine ("Error receiving request from client " + client.Address + ": " + e.Message, Logger.Severity.Error);
-                    client.Stream.Close ();
-                    continue;
                 } catch (KRPC.Server.Message.RequestDecodeException e) {
                     // The request arrived intact but names something the server cannot give,
                     // such as an object it has reclaimed. Report a failed call, and leave the
                     // connection open
-                    SendErrorResponse (client, KRPC.Service.Services.Instance.HandleException (e.InnerException ?? e));
+                    var error = KRPC.Service.Services.Instance.HandleException (e.InnerException ?? e);
+                    if (Logger.ShouldLog (Logger.Severity.Debug)) {
+                        var text = new StringBuilder ("Client " + client.Label () + " sent a request that failed: " + Describe (error));
+                        AppendStackTrace (text, error);
+                        Logger.WriteLine (text.ToString (), Logger.Severity.Debug);
+                    }
+                    SendErrorResponse (client, e.Id, error);
                 } catch (System.Exception e) {
+                    // No request exists to tie a response to, so the connection ends. The
+                    // connection logs the end of the session
                     if (Logger.ShouldLog (Logger.Severity.Debug))
-                        Logger.WriteLine (e.Message + Environment.NewLine + e.StackTrace, Logger.Severity.Error);
-                    SendErrorResponse (client, new Error (
-                        "Error receiving message" + Environment.NewLine + e.Message, e.StackTrace));
+                        Logger.WriteLine ("Failed to read a request from client " + client.Label () + ": " + e, Logger.Severity.Debug);
+                    var messageStream = client.Stream as IMessageStream;
+                    if (messageStream != null) {
+                        messageStream.Disconnect (DisconnectReason.MalformedMessage, "Failed to read a request: " + e.Message);
+                    } else {
+                        Logger.WriteLine ("Failed to read a request from client " + client.Label () + ": " + e.Message, Logger.Severity.Warning);
+                        client.Stream.Close ();
+                    }
                 }
                 item = item.Next;
             }
@@ -943,24 +942,69 @@ namespace KRPC
             } catch (YieldException) {
                 throw;
             } catch (RPCException e) {
-                response = new Response { Error = Service.Services.Instance.HandleException (e) };
+                response = new Response { Id = continuation.Id, Error = Service.Services.Instance.HandleException (e) };
             } catch (System.Exception e) {
-                response = new Response { Error = Service.Services.Instance.HandleException (e) };
+                response = new Response { Id = continuation.Id, Error = Service.Services.Instance.HandleException (e) };
             } finally {
                 CallContext.Clear ();
             }
 
             // Send response to the client
-            try {
-                client.Stream.Write (response);
-                if (Logger.ShouldLog (Logger.Severity.Debug)) {
-                    if (response.HasError)
-                        Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
-                    else
-                        Logger.WriteLine ("Sent response to client " + client.Address, Logger.Severity.Debug);
+            client.Stream.Write (response);
+            if (Logger.ShouldLog (Logger.Severity.Debug))
+                LogCalls (continuation, response);
+        }
+
+        /// <summary>
+        /// Log the calls in a request and the error of each one that failed, as one line.
+        /// The stack traces of the errors follow it.
+        /// </summary>
+        static void LogCalls (RequestContinuation continuation, Response response)
+        {
+            var text = new StringBuilder ("Client ");
+            text.Append (continuation.Client.Label ());
+            if (response.HasError) {
+                text.Append (" sent a request that failed: ");
+                text.Append (Describe (response.Error));
+                AppendStackTrace (text, response.Error);
+            } else {
+                text.Append (" called ");
+                var calls = continuation.Calls;
+                for (int i = 0; i < calls.Count; i++) {
+                    if (i > 0)
+                        text.Append (", ");
+                    var procedure = calls [i].Procedure;
+                    text.Append (procedure != null ? procedure.FullyQualifiedName : "an unknown procedure");
+                    var result = i < response.Results.Count ? response.Results [i] : null;
+                    if (result != null && result.HasError) {
+                        text.Append (" (failed: ");
+                        text.Append (Describe (result.Error));
+                        text.Append (')');
+                    }
                 }
-            } catch (ServerException exn) {
-                Logger.WriteLine ("Failed to send response to client " + client.Address + Environment.NewLine + exn, Logger.Severity.Error);
+                foreach (var result in response.Results)
+                    if (result.HasError)
+                        AppendStackTrace (text, result.Error);
+            }
+            Logger.WriteLine (text.ToString (), Logger.Severity.Debug);
+        }
+
+        /// <summary>
+        /// An error's name and description, for a log line.
+        /// </summary>
+        static string Describe (Error error)
+        {
+            return string.IsNullOrEmpty (error.Name) ? error.Description : error.Name + ": " + error.Description;
+        }
+
+        /// <summary>
+        /// Append an error's stack trace on the lines after a log line, if it has one.
+        /// </summary>
+        static void AppendStackTrace (StringBuilder text, Error error)
+        {
+            if (!string.IsNullOrEmpty (error.StackTrace)) {
+                text.Append (Environment.NewLine);
+                text.Append (error.StackTrace.TrimEnd ());
             }
         }
     }

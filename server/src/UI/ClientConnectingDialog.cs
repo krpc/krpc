@@ -40,6 +40,15 @@ namespace KRPC.UI
             args = null;
         }
 
+        // A closed connection raises no further request events
+        void Update ()
+        {
+            if (Visible && !args.Client.Connected) {
+                Logger.WriteLine ("Client disconnected before the player allowed or denied it");
+                Close ();
+            }
+        }
+
         public void OnClientRequestingConnection (object sender, ClientRequestingConnectionEventArgs eventArgs)
         {
             // Not open, so open the dialog

@@ -23,8 +23,6 @@ namespace KRPC.UI
         const float labelWidth = 90f;
         const string protocolLabelText = "Protocol:";
         const string addressLabelText = "Address:";
-        const string rpcPortLabelText = "RPC port:";
-        const string streamPortLabelText = "Stream port:";
         const string portLabelText = "Port:";
         const string baudRateLabelText = "Baud rate:";
         const string dataBitsLabelText = "Data bits:";
@@ -34,18 +32,13 @@ namespace KRPC.UI
         const string manualText = "Manual";
         const string anyText = "Any";
         const string invalidAddressText = "Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"";
-        const string invalidRPCPortText = "RPC port must be between 0 and 65535";
-        const string invalidStreamPortText = "Stream port must be between 0 and 65535";
+        const string invalidPortText = "Port must be between 0 and 65535";
         const string invalidPortNameText = "Port name is empty";
         const string invalidBaudRateText = "Baud rate is not an integer";
         const string invalidDataBitsText = "Data bits must be between 5 and 8 inclusive";
-        const string rpcPathLabelText = "RPC socket:";
-        const string streamPathLabelText = "Stream socket:";
-        static readonly string invalidRPCPathText =
-            "RPC socket path must not be empty, and must take at most " +
-            LocalSocketServer.MaximumPathLength + " bytes";
-        static readonly string invalidStreamPathText =
-            "Stream socket path must not be empty, and must take at most " +
+        const string pathLabelText = "Socket:";
+        static readonly string invalidPathText =
+            "Socket path must not be empty, and must take at most " +
             LocalSocketServer.MaximumPathLength + " bytes";
         string[] availableProtocols = {
             MainWindow.protobufOverTcpText,
@@ -78,19 +71,16 @@ namespace KRPC.UI
         // Names for the fields whose value is too long for the field it is edited in, unique
         // in the same way, and how far each has been scrolled sideways. The field is a
         // window onto its value that follows the caret
-        readonly string rpcPathFieldName;
-        readonly string streamPathFieldName;
+        readonly string pathFieldName;
         readonly string portNameFieldName;
-        float rpcPathScroll;
-        float streamPathScroll;
+        float pathScroll;
         float portNameScroll;
 
         public EditServer (MainWindow mainWindow, Configuration.Server server)
         {
             window = mainWindow;
             id = server.Id;
-            rpcPathFieldName = "rpc_path " + id;
-            streamPathFieldName = "stream_path " + id;
+            pathFieldName = "path " + id;
             portNameFieldName = "port " + id;
 
             name = server.Name;
@@ -118,6 +108,11 @@ namespace KRPC.UI
             GUILayout.Label (text, window.labelStyle, GUILayout.Width (labelWidth * GameSettings.UI_SCALE));
         }
 
+        // The prefix of the address and port keys, which differs between TCP/IP and WebSockets
+        string SettingsPrefix {
+            get { return protocol == Protocol.ProtocolBuffersOverWebsockets ? "ws_" : "tcpip_"; }
+        }
+
         public void Draw ()
         {
             GUILayout.BeginHorizontal ();
@@ -127,11 +122,13 @@ namespace KRPC.UI
 
             if (protocol == Protocol.ProtocolBuffersOverTCP ||
                 protocol == Protocol.ProtocolBuffersOverWebsockets) {
+                var addressKey = SettingsPrefix + "address";
+                var portKey = SettingsPrefix + "port";
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (addressLabelText);
-                if (!settings.ContainsKey("address"))
-                    settings["address"] = IPAddress.Loopback.ToString();
-                var address = settings["address"];
+                if (!settings.ContainsKey(addressKey))
+                    settings[addressKey] = IPAddress.Loopback.ToString();
+                var address = settings[addressKey];
                 // Get the index of the address in the combo box
                 int addressSelected;
                 if (!manualAddress && address == IPAddress.Loopback.ToString())
@@ -161,95 +158,76 @@ namespace KRPC.UI
                             ValidAddress (address), window.errorColor));
                     manualAddress = true;
                 }
-                settings["address"] = address;
+                settings[addressKey] = address;
                 GUILayout.EndHorizontal();
-
-                GUILayout.BeginHorizontal();
-                DrawFieldLabel (rpcPortLabelText);
-                if (!settings.ContainsKey("rpc_port"))
-                    settings["rpc_port"] = "50000";
-                settings["rpc_port"] = GUILayoutExtensions.FilterDigits (
-                    GUILayoutExtensions.ValidatedTextField (settings["rpc_port"], portMaxLength, window.stretchyTextFieldStyle,
-                        ValidPort (settings["rpc_port"]), window.errorColor));
-                GUILayout.EndHorizontal();
-
-                GUILayout.BeginHorizontal();
-                DrawFieldLabel (streamPortLabelText);
-                if (!settings.ContainsKey("stream_port"))
-                    settings["stream_port"] = "50000";
-                settings["stream_port"] = GUILayoutExtensions.FilterDigits (
-                    GUILayoutExtensions.ValidatedTextField (settings["stream_port"], portMaxLength, window.stretchyTextFieldStyle,
-                        ValidPort (settings["stream_port"]), window.errorColor));
-                GUILayout.EndHorizontal();
-            } else if (protocol == Protocol.ProtocolBuffersOverLocalSocket) {
-                GUILayout.BeginHorizontal();
-                DrawFieldLabel (rpcPathLabelText);
-                if (!settings.ContainsKey("rpc_path"))
-                    settings["rpc_path"] = LocalSocketServer.DefaultPath ("rpc");
-                settings["rpc_path"] = GUILayoutExtensions.ValidatedScrollingTextField (
-                    rpcPathFieldName, settings["rpc_path"], ref rpcPathScroll,
-                    LocalSocketServer.MaximumPathLength, window.stretchyTextFieldStyle,
-                    ValidPath (settings["rpc_path"]), window.errorColor);
-                GUILayout.EndHorizontal();
-
-                GUILayout.BeginHorizontal();
-                DrawFieldLabel (streamPathLabelText);
-                if (!settings.ContainsKey("stream_path"))
-                    settings["stream_path"] = LocalSocketServer.DefaultPath ("stream");
-                settings["stream_path"] = GUILayoutExtensions.ValidatedScrollingTextField (
-                    streamPathFieldName, settings["stream_path"], ref streamPathScroll,
-                    LocalSocketServer.MaximumPathLength, window.stretchyTextFieldStyle,
-                    ValidPath (settings["stream_path"]), window.errorColor);
-                GUILayout.EndHorizontal();
-            } else {
-                if (!settings.ContainsKey("baud_rate"))
-                    settings["baud_rate"] = "9600";
-                if (!settings.ContainsKey("data_bits"))
-                    settings["data_bits"] = "8";
 
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (portLabelText);
-                if (!settings.ContainsKey("port"))
-                    settings["port"] = new KRPC.IO.Ports.SerialPort ().PortName;
-                settings["port"] = GUILayoutExtensions.ValidatedScrollingTextField (
-                    portNameFieldName, settings["port"], ref portNameScroll,
+                if (!settings.ContainsKey(portKey))
+                    settings[portKey] = "50000";
+                settings[portKey] = GUILayoutExtensions.FilterDigits (
+                    GUILayoutExtensions.ValidatedTextField (settings[portKey], portMaxLength, window.stretchyTextFieldStyle,
+                        ValidPort (settings[portKey]), window.errorColor));
+                GUILayout.EndHorizontal();
+            } else if (protocol == Protocol.ProtocolBuffersOverLocalSocket) {
+                GUILayout.BeginHorizontal();
+                DrawFieldLabel (pathLabelText);
+                if (!settings.ContainsKey("localsocket_path"))
+                    settings["localsocket_path"] = LocalSocketServer.DefaultPath ();
+                settings["localsocket_path"] = GUILayoutExtensions.ValidatedScrollingTextField (
+                    pathFieldName, settings["localsocket_path"], ref pathScroll,
+                    LocalSocketServer.MaximumPathLength, window.stretchyTextFieldStyle,
+                    ValidPath (settings["localsocket_path"]), window.errorColor);
+                GUILayout.EndHorizontal();
+            } else {
+                if (!settings.ContainsKey("serialio_baud_rate"))
+                    settings["serialio_baud_rate"] = "9600";
+                if (!settings.ContainsKey("serialio_data_bits"))
+                    settings["serialio_data_bits"] = "8";
+
+                GUILayout.BeginHorizontal();
+                DrawFieldLabel (portLabelText);
+                if (!settings.ContainsKey("serialio_port"))
+                    settings["serialio_port"] = new KRPC.IO.Ports.SerialPort ().PortName;
+                settings["serialio_port"] = GUILayoutExtensions.ValidatedScrollingTextField (
+                    portNameFieldName, settings["serialio_port"], ref portNameScroll,
                     portNameMaxLength, window.stretchyTextFieldStyle,
-                    settings["port"].Length > 0, window.errorColor);
+                    settings["serialio_port"].Length > 0, window.errorColor);
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (baudRateLabelText);
-                if (!settings.ContainsKey("baud_rate"))
-                    settings["baud_rate"] = "9600";
-                settings["baud_rate"] = GUILayoutExtensions.FilterDigits (
-                    GUILayoutExtensions.ValidatedTextField (settings["baud_rate"], baudRateMaxLength, window.stretchyTextFieldStyle,
-                        ValidBaudRate (settings["baud_rate"]), window.errorColor));
+                if (!settings.ContainsKey("serialio_baud_rate"))
+                    settings["serialio_baud_rate"] = "9600";
+                settings["serialio_baud_rate"] = GUILayoutExtensions.FilterDigits (
+                    GUILayoutExtensions.ValidatedTextField (settings["serialio_baud_rate"], baudRateMaxLength, window.stretchyTextFieldStyle,
+                        ValidBaudRate (settings["serialio_baud_rate"]), window.errorColor));
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (dataBitsLabelText);
-                if (!settings.ContainsKey("data_bits"))
-                    settings["data_bits"] = "8";
-                settings["data_bits"] = GUILayoutExtensions.FilterDigits (
-                    GUILayoutExtensions.ValidatedTextField (settings["data_bits"], dataBitsMaxLength, window.stretchyTextFieldStyle,
-                        ValidDataBits (settings["data_bits"]), window.errorColor));
+                if (!settings.ContainsKey("serialio_data_bits"))
+                    settings["serialio_data_bits"] = "8";
+                settings["serialio_data_bits"] = GUILayoutExtensions.FilterDigits (
+                    GUILayoutExtensions.ValidatedTextField (settings["serialio_data_bits"], dataBitsMaxLength, window.stretchyTextFieldStyle,
+                        ValidDataBits (settings["serialio_data_bits"]), window.errorColor));
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (parityLabelText);
-                if (!settings.ContainsKey("parity"))
-                    settings["parity"] = "None";
-                settings["parity"] = parityOptions [GUILayoutExtensions.ComboBox (
-                        parityComboId, parityOptions.IndexOf(settings["parity"]), parityOptions,
+                if (!settings.ContainsKey("serialio_parity"))
+                    settings["serialio_parity"] = "None";
+                settings["serialio_parity"] = parityOptions [GUILayoutExtensions.ComboBox (
+                        parityComboId, parityOptions.IndexOf(settings["serialio_parity"]), parityOptions,
                         window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle)];
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 DrawFieldLabel (stopBitsLabelText);
-                if (!settings.ContainsKey("stop_bits"))
-                    settings["stop_bits"] = "One";
-                settings["stop_bits"] = stopBitsOptions [GUILayoutExtensions.ComboBox (
-                        stopBitsComboId, stopBitsOptions.IndexOf(settings["stop_bits"]), stopBitsOptions,
+                if (!settings.ContainsKey("serialio_stop_bits"))
+                    settings["serialio_stop_bits"] = "One";
+                settings["serialio_stop_bits"] = stopBitsOptions [GUILayoutExtensions.ComboBox (
+                        stopBitsComboId, stopBitsOptions.IndexOf(settings["serialio_stop_bits"]), stopBitsOptions,
                         window.buttonStyle, window.comboOptionsStyle, window.comboOptionStyle)];
                 GUILayout.EndHorizontal();
             }
@@ -294,28 +272,27 @@ namespace KRPC.UI
             if (protocol == Protocol.ProtocolBuffersOverTCP ||
                 protocol == Protocol.ProtocolBuffersOverWebsockets)
             {
-                if (!ValidAddress (settings["address"]))
+                var addressKey = SettingsPrefix + "address";
+                var portKey = SettingsPrefix + "port";
+                if (!ValidAddress (settings[addressKey]))
                     window.Errors.Add(invalidAddressText);
-                if (!ValidPort (settings["rpc_port"]))
-                    window.Errors.Add(invalidRPCPortText);
-                if (!ValidPort (settings["stream_port"]))
-                    window.Errors.Add(invalidStreamPortText);
-                allowedKeys = new List<string> { "address", "rpc_port", "stream_port" };
+                if (!ValidPort (settings[portKey]))
+                    window.Errors.Add(invalidPortText);
+                allowedKeys = new List<string> { addressKey, portKey };
             } else if (protocol == Protocol.ProtocolBuffersOverLocalSocket) {
-                if (!ValidPath (settings["rpc_path"]))
-                    window.Errors.Add(invalidRPCPathText);
-                if (!ValidPath (settings["stream_path"]))
-                    window.Errors.Add(invalidStreamPathText);
-                allowedKeys = new List<string> { "rpc_path", "stream_path" };
+                if (!ValidPath (settings["localsocket_path"]))
+                    window.Errors.Add(invalidPathText);
+                allowedKeys = new List<string> { "localsocket_path" };
             } else {
-                if (settings["port"].Length == 0)
+                if (settings["serialio_port"].Length == 0)
                     window.Errors.Add(invalidPortNameText);
-                if (!ValidBaudRate (settings["baud_rate"]))
+                if (!ValidBaudRate (settings["serialio_baud_rate"]))
                     window.Errors.Add(invalidBaudRateText);
-                if (!ValidDataBits (settings["data_bits"]))
+                if (!ValidDataBits (settings["serialio_data_bits"]))
                     window.Errors.Add(invalidDataBitsText);
                 allowedKeys = new List<string> {
-                    "port", "baud_rate", "data_bits", "parity", "stop_bits" };
+                    "serialio_port", "serialio_baud_rate", "serialio_data_bits",
+                    "serialio_parity", "serialio_stop_bits" };
             }
             settings = settings
                 .Where(x => allowedKeys.Contains(x.Key))

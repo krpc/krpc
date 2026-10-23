@@ -11,7 +11,7 @@ build:
 	rm -f TestServer.zip
 
 test:
-	docker run -t -i -p 50000:50000 -p 50001:50001 ghcr.io/krpc/testserver:$(VERSION)
+	docker run -t -i -p 50000:50000 ghcr.io/krpc/testserver:$(VERSION)
 
 deploy:
 	docker push ghcr.io/krpc/testserver:$(VERSION)

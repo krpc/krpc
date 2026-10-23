@@ -299,10 +299,8 @@ namespace KRPC.Service
             } catch (YieldException) {
                 throw;
             } catch (System.Exception e) {
-                // Not logged for an error that holds a stream, which a held stream reads on
-                // every update
                 result.Reset ();
-                result.Error = HandleException (e, !IsHeld (e));
+                result.Error = HandleException (e);
                 return;
             }
             result.Reset ();
@@ -481,10 +479,9 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Convert an exception thrown by an RPC into an error message, and log it at debug
-        /// level if log is set.
+        /// Convert an exception thrown by an RPC into an error message.
         /// </summary>
-        internal Error HandleException(System.Exception exn, bool log = true)
+        internal Error HandleException(System.Exception exn)
         {
             if (exn is RPCException && exn.InnerException != null)
                 exn = exn.InnerException;
@@ -492,11 +489,6 @@ namespace KRPC.Service
             var verboseErrors = Configuration.Instance.VerboseErrors;
             // An exception that was never thrown has no stack trace
             var stackTrace = verboseErrors ? exn.StackTrace ?? string.Empty : string.Empty;
-            if (log && Logger.ShouldLog (Logger.Severity.Debug)) {
-                Logger.WriteLine (message, Logger.Severity.Debug);
-                if (verboseErrors)
-                    Logger.WriteLine (stackTrace, Logger.Severity.Debug);
-            }
             var mappedType = GetMappedExceptionType(exn.GetType());
             var type = mappedType ?? exn.GetType();
             Error error;

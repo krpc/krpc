@@ -10,10 +10,12 @@ namespace KRPC.Test.Server
     {
         readonly Guid guid;
 
-        public TestClient (TestStream stream)
+        readonly TestStream stream;
+
+        public TestClient (TestStream innerStream)
         {
             guid = Guid.NewGuid ();
-            Stream = stream;
+            stream = innerStream;
         }
 
         public string Name {
@@ -28,15 +30,23 @@ namespace KRPC.Test.Server
             get { return "TestClientAddress"; }
         }
 
-        public IStream<byte,byte> Stream { get; private set; }
+        public IStream<byte,byte> Stream {
+            get { return stream; }
+        }
 
+        /// <summary>
+        /// Whether the other end of the connection has closed it.
+        /// </summary>
+        public bool PeerClosed { get; set; }
+
+        // As TCPClient, which sees a closed peer only once its unread bytes are read
         public bool Connected {
-            get { throw new NotSupportedException (); }
+            get { return !stream.Closed && !(PeerClosed && !stream.DataAvailable); }
         }
 
         public void Close ()
         {
-            throw new NotSupportedException ();
+            stream.Closed = true;
         }
 
         public override bool Equals (object obj)

@@ -31,9 +31,8 @@ namespace KRPC
             [Persistent] string name = "Default Server";
             [Persistent] string protocol = Protocol.ProtocolBuffersOverTCP.ToString ();
             [Persistent] List<KeyValuePair> settings = new List<KeyValuePair> {
-                new KeyValuePair {key = "address", value = "127.0.0.1"},
-                new KeyValuePair {key = "rpc_port", value = "50000"},
-                new KeyValuePair {key = "stream_port", value = "50001"}};
+                new KeyValuePair {key = "tcpip_address", value = "127.0.0.1"},
+                new KeyValuePair {key = "tcpip_port", value = "50000"}};
 
             public void BeforeSave (Configuration.Server server)
             {

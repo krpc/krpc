@@ -123,27 +123,6 @@ namespace KRPC.Server.SerialIO
         }
 
         /// <summary>
-        /// Called by RPCStream.Read when a client sends a connection request message,
-        /// but another client is already connected.
-        /// </summary>
-        internal void ClientConnectionRequest (byte[] data)
-        {
-            if (client != null) {
-                DisconnectClient (client);
-                client = null;
-            }
-            if (pendingClient != null) {
-                DisconnectClient (pendingClient, true);
-                pendingClient = null;
-            }
-            Logger.WriteLine (
-                "SerialIO.Server[" + Address + "]: " +
-                "client requesting connection (overriding previous client connection)",
-                Logger.Severity.Debug);
-            pendingClient = new ByteClient (port, data);
-        }
-
-        /// <summary>
         /// Update the server.
         /// </summary>
         public void Update ()

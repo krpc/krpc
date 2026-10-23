@@ -12,6 +12,11 @@ namespace KRPC.Service
     {
         public IClient<Request,Response> Client { get; private set; }
 
+        /// <summary>
+        /// The id of the request, copied onto its response.
+        /// </summary>
+        public ulong Id { get; private set; }
+
         ProcedureCallContinuation call;
         readonly ProcedureCallContinuation[] calls;
         readonly ProcedureResult[] results;
@@ -19,6 +24,7 @@ namespace KRPC.Service
         public RequestContinuation (IClient<Request,Response> client, Request request)
         {
             Client = client;
+            Id = request.Id;
             int size = request.Calls.Count;
             if (size == 1) {
                 // Special case for requests with a single call, to avoid allocating arrays
@@ -55,7 +61,7 @@ namespace KRPC.Service
                 // Special case when the request contains a single call, as the logic is much simpler
                 try {
                     var result = call.Run();
-                    var response = new Response ();
+                    var response = new Response { Id = Id };
                     response.Results.Add(result);
                     return response;
                 } catch (YieldException<ProcedureCallContinuation> e) {
@@ -76,7 +82,7 @@ namespace KRPC.Service
                 }
                 if (yielded)
                     throw new YieldException<RequestContinuation> (this);
-                var response = new Response ();
+                var response = new Response { Id = Id };
                 for (int i = 0; i < results.Length; i++)
                     response.Results.Add (results [i]);
                 return response;

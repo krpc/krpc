@@ -37,7 +37,7 @@ namespace KRPC.Server.LocalSocket
         public IStream<byte,byte> Stream {
             get {
                 if (stream == null)
-                    stream = new TCPStream (new NetworkStream (socket));
+                    stream = new TCPStream (new NetworkStream (socket), socket);
                 return stream;
             }
         }
@@ -47,7 +47,7 @@ namespace KRPC.Server.LocalSocket
         public bool Connected {
             get {
                 try {
-                    if (!socket.Connected)
+                    if (!(socket.Connected || (stream != null && stream.HalfClosed)))
                         return false;
                     // A closed peer polls readable and then reads nothing, which tells a
                     // disconnect apart from an idle connection

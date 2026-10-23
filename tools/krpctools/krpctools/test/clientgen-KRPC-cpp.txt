@@ -423,7 +423,7 @@ class KRPC : public Service {
   void set_stream_rate(uint64_t id, float rate);
 
   /**
-   * The RPC clients that are currently connected to the server.
+   * The clients that are currently connected to the server.
    */
   std::vector<KRPC::ClientInfo> clients();
 

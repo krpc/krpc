@@ -349,7 +349,7 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
-        /// The RPC clients that are currently connected to the server.
+        /// The clients that are currently connected to the server.
         /// </summary>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "get_Clients", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo> Clients {

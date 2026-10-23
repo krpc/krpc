@@ -106,26 +106,24 @@ namespace KRPC.Server.LocalSocket
         }
 
         /// <summary>
-        /// A default path for a socket of the given name, in a directory belonging to
-        /// the user running the game, so that sockets are neither shared between
-        /// accounts nor left in a directory anyone can write to. Windows has no runtime
-        /// directory for this, so its per-user application data directory stands in.
+        /// The default socket path. It is krpc.sock in the runtime directory of the user
+        /// running the game, which only that account can access. Windows has no runtime
+        /// directory, so its per-user application data directory stands in.
         ///
-        /// A client works the same path out for itself, so the two only meet if they
-        /// agree on every step. The fallback therefore names a fixed directory rather
-        /// than asking for the temporary one, which TMPDIR moves for one process and not
-        /// the other. Windows always names a directory in LOCALAPPDATA and so never
-        /// reaches the fallback, leaving it nothing fixed to insist on there.
+        /// A client works the same path out for itself, so the two only meet if they agree
+        /// on every step. The fallback therefore names the fixed directory /tmp, because
+        /// TMPDIR can differ between the two processes. Windows always names a directory in
+        /// LOCALAPPDATA and so never reaches the fallback.
         /// </summary>
-        public static string DefaultPath (string name)
+        public static string DefaultPath ()
         {
             var windows = Environment.OSVersion.Platform == PlatformID.Win32NT;
             var directory = Environment.GetEnvironmentVariable (
                 windows ? "LOCALAPPDATA" : "XDG_RUNTIME_DIR");
             if (!string.IsNullOrEmpty (directory))
-                return Path.Combine (directory, "krpc", name);
+                return Path.Combine (directory, "krpc.sock");
             var temporary = windows ? Path.GetTempPath () : "/tmp";
-            return Path.Combine (temporary, "krpc-" + Environment.UserName, name);
+            return Path.Combine (temporary, "krpc-" + Environment.UserName + ".sock");
         }
 
         /// <summary>
