@@ -140,6 +140,7 @@ unit_tests = [
     "krpc/test/test_limits.py",
     "krpc/test/test_platform.py",
     "krpc/test/test_service_definitions.py",
+    "krpc/test/test_session.py",
     "krpc/test/test_snake_case.py",
     "krpc/test/test_types.py",
 ]

@@ -49,14 +49,14 @@ class TestDefaultPath(unittest.TestCase):
 
     def test_runtime_directory_is_used_when_there_is_one(self) -> None:
         with mock.patch.dict(os.environ, {"XDG_RUNTIME_DIR": "/run/user/1000"}):
-            self.assertEqual("/run/user/1000/krpc/rpc", _default_path("rpc"))
+            self.assertEqual("/run/user/1000/krpc.sock", _default_path())
 
-    def test_fixed_directory_is_fallen_back_to(self) -> None:
+    def test_fixed_path_is_fallen_back_to(self) -> None:
         # TMPDIR is set per process, and the server's is not the client's to read
         environment = {"TMPDIR": "/somewhere/else"}
         with mock.patch.dict(os.environ, environment, clear=True):
             self.assertEqual(
-                "/tmp/krpc-" + getpass.getuser() + "/stream", _default_path("stream")
+                "/tmp/krpc-" + getpass.getuser() + ".sock", _default_path()
             )
 
 

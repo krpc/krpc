@@ -1,6 +1,7 @@
 import unittest
 
-from krpc.decoder import Decoder
+import krpc.schema.KRPC_pb2 as KRPC
+from krpc.decoder import Decoder, decode_response_message
 from krpc.platform import unhexlify
 from krpc.types import Types
 
@@ -38,6 +39,23 @@ class TestDecoder(unittest.TestCase):
         value = Decoder.decode(None, unhexlify("ac02"), typ)
         self.assertTrue(isinstance(value, typ.python_type))
         self.assertEqual(300, value._object_id)  # pyright: ignore[reportAttributeAccessIssue]
+
+    def test_decode_response_message(self) -> None:
+        # Short and long responses, whose lengths take one and two bytes
+        for length in (0, 10, 200, 20000):
+            response = KRPC.Response(id=3)
+            if length:
+                response.results.add(value=b"x" * length)
+            data = KRPC.Message(response=response).SerializeToString()
+            self.assertEqual(response, decode_response_message(data))
+
+    def test_decode_response_message_without_a_response(self) -> None:
+        for message in (
+            KRPC.Message(),
+            KRPC.Message(disconnect=KRPC.Disconnect(message="x")),
+            KRPC.Message(stream_update=KRPC.StreamUpdate()),
+        ):
+            self.assertIsNone(decode_response_message(message.SerializeToString()))
 
 
 if __name__ == "__main__":

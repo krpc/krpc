@@ -159,6 +159,10 @@ class TestEvent(ServerTestCase, unittest.TestCase):
         result = KRPC.StreamResult(id=stream_id)
         result.result.value = b"\x01"
         self.conn._stream_manager.update([result])
+        # Wait for the dispatcher to call the callbacks
+        done = threading.Event()
+        self.conn._session.dispatch(done.set)
+        self.assertTrue(done.wait(10))
 
     def test_a_firing_passed_to_a_value_callback_is_replayed(self) -> None:
         event = self.unissued_event(4000000)
@@ -349,9 +353,8 @@ class TestEvent(ServerTestCase, unittest.TestCase):
                 done.set()
 
             event.add_end_callback(end_callback)
-            assert conn._stream_connection is not None
             # Stands in for the server closing the connection
-            conn._stream_connection._socket.shutdown(socket.SHUT_RDWR)
+            conn._connection._socket.shutdown(socket.SHUT_RDWR)
             self.assertTrue(done.wait(10))
             self.assertEqual(1, len(ended))
             self.assertIsInstance(ended[0], krpc.error.ConnectionError)
@@ -374,9 +377,8 @@ class TestEvent(ServerTestCase, unittest.TestCase):
             thread = threading.Thread(target=wait, daemon=True)
             thread.start()
             time.sleep(0.2)
-            assert conn._stream_connection is not None
             # Stands in for the server closing the connection
-            conn._stream_connection._socket.shutdown(socket.SHUT_RDWR)
+            conn._connection._socket.shutdown(socket.SHUT_RDWR)
             self.assertTrue(raised.wait(10))
         finally:
             conn.close()

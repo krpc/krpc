@@ -11,7 +11,6 @@ from typing import Any, cast
 import krpc.schema.KRPC_pb2 as KRPC
 import krpc.services
 import krpc.stream
-import krpc.streammanager
 from krpc import limits
 from krpc.connection import Connection
 from krpc.decoder import Decoder
@@ -30,6 +29,7 @@ from krpc.service import (
     merge_service,
     service_definitions,
 )
+from krpc.session import Session
 from krpc.stream import Stream
 from krpc.streammanager import StreamManager
 from krpc.types import DefaultArgument, TypeBase, Types
@@ -204,16 +204,15 @@ class Client(krpc.services.Client):
 
     def __init__(
         self,
-        rpc_connection: Connection,
-        stream_connection: Connection | None,
+        connection: Connection,
         use_pregenerated_stubs: bool = True,
     ) -> None:
         super().__init__()
         self._types = Types()
-        self._rpc_connection = rpc_connection
-        self._rpc_connection_lock = threading.Lock()
-        self._stream_connection = stream_connection
-        self._stream_manager = StreamManager(self)
+        self._connection = connection
+        self._session = Session(connection, self._remove_stream_request)
+        self._stream_manager = StreamManager(self, self._session.dispatch)
+        self._session.start(self._stream_manager)
         # The type a server side function returns, and the types of its
         # parameters, by expression object identifier, so that each is
         # introspected over the wire only once
@@ -228,7 +227,13 @@ class Client(krpc.services.Client):
         # shares them
         self._expression_metadata: Any = None
         self._expression_remote_types: dict[bytes, Any] = {}
+        try:
+            self._load_services(use_pregenerated_stubs)
+        except BaseException:
+            self.close()
+            raise
 
+    def _load_services(self, use_pregenerated_stubs: bool) -> None:
         services = cast(
             KRPC.Services,
             self._invoke("KRPC", "GetServices", [], [], self._types.services_type),
@@ -262,39 +267,16 @@ class Client(krpc.services.Client):
         for service_info, service in stub_services:
             merge_service(self, service_info, service)
 
-        # Set up stream update thread
-        if stream_connection is not None:
-            self._stream_thread_stop = threading.Event()
-            self._stream_thread = threading.Thread(
-                target=krpc.streammanager.update_thread,
-                args=(
-                    self._stream_manager,
-                    stream_connection,
-                    self._stream_thread_stop,
-                ),
-            )
-            self._stream_thread.daemon = True
-            self._stream_thread.start()
-        else:
-            self._stream_thread = None
-
     def close(self) -> None:
-        self._rpc_connection.close()
-        # Streams end before the join, as the caller can hold a stream's condition, which
-        # the update thread then stops trying to take
+        # The dispatcher thread stops trying to take a condition the caller can hold
         self._stream_manager.request_close()
-        deferred = self._stream_manager.notify_closed()
-        if self._stream_thread is not None:
-            self._stream_thread_stop.set()
-            # Callbacks run on the update thread, so a client closed from one would join the
-            # thread it is running on, which raises. A callback can also wait for a
-            # condition the caller holds, so the update thread then ends once the caller
-            # releases it.
-            if (
-                threading.current_thread() is not self._stream_thread
-                and not self._stream_manager.holds_a_condition()
-            ):
-                self._stream_thread.join()
+        self._session.close()
+        # Streams end before the join, so a thread waiting on one is woken
+        deferred = self._stream_manager.notify_closed(cause=self._session.failure_cause)
+        # Callbacks run on the dispatcher thread, so a client closed from one does not
+        # join it. A callback can also wait for a condition the caller holds, so the
+        # dispatcher thread then ends once the caller releases it.
+        self._session.join(not self._stream_manager.holds_a_condition())
         # An exception from an end callback is raised once the client has closed
         if deferred is not None:
             raise deferred
@@ -315,12 +297,10 @@ class Client(krpc.services.Client):
         the stream repeats that call. Given a server side function, a
         KRPC.Expression object, the stream evaluates it on each update. The
         function may also be a Python function or lambda taking no arguments,
-        compiled with compile on every call. Raises a StreamError without a
-        stream connection, for a property setter, for arguments to a function,
-        for a function with no value, and for a compiled function that takes
-        parameters. Raises TypeError for any other value."""
-        if self._stream_connection is None:
-            raise StreamError("Not connected to stream server")
+        compiled with compile on every call. Raises a StreamError for a property
+        setter, for arguments to a function, for a function with no value, and
+        for a compiled function that takes parameters. Raises TypeError for any
+        other value."""
         if func == setattr:
             raise StreamError("Cannot stream a property setter")
         if self._is_remote_procedure(func):
@@ -416,12 +396,9 @@ class Client(krpc.services.Client):
         """Create an event from a server side function that evaluates to a
         boolean value. The function may also be a Python function or lambda
         taking no arguments, compiled with compile on every call. Raises a
-        StreamError without a stream connection, and for a compiled function
-        that takes parameters. Raises ValueError for a function that does not
-        evaluate to a boolean value, and TypeError for a value that is not a
-        function."""
-        if self._stream_connection is None:
-            raise StreamError("Not connected to stream server")
+        StreamError for a compiled function that takes parameters. Raises
+        ValueError for a function that does not evaluate to a boolean value, and
+        TypeError for a value that is not a function."""
         self._check_function(function)
         if callable(function):
             function, _, _ = compile_function_with_type(self, function, streamed=True)
@@ -626,21 +603,15 @@ class Client(krpc.services.Client):
         request = KRPC.Request()
         self._encode_call(request.calls.add(), service, procedure, args, param_types)
 
-        # Send the request
-        with self._rpc_connection_lock:
-            self._rpc_connection.send_message(request)
-            response = cast(
-                KRPC.Response, self._rpc_connection.receive_message(KRPC.Response)
-            )
-            self._note_stream_id(response, return_type)
-            if (
-                service == "KRPC"
-                and procedure == "RemoveStream"
-                and not response.HasField("error")
-                and response.results
-                and not response.results[0].HasField("error")
-            ):
-                self._stream_manager.note_removed(cast(int, args[0]))
+        # Send the request, and wait for its response. The reader registers a stream
+        # or an event the call adds before it reads the stream's first update
+        stream_type = None
+        if return_type is not None and return_type.python_type in (
+            KRPC.Stream,
+            KRPC.Event,
+        ):
+            stream_type = return_type.python_type
+        response = self._session.call(request, stream_type)
 
         # Check for an error response
         if response.HasField("error"):
@@ -659,26 +630,17 @@ class Client(krpc.services.Client):
             value = Event(self, value)
         return value
 
-    def _note_stream_id(
-        self, response: KRPC.Response, return_type: TypeBase | None
-    ) -> None:
-        """Note the id of a stream or event the server returned. Called in the order the
-        replies arrive, so the stream manager keeps the latest value and any ending sent
-        for the stream before it is registered."""
-        if return_type is None or return_type.python_type not in (
-            KRPC.Stream,
-            KRPC.Event,
-        ):
-            return
-        if response.HasField("error") or not response.results:
-            return
-        result = response.results[0]
-        if result.HasField("error") or result.is_null:
-            return
-        message = return_type.python_type()
-        message.ParseFromString(result.value)
-        stream = message if isinstance(message, KRPC.Stream) else message.stream
-        self._stream_manager.note_issued(stream.id)
+    def _remove_stream_request(self, stream_id: int) -> KRPC.Request:
+        """A request to remove a stream on the server."""
+        request = KRPC.Request()
+        self._encode_call(
+            request.calls.add(),
+            "KRPC",
+            "RemoveStream",
+            [stream_id],
+            [self._types.uint64_type],
+        )
+        return request
 
     def _build_call(
         self,

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import threading
 import time
 from collections.abc import Callable
@@ -11,6 +12,16 @@ from krpc.types import TypeBase
 if TYPE_CHECKING:
     from krpc.client import Client
     from krpc.streammanager import StreamImpl
+
+
+def wait_deadline(timeout: float | None) -> float | None:
+    """The monotonic time a wait with the given timeout gives up at, or None for no
+    deadline. Raises ValueError for a negative or NaN timeout."""
+    if timeout is None or timeout == math.inf:
+        return None
+    if not timeout >= 0:
+        raise ValueError("timeout must not be negative or NaN, not %r" % timeout)
+    return time.monotonic() + timeout
 
 
 class Stream:
@@ -71,11 +82,16 @@ class Stream:
         specifying the timeout in seconds for the operation. Returns true if the
         stream updated, and false on a timeout. Raises the error that ended the
         stream, if it ends before or during the wait."""
+        deadline = wait_deadline(timeout)
         stream = self._stream
         stream.raise_if_ended()
-        version = stream.version
-        deadline = None if timeout is None else time.monotonic() + timeout
-        while stream.version == version:
+        # An ending that arrived while this thread held the condition is read as an update
+        pending_ending = stream.ended
+        # Past the value this thread last read, which can be one not yet announced
+        version = max(stream.announced_version, stream.seen_version)
+        while stream.announced_version <= version:
+            if pending_ending and stream.ending_announced:
+                return True
             stream.raise_if_ended()
             if deadline is None:
                 stream.condition.wait()

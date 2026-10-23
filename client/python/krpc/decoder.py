@@ -57,6 +57,23 @@ def _decode_varint(data: bytes | bytearray) -> tuple[int, int]:
     return _pb_decode_varint(data, 0)
 
 
+def decode_response_message(data: bytes) -> KRPC.Response | None:
+    """The response a Message holds, decoded without the Message, or None if the
+    Message holds no response."""
+    # A Message holding a response is the tag of field 2, then the response's size and
+    # bytes
+    if len(data) < 2 or data[0] != 0x12:
+        return None
+    size = data[1]
+    if size < 128:
+        position = 2
+    else:
+        size, position = _pb_decode_varint(data, 1)
+    if position + size != len(data):
+        return None
+    return KRPC.Response.FromString(data[position:])
+
+
 class Decoder:
     """Routines for decoding messages and values from
     the protocol buffer serialization format"""

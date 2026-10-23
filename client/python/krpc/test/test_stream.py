@@ -13,9 +13,9 @@ import krpc.stream
 from krpc import streammanager
 from krpc.client import Client
 from krpc.error import StreamError
+from krpc.session import Session
 from krpc.streammanager import StreamManager
 from krpc.test.servertestcase import ServerTestCase
-from krpc.types import TypeBase
 
 
 def manager_without_client() -> StreamManager:
@@ -256,119 +256,111 @@ class TestStream(ServerTestCase, unittest.TestCase):
             x.add_callback(values.append)
             self.assertEqual(["49"], values)
 
-    def test_result_before_the_add_reply_is_kept(self) -> None:
+    def test_a_registered_stream_keeps_its_latest_result_for_its_first_handle(
+        self,
+    ) -> None:
         manager = manager_without_client()
-        manager.note_issued(3)
-        # One for an id noted but not registered, and one for an id not yet noted
-        noted = KRPC.StreamResult(id=3)
-        noted.result.value = b"\x2a"
-        later = KRPC.StreamResult(id=4)
-        later.result.value = b"\x2b"
-        manager.update([noted, later])
-        self.assertEqual(42, manager.get_stream(self.conn._types.uint32_type, 3).value)
-        self.assertEqual(43, manager.get_stream(self.conn._types.uint32_type, 4).value)
-
-    def test_result_for_an_ended_stream_is_dropped(self) -> None:
-        manager = manager_without_client()
-        manager.note_issued(5)
-        manager.get_stream(self.conn._types.uint32_type, 5)
-        result = KRPC.StreamResult(id=2)
-        result.result.value = b"\x2a"
-        manager.update([result])
-        self.assertEqual({}, manager._pending)
-
-    def test_a_removal_drops_the_results_kept_for_an_id(self) -> None:
-        conn = self.connect()
-        try:
-            manager = conn._stream_manager
-            call = conn.get_call(conn.test_service.int32_to_string, 59)
-            stream_id = conn.krpc.add_stream(call).id
-            for _ in range(100):
-                if stream_id in manager._pending:
-                    break
-                time.sleep(0.05)
-            self.assertIn(stream_id, manager._pending)
-            conn.krpc.remove_stream(stream_id)
-            self.assertNotIn(stream_id, manager._unregistered)
-            self.assertNotIn(stream_id, manager._pending)
-        finally:
-            conn.close()
-
-    def test_kept_results_are_bounded(self) -> None:
-        manager = manager_without_client()
-        manager.note_issued(3)
+        manager.register(3)
         for value in range(1, 100):
             result = KRPC.StreamResult(id=3)
             result.result.value = bytes([value])
             manager.update([result])
-        self.assertEqual(1, len(manager._pending[3]))
         self.assertEqual(99, manager.get_stream(self.conn._types.uint32_type, 3).value)
 
-    def test_kept_results_end_at_the_first_ending(self) -> None:
-        manager = StreamManager(mock.Mock())
-        manager.note_issued(3)
-        bad = KRPC.StreamResult(id=3)
-        # A varint that never ends
-        bad.result.value = b"\xff"
+    def test_a_registered_stream_keeps_an_ending_for_its_first_handle(self) -> None:
+        client = mock.Mock()
+        client._build_error.return_value = RuntimeError("it went wrong")
+        manager = StreamManager(client)
+        manager.register(3)
         error = KRPC.StreamResult(id=3)
         error.result.error.description = "it went wrong"
-        manager.update([bad, error])
+        later = KRPC.StreamResult(id=3)
+        later.result.value = b"\x01"
+        manager.update([error, later])
         stream = manager.get_stream(self.conn._types.uint32_type, 3)
         self.assertTrue(stream.ended)
         self.assertNotIn(3, manager._streams)
 
-    def test_kept_results_land_before_a_later_update(self) -> None:
+    def test_result_for_an_unregistered_stream_is_dropped(self) -> None:
         manager = manager_without_client()
-        manager.note_issued(3)
-        first = KRPC.StreamResult(id=3)
-        first.result.value = b"\x01"
-        manager.update([first])
-        second = KRPC.StreamResult(id=3)
-        second.result.value = b"\x02"
-        updater = threading.Thread(target=manager.update, args=([second],))
-        decode = streammanager.Decoder.decode
+        result = KRPC.StreamResult(id=2)
+        result.result.value = b"\x2a"
+        manager.update([result])
+        self.assertNotIn(2, manager._streams)
+        stream = manager.get_stream(self.conn._types.uint32_type, 2)
+        self.assertFalse(stream.updated)
 
-        # Send the second value while the kept one is being stored
-        def decode_then_update(
-            client: Client | None, data: bytes, typ: TypeBase
-        ) -> object:
-            if data == b"\x01" and not updater.is_alive():
-                updater.start()
-                time.sleep(0.1)
-            return decode(client, data, typ)
+    def test_wait_sees_a_value_stored_before_its_wake(self) -> None:
+        queued: list = []
+        manager = StreamManager(None, queued.append)  # pyright: ignore[reportArgumentType]
+        impl = manager.get_stream(self.conn._types.uint32_type, 1)
+        stream = krpc.stream.Stream(impl)
 
-        with mock.patch.object(streammanager.Decoder, "decode", decode_then_update):
-            stream = manager.get_stream(self.conn._types.uint32_type, 3)
-            updater.join(10)
-        self.assertEqual(2, stream.value)
+        def update(value: int) -> None:
+            result = KRPC.StreamResult(id=1)
+            result.result.value = bytes([value])
+            manager.update([result])
 
-    def test_a_value_that_fails_to_decode_removes_the_stream(self) -> None:
-        client = mock.Mock()
-        removed = threading.Event()
-        threads = []
+        update(1)
+        for work in queued:
+            work()
+        queued.clear()
+        woken = threading.Event()
 
-        def remove_stream(stream_id: int) -> None:
-            threads.append(threading.current_thread())
-            removed.set()
+        def wait() -> None:
+            with stream.condition:
+                # A value stored after get(), whose wake is still queued
+                self.assertEqual(1, stream())
+                update(2)
+                if stream.wait(timeout=10):
+                    woken.set()
 
-        client.krpc.remove_stream.side_effect = remove_stream
-        manager = StreamManager(client)
-        manager.get_stream(self.conn._types.uint32_type, 1)
-        bad = KRPC.StreamResult(id=1)
-        bad.result.value = b"\xff"
-        manager.update([bad])
-        self.assertTrue(removed.wait(10))
-        client.krpc.remove_stream.assert_called_once_with(1)
-        # Sent off the thread that applies updates
-        self.assertIsNot(threading.current_thread(), threads[0])
-
-    def test_no_removal_is_sent_once_closed(self) -> None:
-        client = mock.Mock()
-        manager = StreamManager(client)
-        manager.notify_closed()
-        manager._remove_on_server(1)
+        waiter = threading.Thread(target=wait)
+        waiter.start()
+        while not queued:
+            time.sleep(0.01)
         time.sleep(0.1)
-        client.krpc.remove_stream.assert_not_called()
+        for work in queued:
+            work()
+        waiter.join()
+        self.assertTrue(woken.is_set())
+
+    def test_a_thread_holding_the_condition_reads_the_announced_value(self) -> None:
+        queued: list = []
+        manager = StreamManager(None, queued.append)  # pyright: ignore[reportArgumentType]
+        stream = krpc.stream.Stream(manager.get_stream(self.conn._types.uint32_type, 1))
+        for value in (1, 2):
+            result = KRPC.StreamResult(id=1)
+            result.result.value = bytes([value])
+            manager.update([result])
+            if value == 1:
+                queued.pop()()
+        # A thread holding the condition sees the value frozen until the wake
+        with stream.condition:
+            self.assertEqual(1, stream())
+        self.assertEqual(2, stream())
+        queued.pop()()
+        with stream.condition:
+            self.assertEqual(2, stream())
+
+    def test_wait_waits_past_a_value_read_before_its_announcement(self) -> None:
+        queued: list = []
+        manager = StreamManager(None, queued.append)  # pyright: ignore[reportArgumentType]
+        stream = krpc.stream.Stream(manager.get_stream(self.conn._types.uint32_type, 1))
+
+        def update(value: int) -> None:
+            result = KRPC.StreamResult(id=1)
+            result.result.value = bytes([value])
+            manager.update([result])
+
+        update(1)
+        queued.pop()()
+        update(2)
+        # Read without the lock, before its announcement
+        self.assertEqual(2, stream())
+        queued.pop()()
+        with stream.condition:
+            self.assertFalse(stream.wait(timeout=0.1))
 
     def test_a_callback_runs_on_one_thread_at_a_time(self) -> None:
         manager = manager_without_client()
@@ -406,34 +398,22 @@ class TestStream(ServerTestCase, unittest.TestCase):
         stream.call(stream.callbacks[0], 1, "value")
         self.assertEqual([], values)
 
-    def test_a_server_ending_is_kept_for_the_closing_thread(self) -> None:
+    def test_a_server_ending_ends_the_stream_while_its_condition_is_held(
+        self,
+    ) -> None:
         client = mock.Mock()
         error = RuntimeError("ended by the server")
         client._build_error.return_value = error
-        manager = StreamManager(client)
+        queued: list = []
+        manager = StreamManager(client, queued.append)
         stream = manager.get_stream(self.conn._types.uint32_type, 1)
-        held = threading.Event()
-        release = threading.Event()
-
-        def hold() -> None:
-            with stream.condition:
-                held.set()
-                release.wait(10)
-
-        holder = threading.Thread(target=hold, daemon=True)
-        holder.start()
-        self.assertTrue(held.wait(10))
-        # The update thread stops trying to take the condition, as a thread is closing
-        # the client
-        manager.request_close()
         ending = KRPC.StreamResult(id=1)
         ending.result.error.description = "ended by the server"
-        manager.update([ending])
-        self.assertFalse(stream.ended)
-        release.set()
-        manager.notify_closed()
-        self.assertTrue(stream.ended)
-        self.assertRaises(RuntimeError, lambda: stream.value)
+        with stream.condition:
+            # The reader ends the stream without taking its condition
+            manager.update([ending])
+            self.assertTrue(stream.ended)
+            self.assertRaises(RuntimeError, lambda: stream.value)
 
     def test_a_callback_is_not_passed_an_older_value(self) -> None:
         manager = manager_without_client()
@@ -606,46 +586,24 @@ class TestStream(ServerTestCase, unittest.TestCase):
         manager.update([])
         self.assertEqual([], called)
 
-    def test_a_closer_holding_the_condition_keeps_a_server_ending(self) -> None:
-        client = mock.Mock()
-        error = RuntimeError("ended by the server")
-        client._build_error.return_value = error
-        manager = StreamManager(client)
-        stream = manager.get_stream(self.conn._types.uint32_type, 1)
-        ending = KRPC.StreamResult(id=1)
-        ending.result.error.description = "ended by the server"
-        with stream.condition:
-            manager.request_close()
-            updater = threading.Thread(target=manager.update, args=([ending],))
-            updater.start()
-            # Closed once the ending is decoded, while the update thread waits for the
-            # condition the closing thread holds
-            deadline = time.monotonic() + 10
-            while 1 in manager._streams:
-                if time.monotonic() > deadline:
-                    self.fail("Timed out waiting for the ending to be decoded")
-                time.sleep(0.001)
-            manager.notify_closed()
-            self.assertTrue(stream.ended)
-            self.assertRaises(RuntimeError, lambda: stream.value)
-        updater.join(10)
-
     def test_remove_keeps_a_server_ending(self) -> None:
         client = mock.Mock()
         error = RuntimeError("ended by the server")
         client._build_error.return_value = error
-        manager = StreamManager(client)
+        queued: list = []
+        manager = StreamManager(client, queued.append)
         stream = manager.get_stream(self.conn._types.uint32_type, 1)
         ending = KRPC.StreamResult(id=1)
         ending.result.error.description = "ended by the server"
-        # Removed between the update thread decoding the ending and applying it
-        with manager.update_lock:
-            decoded = manager._decode(stream, ending)
+        # Removed between the reader storing the ending and the dispatcher waking the
+        # stream's waiters
+        manager.update([ending])
         stream.remove()
         self.assertTrue(stream.ended)
         self.assertRaises(RuntimeError, lambda: stream.value)
         client.krpc.remove_stream.assert_not_called()
-        manager._apply([decoded])
+        for work in queued:
+            work()
         self.assertRaises(RuntimeError, lambda: stream.value)
 
     def test_close_with_an_end_callback_that_exits(self) -> None:
@@ -665,8 +623,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         # The other stream ended, and the update thread was joined
         self.assertEqual(1, len(ended))
         self.assertIsInstance(ended[0], krpc.error.ConnectionError)
-        assert conn._stream_thread is not None
-        self.assertFalse(conn._stream_thread.is_alive())
+        self.assertFalse(conn._session.dispatcher.is_alive())
 
     def test_remove_with_an_end_callback_that_exits(self) -> None:
         client = mock.Mock()
@@ -920,7 +877,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertRaises(krpc.error.ConnectionError, x)
 
     def _close_while_holding_the_update_condition(self, conn: Client) -> None:
-        stream_thread = conn._stream_thread
+        stream_thread = conn._session.dispatcher
         assert stream_thread is not None
 
         def close() -> None:
@@ -1018,7 +975,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
         with self.assertRaises(StreamError):
             stream.value
 
-    def test_a_value_that_fails_to_decode_ends_only_its_stream(self) -> None:
+    def test_a_value_that_fails_to_decode_is_dropped(self) -> None:
         manager = manager_without_client()
         failing = manager.get_stream(self.conn._types.uint32_type, 1)
         working = manager.get_stream(self.conn._types.uint32_type, 2)
@@ -1030,10 +987,10 @@ class TestStream(ServerTestCase, unittest.TestCase):
         good = KRPC.StreamResult(id=2)
         good.result.value = b"\x2a"
         manager.update([bad, good])
-        self.assertEqual(1, len(ended))
-        self.assertRaises(Exception, lambda: failing.value)  # noqa: B017
+        self.assertEqual([], ended)
+        self.assertFalse(failing.updated)
         self.assertEqual(42, working.value)
-        self.assertNotIn(1, manager._streams)
+        self.assertIn(1, manager._streams)
 
     def test_error_ends_the_stream(self) -> None:
         stream = self.conn.add_stream(
@@ -1130,9 +1087,8 @@ class TestStream(ServerTestCase, unittest.TestCase):
             thread = threading.Thread(target=wait_for_update, daemon=True)
             thread.start()
             time.sleep(0.2)
-            assert conn._stream_connection is not None
             # Stands in for the server closing the connection
-            conn._stream_connection._socket.shutdown(socket.SHUT_RDWR)
+            conn._connection._socket.shutdown(socket.SHUT_RDWR)
             self.assertTrue(woke.wait(10))
             self.assertEqual(1, len(ended))
             self.assertRaises(krpc.error.ConnectionError, x)
@@ -1144,11 +1100,9 @@ class TestStream(ServerTestCase, unittest.TestCase):
         try:
             x = conn.add_stream(conn.test_service.int32_to_string, 48)
             self.assertEqual("48", x())
-            assert conn._stream_connection is not None
             # Stands in for the server closing the connection
-            conn._stream_connection._socket.shutdown(socket.SHUT_RDWR)
-            assert conn._stream_thread is not None
-            conn._stream_thread.join(10)
+            conn._connection._socket.shutdown(socket.SHUT_RDWR)
+            conn._session.dispatcher.join(10)
             with self.assertRaises(krpc.error.ConnectionError) as context:
                 x()
             self.assertIsInstance(context.exception.__cause__, OSError)
@@ -1157,31 +1111,44 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
     def test_a_message_that_cannot_be_read_is_the_cause_of_the_ending(self) -> None:
         class Unreadable:
-            """A stream connection that sends a message that is not a stream update."""
+            """A connection that receives a message that does not parse."""
 
-            def partial_receive(self, _length: int) -> bytes:
-                return b"\x02"
-
-            def receive(self, _size: int) -> bytes:
+            def receive_message_data(
+                self, timeout: float | None = None, stall_timeout: float | None = None
+            ) -> bytes:
                 return b"\xff\xff"
+
+            def send_message(self, _message: object) -> None:
+                pass
+
+            def wait_readable(self, _timeout: float | None = None) -> bool:
+                return True
+
+            def has_message(self) -> bool:
+                return False
+
+            def has_buffered(self) -> bool:
+                return False
+
+            def half_close(self) -> None:
+                pass
+
+            def discard(self, _timeout: float) -> None:
+                raise OSError("Connection closed")
 
             def close(self) -> None:
                 pass
 
-        manager = manager_without_client()
+        session = Session(Unreadable(), lambda _: KRPC.Message())  # pyright: ignore[reportArgumentType]
+        manager = StreamManager(None, session.dispatch)  # pyright: ignore[reportArgumentType]
         stream = manager.get_stream(self.conn._types.string_type, 1)
-        thread = threading.Thread(
-            target=streammanager.update_thread,
-            args=(manager, Unreadable(), threading.Event()),
-            daemon=True,
-        )
-        thread.start()
-        thread.join(10)
+        session.start(manager)
+        session.dispatcher.join(10)
         with self.assertRaises(krpc.error.ConnectionError) as context:
             stream.raise_if_ended()
         self.assertIsInstance(context.exception.__cause__, DecodeError)
 
-    def test_a_stopped_update_thread_gives_no_cause(self) -> None:
+    def test_a_closed_connection_gives_no_cause(self) -> None:
         conn = self.connect()
         x = conn.add_stream(conn.test_service.int32_to_string, 49)
         self.assertEqual("49", x())
@@ -1334,13 +1301,11 @@ class TestStream(ServerTestCase, unittest.TestCase):
             waiter = threading.Thread(target=wait, daemon=True)
             waiter.start()
             self.assertTrue(waiting.wait(10))
-            assert conn._stream_connection is not None
             # Stands in for the server closing the connection
-            conn._stream_connection._socket.shutdown(socket.SHUT_RDWR)
+            conn._connection._socket.shutdown(socket.SHUT_RDWR)
             self.assertTrue(raised.wait(10))
-            assert conn._stream_thread is not None
-            conn._stream_thread.join(10)
-            self.assertFalse(conn._stream_thread.is_alive())
+            conn._session.dispatcher.join(10)
+            self.assertFalse(conn._session.dispatcher.is_alive())
             self.assertRaises(krpc.error.ConnectionError, first)
         finally:
             conn.close()
@@ -1378,9 +1343,8 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertTrue(entered.is_set())
         self.assertTrue(closed.is_set())
         # The update thread ends once the condition is released
-        assert conn._stream_thread is not None
-        conn._stream_thread.join(10)
-        self.assertFalse(conn._stream_thread.is_alive())
+        conn._session.dispatcher.join(10)
+        self.assertFalse(conn._session.dispatcher.is_alive())
 
     def test_close_from_an_end_callback(self) -> None:
         conn = self.connect()
@@ -1395,17 +1359,21 @@ class TestStream(ServerTestCase, unittest.TestCase):
 
         event.add_end_callback(end_callback)
         self.assertTrue(closed.wait(10))
-        self.assertIs(conn._stream_thread, threads[0])
+        self.assertIs(conn._session.dispatcher, threads[0])
 
     def test_remove_callback(self) -> None:
         called1 = threading.Event()
         called2 = threading.Event()
+        removed = threading.Event()
 
         def callback1(x: int) -> None:
             called1.set()
 
+        # Added to a stream that can already have a value, so its first call can come
+        # before the remove
         def callback2(x: int) -> None:
-            called2.set()
+            if removed.is_set():
+                called2.set()
 
         with self.conn.stream(
             self.conn.test_service.counter, "TestStream.test_remove_callback", 10
@@ -1413,6 +1381,10 @@ class TestStream(ServerTestCase, unittest.TestCase):
             x.add_callback(callback1)
             x.add_callback(callback2)
             x.remove_callback(callback2)
+            removed.set()
+            called1.wait(3)
+            called1.clear()
+            # A later update, for which callback2 is not called
             called1.wait(3)
 
         self.assertTrue(called1.is_set())

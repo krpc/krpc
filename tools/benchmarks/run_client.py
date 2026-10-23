@@ -22,9 +22,9 @@ five languages cannot disagree about it.
 
 Every transport the machine has is measured, against a server started for it, and reported as a
 block apiece: which one carries a call is part of what the call costs. Where the server is
-listening arrives in the program's environment, as ``RPC_PORT`` and ``STREAM_PORT`` for TCP/IP
-or ``RPC_PATH`` and ``STREAM_PATH`` for a local socket, and which pair is set is also what picks
-the transport in a client that chooses one when it connects. The cnano client chooses when it is
+listening arrives in the program's environment, as ``KRPC_TEST_TCPIP_PORT`` for TCP/IP or
+``KRPC_TEST_LOCALSOCKET_PATH`` for a local socket, and which one is set is also what picks the
+transport in a client that chooses one when it connects. The cnano client chooses when it is
 compiled, so it comes as a program per transport and ``--client-localsocket`` names the second.
 
 The server it is measured against runs unpaced. A round trip is served over and over inside one

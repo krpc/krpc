@@ -3,6 +3,7 @@ import unittest
 
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.connection import Connection
+from krpc.decoder import Decoder
 from krpc.encoder import Encoder
 
 
@@ -43,7 +44,7 @@ class TestReceiveMessage(unittest.TestCase):
         return conn
 
     def receive(self, conn: Connection) -> bytes:
-        message = conn.receive_message(KRPC.Response)
+        message = Decoder.decode_message(conn.receive_message_data(), KRPC.Response)
         return message.results[0].value  # pyright: ignore[reportAttributeAccessIssue]
 
     def test_whole_message_in_one_read(self) -> None:
@@ -82,7 +83,7 @@ class TestReceiveMessage(unittest.TestCase):
     def test_connection_closed_partway_through_a_message(self) -> None:
         data = self.encoded(b"foo")
         conn = self.connection(data[:2])
-        self.assertRaises(socket.error, conn.receive_message, KRPC.Response)
+        self.assertRaises(socket.error, conn.receive_message_data)
 
 
 if __name__ == "__main__":

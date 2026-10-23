@@ -11,9 +11,9 @@ differs between them, so that starting a server, connecting to it, and telling a
 program in another language where to find it are each written once.
 
 A run starts its own server, so the numbers are taken against a process nothing else is
-talking to. Set ``RPC_PORT`` and ``STREAM_PORT``, or ``RPC_PATH`` and ``STREAM_PATH``, to
-measure against a server that is already running instead; a run against one of those measures
-the transport that server speaks and no other.
+talking to. Set ``KRPC_TEST_TCPIP_PORT`` or ``KRPC_TEST_LOCALSOCKET_PATH`` to measure
+against a server that is already running instead; a run against one of those measures the
+transport that server speaks and no other.
 """
 
 import contextlib
@@ -31,10 +31,8 @@ import krpc
 # timestamp and severity. Where it is listening comes first, then the ready line, so a reader
 # that has seen the ready line has already seen the rest.
 ADDRESSES = {
-    "rpc_port": re.compile(r"rpc_port = (\d+)"),
-    "stream_port": re.compile(r"stream_port = (\d+)"),
-    "rpc_path": re.compile(r"rpc_path = (\S+)"),
-    "stream_path": re.compile(r"stream_path = (\S+)"),
+    "tcpip_port": re.compile(r"tcpip_port = (\d+)"),
+    "localsocket_path": re.compile(r"localsocket_path = (\S+)"),
 }
 READY = "Server started successfully"
 
@@ -48,10 +46,10 @@ LABELS = {TCP: "TCP/IP", LOCAL_SOCKET: "a local socket"}
 SERVER_TYPES = {TCP: "protobuf", LOCAL_SOCKET: "localsocket"}
 
 # Every variable a benchmark program reads to find the server. A program looks for the socket
-# paths first and falls back to the ports, so setting only the pair the transport being
-# measured uses also picks that transport inside the program. The other pair has to be
-# cleared, not inherited from whatever started the run.
-VARIABLES = ("RPC_PORT", "STREAM_PORT", "RPC_PATH", "STREAM_PATH")
+# path first and falls back to the port, so setting only the one the transport being measured
+# uses also picks that transport inside the program. The other has to be cleared, not
+# inherited from whatever started the run.
+VARIABLES = ("KRPC_TEST_TCPIP_PORT", "KRPC_TEST_LOCALSOCKET_PATH")
 
 # The time to wait for those lines before giving up and showing what the server printed.
 STARTUP_TIMEOUT_SECONDS = 60
@@ -66,31 +64,26 @@ WARMUP_SECONDS = 1.0
 class Endpoint:
     """Where a TestServer is listening, and how a client reaches it.
 
-    One per transport: ``rpc`` and ``stream`` are ports for TCP/IP and socket paths for a local
-    socket, and everything that reads them goes through this rather than asking which transport
-    it is holding.
+    One per transport: ``address`` is a port for TCP/IP and a socket path for a local socket, and
+    everything that reads it goes through this rather than asking which transport it is
+    holding.
     """
 
-    def __init__(self, transport, rpc, stream):
+    def __init__(self, transport, address):
         self.transport = transport
-        self.rpc = rpc
-        self.stream = stream
+        self.address = address
 
     def open(self, name):
         """Open a python client on this endpoint."""
         if self.transport == LOCAL_SOCKET:
-            return krpc.connect_local(
-                name=name, rpc_path=self.rpc, stream_path=self.stream
-            )
-        return krpc.connect(
-            name=name, address="localhost", rpc_port=self.rpc, stream_port=self.stream
-        )
+            return krpc.connect_local(name=name, path=self.address)
+        return krpc.connect(name=name, address="localhost", port=self.address)
 
     def variables(self):
         """What to put in a benchmark program's environment to send it here."""
         if self.transport == LOCAL_SOCKET:
-            return {"RPC_PATH": self.rpc, "STREAM_PATH": self.stream}
-        return {"RPC_PORT": str(self.rpc), "STREAM_PORT": str(self.stream)}
+            return {"KRPC_TEST_LOCALSOCKET_PATH": self.address}
+        return {"KRPC_TEST_TCPIP_PORT": str(self.address)}
 
 
 def transports():
@@ -107,23 +100,11 @@ def transports():
 
 
 def from_environment():
-    """The server the environment names, or ``None`` if it names none.
-
-    Only the rpc half has to be given. Where the stream server is falls back to the client's own
-    default, which is where a server left alone puts it.
-    """
-    if "RPC_PATH" in os.environ:
-        return Endpoint(
-            LOCAL_SOCKET,
-            os.environ["RPC_PATH"],
-            os.environ.get("STREAM_PATH", krpc.DEFAULT_STREAM_PATH),
-        )
-    if "RPC_PORT" in os.environ:
-        return Endpoint(
-            TCP,
-            int(os.environ["RPC_PORT"]),
-            int(os.environ.get("STREAM_PORT", krpc.DEFAULT_STREAM_PORT)),
-        )
+    """The server the environment names, or ``None`` if it names none."""
+    if "KRPC_TEST_LOCALSOCKET_PATH" in os.environ:
+        return Endpoint(LOCAL_SOCKET, os.environ["KRPC_TEST_LOCALSOCKET_PATH"])
+    if "KRPC_TEST_TCPIP_PORT" in os.environ:
+        return Endpoint(TCP, int(os.environ["KRPC_TEST_TCPIP_PORT"]))
     return None
 
 
@@ -176,8 +157,9 @@ def running(executable, frame_pacing=True, transport=TCP):
                 "--type=%s" % SERVER_TYPES[transport],
             ]
             if directory is not None:
-                command.append("--rpc-path=%s" % os.path.join(directory, "rpc"))
-                command.append("--stream-path=%s" % os.path.join(directory, "stream"))
+                command.append(
+                    "--localsocket-path=%s" % os.path.join(directory, "krpc.sock")
+                )
             if not frame_pacing:
                 command.append("--no-frame-pacing")
             process = subprocess.Popen(
@@ -258,22 +240,18 @@ def _environment():
 
 
 def _wait_for_endpoint(process, log, transport):
-    rpc, stream = (
-        ("rpc_path", "stream_path")
-        if transport == LOCAL_SOCKET
-        else ("rpc_port", "stream_port")
-    )
+    name = "localsocket_path" if transport == LOCAL_SOCKET else "tcpip_port"
     deadline = time.time() + STARTUP_TIMEOUT_SECONDS
     while time.time() < deadline:
         output = log.read()
         log.seek(0)
         if READY in output:
-            found = [ADDRESSES[name].search(output) for name in (rpc, stream)]
-            if all(found):
-                addresses = [match.group(1) for match in found if match is not None]
-                if transport != LOCAL_SOCKET:
-                    addresses = [int(x) for x in addresses]
-                return Endpoint(transport, *addresses)
+            found = ADDRESSES[name].search(output)
+            if found is not None:
+                address = found.group(1)
+                return Endpoint(
+                    transport, address if transport == LOCAL_SOCKET else int(address)
+                )
         if process.poll() is not None:
             raise RuntimeError(
                 "TestServer exited with status %d before it was ready:\n%s"

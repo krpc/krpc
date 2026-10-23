@@ -368,17 +368,17 @@ def _count_sent_calls(client: Client) -> None:
     """Count the remote procedure calls each thread sends through a client's
     connection, so a client side function called when compiling can be checked
     for one."""
-    connection = client._rpc_connection
+    connection = client._connection
     with _SENT_CALLS_LOCK:
         if getattr(connection, "_counts_sent_calls", False):
             return
-        send = connection.send_message
+        send = connection.send_request
 
-        def counted(message: Any) -> None:
+        def counted(request: Any) -> None:
             _SENT_CALLS.count = _sent_calls() + 1
-            send(message)
+            send(request)
 
-        connection.send_message = counted
+        connection.send_request = counted
         connection._counts_sent_calls = True  # pyright: ignore[reportAttributeAccessIssue]
 
 

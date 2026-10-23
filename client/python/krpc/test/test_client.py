@@ -1,6 +1,5 @@
 import math
 import os
-import socket
 import unittest
 import warnings
 from collections.abc import Callable
@@ -22,7 +21,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
         status = self.conn.krpc.get_status()
         self.assertRegex(status.version, r"^[0-9]+\.[0-9]+\.[0-9]+$")
         self.assertGreater(status.bytes_read, 0)
-        self.assertEqual(1, status.protocol_version)
+        self.assertEqual(2, status.protocol_version)
 
     def test_clients(self) -> None:
         client_id = self.conn.krpc.get_client_id()
@@ -31,60 +30,29 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertIsInstance(client.address, str)
 
     @unittest.skipIf(
-        os.getenv("RPC_PATH") is not None,
+        os.getenv("KRPC_TEST_LOCALSOCKET_PATH") is not None,
         "the server is listening on socket paths rather than on ports",
     )
-    def test_wrong_rpc_port(self) -> None:
-        with self.assertRaises(socket.error):
+    def test_wrong_port(self) -> None:
+        with self.assertRaises(krpc.error.ConnectionError):
             krpc.connect(
-                name="python_client_test_wrong_rpc_port",
+                name="python_client_test_wrong_port",
                 address="localhost",
-                rpc_port=ServerTestCase.unused_port(),
-                stream_port=ServerTestCase.stream_port(),
+                port=ServerTestCase.unused_port(),
                 timeout=ServerTestCase.CONNECT_TIMEOUT,
             )
 
-    @unittest.skipIf(
-        os.getenv("RPC_PATH") is not None,
-        "the server is listening on socket paths rather than on ports",
-    )
-    def test_wrong_stream_port(self) -> None:
-        with self.assertRaises(socket.error):
-            krpc.connect(
-                name="python_client_test_wrong_stream_port",
-                address="localhost",
-                rpc_port=ServerTestCase.rpc_port(),
-                stream_port=ServerTestCase.unused_port(),
-                timeout=ServerTestCase.CONNECT_TIMEOUT,
-            )
+    def test_reconnect_gets_a_new_client(self) -> None:
+        with ServerTestCase.connect(name="python_client_test_first") as first:
+            first_id = first.krpc.get_client_id()
+        with ServerTestCase.connect(name="python_client_test_second") as second:
+            self.assertNotEqual(first_id, second.krpc.get_client_id())
 
-    def test_wrong_rpc_server(self) -> None:
-        with self.assertRaises(krpc.error.ConnectionError) as cm:
-            ServerTestCase.connect(
-                name="python_client_test_wrong_rpc_server",
-                rpc="stream",
-                stream="stream",
-            )
-        self.assertEqual(
-            "Connection request was for the rpc server, "
-            + "but this is the stream server. "
-            + "Did you connect to the wrong port number or socket path?",
-            str(cm.exception),
-        )
-
-    def test_wrong_stream_server(self) -> None:
-        with self.assertRaises(krpc.error.ConnectionError) as cm:
-            ServerTestCase.connect(
-                name="python_client_test_wrong_stream_server",
-                rpc="rpc",
-                stream="rpc",
-            )
-        self.assertEqual(
-            "Connection request was for the stream server, "
-            + "but this is the rpc server. "
-            + "Did you connect to the wrong port number or socket path?",
-            str(cm.exception),
-        )
+    def test_calls_after_close_raise(self) -> None:
+        conn = ServerTestCase.connect(name="python_client_test_closed")
+        conn.close()
+        with self.assertRaises(krpc.error.ConnectionError):
+            conn.krpc.get_status()
 
     def test_value_parameters(self) -> None:
         self.assertEqual("3.14159", self.conn.test_service.float_to_string(3.14159))
