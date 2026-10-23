@@ -184,6 +184,18 @@ comments* below.
    design rationale.
  * Keep `<returns>` on methods that return a value, and keep `<param>` to a short noun phrase.
    `e.g.` and `i.e.` are used in this codebase.
+ * A single named unit is a word ("in meters", "in degrees"). A compound unit or a unit symbol is
+   `<unit>`: `<unit>m/s^2</unit>`, `<unit>N.m</unit>`, `<unit>kg</unit>`. `.` joins two factors.
+ * Formulas and symbols are `<math>`: `<math>\frac{1}{2} \rho v^2</math>`, `<math>2\pi</math>`.
+   Define each symbol in words. The LaTeX subset is listed in `doc/src/extending.rst`.
+ * A relation between members stays prose with `<see cref>` ("`Thrust` divided by `Mass`"), as
+   `<math>` cannot hold a reference.
+ * Tuples, component orders and literal values are `<c>`: `<c>(x, y, z, w)</c>`, `<c>null</c>`.
+ * docgen rejects `<math>` or `<unit>` content outside the subset, and any unknown tag, so the
+   `//doc:html` build is the check. clientgen prints a warning for the same markup.
+ * When a doc needs notation the subset lacks, extend the subset in
+   `client/python/krpc/docmath.py` with a LaTeX form, a Unicode form and a test. Do not reword the
+   doc to avoid the notation.
 
 ### Code comments
 
