@@ -1,5 +1,26 @@
 ## [v0.8.0] - unreleased
 
+- Connections
+  - **Breaking:** Connect over one connection, removing the `stream_port` and `stream_path`
+    parameters of `connect` and `connect_local`. A server from before 0.8 refuses the
+    connection (#1219)
+  - **Breaking:** Give up after 5 seconds if the server does not accept the connection. Pass a
+    `handshake_timeout` of zero to wait for the player to approve it (#1219)
+  - Add `handshake_timeout` and `stall_timeout` parameters to `connect` and `connect_local`
+    (#1219)
+  - Send calls from several threads without waiting for each other's responses (#1219)
+  - Tell the server when the last client is released (#1219)
+  - Add `status` and `reason` to `ConnectionError` for a refused or ended connection (#1219)
+  - **Breaking:** Throw `ConnectionError` when the server cannot be reached, nesting the error
+    from the socket (#1219)
+
+- Streams and events
+  - **Breaking:** Remove a stream or event from the server when its last copy is destroyed (#1219)
+  - **Breaking:** Remove `Client::remove_stream` and the `Stream` constructor taking a stream id.
+    Remove a stream through its stream object (#1219)
+  - **Breaking:** Wait with no deadline in `Stream::wait` and `Event::wait` by default, or for an
+    infinite timeout, and throw `std::invalid_argument` for a negative or NaN one (#1219)
+
 - Fix the documentation of the services that Doxygen warns about, such as parameter names
   that do not match (#1185)
 - Throw `EncodingError` when decoding a tuple of the wrong length, which crashed (#1194)

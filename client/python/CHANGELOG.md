@@ -1,5 +1,28 @@
 ## [v0.8.0] - unreleased
 
+- Connections
+  - **Breaking:** Connect over one connection, removing the `stream_port` and `stream_path`
+    parameters of `connect` and `connect_local`. A server from before 0.8 refuses the
+    connection (#1219)
+  - **Breaking:** Rename the `rpc_port` and `rpc_path` parameters of `connect` and
+    `connect_local` to `port` and `path` (#1219)
+  - **Breaking:** Give up after 5 seconds if the server does not accept the connection. Pass
+    `handshake_timeout=None` to wait for the player to approve it (#1219)
+  - Add `handshake_timeout` and `stall_timeout` parameters to `connect` and `connect_local`
+    (#1219)
+  - Send calls from several threads without waiting for each other's responses (#1219)
+  - Fix later calls reading the wrong response after a call is interrupted by an exception
+    (#1219)
+  - Tell the server when the connection closes (#1219)
+  - Add `status` and `reason` to `ConnectionError` for a refused or ended connection (#1219)
+  - **Breaking:** Raise `ConnectionError` when the server cannot be reached, with the
+    `OSError` as its cause (#1219)
+
+- Streams and events
+  - **Breaking:** Raise `ValueError` from `Stream.wait` and `Event.wait` for a negative or NaN
+    timeout, and wait with no deadline for an infinite one (#1219)
+  - Keep a stream running when a value fails to decode, dropping the value (#1219)
+
 - Link the references in service docstrings with Sphinx roles (#1185)
 - Fix the lists and parameter references in service docstrings, which were invalid
   reStructuredText (#1185)

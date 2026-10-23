@@ -1,3 +1,11 @@
+## [v0.8.0] - unreleased
+- **Breaking:** Listen on one port or socket path per server, removing the stream port and
+  stream path settings (#1219)
+- **Breaking:** Reset each existing server's settings to their defaults, so a TCP/IP and a
+  WebSockets server both use port 50000 until one is changed (#1219)
+- **Breaking:** Turn on "Auto-accept new clients" for new installs. An existing settings file
+  keeps its value (#1219)
+
 ## [v0.7.0]
 - **Breaking:** KSP 1.12.5 is the minimum supported version, matching the maximum (#1048)
 - Add the local socket protocol to the server window. It opens no network port (#1065)

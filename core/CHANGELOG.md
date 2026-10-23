@@ -6,6 +6,24 @@
   `OverflowException` (#1193)
 - Update a stream when its value changes between 0.0 and -0.0, or a collection it returns
   changes in place (#1199)
+- Connections
+  - **Breaking:** Carry each client on one connection, as protocol version 2, where every
+    message is a `Message`. Clients from earlier releases cannot connect (#1219)
+  - Add an id to each request, which the server copies onto its response (#1219)
+  - End a connection with a `Disconnect` message giving the reason (#1219)
+  - Refuse a connection the player denies with the status `DENIED` (#1219)
+  - Start a new session on a `ConnectionRequest` sent during a session, on every transport
+    (#1219)
+  - Accept the stream RPCs over serial IO, which returned an error, with no flow control for
+    their updates (#1219)
+  - End a connection whose message stalls partway, after 3 seconds over serial IO and 30
+    seconds otherwise (#1219)
+  - Name a client in log lines by its address and the start of its identifier (#1219)
+  - Log each request at the debug level as one line naming its calls and their errors, and
+    stop logging each stream update (#1219)
+  - Move the default local socket to `krpc.sock` in `XDG_RUNTIME_DIR` or `LOCALAPPDATA`, or
+    to `/tmp/krpc-<user>.sock` (#1219)
+
 - Exceptions
   - Report the .NET exception each kRPC exception stands for, as `mapped_type` in
     `KRPC.Exception` (#1172)
