@@ -158,7 +158,8 @@ def changelogs():
 
 def strip_unreleased():
     """Drop the ' - unreleased' suffix from the current version's header in
-    every component changelog, returning the paths that changed.
+    every component changelog, krpctest's included, returning the paths that
+    changed.
 
     While on main the in-development version's header reads
     ``## [vX.Y.Z] - unreleased``; releasing turns it into ``## [vX.Y.Z]``.
@@ -166,7 +167,7 @@ def strip_unreleased():
     header = f"## [v{VERSION}] - unreleased"
     replacement = f"## [v{VERSION}]"
     changed = []
-    for path in changelogs():
+    for path in [*changelogs(), "tools/krpctest/CHANGELOG.md"]:
         file = Path(path)
         text = file.read_text()
         if header in text:

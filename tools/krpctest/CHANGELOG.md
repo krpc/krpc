@@ -1,4 +1,4 @@
-## [v0.7.0] - unreleased
+## [v0.7.0]
 - Install the maintained fork of KerbalAlarmClock, with its ClickThroughBlocker, ToolbarControl
   and Harmony dependencies (#1139)
 - Add `krpctest.Mixin`, the base of a mixin of tests, which type checks as a `TestCase`
