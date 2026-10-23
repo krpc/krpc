@@ -67,6 +67,11 @@ reference frame:
 
 .. tabs::
 
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.py
+         :language: python
+
    .. tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.cs
@@ -91,11 +96,6 @@ reference frame:
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.lua
          :language: lua
-
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.py
-         :language: python
 
 For a vessel sat on the launchpad, the magnitude of this position vector will be
 roughly 600,000 meters (equal to the radius of Kerbin). The position vector will
@@ -173,6 +173,27 @@ Available Reference Frames
 kRPC provides the following reference frames:
 
 .. tabs::
+
+   .. tab:: Python
+
+      * :py:attr:`Vessel.reference_frame`
+      * :py:attr:`Vessel.orbital_reference_frame`
+      * :py:attr:`Vessel.surface_reference_frame`
+      * :py:attr:`Vessel.surface_velocity_reference_frame`
+      * :py:attr:`Vessel.orbit_speed_reference_frame`
+      * :py:attr:`Vessel.surface_speed_reference_frame`
+      * :py:attr:`Vessel.target_speed_reference_frame`
+      * :py:attr:`CelestialBody.reference_frame`
+      * :py:attr:`CelestialBody.non_rotating_reference_frame`
+      * :py:attr:`CelestialBody.orbital_reference_frame`
+      * :py:attr:`Orbit.reference_frame`
+      * :py:attr:`Orbit.orbital_reference_frame`
+      * :py:attr:`Node.reference_frame`
+      * :py:attr:`Node.orbital_reference_frame`
+      * :py:attr:`Part.reference_frame`
+      * :py:attr:`Part.center_of_mass_reference_frame`
+      * :py:attr:`DockingPort.reference_frame`
+      * :py:attr:`Thruster.thrust_reference_frame`
 
    .. tab:: C#
 
@@ -279,27 +300,6 @@ kRPC provides the following reference frames:
       * :lua:attr:`SpaceCenter.DockingPort.reference_frame`
       * :lua:attr:`SpaceCenter.Thruster.thrust_reference_frame`
 
-   .. tab:: Python
-
-      * :py:attr:`Vessel.reference_frame`
-      * :py:attr:`Vessel.orbital_reference_frame`
-      * :py:attr:`Vessel.surface_reference_frame`
-      * :py:attr:`Vessel.surface_velocity_reference_frame`
-      * :py:attr:`Vessel.orbit_speed_reference_frame`
-      * :py:attr:`Vessel.surface_speed_reference_frame`
-      * :py:attr:`Vessel.target_speed_reference_frame`
-      * :py:attr:`CelestialBody.reference_frame`
-      * :py:attr:`CelestialBody.non_rotating_reference_frame`
-      * :py:attr:`CelestialBody.orbital_reference_frame`
-      * :py:attr:`Orbit.reference_frame`
-      * :py:attr:`Orbit.orbital_reference_frame`
-      * :py:attr:`Node.reference_frame`
-      * :py:attr:`Node.orbital_reference_frame`
-      * :py:attr:`Part.reference_frame`
-      * :py:attr:`Part.center_of_mass_reference_frame`
-      * :py:attr:`DockingPort.reference_frame`
-      * :py:attr:`Thruster.thrust_reference_frame`
-
 Relative and hybrid reference frames can also be constructed from the above.
 
 Custom Reference Frames
@@ -348,6 +348,13 @@ velocities between the different reference frames:
 
 .. tabs::
 
+   .. tab:: Python
+
+      * :py:meth:`SpaceCenter.transform_position`
+      * :py:meth:`SpaceCenter.transform_direction`
+      * :py:meth:`SpaceCenter.transform_rotation`
+      * :py:meth:`SpaceCenter.transform_velocity`
+
    .. tab:: C#
 
       * :cs:meth:`SpaceCenter.TransformPosition`
@@ -383,13 +390,6 @@ velocities between the different reference frames:
       * :lua:meth:`SpaceCenter.transform_rotation`
       * :lua:meth:`SpaceCenter.transform_velocity`
 
-   .. tab:: Python
-
-      * :py:meth:`SpaceCenter.transform_position`
-      * :py:meth:`SpaceCenter.transform_direction`
-      * :py:meth:`SpaceCenter.transform_rotation`
-      * :py:meth:`SpaceCenter.transform_velocity`
-
 Visual Debugging
 ----------------
 
@@ -404,6 +404,11 @@ following code draws the axes of :attr:`Vessel.surface_reference_frame`, and a
 labeled arrow in the direction of the vessel's velocity relative to the surface:
 
 .. tabs::
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.py
+         :language: python
 
    .. tab:: C#
 
@@ -430,11 +435,6 @@ labeled arrow in the direction of the vessel's velocity relative to the surface:
       .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.lua
          :language: lua
 
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.py
-         :language: python
-
 .. note:: This example uses :attr:`Vessel.surface_velocity_reference_frame`, which is
    singular when the vessel's surface speed is zero (hovering, landed). Run it while the
    vessel is moving; on the launchpad the drawing calls will raise an error.
@@ -454,6 +454,11 @@ This example demonstrates how to make the vessel point in various directions on
 the navball:
 
 .. tabs::
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.py
+         :language: python
 
    .. tab:: C#
 
@@ -479,11 +484,6 @@ the navball:
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.lua
          :language: lua
-
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.py
-         :language: python
 
 The code uses the vessel's surface reference frame
 (:attr:`Vessel.surface_reference_frame`), pictured below:
@@ -512,6 +512,11 @@ directions, as seen on the navball when it is in 'orbit' mode. It uses
 
 .. tabs::
 
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.py
+         :language: python
+
    .. tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.cs
@@ -537,11 +542,6 @@ directions, as seen on the navball when it is in 'orbit' mode. It uses
       .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.lua
          :language: lua
 
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.py
-         :language: python
-
 This code uses the vessel's orbital reference frame, pictured below:
 
 .. image:: /images/reference-frames/vessel-orbital.png
@@ -555,6 +555,11 @@ the navball, when in 'surface' mode. This is the direction of the vessels
 velocity relative to the surface:
 
 .. tabs::
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.py
+         :language: python
 
    .. tab:: C#
 
@@ -580,11 +585,6 @@ velocity relative to the surface:
 
       .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.lua
          :language: lua
-
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.py
-         :language: python
 
 .. note:: :attr:`Vessel.surface_velocity_reference_frame` is singular when the
    vessel's surface speed is zero (hovering, landed). Calling this when the
@@ -620,6 +620,11 @@ rotates with the body.
 
 .. tabs::
 
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.py
+         :language: python
+
    .. tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.cs
@@ -644,11 +649,6 @@ rotates with the body.
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.lua
          :language: lua
-
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.py
-         :language: python
 
 .. seealso:: :attr:`Vessel.orbit_speed_reference_frame` and
    :attr:`Vessel.surface_speed_reference_frame` give the same two speeds
@@ -675,6 +675,11 @@ the body.
 
 .. tabs::
 
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.py
+         :language: python
+
    .. tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.cs
@@ -699,11 +704,6 @@ the body.
 
       .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.lua
          :language: lua
-
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.py
-         :language: python
 
 .. seealso:: :attr:`Vessel.surface_speed_reference_frame` gives the same velocity
    without constructing a frame, although in its own prograde/normal/radial axes
@@ -743,6 +743,11 @@ This example prints the speeds the navball shows in orbit and surface modes:
 
 .. tabs::
 
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.py
+         :language: python
+
    .. tab:: C#
 
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.cs
@@ -768,11 +773,6 @@ This example prints the speeds the navball shows in orbit and surface modes:
       .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.lua
          :language: lua
 
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.py
-         :language: python
-
 .. note:: :attr:`Vessel.target_speed_reference_frame` requires a target to be
    set, and raises an error otherwise.
 
@@ -783,6 +783,11 @@ This example computes the angle between the direction the vessel is pointing in,
 and the direction that the vessel is moving in (relative to the surface):
 
 .. tabs::
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.py
+         :language: python
 
    .. tab:: C#
 
@@ -809,11 +814,6 @@ and the direction that the vessel is moving in (relative to the surface):
       .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.lua
          :language: lua
 
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.py
-         :language: python
-
 Note that the orientation of the reference frame used to get the direction and
 velocity vectors does not matter, as the angle between two vectors is the same
 regardless of the orientation of the axes. However, if we were to use a
@@ -836,6 +836,11 @@ at a given altitude, which could be used as the target for a landing auto pilot.
 :meth:`Drawing.add_axes` draws it.
 
 .. tabs::
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.py
+         :language: python
 
    .. tab:: C#
 
@@ -861,8 +866,3 @@ at a given altitude, which could be used as the target for a landing auto pilot.
 
       .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.lua
          :language: lua
-
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.py
-         :language: python

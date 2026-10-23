@@ -25,8 +25,8 @@ compiled code translates into, which every client can build directly.
 
 .. note::
 
-   Compiled functions need the C# or Python client. Events, function streams and ``Run`` need the
-   C#, C++, Java or Python client.
+   Compiled functions need the Python or C# client. Events, function streams and ``Run`` need the
+   Python, C#, C++ or Java client.
 
 .. _server-side-functions-compiled:
 

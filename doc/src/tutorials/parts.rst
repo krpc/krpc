@@ -9,6 +9,13 @@ API documentation:
 
 .. tabs::
 
+   .. tab:: Python
+
+      * :ref:`python-api-parts-trees-of-parts`
+      * :ref:`python-api-parts-attachment-modes`
+      * :ref:`python-api-parts-fuel-lines`
+      * :ref:`python-api-parts-staging`
+
    .. tab:: C#
 
       * :ref:`csharp-api-parts-trees-of-parts`
@@ -44,13 +51,6 @@ API documentation:
       * :ref:`lua-api-parts-fuel-lines`
       * :ref:`lua-api-parts-staging`
 
-   .. tab:: Python
-
-      * :ref:`python-api-parts-trees-of-parts`
-      * :ref:`python-api-parts-attachment-modes`
-      * :ref:`python-api-parts-fuel-lines`
-      * :ref:`python-api-parts-staging`
-
 .. note:: To interact with the fields, events and actions of a part module, use
    :attr:`Module.field_list`, :attr:`Module.event_list` and
    :attr:`Module.action_list`. These return :class:`PartField`,
@@ -64,6 +64,11 @@ Sometimes things go horribly wrong. The following script does its best to save
 your Kerbals by deploying all the parachutes:
 
 .. tabs::
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.py
+         :language: python
 
    .. tab:: C#
 
@@ -90,11 +95,6 @@ your Kerbals by deploying all the parachutes:
       .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.lua
          :language: lua
 
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/tutorials/parts/DeployParachutes.py
-         :language: python
-
 The script deploys the parachutes one call at a time, and the game can advance between the
 calls. In Python, a :ref:`server side function <server-side-functions>` deploys them all
 in the same physics tick, with a single call:
@@ -111,6 +111,11 @@ The following example will find a standard sized Clamp-O-Tron docking port, and
 control the vessel from it:
 
 .. tabs::
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.py
+         :language: python
 
    .. tab:: C#
 
@@ -137,11 +142,6 @@ control the vessel from it:
       .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.lua
          :language: lua
 
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/tutorials/parts/ControlFromHere.py
-         :language: python
-
 Combined Specific Impulse
 -------------------------
 
@@ -150,6 +150,11 @@ active and fueled engines on a rocket. See here for a description of the maths:
 https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
 
 .. tabs::
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.py
+         :language: python
 
    .. tab:: C#
 
@@ -176,16 +181,18 @@ https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.lua
          :language: lua
 
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.py
-         :language: python
-
 The script reads the thrust and specific impulse of each engine with separate calls, which can
 land in different physics ticks. A :ref:`server side function <server-side-functions>`
 reads them all in the same tick, with a single call:
 
 .. tabs::
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.py
+         :language: python
+         :start-after: [docs]
+         :end-before: [/docs]
 
    .. tab:: C#
 
@@ -194,13 +201,6 @@ reads them all in the same tick, with a single call:
          :start-after: [docs]
          :end-before: [/docs]
          :dedent:
-
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/tutorials/parts/CombinedIspFunction.py
-         :language: python
-         :start-after: [docs]
-         :end-before: [/docs]
 
 .. seealso:: The combined specific impulse of each stage is also available
    directly from the staging API, as :attr:`Stage.specific_impulse` on the

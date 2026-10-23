@@ -8,6 +8,11 @@ once per second.
 
 .. tabs::
 
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.py
+         :language: python
+
    .. tab:: C#
 
       .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.cs
@@ -32,11 +37,6 @@ once per second.
 
       .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.lua
          :language: lua
-
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.py
-         :language: python
 
 .. note:: Pitch, heading and roll are Euler angles, and are ill-defined when the vessel
    points near vertical (pitch approaching ±90°), where heading and roll become

@@ -912,8 +912,8 @@ and sent to clients over the wire, as the ``deprecated`` and ``deprecated_reason
 by ``KRPC.GetServices``. Any ``<see cref='...'/>`` references in the message are resolved to the
 name of the referenced member; unqualified names are resolved against the declaring type. Clients then expose the deprecation using each language's own
 mechanism: for example, the Python client emits a ``DeprecationWarning`` when a deprecated member
-is called, and the generated C#, C++, Java and C-nano client code marks deprecated members with
-``[Obsolete]``, ``[[deprecated]]``, ``@Deprecated`` and ``KRPC_DEPRECATED`` respectively.
+is called, and the generated C#, C++, C-nano and Java client code marks deprecated members with
+``[Obsolete]``, ``[[deprecated]]``, ``KRPC_DEPRECATED`` and ``@Deprecated`` respectively.
 
 .. _service-api-extension-members:
 
@@ -933,7 +933,7 @@ method, and joins the service that owns the type being extended:
 
 The containing class needs no kRPC attribute, only ``public static``. A dynamic client, such as
 Python or Lua, exposes the member as an ordinary member of the class it extends. A static client,
-such as C#, C++, Java or C-nano, reaches it once its code is regenerated from the mod's assembly
+such as C#, C++, C-nano or Java, reaches it once its code is regenerated from the mod's assembly
 and the assembly declaring the service being extended; see :ref:`service-api-clientgen`.
 
 C# has no extension properties, so a property is a pair of extension methods named ``GetX`` and

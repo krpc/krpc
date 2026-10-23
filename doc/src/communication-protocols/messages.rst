@@ -4,8 +4,8 @@ Messaging Protocol
 Communication with a kRPC server is performed via Protocol Buffer messages. The `kRPC download
 <https://github.com/krpc/krpc/releases/latest>`_ comes with a protocol buffer message definitions
 file (:github-blob:`schema/krpc.proto <protobuf/krpc.proto>`)
-that defines the structure of these messages. It also contains versions of this file for C#, C++,
-Java, Lua and Python, compiled using `Google's protocol buffers compiler
+that defines the structure of these messages. It also contains versions of this file for Python, C#,
+C++, Java and Lua, compiled using `Google's protocol buffers compiler
 <https://github.com/google/protobuf>`_.
 
 Invoking Remote Procedures
