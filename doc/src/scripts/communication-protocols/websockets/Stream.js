@@ -3,47 +3,36 @@
 var websocket = require('ws');
 var protobufjs = require('protobufjs')
 var proto = protobufjs.loadProtoFile('krpc.proto').build();
+var schema = proto.krpc.schema;
 
-console.log('Connecting to RPC server')
-let rpcConn = new websocket('ws://127.0.0.1:50000', 'krpc.1')
-rpcConn.binaryType = 'arraybuffer'
+console.log('Connecting to the server')
+let conn = new websocket('ws://127.0.0.1:50000')
+conn.binaryType = 'arraybuffer'
 
-rpcConn.onopen = (evnt) => {
-  console.log('Successfully connected')
-  console.log('Calling KRPC.GetClientID')
-  let call = new proto.krpc.schema.ProcedureCall('KRPC', 'GetClientID');
-  let request = new proto.krpc.schema.Request([call]);
-  rpcConn.send(request.toArrayBuffer());
+conn.onopen = (evnt) => {
+  // The handshake is the first binary message
+  let request = new schema.ConnectionRequest({client_name: 'Jeb', protocol_version: 2});
+  conn.send(new schema.Message({connection_request: request}).toArrayBuffer());
 };
 
-rpcConn.onmessage = (evnt) => {
-  let response = proto.krpc.schema.Response.decode(evnt.data);
-  response.results[0].value.readVarint32(); // skip size
-  let client_identifier = response.results[0].value.toBase64();
-  console.log('Client identifier =', client_identifier);
-
-  console.log('Connecting to Stream server');
-  let streamConn = new websocket('ws://127.0.0.1:50001?id=' + client_identifier, 'krpc.1');
-  streamConn.binaryType = 'arraybuffer';
-
-  streamConn.onopen = (evnt) => {
+conn.onmessage = (evnt) => {
+  let message = schema.Message.decode(evnt.data);
+  if (message.connection_response) {
+    if (message.connection_response.status !== schema.ConnectionResponse.Status.OK)
+      throw new Error('Connection failed: ' + message.connection_response.message);
     console.log('Successfully connected');
 
-    let call_to_stream = new proto.krpc.schema.ProcedureCall('KRPC', 'GetStatus');
-    let arg = new proto.krpc.schema.Argument(0, call_to_stream.toArrayBuffer());
-    let call = new proto.krpc.schema.ProcedureCall('KRPC', 'AddStream', [arg]);
-    let request = new proto.krpc.schema.Request([call]);
-    rpcConn.send(request.toArrayBuffer());
-    rpcConn.onmessage = (evnt) => {
-      let response = proto.krpc.schema.Response.decode(evnt.data);
-      let stream = proto.krpc.schema.Stream.decode(response.results[0].value);
-      console.log("added stream id =", stream.id.toString());
-    };
-  };
-
-  streamConn.onmessage = (evnt) => {
-    let value = new proto.krpc.schema.StreamUpdate.decode(evnt.data);
-    let status = proto.krpc.schema.Status.decode(value.results[0].result.value)
+    // Call KRPC.AddStream to stream KRPC.GetStatus, in a request with the id 1
+    let call_to_stream = new schema.ProcedureCall('KRPC', 'GetStatus');
+    let arg = new schema.Argument(0, call_to_stream.toArrayBuffer());
+    let call = new schema.ProcedureCall('KRPC', 'AddStream', [arg]);
+    conn.send(new schema.Message({request: new schema.Request({id: 1, calls: [call]})}).toArrayBuffer());
+  } else if (message.response) {
+    let stream = schema.Stream.decode(message.response.results[0].value);
+    console.log('added stream id =', stream.id.toString());
+  } else if (message.stream_update) {
+    // Stream updates arrive on the same connection as the responses
+    let status = schema.Status.decode(message.stream_update.results[0].result.value);
     console.log(status);
-  };
+  }
 };

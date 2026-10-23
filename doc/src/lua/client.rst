@@ -33,7 +33,7 @@ connect to a server running on the local machine:
 
 .. literalinclude:: /scripts/lua/client/Basic.lua
 
-This function also accepts arguments that specify what address and port numbers
+This function also accepts arguments that specify what address and port
 to connect to. For example:
 
 .. literalinclude:: /scripts/lua/client/Connecting.lua
@@ -70,7 +70,7 @@ Reference
 
 .. module:: krpc
 
-.. function:: connect([name=''], [address='127.0.0.1'], [rpc_port=50000])
+.. function:: connect([name=''], [address='127.0.0.1'], [port=50000], [handshake_timeout=5])
 
    This function creates a connection to a kRPC server. It returns a
    :class:`krpc.Client` object, through which the server can be communicated
@@ -82,9 +82,15 @@ Reference
    :param string address: The address of the server to connect to. Can either be
                           a hostname or an IP address in dotted decimal
                           notation. Defaults to '127.0.0.1'.
-   :param number rpc_port: The port number of the RPC Server. Defaults to 50000.
+   :param number port: The port number of the server. Defaults to 50000.
+   :param number handshake_timeout: How many seconds to wait for the server to
+                                    accept the connection before giving up.
+                                    Defaults to 5. ``false`` waits
+                                    indefinitely, such as for a server that
+                                    asks the player to approve each
+                                    connection.
 
-.. function:: krpc.connect_local([name], [rpc_path])
+.. function:: krpc.connect_local([name], [path], [handshake_timeout=5])
 
    This function connects to a kRPC server running on the same machine, over a
    unix domain socket rather than TCP/IP. It returns a :class:`Client` object,
@@ -102,10 +108,11 @@ Reference
    :param string name: A descriptive name for the connection. This is passed to
                        the server and appears, for example, in the client
                        connection dialog on the in-game server window.
-   :param string rpc_path: The path of the socket the RPC Server is listening
-                           on. This should match the RPC socket path shown in
-                           the in-game server window. Defaults to the path the
-                           server uses unless it was configured with another.
+   :param string path: The path of the socket the server is listening on.
+                       This should match the socket path shown in the
+                       in-game server window. Defaults to the path the
+                       server uses unless it was configured with another.
+   :param number handshake_timeout: As for :func:`krpc.connect`.
 
 .. function:: krpc.get_object_id(obj)
 
@@ -125,7 +132,7 @@ Reference
 
    .. method:: close()
 
-      Closes the connection to the server.
+      Tells the server the connection is closing, then closes it.
 
    .. attribute:: krpc
 

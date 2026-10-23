@@ -21,14 +21,14 @@ def decode_varint(data):
 
 
 def send_message(conn, msg):
-    """Send a message, prefixed with its size, to a socket"""
+    """Send a message, prefixed with its size, to a unix domain socket"""
     data = msg.SerializeToString()
     size = encode_varint(len(data))
     conn.sendall(size + data)
 
 
-def recv_message(conn, msg_type):
-    """Receive a message, prefixed with its size, from a socket"""
+def recv_message(conn):
+    """Receive a Message, prefixed with its size, from a unix domain socket"""
     # Receive the size of the message data
     data = b""
     while True:
@@ -39,52 +39,54 @@ def recv_message(conn, msg_type):
         except IndexError:
             pass
     # Receive the message data
-    data = conn.recv(size)
+    data = b""
+    while len(data) < size:
+        data += conn.recv(size - len(data))
     # Decode the message
-    msg = msg_type()
+    msg = KRPC.Message()
     msg.ParseFromString(data)
     return msg
 
 
-def default_path(name):
+def default_path():
     """The path the server listens on, unless it was configured with another"""
     directory = os.environ.get("XDG_RUNTIME_DIR")
     if directory:
-        return os.path.join(directory, "krpc", name)
-    return os.path.join("/tmp", "krpc-" + getpass.getuser(), name)
+        return os.path.join(directory, "krpc.sock")
+    return os.path.join("/tmp", "krpc-" + getpass.getuser() + ".sock")
 
 
-# Open a unix domain socket to the RPC server
-rpc_conn = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-rpc_conn.connect(default_path("rpc"))
+# Open a unix domain socket to the server
+conn = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+conn.connect(default_path())
 
-# Send an RPC connection request
-request = KRPC.ConnectionRequest()
-request.type = KRPC.ConnectionRequest.RPC
-request.protocol_version = 1
-request.client_name = "Jeb"
-send_message(rpc_conn, request)
+# Send a connection request
+message = KRPC.Message()
+message.connection_request.protocol_version = 2
+message.connection_request.client_name = "Jeb"
+send_message(conn, message)
 
 # Receive the connection response
-response = recv_message(rpc_conn, KRPC.ConnectionResponse)
+response = recv_message(conn).connection_response
 
 # Check the connection was successful
 if response.status != KRPC.ConnectionResponse.OK:
     raise RuntimeError("Connection failed: " + response.message)
-if response.protocol_version != 1:
-    raise RuntimeError("The server does not support protocol version 1")
-print("Connected to RPC server")
+if response.protocol_version != 2:
+    raise RuntimeError("The server does not support protocol version 2")
+print("Connected to the server")
 
-# Invoke the KRPC.GetStatus RPC
-call = KRPC.ProcedureCall()
+# Invoke the KRPC.GetStatus RPC, in a request with the id 1
+message = KRPC.Message()
+message.request.id = 1
+call = message.request.calls.add()
 call.service = "KRPC"
 call.procedure = "GetStatus"
-request = KRPC.Request()
-request.calls.extend([call])
-send_message(rpc_conn, request)
+send_message(conn, message)
 
-# Receive the response
-response = recv_message(rpc_conn, KRPC.Response)
+# Receive the response, which carries the id of the request it answers
+response = recv_message(conn).response
+assert response.id == 1
 
 # Check for an error in the response
 if response.HasField("error"):
@@ -101,3 +103,17 @@ status.ParseFromString(response.results[0].value)
 
 # Print out the Status message
 print(status)
+
+# End the connection with a disconnect, then close the write side
+disconnect = KRPC.Disconnect(reason=KRPC.Disconnect.CLOSED)
+send_message(conn, KRPC.Message(disconnect=disconnect))
+conn.shutdown(socket.SHUT_WR)
+
+# Discard anything still arriving until the server closes its side, for up to a second
+conn.settimeout(1)
+try:
+    while conn.recv(4096):
+        pass
+except TimeoutError:
+    pass
+conn.close()

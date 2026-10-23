@@ -17,28 +17,28 @@ def decode_varint(data):
     return _DecodeVarint(data, 0)[0]
 
 
-def send_message(port, msg):
+def send_message(conn, msg):
     """Send a message, prefixed with its size, to a serial port"""
     data = msg.SerializeToString()
     size = encode_varint(len(data))
-    port.write(size + data)
+    conn.write(size + data)
 
 
-def recv_message(port, msg_type):
-    """Receive a message, prefixed with its size, from a serial port"""
+def recv_message(conn):
+    """Receive a Message, prefixed with its size, from a serial port"""
     # Receive the size of the message data
     data = b""
     while True:
         try:
-            data += port.read(1)
+            data += conn.read(1)
             size = decode_varint(data)
             break
         except IndexError:
             pass
     # Receive the message data
-    data = port.read(size)
+    data = conn.read(size)
     # Decode the message
-    msg = msg_type()
+    msg = KRPC.Message()
     msg.ParseFromString(data)
     return msg
 
@@ -46,34 +46,33 @@ def recv_message(port, msg_type):
 # Open a connection to the serial port
 conn = serial.Serial("/dev/ttyUSB0")
 
-# Send a connection request wrapped in a MultiplexedRequest
-request = KRPC.MultiplexedRequest()
-request.connection_request.type = KRPC.ConnectionRequest.RPC
-request.connection_request.protocol_version = 1
-request.connection_request.client_name = "Jeb"
-send_message(conn, request)
+# Send a connection request
+message = KRPC.Message()
+message.connection_request.protocol_version = 2
+message.connection_request.client_name = "Jeb"
+send_message(conn, message)
 
 # Receive the connection response
-response = recv_message(conn, KRPC.ConnectionResponse)
+response = recv_message(conn).connection_response
 
 # Check the connection was successful
 if response.status != KRPC.ConnectionResponse.OK:
     raise RuntimeError("Connection failed: " + response.message)
-if response.protocol_version != 1:
-    raise RuntimeError("The server does not support protocol version 1")
-print("Connected to server")
+if response.protocol_version != 2:
+    raise RuntimeError("The server does not support protocol version 2")
+print("Connected to the server")
 
-# Invoke the KRPC.GetStatus RPC, wrapped in a MultiplexedRequest
-call = KRPC.ProcedureCall()
+# Invoke the KRPC.GetStatus RPC, in a request with the id 1
+message = KRPC.Message()
+message.request.id = 1
+call = message.request.calls.add()
 call.service = "KRPC"
 call.procedure = "GetStatus"
-request = KRPC.MultiplexedRequest()
-request.request.calls.extend([call])
-send_message(conn, request)
+send_message(conn, message)
 
-# Receive the MultiplexedResponse
-multiplexed_response = recv_message(conn, KRPC.MultiplexedResponse)
-response = multiplexed_response.response
+# Receive the response, which carries the id of the request it answers
+response = recv_message(conn).response
+assert response.id == 1
 
 # Check for an error in the response
 if response.HasField("error"):
@@ -90,3 +89,8 @@ status.ParseFromString(response.results[0].value)
 
 # Print out the Status message
 print(status)
+
+# End the session with a disconnect, which is how the server sees it end on a serial port
+disconnect = KRPC.Disconnect(reason=KRPC.Disconnect.CLOSED)
+send_message(conn, KRPC.Message(disconnect=disconnect))
+conn.close()

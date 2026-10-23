@@ -92,10 +92,16 @@ Connecting to the Server
 
 The :func:`krpc::connect` function is used to open a connection to a server. It returns a client
 object (of type :class:`krpc::Client`) through which you can interact with the server. When called
-without any arguments, it will connect to the local machine on the default port numbers. You can
+without any arguments, it will connect to the local machine on the default port. You can
 specify different connection settings, and also a descriptive name for the connection, as follows:
 
 .. literalinclude:: /scripts/cpp/client/Connecting.cpp
+
+.. note::
+
+   A server with "Auto-accept new clients" turned off answers only once the player approves the
+   connection, and the client gives up after 5 seconds by default. Pass a ``handshake_timeout`` of zero to wait
+   for the player.
 
 Calling Remote Procedures
 -------------------------
@@ -181,8 +187,8 @@ holding the tick, as described in :ref:`holding-a-tick`.
 
 .. note::
 
-   A stream runs on the server until you remove it or the connection closes, even once every copy
-   of the stream object is destroyed. Each call to a ``_stream`` function adds another stream.
+   Destroying the last copy of a stream object removes the stream from the server, as
+   :func:`krpc::Stream::remove()` does. Each call to a ``_stream`` function adds another stream.
 
 Synchronizing with Stream Updates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -209,6 +215,10 @@ This code creates a stream, acquires a lock on the streams condition variable (b
 ``acquire``) and then repeatedly checks the value of ``abort``. It leaves the loop when it changes
 to true.
 
+While a thread holds the lock, the value of the stream changes only when the condition variable is
+notified. A check of the value and the wait that follows it therefore see the same updates. A
+wait returns for a value newer than the last one the thread read, with or without the lock.
+
 The body of the loop calls ``wait`` on the stream, which causes the program to block until the value
 changes. This prevents the loop from 'spinning' and so it does not consume processing resources
 whilst waiting.
@@ -229,8 +239,9 @@ A callback added to a stream that already has a value is called with that value 
 
 .. note::
 
-   The callback function may be called from a different thread than the one that created the
-   stream. Any changes to shared state must therefore be protected with appropriate
+   Callbacks run on the client's callback thread, one at a time, and may make remote
+   procedure calls. A callback must not wait on a stream, as the same thread wakes the
+   stream's waiters. Any changes to shared state must be protected with appropriate
    synchronization.
 
 Stream Endings
@@ -300,7 +311,7 @@ Client API Reference
 
 .. namespace:: krpc
 
-.. function:: Client connect(const std::string& name = "", const std::string& address = "127.0.0.1", unsigned int rpc_port = 50000, unsigned int stream_port = 50001, std::chrono::milliseconds timeout = std::chrono::milliseconds::zero())
+.. function:: Client connect(const std::string& name = "", const std::string& address = "127.0.0.1", unsigned int port = 50000, std::chrono::milliseconds timeout = std::chrono::milliseconds::zero(), std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5))
 
    This function creates a connection to a kRPC server. It returns a :class:`krpc::Client` object,
    through which the server can be communicated with.
@@ -311,18 +322,23 @@ Client API Reference
         server and appears in the in-game server window.
       * **address** (*std::string*) -- The address of the server to connect to. Can either be a
         hostname or an IP address in dotted decimal notation. Defaults to '127.0.0.1'.
-      * **rpc_port** (*unsigned int*) -- The port number of the RPC Server. Defaults to 50000. This
-        should match the RPC port number of the server you want to connect to.
-      * **stream_port** (*unsigned int*) -- The port number of the Stream Server. Defaults
-        to 50001. This should match the stream port number of the server you want to connect to.
+      * **port** (*unsigned int*) -- The port number of the server. Defaults to 50000. This
+        should match the port number of the server you want to connect to.
       * **timeout** (*std::chrono::milliseconds*) -- How long to wait for a connection before
         giving up. Defaults to zero, which waits indefinitely. A network that drops a connection
         attempt rather than refusing it otherwise leaves the client waiting.
+      * **handshake_timeout** (*std::chrono::milliseconds*) -- How long to wait for the server
+        to accept the connection before giving up. Defaults to 5 seconds. Zero waits
+        indefinitely, such as for a server that asks the player to approve each connection.
 
-.. function:: Client connect_local(const std::string& name = "", const std::string& rpc_path = "", const std::string& stream_path = "")
+   Throws ``krpc::ConnectionError`` if the server refuses the connection. Its ``status()``
+   names the status the server gave, such as ``"DENIED"``. An error thrown when the server ends
+   the connection names the reason in its ``reason()``, such as ``"SERVER_STOPPED"``.
 
-   This function creates a connection to a kRPC server running on the same machine, over unix
-   domain sockets rather than TCP/IP. It returns a :class:`krpc::Client` object, just as
+.. function:: Client connect_local(const std::string& name = "", const std::string& path = "", std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5))
+
+   This function creates a connection to a kRPC server running on the same machine, over a unix
+   domain socket rather than TCP/IP. It returns a :class:`krpc::Client` object, just as
    :func:`krpc::connect` does, and the connection behaves identically thereafter.
 
    Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows Server
@@ -332,18 +348,16 @@ Client API Reference
 
       * **name** (*std::string*) -- A descriptive name for the connection. This is passed to the
         server and appears in the in-game server window.
-      * **rpc_path** (*std::string*) -- The path of the socket the RPC Server is listening on. This
-        should match the RPC socket path shown in the in-game server window. Leave empty for the
-        path the server uses unless it was configured with another.
-      * **stream_path** (*std::string*) -- The path of the socket the Stream Server is listening
-        on. This should match the stream socket path shown in the in-game server window. Defaults
-        as ``rpc_path`` does.
+      * **path** (*std::string*) -- The path of the socket the server is listening on. This
+        should match the socket path shown in the in-game server window. Leave empty for the path
+        the server uses unless it was configured with another.
+      * **handshake_timeout** (*std::chrono::milliseconds*) -- As for :func:`krpc::connect`.
 
 .. function:: template <typename T> Stream<T> add_stream(const services::KRPC::Expression& function)
 
    Create a stream from a server side function, evaluated on each update. Each call creates a new
    stream. Throws ``std::invalid_argument`` if the template type does not describe the function's
-   value, and ``StreamError`` if the client has no stream connection. Throws
+   value, and ``StreamError`` if the client is not connected to a server. Throws
    ``krpc::services::KRPC::ArgumentException`` if the function has parameters.
 
    Reading a null value throws ``std::runtime_error`` unless the template type is a
@@ -374,7 +388,7 @@ Client API Reference
 .. function:: Event add_event(const services::KRPC::Expression& function)
 
    Create an event from a server side function that evaluates to a boolean value. Each call
-   creates a new event. Throws ``StreamError`` if the client has no stream connection, and
+   creates a new event. Throws ``StreamError`` if the client is not connected to a server, and
    ``krpc::services::KRPC::ArgumentException`` if the function does not evaluate to a boolean
    value or has parameters.
 
@@ -432,8 +446,9 @@ Client API Reference
 
       .. note::
 
-         The callback function may be called from a different thread than the one that created
-         the stream. Any changes to shared state must therefore be protected with appropriate
+         Callbacks run on the client's callback thread, one at a time, and may make remote
+         procedure calls. A callback must not wait on a stream, as the same thread wakes the
+         stream's waiters. Any changes to shared state must be protected with appropriate
          synchronization.
 
    .. function:: void remove_stream_update_callback(int tag)
@@ -448,7 +463,7 @@ Client API Reference
    Streams are created by calling a remote procedure with ``_stream`` appended to its name.
 
    Stream objects are copy constructible and assignable, and every copy refers to the same stream.
-   Call :func:`remove` to remove the stream from the server.
+   Call :func:`remove`, or destroy every copy, to remove the stream from the server.
 
    .. function:: float rate() const
    .. function:: void set_rate(float rate)
@@ -504,8 +519,9 @@ Client API Reference
 
       .. note::
 
-         The callback function may be called from a different thread than the one that created
-         the stream. Any changes to shared state must therefore be protected with appropriate
+         Callbacks run on the client's callback thread, one at a time, and may make remote
+         procedure calls. A callback must not wait on a stream, as the same thread wakes the
+         stream's waiters. Any changes to shared state must be protected with appropriate
          synchronization.
 
    .. function:: void remove_callback(int tag)
@@ -549,7 +565,7 @@ Client API Reference
    ``Stream<bool>`` that indicates when the event occurs.
 
    Event objects are copy constructible and assignable, and every copy refers to the same event.
-   Call :func:`remove` to remove the event from the server.
+   Call :func:`remove`, or destroy every copy, to remove the event from the server.
 
    .. function:: Condition& get_condition() const
 

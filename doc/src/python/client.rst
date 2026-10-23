@@ -28,11 +28,17 @@ it out:
 
 .. literalinclude:: /scripts/python/client/Connecting1.py
 
-This function also accepts arguments that specify what address and port numbers to connect to, and
+This function also accepts arguments that specify what address and port to connect to, and
 an optional descriptive name for the connection which is displayed in the kRPC window in the
 game. For example:
 
 .. literalinclude:: /scripts/python/client/Connecting2.py
+
+.. note::
+
+   A server with "Auto-accept new clients" turned off answers only once the player approves the
+   connection, and the client gives up after 5 seconds by default. Pass ``handshake_timeout=None`` to wait
+   for the player.
 
 Calling Remote Procedures
 -------------------------
@@ -156,6 +162,10 @@ This code creates a stream, acquires a lock on the streams condition variable (u
 statement) and then repeatedly checks the value of ``abort``. It leaves the loop when it changes to
 true.
 
+While a thread holds the lock, the value of the stream changes only when the condition variable is
+notified. A check of the value and the wait that follows it therefore see the same updates. A
+wait returns for a value newer than the last one the thread read, with or without the lock.
+
 The body of the loop calls ``wait`` on the stream, which causes the program to block until the value
 changes. This prevents the loop from 'spinning' and so it does not consume processing resources
 whilst waiting.
@@ -181,8 +191,9 @@ A callback added to a stream that already has a value is called with that value 
 
 .. note::
 
-   The callback function may be called from a different thread than the one that created the
-   stream. Any changes to shared state must therefore be protected with appropriate
+   Callbacks run on the client's callback thread, one at a time, and may make remote
+   procedure calls. A callback must not wait on a stream, as the same thread wakes the
+   stream's waiters. Any changes to shared state must be protected with appropriate
    synchronization.
 
 Stream Endings
@@ -459,7 +470,7 @@ makes no remote procedure call and uses no state variable, as its value is the s
 Client API Reference
 --------------------
 
-.. function:: krpc.connect([name=None], [address='127.0.0.1'], [rpc_port=50000], [stream_port=50001], [use_pregenerated_stubs=True], [timeout=None])
+.. function:: krpc.connect([name=None], [address='127.0.0.1'], [port=50000], [use_pregenerated_stubs=True], [timeout=None], [handshake_timeout=5])
 
    This function creates a connection to a kRPC server. It returns a :class:`krpc.client.Client`
    object, through which the server can be communicated with.
@@ -468,10 +479,8 @@ Client API Reference
                     in the in-game server window.
    :param str address: The address of the server to connect to. Can either be a hostname or an IP
                        address in dotted decimal notation. Defaults to '127.0.0.1'.
-   :param int rpc_port: The port number of the RPC Server. Defaults to 50000. This should match the
-                           RPC port number of the server you want to connect to.
-   :param int stream_port: The port number of the Stream Server. Defaults to 50001. This should
-                           match the stream port number of the server you want to connect to.
+   :param int port: The port number of the server. Defaults to 50000. This should match the
+                       port number of the server you want to connect to.
    :param bool use_pregenerated_stubs: Whether to use the pre-generated service stubs bundled with
                            the client, which include type hints. If set to ``False``, or if the
                            server provides a service with no bundled stub, the service is generated
@@ -479,11 +488,19 @@ Client API Reference
    :param float timeout: How many seconds to wait for a connection before giving up. Defaults to
                            ``None``, which waits indefinitely. A network that drops a connection
                            attempt rather than refusing it otherwise leaves the client waiting.
+   :param float handshake_timeout: How many seconds to wait for the server to accept the
+                           connection before giving up. Defaults to 5. ``None`` waits indefinitely,
+                           such as for a server that asks the player to approve each connection.
 
-.. function:: krpc.connect_local([name=None], [rpc_path], [stream_path], [use_pregenerated_stubs=True])
+   Raises ``krpc.error.ConnectionError`` if the server refuses the connection. Its ``status``
+   attribute names the status the server gave, such as ``"DENIED"``. An error raised when the
+   server ends the connection names the reason in its ``reason`` attribute, such as
+   ``"SERVER_STOPPED"``.
 
-   This function creates a connection to a kRPC server running on the same machine, over unix
-   domain sockets rather than TCP/IP. It returns a :class:`krpc.client.Client` object, just as
+.. function:: krpc.connect_local([name=None], [path], [use_pregenerated_stubs=True], [handshake_timeout=5])
+
+   This function creates a connection to a kRPC server running on the same machine, over a unix
+   domain socket rather than TCP/IP. It returns a :class:`krpc.client.Client` object, just as
    :func:`krpc.connect` does, and the connection behaves identically thereafter.
 
    Use this when the script runs on the same machine as the game and the server is configured to
@@ -497,14 +514,11 @@ Client API Reference
 
    :param str name: A descriptive name for the connection. This is passed to the server and appears
                     in the in-game server window.
-   :param str rpc_path: The path of the socket the RPC server is listening on. This should match
-                        the RPC socket path shown in the in-game server window. Defaults to the
-                        path the server uses unless it was configured with another.
-   :param str stream_path: The path of the socket the Stream Server is listening on. This should
-                           match the stream socket path shown in the in-game server window.
-                           Defaults as ``rpc_path`` does. Pass ``None`` to connect without stream
-                           support.
+   :param str path: The path of the socket the server is listening on. This should match the
+                    socket path shown in the in-game server window. Defaults to the path the
+                    server uses unless it was configured with another.
    :param bool use_pregenerated_stubs: As for :func:`krpc.connect`.
+   :param float handshake_timeout: As for :func:`krpc.connect`.
 
 .. function:: krpc.get_object_id(obj)
 
@@ -551,9 +565,9 @@ Client API Reference
       compiled with :meth:`compile` on every call. Returns a
       :class:`krpc.event.Event` object.
 
-      Raises ``StreamError`` without a stream connection, and for a compiled function with
-      parameters. A function that does not evaluate to a boolean value raises ``ValueError``,
-      and a value that is not a function raises ``TypeError``.
+      Raises ``StreamError`` for a compiled function with parameters. A function that does not
+      evaluate to a boolean value raises ``ValueError``, and a value that is not a function
+      raises ``TypeError``.
 
    .. method:: run(function, *args, **kwargs)
 
@@ -588,8 +602,9 @@ Client API Reference
 
       .. note::
 
-         The callback function may be called from a different thread than the one that created the
-         stream. Any changes to shared state must therefore be protected with appropriate
+         Callbacks run on the client's callback thread, one at a time, and may make remote
+         procedure calls. A callback must not wait on a stream, as the same thread wakes the
+         stream's waiters. Any changes to shared state must be protected with appropriate
          synchronization.
 
    .. method:: remove_stream_update_callback(callback)
@@ -604,7 +619,7 @@ Client API Reference
 
    .. method:: close()
 
-      Closes the connection to the server.
+      Tells the server the connection is closing, then closes it.
 
    .. attribute:: krpc
 
@@ -667,8 +682,9 @@ Client API Reference
 
       .. note::
 
-         The callback function may be called from a different thread than the one that created the
-         stream. Any changes to shared state must therefore be protected with appropriate
+         Callbacks run on the client's callback thread, one at a time, and may make remote
+         procedure calls. A callback must not wait on a stream, as the same thread wakes the
+         stream's waiters. Any changes to shared state must be protected with appropriate
          synchronization.
 
    .. method:: remove_callback(callback)
