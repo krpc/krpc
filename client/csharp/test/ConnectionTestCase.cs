@@ -1,5 +1,6 @@
 using System;
 using System.Net.Sockets;
+using System.Threading;
 using KRPC.Schema.KRPC;
 using NUnit.Framework;
 
@@ -75,13 +76,63 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void CloseWithACallInFlight ()
+        {
+            var connection = Connect ("CSharpConnectionTestClose");
+            server.AnswerOnDisconnect = true;
+            ConnectionException error = null;
+            var thread = new Thread (() => {
+                try {
+                    connection.Invoke ("TestService", "TestProcedure", null, null);
+                } catch (ConnectionException exn) {
+                    error = exn;
+                }
+            });
+            thread.IsBackground = true;
+            thread.Start ();
+            Assert.IsTrue (server.RequestHeld.WaitOne (5000));
+            // The call holds the reader role, and its response arrives 100 ms after the
+            // disconnect, followed by the server's close. The response does not reach the call.
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew ();
+            connection.Dispose ();
+            Assert.Less (stopwatch.ElapsedMilliseconds, 600);
+            Assert.IsTrue (thread.Join (5000));
+            Assert.IsInstanceOf<ConnectionException> (error);
+        }
+
+        [Test]
         public void ConnectionRefusedByTheServer ()
         {
-            server.Status = ConnectionResponse.Types.Status.WrongType;
-            server.Message = "Connection request was for the wrong server";
+            server.Status = ConnectionResponse.Types.Status.Denied;
+            server.Message = "The connection was denied";
             var exn = Assert.Throws<ConnectionException> (
                           () => Connect ("CSharpConnectionTestRefused"));
-            Assert.AreEqual ("Connection request was for the wrong server", exn.Message);
+            Assert.AreEqual ("The server refused the connection (Denied): The connection was denied", exn.Message);
+            Assert.AreEqual (ConnectionResponse.Types.Status.Denied, exn.Status);
+        }
+
+        [Test]
+        public void MalformedHandshakeResponse ()
+        {
+            server.MalformedHandshake = true;
+            var exn = Assert.Throws<ConnectionException> (
+                          () => Connect ("CSharpConnectionTestMalformed"));
+            Assert.IsInstanceOf<System.IO.InvalidDataException> (exn.InnerException);
+        }
+
+        [Test]
+        public void ConnectionEndedByTheServer ()
+        {
+            server.DisconnectReason = Disconnect.Types.Reason.Removed;
+            using (var connection = Connect ("CSharpConnectionTestEnded")) {
+                var exn = Assert.Throws<ConnectionException> (
+                              () => connection.Invoke ("TestService", "TestProcedure"));
+                Assert.AreEqual (Disconnect.Types.Reason.Removed, exn.Reason);
+                Assert.AreEqual ("The server ended the connection (Removed): Bye", exn.Message);
+                // A later call fails at once with the same error
+                Assert.AreSame (exn, Assert.Throws<ConnectionException> (
+                    () => connection.Invoke ("TestService", "TestProcedure")));
+            }
         }
     }
 }

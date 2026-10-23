@@ -24,7 +24,7 @@ namespace KRPC.Client.Test
 
         /// <summary>
         /// The status the handshake is answered with, so that a test can have a connection
-        /// refused as the server refuses one made to the wrong endpoint.
+        /// refused.
         /// </summary>
         public ConnectionResponse.Types.Status Status { get; set; }
 
@@ -32,6 +32,37 @@ namespace KRPC.Client.Test
         /// The message accompanying a refused connection.
         /// </summary>
         public string Message { get; set; }
+
+        /// <summary>
+        /// Whether the handshake is answered with a malformed length prefix.
+        /// </summary>
+        public bool MalformedHandshake { get; set; }
+
+        /// <summary>
+        /// The reason given in a disconnect sent in answer to a request, or null to answer
+        /// requests.
+        /// </summary>
+        public Disconnect.Types.Reason? DisconnectReason { get; set; }
+
+        /// <summary>
+        /// Whether a request is answered only once the client's disconnect arrives, after which
+        /// the connection is closed.
+        /// </summary>
+        public bool AnswerOnDisconnect {
+            get { return answerOnDisconnect; }
+            set { answerOnDisconnect = value; }
+        }
+
+        volatile bool answerOnDisconnect;
+
+        /// <summary>
+        /// Set when a request held by <see cref="AnswerOnDisconnect"/> arrives.
+        /// </summary>
+        public ManualResetEvent RequestHeld {
+            get { return requestHeld; }
+        }
+
+        readonly ManualResetEvent requestHeld = new ManualResetEvent (false);
 
         public StandInServer (Socket listeningSocket)
         {
@@ -82,23 +113,50 @@ namespace KRPC.Client.Test
                 using (var stream = new NetworkStream (socket)) {
                     var reader = new MessageReader (stream);
                     reader.Read ();
-                    ConnectionRequest.Parser.ParseFrom (reader.Buffer, reader.Offset, reader.Size);
+                    var request = Schema.KRPC.Message.Parser.ParseFrom (reader.Buffer, reader.Offset, reader.Size);
+                    if (request.ConnectionRequest == null)
+                        return;
+                    if (MalformedHandshake) {
+                        // A varint that does not end within five bytes
+                        stream.Write (new byte [] { 0xff, 0xff, 0xff, 0xff, 0xff, 0x01 }, 0, 6);
+                        return;
+                    }
                     var response = new ConnectionResponse ();
                     response.Status = Status;
                     response.Message = Message;
-                    response.ProtocolVersion = 1;
+                    response.ProtocolVersion = 2;
                     response.ClientIdentifier = ByteString.CopyFrom (new byte [16]);
-                    Write (stream, response);
+                    Write (stream, new Schema.KRPC.Message { ConnectionResponse = response });
                     if (Status != ConnectionResponse.Types.Status.Ok)
                         return;
                     // Every request is answered with an empty result, the same as a call
                     // returning nothing gets back from a real server
+                    Response held = null;
                     while (!stopping) {
                         reader.Read ();
-                        Request.Parser.ParseFrom (reader.Buffer, reader.Offset, reader.Size);
-                        var reply = new Response ();
+                        var message = Schema.KRPC.Message.Parser.ParseFrom (reader.Buffer, reader.Offset, reader.Size);
+                        if (message.Disconnect != null) {
+                            if (held != null) {
+                                Thread.Sleep (100);
+                                Write (stream, new Schema.KRPC.Message { Response = held });
+                                socket.Shutdown (SocketShutdown.Both);
+                            }
+                            return;
+                        }
+                        if (DisconnectReason.HasValue) {
+                            Write (stream, new Schema.KRPC.Message {
+                                Disconnect = new Disconnect { Reason = DisconnectReason.Value, Message = "Bye" }
+                            });
+                            return;
+                        }
+                        var reply = new Response { Id = message.Request.Id };
                         reply.Results.Add (new ProcedureResult ());
-                        Write (stream, reply);
+                        if (answerOnDisconnect) {
+                            held = reply;
+                            requestHeld.Set ();
+                            continue;
+                        }
+                        Write (stream, new Schema.KRPC.Message { Response = reply });
                     }
                 }
             } catch (IOException) {

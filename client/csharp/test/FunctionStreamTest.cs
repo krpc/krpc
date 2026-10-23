@@ -202,7 +202,7 @@ namespace KRPC.Client.Test
             Assert.AreNotEqual (first, second);
             first.Remove ();
             lock (first.Condition)
-                Assert.Throws<System.InvalidOperationException> (() => first.Wait ());
+                Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => first.Wait ());
             lock (second.Condition)
                 Assert.IsFalse (second.Wait (0.1));
             second.Remove ();
@@ -219,23 +219,9 @@ namespace KRPC.Client.Test
             Assert.AreNotEqual (first.stream.Id, second.stream.Id);
             Assert.AreNotEqual (first, second);
             first.Remove ();
-            Assert.Throws<System.InvalidOperationException> (() => first.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => first.Get ());
             Assert.AreEqual ("foox", second.Get ());
             second.Remove ();
-        }
-
-        [Test]
-        public void TestNoStreamServer ()
-        {
-            using (var connection = Connect ("CSharpNoStreams", stream: null)) {
-                var testService = connection.TestService ();
-                var expr = Expr.Call (connection, Connection.GetCall (() => testService.StringProperty));
-                Assert.Throws<System.InvalidOperationException> (() => connection.AddStream<string> (expr));
-                Assert.Throws<System.InvalidOperationException> (
-                    () => connection.AddStream (() => testService.StringProperty + "x"));
-                Assert.Throws<System.InvalidOperationException> (
-                    () => connection.AddEvent (() => testService.StringProperty == "x"));
-            }
         }
 
         [Test]

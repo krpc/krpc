@@ -82,16 +82,11 @@ namespace KRPC.Client.Benchmark
         // path or by port. Both are measured, as the transport is part of what a call costs.
         static Connection Connect ()
         {
-            var rpcPath = Environment.GetEnvironmentVariable ("RPC_PATH");
-            if (rpcPath != null) {
-                return Connection.ConnectLocal (
-                    "csharp_client_benchmark", rpcPath,
-                    Environment.GetEnvironmentVariable ("STREAM_PATH"));
-            }
-            return new Connection (
-                "csharp_client_benchmark",
-                rpcPort: Port ("RPC_PORT", 50000),
-                streamPort: Port ("STREAM_PORT", 50001));
+            var path = Environment.GetEnvironmentVariable ("KRPC_TEST_LOCALSOCKET_PATH");
+            if (path != null)
+                return Connection.ConnectLocal ("csharp_client_benchmark", path);
+            var port = Port ("KRPC_TEST_TCPIP_PORT", 50000);
+            return new Connection ("csharp_client_benchmark", port: port);
         }
 
         /// <summary>

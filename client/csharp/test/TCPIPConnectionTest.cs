@@ -23,8 +23,7 @@ namespace KRPC.Client.Test
         protected override Connection Connect (string name)
         {
             var endPoint = (IPEndPoint)Server.EndPoint;
-            return new Connection (
-                name, IPAddress.Loopback, endPoint.Port, endPoint.Port);
+            return new Connection (name, IPAddress.Loopback, endPoint.Port);
         }
     }
 }

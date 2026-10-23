@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using System.Net.Sockets;
 using System.Threading;
 
 namespace KRPC.Client
@@ -28,6 +30,7 @@ namespace KRPC.Client
         const int MaximumPrefixLength = 5;
 
         readonly Stream stream;
+        readonly Socket socket;
         byte[] buffer = new byte [InitialSize];
 
         // The bytes read but not yet handed out, as the half open range [start, end) of the
@@ -35,9 +38,10 @@ namespace KRPC.Client
         int start;
         int end;
 
-        public MessageReader (Stream messageStream)
+        public MessageReader (Stream messageStream, Socket pollSocket = null)
         {
             stream = messageStream;
+            socket = pollSocket;
         }
 
         /// <summary>
@@ -59,28 +63,54 @@ namespace KRPC.Client
         public int Size { get; private set; }
 
         /// <summary>
-        /// Read the next message, and return whether one was read. If a stop event is given and
-        /// is signaled while waiting for a message, returns false without having read one.
+        /// Whether a whole message has been read that is not yet handed out. True for a
+        /// malformed length prefix, so the next read throws.
         /// </summary>
-        public bool Read (EventWaitHandle stopEvent = null)
+        public bool HasMessage {
+            get {
+                if (end == start)
+                    return false;
+                int size;
+                int prefix;
+                try {
+                    if (!Prefix (out size, out prefix))
+                        return false;
+                } catch (InvalidDataException) {
+                    return true;
+                }
+                return end - start - prefix >= size;
+            }
+        }
+
+        /// <summary>
+        /// Read the next message, waiting for as long as it takes.
+        /// </summary>
+        public void Read ()
         {
+            Read (Timeout.InfiniteTimeSpan, Timeout.InfiniteTimeSpan);
+        }
+
+        /// <summary>
+        /// Read the next message. Throws a TimeoutException if no whole message arrives within
+        /// the timeout, or if a message that has started to arrive receives no new byte within
+        /// the stall timeout. The timeouts need the socket the reader was given.
+        /// </summary>
+        public void Read (TimeSpan timeout, TimeSpan stallTimeout)
+        {
+            deadline = timeout == Timeout.InfiniteTimeSpan ? null : (DateTime?)(DateTime.UtcNow + timeout);
+            stall = stallTimeout;
             int size;
             int prefix;
-            while (!Prefix (out size, out prefix)) {
-                if (!Fill (stopEvent))
-                    return false;
-            }
+            while (!Prefix (out size, out prefix))
+                Fill ();
             // The prefix and the message together, so that neither making room for the message
             // nor reading the rest of it moves the buffer once the message has been found in it.
             Reserve (prefix + size);
-            while (end - start < prefix + size) {
-                if (!Fill (stopEvent))
-                    return false;
-            }
+            while (end - start < prefix + size)
+                Fill ();
             Offset = start + prefix;
             Size = size;
             start += prefix + size;
-            return true;
         }
 
         /// <summary>
@@ -112,14 +142,60 @@ namespace KRPC.Client
             return false;
         }
 
+        DateTime? deadline;
+        TimeSpan stall = Timeout.InfiniteTimeSpan;
+
+        // When a read last received a byte
+        DateTime progress = DateTime.UtcNow;
+
         /// <summary>
-        /// Read a block from the stream into the buffer, and return whether to carry on. A stop
-        /// event is checked either side of the read, since the read itself does not observe it.
+        /// Whether the buffer holds part of a message.
         /// </summary>
-        bool Fill (EventWaitHandle stopEvent)
+        public bool HasBuffered {
+            get { return end > start; }
+        }
+
+        /// <summary>
+        /// The time left before the part of a message in the buffer stalls.
+        /// </summary>
+        public TimeSpan StallRemaining (TimeSpan stallTimeout)
         {
-            if (Stopped (stopEvent))
-                return false;
+            var remaining = stallTimeout - (DateTime.UtcNow - progress);
+            return remaining < TimeSpan.Zero ? TimeSpan.Zero : remaining;
+        }
+
+        /// <summary>
+        /// Wait until the socket has data to read, for as long as the timeouts allow.
+        /// </summary>
+        void WaitForData ()
+        {
+            if (socket == null)
+                return;
+            // The stall clock runs from the last byte received, which an earlier read may have
+            // taken
+            var wait = Timeout.InfiniteTimeSpan;
+            if (end > start && stall != Timeout.InfiniteTimeSpan)
+                wait = StallRemaining (stall);
+            if (deadline.HasValue) {
+                var remaining = deadline.Value - DateTime.UtcNow;
+                if (remaining < TimeSpan.Zero)
+                    remaining = TimeSpan.Zero;
+                if (wait == Timeout.InfiniteTimeSpan || remaining < wait)
+                    wait = remaining;
+            }
+            if (wait == Timeout.InfiniteTimeSpan)
+                return;
+            var microseconds = (int)Math.Min (wait.TotalMilliseconds * 1000, int.MaxValue);
+            if (!socket.Poll (microseconds, SelectMode.SelectRead))
+                throw new TimeoutException ("Timed out waiting for data from the server");
+        }
+
+        /// <summary>
+        /// Read a block from the stream into the buffer.
+        /// </summary>
+        void Fill ()
+        {
+            WaitForData ();
             // Room for at least one byte more than is in hand, so that there is somewhere to put
             // what the read takes.
             Reserve (end - start + 1);
@@ -127,7 +203,7 @@ namespace KRPC.Client
             if (read <= 0)
                 throw new EndOfStreamException ("Connection closed by the server");
             end += read;
-            return !Stopped (stopEvent);
+            progress = DateTime.UtcNow;
         }
 
         /// <summary>
@@ -158,11 +234,6 @@ namespace KRPC.Client
             var grown = new byte [length];
             System.Buffer.BlockCopy (buffer, 0, grown, 0, end);
             buffer = grown;
-        }
-
-        static bool Stopped (EventWaitHandle stopEvent)
-        {
-            return stopEvent != null && stopEvent.WaitOne (0);
         }
     }
 }

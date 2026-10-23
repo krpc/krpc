@@ -21,6 +21,11 @@ namespace KRPC.Client
         readonly IDictionary<int, Action<Exception>> endCallbacks = new Dictionary<int, Action<Exception>> ();
         int nextEndCallbackKey;
         volatile Exception ending;
+        // The ending as a thread holding the condition reads it. An ending from the server
+        // reaches the holder when its waiters are woken, as a value does.
+        volatile Exception announcedEnding;
+        // Whether a remove or a close ended the stream, which discards an unseen firing
+        volatile bool endedByClient;
         volatile bool updated;
         float rate = 0;
 
@@ -35,7 +40,17 @@ namespace KRPC.Client
 
         public ulong Id { get; private set; }
 
-        public TypeSpec ReturnType { get; private set; }
+        /// <summary>
+        /// The type of the stream's values. Null for a stream the reader registered before a
+        /// handle gave its type.
+        /// </summary>
+        public TypeSpec ReturnType { get; internal set; }
+
+        /// <summary>
+        /// The latest result of a stream with no return type yet, kept undecoded for its
+        /// first handle. Changed under the update lock.
+        /// </summary>
+        internal Schema.KRPC.ProcedureResult Raw { get; set; }
 
         public float Rate {
             get { return rate; }
@@ -52,26 +67,99 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Throw the exception that ended the stream, if it has ended.
+        /// Whether a remove or a close ended the stream.
+        /// </summary>
+        public bool EndedByClient {
+            get { return endedByClient; }
+        }
+
+        /// <summary>
+        /// Whether the ending has been announced to a thread holding the condition.
+        /// </summary>
+        public bool EndingAnnounced {
+            get { return announcedEnding != null; }
+        }
+
+        /// <summary>
+        /// Announce the ending to a thread holding the condition, with it held.
+        /// </summary>
+        public void AnnounceEnding ()
+        {
+            announcedEnding = ending;
+        }
+
+        /// <summary>
+        /// Throw the exception that ended the stream, if it has ended. A thread holding the
+        /// condition reads the ending once it is announced.
         /// </summary>
         public void ThrowIfEnded ()
         {
             var exn = ending;
-            if (exn != null)
-                throw exn;
+            if (exn == null)
+                return;
+            if (exn != announcedEnding && !connection.StreamManager.Closed && Monitor.IsEntered (condition))
+                return;
+            throw exn;
         }
 
+        /// <summary>
+        /// The latest value, or the last one announced to waiters for a thread holding the
+        /// condition, which then sees the value change only when its waiters are woken.
+        /// </summary>
         public object Value {
             get {
                 ThrowIfEnded ();
-                if (!Updated)
-                    throw new System.InvalidOperationException ("Stream has no value");
-                return _value;
+                if (Monitor.IsEntered (condition)) {
+                    if (!announced)
+                        throw new System.InvalidOperationException ("Stream has no value");
+                    seen.Value = AnnouncedVersion;
+                    return announcedValue;
+                }
+                lock (updateLock) {
+                    if (!updated)
+                        throw new System.InvalidOperationException ("Stream has no value");
+                    seen.Value = Version;
+                    return _value;
+                }
             }
         }
 
+        // The version of the value each thread last read, which a wait on that thread waits past
+        readonly ThreadLocal<long> seen = new ThreadLocal<long> ();
+
+        /// <summary>
+        /// The version of the value this thread last read.
+        /// </summary>
+        public long SeenVersion {
+            get { return seen.Value; }
+        }
+
+        /// <summary>
+        /// Whether there is a value, announced to waiters for a thread holding the condition.
+        /// </summary>
         public bool Updated {
-            get { return updated; }
+            get { return Monitor.IsEntered (condition) ? announced : updated; }
+        }
+
+        // The last value announced to waiters, which Wait and a thread holding the condition
+        // read. Changed with the condition held, so the holder sees it frozen.
+        object announcedValue;
+        volatile bool announced;
+
+        /// <summary>
+        /// The version of the last value announced to waiters.
+        /// </summary>
+        public long AnnouncedVersion { get; private set; }
+
+        /// <summary>
+        /// Announce a stored value to waiters, with the condition held.
+        /// </summary>
+        public void Announce (object value, long version)
+        {
+            // Stored before the flag, as a reader checks the flag with no lock held
+            announcedValue = value;
+            AnnouncedVersion = version;
+            announced = true;
         }
 
         /// <summary>
@@ -105,23 +193,36 @@ namespace KRPC.Client
         }
 
         /// <summary>
+        /// End the stream, without waking its waiters. An ending that is not announced reaches a
+        /// thread holding the condition once AnnounceEnding is called. Returns the end callbacks
+        /// to call, with no lock held, or none if the stream had already ended.
+        /// </summary>
+        public IList<Action<Exception>> SetEnding (Exception exn, bool announce = true, bool byClient = false)
+        {
+            lock (updateLock) {
+                if (ending != null)
+                    return new Action<Exception> [0];
+                ending = exn;
+                endedByClient = byClient;
+                if (announce)
+                    announcedEnding = exn;
+                var toCall = new List<Action<Exception>> (endCallbacks.Values);
+                endCallbacks.Clear ();
+                return toCall;
+            }
+        }
+
+        /// <summary>
         /// End the stream and wake its waiters. Returns the end callbacks to call, with no lock
-        /// held. Returns none if the stream had already ended.
+        /// held, or none if the stream had already ended.
         /// </summary>
         public IList<Action<Exception>> End (Exception exn)
         {
-            IList<Action<Exception>> toCall;
             lock (condition) {
-                lock (updateLock) {
-                    if (ending != null)
-                        return new Action<Exception> [0];
-                    ending = exn;
-                    toCall = new List<Action<Exception>> (endCallbacks.Values);
-                    endCallbacks.Clear ();
-                }
+                var toCall = SetEnding (exn, true, true);
                 Monitor.PulseAll (condition);
+                return toCall;
             }
-            return toCall;
         }
 
         public object Condition {
@@ -131,11 +232,12 @@ namespace KRPC.Client
         /// <summary>
         /// Wait on the condition, which the caller holds, until done returns true. Returns false
         /// when the timeout in seconds passes first, and throws the ending if the stream ends
-        /// first. A negative timeout waits indefinitely.
+        /// first. An infinite timeout waits indefinitely.
         /// </summary>
         public bool Wait (Func<bool> done, double timeout)
         {
-            var timer = timeout >= 0 ? Stopwatch.StartNew () : null;
+            CheckTimeout (timeout);
+            var timer = double.IsPositiveInfinity (timeout) ? null : Stopwatch.StartNew ();
             while (!done ()) {
                 ThrowIfEnded ();
                 if (timer == null) {
@@ -152,14 +254,25 @@ namespace KRPC.Client
         }
 
         /// <summary>
+        /// Throw ArgumentOutOfRangeException for a negative or NaN timeout.
+        /// </summary>
+        public static void CheckTimeout (double timeout)
+        {
+            if (double.IsNaN (timeout) || timeout < 0)
+                throw new System.ArgumentOutOfRangeException (
+                    nameof (timeout), timeout, "The timeout must not be negative or NaN");
+        }
+
+        /// <summary>
         /// A value callback, or an event callback that is passed only firings. The version is
         /// that of the last value passed to a value callback, or the firing count last passed to
         /// an event callback. The callback runs with the entry locked, so it runs on one thread
         /// at a time.
         /// </summary>
         /// <remarks>
-        /// While the adding thread makes the first call, the update thread queues its values in
-        /// Missed for the adding thread to pass on.
+        /// While the adding thread makes the first call, the dispatcher thread queues its values in
+        /// Missed for the adding thread to pass on, and leaves a server ending in EndCallbacks
+        /// and Ending for the adding thread to call the end callbacks with after them.
         /// </remarks>
         public sealed class Callback
         {
@@ -167,7 +280,11 @@ namespace KRPC.Client
             public bool Event;
             public long Version;
             public bool Adding;
-            public readonly Queue<KeyValuePair<long, object>> Missed = new Queue<KeyValuePair<long, object>> ();
+            // Whether the adding thread is passing on the values queued during the first call
+            public bool Draining;
+            public Queue<KeyValuePair<long, object>> Missed = new Queue<KeyValuePair<long, object>> ();
+            public IList<Action<Exception>> EndCallbacks;
+            public Exception Ending;
         }
 
         public IDictionary<int, Callback> Callbacks {
@@ -215,7 +332,7 @@ namespace KRPC.Client
                 var fired = Fired;
                 replay = 0;
                 // The reservation stops a concurrent add replaying the same firing
-                if (ending == null && fired > Math.Max (seen, Math.Max (CallbacksFired, replaying))) {
+                if (!endedByClient && fired > Math.Max (seen, Math.Max (CallbacksFired, replaying))) {
                     replaying = fired;
                     replay = fired;
                 }
@@ -252,8 +369,8 @@ namespace KRPC.Client
         /// callback, which is passed only firings. Called with no lock held.
         /// </summary>
         /// <remarks>
-        /// The first call, from the adding thread, skips the value if the update thread is
-        /// calling the callback, as that thread has a newer value. The update thread queues its
+        /// The first call, from the adding thread, skips the value if the dispatcher thread is
+        /// calling the callback, as that thread has a newer value. The dispatcher thread queues its
         /// values for the adding thread while the first call runs.
         /// </remarks>
         public void Call (Callback callback, long version, object value, bool added = false) {
@@ -262,11 +379,13 @@ namespace KRPC.Client
             if (added) {
                 if (!Monitor.TryEnter (callback))
                     return;
-            } else if (!EnterOnUpdateThread (callback, version, value))
+            } else if (!EnterOnDispatcherThread (callback, version, value))
                 return;
             try {
                 lock (updateLock) {
-                    if (ending != null || !NotePassed (callback, version))
+                    // A late event callback is passed an unseen firing after a server ending
+                    var ended = ending != null && (!added || endedByClient);
+                    if (ended || !NotePassed (callback, version))
                         return;
                     callback.Adding = added;
                 }
@@ -282,8 +401,10 @@ namespace KRPC.Client
                     if (added && !drained) {
                         lock (updateLock) {
                             callback.Adding = false;
+                            callback.Draining = false;
                             callback.Missed.Clear ();
                         }
+                        CallDeferredEnding (callback);
                     }
                 }
             } finally {
@@ -292,10 +413,10 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Take a callback's entry on the update thread. Returns false, without the entry, once
+        /// Take a callback's entry on the dispatcher thread. Returns false, without the entry, once
         /// the value is queued for the adding thread or the connection is closing.
         /// </summary>
-        bool EnterOnUpdateThread (Callback callback, long version, object value) {
+        bool EnterOnDispatcherThread (Callback callback, long version, object value) {
             while (!Monitor.TryEnter (callback, 10)) {
                 if (connection.StreamManager.CloseRequested)
                     return false;
@@ -310,26 +431,73 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Call a callback, on the adding thread, with the values the update thread queued
-        /// during its first call. A value queued before the stream ended is still passed on.
-        /// Called with the entry held.
+        /// Call a callback, on the adding thread, with the values the dispatcher thread queued
+        /// during its first call, then the end callbacks of a server ending that arrives
+        /// meanwhile. A value queued before the server ended the stream is still passed on, and a
+        /// remove or a close drops the queue. Adding is cleared in the hold that takes the queue,
+        /// so a value that arrives later waits for the entry on the dispatcher thread. Called
+        /// with the entry held.
         /// </summary>
         void CallMissed (Callback callback) {
-            while (true) {
-                object value;
-                lock (updateLock) {
-                    // Cleared with the queue found empty, so no value is queued after the drain
-                    if (callback.Missed.Count == 0) {
-                        callback.Adding = false;
-                        return;
-                    }
-                    var missed = callback.Missed.Dequeue ();
-                    if (!NotePassed (callback, missed.Key))
-                        continue;
-                    value = missed.Value;
-                }
-                StreamManager.InvokeCallback (callback.Fn, value);
+            Queue<KeyValuePair<long, object>> missed;
+            lock (updateLock) {
+                missed = callback.Missed;
+                callback.Missed = new Queue<KeyValuePair<long, object>> ();
+                callback.Adding = false;
+                callback.Draining = true;
             }
+            try {
+                foreach (var entry in missed) {
+                    lock (updateLock) {
+                        if (endedByClient)
+                            break;
+                        if (!NotePassed (callback, entry.Key))
+                            continue;
+                    }
+                    StreamManager.InvokeCallback (callback.Fn, entry.Value);
+                }
+            } finally {
+                lock (updateLock) {
+                    callback.Draining = false;
+                }
+            }
+            CallDeferredEnding (callback);
+        }
+
+        /// <summary>
+        /// Call the end callbacks of a server ending left to a callback's adding thread.
+        /// </summary>
+        void CallDeferredEnding (Callback callback) {
+            IList<Action<Exception>> endCallbacks;
+            Exception exn;
+            lock (updateLock) {
+                endCallbacks = callback.EndCallbacks;
+                exn = callback.Ending;
+                callback.EndCallbacks = null;
+                callback.Ending = null;
+            }
+            if (endCallbacks == null)
+                return;
+            foreach (var endCallback in endCallbacks)
+                StreamManager.InvokeEndCallback (endCallback, exn);
+        }
+
+        /// <summary>
+        /// Leave a server ending to a callback's adding thread, to call the end callbacks once
+        /// the values queued during the first call are passed. Returns false if no first call
+        /// is running.
+        /// </summary>
+        public bool DeferEnding (IList<Action<Exception>> endCallbacks, Exception exn) {
+            lock (updateLock) {
+                foreach (var callback in callbacks.Values) {
+                    if (callback.Adding || callback.Draining) {
+                        callback.EndCallbacks = endCallbacks;
+                        callback.Ending = exn;
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         /// <summary>
