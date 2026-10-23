@@ -12,6 +12,15 @@ v0.8.0 - unreleased
 -------------------
 
 
+Core
+^^^^
+
+* Exceptions
+
+  * Report the .NET exception each kRPC exception stands for, as ``mapped_type`` in ``KRPC.Exception`` (:issue:`1172`)
+
+
+
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
@@ -19,11 +28,43 @@ SpaceCenter service
 * Allow the rails warp rates the game allows the player, which ignore the altitude limits when the periapsis is clear of the atmosphere and terrain (:issue:`1167`)
 
 
+C# client
+^^^^^^^^^
+
+* Exceptions
+
+  * :breaking:`Breaking` Remove the trailing space after ``Server stack trace:`` in an exception's message, and separate its lines with ``\n`` on every platform (:issue:`1172`)
+
+
+
+C++ client
+^^^^^^^^^^
+
+* Exceptions
+
+  * :breaking:`Breaking` Derive the ``KRPC`` exceptions with a standard equivalent from it, e.g. ``ArgumentException`` from ``std::invalid_argument``, in place of ``RPCError`` (:issue:`1172`)
+  * :breaking:`Breaking` Add the server stack trace to an exception's message (:issue:`1172`)
+
+
+
+Java client
+^^^^^^^^^^^
+
+* Exceptions
+
+  * :breaking:`Breaking` Throw ``InvalidOperationException`` as ``IllegalStateException``, and ``ArgumentOutOfRangeException`` as ``IllegalArgumentException`` (:issue:`1172`)
+
+
+
 Python client
 ^^^^^^^^^^^^^
 
 * Write the units and formulas in service documentation as Unicode text in docstrings (:issue:`1169`)
 * Fix a ``SyntaxWarning`` for an invalid escape sequence on importing the ``SpaceCenter`` stubs (:issue:`1169`)
+* Exceptions
+
+  * Raise a ``KRPC`` exception as its own class, derived from the builtin it was raised as before, so ``except conn.krpc.ArgumentException`` catches it (:issue:`1172`)
+
 
 
 krpctools
@@ -31,6 +72,8 @@ krpctools
 
 * Add ``<unit>`` and a LaTeX subset for ``<math>`` to service documentation, typeset by ``krpc-docgen`` and written as Unicode text by ``krpc-clientgen`` (:issue:`1169`)
 * Report invalid documentation markup as an error from ``krpc-docgen``, and a warning from ``krpc-clientgen`` (:issue:`1169`)
+* Write the ``mapped_type`` of each exception to the service definitions (:issue:`1172`)
+* Generate Python, C++ and Java exceptions that stand for their language's equivalent (:issue:`1172`)
 
 
 v0.7.0
