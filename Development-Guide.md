@@ -2,12 +2,8 @@
 
 This document explains the structure of the kRPC codebase, how to build it and the various tools.
 
-If you are not already familiar with how kRPC works, it is recommended that you first read the
-documentation on the website:
-
- * [Extending kRPC](https://krpc.github.io/krpc/extending.html)
- * [Communication Protocols](https://krpc.github.io/krpc/communication-protocols.html)
- * [Server Performance](https://krpc.github.io/krpc/user-guide/server-performance.html)
+If you are not already familiar with how kRPC works, first read the Developer Guide section of the
+[documentation](https://krpc.github.io/krpc).
 
 ## Code Structure and Components
 
