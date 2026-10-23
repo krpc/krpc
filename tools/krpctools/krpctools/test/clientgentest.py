@@ -96,6 +96,9 @@ class ClientGenTestCase(_Base):
     def test_test_service(self):
         self.run_test("TestService", "TestService")
 
+    def test_krpc(self):
+        self.run_test("KRPC", "KRPC")
+
     def test_ordering(self):
         self.run_test("ServiceA", "Ordering")
 
