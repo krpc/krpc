@@ -105,7 +105,7 @@ bazel run //:run-ksp -- --load-game=krpctest --mods=RemoteTech
 bazel run //:test-ingame -- --no-launch service/RemoteTech/test/test_remotetech.py -v
 ```
 
- * `--no-launch` (`KRPC_AUTO_LAUNCH=0`) errors on a missing server instead of launching a second game.
+ * `--no-launch` (`KRPC_TEST_AUTO_LAUNCH=0`) errors on a missing server instead of launching a second game.
    Pass it whenever a game should already be up — a still-loading game looks like no game.
  * Only works for tests whose mod set the running game already has.
  * `//:run-ksp` builds, installs, launches, tails the kRPC log. `--load-game` brings the server up;

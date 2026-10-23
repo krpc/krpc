@@ -87,7 +87,7 @@ _unsatisfiable = set()
 
 
 def _address():
-    return os.environ.get("KRPC_ADDRESS", "127.0.0.1")
+    return os.environ.get("KRPC_TEST_ADDRESS", "127.0.0.1")
 
 
 def connect(use_cached=True):
@@ -101,15 +101,15 @@ def connect(use_cached=True):
 
 
 def _auto_launch_enabled():
-    return os.environ.get("KRPC_AUTO_LAUNCH", "1") != "0"
+    return os.environ.get("KRPC_TEST_AUTO_LAUNCH", "1") != "0"
 
 
 def _gamedata_check_enabled():
-    return os.environ.get("KRPC_SKIP_GAMEDATA_CHECK", "0") != "1"
+    return os.environ.get("KRPC_TEST_SKIP_GAMEDATA_CHECK", "0") != "1"
 
 
 def _skip_mod_install_enabled():
-    return os.environ.get("KRPC_SKIP_MOD_INSTALL", "0") == "1"
+    return os.environ.get("KRPC_TEST_SKIP_MOD_INSTALL", "0") == "1"
 
 
 def copy_blank_save(name, ksp_dir=None):
@@ -316,7 +316,7 @@ def ensure_game(mods=None):
     - Server up with the correct mods: return (the fast manual path, no restart).
     - Server up with the wrong mods: if this run started KSP, restart it with the
       correct mods; otherwise raise (never touch a manually-started game).
-    - No server: launch KSP with the required mods (unless KRPC_AUTO_LAUNCH=0).
+    - No server: launch KSP with the required mods (unless KRPC_TEST_AUTO_LAUNCH=0).
     """
     required = set(mods or [])
     _validate_mods(required)
@@ -341,7 +341,7 @@ def ensure_game(mods=None):
     elif not _auto_launch_enabled():
         raise RuntimeError(
             "No kRPC server is reachable and auto-launch is disabled (--no-launch or "
-            "KRPC_AUTO_LAUNCH=0). Start KSP first, e.g. `%s`, and wait for it to load."
+            "KRPC_TEST_AUTO_LAUNCH=0). Start KSP first, e.g. `%s`, and wait for it to load."
             % _run_ksp_command(
                 ("--mods=" + ",".join(sorted(required))) if required else ""
             )

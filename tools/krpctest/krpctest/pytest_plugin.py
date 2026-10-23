@@ -45,16 +45,16 @@ def pytest_configure(config):
     ksp_dir = config.getoption("--ksp-dir")
     if ksp_dir is not None:
         os.environ["KSP_DIR"] = ksp_dir
-    # Likewise, auto-launch is off when KRPC_AUTO_LAUNCH is 0. Use this when running against
+    # Likewise, auto-launch is off when KRPC_TEST_AUTO_LAUNCH is 0. Use this when running against
     # a game started separately: a game that is still loading has no server to connect to
     # yet, and without it the framework would launch a second game and reinstall the mod
     # underneath the first.
     if config.getoption("--no-launch"):
-        os.environ["KRPC_AUTO_LAUNCH"] = "0"
-    # Likewise, the GameData validity check is skipped when KRPC_SKIP_GAMEDATA_CHECK is 1.
+        os.environ["KRPC_TEST_AUTO_LAUNCH"] = "0"
+    # Likewise, the GameData validity check is skipped when KRPC_TEST_SKIP_GAMEDATA_CHECK is 1.
     # Use this to auto-launch with an unmanaged mod deliberately installed alongside kRPC.
     if config.getoption("--skip-gamedata-check"):
-        os.environ["KRPC_SKIP_GAMEDATA_CHECK"] = "1"
+        os.environ["KRPC_TEST_SKIP_GAMEDATA_CHECK"] = "1"
 
 
 def _mods_key(item):
