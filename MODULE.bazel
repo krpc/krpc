@@ -186,7 +186,7 @@ http_archive(
     build_file_content = "filegroup(name = 'plugin', srcs = glob(['generator/**']), visibility = ['//visibility:public'])",
     sha256 = "7e05f5908f0dff5d91cb90d11ca487876de8ec274695887959b3903e4b307887",
     strip_prefix = "nanopb-0.4.9.2-linux-x86",
-    url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.9.2-linux-x86.tar.gz",
+    url = "https://github.com/nanopb/nanopb/releases/download/nanopb-0.4.9.2/nanopb-0.4.9.2-linux-x86.tar.gz",
 )
 
 # ----------------------- C# dependencies ------------------------------------------------
@@ -398,7 +398,7 @@ filegroup(
 """,
     sha256 = "7e05f5908f0dff5d91cb90d11ca487876de8ec274695887959b3903e4b307887",
     strip_prefix = "nanopb-0.4.9.2-linux-x86",
-    url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.9.2-linux-x86.tar.gz",
+    url = "https://github.com/nanopb/nanopb/releases/download/nanopb-0.4.9.2/nanopb-0.4.9.2-linux-x86.tar.gz",
 )
 
 # ----------------------- Java dependencies ----------------------------------------------
