@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -849,21 +850,7 @@ namespace KRPC.SpaceCenter.Services
             // Not a valid factor
             if (factor < 0 || factor >= TimeWarpInstance.warpRates.Length)
                 return false;
-            if (!InFlight)
-                return true;
-            // Landed
-            var vessel = ActiveVessel.InternalVessel;
-            if (vessel.LandedOrSplashed)
-                return true;
-            // Below altitude limit
-            var altitude = vessel.mainBody.GetAltitude (vessel.CoM);
-            var altitudeLimit = TimeWarpInstance.GetAltitudeLimit (factor, vessel.mainBody);
-            if (altitude < altitudeLimit)
-                return false;
-            // Throttle is non-zero
-            if (FlightInputHandler.state.mainThrottle > 0f)
-                return false;
-            return true;
+            return RailsWarpLimit (factor) == factor;
         }
 
         /// <summary>
@@ -877,13 +864,30 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProperty (GameScene = WarpScenes)]
         public static int MaximumRailsWarpFactor {
-            get {
-                for (int i = TimeWarpInstance.warpRates.Length - 1; i > 0; i--) {
-                    if (CanRailsWarpAt (i))
-                        return i;
-                }
+            get { return RailsWarpLimit (TimeWarpInstance.warpRates.Length - 1); }
+        }
+
+        static readonly MethodInfo getMaxOnRailsRateIdx =
+            typeof (TimeWarp).GetMethod (
+                "getMaxOnRailsRateIdx",
+                BindingFlags.NonPublic | BindingFlags.Instance);
+
+        /// <summary>
+        /// The highest rails warp factor, up to <paramref name="factor"/>, that the game allows.
+        /// In flight this is the limit TimeWarp.SetRate applies, which depends on the
+        /// ORBIT_WARP_MAXRATE_MODE setting.
+        /// </summary>
+        static int RailsWarpLimit (int factor)
+        {
+            if (!InFlight)
+                return factor;
+            // Throttle is non-zero
+            if (!ActiveVessel.InternalVessel.LandedOrSplashed && FlightInputHandler.state.mainThrottle > 0f)
                 return 0;
-            }
+            if (getMaxOnRailsRateIdx == null)
+                throw new InvalidOperationException ("TimeWarp.getMaxOnRailsRateIdx not found");
+            // Parameters are the target factor, whether to look ahead along the orbit, and an out reason
+            return (int)getMaxOnRailsRateIdx.Invoke (TimeWarpInstance, new object [] { factor, true, null });
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import unittest
 from typing import TYPE_CHECKING
 
@@ -387,6 +388,12 @@ class RailsWarpTestBase(krpctest.Mixin):
     maximum_rails_warp_factor: int
     rails_rates = [1, 5, 10, 50, 100, 1000, 10000, 100000]
 
+    @classmethod
+    def wait_for_free_fall(cls, vessel):
+        # Setting the orbit leaves a g-force reading for a few frames, which blocks rails warp
+        flight = vessel.flight()
+        cls.wait_until(lambda: flight.g_force < 0.01, message="the g-force to settle")
+
     def wait_for_warp_rate(self, rate):
         # The game eases the warp rate to a new target over a second of game time
         self.wait_until(
@@ -537,8 +544,36 @@ class TestWarpInOrbit(WarpTestBase, krpctest.TestCase):
         cls.set_circular_orbit("Kerbin", 200000)
         cls.sc = cls.connect().space_center
         cls.vessel = cls.sc.active_vessel
-        cls.maximum_rails_warp_factor = 4
+        cls.wait_for_free_fall(cls.vessel)
+        # The periapsis is above the atmosphere, so the altitude limits do not apply
+        cls.maximum_rails_warp_factor = 7
         cls.landed = False
+
+
+class TestWarpInOrbitThroughAtmosphere(RailsWarpTestBase, krpctest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("Basic")
+        cls.remove_other_vessels()
+        # At the 200 km apoapsis of an orbit with a 60 km periapsis
+        radius = 600000
+        apoapsis = radius + 200000
+        periapsis = radius + 60000
+        semi_major_axis = (apoapsis + periapsis) / 2
+        eccentricity = (apoapsis - periapsis) / (apoapsis + periapsis)
+        cls.sc = cls.connect().space_center
+        cls.set_orbit(
+            "Kerbin", semi_major_axis, eccentricity, 0, 0, 0, math.pi, cls.sc.ut
+        )
+        cls.wait_for_free_fall(cls.sc.active_vessel)
+        # Kerbin's altitude limit for factor 5 is 240 km
+        cls.maximum_rails_warp_factor = 4
+
+    def test_warp_to(self):
+        ut = self.sc.ut + 60
+        self.sc.warp_to(ut)
+        self.assertAlmostEqual(ut, self.sc.ut, delta=2)
 
 
 class TestWarpInSpace(WarpTestBase, krpctest.TestCase):
@@ -550,6 +585,7 @@ class TestWarpInSpace(WarpTestBase, krpctest.TestCase):
         cls.set_circular_orbit("Kerbin", 700000)
         cls.sc = cls.connect().space_center
         cls.vessel = cls.sc.active_vessel
+        cls.wait_for_free_fall(cls.vessel)
         cls.maximum_rails_warp_factor = 7
         cls.landed = False
 
