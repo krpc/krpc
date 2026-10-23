@@ -1,3 +1,8 @@
+## [v0.8.0] - unreleased
+
+- Allow the rails warp rates the game allows the player, which ignore the altitude limits when
+  the periapsis is clear of the atmosphere and terrain (#1167)
+
 ## [v0.7.0]
 
 - Object lifetime
