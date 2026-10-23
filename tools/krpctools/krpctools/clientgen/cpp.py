@@ -174,10 +174,6 @@ class CppDocParser(DocParser):
     def parse_c(node):
         return node.text
 
-    @staticmethod
-    def parse_math(node):
-        return node.text
-
     def parse_list(self, node):
         content = [
             "- %s\n" % self.parse_node(item[0], indent=2)[2:].rstrip() for item in node

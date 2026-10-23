@@ -20,7 +20,13 @@ class DocumentationGenerator:
         node = self.root.find(path)
         if node is None:
             return ""
-        return self._generate(node)
+        try:
+            return self._generate(node)
+        except ValueError as error:
+            text = " ".join(ElementTree.tostring(node, encoding="unicode").split())
+            raise RuntimeError(
+                "Invalid documentation markup: %s, in %s" % (error, text)
+            ) from error
 
     def has(self, path="./summary"):
         if self.root is None:
@@ -49,11 +55,13 @@ class DocumentationGenerator:
         if node.tag == "c":
             return self.domain.code(node.text)
         if node.tag == "math":
-            return self.domain.math(node.text)
+            return self.domain.math(node.text or "")
+        if node.tag == "unit":
+            return self.domain.unit(node.text or "")
         if node.tag == "list":
             content = [
                 "* %s\n" % indent(self._generate(item[0]), width=2)[2:].rstrip()
                 for item in node
             ]
             return "\n" + "".join(content)
-        raise RuntimeError("Unknown node '%s'" % node.tag)
+        raise ValueError("unknown tag '%s'" % node.tag)

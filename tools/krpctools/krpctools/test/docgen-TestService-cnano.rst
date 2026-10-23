@@ -1075,7 +1075,8 @@ Service documentation string.
 
    .. macro:: KRPC_TESTSERVICE_TESTENUM_VALUEC
 
-      Enum ValueC documentation string.
+      Enum ValueC documentation string, in :math:`\mathrm{m/s^{2}}`, equal to
+      :math:`\frac{1}{2} \rho v^{2}`.
 
 
 

@@ -1008,6 +1008,38 @@ Documentation can be added using `C# XML documentation
 as the Python and Lua clients, the documentation will be automatically exported to clients when they
 connect.
 
+Units and formulas are marked up with ``<unit>`` and ``<math>`` tags:
+
+.. literalinclude:: /scripts/extending/Documentation.lib.cs
+   :language: csharp
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
+
+The API reference typesets them, and client documentation shows them as text, such as ``m/s²`` and
+``N·m``. A unit is set upright, and a ``.`` in it joins two factors, as in ``N.m``. Both tags
+hold a subset of LaTeX:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Markup
+     - Example
+   * - Superscripts and subscripts
+     - ``m^3.s^{-2}``, ``\omega_{max}``
+   * - Fractions and roots
+     - ``\frac{1}{2}``, ``\sqrt{x + y}``
+   * - Text
+     - ``\text{air density}``
+   * - Operators
+     - ``\cdot``, ``\times``, ``\pm``, ``\le``, ``\ge``, ``\approx``, ``\infty``, ``\degree``
+   * - Greek letters
+     - ``\alpha`` to ``\omega``, and the capitals LaTeX names, such as ``\Delta``
+
+A superscript or subscript must have a Unicode form, so ``^2`` and ``_{max}`` work but ``^q`` does
+not. The documentation build rejects markup outside the subset, and ``krpc-clientgen`` warns about
+it and writes it as text.
+
 Further Examples
 ----------------
 
