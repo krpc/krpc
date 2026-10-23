@@ -189,21 +189,21 @@ Editor
    .. method:: float getMass()
 
 
-      The total mass of the vessel, including resources and crew, in kg.
+      The total mass of the vessel, including resources and crew, in :math:`\mathrm{kg}`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
    .. method:: float getDryMass()
 
 
-      The total mass of the vessel, excluding resources, in kg.
+      The total mass of the vessel, excluding resources, in :math:`\mathrm{kg}`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getMomentOfInertia()
 
 
-      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The moment of inertia of the vessel around its center of mass in :math:`\mathrm{kg \cdot m^{2}}`.
       The inertia values in the returned 3-tuple are around the
       pitch, roll and yaw directions respectively.
       This corresponds to the vessels reference frame (:meth:`EditorVessel.getReferenceFrame()`).
@@ -293,7 +293,7 @@ Editor
       The rotation of the vessel, in the given reference frame.
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned rotation is in.
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> direction(ReferenceFrame referenceFrame)
@@ -403,21 +403,21 @@ Editor
 
 
       Total delta-v for the vessel in the situation the game's delta-v readout
-      assumes, in m/s. See :meth:`Editor.getDeltaVBody()`.
+      assumes, in :math:`\mathrm{m/s}`. See :meth:`Editor.getDeltaVBody()`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
    .. method:: float getVacuumDeltaV()
 
 
-      Total vacuum delta-v for the vessel, in m/s.
+      Total vacuum delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
    .. method:: float getSeaLevelDeltaV()
 
 
-      Total sea-level delta-v for the vessel, in m/s.
+      Total sea-level delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
@@ -474,7 +474,7 @@ Editor
 
       The rotation of the vessel, in the reference frame :type:`ReferenceFrame`
 
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getDirection()
@@ -519,7 +519,7 @@ Editor
 
 
       The volume of water the vessel displaces when fully submerged, in
-      :math:`m^3`.
+      :math:`\mathrm{m^{3}}`.
 
       :Game Scenes: Editor Vab, Editor Sph
 
@@ -544,8 +544,8 @@ Editor
       The buoyant force on the vessel when fully submerged in a fluid of the given
       density, in Newtons.
 
-      :param double density: The density of the fluid, in :math:`kg/m^3`.
-      :param double gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :param double density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+      :param double gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
       :Game Scenes: Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> buoyantTorqueAt(double density, double gravity)
@@ -555,7 +555,7 @@ Editor
       :type:`ReferenceFrame`. Gravity acts along the negative x-axis of
       :meth:`SimulatedFlight.getSurfaceReferenceFrame()`.
 
-      :param double density: The density of the fluid, in :math:`kg/m^3`.
-      :param double gravity: The acceleration due to gravity, in :math:`m/s^2`.
-      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :param double density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+      :param double gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`.
       :Game Scenes: Editor Vab, Editor Sph

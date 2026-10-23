@@ -179,7 +179,8 @@ Servo
 
    .. function:: krpc_error_t krpc_InfernalRobotics_Servo_ElectricChargeRequired(krpc_connection_t connection, float * returnValue, krpc_InfernalRobotics_Servo_t instance)
 
-      The rate at which the servo consumes electric charge, in units per second, when moving.
+      The rate at which the servo consumes electric charge, in :math:`\mathrm{units/s}`,
+      when moving.
 
       :Game Scenes: Flight
 

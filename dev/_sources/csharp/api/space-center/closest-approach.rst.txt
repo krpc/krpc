@@ -45,8 +45,8 @@ Closest Approach
 
    .. property:: double RelativeSpeed { get; }
 
-      The relative speed of the objects at the closest approach, in meters per
-      second. This is the magnitude of :meth:`ClosestApproach.RelativeVelocity`, and does
+      The relative speed of the objects at the closest approach, in :math:`\mathrm{m/s}`.
+      This is the magnitude of :meth:`ClosestApproach.RelativeVelocity`, and does
       not depend on the choice of reference frame.
 
       :Game Scenes: All

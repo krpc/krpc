@@ -737,14 +737,16 @@ See <a class="reference internal" href="space-center.html#krpc.client.services.S
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.getGravitationalParameter()">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getGravitationalParameter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.getGravitationalParameter()" title="Link to this definition">#</a></dt>
-<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Standard_gravitational_parameter">standard gravitational parameter</a> of the body in <span class="math notranslate nohighlight">\(m^3s^{-2}\)</span>.</p>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Standard_gravitational_parameter">standard gravitational parameter</a> of the body in <span class="math notranslate nohighlight">\(\mathrm{m^{3} \cdot s^{-2}}\)</span>.
+This is <span class="math notranslate nohighlight">\(GM\)</span>, where <span class="math notranslate nohighlight">\(G\)</span> is the gravitational constant and
+<span class="math notranslate nohighlight">\(M\)</span> the mass of the body.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.getSurfaceGravity()">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getSurfaceGravity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.getSurfaceGravity()" title="Link to this definition">#</a></dt>
 <dd><p>The acceleration due to gravity at sea level (mean altitude) on the body,
-in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p>
+in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -756,21 +758,21 @@ in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.getRotationalSpeed()">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getRotationalSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.getRotationalSpeed()" title="Link to this definition">#</a></dt>
-<dd><p>The rotational speed of the body, in radians per second.</p>
+<dd><p>The rotational speed of the body, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.getRotationAngle()">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getRotationAngle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.getRotationAngle()" title="Link to this definition">#</a></dt>
 <dd><p>The current rotation angle of the body, in radians.
-A value between 0 and 2 pi.</p>
+A value between 0 and <span class="math notranslate nohighlight">\(2\pi\)</span>.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.getInitialRotation()">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getInitialRotation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.getInitialRotation()" title="Link to this definition">#</a></dt>
 <dd><p>The initial rotation angle of the body (at UT 0), in radians.
-A value between 0 and 2 pi.</p>
+A value between 0 and <span class="math notranslate nohighlight">\(2\pi\)</span>.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -1054,14 +1056,14 @@ when over water.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.getOceanDensity()">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getOceanDensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.getOceanDensity()" title="Link to this definition">#</a></dt>
-<dd><p>The density of the body’s ocean, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.
+<dd><p>The density of the body’s ocean, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>.
 Returns zero if the body has no ocean.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.atmosphericDensityAtPosition(org.javatuples.Triplet, ReferenceFrame)">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">atmosphericDensityAtPosition</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="https://javadoc.io/static/org.javatuples/javatuples/1.2/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">position</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.atmosphericDensityAtPosition(org.javatuples.Triplet, ReferenceFrame)" title="Link to this definition">#</a></dt>
-<dd><p>The atmospheric density at the given position, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>,
+<dd><p>The atmospheric density at the given position, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>,
 in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1100,7 +1102,7 @@ in the given reference frame.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.CelestialBody.densityAt(double)">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">densityAt</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">altitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.CelestialBody.densityAt(double)" title="Link to this definition">#</a></dt>
-<dd><p>Gets the air density, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>, for the specified
+<dd><p>Gets the air density, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>, for the specified
 altitude above sea level, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1254,7 +1256,7 @@ directions.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.</p>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1270,7 +1272,7 @@ directions.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
+<dd class="field-even"><p>The rotation as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1303,7 +1305,7 @@ in the specified reference frame.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The angular velocity as a vector. The magnitude of the vector is the rotational speed of the body, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.</p>
+<dd class="field-even"><p>The angular velocity as a vector. The magnitude of the vector is the rotational speed of the body, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>. The direction of the vector indicates the axis of rotation, using the right-hand rule.</p>
 </dd>
 </dl>
 </dd></dl>

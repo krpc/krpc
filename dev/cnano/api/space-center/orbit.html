@@ -42,6 +42,7 @@
     <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cnano/api/space-center/orbit';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -722,7 +723,7 @@ be at any later time.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>body</strong> – The celestial body being orbited.</p></li>
 <li><p><strong>position</strong> – The position, as a position vector.</p></li>
-<li><p><strong>velocity</strong> – The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.</p></li>
+<li><p><strong>velocity</strong> – The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p></li>
 <li><p><strong>ut</strong> – The universal time, in seconds, at which the object is at <em>position</em> traveling at <em>velocity</em>.</p></li>
 <li><p><strong>referenceFrame</strong> – The reference frame that <em>position</em> and <em>velocity</em> are in. Defaults to <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame()</span></code> of <em>body</em>.</p></li>
 </ul>
@@ -1031,7 +1032,7 @@ frame.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.</p>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1048,7 +1049,7 @@ frame.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.</p>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1066,7 +1067,7 @@ reference frame.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.</p>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1074,7 +1075,7 @@ reference frame.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_Speed">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_Speed</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_Speed" title="Link to this definition">#</a><br /></dt>
-<dd><p>The current orbital speed of the object in meters per second.</p>
+<dd><p>The current orbital speed of the object in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This value will change over time if the orbit is elliptical.</p>
@@ -1084,7 +1085,7 @@ reference frame.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpeedAt">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_SpeedAt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpeedAt" title="Link to this definition">#</a><br /></dt>
-<dd><p>The orbital speed at the given time, in meters per second.</p>
+<dd><p>The orbital speed at the given time, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1097,7 +1098,7 @@ reference frame.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpeedAtRadius">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_SpeedAtRadius</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">radius</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpeedAtRadius" title="Link to this definition">#</a><br /></dt>
-<dd><p>The orbital speed at the given orbital radius, in meters per second.</p>
+<dd><p>The orbital speed at the given orbital radius, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1115,8 +1116,8 @@ an ellipse the speed is <code class="docutils literal notranslate"><span class="
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpeedAtTrueAnomaly">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_SpeedAtTrueAnomaly</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">trueAnomaly</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpeedAtTrueAnomaly" title="Link to this definition">#</a><br /></dt>
-<dd><p>The orbital speed at the point in the orbit given by the true anomaly, in meters
-per second.</p>
+<dd><p>The orbital speed at the point in the orbit given by the true anomaly, in
+<span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1129,19 +1130,20 @@ per second.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpecificEnergy">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_SpecificEnergy</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpecificEnergy" title="Link to this definition">#</a><br /></dt>
-<dd><p>The specific orbital energy, in Joules per kilogram (equivalently,
-meters squared per second squared).</p>
+<dd><p>The specific orbital energy, in <span class="math notranslate nohighlight">\(\mathrm{J/kg}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is the sum of the orbit’s specific kinetic and potential energy, and
-is negative for a bound (elliptical) orbit.</p>
+<p>This is the sum of the orbit’s specific kinetic and potential energy,
+<span class="math notranslate nohighlight">\(v^{2}/2 - \mu/r\)</span>, where <span class="math notranslate nohighlight">\(v\)</span> is the orbital speed,
+<span class="math notranslate nohighlight">\(\mu\)</span> the gravitational parameter of the body and <span class="math notranslate nohighlight">\(r\)</span> the
+orbital radius. It is negative for a bound (elliptical) orbit.</p>
 </div>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpecificAngularMomentum">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_SpecificAngularMomentum</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpecificAngularMomentum" title="Link to this definition">#</a><br /></dt>
-<dd><p>The specific relative angular momentum, in meters squared per second.</p>
+<dd><p>The specific relative angular momentum, in <span class="math notranslate nohighlight">\(\mathrm{m^{2}/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -1153,7 +1155,7 @@ is negative for a bound (elliptical) orbit.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_MeanMotion">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_MeanMotion</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_MeanMotion" title="Link to this definition">#</a><br /></dt>
-<dd><p>The mean motion, in radians per second.</p>
+<dd><p>The mean motion, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -1335,7 +1337,7 @@ is measured.</p>
 <p class="admonition-title">Warning</p>
 <p>Deprecated. Use <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_Speed" title="krpc_SpaceCenter_Orbit_Speed"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_Speed()</span></code></a> instead.</p>
 </div>
-<p>The current orbital speed in meters per second.</p>
+<p>The current orbital speed in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -1345,7 +1347,7 @@ is measured.</p>
 <p class="admonition-title">Warning</p>
 <p>Deprecated. Use <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpeedAt" title="krpc_SpaceCenter_Orbit_SpeedAt"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_SpeedAt()</span></code></a> instead.</p>
 </div>
-<p>The orbital speed at the given time, in meters per second.</p>
+<p>The orbital speed at the given time, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1362,7 +1364,7 @@ is measured.</p>
 <p class="admonition-title">Warning</p>
 <p>Deprecated. Use <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_SpecificEnergy" title="krpc_SpaceCenter_Orbit_SpecificEnergy"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_SpecificEnergy()</span></code></a> instead.</p>
 </div>
-<p>The specific orbital energy of the orbit, in Joules per kilogram.</p>
+<p>The specific orbital energy of the orbit, in <span class="math notranslate nohighlight">\(\mathrm{J/kg}\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">

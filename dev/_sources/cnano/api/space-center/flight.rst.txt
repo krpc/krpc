@@ -19,7 +19,7 @@ Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_GForce(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
-      The current G force acting on the vessel in :math:`g`.
+      The current G force acting on the vessel in :math:`\mathrm{g}`.
 
       :Game Scenes: Flight
 
@@ -76,26 +76,26 @@ Flight
 
       The velocity of the vessel, in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
 
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the vessel in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the vessel in :math:`\mathrm{m/s}`.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_Speed(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Flight_t instance)
 
-      The speed of the vessel in meters per second,
+      The speed of the vessel in :math:`\mathrm{m/s}`,
       in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
 
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_HorizontalSpeed(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Flight_t instance)
 
-      The horizontal speed of the vessel in meters per second,
+      The horizontal speed of the vessel in :math:`\mathrm{m/s}`,
       in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
 
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_VerticalSpeed(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Flight_t instance)
 
-      The vertical speed of the vessel in meters per second,
+      The vertical speed of the vessel in :math:`\mathrm{m/s}`,
       in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
 
       :Game Scenes: Flight
@@ -106,7 +106,7 @@ Flight
       This is the total acceleration, including the acceleration due to gravity, and is the
       time derivative of :func:`krpc_SpaceCenter_Flight_Velocity`.
 
-      :returns: The acceleration as a vector. The vector points in the direction of the acceleration, and its magnitude is the acceleration of the vessel in :math:`m/s^2`.
+      :returns: The acceleration as a vector. The vector points in the direction of the acceleration, and its magnitude is the acceleration of the vessel in :math:`\mathrm{m/s^{2}}`.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_CenterOfMass(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Flight_t instance)
@@ -121,7 +121,7 @@ Flight
 
       The rotation of the vessel, in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`
 
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Flight_t instance)
@@ -255,15 +255,15 @@ Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_AtmosphereDensity(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
-      The current density of the atmosphere around the vessel, in :math:`kg/m^3`.
+      The current density of the atmosphere around the vessel, in :math:`\mathrm{kg/m^{3}}`.
 
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_DynamicPressure(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
       The dynamic pressure acting on the vessel, in Pascals. This is a measure of the
-      strength of the aerodynamic forces. It is equal to
-      :math:`\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2`.
+      strength of the aerodynamic forces. It is equal to :math:`\frac{1}{2} \rho v^{2}`,
+      where :math:`\rho` is the air density and :math:`v` the velocity.
       It is commonly denoted :math:`Q`.
 
       :Game Scenes: Flight
@@ -289,13 +289,13 @@ Flight
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_Displacement(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Flight_t instance)
 
       The volume of water the vessel displaces when fully submerged, in
-      :math:`m^3`.
+      :math:`\mathrm{m^{3}}`.
 
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_DisplacedVolume(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Flight_t instance)
 
-      The volume of water the vessel is displacing, in :math:`m^3`.
+      The volume of water the vessel is displacing, in :math:`\mathrm{m^{3}}`.
 
       :Game Scenes: Flight
 
@@ -341,7 +341,7 @@ Flight
       (:func:`krpc_SpaceCenter_Flight_BuoyantForce` divided by the vessel's mass),
       in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
 
-      :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`m/s^2`.
+      :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`\mathrm{m/s^{2}}`.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_BuoyantTorque(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Flight_t instance)
@@ -349,7 +349,7 @@ Flight
       The torque the buoyant force exerts on the vessel about its center of mass,
       in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
 
-      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_FullySubmergedCenterOfBuoyancy(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, bool * returnValueIsNull, krpc_SpaceCenter_Flight_t instance)
@@ -374,8 +374,8 @@ Flight
 
       :Parameters:
 
-       * **density** -- The density of the fluid, in :math:`kg/m^3`.
-       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+       * **density** -- The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+       * **gravity** -- The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
 
       :Game Scenes: Flight
 
@@ -387,10 +387,10 @@ Flight
 
       :Parameters:
 
-       * **density** -- The density of the fluid, in :math:`kg/m^3`.
-       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+       * **density** -- The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+       * **gravity** -- The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
 
-      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_Depth(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Flight_t instance)
@@ -427,9 +427,9 @@ Flight
 
       The net aerodynamic torque currently acting on the vessel about its center of
       mass, in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`. The magnitude is in
-      newton-meters.
+      :math:`\mathrm{N \cdot m}`.
 
-      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`.
       :Game Scenes: Flight
 
 
@@ -482,7 +482,7 @@ Flight
        * **rotation** -- The orientation of the vessel, in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`, in the same form as :func:`krpc_SpaceCenter_Vessel_Rotation`. Pass the vessel's current rotation to evaluate the torque at its current orientation.
        * **angularVelocity** -- The angular velocity of the vessel, in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`. This adds the solid-body rotation term to each part's local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping torque. Pass a zero vector to evaluate the static torque.
 
-      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters, in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`, in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
       :Game Scenes: Flight
 
 
@@ -583,7 +583,7 @@ Flight
       (:func:`krpc_SpaceCenter_Flight_AerodynamicForce` divided by the vessel's mass),
       in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
 
-      :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`m/s^2`.
+      :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`\mathrm{m/s^{2}}`.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_LiftAcceleration(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Flight_t instance)
@@ -592,7 +592,7 @@ Flight
       (the aerodynamic lift divided by the vessel's mass),
       in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
 
-      :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`m/s^2`.
+      :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`\mathrm{m/s^{2}}`.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_DragAcceleration(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Flight_t instance)
@@ -601,12 +601,12 @@ Flight
       (the aerodynamic drag divided by the vessel's mass),
       in reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.
 
-      :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`m/s^2`.
+      :returns: A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in :math:`\mathrm{m/s^{2}}`.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_SpeedOfSound(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
-      The speed of sound, in the atmosphere around the vessel, in :math:`m/s`.
+      The speed of sound, in the atmosphere around the vessel, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
@@ -630,20 +630,20 @@ Flight
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_TrueAirSpeed(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
       The `true air speed <https://en.wikipedia.org/wiki/True_airspeed>`_
-      of the vessel, in meters per second.
+      of the vessel, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_EquivalentAirSpeed(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
       The `equivalent air speed <https://en.wikipedia.org/wiki/Equivalent_airspeed>`_
-      of the vessel, in meters per second.
+      of the vessel, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_TerminalVelocity(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Flight_t instance)
 
-      An estimate of the current terminal velocity of the vessel, in meters per second.
+      An estimate of the current terminal velocity of the vessel, in :math:`\mathrm{m/s}`.
       This is the speed at which the drag forces cancel out the force of gravity.
 
       :Game Scenes: Flight
@@ -749,4 +749,4 @@ Flight
 
    .. member:: krpc_tuple_double_double_double_t torque
 
-      The torque, in Newton meters.
+      The torque, in :math:`\mathrm{N \cdot m}`.

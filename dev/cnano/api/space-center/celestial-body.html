@@ -737,14 +737,16 @@ See <a class="reference internal" href="space-center.html#c.krpc_SpaceCenter_Bod
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_GravitationalParameter">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_GravitationalParameter</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_GravitationalParameter" title="Link to this definition">#</a><br /></dt>
-<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Standard_gravitational_parameter">standard gravitational parameter</a> of the body in <span class="math notranslate nohighlight">\(m^3s^{-2}\)</span>.</p>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Standard_gravitational_parameter">standard gravitational parameter</a> of the body in <span class="math notranslate nohighlight">\(\mathrm{m^{3} \cdot s^{-2}}\)</span>.
+This is <span class="math notranslate nohighlight">\(GM\)</span>, where <span class="math notranslate nohighlight">\(G\)</span> is the gravitational constant and
+<span class="math notranslate nohighlight">\(M\)</span> the mass of the body.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_SurfaceGravity">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_SurfaceGravity</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_SurfaceGravity" title="Link to this definition">#</a><br /></dt>
 <dd><p>The acceleration due to gravity at sea level (mean altitude) on the body,
-in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p>
+in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -756,21 +758,21 @@ in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_RotationalSpeed">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_RotationalSpeed</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_RotationalSpeed" title="Link to this definition">#</a><br /></dt>
-<dd><p>The rotational speed of the body, in radians per second.</p>
+<dd><p>The rotational speed of the body, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_RotationAngle">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_RotationAngle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_RotationAngle" title="Link to this definition">#</a><br /></dt>
 <dd><p>The current rotation angle of the body, in radians.
-A value between 0 and 2 pi.</p>
+A value between 0 and <span class="math notranslate nohighlight">\(2\pi\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_InitialRotation">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_InitialRotation</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_InitialRotation" title="Link to this definition">#</a><br /></dt>
 <dd><p>The initial rotation angle of the body (at UT 0), in radians.
-A value between 0 and 2 pi.</p>
+A value between 0 and <span class="math notranslate nohighlight">\(2\pi\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -1054,14 +1056,14 @@ when over water.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_OceanDensity">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_OceanDensity</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_OceanDensity" title="Link to this definition">#</a><br /></dt>
-<dd><p>The density of the body’s ocean, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.
+<dd><p>The density of the body’s ocean, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>.
 Returns zero if the body has no ocean.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_AtmosphericDensityAtPosition">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_AtmosphericDensityAtPosition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">position</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_AtmosphericDensityAtPosition" title="Link to this definition">#</a><br /></dt>
-<dd><p>The atmospheric density at the given position, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>,
+<dd><p>The atmospheric density at the given position, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>,
 in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1100,7 +1102,7 @@ in the given reference frame.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_DensityAt">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_DensityAt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">altitude</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_DensityAt" title="Link to this definition">#</a><br /></dt>
-<dd><p>Gets the air density, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>, for the specified
+<dd><p>Gets the air density, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>, for the specified
 altitude above sea level, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1244,7 +1246,7 @@ directions.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.</p>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1260,7 +1262,7 @@ directions.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
+<dd class="field-even"><p>The rotation as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1293,7 +1295,7 @@ in the specified reference frame.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The angular velocity as a vector. The magnitude of the vector is the rotational speed of the body, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.</p>
+<dd class="field-even"><p>The angular velocity as a vector. The magnitude of the vector is the rotational speed of the body, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>. The direction of the vector indicates the axis of rotation, using the right-hand rule.</p>
 </dd>
 </dl>
 </dd></dl>

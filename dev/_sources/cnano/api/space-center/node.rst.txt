@@ -14,7 +14,7 @@ Node
    .. function:: krpc_error_t krpc_SpaceCenter_Node_set_Prograde(krpc_connection_t connection, krpc_SpaceCenter_Node_t instance, double value)
 
       The magnitude of the maneuver nodes delta-v in the prograde direction,
-      in meters per second.
+      in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
@@ -22,7 +22,7 @@ Node
    .. function:: krpc_error_t krpc_SpaceCenter_Node_set_Normal(krpc_connection_t connection, krpc_SpaceCenter_Node_t instance, double value)
 
       The magnitude of the maneuver nodes delta-v in the normal direction,
-      in meters per second.
+      in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
@@ -30,14 +30,14 @@ Node
    .. function:: krpc_error_t krpc_SpaceCenter_Node_set_Radial(krpc_connection_t connection, krpc_SpaceCenter_Node_t instance, double value)
 
       The magnitude of the maneuver nodes delta-v in the radial direction,
-      in meters per second.
+      in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Node_DeltaV(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Node_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_Node_set_DeltaV(krpc_connection_t connection, krpc_SpaceCenter_Node_t instance, double value)
 
-      The delta-v of the maneuver node, in meters per second.
+      The delta-v of the maneuver node, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
@@ -48,7 +48,7 @@ Node
 
    .. function:: krpc_error_t krpc_SpaceCenter_Node_RemainingDeltaV(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Node_t instance)
 
-      Gets the remaining delta-v of the maneuver node, in meters per second. Changes as the
+      Gets the remaining delta-v of the maneuver node, in :math:`\mathrm{m/s}`. Changes as the
       node is executed. This is equivalent to the delta-v reported in-game.
 
       :Game Scenes: Flight
@@ -61,7 +61,7 @@ Node
 
        * **referenceFrame** -- The reference frame that the returned vector is in. Defaults to :func:`krpc_SpaceCenter_Vessel_OrbitalReferenceFrame`.
 
-      :returns: A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in meters per second.
+      :returns: A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in :math:`\mathrm{m/s}`.
       :Game Scenes: Flight
 
 
@@ -77,7 +77,7 @@ Node
 
        * **referenceFrame** -- The reference frame that the returned vector is in. Defaults to :func:`krpc_SpaceCenter_Vessel_OrbitalReferenceFrame`.
 
-      :returns: A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in meters per second.
+      :returns: A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in :math:`\mathrm{m/s}`.
       :Game Scenes: Flight
 
 
@@ -156,7 +156,7 @@ Node
 
        * **referenceFrame** -- The reference frame that the returned rotation is in.
 
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Node_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Node_t instance, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)

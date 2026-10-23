@@ -262,7 +262,7 @@ colors other services use.
 
 .. staticmethod:: atan2(y, x)
 
-   The angle, in radians, between the positive x axis and the point (x, y).
+   The angle, in radians, between the positive x axis and the point ``(x, y)``.
 
    :param float y: The y coordinate.
    :param float x: The x coordinate.
@@ -505,7 +505,7 @@ colors other services use.
 
 .. staticmethod:: vector_angle(u, v)
 
-   The angle between two vectors, in radians, between 0 and pi.
+   The angle between two vectors, in radians, between 0 and :math:`\pi`.
 
    :param tuple u: The first vector.
    :param tuple v: The second vector.
@@ -654,7 +654,7 @@ colors other services use.
 .. staticmethod:: quaternion_angle(q, r)
 
    The angle of the rotation that takes one rotation to another,
-   in radians, between 0 and pi.
+   in radians, between 0 and :math:`\pi`.
 
    :param tuple q: The first rotation.
    :param tuple r: The second rotation.
@@ -717,7 +717,7 @@ colors other services use.
 
    .. attribute:: angle
 
-      The angle of the rotation, in radians between 0 and pi.
+      The angle of the rotation, in radians between 0 and :math:`\pi`.
 
       :rtype: float
 

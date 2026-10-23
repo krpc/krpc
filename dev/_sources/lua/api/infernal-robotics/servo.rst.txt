@@ -197,7 +197,8 @@ Servo
 
    .. attribute:: electric_charge_required: number
 
-      The rate at which the servo consumes electric charge, in units per second, when moving.
+      The rate at which the servo consumes electric charge, in :math:`\mathrm{units/s}`,
+      when moving.
 
       :Attribute: Read-only, cannot be set
       :rtype: number

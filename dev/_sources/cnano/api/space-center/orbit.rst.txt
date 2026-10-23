@@ -23,7 +23,7 @@ Orbit
 
        * **body** -- The celestial body being orbited.
        * **position** -- The position, as a position vector.
-       * **velocity** -- The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.
+       * **velocity** -- The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in :math:`\mathrm{m/s}`.
        * **ut** -- The universal time, in seconds, at which the object is at *position* traveling at *velocity*.
        * **referenceFrame** -- The reference frame that *position* and *velocity* are in. Defaults to :func:`krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame` of *body*.
 
@@ -308,7 +308,7 @@ Orbit
 
        * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to :func:`krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame` of :func:`krpc_SpaceCenter_Orbit_Body`.
 
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
    
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_VelocityAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Orbit_t instance, double ut, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
@@ -320,7 +320,7 @@ Orbit
        * **ut** -- The universal time to measure the velocity at.
        * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to :func:`krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame` of :func:`krpc_SpaceCenter_Orbit_Body`.
 
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
    
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_VelocityAtTrueAnomaly(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_Orbit_t instance, double trueAnomaly, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
@@ -333,12 +333,12 @@ Orbit
        * **trueAnomaly** -- The true anomaly.
        * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to :func:`krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame` of :func:`krpc_SpaceCenter_Orbit_Body`.
 
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
    
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Speed(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Orbit_t instance)
 
-      The current orbital speed of the object in meters per second.
+      The current orbital speed of the object in :math:`\mathrm{m/s}`.
 
    
 
@@ -348,7 +348,7 @@ Orbit
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_SpeedAt(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Orbit_t instance, double ut)
 
-      The orbital speed at the given time, in meters per second.
+      The orbital speed at the given time, in :math:`\mathrm{m/s}`.
 
       :Parameters:
 
@@ -358,7 +358,7 @@ Orbit
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_SpeedAtRadius(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Orbit_t instance, double radius)
 
-      The orbital speed at the given orbital radius, in meters per second.
+      The orbital speed at the given orbital radius, in :math:`\mathrm{m/s}`.
 
       :Parameters:
 
@@ -373,8 +373,8 @@ Orbit
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_SpeedAtTrueAnomaly(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Orbit_t instance, double trueAnomaly)
 
-      The orbital speed at the point in the orbit given by the true anomaly, in meters
-      per second.
+      The orbital speed at the point in the orbit given by the true anomaly, in
+      :math:`\mathrm{m/s}`.
 
       :Parameters:
 
@@ -384,19 +384,20 @@ Orbit
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_SpecificEnergy(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Orbit_t instance)
 
-      The specific orbital energy, in Joules per kilogram (equivalently,
-      meters squared per second squared).
+      The specific orbital energy, in :math:`\mathrm{J/kg}`.
 
    
 
       .. note::
 
-         This is the sum of the orbit's specific kinetic and potential energy, and
-         is negative for a bound (elliptical) orbit.
+         This is the sum of the orbit's specific kinetic and potential energy,
+         :math:`v^{2}/2 - \mu/r`, where :math:`v` is the orbital speed,
+         :math:`\mu` the gravitational parameter of the body and :math:`r` the
+         orbital radius. It is negative for a bound (elliptical) orbit.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_SpecificAngularMomentum(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Orbit_t instance)
 
-      The specific relative angular momentum, in meters squared per second.
+      The specific relative angular momentum, in :math:`\mathrm{m^{2}/s}`.
 
    
 
@@ -408,7 +409,7 @@ Orbit
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_MeanMotion(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_Orbit_t instance)
 
-      The mean motion, in radians per second.
+      The mean motion, in :math:`\mathrm{rad/s}`.
 
    
 
@@ -567,7 +568,7 @@ Orbit
 
       .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_Orbit_Speed` instead.
 
-      The current orbital speed in meters per second.
+      The current orbital speed in :math:`\mathrm{m/s}`.
 
    
 
@@ -575,7 +576,7 @@ Orbit
 
       .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_Orbit_SpeedAt` instead.
 
-      The orbital speed at the given time, in meters per second.
+      The orbital speed at the given time, in :math:`\mathrm{m/s}`.
 
       :Parameters:
 
@@ -587,7 +588,7 @@ Orbit
 
       .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_Orbit_SpecificEnergy` instead.
 
-      The specific orbital energy of the orbit, in Joules per kilogram.
+      The specific orbital energy of the orbit, in :math:`\mathrm{J/kg}`.
 
    
 

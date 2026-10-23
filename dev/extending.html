@@ -1749,6 +1749,50 @@ store drop the object once the game destroys the part.</p>
 <p>Documentation can be added using <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>. For dynamic clients, such
 as the Python and Lua clients, the documentation will be automatically exported to clients when they
 connect.</p>
+<p>Units and formulas are marked up with <code class="docutils literal notranslate"><span class="pre">&lt;unit&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;math&gt;</span></code> tags:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">/// &lt;summary&gt;</span>
+<span class="c1">/// The dynamic pressure, in pascals. It is equal to &lt;math&gt;\frac{1}{2} \rho v^2&lt;/math&gt;,</span>
+<span class="c1">/// where &lt;math&gt;\rho&lt;/math&gt; is the air density and &lt;math&gt;v&lt;/math&gt; the airspeed in</span>
+<span class="c1">/// &lt;unit&gt;m/s&lt;/unit&gt;.</span>
+<span class="c1">/// &lt;/summary&gt;</span>
+<span class="na">[KRPCProperty]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">DynamicPressure</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">get</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">NotImplementedException</span><span class="w"> </span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The API reference typesets them, and client documentation shows them as text, such as <code class="docutils literal notranslate"><span class="pre">m/s²</span></code> and
+<code class="docutils literal notranslate"><span class="pre">N·m</span></code>. A unit is set upright, and a <code class="docutils literal notranslate"><span class="pre">.</span></code> in it joins two factors, as in <code class="docutils literal notranslate"><span class="pre">N.m</span></code>. Both tags
+hold a subset of LaTeX:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Markup</p></th>
+<th class="head"><p>Example</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Superscripts and subscripts</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">m^3.s^{-2}</span></code>, <code class="docutils literal notranslate"><span class="pre">\omega_{max}</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Fractions and roots</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">\frac{1}{2}</span></code>, <code class="docutils literal notranslate"><span class="pre">\sqrt{x</span> <span class="pre">+</span> <span class="pre">y}</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Text</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">\text{air</span> <span class="pre">density}</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Operators</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">\cdot</span></code>, <code class="docutils literal notranslate"><span class="pre">\times</span></code>, <code class="docutils literal notranslate"><span class="pre">\pm</span></code>, <code class="docutils literal notranslate"><span class="pre">\le</span></code>, <code class="docutils literal notranslate"><span class="pre">\ge</span></code>, <code class="docutils literal notranslate"><span class="pre">\approx</span></code>, <code class="docutils literal notranslate"><span class="pre">\infty</span></code>, <code class="docutils literal notranslate"><span class="pre">\degree</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Greek letters</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">\alpha</span></code> to <code class="docutils literal notranslate"><span class="pre">\omega</span></code>, and the capitals LaTeX names, such as <code class="docutils literal notranslate"><span class="pre">\Delta</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A superscript or subscript must have a Unicode form, so <code class="docutils literal notranslate"><span class="pre">^2</span></code> and <code class="docutils literal notranslate"><span class="pre">_{max}</span></code> work but <code class="docutils literal notranslate"><span class="pre">^q</span></code> does
+not. The documentation build rejects markup outside the subset, and <code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span></code> warns about
+it and writes it as text.</p>
 </section>
 <section id="further-examples">
 <h2>Further Examples<a class="headerlink" href="#further-examples" title="Link to this heading">#</a></h2>

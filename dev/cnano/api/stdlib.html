@@ -42,6 +42,7 @@
     <script src="../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cnano/api/stdlib';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -979,7 +980,7 @@ with a halfway value rounded toward positive infinity.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_StdLib_Atan2">
 <a class="reference internal" href="../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_StdLib_Atan2</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">y</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_StdLib_Atan2" title="Link to this definition">#</a><br /></dt>
-<dd><p>The angle, in radians, between the positive x axis and the point (x, y).</p>
+<dd><p>The angle, in radians, between the positive x axis and the point <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1260,7 +1261,7 @@ limited to the range 0 to 1.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_StdLib_VectorAngle">
 <a class="reference internal" href="../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_StdLib_VectorAngle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">u</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">v</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_StdLib_VectorAngle" title="Link to this definition">#</a><br /></dt>
-<dd><p>The angle between two vectors, in radians, between 0 and pi.</p>
+<dd><p>The angle between two vectors, in radians, between 0 and <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1427,7 +1428,7 @@ exception if either vector is zero, or if they are parallel.</p>
 <dt class="sig sig-object c" id="c.krpc_StdLib_QuaternionAngle">
 <a class="reference internal" href="../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_StdLib_QuaternionAngle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">q</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">r</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_StdLib_QuaternionAngle" title="Link to this definition">#</a><br /></dt>
 <dd><p>The angle of the rotation that takes one rotation to another,
-in radians, between 0 and pi.</p>
+in radians, between 0 and <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1497,7 +1498,7 @@ written at the Info level, so a server log level of Warning or Error hides it.</
 <dl class="c member">
 <dt class="sig sig-object c" id="c.krpc_StdLib_AxisAngle_t.angle">
 <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">angle</span></span></span><a class="headerlink" href="#c.krpc_StdLib_AxisAngle_t.angle" title="Link to this definition">#</a><br /></dt>
-<dd><p>The angle of the rotation, in radians between 0 and pi.</p>
+<dd><p>The angle of the rotation, in radians between 0 and <span class="math notranslate nohighlight">\(\pi\)</span>.</p>
 </dd></dl>
 
 </dd></dl>

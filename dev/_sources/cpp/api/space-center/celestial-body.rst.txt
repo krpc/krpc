@@ -37,14 +37,16 @@ CelestialBody
 
    .. function:: double gravitational_parameter()
 
-      The `standard gravitational parameter <https://en.wikipedia.org/wiki/Standard_gravitational_parameter>`_ of the body in :math:`m^3s^{-2}`.
+      The `standard gravitational parameter <https://en.wikipedia.org/wiki/Standard_gravitational_parameter>`_ of the body in :math:`\mathrm{m^{3} \cdot s^{-2}}`.
+      This is :math:`GM`, where :math:`G` is the gravitational constant and
+      :math:`M` the mass of the body.
 
    
 
    .. function:: double surface_gravity()
 
       The acceleration due to gravity at sea level (mean altitude) on the body,
-      in :math:`m/s^2`.
+      in :math:`\mathrm{m/s^{2}}`.
 
    
 
@@ -56,21 +58,21 @@ CelestialBody
 
    .. function:: double rotational_speed()
 
-      The rotational speed of the body, in radians per second.
+      The rotational speed of the body, in :math:`\mathrm{rad/s}`.
 
    
 
    .. function:: double rotation_angle()
 
       The current rotation angle of the body, in radians.
-      A value between 0 and 2 pi.
+      A value between 0 and :math:`2\pi`.
 
    
 
    .. function:: double initial_rotation()
 
       The initial rotation angle of the body (at UT 0), in radians.
-      A value between 0 and 2 pi.
+      A value between 0 and :math:`2\pi`.
 
    
 
@@ -300,14 +302,14 @@ CelestialBody
 
    .. function:: double ocean_density()
 
-      The density of the body's ocean, in :math:`kg/m^3`.
+      The density of the body's ocean, in :math:`\mathrm{kg/m^{3}}`.
       Returns zero if the body has no ocean.
 
    
 
    .. function:: double atmospheric_density_at_position(std::tuple<double, double, double> position, ReferenceFrame reference_frame)
 
-      The atmospheric density at the given position, in :math:`kg/m^3`,
+      The atmospheric density at the given position, in :math:`\mathrm{kg/m^{3}}`,
       in the given reference frame.
 
       :Parameters:
@@ -340,7 +342,7 @@ CelestialBody
 
    .. function:: double density_at(double altitude)
 
-      Gets the air density, in :math:`kg/m^3`, for the specified
+      Gets the air density, in :math:`\mathrm{kg/m^{3}}`, for the specified
       altitude above sea level, in meters.
 
       :Parameters:
@@ -474,7 +476,7 @@ CelestialBody
 
        * **reference_frame** -- The reference frame that the returned velocity vector is in.
 
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in :math:`\mathrm{m/s}`.
    
 
    .. function:: std::tuple<double, double, double, double> rotation(ReferenceFrame reference_frame)
@@ -485,7 +487,7 @@ CelestialBody
 
        * **reference_frame** -- The reference frame that the returned rotation is in.
 
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
    
 
    .. function:: std::tuple<double, double, double> direction(ReferenceFrame reference_frame)
@@ -508,4 +510,4 @@ CelestialBody
 
        * **reference_frame** -- The reference frame the returned angular velocity is in.
 
-      :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the body, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.
+      :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the body, in :math:`\mathrm{rad/s}`. The direction of the vector indicates the axis of rotation, using the right-hand rule.

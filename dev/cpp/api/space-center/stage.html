@@ -42,6 +42,7 @@
     <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cpp/api/space-center/stage';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -753,7 +754,7 @@ the C# <code class="docutils literal notranslate"><span class="pre">Resources()<
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Stage7delta_vEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Stage7delta_vEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Stage7delta_vEv"></span><span id="krpc::services::SpaceCenter::Stage::delta_v"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delta_v</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Stage7delta_vEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Delta-v for this stage in the current situation, in m/s.</p>
+<dd><p>Delta-v for this stage in the current situation, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Delta-v is only defined for <strong>activation</strong> stages (<code class="docutils literal notranslate"><span class="pre">decouple</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code>).
@@ -764,13 +765,13 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Stage14vacuum_delta_vEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Stage14vacuum_delta_vEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Stage14vacuum_delta_vEv"></span><span id="krpc::services::SpaceCenter::Stage::vacuum_delta_v"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vacuum_delta_v</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Stage14vacuum_delta_vEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Vacuum delta-v for this stage, in m/s.</p>
+<dd><p>Vacuum delta-v for this stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Stage17sea_level_delta_vEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Stage17sea_level_delta_vEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Stage17sea_level_delta_vEv"></span><span id="krpc::services::SpaceCenter::Stage::sea_level_delta_v"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sea_level_delta_v</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Stage17sea_level_delta_vEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Sea-level delta-v for this stage, in m/s.</p>
+<dd><p>Sea-level delta-v for this stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -836,19 +837,19 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Stage10start_massEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Stage10start_massEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Stage10start_massEv"></span><span id="krpc::services::SpaceCenter::Stage::start_mass"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">start_mass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Stage10start_massEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The mass of the vessel after the stage activates, in kg.</p>
+<dd><p>The mass of the vessel after the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Stage8end_massEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Stage8end_massEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Stage8end_massEv"></span><span id="krpc::services::SpaceCenter::Stage::end_mass"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">end_mass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Stage8end_massEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The mass of the vessel when the stage burns out, in kg.</p>
+<dd><p>The mass of the vessel when the stage burns out, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Stage8dry_massEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Stage8dry_massEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Stage8dry_massEv"></span><span id="krpc::services::SpaceCenter::Stage::dry_mass"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dry_mass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Stage8dry_massEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The dry mass of the vessel after the stage activates, in kg.</p>
+<dd><p>The dry mass of the vessel after the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Includes the parts of all later stages.</p>
@@ -858,7 +859,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Stage9fuel_massEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Stage9fuel_massEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Stage9fuel_massEv"></span><span id="krpc::services::SpaceCenter::Stage::fuel_mass"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fuel_mass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Stage9fuel_massEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The fuel mass of the vessel when the stage activates, in kg.</p>
+<dd><p>The fuel mass of the vessel when the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Includes the fuel of all later stages, and the fuel left in the parts the stage

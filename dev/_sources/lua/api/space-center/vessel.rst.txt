@@ -279,7 +279,7 @@ Vessel
 
    .. attribute:: delta_v: number
 
-      Total delta-v for the vessel in the current situation, in m/s.
+      Total delta-v for the vessel in the current situation, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -288,14 +288,14 @@ Vessel
 
    .. attribute:: vacuum_delta_v: number
 
-      Total vacuum delta-v for the vessel, in m/s.
+      Total vacuum delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: sea_level_delta_v: number
 
-      Total sea-level delta-v for the vessel, in m/s.
+      Total sea-level delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -316,14 +316,14 @@ Vessel
 
    .. attribute:: mass: number
 
-      The total mass of the vessel, including resources, in kg.
+      The total mass of the vessel, including resources, in :math:`\mathrm{kg}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: dry_mass: number
 
-      The total mass of the vessel, excluding resources, in kg.
+      The total mass of the vessel, excluding resources, in :math:`\mathrm{kg}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -387,7 +387,7 @@ Vessel
    .. attribute:: acceleration: number
 
       The acceleration currently produced by the vessel's engines, in
-      :math:`m/s^2`. This is :attr:`SpaceCenter.Vessel.thrust` divided by the
+      :math:`\mathrm{m/s^{2}}`. This is :attr:`SpaceCenter.Vessel.thrust` divided by the
       vessel's :attr:`SpaceCenter.Vessel.mass`.
 
       :Attribute: Read-only, cannot be set
@@ -396,7 +396,7 @@ Vessel
    .. attribute:: available_acceleration: number
 
       The total available acceleration that can be produced by the vessel's
-      active engines, in :math:`m/s^2`. This is :attr:`SpaceCenter.Vessel.available_thrust`
+      active engines, in :math:`\mathrm{m/s^{2}}`. This is :attr:`SpaceCenter.Vessel.available_thrust`
       divided by the vessel's :attr:`SpaceCenter.Vessel.mass`.
 
       :Attribute: Read-only, cannot be set
@@ -405,7 +405,7 @@ Vessel
    .. method:: available_acceleration_at(pressure)
 
       The total available acceleration that can be produced by the vessel's
-      active engines, in :math:`m/s^2`. This is :meth:`SpaceCenter.Vessel.available_thrust_at`
+      active engines, in :math:`\mathrm{m/s^{2}}`. This is :meth:`SpaceCenter.Vessel.available_thrust_at`
       divided by the vessel's :attr:`SpaceCenter.Vessel.mass`. Takes the given pressure into account.
 
       :param number pressure: Atmospheric pressure in atmospheres
@@ -414,7 +414,7 @@ Vessel
    .. attribute:: max_acceleration: number
 
       The total maximum acceleration that can be produced by the vessel's active
-      engines, in :math:`m/s^2`. This is :attr:`SpaceCenter.Vessel.max_thrust` divided by
+      engines, in :math:`\mathrm{m/s^{2}}`. This is :attr:`SpaceCenter.Vessel.max_thrust` divided by
       the vessel's :attr:`SpaceCenter.Vessel.mass`.
 
       :Attribute: Read-only, cannot be set
@@ -423,7 +423,7 @@ Vessel
    .. method:: max_acceleration_at(pressure)
 
       The total maximum acceleration that can be produced by the vessel's active
-      engines, in :math:`m/s^2`. This is :meth:`SpaceCenter.Vessel.max_thrust_at` divided by
+      engines, in :math:`\mathrm{m/s^{2}}`. This is :meth:`SpaceCenter.Vessel.max_thrust_at` divided by
       the vessel's :attr:`SpaceCenter.Vessel.mass`. Takes the given pressure into account.
 
       :param number pressure: Atmospheric pressure in atmospheres
@@ -432,7 +432,7 @@ Vessel
    .. attribute:: max_vacuum_acceleration: number
 
       The total maximum acceleration that can be produced by the vessel's active
-      engines when the vessel is in a vacuum, in :math:`m/s^2`. This is
+      engines when the vessel is in a vacuum, in :math:`\mathrm{m/s^{2}}`. This is
       :attr:`SpaceCenter.Vessel.max_vacuum_thrust` divided by the vessel's :attr:`SpaceCenter.Vessel.mass`.
 
       :Attribute: Read-only, cannot be set
@@ -474,7 +474,7 @@ Vessel
 
    .. attribute:: moment_of_inertia: Tuple
 
-      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The moment of inertia of the vessel around its center of mass in :math:`\mathrm{kg \cdot m^{2}}`.
       The inertia values in the returned 3-tuple are around the
       pitch, roll and yaw directions respectively.
       This corresponds to the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
@@ -495,7 +495,7 @@ Vessel
 
       The maximum torque that the vessel generates. Includes contributions from
       reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -505,7 +505,7 @@ Vessel
    .. attribute:: available_reaction_wheel_torque: SpaceCenter.AxisRange
 
       The maximum torque that the currently active and powered reaction wheels can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -515,7 +515,7 @@ Vessel
    .. attribute:: available_rcs_torque: SpaceCenter.AxisRange
 
       The maximum torque that the currently active RCS thrusters can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -525,7 +525,7 @@ Vessel
    .. attribute:: available_rcs_force: SpaceCenter.AxisRange
 
       The maximum force that the currently active RCS thrusters can generate.
-      Returns the forces in :math:`N` along each of the coordinate axes of the
+      Returns the forces in :math:`\mathrm{N}` along each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the right, forward and bottom directions of the vessel.
 
@@ -536,7 +536,7 @@ Vessel
 
       The maximum acceleration that the currently active RCS thrusters can generate.
       This is :attr:`SpaceCenter.Vessel.available_rcs_force` divided by the vessel's :attr:`SpaceCenter.Vessel.mass`.
-      Returns the accelerations in :math:`m/s^2` along each of the coordinate axes of the
+      Returns the accelerations in :math:`\mathrm{m/s^{2}}` along each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the right, forward and bottom directions of the vessel.
 
@@ -546,7 +546,7 @@ Vessel
    .. attribute:: available_engine_torque: SpaceCenter.AxisRange
 
       The maximum torque that the currently active and gimballed engines can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -556,7 +556,7 @@ Vessel
    .. attribute:: available_control_surface_torque: SpaceCenter.AxisRange
 
       The maximum torque that the aerodynamic control surfaces can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -567,7 +567,7 @@ Vessel
 
       The maximum torque that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -579,7 +579,7 @@ Vessel
       The maximum angular acceleration that the vessel can generate. Includes contributions
       from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
       This is :attr:`SpaceCenter.Vessel.available_torque` divided by the vessel's :attr:`SpaceCenter.Vessel.moment_of_inertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -591,7 +591,7 @@ Vessel
       The maximum angular acceleration that the currently active and powered reaction wheels
       can generate. This is :attr:`SpaceCenter.Vessel.available_reaction_wheel_torque` divided by the vessel's
       :attr:`SpaceCenter.Vessel.moment_of_inertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -602,7 +602,7 @@ Vessel
 
       The maximum angular acceleration that the currently active RCS thrusters can generate.
       This is :attr:`SpaceCenter.Vessel.available_rcs_torque` divided by the vessel's :attr:`SpaceCenter.Vessel.moment_of_inertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -614,7 +614,7 @@ Vessel
       The maximum angular acceleration that the currently active and gimballed engines can
       generate. This is :attr:`SpaceCenter.Vessel.available_engine_torque` divided by the vessel's
       :attr:`SpaceCenter.Vessel.moment_of_inertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -626,7 +626,7 @@ Vessel
       The maximum angular acceleration that the aerodynamic control surfaces can generate.
       This is :attr:`SpaceCenter.Vessel.available_control_surface_torque` divided by the vessel's
       :attr:`SpaceCenter.Vessel.moment_of_inertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -638,7 +638,7 @@ Vessel
       The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate. This is :attr:`SpaceCenter.Vessel.available_other_torque` divided
       by the vessel's :attr:`SpaceCenter.Vessel.moment_of_inertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:attr:`SpaceCenter.Vessel.reference_frame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -837,7 +837,7 @@ Vessel
       The velocity of the center of mass of the vessel, in the given reference frame.
 
       :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in.
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in :math:`\mathrm{m/s}`.
       :rtype: Tuple
 
    .. method:: rotation(reference_frame)
@@ -845,7 +845,7 @@ Vessel
       The rotation of the vessel, in the given reference frame.
 
       :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :rtype: Tuple
 
    .. method:: direction(reference_frame)
@@ -861,7 +861,7 @@ Vessel
       The angular velocity of the vessel, in the given reference frame.
 
       :param SpaceCenter.ReferenceFrame reference_frame: The reference frame the returned angular velocity is in.
-      :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.
+      :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in :math:`\mathrm{rad/s}`. The direction of the vector indicates the axis of rotation, using the right-hand rule.
       :rtype: Tuple
 
 

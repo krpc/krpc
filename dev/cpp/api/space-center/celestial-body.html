@@ -737,14 +737,16 @@ See <a class="reference internal" href="space-center.html#_CPPv4N4krpc8services1
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13CelestialBody23gravitational_parameterEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter13CelestialBody23gravitational_parameterEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter13CelestialBody23gravitational_parameterEv"></span><span id="krpc::services::SpaceCenter::CelestialBody::gravitational_parameter"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gravitational_parameter</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13CelestialBody23gravitational_parameterEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Standard_gravitational_parameter">standard gravitational parameter</a> of the body in <span class="math notranslate nohighlight">\(m^3s^{-2}\)</span>.</p>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Standard_gravitational_parameter">standard gravitational parameter</a> of the body in <span class="math notranslate nohighlight">\(\mathrm{m^{3} \cdot s^{-2}}\)</span>.
+This is <span class="math notranslate nohighlight">\(GM\)</span>, where <span class="math notranslate nohighlight">\(G\)</span> is the gravitational constant and
+<span class="math notranslate nohighlight">\(M\)</span> the mass of the body.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13CelestialBody15surface_gravityEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter13CelestialBody15surface_gravityEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter13CelestialBody15surface_gravityEv"></span><span id="krpc::services::SpaceCenter::CelestialBody::surface_gravity"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">surface_gravity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13CelestialBody15surface_gravityEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The acceleration due to gravity at sea level (mean altitude) on the body,
-in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p>
+in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -756,21 +758,21 @@ in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13CelestialBody16rotational_speedEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter13CelestialBody16rotational_speedEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter13CelestialBody16rotational_speedEv"></span><span id="krpc::services::SpaceCenter::CelestialBody::rotational_speed"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rotational_speed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13CelestialBody16rotational_speedEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The rotational speed of the body, in radians per second.</p>
+<dd><p>The rotational speed of the body, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13CelestialBody14rotation_angleEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter13CelestialBody14rotation_angleEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter13CelestialBody14rotation_angleEv"></span><span id="krpc::services::SpaceCenter::CelestialBody::rotation_angle"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rotation_angle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13CelestialBody14rotation_angleEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The current rotation angle of the body, in radians.
-A value between 0 and 2 pi.</p>
+A value between 0 and <span class="math notranslate nohighlight">\(2\pi\)</span>.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13CelestialBody16initial_rotationEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter13CelestialBody16initial_rotationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter13CelestialBody16initial_rotationEv"></span><span id="krpc::services::SpaceCenter::CelestialBody::initial_rotation"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initial_rotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13CelestialBody16initial_rotationEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The initial rotation angle of the body (at UT 0), in radians.
-A value between 0 and 2 pi.</p>
+A value between 0 and <span class="math notranslate nohighlight">\(2\pi\)</span>.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1054,14 +1056,14 @@ when over water.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13CelestialBody13ocean_densityEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter13CelestialBody13ocean_densityEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter13CelestialBody13ocean_densityEv"></span><span id="krpc::services::SpaceCenter::CelestialBody::ocean_density"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ocean_density</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13CelestialBody13ocean_densityEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The density of the body’s ocean, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.
+<dd><p>The density of the body’s ocean, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>.
 Returns zero if the body has no ocean.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13CelestialBody31atmospheric_density_at_positionENSt5tupleIdddEE14ReferenceFrame">
 <span id="_CPPv3N4krpc8services11SpaceCenter13CelestialBody31atmospheric_density_at_positionENSt5tupleIdddEE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter13CelestialBody31atmospheric_density_at_positionENSt5tupleIdddEE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::CelestialBody::atmospheric_density_at_position__std::tuple:double.double.double:.ReferenceFrame"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">atmospheric_density_at_position</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">position</span></span>, <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13CelestialBody31atmospheric_density_at_positionENSt5tupleIdddEE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
-<dd><p>The atmospheric density at the given position, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>,
+<dd><p>The atmospheric density at the given position, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>,
 in the given reference frame.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1100,7 +1102,7 @@ in the given reference frame.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13CelestialBody10density_atEd">
 <span id="_CPPv3N4krpc8services11SpaceCenter13CelestialBody10density_atEd"></span><span id="_CPPv2N4krpc8services11SpaceCenter13CelestialBody10density_atEd"></span><span id="krpc::services::SpaceCenter::CelestialBody::density_at__double"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">density_at</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">altitude</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13CelestialBody10density_atEd" title="Link to this definition">#</a><br /></dt>
-<dd><p>Gets the air density, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>, for the specified
+<dd><p>Gets the air density, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>, for the specified
 altitude above sea level, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1244,7 +1246,7 @@ directions.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.</p>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1260,7 +1262,7 @@ directions.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
+<dd class="field-even"><p>The rotation as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1293,7 +1295,7 @@ in the specified reference frame.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The angular velocity as a vector. The magnitude of the vector is the rotational speed of the body, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.</p>
+<dd class="field-even"><p>The angular velocity as a vector. The magnitude of the vector is the rotational speed of the body, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>. The direction of the vector indicates the axis of rotation, using the right-hand rule.</p>
 </dd>
 </dl>
 </dd></dl>

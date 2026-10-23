@@ -495,7 +495,7 @@ Part
 
    .. attribute:: displacement: number
 
-      The volume of water the part displaces when fully submerged, in :math:`m^3`.
+      The volume of water the part displaces when fully submerged, in :math:`\mathrm{m^{3}}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -516,8 +516,8 @@ Part
       The buoyant force on the part when fully submerged in a fluid of the given
       density, in Newtons.
 
-      :param number density: The density of the fluid, in :math:`kg/m^3`.
-      :param number gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :param number density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+      :param number gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
       :rtype: number
 
       .. note::
@@ -543,7 +543,7 @@ Part
 
    .. attribute:: displaced_volume: number
 
-      The volume of water the part is displacing, in :math:`m^3`.
+      The volume of water the part is displacing, in :math:`\mathrm{m^{3}}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -619,7 +619,7 @@ Part
 
    .. attribute:: impact_tolerance: number
 
-      The impact tolerance of the part, in meters per second.
+      The impact tolerance of the part, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -1076,7 +1076,7 @@ Part
       The linear velocity of the part in the given reference frame.
 
       :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in.
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in :math:`\mathrm{m/s}`.
       :rtype: Tuple
 
    .. method:: rotation(reference_frame)
@@ -1084,7 +1084,7 @@ Part
       The rotation of the part, in the given reference frame.
 
       :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :rtype: Tuple
 
    .. method:: lift(reference_frame)
@@ -1151,7 +1151,7 @@ Part
 
    .. attribute:: moment_of_inertia: Tuple
 
-      The moment of inertia of the part in :math:`kg.m^2` around its center of mass
+      The moment of inertia of the part in :math:`\mathrm{kg \cdot m^{2}}` around its center of mass
       in the parts center of mass reference frame (:attr:`SpaceCenter.Part.center_of_mass_reference_frame`).
 
       :Attribute: Read-only, cannot be set
@@ -2030,14 +2030,14 @@ Control Surface
 
    .. attribute:: surface_area: number
 
-      Surface area of the control surface in :math:`m^2`.
+      Surface area of the control surface in :math:`\mathrm{m^{2}}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: available_torque: SpaceCenter.AxisRange
 
-      The available torque, in Newton meters, that can be produced by this control surface,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this control surface,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :attr:`SpaceCenter.Vessel.reference_frame`.
 
@@ -2090,7 +2090,7 @@ Decoupler
 
    .. attribute:: impulse: number
 
-      The impulse that the decoupler imparts when it is fired, in Newton seconds.
+      The impulse that the decoupler imparts when it is fired, in :math:`\mathrm{N \cdot s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -2283,7 +2283,7 @@ Docking Port
       The rotation of the docking port, in the given reference frame.
 
       :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :rtype: Tuple
 
    .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
@@ -2673,7 +2673,7 @@ Engine
 
    .. attribute:: available_torque: SpaceCenter.AxisRange
 
-      The available torque, in Newton meters, that can be produced by this engine,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this engine,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :attr:`SpaceCenter.Vessel.reference_frame`.
       Returns zero if the engine is inactive, or not gimballed.
@@ -3109,7 +3109,7 @@ Intake
 
    .. attribute:: speed: number
 
-      Speed of the flow into the intake, in :math:`m/s`.
+      Speed of the flow into the intake, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -3123,7 +3123,7 @@ Intake
 
    .. attribute:: area: number
 
-      The area of the intake's opening, in square meters.
+      The area of the intake's opening, in :math:`\mathrm{m^{2}}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -3623,7 +3623,7 @@ Resource Harvester
 
    .. attribute:: extraction_rate: number
 
-      The rate at which the drill is extracting ore, in units per second.
+      The rate at which the drill is extracting ore, in :math:`\mathrm{units/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -3682,7 +3682,7 @@ Reaction Wheel
 
    .. attribute:: available_torque: SpaceCenter.AxisRange
 
-      The available torque, in Newton meters, that can be produced by this reaction wheel,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this reaction wheel,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :attr:`SpaceCenter.Vessel.reference_frame`.
       Returns zero if the reaction wheel is inactive or broken.
@@ -3692,7 +3692,7 @@ Reaction Wheel
 
    .. attribute:: max_torque: SpaceCenter.AxisRange
 
-      The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+      The maximum torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this reaction wheel,
       when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
       These axes correspond to the coordinate axes of the :attr:`SpaceCenter.Vessel.reference_frame`.
 
@@ -3967,7 +3967,7 @@ Robotic Hinge
 
    .. attribute:: rate: number
 
-      Target movement rate in degrees per second.
+      Target movement rate in :math:`\mathrm{{}^{\circ}/s}`.
 
       :Attribute: Can be read or written
       :rtype: number
@@ -4051,7 +4051,7 @@ Robotic Piston
 
    .. attribute:: rate: number
 
-      Target movement rate in meters per second.
+      Target movement rate in :math:`\mathrm{m/s}`.
 
       :Attribute: Can be read or written
       :rtype: number
@@ -4143,7 +4143,7 @@ Robotic Rotation
 
    .. attribute:: rate: number
 
-      Target movement rate in degrees per second.
+      Target movement rate in :math:`\mathrm{{}^{\circ}/s}`.
 
       :Attribute: Can be read or written
       :rtype: number
@@ -4368,7 +4368,7 @@ RCS
 
    .. attribute:: available_torque: SpaceCenter.AxisRange
 
-      The available torque, in Newton meters, that can be produced by this RCS,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this RCS,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :attr:`SpaceCenter.Vessel.reference_frame`.
       Returns zero if RCS is disable.
@@ -4410,7 +4410,7 @@ RCS
    .. attribute:: torque: Tuple
 
       The torque being applied by the RCS thrusters about the vessel's center of mass,
-      in Newton meters. The vector is in the vessel's reference frame
+      in :math:`\mathrm{N \cdot m}`. The vector is in the vessel's reference frame
       (:attr:`SpaceCenter.Vessel.reference_frame`). Returns zero if the RCS is inactive.
 
       :Attribute: Read-only, cannot be set
@@ -4418,7 +4418,7 @@ RCS
 
    .. method:: override_wrench(rotation, translation)
 
-      The force and torque the given demands would produce, in Newtons and Newton meters.
+      The force and torque the given demands would produce, in Newtons and :math:`\mathrm{N \cdot m}`.
 
       :param Tuple rotation: A rotation demand, as set by :attr:`SpaceCenter.RCS.rotation_override`.
       :param Tuple translation: A translation demand, as set by :attr:`SpaceCenter.RCS.translation_override`.
@@ -4836,7 +4836,8 @@ Wheel
 
    .. attribute:: motor_output: number
 
-      The output of the motor. This is the torque currently being generated, in Newton meters.
+      The output of the motor. This is the torque currently being generated, in
+      :math:`\mathrm{N \cdot m}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number

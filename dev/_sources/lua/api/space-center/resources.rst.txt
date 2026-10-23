@@ -57,7 +57,7 @@ Resources
 
    .. staticmethod:: density(name)
 
-      Returns the density of a resource, in :math:`kg/l`.
+      Returns the density of a resource, in :math:`\mathrm{kg/l}`.
 
       :param string name: The name of the resource.
       :rtype: number
@@ -118,7 +118,7 @@ Resources
 
    .. attribute:: density: number
 
-      The density of the resource, in :math:`kg/l`.
+      The density of the resource, in :math:`\mathrm{kg/l}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number

@@ -42,6 +42,7 @@
     <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cnano/api/space-center/stage';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -753,7 +754,7 @@ the C# <code class="docutils literal notranslate"><span class="pre">Resources()<
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_DeltaV">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_DeltaV</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Stage_t" title="krpc_SpaceCenter_Stage_t"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_DeltaV" title="Link to this definition">#</a><br /></dt>
-<dd><p>Delta-v for this stage in the current situation, in m/s.</p>
+<dd><p>Delta-v for this stage in the current situation, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Delta-v is only defined for <strong>activation</strong> stages (<code class="docutils literal notranslate"><span class="pre">decouple</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code>).
@@ -764,13 +765,13 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_VacuumDeltaV">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_VacuumDeltaV</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Stage_t" title="krpc_SpaceCenter_Stage_t"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_VacuumDeltaV" title="Link to this definition">#</a><br /></dt>
-<dd><p>Vacuum delta-v for this stage, in m/s.</p>
+<dd><p>Vacuum delta-v for this stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_SeaLevelDeltaV">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_SeaLevelDeltaV</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Stage_t" title="krpc_SpaceCenter_Stage_t"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_SeaLevelDeltaV" title="Link to this definition">#</a><br /></dt>
-<dd><p>Sea-level delta-v for this stage, in m/s.</p>
+<dd><p>Sea-level delta-v for this stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -836,19 +837,19 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_StartMass">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_StartMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Stage_t" title="krpc_SpaceCenter_Stage_t"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_StartMass" title="Link to this definition">#</a><br /></dt>
-<dd><p>The mass of the vessel after the stage activates, in kg.</p>
+<dd><p>The mass of the vessel after the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_EndMass">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_EndMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Stage_t" title="krpc_SpaceCenter_Stage_t"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_EndMass" title="Link to this definition">#</a><br /></dt>
-<dd><p>The mass of the vessel when the stage burns out, in kg.</p>
+<dd><p>The mass of the vessel when the stage burns out, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_DryMass">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_DryMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Stage_t" title="krpc_SpaceCenter_Stage_t"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_DryMass" title="Link to this definition">#</a><br /></dt>
-<dd><p>The dry mass of the vessel after the stage activates, in kg.</p>
+<dd><p>The dry mass of the vessel after the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Includes the parts of all later stages.</p>
@@ -858,7 +859,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_FuelMass">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_FuelMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Stage_t" title="krpc_SpaceCenter_Stage_t"><span class="n"><span class="pre">krpc_SpaceCenter_Stage_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Stage_t.krpc_SpaceCenter_Stage_FuelMass" title="Link to this definition">#</a><br /></dt>
-<dd><p>The fuel mass of the vessel when the stage activates, in kg.</p>
+<dd><p>The fuel mass of the vessel when the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Includes the fuel of all later stages, and the fuel left in the parts the stage

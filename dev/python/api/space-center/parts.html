@@ -1661,7 +1661,7 @@ includes the pressure of the water.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Part.displacement">
 <span class="sig-name descname"><span class="pre">displacement</span></span><a class="headerlink" href="#SpaceCenter.Part.displacement" title="Link to this definition">#</a></dt>
-<dd><p>The volume of water the part displaces when fully submerged, in <span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dd><p>The volume of water the part displaces when fully submerged, in <span class="math notranslate nohighlight">\(\mathrm{m^{3}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1704,8 +1704,8 @@ density, in Newtons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>density</strong> (<em>float</em>) – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
-<li><p><strong>gravity</strong> (<em>float</em>) – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+<li><p><strong>density</strong> (<em>float</em>) – The density of the fluid, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>.</p></li>
+<li><p><strong>gravity</strong> (<em>float</em>) – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -1761,7 +1761,7 @@ part rather than what
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Part.displaced_volume">
 <span class="sig-name descname"><span class="pre">displaced_volume</span></span><a class="headerlink" href="#SpaceCenter.Part.displaced_volume" title="Link to this definition">#</a></dt>
-<dd><p>The volume of water the part is displacing, in <span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dd><p>The volume of water the part is displacing, in <span class="math notranslate nohighlight">\(\mathrm{m^{3}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1917,7 +1917,7 @@ in the editor and at a body with no ocean.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Part.impact_tolerance">
 <span class="sig-name descname"><span class="pre">impact_tolerance</span></span><a class="headerlink" href="#SpaceCenter.Part.impact_tolerance" title="Link to this definition">#</a></dt>
-<dd><p>The impact tolerance of the part, in meters per second.</p>
+<dd><p>The impact tolerance of the part, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -2828,7 +2828,7 @@ the <a class="reference internal" href="#SpaceCenter.Part.center_of_mass" title=
 <dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the returned velocity vector is in.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.</p>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple(float, float, float)</p>
@@ -2848,7 +2848,7 @@ the <a class="reference internal" href="#SpaceCenter.Part.center_of_mass" title=
 <dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the returned rotation is in.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
+<dd class="field-even"><p>The rotation as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple(float, float, float, float)</p>
@@ -2984,7 +2984,7 @@ it are reported by <a class="reference internal" href="#SpaceCenter.Part.submerg
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Part.moment_of_inertia">
 <span class="sig-name descname"><span class="pre">moment_of_inertia</span></span><a class="headerlink" href="#SpaceCenter.Part.moment_of_inertia" title="Link to this definition">#</a></dt>
-<dd><p>The moment of inertia of the part in <span class="math notranslate nohighlight">\(kg.m^2\)</span> around its center of mass
+<dd><p>The moment of inertia of the part in <span class="math notranslate nohighlight">\(\mathrm{kg \cdot m^{2}}\)</span> around its center of mass
 in the parts center of mass reference frame (<a class="reference internal" href="#SpaceCenter.Part.center_of_mass_reference_frame" title="SpaceCenter.Part.center_of_mass_reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.center_of_mass_reference_frame</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -4583,7 +4583,7 @@ value between -1 and 1, mapped onto the surface’s deploy angle range.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.ControlSurface.surface_area">
 <span class="sig-name descname"><span class="pre">surface_area</span></span><a class="headerlink" href="#SpaceCenter.ControlSurface.surface_area" title="Link to this definition">#</a></dt>
-<dd><p>Surface area of the control surface in <span class="math notranslate nohighlight">\(m^2\)</span>.</p>
+<dd><p>Surface area of the control surface in <span class="math notranslate nohighlight">\(\mathrm{m^{2}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -4600,7 +4600,7 @@ value between -1 and 1, mapped onto the surface’s deploy angle range.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.ControlSurface.available_torque">
 <span class="sig-name descname"><span class="pre">available_torque</span></span><a class="headerlink" href="#SpaceCenter.ControlSurface.available_torque" title="Link to this definition">#</a></dt>
-<dd><p>The available torque, in Newton meters, that can be produced by this control surface,
+<dd><p>The available torque, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>, that can be produced by this control surface,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#SpaceCenter.Vessel.reference_frame" title="SpaceCenter.Vessel.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.reference_frame</span></code></a>.</p>
 <dl class="field-list simple">
@@ -4700,7 +4700,7 @@ after calling this function, the object(s) returned by previous call(s) to
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Decoupler.impulse">
 <span class="sig-name descname"><span class="pre">impulse</span></span><a class="headerlink" href="#SpaceCenter.Decoupler.impulse" title="Link to this definition">#</a></dt>
-<dd><p>The impulse that the decoupler imparts when it is fired, in Newton seconds.</p>
+<dd><p>The impulse that the decoupler imparts when it is fired, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -5069,7 +5069,7 @@ port does not have a shield, setting this attribute has no effect.</p>
 <dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the returned rotation is in.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
+<dd class="field-even"><p>The rotation as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>tuple(float, float, float, float)</p>
@@ -5832,7 +5832,7 @@ returns the current actuation.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Engine.available_torque">
 <span class="sig-name descname"><span class="pre">available_torque</span></span><a class="headerlink" href="#SpaceCenter.Engine.available_torque" title="Link to this definition">#</a></dt>
-<dd><p>The available torque, in Newton meters, that can be produced by this engine,
+<dd><p>The available torque, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>, that can be produced by this engine,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#SpaceCenter.Vessel.reference_frame" title="SpaceCenter.Vessel.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.reference_frame</span></code></a>.
 Returns zero if the engine is inactive, or not gimballed.</p>
@@ -6722,7 +6722,7 @@ Supports both stock fairings, and those from the ProceduralFairings mod.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Intake.speed">
 <span class="sig-name descname"><span class="pre">speed</span></span><a class="headerlink" href="#SpaceCenter.Intake.speed" title="Link to this definition">#</a></dt>
-<dd><p>Speed of the flow into the intake, in <span class="math notranslate nohighlight">\(m/s\)</span>.</p>
+<dd><p>Speed of the flow into the intake, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -6756,7 +6756,7 @@ Supports both stock fairings, and those from the ProceduralFairings mod.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Intake.area">
 <span class="sig-name descname"><span class="pre">area</span></span><a class="headerlink" href="#SpaceCenter.Intake.area" title="Link to this definition">#</a></dt>
-<dd><p>The area of the intake’s opening, in square meters.</p>
+<dd><p>The area of the intake’s opening, in <span class="math notranslate nohighlight">\(\mathrm{m^{2}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -7698,7 +7698,7 @@ retracting.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.ResourceHarvester.extraction_rate">
 <span class="sig-name descname"><span class="pre">extraction_rate</span></span><a class="headerlink" href="#SpaceCenter.ResourceHarvester.extraction_rate" title="Link to this definition">#</a></dt>
-<dd><p>The rate at which the drill is extracting ore, in units per second.</p>
+<dd><p>The rate at which the drill is extracting ore, in <span class="math notranslate nohighlight">\(\mathrm{units/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -7826,7 +7826,7 @@ retracting.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.ReactionWheel.available_torque">
 <span class="sig-name descname"><span class="pre">available_torque</span></span><a class="headerlink" href="#SpaceCenter.ReactionWheel.available_torque" title="Link to this definition">#</a></dt>
-<dd><p>The available torque, in Newton meters, that can be produced by this reaction wheel,
+<dd><p>The available torque, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>, that can be produced by this reaction wheel,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#SpaceCenter.Vessel.reference_frame" title="SpaceCenter.Vessel.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.reference_frame</span></code></a>.
 Returns zero if the reaction wheel is inactive or broken.</p>
@@ -7846,7 +7846,7 @@ Returns zero if the reaction wheel is inactive or broken.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.ReactionWheel.max_torque">
 <span class="sig-name descname"><span class="pre">max_torque</span></span><a class="headerlink" href="#SpaceCenter.ReactionWheel.max_torque" title="Link to this definition">#</a></dt>
-<dd><p>The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+<dd><p>The maximum torque, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>, that can be produced by this reaction wheel,
 when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
 These axes correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#SpaceCenter.Vessel.reference_frame" title="SpaceCenter.Vessel.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.reference_frame</span></code></a>.</p>
 <dl class="field-list simple">
@@ -8430,7 +8430,7 @@ See <a class="reference internal" href="#SpaceCenter.ResourceDrain.drain_mode" t
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.RoboticHinge.rate">
 <span class="sig-name descname"><span class="pre">rate</span></span><a class="headerlink" href="#SpaceCenter.RoboticHinge.rate" title="Link to this definition">#</a></dt>
-<dd><p>Target movement rate in degrees per second.</p>
+<dd><p>Target movement rate in <span class="math notranslate nohighlight">\(\mathrm{{}^{\circ}/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -8620,7 +8620,7 @@ See <a class="reference internal" href="#SpaceCenter.ResourceDrain.drain_mode" t
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.RoboticPiston.rate">
 <span class="sig-name descname"><span class="pre">rate</span></span><a class="headerlink" href="#SpaceCenter.RoboticPiston.rate" title="Link to this definition">#</a></dt>
-<dd><p>Target movement rate in meters per second.</p>
+<dd><p>Target movement rate in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -8828,7 +8828,7 @@ ignoring the angle limits.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.RoboticRotation.rate">
 <span class="sig-name descname"><span class="pre">rate</span></span><a class="headerlink" href="#SpaceCenter.RoboticRotation.rate" title="Link to this definition">#</a></dt>
-<dd><p>Target movement rate in degrees per second.</p>
+<dd><p>Target movement rate in <span class="math notranslate nohighlight">\(\mathrm{{}^{\circ}/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -9328,7 +9328,7 @@ and 1.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.RCS.available_torque">
 <span class="sig-name descname"><span class="pre">available_torque</span></span><a class="headerlink" href="#SpaceCenter.RCS.available_torque" title="Link to this definition">#</a></dt>
-<dd><p>The available torque, in Newton meters, that can be produced by this RCS,
+<dd><p>The available torque, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>, that can be produced by this RCS,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#SpaceCenter.Vessel.reference_frame" title="SpaceCenter.Vessel.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.reference_frame</span></code></a>.
 Returns zero if RCS is disable.</p>
@@ -9400,7 +9400,7 @@ Returns zero if the RCS is inactive.</p>
 <dt class="sig sig-object py" id="SpaceCenter.RCS.torque">
 <span class="sig-name descname"><span class="pre">torque</span></span><a class="headerlink" href="#SpaceCenter.RCS.torque" title="Link to this definition">#</a></dt>
 <dd><p>The torque being applied by the RCS thrusters about the vessel’s center of mass,
-in Newton meters. The vector is in the vessel’s reference frame
+in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>. The vector is in the vessel’s reference frame
 (<a class="reference internal" href="vessel.html#SpaceCenter.Vessel.reference_frame" title="SpaceCenter.Vessel.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Vessel.reference_frame</span></code></a>). Returns zero if the RCS is inactive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -9418,7 +9418,7 @@ in Newton meters. The vector is in the vessel’s reference frame
 <dl class="py method">
 <dt class="sig sig-object py" id="SpaceCenter.RCS.override_wrench">
 <span class="sig-name descname"><span class="pre">override_wrench</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">translation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RCS.override_wrench" title="Link to this definition">#</a></dt>
-<dd><p>The force and torque the given demands would produce, in Newtons and Newton meters.</p>
+<dd><p>The force and torque the given demands would produce, in Newtons and <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -10255,7 +10255,8 @@ A value between 0 and 5 inclusive.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Wheel.motor_output">
 <span class="sig-name descname"><span class="pre">motor_output</span></span><a class="headerlink" href="#SpaceCenter.Wheel.motor_output" title="Link to this definition">#</a></dt>
-<dd><p>The output of the motor. This is the torque currently being generated, in Newton meters.</p>
+<dd><p>The output of the motor. This is the torque currently being generated, in
+<span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>

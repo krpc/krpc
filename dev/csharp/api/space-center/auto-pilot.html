@@ -42,6 +42,7 @@
     <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'csharp/api/space-center/auto-pilot';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -1127,9 +1128,9 @@ the target roll (if set). Throws an exception if the auto-pilot has not been eng
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.StoppingVelocityThreshold">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">StoppingVelocityThreshold</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.StoppingVelocityThreshold" title="Link to this definition">#</a></dt>
-<dd><p>The threshold angular velocity, in rad/s, below which the vessel’s angular
+<dd><p>The threshold angular velocity, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, below which the vessel’s angular
 velocity magnitude must fall for <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCenter.AutoPilot.Wait" title="function: KRPC.Client.Services.SpaceCenter.AutoPilot.Wait"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">AutoPilot.Wait</span></code></a> to return.
-Defaults to 0.05 rad/s.</p>
+Defaults to 0.05 <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1159,7 +1160,7 @@ error relative to the target the auto-pilot is currently tracking.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">AttitudeError</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="Link to this definition">#</a></dt>
-<dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
+<dd><p>The per-axis attitude error <code class="docutils literal notranslate"><span class="pre">(pitch,</span> <span class="pre">yaw,</span> <span class="pre">roll)</span></code>, in degrees, between the vessel’s current
 attitude and the commanded target. All three components come from one singularity-free
 residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
 of pitch/heading/roll angles). The scalar <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchError" title="property: KRPC.Client.Services.SpaceCenter.AutoPilot.PitchError"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">AutoPilot.PitchError</span></code></a>,
@@ -1245,7 +1246,7 @@ auto-pilot has not been engaged.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentAttitudeError">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">CurrentAttitudeError</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentAttitudeError" title="Link to this definition">#</a></dt>
-<dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
+<dd><p>The per-axis attitude error <code class="docutils literal notranslate"><span class="pre">(pitch,</span> <span class="pre">yaw,</span> <span class="pre">roll)</span></code>, in degrees, between the vessel’s current
 attitude and the target the auto-pilot is currently tracking (the slewed target, see
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetRotation" title="property: KRPC.Client.Services.SpaceCenter.AutoPilot.CurrentTargetRotation"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">AutoPilot.CurrentTargetRotation</span></code></a>). Like <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError" title="property: KRPC.Client.Services.SpaceCenter.AutoPilot.AttitudeError"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">AutoPilot.AttitudeError</span></code></a> but relative to the
 current target, so it stays small while a smoothed change (see
@@ -1338,10 +1339,10 @@ Defaults to 15 degrees.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.MaxAngularVelocity">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MaxAngularVelocity</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.MaxAngularVelocity" title="Link to this definition">#</a></dt>
-<dd><p>The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
-and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
-that vessels with very high torque availability do not spin faster than desired.
-Defaults to 1 rad/s for each axis.</p>
+<dd><p>The maximum angular velocity of the vessel, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, for each of the
+pitch, roll and yaw axes. Limits the target angular velocity computed by the bang-bang
+profile so that vessels with very high torque availability do not spin faster than
+desired. Defaults to 1 <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span> for each axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1590,10 +1591,11 @@ reduced at all times.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationBandwidthFloor">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">OscillationBandwidthFloor</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.OscillationBandwidthFloor" title="Link to this definition">#</a></dt>
-<dd><p>The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
-bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
-strongly; raising it keeps more control authority at the cost of allowing more wobble.
-Defaults to 1 rad/s. This is an advanced tuning parameter.</p>
+<dd><p>The inner control loop bandwidth, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, that an axis is reduced
+towards while the bandwidth-floor mitigation is engaged on it. Lowering it suppresses
+oscillation more strongly; raising it keeps more control authority at the cost of
+allowing more wobble. Defaults to 1 <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>. This is an advanced tuning
+parameter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>

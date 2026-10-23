@@ -378,7 +378,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 .. function:: krpc_error_t krpc_SpaceCenter_G(krpc_connection_t connection, double * returnValue)
 
-   The value of the `gravitational constant <https://en.wikipedia.org/wiki/Gravitational_constant>`_ G in :math:`N(m/kg)^2`.
+   The value of the `gravitational constant <https://en.wikipedia.org/wiki/Gravitational_constant>`_ G in :math:`\mathrm{N(m/kg)^{2}}`.
 
    
 
@@ -564,11 +564,11 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
    :Parameters:
 
-    * **rotation** -- Rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *from*.
+    * **rotation** -- Rotation, as a quaternion of the form ``(x, y, z, w)``, in reference frame *from*.
     * **from** -- The reference frame that the rotation is in.
     * **to** -- The reference frame to covert the rotation to.
 
-   :returns: The corresponding rotation, as a quaternion of the form :math:`(x, y, z, w)`, in reference frame *to*.
+   :returns: The corresponding rotation, as a quaternion of the form ``(x, y, z, w)``, in reference frame *to*.
    
 
 
@@ -583,7 +583,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
    :Parameters:
 
     * **position** -- Position, as a vector, in reference frame *from*.
-    * **velocity** -- Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in meters per second, in reference frame *from*.
+    * **velocity** -- Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in :math:`\mathrm{m/s}`, in reference frame *from*.
     * **from** -- The reference frame that the position and velocity are in.
     * **to** -- The reference frame to covert the velocity to.
 

@@ -67,7 +67,7 @@ Resources
 
    .. function:: static float density(Client& connection, std::string name)
 
-      Returns the density of a resource, in :math:`kg/l`.
+      Returns the density of a resource, in :math:`\mathrm{kg/l}`.
 
       :Parameters:
 
@@ -131,7 +131,7 @@ Resources
 
    .. function:: float density()
 
-      The density of the resource, in :math:`kg/l`.
+      The density of the resource, in :math:`\mathrm{kg/l}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 

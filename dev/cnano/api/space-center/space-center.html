@@ -1067,7 +1067,7 @@ game only when this is true.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_G">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_G</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_G" title="Link to this definition">#</a><br /></dt>
-<dd><p>The value of the <a class="reference external" href="https://en.wikipedia.org/wiki/Gravitational_constant">gravitational constant</a> G in <span class="math notranslate nohighlight">\(N(m/kg)^2\)</span>.</p>
+<dd><p>The value of the <a class="reference external" href="https://en.wikipedia.org/wiki/Gravitational_constant">gravitational constant</a> G in <span class="math notranslate nohighlight">\(\mathrm{N(m/kg)^{2}}\)</span>.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -1269,13 +1269,13 @@ Throws an exception if the game scene changes during the time warp.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rotation</strong> – Rotation, as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>, in reference frame <em>from</em>.</p></li>
+<li><p><strong>rotation</strong> – Rotation, as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>, in reference frame <em>from</em>.</p></li>
 <li><p><strong>from</strong> – The reference frame that the rotation is in.</p></li>
 <li><p><strong>to</strong> – The reference frame to covert the rotation to.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The corresponding rotation, as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>, in reference frame <em>to</em>.</p>
+<dd class="field-even"><p>The corresponding rotation, as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>, in reference frame <em>to</em>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1290,7 +1290,7 @@ reference frames into account.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>position</strong> – Position, as a vector, in reference frame <em>from</em>.</p></li>
-<li><p><strong>velocity</strong> – Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in meters per second, in reference frame <em>from</em>.</p></li>
+<li><p><strong>velocity</strong> – Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>, in reference frame <em>from</em>.</p></li>
 <li><p><strong>from</strong> – The reference frame that the position and velocity are in.</p></li>
 <li><p><strong>to</strong> – The reference frame to covert the velocity to.</p></li>
 </ul>

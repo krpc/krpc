@@ -315,9 +315,9 @@ AutoPilot
 
    .. attribute:: stopping_velocity_threshold: number
 
-      The threshold angular velocity, in rad/s, below which the vessel's angular
+      The threshold angular velocity, in :math:`\mathrm{rad/s}`, below which the vessel's angular
       velocity magnitude must fall for :meth:`SpaceCenter.AutoPilot.wait` to return.
-      Defaults to 0.05 rad/s.
+      Defaults to 0.05 :math:`\mathrm{rad/s}`.
 
       :Attribute: Can be read or written
       :rtype: number
@@ -339,7 +339,7 @@ AutoPilot
 
    .. attribute:: attitude_error: Tuple
 
-      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      The per-axis attitude error ``(pitch, yaw, roll)``, in degrees, between the vessel's current
       attitude and the commanded target. All three components come from one singularity-free
       residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
       of pitch/heading/roll angles). The scalar :attr:`SpaceCenter.AutoPilot.pitch_error`,
@@ -405,7 +405,7 @@ AutoPilot
 
    .. attribute:: current_attitude_error: Tuple
 
-      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      The per-axis attitude error ``(pitch, yaw, roll)``, in degrees, between the vessel's current
       attitude and the target the auto-pilot is currently tracking (the slewed target, see
       :attr:`SpaceCenter.AutoPilot.current_target_rotation`). Like :attr:`SpaceCenter.AutoPilot.attitude_error` but relative to the
       current target, so it stays small while a smoothed change (see
@@ -474,10 +474,10 @@ AutoPilot
 
    .. attribute:: max_angular_velocity: Tuple
 
-      The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
-      and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
-      that vessels with very high torque availability do not spin faster than desired.
-      Defaults to 1 rad/s for each axis.
+      The maximum angular velocity of the vessel, in :math:`\mathrm{rad/s}`, for each of the
+      pitch, roll and yaw axes. Limits the target angular velocity computed by the bang-bang
+      profile so that vessels with very high torque availability do not spin faster than
+      desired. Defaults to 1 :math:`\mathrm{rad/s}` for each axis.
 
       :Attribute: Can be read or written
       :rtype: Tuple
@@ -658,10 +658,11 @@ AutoPilot
 
    .. attribute:: oscillation_bandwidth_floor: number
 
-      The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
-      bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
-      strongly; raising it keeps more control authority at the cost of allowing more wobble.
-      Defaults to 1 rad/s. This is an advanced tuning parameter.
+      The inner control loop bandwidth, in :math:`\mathrm{rad/s}`, that an axis is reduced
+      towards while the bandwidth-floor mitigation is engaged on it. Lowering it suppresses
+      oscillation more strongly; raising it keeps more control authority at the cost of
+      allowing more wobble. Defaults to 1 :math:`\mathrm{rad/s}`. This is an advanced tuning
+      parameter.
 
       :Attribute: Can be read or written
       :rtype: number

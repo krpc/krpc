@@ -45,8 +45,8 @@ Closest Approach
 
    .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_RelativeSpeed(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_ClosestApproach_t instance)
 
-      The relative speed of the objects at the closest approach, in meters per
-      second. This is the magnitude of :func:`krpc_SpaceCenter_ClosestApproach_RelativeVelocity`, and does
+      The relative speed of the objects at the closest approach, in :math:`\mathrm{m/s}`.
+      This is the magnitude of :func:`krpc_SpaceCenter_ClosestApproach_RelativeVelocity`, and does
       not depend on the choice of reference frame.
 
    

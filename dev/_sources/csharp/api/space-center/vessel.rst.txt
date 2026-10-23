@@ -281,7 +281,7 @@ Vessel
 
    .. property:: float DeltaV { get; }
 
-      Total delta-v for the vessel in the current situation, in m/s.
+      Total delta-v for the vessel in the current situation, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
@@ -290,13 +290,13 @@ Vessel
 
    .. property:: float VacuumDeltaV { get; }
 
-      Total vacuum delta-v for the vessel, in m/s.
+      Total vacuum delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
    .. property:: float SeaLevelDeltaV { get; }
 
-      Total sea-level delta-v for the vessel, in m/s.
+      Total sea-level delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
@@ -314,13 +314,13 @@ Vessel
 
    .. property:: float Mass { get; }
 
-      The total mass of the vessel, including resources, in kg.
+      The total mass of the vessel, including resources, in :math:`\mathrm{kg}`.
 
       :Game Scenes: Flight
 
    .. property:: float DryMass { get; }
 
-      The total mass of the vessel, excluding resources, in kg.
+      The total mass of the vessel, excluding resources, in :math:`\mathrm{kg}`.
 
       :Game Scenes: Flight
 
@@ -385,7 +385,7 @@ Vessel
    .. property:: float Acceleration { get; }
 
       The acceleration currently produced by the vessel's engines, in
-      :math:`m/s^2`. This is :prop:`Vessel.Thrust` divided by the
+      :math:`\mathrm{m/s^{2}}`. This is :prop:`Vessel.Thrust` divided by the
       vessel's :prop:`Vessel.Mass`.
 
       :Game Scenes: Flight
@@ -393,7 +393,7 @@ Vessel
    .. property:: float AvailableAcceleration { get; }
 
       The total available acceleration that can be produced by the vessel's
-      active engines, in :math:`m/s^2`. This is :prop:`Vessel.AvailableThrust`
+      active engines, in :math:`\mathrm{m/s^{2}}`. This is :prop:`Vessel.AvailableThrust`
       divided by the vessel's :prop:`Vessel.Mass`.
 
       :Game Scenes: Flight
@@ -401,7 +401,7 @@ Vessel
    .. function:: float AvailableAccelerationAt(double pressure)
 
       The total available acceleration that can be produced by the vessel's
-      active engines, in :math:`m/s^2`. This is :meth:`Vessel.AvailableThrustAt`
+      active engines, in :math:`\mathrm{m/s^{2}}`. This is :meth:`Vessel.AvailableThrustAt`
       divided by the vessel's :prop:`Vessel.Mass`. Takes the given pressure into account.
 
       :parameters:
@@ -413,7 +413,7 @@ Vessel
    .. property:: float MaxAcceleration { get; }
 
       The total maximum acceleration that can be produced by the vessel's active
-      engines, in :math:`m/s^2`. This is :prop:`Vessel.MaxThrust` divided by
+      engines, in :math:`\mathrm{m/s^{2}}`. This is :prop:`Vessel.MaxThrust` divided by
       the vessel's :prop:`Vessel.Mass`.
 
       :Game Scenes: Flight
@@ -421,7 +421,7 @@ Vessel
    .. function:: float MaxAccelerationAt(double pressure)
 
       The total maximum acceleration that can be produced by the vessel's active
-      engines, in :math:`m/s^2`. This is :meth:`Vessel.MaxThrustAt` divided by
+      engines, in :math:`\mathrm{m/s^{2}}`. This is :meth:`Vessel.MaxThrustAt` divided by
       the vessel's :prop:`Vessel.Mass`. Takes the given pressure into account.
 
       :parameters:
@@ -433,7 +433,7 @@ Vessel
    .. property:: float MaxVacuumAcceleration { get; }
 
       The total maximum acceleration that can be produced by the vessel's active
-      engines when the vessel is in a vacuum, in :math:`m/s^2`. This is
+      engines when the vessel is in a vacuum, in :math:`\mathrm{m/s^{2}}`. This is
       :prop:`Vessel.MaxVacuumThrust` divided by the vessel's :prop:`Vessel.Mass`.
 
       :Game Scenes: Flight
@@ -474,7 +474,7 @@ Vessel
 
    .. property:: System.Tuple<double,double,double> MomentOfInertia { get; }
 
-      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The moment of inertia of the vessel around its center of mass in :math:`\mathrm{kg \cdot m^{2}}`.
       The inertia values in the returned 3-tuple are around the
       pitch, roll and yaw directions respectively.
       This corresponds to the vessels reference frame (:prop:`Vessel.ReferenceFrame`).
@@ -493,7 +493,7 @@ Vessel
 
       The maximum torque that the vessel generates. Includes contributions from
       reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -502,7 +502,7 @@ Vessel
    .. property:: AxisRange AvailableReactionWheelTorque { get; }
 
       The maximum torque that the currently active and powered reaction wheels can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -511,7 +511,7 @@ Vessel
    .. property:: AxisRange AvailableRCSTorque { get; }
 
       The maximum torque that the currently active RCS thrusters can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -520,7 +520,7 @@ Vessel
    .. property:: AxisRange AvailableRCSForce { get; }
 
       The maximum force that the currently active RCS thrusters can generate.
-      Returns the forces in :math:`N` along each of the coordinate axes of the
+      Returns the forces in :math:`\mathrm{N}` along each of the coordinate axes of the
       vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the right, forward and bottom directions of the vessel.
 
@@ -530,7 +530,7 @@ Vessel
 
       The maximum acceleration that the currently active RCS thrusters can generate.
       This is :prop:`Vessel.AvailableRCSForce` divided by the vessel's :prop:`Vessel.Mass`.
-      Returns the accelerations in :math:`m/s^2` along each of the coordinate axes of the
+      Returns the accelerations in :math:`\mathrm{m/s^{2}}` along each of the coordinate axes of the
       vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the right, forward and bottom directions of the vessel.
 
@@ -539,7 +539,7 @@ Vessel
    .. property:: AxisRange AvailableEngineTorque { get; }
 
       The maximum torque that the currently active and gimballed engines can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -548,7 +548,7 @@ Vessel
    .. property:: AxisRange AvailableControlSurfaceTorque { get; }
 
       The maximum torque that the aerodynamic control surfaces can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -558,7 +558,7 @@ Vessel
 
       The maximum torque that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate.
-      Returns the torques in :math:`N.m` around each of the coordinate axes of the
+      Returns the torques in :math:`\mathrm{N \cdot m}` around each of the coordinate axes of the
       vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -569,7 +569,7 @@ Vessel
       The maximum angular acceleration that the vessel can generate. Includes contributions
       from reaction wheels, RCS, gimballed engines and aerodynamic control surfaces.
       This is :prop:`Vessel.AvailableTorque` divided by the vessel's :prop:`Vessel.MomentOfInertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -580,7 +580,7 @@ Vessel
       The maximum angular acceleration that the currently active and powered reaction wheels
       can generate. This is :prop:`Vessel.AvailableReactionWheelTorque` divided by the vessel's
       :prop:`Vessel.MomentOfInertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -590,7 +590,7 @@ Vessel
 
       The maximum angular acceleration that the currently active RCS thrusters can generate.
       This is :prop:`Vessel.AvailableRCSTorque` divided by the vessel's :prop:`Vessel.MomentOfInertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -601,7 +601,7 @@ Vessel
       The maximum angular acceleration that the currently active and gimballed engines can
       generate. This is :prop:`Vessel.AvailableEngineTorque` divided by the vessel's
       :prop:`Vessel.MomentOfInertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -612,7 +612,7 @@ Vessel
       The maximum angular acceleration that the aerodynamic control surfaces can generate.
       This is :prop:`Vessel.AvailableControlSurfaceTorque` divided by the vessel's
       :prop:`Vessel.MomentOfInertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -623,7 +623,7 @@ Vessel
       The maximum angular acceleration that parts (excluding reaction wheels, gimballed engines,
       RCS and control surfaces) can generate. This is :prop:`Vessel.AvailableOtherTorque` divided
       by the vessel's :prop:`Vessel.MomentOfInertia`.
-      Returns the angular accelerations in :math:`rad/s^2` around each of the coordinate
+      Returns the angular accelerations in :math:`\mathrm{rad/s^{2}}` around each of the coordinate
       axes of the vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       These axes are equivalent to the pitch, roll and yaw axes of the vessel.
 
@@ -830,7 +830,7 @@ Vessel
 
        * **referenceFrame** -- The reference frame that the returned velocity vector is in.
 
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in :math:`\mathrm{m/s}`.
       :Game Scenes: Flight
 
    .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
@@ -841,7 +841,7 @@ Vessel
 
        * **referenceFrame** -- The reference frame that the returned rotation is in.
 
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Flight
 
    .. function:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
@@ -863,7 +863,7 @@ Vessel
 
        * **referenceFrame** -- The reference frame the returned angular velocity is in.
 
-      :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in radians per second. The direction of the vector indicates the axis of rotation, using the right-hand rule.
+      :returns: The angular velocity as a vector. The magnitude of the vector is the rotational speed of the vessel, in :math:`\mathrm{rad/s}`. The direction of the vector indicates the axis of rotation, using the right-hand rule.
       :Game Scenes: Flight
 
 

@@ -953,7 +953,7 @@ plane hangar reports the space plane hangar.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12EditorVessel4massEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter12EditorVessel4massEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12EditorVessel4massEv"></span><span id="krpc::services::SpaceCenter::EditorVessel::mass"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel4massEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The total mass of the vessel, including resources and crew, in kg.</p>
+<dd><p>The total mass of the vessel, including resources and crew, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
@@ -964,7 +964,7 @@ plane hangar reports the space plane hangar.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12EditorVessel8dry_massEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter12EditorVessel8dry_massEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12EditorVessel8dry_massEv"></span><span id="krpc::services::SpaceCenter::EditorVessel::dry_mass"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dry_mass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel8dry_massEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The total mass of the vessel, excluding resources, in kg.</p>
+<dd><p>The total mass of the vessel, excluding resources, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
@@ -975,7 +975,7 @@ plane hangar reports the space plane hangar.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12EditorVessel17moment_of_inertiaEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter12EditorVessel17moment_of_inertiaEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12EditorVessel17moment_of_inertiaEv"></span><span id="krpc::services::SpaceCenter::EditorVessel::moment_of_inertia"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">moment_of_inertia</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel17moment_of_inertiaEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The moment of inertia of the vessel around its center of mass in <span class="math notranslate nohighlight">\(kg.m^2\)</span>.
+<dd><p>The moment of inertia of the vessel around its center of mass in <span class="math notranslate nohighlight">\(\mathrm{kg \cdot m^{2}}\)</span>.
 The inertia values in the returned 3-tuple are around the
 pitch, roll and yaw directions respectively.
 This corresponds to the vessels reference frame (<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel15reference_frameEv" title="krpc::services::SpaceCenter::EditorVessel::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">EditorVessel::reference_frame()</span></code></a>).</p>
@@ -1117,7 +1117,7 @@ vessel in flight, in the specified reference frame.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
+<dd class="field-even"><p>The rotation as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
@@ -1290,7 +1290,7 @@ changing anything the figures depend on.</p>
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12EditorVessel7delta_vEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter12EditorVessel7delta_vEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12EditorVessel7delta_vEv"></span><span id="krpc::services::SpaceCenter::EditorVessel::delta_v"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delta_v</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel7delta_vEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Total delta-v for the vessel in the situation the game’s delta-v readout
-assumes, in m/s. See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Editor12delta_v_bodyEv" title="krpc::services::SpaceCenter::Editor::delta_v_body"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Editor::delta_v_body()</span></code></a>.</p>
+assumes, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>. See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Editor12delta_v_bodyEv" title="krpc::services::SpaceCenter::Editor::delta_v_body"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Editor::delta_v_body()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
@@ -1301,7 +1301,7 @@ assumes, in m/s. See <a class="reference internal" href="#_CPPv4N4krpc8services1
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12EditorVessel14vacuum_delta_vEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter12EditorVessel14vacuum_delta_vEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12EditorVessel14vacuum_delta_vEv"></span><span id="krpc::services::SpaceCenter::EditorVessel::vacuum_delta_v"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vacuum_delta_v</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel14vacuum_delta_vEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Total vacuum delta-v for the vessel, in m/s.</p>
+<dd><p>Total vacuum delta-v for the vessel, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
@@ -1312,7 +1312,7 @@ assumes, in m/s. See <a class="reference internal" href="#_CPPv4N4krpc8services1
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12EditorVessel17sea_level_delta_vEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter12EditorVessel17sea_level_delta_vEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12EditorVessel17sea_level_delta_vEv"></span><span id="krpc::services::SpaceCenter::EditorVessel::sea_level_delta_v"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sea_level_delta_v</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12EditorVessel17sea_level_delta_vEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Total sea-level delta-v for the vessel, in m/s.</p>
+<dd><p>Total sea-level delta-v for the vessel, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
@@ -1391,7 +1391,7 @@ in the reference frame <a class="reference internal" href="reference-frame.html#
 <dd><p>The rotation of the vessel, in the reference frame <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
+<dd class="field-odd"><p>The rotation as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>Editor Vab, Editor Sph</p>
@@ -1453,7 +1453,7 @@ near -90° or +90°). For an always-defined attitude use <a class="reference int
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter15SimulatedFlight12displacementEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter15SimulatedFlight12displacementEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter15SimulatedFlight12displacementEv"></span><span id="krpc::services::SpaceCenter::SimulatedFlight::displacement"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">displacement</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter15SimulatedFlight12displacementEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The volume of water the vessel displaces when fully submerged, in
-<span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<span class="math notranslate nohighlight">\(\mathrm{m^{3}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>
@@ -1490,8 +1490,8 @@ density, in Newtons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
-<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
@@ -1510,12 +1510,12 @@ submerged in a fluid of the given density, in reference frame
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
-<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Editor Vab, Editor Sph</p>

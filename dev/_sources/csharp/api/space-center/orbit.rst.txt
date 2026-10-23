@@ -23,7 +23,7 @@ Orbit
 
        * **body** -- The celestial body being orbited.
        * **position** -- The position, as a position vector.
-       * **velocity** -- The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.
+       * **velocity** -- The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in :math:`\mathrm{m/s}`.
        * **ut** -- The universal time, in seconds, at which the object is at *position* traveling at *velocity*.
        * **referenceFrame** -- The reference frame that *position* and *velocity* are in. Defaults to :prop:`CelestialBody.NonRotatingReferenceFrame` of *body*.
 
@@ -319,7 +319,7 @@ Orbit
 
        * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to :prop:`CelestialBody.NonRotatingReferenceFrame` of :prop:`Orbit.Body`.
 
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
       :Game Scenes: All
 
    .. function:: System.Tuple<double,double,double> VelocityAt(double ut, ReferenceFrame referenceFrame = null)
@@ -331,7 +331,7 @@ Orbit
        * **ut** -- The universal time to measure the velocity at.
        * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to :prop:`CelestialBody.NonRotatingReferenceFrame` of :prop:`Orbit.Body`.
 
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
       :Game Scenes: All
 
    .. function:: System.Tuple<double,double,double> VelocityAtTrueAnomaly(double trueAnomaly, ReferenceFrame referenceFrame = null)
@@ -344,12 +344,12 @@ Orbit
        * **trueAnomaly** -- The true anomaly.
        * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to :prop:`CelestialBody.NonRotatingReferenceFrame` of :prop:`Orbit.Body`.
 
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
       :Game Scenes: All
 
    .. property:: double Speed { get; }
 
-      The current orbital speed of the object in meters per second.
+      The current orbital speed of the object in :math:`\mathrm{m/s}`.
 
       :Game Scenes: All
 
@@ -360,7 +360,7 @@ Orbit
 
    .. function:: double SpeedAt(double ut)
 
-      The orbital speed at the given time, in meters per second.
+      The orbital speed at the given time, in :math:`\mathrm{m/s}`.
 
       :parameters:
 
@@ -370,7 +370,7 @@ Orbit
 
    .. function:: double SpeedAtRadius(double radius)
 
-      The orbital speed at the given orbital radius, in meters per second.
+      The orbital speed at the given orbital radius, in :math:`\mathrm{m/s}`.
 
       :parameters:
 
@@ -386,8 +386,8 @@ Orbit
 
    .. function:: double SpeedAtTrueAnomaly(double trueAnomaly)
 
-      The orbital speed at the point in the orbit given by the true anomaly, in meters
-      per second.
+      The orbital speed at the point in the orbit given by the true anomaly, in
+      :math:`\mathrm{m/s}`.
 
       :parameters:
 
@@ -397,20 +397,21 @@ Orbit
 
    .. property:: double SpecificEnergy { get; }
 
-      The specific orbital energy, in Joules per kilogram (equivalently,
-      meters squared per second squared).
+      The specific orbital energy, in :math:`\mathrm{J/kg}`.
 
       :Game Scenes: All
 
 
       .. note::
 
-         This is the sum of the orbit's specific kinetic and potential energy, and
-         is negative for a bound (elliptical) orbit.
+         This is the sum of the orbit's specific kinetic and potential energy,
+         :math:`v^{2}/2 - \mu/r`, where :math:`v` is the orbital speed,
+         :math:`\mu` the gravitational parameter of the body and :math:`r` the
+         orbital radius. It is negative for a bound (elliptical) orbit.
 
    .. property:: double SpecificAngularMomentum { get; }
 
-      The specific relative angular momentum, in meters squared per second.
+      The specific relative angular momentum, in :math:`\mathrm{m^{2}/s}`.
 
       :Game Scenes: All
 
@@ -422,7 +423,7 @@ Orbit
 
    .. property:: double MeanMotion { get; }
 
-      The mean motion, in radians per second.
+      The mean motion, in :math:`\mathrm{rad/s}`.
 
       :Game Scenes: All
 
@@ -583,7 +584,7 @@ Orbit
 
       .. warning:: Deprecated. Use :prop:`Orbit.Speed` instead.
 
-      The current orbital speed in meters per second.
+      The current orbital speed in :math:`\mathrm{m/s}`.
 
       :Game Scenes: All
 
@@ -591,7 +592,7 @@ Orbit
 
       .. warning:: Deprecated. Use :meth:`Orbit.SpeedAt` instead.
 
-      The orbital speed at the given time, in meters per second.
+      The orbital speed at the given time, in :math:`\mathrm{m/s}`.
 
       :parameters:
 
@@ -603,7 +604,7 @@ Orbit
 
       .. warning:: Deprecated. Use :prop:`Orbit.SpecificEnergy` instead.
 
-      The specific orbital energy of the orbit, in Joules per kilogram.
+      The specific orbital energy of the orbit, in :math:`\mathrm{J/kg}`.
 
       :Game Scenes: All
 

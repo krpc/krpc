@@ -42,6 +42,7 @@
     <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'java/api/space-center/stage';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -753,7 +754,7 @@ the C# <code class="docutils literal notranslate"><span class="pre">Resources()<
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getDeltaV()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getDeltaV()" title="Link to this definition">#</a></dt>
-<dd><p>Delta-v for this stage in the current situation, in m/s.</p>
+<dd><p>Delta-v for this stage in the current situation, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Delta-v is only defined for <strong>activation</strong> stages (<code class="docutils literal notranslate"><span class="pre">decouple</span></code> is <code class="docutils literal notranslate"><span class="pre">false</span></code>).
@@ -764,13 +765,13 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getVacuumDeltaV()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getVacuumDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getVacuumDeltaV()" title="Link to this definition">#</a></dt>
-<dd><p>Vacuum delta-v for this stage, in m/s.</p>
+<dd><p>Vacuum delta-v for this stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getSeaLevelDeltaV()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSeaLevelDeltaV</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getSeaLevelDeltaV()" title="Link to this definition">#</a></dt>
-<dd><p>Sea-level delta-v for this stage, in m/s.</p>
+<dd><p>Sea-level delta-v for this stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -836,19 +837,19 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getStartMass()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getStartMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getStartMass()" title="Link to this definition">#</a></dt>
-<dd><p>The mass of the vessel after the stage activates, in kg.</p>
+<dd><p>The mass of the vessel after the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getEndMass()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getEndMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getEndMass()" title="Link to this definition">#</a></dt>
-<dd><p>The mass of the vessel when the stage burns out, in kg.</p>
+<dd><p>The mass of the vessel when the stage burns out, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getDryMass()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDryMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getDryMass()" title="Link to this definition">#</a></dt>
-<dd><p>The dry mass of the vessel after the stage activates, in kg.</p>
+<dd><p>The dry mass of the vessel after the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Includes the parts of all later stages.</p>
@@ -858,7 +859,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Stage.getFuelMass()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getFuelMass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Stage.getFuelMass()" title="Link to this definition">#</a></dt>
-<dd><p>The fuel mass of the vessel when the stage activates, in kg.</p>
+<dd><p>The fuel mass of the vessel when the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Includes the fuel of all later stages, and the fuel left in the parts the stage

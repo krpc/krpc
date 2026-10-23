@@ -292,7 +292,7 @@ colors other services use.
 
 .. function:: krpc_error_t krpc_StdLib_Atan2(krpc_connection_t connection, double * returnValue, double y, double x)
 
-   The angle, in radians, between the positive x axis and the point (x, y).
+   The angle, in radians, between the positive x axis and the point ``(x, y)``.
 
    :Parameters:
 
@@ -573,7 +573,7 @@ colors other services use.
 
 .. function:: krpc_error_t krpc_StdLib_VectorAngle(krpc_connection_t connection, double * returnValue, const krpc_tuple_double_double_double_t * u, const krpc_tuple_double_double_double_t * v)
 
-   The angle between two vectors, in radians, between 0 and pi.
+   The angle between two vectors, in radians, between 0 and :math:`\pi`.
 
    :Parameters:
 
@@ -740,7 +740,7 @@ colors other services use.
 .. function:: krpc_error_t krpc_StdLib_QuaternionAngle(krpc_connection_t connection, double * returnValue, const krpc_tuple_double_double_double_double_t * q, const krpc_tuple_double_double_double_double_t * r)
 
    The angle of the rotation that takes one rotation to another,
-   in radians, between 0 and pi.
+   in radians, between 0 and :math:`\pi`.
 
    :Parameters:
 
@@ -808,7 +808,7 @@ colors other services use.
 
    .. member:: double angle
 
-      The angle of the rotation, in radians between 0 and pi.
+      The angle of the rotation, in radians between 0 and :math:`\pi`.
 
 
 .. type:: krpc_StdLib_ColorRGB_t

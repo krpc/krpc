@@ -27,10 +27,10 @@ ReferenceFrame
       whose components offset the components of a parent reference frame.
 
       :param ReferenceFrame referenceFrame: The parent reference frame on which to base this reference frame.
-      :param org.javatuples.Triplet<Double,Double,Double> position: The offset of the position of the origin, as a position vector. Defaults to :math:`(0, 0, 0)`
-      :param org.javatuples.Quartet<Double,Double,Double,Double> rotation: The rotation to apply to the parent frames rotation, as a quaternion of the form :math:`(x, y, z, w)`. Defaults to :math:`(0, 0, 0, 1)` (i.e. no rotation)
-      :param org.javatuples.Triplet<Double,Double,Double> velocity: The linear velocity to offset the parent frame by, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second. Defaults to :math:`(0, 0, 0)`.
-      :param org.javatuples.Triplet<Double,Double,Double> angularVelocity: The angular velocity to offset the parent frame by, as a vector. This vector points in the direction of the axis of rotation, and its magnitude is the speed of the rotation in radians per second. Defaults to :math:`(0, 0, 0)`.
+      :param org.javatuples.Triplet<Double,Double,Double> position: The offset of the position of the origin, as a position vector. Defaults to ``(0, 0, 0)``
+      :param org.javatuples.Quartet<Double,Double,Double,Double> rotation: The rotation to apply to the parent frames rotation, as a quaternion of the form ``(x, y, z, w)``. Defaults to ``(0, 0, 0, 1)`` (i.e. no rotation)
+      :param org.javatuples.Triplet<Double,Double,Double> velocity: The linear velocity to offset the parent frame by, as a vector pointing in the direction of travel, whose magnitude is the speed in :math:`\mathrm{m/s}`. Defaults to ``(0, 0, 0)``.
+      :param org.javatuples.Triplet<Double,Double,Double> angularVelocity: The angular velocity to offset the parent frame by, as a vector. This vector points in the direction of the axis of rotation, and its magnitude is the speed of the rotation in :math:`\mathrm{rad/s}`. Defaults to ``(0, 0, 0)``.
    
 
       .. note::

@@ -503,7 +503,7 @@ Part
    .. method:: double getDisplacement()
 
 
-      The volume of water the part displaces when fully submerged, in :math:`m^3`.
+      The volume of water the part displaces when fully submerged, in :math:`\mathrm{m^{3}}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -524,8 +524,8 @@ Part
       The buoyant force on the part when fully submerged in a fluid of the given
       density, in Newtons.
 
-      :param double density: The density of the fluid, in :math:`kg/m^3`.
-      :param double gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :param double density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+      :param double gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
@@ -553,7 +553,7 @@ Part
    .. method:: double getDisplacedVolume()
 
 
-      The volume of water the part is displacing, in :math:`m^3`.
+      The volume of water the part is displacing, in :math:`\mathrm{m^{3}}`.
 
       :Game Scenes: Flight
 
@@ -632,7 +632,7 @@ Part
    .. method:: double getImpactTolerance()
 
 
-      The impact tolerance of the part, in meters per second.
+      The impact tolerance of the part, in :math:`\mathrm{m/s}`.
 
    
 
@@ -1092,7 +1092,7 @@ Part
       The linear velocity of the part in the given reference frame.
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in.
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in :math:`\mathrm{m/s}`.
       :Game Scenes: Flight
 
    .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
@@ -1100,7 +1100,7 @@ Part
       The rotation of the part, in the given reference frame.
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned rotation is in.
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> lift(ReferenceFrame referenceFrame)
@@ -1172,7 +1172,7 @@ Part
    .. method:: org.javatuples.Triplet<Double,Double,Double> getMomentOfInertia()
 
 
-      The moment of inertia of the part in :math:`kg.m^2` around its center of mass
+      The moment of inertia of the part in :math:`\mathrm{kg \cdot m^{2}}` around its center of mass
       in the parts center of mass reference frame (:meth:`Part.getCenterOfMassReferenceFrame()`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
@@ -2086,14 +2086,14 @@ Control Surface
    .. method:: float getSurfaceArea()
 
 
-      Surface area of the control surface in :math:`m^2`.
+      Surface area of the control surface in :math:`\mathrm{m^{2}}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: AxisRange getAvailableTorque()
 
 
-      The available torque, in Newton meters, that can be produced by this control surface,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this control surface,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
 
@@ -2147,7 +2147,7 @@ Decoupler
    .. method:: float getImpulse()
 
 
-      The impulse that the decoupler imparts when it is fired, in Newton seconds.
+      The impulse that the decoupler imparts when it is fired, in :math:`\mathrm{N \cdot s}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -2343,7 +2343,7 @@ Docking Port
       The rotation of the docking port, in the given reference frame.
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned rotation is in.
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Flight
 
    .. method:: ReferenceFrame getReferenceFrame()
@@ -2749,7 +2749,7 @@ Engine
    .. method:: AxisRange getAvailableTorque()
 
 
-      The available torque, in Newton meters, that can be produced by this engine,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this engine,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
       Returns zero if the engine is inactive, or not gimballed.
@@ -3185,7 +3185,7 @@ Intake
    .. method:: float getSpeed()
 
 
-      Speed of the flow into the intake, in :math:`m/s`.
+      Speed of the flow into the intake, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
@@ -3199,7 +3199,7 @@ Intake
    .. method:: float getArea()
 
 
-      The area of the intake's opening, in square meters.
+      The area of the intake's opening, in :math:`\mathrm{m^{2}}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -3723,7 +3723,7 @@ Resource Harvester
    .. method:: float getExtractionRate()
 
 
-      The rate at which the drill is extracting ore, in units per second.
+      The rate at which the drill is extracting ore, in :math:`\mathrm{units/s}`.
 
       :Game Scenes: Flight
 
@@ -3783,7 +3783,7 @@ Reaction Wheel
    .. method:: AxisRange getAvailableTorque()
 
 
-      The available torque, in Newton meters, that can be produced by this reaction wheel,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this reaction wheel,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
       Returns zero if the reaction wheel is inactive or broken.
@@ -3793,7 +3793,7 @@ Reaction Wheel
    .. method:: AxisRange getMaxTorque()
 
 
-      The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+      The maximum torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this reaction wheel,
       when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
       These axes correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
 
@@ -4088,7 +4088,7 @@ Robotic Hinge
 
    .. method:: void setRate(float value)
 
-      Target movement rate in degrees per second.
+      Target movement rate in :math:`\mathrm{{}^{\circ}/s}`.
 
       :Game Scenes: Flight
 
@@ -4181,7 +4181,7 @@ Robotic Piston
 
    .. method:: void setRate(float value)
 
-      Target movement rate in meters per second.
+      Target movement rate in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
@@ -4283,7 +4283,7 @@ Robotic Rotation
 
    .. method:: void setRate(float value)
 
-      Target movement rate in degrees per second.
+      Target movement rate in :math:`\mathrm{{}^{\circ}/s}`.
 
       :Game Scenes: Flight
 
@@ -4530,7 +4530,7 @@ RCS
    .. method:: AxisRange getAvailableTorque()
 
 
-      The available torque, in Newton meters, that can be produced by this RCS,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this RCS,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
       Returns zero if RCS is disable.
@@ -4574,14 +4574,14 @@ RCS
 
 
       The torque being applied by the RCS thrusters about the vessel's center of mass,
-      in Newton meters. The vector is in the vessel's reference frame
+      in :math:`\mathrm{N \cdot m}`. The vector is in the vessel's reference frame
       (:meth:`Vessel.getReferenceFrame()`). Returns zero if the RCS is inactive.
 
       :Game Scenes: Flight
 
    .. method:: Wrench overrideWrench(org.javatuples.Triplet<Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> translation)
 
-      The force and torque the given demands would produce, in Newtons and Newton meters.
+      The force and torque the given demands would produce, in Newtons and :math:`\mathrm{N \cdot m}`.
 
       :param org.javatuples.Triplet<Double,Double,Double> rotation: A rotation demand, as set by :meth:`RCS.getRotationOverride()`.
       :param org.javatuples.Triplet<Double,Double,Double> translation: A translation demand, as set by :meth:`RCS.getTranslationOverride()`.
@@ -5012,7 +5012,8 @@ Wheel
    .. method:: float getMotorOutput()
 
 
-      The output of the motor. This is the torque currently being generated, in Newton meters.
+      The output of the motor. This is the torque currently being generated, in
+      :math:`\mathrm{N \cdot m}`.
 
    
 

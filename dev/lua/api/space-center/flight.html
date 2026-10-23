@@ -719,7 +719,7 @@ Obtained by calling <a class="reference internal" href="vessel.html#SpaceCenter.
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Flight.g_force">
 <span class="sig-name descname"><span class="pre">g_force</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.g_force" title="Link to this definition">#</a></dt>
-<dd><p>The current G force acting on the vessel in <span class="math notranslate nohighlight">\(g\)</span>.</p>
+<dd><p>The current G force acting on the vessel in <span class="math notranslate nohighlight">\(\mathrm{g}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -846,7 +846,7 @@ and points straight up when the vessel is over water.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the vessel in meters per second.</p>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the vessel in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
@@ -857,7 +857,7 @@ and points straight up when the vessel is over water.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Flight.speed">
 <span class="sig-name descname"><span class="pre">speed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.speed" title="Link to this definition">#</a></dt>
-<dd><p>The speed of the vessel in meters per second,
+<dd><p>The speed of the vessel in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>,
 in the reference frame <a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -872,7 +872,7 @@ in the reference frame <a class="reference internal" href="reference-frame.html#
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Flight.horizontal_speed">
 <span class="sig-name descname"><span class="pre">horizontal_speed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.horizontal_speed" title="Link to this definition">#</a></dt>
-<dd><p>The horizontal speed of the vessel in meters per second,
+<dd><p>The horizontal speed of the vessel in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>,
 in the reference frame <a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -887,7 +887,7 @@ in the reference frame <a class="reference internal" href="reference-frame.html#
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Flight.vertical_speed">
 <span class="sig-name descname"><span class="pre">vertical_speed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.vertical_speed" title="Link to this definition">#</a></dt>
-<dd><p>The vertical speed of the vessel in meters per second,
+<dd><p>The vertical speed of the vessel in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>,
 in the reference frame <a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -910,7 +910,7 @@ time derivative of <a class="reference internal" href="#SpaceCenter.SpaceCenter.
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The acceleration as a vector. The vector points in the direction of the acceleration, and its magnitude is the acceleration of the vessel in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p>
+<dd class="field-even"><p>The acceleration as a vector. The vector points in the direction of the acceleration, and its magnitude is the acceleration of the vessel in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
@@ -945,7 +945,7 @@ in the reference frame <a class="reference internal" href="reference-frame.html#
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
+<dd class="field-even"><p>The rotation as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
@@ -1194,7 +1194,7 @@ in the reference frame <a class="reference internal" href="reference-frame.html#
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Flight.atmosphere_density">
 <span class="sig-name descname"><span class="pre">atmosphere_density</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.atmosphere_density" title="Link to this definition">#</a></dt>
-<dd><p>The current density of the atmosphere around the vessel, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p>
+<dd><p>The current density of the atmosphere around the vessel, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1209,8 +1209,8 @@ in the reference frame <a class="reference internal" href="reference-frame.html#
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Flight.dynamic_pressure">
 <span class="sig-name descname"><span class="pre">dynamic_pressure</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.dynamic_pressure" title="Link to this definition">#</a></dt>
 <dd><p>The dynamic pressure acting on the vessel, in Pascals. This is a measure of the
-strength of the aerodynamic forces. It is equal to
-<span class="math notranslate nohighlight">\(\frac{1}{2} . \mbox{air density} . \mbox{velocity}^2\)</span>.
+strength of the aerodynamic forces. It is equal to <span class="math notranslate nohighlight">\(\frac{1}{2} \rho v^{2}\)</span>,
+where <span class="math notranslate nohighlight">\(\rho\)</span> is the air density and <span class="math notranslate nohighlight">\(v\)</span> the velocity.
 It is commonly denoted <span class="math notranslate nohighlight">\(Q\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -1259,7 +1259,7 @@ center of mass.</p>
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Flight.displacement">
 <span class="sig-name descname"><span class="pre">displacement</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.displacement" title="Link to this definition">#</a></dt>
 <dd><p>The volume of water the vessel displaces when fully submerged, in
-<span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<span class="math notranslate nohighlight">\(\mathrm{m^{3}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1273,7 +1273,7 @@ center of mass.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Flight.displaced_volume">
 <span class="sig-name descname"><span class="pre">displaced_volume</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.displaced_volume" title="Link to this definition">#</a></dt>
-<dd><p>The volume of water the vessel is displacing, in <span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dd><p>The volume of water the vessel is displacing, in <span class="math notranslate nohighlight">\(\mathrm{m^{3}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1357,7 +1357,7 @@ in reference frame <a class="reference internal" href="reference-frame.html#Spac
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p>
+<dd class="field-even"><p>A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
@@ -1375,7 +1375,7 @@ in reference frame <a class="reference internal" href="reference-frame.html#Spac
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
@@ -1415,8 +1415,8 @@ density, in Newtons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>density</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
-<li><p><strong>gravity</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+<li><p><strong>density</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The density of the fluid, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>.</p></li>
+<li><p><strong>gravity</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
@@ -1434,12 +1434,12 @@ submerged in a fluid of the given density, in reference frame
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>density</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
-<li><p><strong>gravity</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+<li><p><strong>density</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The density of the fluid, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>.</p></li>
+<li><p><strong>gravity</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
@@ -1507,13 +1507,13 @@ vessel whatever the vessel’s orientation. It equals <a class="reference intern
 <span class="sig-name descname"><span class="pre">aerodynamic_torque</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.aerodynamic_torque" title="Link to this definition">#</a></dt>
 <dd><p>The net aerodynamic torque currently acting on the vessel about its center of
 mass, in reference frame <a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a>. The magnitude is in
-newton-meters.</p>
+<span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
@@ -1580,7 +1580,7 @@ celestial body.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters, in reference frame <a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a>.</p>
+<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>, in reference frame <a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
@@ -1722,7 +1722,7 @@ in reference frame <a class="reference internal" href="reference-frame.html#Spac
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p>
+<dd class="field-even"><p>A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
@@ -1741,7 +1741,7 @@ in reference frame <a class="reference internal" href="reference-frame.html#Spac
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p>
+<dd class="field-even"><p>A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
@@ -1760,7 +1760,7 @@ in reference frame <a class="reference internal" href="reference-frame.html#Spac
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p>
+<dd class="field-even"><p>A vector pointing in the direction that the vessel is accelerated, with its magnitude equal to the acceleration in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
@@ -1771,7 +1771,7 @@ in reference frame <a class="reference internal" href="reference-frame.html#Spac
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Flight.speed_of_sound">
 <span class="sig-name descname"><span class="pre">speed_of_sound</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.speed_of_sound" title="Link to this definition">#</a></dt>
-<dd><p>The speed of sound, in the atmosphere around the vessel, in <span class="math notranslate nohighlight">\(m/s\)</span>.</p>
+<dd><p>The speed of sound, in the atmosphere around the vessel, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1818,7 +1818,7 @@ in reference frame <a class="reference internal" href="reference-frame.html#Spac
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Flight.true_air_speed">
 <span class="sig-name descname"><span class="pre">true_air_speed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.true_air_speed" title="Link to this definition">#</a></dt>
 <dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/True_airspeed">true air speed</a>
-of the vessel, in meters per second.</p>
+of the vessel, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1833,7 +1833,7 @@ of the vessel, in meters per second.</p>
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Flight.equivalent_air_speed">
 <span class="sig-name descname"><span class="pre">equivalent_air_speed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.equivalent_air_speed" title="Link to this definition">#</a></dt>
 <dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Equivalent_airspeed">equivalent air speed</a>
-of the vessel, in meters per second.</p>
+of the vessel, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1847,7 +1847,7 @@ of the vessel, in meters per second.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Flight.terminal_velocity">
 <span class="sig-name descname"><span class="pre">terminal_velocity</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Flight.terminal_velocity" title="Link to this definition">#</a></dt>
-<dd><p>An estimate of the current terminal velocity of the vessel, in meters per second.
+<dd><p>An estimate of the current terminal velocity of the vessel, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.
 This is the speed at which the drag forces cancel out the force of gravity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
@@ -2034,7 +2034,7 @@ per hour, to produce one newton of thrust.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Wrench.torque">
 <span class="sig-name descname"><span class="pre">torque</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Wrench.torque" title="Link to this definition">#</a></dt>
-<dd><p>The torque, in Newton meters.</p>
+<dd><p>The torque, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>

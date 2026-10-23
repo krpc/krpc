@@ -191,7 +191,7 @@ Editor
 
    .. attribute:: mass
 
-      The total mass of the vessel, including resources and crew, in kg.
+      The total mass of the vessel, including resources and crew, in :math:`\mathrm{kg}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -199,7 +199,7 @@ Editor
 
    .. attribute:: dry_mass
 
-      The total mass of the vessel, excluding resources, in kg.
+      The total mass of the vessel, excluding resources, in :math:`\mathrm{kg}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -207,7 +207,7 @@ Editor
 
    .. attribute:: moment_of_inertia
 
-      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The moment of inertia of the vessel around its center of mass in :math:`\mathrm{kg \cdot m^{2}}`.
       The inertia values in the returned 3-tuple are around the
       pitch, roll and yaw directions respectively.
       This corresponds to the vessels reference frame (:attr:`EditorVessel.reference_frame`).
@@ -305,7 +305,7 @@ Editor
       The rotation of the vessel, in the given reference frame.
 
       :param ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :rtype: tuple(float, float, float, float)
       :Game Scenes: Editor Vab, Editor Sph
 
@@ -425,7 +425,7 @@ Editor
    .. attribute:: delta_v
 
       Total delta-v for the vessel in the situation the game's delta-v readout
-      assumes, in m/s. See :attr:`Editor.delta_v_body`.
+      assumes, in :math:`\mathrm{m/s}`. See :attr:`Editor.delta_v_body`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -433,7 +433,7 @@ Editor
 
    .. attribute:: vacuum_delta_v
 
-      Total vacuum delta-v for the vessel, in m/s.
+      Total vacuum delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -441,7 +441,7 @@ Editor
 
    .. attribute:: sea_level_delta_v
 
-      Total sea-level delta-v for the vessel, in m/s.
+      Total sea-level delta-v for the vessel, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -502,7 +502,7 @@ Editor
       The rotation of the vessel, in the reference frame :class:`ReferenceFrame`
 
       :Attribute: Read-only, cannot be set
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :rtype: tuple(float, float, float, float)
       :Game Scenes: Editor Vab, Editor Sph
 
@@ -550,7 +550,7 @@ Editor
    .. attribute:: displacement
 
       The volume of water the vessel displaces when fully submerged, in
-      :math:`m^3`.
+      :math:`\mathrm{m^{3}}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -578,8 +578,8 @@ Editor
       The buoyant force on the vessel when fully submerged in a fluid of the given
       density, in Newtons.
 
-      :param float density: The density of the fluid, in :math:`kg/m^3`.
-      :param float gravity: The acceleration due to gravity, in :math:`m/s^2`.
+      :param float density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+      :param float gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
       :rtype: float
       :Game Scenes: Editor Vab, Editor Sph
 
@@ -590,8 +590,8 @@ Editor
       :class:`ReferenceFrame`. Gravity acts along the negative x-axis of
       :attr:`SimulatedFlight.surface_reference_frame`.
 
-      :param float density: The density of the fluid, in :math:`kg/m^3`.
-      :param float gravity: The acceleration due to gravity, in :math:`m/s^2`.
-      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :param float density: The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+      :param float gravity: The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in :math:`\mathrm{N \cdot m}`.
       :rtype: tuple(float, float, float)
       :Game Scenes: Editor Vab, Editor Sph

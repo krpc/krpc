@@ -51,7 +51,7 @@ Stage
 
    .. function:: krpc_error_t krpc_SpaceCenter_Stage_DeltaV(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Stage_t instance)
 
-      Delta-v for this stage in the current situation, in m/s.
+      Delta-v for this stage in the current situation, in :math:`\mathrm{m/s}`.
 
    
 
@@ -60,13 +60,13 @@ Stage
 
    .. function:: krpc_error_t krpc_SpaceCenter_Stage_VacuumDeltaV(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Stage_t instance)
 
-      Vacuum delta-v for this stage, in m/s.
+      Vacuum delta-v for this stage, in :math:`\mathrm{m/s}`.
 
    
 
    .. function:: krpc_error_t krpc_SpaceCenter_Stage_SeaLevelDeltaV(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Stage_t instance)
 
-      Sea-level delta-v for this stage, in m/s.
+      Sea-level delta-v for this stage, in :math:`\mathrm{m/s}`.
 
    
 
@@ -132,19 +132,19 @@ Stage
 
    .. function:: krpc_error_t krpc_SpaceCenter_Stage_StartMass(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Stage_t instance)
 
-      The mass of the vessel after the stage activates, in kg.
+      The mass of the vessel after the stage activates, in :math:`\mathrm{kg}`.
 
    
 
    .. function:: krpc_error_t krpc_SpaceCenter_Stage_EndMass(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Stage_t instance)
 
-      The mass of the vessel when the stage burns out, in kg.
+      The mass of the vessel when the stage burns out, in :math:`\mathrm{kg}`.
 
    
 
    .. function:: krpc_error_t krpc_SpaceCenter_Stage_DryMass(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Stage_t instance)
 
-      The dry mass of the vessel after the stage activates, in kg.
+      The dry mass of the vessel after the stage activates, in :math:`\mathrm{kg}`.
 
    
 
@@ -154,7 +154,7 @@ Stage
 
    .. function:: krpc_error_t krpc_SpaceCenter_Stage_FuelMass(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_Stage_t instance)
 
-      The fuel mass of the vessel when the stage activates, in kg.
+      The fuel mass of the vessel when the stage activates, in :math:`\mathrm{kg}`.
 
    
 

@@ -29,10 +29,10 @@ ReferenceFrame
       :parameters:
 
        * **referenceFrame** -- The parent reference frame on which to base this reference frame.
-       * **position** -- The offset of the position of the origin, as a position vector. Defaults to :math:`(0, 0, 0)` If null, defaults to ``new System.Tuple<double,double,double>(0.0, 0.0, 0.0)``.
-       * **rotation** -- The rotation to apply to the parent frames rotation, as a quaternion of the form :math:`(x, y, z, w)`. Defaults to :math:`(0, 0, 0, 1)` (i.e. no rotation) If null, defaults to ``new System.Tuple<double,double,double,double>(0.0, 0.0, 0.0, 1.0)``.
-       * **velocity** -- The linear velocity to offset the parent frame by, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second. Defaults to :math:`(0, 0, 0)`. If null, defaults to ``new System.Tuple<double,double,double>(0.0, 0.0, 0.0)``.
-       * **angularVelocity** -- The angular velocity to offset the parent frame by, as a vector. This vector points in the direction of the axis of rotation, and its magnitude is the speed of the rotation in radians per second. Defaults to :math:`(0, 0, 0)`. If null, defaults to ``new System.Tuple<double,double,double>(0.0, 0.0, 0.0)``.
+       * **position** -- The offset of the position of the origin, as a position vector. Defaults to ``(0, 0, 0)`` If null, defaults to ``new System.Tuple<double,double,double>(0.0, 0.0, 0.0)``.
+       * **rotation** -- The rotation to apply to the parent frames rotation, as a quaternion of the form ``(x, y, z, w)``. Defaults to ``(0, 0, 0, 1)`` (i.e. no rotation) If null, defaults to ``new System.Tuple<double,double,double,double>(0.0, 0.0, 0.0, 1.0)``.
+       * **velocity** -- The linear velocity to offset the parent frame by, as a vector pointing in the direction of travel, whose magnitude is the speed in :math:`\mathrm{m/s}`. Defaults to ``(0, 0, 0)``. If null, defaults to ``new System.Tuple<double,double,double>(0.0, 0.0, 0.0)``.
+       * **angularVelocity** -- The angular velocity to offset the parent frame by, as a vector. This vector points in the direction of the axis of rotation, and its magnitude is the speed of the rotation in :math:`\mathrm{rad/s}`. Defaults to ``(0, 0, 0)``. If null, defaults to ``new System.Tuple<double,double,double>(0.0, 0.0, 0.0)``.
 
       :Game Scenes: All
 

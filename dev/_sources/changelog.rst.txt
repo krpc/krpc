@@ -15,7 +15,22 @@ v0.8.0 - unreleased
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
+* Typeset units and formulas in the API documentation, and write them as Unicode text in client documentation, e.g. ``m/s²`` (:issue:`1169`)
 * Allow the rails warp rates the game allows the player, which ignore the altitude limits when the periapsis is clear of the atmosphere and terrain (:issue:`1167`)
+
+
+Python client
+^^^^^^^^^^^^^
+
+* Write the units and formulas in service documentation as Unicode text in docstrings (:issue:`1169`)
+* Fix a ``SyntaxWarning`` for an invalid escape sequence on importing the ``SpaceCenter`` stubs (:issue:`1169`)
+
+
+krpctools
+^^^^^^^^^
+
+* Add ``<unit>`` and a LaTeX subset for ``<math>`` to service documentation, typeset by ``krpc-docgen`` and written as Unicode text by ``krpc-clientgen`` (:issue:`1169`)
+* Report invalid documentation markup as an error from ``krpc-docgen``, and a warning from ``krpc-clientgen`` (:issue:`1169`)
 
 
 v0.7.0

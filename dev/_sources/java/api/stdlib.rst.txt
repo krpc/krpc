@@ -180,7 +180,7 @@ Standard Library
 
    .. method:: double atan2(double y, double x)
 
-      The angle, in radians, between the positive x axis and the point (x, y).
+      The angle, in radians, between the positive x axis and the point ``(x, y)``.
 
       :param double y: The y coordinate.
       :param double x: The x coordinate.
@@ -347,7 +347,7 @@ Standard Library
 
    .. method:: double vectorAngle(org.javatuples.Triplet<Double,Double,Double> u, org.javatuples.Triplet<Double,Double,Double> v)
 
-      The angle between two vectors, in radians, between 0 and pi.
+      The angle between two vectors, in radians, between 0 and :math:`\pi`.
 
       :param org.javatuples.Triplet<Double,Double,Double> u: The first vector.
       :param org.javatuples.Triplet<Double,Double,Double> v: The second vector.
@@ -460,7 +460,7 @@ Standard Library
    .. method:: double quaternionAngle(org.javatuples.Quartet<Double,Double,Double,Double> q, org.javatuples.Quartet<Double,Double,Double,Double> r)
 
       The angle of the rotation that takes one rotation to another,
-      in radians, between 0 and pi.
+      in radians, between 0 and :math:`\pi`.
 
       :param org.javatuples.Quartet<Double,Double,Double,Double> q: The first rotation.
       :param org.javatuples.Quartet<Double,Double,Double,Double> r: The second rotation.
@@ -517,7 +517,7 @@ Standard Library
 
    .. method:: double getAngle()
 
-      The angle of the rotation, in radians between 0 and pi.
+      The angle of the rotation, in radians between 0 and :math:`\pi`.
 
 
 .. type:: public class ColorRGB

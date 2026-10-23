@@ -79,7 +79,7 @@ options.
    :param float latitude: Latitude in degrees.
    :param float longitude: Longitude in degrees.
    :param float altitude: Altitude in meters above sea level.
-   :param float speed: Airspeed in meters per second, relative to the surface.
+   :param float speed: Airspeed in :math:`\mathrm{m/s}`, relative to the surface.
    :param float heading: Compass heading to point along, in degrees (90 is east).
    :param float pitch: Pitch above the horizon, in degrees. Defaults to 0 (level).
    :param float roll: Roll, in degrees. Defaults to 0 (wings level).
@@ -119,7 +119,7 @@ options.
    orbit that passes through its current position at the new velocity, so this works
    in orbit and in the atmosphere alike.
 
-   :param tuple velocity: Velocity in meters per second.
+   :param tuple velocity: Velocity in :math:`\mathrm{m/s}`.
    :param SpaceCenter.ReferenceFrame or None reference_frame: Reference frame the velocity is in. Defaults to the reference frame of the body being orbited, which rotates with it, so a zero velocity leaves the vessel at rest relative to the ground.
    :Game Scenes: Flight
 
@@ -189,7 +189,7 @@ options.
    Set the angular velocity of a vessel, expressed in the given reference frame. Pass a
    zero vector to stop the vessel rotating.
 
-   :param tuple angular_velocity: Angular velocity, in radians per second. The direction is the axis of rotation and the magnitude is the rate.
+   :param tuple angular_velocity: Angular velocity, in :math:`\mathrm{rad/s}`. The direction is the axis of rotation and the magnitude is the rate.
    :param SpaceCenter.ReferenceFrame or None reference_frame: Reference frame the angular velocity is in. Defaults to the vessel's surface reference frame.
    :param SpaceCenter.Vessel or None vessel: Vessel to rotate. Defaults to the active vessel.
    :Game Scenes: Flight

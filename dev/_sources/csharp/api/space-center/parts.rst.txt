@@ -471,7 +471,7 @@ Part
 
    .. property:: double Displacement { get; }
 
-      The volume of water the part displaces when fully submerged, in :math:`m^3`.
+      The volume of water the part displaces when fully submerged, in :math:`\mathrm{m^{3}}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -493,8 +493,8 @@ Part
 
       :parameters:
 
-       * **density** -- The density of the fluid, in :math:`kg/m^3`.
-       * **gravity** -- The acceleration due to gravity, in :math:`m/s^2`.
+       * **density** -- The density of the fluid, in :math:`\mathrm{kg/m^{3}}`.
+       * **gravity** -- The acceleration due to gravity, in :math:`\mathrm{m/s^{2}}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -520,7 +520,7 @@ Part
 
    .. property:: double DisplacedVolume { get; }
 
-      The volume of water the part is displacing, in :math:`m^3`.
+      The volume of water the part is displacing, in :math:`\mathrm{m^{3}}`.
 
       :Game Scenes: Flight
 
@@ -591,7 +591,7 @@ Part
 
    .. property:: double ImpactTolerance { get; }
 
-      The impact tolerance of the part, in meters per second.
+      The impact tolerance of the part, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: All
 
@@ -1020,7 +1020,7 @@ Part
 
        * **referenceFrame** -- The reference frame that the returned velocity vector is in.
 
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in :math:`\mathrm{m/s}`.
       :Game Scenes: Flight
 
    .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
@@ -1031,7 +1031,7 @@ Part
 
        * **referenceFrame** -- The reference frame that the returned rotation is in.
 
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: System.Tuple<double,double,double> Lift(ReferenceFrame referenceFrame)
@@ -1117,7 +1117,7 @@ Part
 
    .. property:: System.Tuple<double,double,double> MomentOfInertia { get; }
 
-      The moment of inertia of the part in :math:`kg.m^2` around its center of mass
+      The moment of inertia of the part in :math:`\mathrm{kg \cdot m^{2}}` around its center of mass
       in the parts center of mass reference frame (:prop:`Part.CenterOfMassReferenceFrame`).
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
@@ -1981,13 +1981,13 @@ Control Surface
 
    .. property:: float SurfaceArea { get; }
 
-      Surface area of the control surface in :math:`m^2`.
+      Surface area of the control surface in :math:`\mathrm{m^{2}}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: AxisRange AvailableTorque { get; }
 
-      The available torque, in Newton meters, that can be produced by this control surface,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this control surface,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
 
@@ -2038,7 +2038,7 @@ Decoupler
 
    .. property:: float Impulse { get; }
 
-      The impulse that the decoupler imparts when it is fired, in Newton seconds.
+      The impulse that the decoupler imparts when it is fired, in :math:`\mathrm{N \cdot s}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -2228,7 +2228,7 @@ Docking Port
 
        * **referenceFrame** -- The reference frame that the returned rotation is in.
 
-      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :returns: The rotation as a quaternion of the form ``(x, y, z, w)``.
       :Game Scenes: Flight
 
    .. property:: ReferenceFrame ReferenceFrame { get; }
@@ -2601,7 +2601,7 @@ Engine
 
    .. property:: AxisRange AvailableTorque { get; }
 
-      The available torque, in Newton meters, that can be produced by this engine,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this engine,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
       Returns zero if the engine is inactive, or not gimballed.
@@ -3005,7 +3005,7 @@ Intake
 
    .. property:: float Speed { get; }
 
-      Speed of the flow into the intake, in :math:`m/s`.
+      Speed of the flow into the intake, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
@@ -3017,7 +3017,7 @@ Intake
 
    .. property:: float Area { get; }
 
-      The area of the intake's opening, in square meters.
+      The area of the intake's opening, in :math:`\mathrm{m^{2}}`.
 
       :Game Scenes: Flight, Editor Vab, Editor Sph
 
@@ -3526,7 +3526,7 @@ Resource Harvester
 
    .. property:: float ExtractionRate { get; }
 
-      The rate at which the drill is extracting ore, in units per second.
+      The rate at which the drill is extracting ore, in :math:`\mathrm{units/s}`.
 
       :Game Scenes: Flight
 
@@ -3578,7 +3578,7 @@ Reaction Wheel
 
    .. property:: AxisRange AvailableTorque { get; }
 
-      The available torque, in Newton meters, that can be produced by this reaction wheel,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this reaction wheel,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
       Returns zero if the reaction wheel is inactive or broken.
@@ -3587,7 +3587,7 @@ Reaction Wheel
 
    .. property:: AxisRange MaxTorque { get; }
 
-      The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+      The maximum torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this reaction wheel,
       when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
       These axes correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
 
@@ -3877,7 +3877,7 @@ Robotic Hinge
 
    .. property:: float Rate { get; set; }
 
-      Target movement rate in degrees per second.
+      Target movement rate in :math:`\mathrm{{}^{\circ}/s}`.
 
       :Game Scenes: Flight
 
@@ -3954,7 +3954,7 @@ Robotic Piston
 
    .. property:: float Rate { get; set; }
 
-      Target movement rate in meters per second.
+      Target movement rate in :math:`\mathrm{m/s}`.
 
       :Game Scenes: Flight
 
@@ -4038,7 +4038,7 @@ Robotic Rotation
 
    .. property:: float Rate { get; set; }
 
-      Target movement rate in degrees per second.
+      Target movement rate in :math:`\mathrm{{}^{\circ}/s}`.
 
       :Game Scenes: Flight
 
@@ -4239,7 +4239,7 @@ RCS
 
    .. property:: AxisRange AvailableTorque { get; }
 
-      The available torque, in Newton meters, that can be produced by this RCS,
+      The available torque, in :math:`\mathrm{N \cdot m}`, that can be produced by this RCS,
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :prop:`Vessel.ReferenceFrame`.
       Returns zero if RCS is disable.
@@ -4280,14 +4280,14 @@ RCS
    .. property:: System.Tuple<double,double,double> Torque { get; }
 
       The torque being applied by the RCS thrusters about the vessel's center of mass,
-      in Newton meters. The vector is in the vessel's reference frame
+      in :math:`\mathrm{N \cdot m}`. The vector is in the vessel's reference frame
       (:prop:`Vessel.ReferenceFrame`). Returns zero if the RCS is inactive.
 
       :Game Scenes: Flight
 
    .. function:: Wrench OverrideWrench(System.Tuple<double,double,double> rotation, System.Tuple<double,double,double> translation)
 
-      The force and torque the given demands would produce, in Newtons and Newton meters.
+      The force and torque the given demands would produce, in Newtons and :math:`\mathrm{N \cdot m}`.
 
       :parameters:
 
@@ -4687,7 +4687,8 @@ Wheel
 
    .. property:: float MotorOutput { get; }
 
-      The output of the motor. This is the torque currently being generated, in Newton meters.
+      The output of the motor. This is the torque currently being generated, in
+      :math:`\mathrm{N \cdot m}`.
 
       :Game Scenes: All
 

@@ -42,6 +42,7 @@
     <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'lua/api/space-center/stage';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -770,7 +771,7 @@ the C# <code class="docutils literal notranslate"><span class="pre">Resources()<
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Stage.delta_v">
 <span class="sig-name descname"><span class="pre">delta_v</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Stage.delta_v" title="Link to this definition">#</a></dt>
-<dd><p>Delta-v for this stage in the current situation, in m/s.</p>
+<dd><p>Delta-v for this stage in the current situation, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -789,7 +790,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Stage.vacuum_delta_v">
 <span class="sig-name descname"><span class="pre">vacuum_delta_v</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Stage.vacuum_delta_v" title="Link to this definition">#</a></dt>
-<dd><p>Vacuum delta-v for this stage, in m/s.</p>
+<dd><p>Vacuum delta-v for this stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -803,7 +804,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Stage.sea_level_delta_v">
 <span class="sig-name descname"><span class="pre">sea_level_delta_v</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Stage.sea_level_delta_v" title="Link to this definition">#</a></dt>
-<dd><p>Sea-level delta-v for this stage, in m/s.</p>
+<dd><p>Sea-level delta-v for this stage, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -957,7 +958,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Stage.start_mass">
 <span class="sig-name descname"><span class="pre">start_mass</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Stage.start_mass" title="Link to this definition">#</a></dt>
-<dd><p>The mass of the vessel after the stage activates, in kg.</p>
+<dd><p>The mass of the vessel after the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -971,7 +972,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Stage.end_mass">
 <span class="sig-name descname"><span class="pre">end_mass</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Stage.end_mass" title="Link to this definition">#</a></dt>
-<dd><p>The mass of the vessel when the stage burns out, in kg.</p>
+<dd><p>The mass of the vessel when the stage burns out, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -985,7 +986,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Stage.dry_mass">
 <span class="sig-name descname"><span class="pre">dry_mass</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Stage.dry_mass" title="Link to this definition">#</a></dt>
-<dd><p>The dry mass of the vessel after the stage activates, in kg.</p>
+<dd><p>The dry mass of the vessel after the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -1003,7 +1004,7 @@ Calling this on a decouple stage raises an error.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Stage.fuel_mass">
 <span class="sig-name descname"><span class="pre">fuel_mass</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Stage.fuel_mass" title="Link to this definition">#</a></dt>
-<dd><p>The fuel mass of the vessel when the stage activates, in kg.</p>
+<dd><p>The fuel mass of the vessel when the stage activates, in <span class="math notranslate nohighlight">\(\mathrm{kg}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>

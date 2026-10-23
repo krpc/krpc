@@ -235,7 +235,7 @@ Standard Library
 
    .. function:: double Atan2(double y, double x)
 
-      The angle, in radians, between the positive x axis and the point (x, y).
+      The angle, in radians, between the positive x axis and the point ``(x, y)``.
 
       :parameters:
 
@@ -463,7 +463,7 @@ Standard Library
 
    .. function:: double VectorAngle(System.Tuple<double,double,double> u, System.Tuple<double,double,double> v)
 
-      The angle between two vectors, in radians, between 0 and pi.
+      The angle between two vectors, in radians, between 0 and :math:`\pi`.
 
       :parameters:
 
@@ -612,7 +612,7 @@ Standard Library
    .. function:: double QuaternionAngle(System.Tuple<double,double,double,double> q, System.Tuple<double,double,double,double> r)
 
       The angle of the rotation that takes one rotation to another,
-      in radians, between 0 and pi.
+      in radians, between 0 and :math:`\pi`.
 
       :parameters:
 
@@ -681,7 +681,7 @@ Standard Library
 
    .. property:: double Angle { get; }
 
-      The angle of the rotation, in radians between 0 and pi.
+      The angle of the rotation, in radians between 0 and :math:`\pi`.
 
 
 .. struct:: ColorRGB

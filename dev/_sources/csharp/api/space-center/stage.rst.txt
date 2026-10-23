@@ -52,7 +52,7 @@ Stage
 
    .. property:: float DeltaV { get; }
 
-      Delta-v for this stage in the current situation, in m/s.
+      Delta-v for this stage in the current situation, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: All
 
@@ -62,13 +62,13 @@ Stage
 
    .. property:: float VacuumDeltaV { get; }
 
-      Vacuum delta-v for this stage, in m/s.
+      Vacuum delta-v for this stage, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: All
 
    .. property:: float SeaLevelDeltaV { get; }
 
-      Sea-level delta-v for this stage, in m/s.
+      Sea-level delta-v for this stage, in :math:`\mathrm{m/s}`.
 
       :Game Scenes: All
 
@@ -134,19 +134,19 @@ Stage
 
    .. property:: float StartMass { get; }
 
-      The mass of the vessel after the stage activates, in kg.
+      The mass of the vessel after the stage activates, in :math:`\mathrm{kg}`.
 
       :Game Scenes: All
 
    .. property:: float EndMass { get; }
 
-      The mass of the vessel when the stage burns out, in kg.
+      The mass of the vessel when the stage burns out, in :math:`\mathrm{kg}`.
 
       :Game Scenes: All
 
    .. property:: float DryMass { get; }
 
-      The dry mass of the vessel after the stage activates, in kg.
+      The dry mass of the vessel after the stage activates, in :math:`\mathrm{kg}`.
 
       :Game Scenes: All
 
@@ -157,7 +157,7 @@ Stage
 
    .. property:: float FuelMass { get; }
 
-      The fuel mass of the vessel when the stage activates, in kg.
+      The fuel mass of the vessel when the stage activates, in :math:`\mathrm{kg}`.
 
       :Game Scenes: All
 

@@ -21,7 +21,7 @@ Orbit
 
       :param SpaceCenter.CelestialBody body: The celestial body being orbited.
       :param Tuple position: The position, as a position vector.
-      :param Tuple velocity: The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.
+      :param Tuple velocity: The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in :math:`\mathrm{m/s}`.
       :param number ut: The universal time, in seconds, at which the object is at *position* traveling at *velocity*.
       :param reference_frame: The reference frame that *position* and *velocity* are in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of *body*.
       :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
@@ -299,7 +299,7 @@ Orbit
 
       :param reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
       :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
       :rtype: Tuple
 
    .. method:: velocity_at(ut, [reference_frame = Types.none])
@@ -309,7 +309,7 @@ Orbit
       :param number ut: The universal time to measure the velocity at.
       :param reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
       :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
       :rtype: Tuple
 
    .. method:: velocity_at_true_anomaly(true_anomaly, [reference_frame = Types.none])
@@ -320,12 +320,12 @@ Orbit
       :param number true_anomaly: The true anomaly.
       :param reference_frame: The reference frame that the returned velocity vector is in. Defaults to :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame` of :attr:`SpaceCenter.Orbit.body`.
       :type reference_frame: :class:`SpaceCenter.ReferenceFrame` or ``Types.none``
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
       :rtype: Tuple
 
    .. attribute:: speed: number
 
-      The current orbital speed of the object in meters per second.
+      The current orbital speed of the object in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -336,14 +336,14 @@ Orbit
 
    .. method:: speed_at(ut)
 
-      The orbital speed at the given time, in meters per second.
+      The orbital speed at the given time, in :math:`\mathrm{m/s}`.
 
       :param number ut: The universal time to measure the speed at.
       :rtype: number
 
    .. method:: speed_at_radius(radius)
 
-      The orbital speed at the given orbital radius, in meters per second.
+      The orbital speed at the given orbital radius, in :math:`\mathrm{m/s}`.
 
       :param number radius: The orbital radius in meters.
       :rtype: number
@@ -355,28 +355,29 @@ Orbit
 
    .. method:: speed_at_true_anomaly(true_anomaly)
 
-      The orbital speed at the point in the orbit given by the true anomaly, in meters
-      per second.
+      The orbital speed at the point in the orbit given by the true anomaly, in
+      :math:`\mathrm{m/s}`.
 
       :param number true_anomaly: The true anomaly.
       :rtype: number
 
    .. attribute:: specific_energy: number
 
-      The specific orbital energy, in Joules per kilogram (equivalently,
-      meters squared per second squared).
+      The specific orbital energy, in :math:`\mathrm{J/kg}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
 
       .. note::
 
-         This is the sum of the orbit's specific kinetic and potential energy, and
-         is negative for a bound (elliptical) orbit.
+         This is the sum of the orbit's specific kinetic and potential energy,
+         :math:`v^{2}/2 - \mu/r`, where :math:`v` is the orbital speed,
+         :math:`\mu` the gravitational parameter of the body and :math:`r` the
+         orbital radius. It is negative for a bound (elliptical) orbit.
 
    .. attribute:: specific_angular_momentum: number
 
-      The specific relative angular momentum, in meters squared per second.
+      The specific relative angular momentum, in :math:`\mathrm{m^{2}/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -390,7 +391,7 @@ Orbit
 
    .. attribute:: mean_motion: number
 
-      The mean motion, in radians per second.
+      The mean motion, in :math:`\mathrm{rad/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -540,7 +541,7 @@ Orbit
 
       .. warning:: Deprecated. Use :attr:`SpaceCenter.Orbit.speed` instead.
 
-      The current orbital speed in meters per second.
+      The current orbital speed in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -549,7 +550,7 @@ Orbit
 
       .. warning:: Deprecated. Use :meth:`SpaceCenter.Orbit.speed_at` instead.
 
-      The orbital speed at the given time, in meters per second.
+      The orbital speed at the given time, in :math:`\mathrm{m/s}`.
 
       :param number ut: The universal time to measure the speed at.
       :rtype: number
@@ -558,7 +559,7 @@ Orbit
 
       .. warning:: Deprecated. Use :attr:`SpaceCenter.Orbit.specific_energy` instead.
 
-      The specific orbital energy of the orbit, in Joules per kilogram.
+      The specific orbital energy of the orbit, in :math:`\mathrm{J/kg}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number

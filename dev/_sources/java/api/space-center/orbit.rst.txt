@@ -21,7 +21,7 @@ Orbit
 
       :param CelestialBody body: The celestial body being orbited.
       :param org.javatuples.Triplet<Double,Double,Double> position: The position, as a position vector.
-      :param org.javatuples.Triplet<Double,Double,Double> velocity: The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.
+      :param org.javatuples.Triplet<Double,Double,Double> velocity: The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in :math:`\mathrm{m/s}`.
       :param double ut: The universal time, in seconds, at which the object is at *position* traveling at *velocity*.
       :param ReferenceFrame referenceFrame: The reference frame that *position* and *velocity* are in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of *body*.
    
@@ -295,7 +295,7 @@ Orbit
       frame.
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
    
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> velocityAt(double ut, ReferenceFrame referenceFrame)
@@ -304,7 +304,7 @@ Orbit
 
       :param double ut: The universal time to measure the velocity at.
       :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
    
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> velocityAtTrueAnomaly(double trueAnomaly, ReferenceFrame referenceFrame)
@@ -314,13 +314,13 @@ Orbit
 
       :param double trueAnomaly: The true anomaly.
       :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in. Defaults to :meth:`CelestialBody.getNonRotatingReferenceFrame()` of :meth:`Orbit.getBody()`.
-      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in :math:`\mathrm{m/s}`.
    
 
    .. method:: double getSpeed()
 
 
-      The current orbital speed of the object in meters per second.
+      The current orbital speed of the object in :math:`\mathrm{m/s}`.
 
    
 
@@ -330,14 +330,14 @@ Orbit
 
    .. method:: double speedAt(double ut)
 
-      The orbital speed at the given time, in meters per second.
+      The orbital speed at the given time, in :math:`\mathrm{m/s}`.
 
       :param double ut: The universal time to measure the speed at.
    
 
    .. method:: double speedAtRadius(double radius)
 
-      The orbital speed at the given orbital radius, in meters per second.
+      The orbital speed at the given orbital radius, in :math:`\mathrm{m/s}`.
 
       :param double radius: The orbital radius in meters.
    
@@ -349,8 +349,8 @@ Orbit
 
    .. method:: double speedAtTrueAnomaly(double trueAnomaly)
 
-      The orbital speed at the point in the orbit given by the true anomaly, in meters
-      per second.
+      The orbital speed at the point in the orbit given by the true anomaly, in
+      :math:`\mathrm{m/s}`.
 
       :param double trueAnomaly: The true anomaly.
    
@@ -358,20 +358,21 @@ Orbit
    .. method:: double getSpecificEnergy()
 
 
-      The specific orbital energy, in Joules per kilogram (equivalently,
-      meters squared per second squared).
+      The specific orbital energy, in :math:`\mathrm{J/kg}`.
 
    
 
       .. note::
 
-         This is the sum of the orbit's specific kinetic and potential energy, and
-         is negative for a bound (elliptical) orbit.
+         This is the sum of the orbit's specific kinetic and potential energy,
+         :math:`v^{2}/2 - \mu/r`, where :math:`v` is the orbital speed,
+         :math:`\mu` the gravitational parameter of the body and :math:`r` the
+         orbital radius. It is negative for a bound (elliptical) orbit.
 
    .. method:: double getSpecificAngularMomentum()
 
 
-      The specific relative angular momentum, in meters squared per second.
+      The specific relative angular momentum, in :math:`\mathrm{m^{2}/s}`.
 
    
 
@@ -385,7 +386,7 @@ Orbit
    .. method:: double getMeanMotion()
 
 
-      The mean motion, in radians per second.
+      The mean motion, in :math:`\mathrm{rad/s}`.
 
    
 
@@ -535,7 +536,7 @@ Orbit
 
       .. warning:: Deprecated. Use :meth:`Orbit.getSpeed()` instead.
 
-      The current orbital speed in meters per second.
+      The current orbital speed in :math:`\mathrm{m/s}`.
 
    
 
@@ -543,7 +544,7 @@ Orbit
 
       .. warning:: Deprecated. Use :meth:`Orbit.speedAt(double)` instead.
 
-      The orbital speed at the given time, in meters per second.
+      The orbital speed at the given time, in :math:`\mathrm{m/s}`.
 
       :param double ut: The universal time to measure the speed at.
    
@@ -553,7 +554,7 @@ Orbit
 
       .. warning:: Deprecated. Use :meth:`Orbit.getSpecificEnergy()` instead.
 
-      The specific orbital energy of the orbit, in Joules per kilogram.
+      The specific orbital energy of the orbit, in :math:`\mathrm{J/kg}`.
 
    
 

@@ -42,6 +42,7 @@
     <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'lua/api/space-center/auto-pilot';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -1160,9 +1161,9 @@ the target roll (if set). Throws an exception if the auto-pilot has not been eng
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.stopping_velocity_threshold">
 <span class="sig-name descname"><span class="pre">stopping_velocity_threshold</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.stopping_velocity_threshold" title="Link to this definition">#</a></dt>
-<dd><p>The threshold angular velocity, in rad/s, below which the vessel’s angular
+<dd><p>The threshold angular velocity, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, below which the vessel’s angular
 velocity magnitude must fall for <a class="reference internal" href="#SpaceCenter.AutoPilot.wait" title="SpaceCenter.AutoPilot.wait"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.wait()</span></code></a> to return.
-Defaults to 0.05 rad/s.</p>
+Defaults to 0.05 <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -1198,7 +1199,7 @@ error relative to the target the auto-pilot is currently tracking.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.attitude_error">
 <span class="sig-name descname"><span class="pre">attitude_error</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.attitude_error" title="Link to this definition">#</a></dt>
-<dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
+<dd><p>The per-axis attitude error <code class="docutils literal notranslate"><span class="pre">(pitch,</span> <span class="pre">yaw,</span> <span class="pre">roll)</span></code>, in degrees, between the vessel’s current
 attitude and the commanded target. All three components come from one singularity-free
 residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
 of pitch/heading/roll angles). The scalar <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_error" title="SpaceCenter.SpaceCenter.AutoPilot.pitch_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.pitch_error</span></code></a>,
@@ -1299,7 +1300,7 @@ auto-pilot has not been engaged.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.current_attitude_error">
 <span class="sig-name descname"><span class="pre">current_attitude_error</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.current_attitude_error" title="Link to this definition">#</a></dt>
-<dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
+<dd><p>The per-axis attitude error <code class="docutils literal notranslate"><span class="pre">(pitch,</span> <span class="pre">yaw,</span> <span class="pre">roll)</span></code>, in degrees, between the vessel’s current
 attitude and the target the auto-pilot is currently tracking (the slewed target, see
 <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.current_target_rotation" title="SpaceCenter.SpaceCenter.AutoPilot.current_target_rotation"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.current_target_rotation</span></code></a>). Like <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.attitude_error" title="SpaceCenter.SpaceCenter.AutoPilot.attitude_error"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.attitude_error</span></code></a> but relative to the
 current target, so it stays small while a smoothed change (see
@@ -1410,10 +1411,10 @@ Defaults to 15 degrees.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.max_angular_velocity">
 <span class="sig-name descname"><span class="pre">max_angular_velocity</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.max_angular_velocity" title="Link to this definition">#</a></dt>
-<dd><p>The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
-and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
-that vessels with very high torque availability do not spin faster than desired.
-Defaults to 1 rad/s for each axis.</p>
+<dd><p>The maximum angular velocity of the vessel, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, for each of the
+pitch, roll and yaw axes. Limits the target angular velocity computed by the bang-bang
+profile so that vessels with very high torque availability do not spin faster than
+desired. Defaults to 1 <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span> for each axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -1713,10 +1714,11 @@ reduced at all times.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.oscillation_bandwidth_floor">
 <span class="sig-name descname"><span class="pre">oscillation_bandwidth_floor</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.oscillation_bandwidth_floor" title="Link to this definition">#</a></dt>
-<dd><p>The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
-bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
-strongly; raising it keeps more control authority at the cost of allowing more wobble.
-Defaults to 1 rad/s. This is an advanced tuning parameter.</p>
+<dd><p>The inner control loop bandwidth, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, that an axis is reduced
+towards while the bandwidth-floor mitigation is engaged on it. Lowering it suppresses
+oscillation more strongly; raising it keeps more control authority at the cost of
+allowing more wobble. Defaults to 1 <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>. This is an advanced tuning
+parameter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>

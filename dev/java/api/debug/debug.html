@@ -42,6 +42,7 @@
     <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'java/api/debug/debug';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -793,7 +794,7 @@ without flying the craft up from the runway.</p>
 <li><p><strong>latitude</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – Latitude in degrees.</p></li>
 <li><p><strong>longitude</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – Longitude in degrees.</p></li>
 <li><p><strong>altitude</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – Altitude in meters above sea level.</p></li>
-<li><p><strong>speed</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – Airspeed in meters per second, relative to the surface.</p></li>
+<li><p><strong>speed</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – Airspeed in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>, relative to the surface.</p></li>
 <li><p><strong>heading</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – Compass heading to point along, in degrees (90 is east).</p></li>
 <li><p><strong>pitch</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – Pitch above the horizon, in degrees. Defaults to 0 (level).</p></li>
 <li><p><strong>roll</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – Roll, in degrees. Defaults to 0 (wings level).</p></li>
@@ -843,7 +844,7 @@ in orbit and in the atmosphere alike.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>velocity</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – Velocity in meters per second.</p></li>
+<li><p><strong>velocity</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – Velocity in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p></li>
 <li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame the velocity is in. Defaults to the reference frame of the body being orbited, which rotates with it, so a zero velocity leaves the vessel at rest relative to the ground.</p></li>
 </ul>
 </dd>
@@ -933,7 +934,7 @@ zero vector to stop the vessel rotating.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>angularVelocity</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – Angular velocity, in radians per second. The direction is the axis of rotation and the magnitude is the rate.</p></li>
+<li><p><strong>angularVelocity</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – Angular velocity, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>. The direction is the axis of rotation and the magnitude is the rate.</p></li>
 <li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame the angular velocity is in. Defaults to the vessel’s surface reference frame.</p></li>
 <li><p><strong>vessel</strong> (<span><a class="reference internal" href="../space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><code class="xref java java-type docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a></span>) – Vessel to rotate. Defaults to the active vessel.</p></li>
 </ul>

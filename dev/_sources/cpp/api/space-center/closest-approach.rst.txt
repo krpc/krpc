@@ -45,8 +45,8 @@ Closest Approach
 
    .. function:: double relative_speed()
 
-      The relative speed of the objects at the closest approach, in meters per
-      second. This is the magnitude of :func:`ClosestApproach::relative_velocity`, and does
+      The relative speed of the objects at the closest approach, in :math:`\mathrm{m/s}`.
+      This is the magnitude of :func:`ClosestApproach::relative_velocity`, and does
       not depend on the choice of reference frame.
 
    

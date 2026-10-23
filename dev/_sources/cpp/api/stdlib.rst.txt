@@ -237,7 +237,7 @@ Standard Library
 
    .. function:: double atan2(double y, double x)
 
-      The angle, in radians, between the positive x axis and the point (x, y).
+      The angle, in radians, between the positive x axis and the point ``(x, y)``.
 
       :Parameters:
 
@@ -461,7 +461,7 @@ Standard Library
 
    .. function:: double vector_angle(std::tuple<double, double, double> u, std::tuple<double, double, double> v)
 
-      The angle between two vectors, in radians, between 0 and pi.
+      The angle between two vectors, in radians, between 0 and :math:`\pi`.
 
       :Parameters:
 
@@ -601,7 +601,7 @@ Standard Library
    .. function:: double quaternion_angle(std::tuple<double, double, double, double> q, std::tuple<double, double, double, double> r)
 
       The angle of the rotation that takes one rotation to another,
-      in radians, between 0 and pi.
+      in radians, between 0 and :math:`\pi`.
 
       :Parameters:
 
@@ -662,7 +662,7 @@ Standard Library
 
    .. member:: double angle
 
-      The angle of the rotation, in radians between 0 and pi.
+      The angle of the rotation, in radians between 0 and :math:`\pi`.
 
 
 .. namespace:: krpc::services::StdLib

@@ -205,7 +205,8 @@ Servo
    .. method:: float getElectricChargeRequired()
 
 
-      The rate at which the servo consumes electric charge, in units per second, when moving.
+      The rate at which the servo consumes electric charge, in :math:`\mathrm{units/s}`,
+      when moving.
 
       :Game Scenes: Flight
 

@@ -42,6 +42,7 @@
     <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cnano/api/space-center/auto-pilot';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -1197,9 +1198,9 @@ the target roll (if set). Throws an exception if the auto-pilot has not been eng
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_set_StoppingVelocityThreshold">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_set_StoppingVelocityThreshold</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t" title="krpc_SpaceCenter_AutoPilot_t"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_set_StoppingVelocityThreshold" title="Link to this definition">#</a><br /></dt>
-<dd><p>The threshold angular velocity, in rad/s, below which the vessel’s angular
+<dd><p>The threshold angular velocity, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, below which the vessel’s angular
 velocity magnitude must fall for <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_Wait" title="krpc_SpaceCenter_AutoPilot_Wait"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_Wait()</span></code></a> to return.
-Defaults to 0.05 rad/s.</p>
+Defaults to 0.05 <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1229,7 +1230,7 @@ error relative to the target the auto-pilot is currently tracking.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AttitudeError">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_AttitudeError</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t" title="krpc_SpaceCenter_AutoPilot_t"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AttitudeError" title="Link to this definition">#</a><br /></dt>
-<dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
+<dd><p>The per-axis attitude error <code class="docutils literal notranslate"><span class="pre">(pitch,</span> <span class="pre">yaw,</span> <span class="pre">roll)</span></code>, in degrees, between the vessel’s current
 attitude and the commanded target. All three components come from one singularity-free
 residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
 of pitch/heading/roll angles). The scalar <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_PitchError" title="krpc_SpaceCenter_AutoPilot_PitchError"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_PitchError()</span></code></a>,
@@ -1315,7 +1316,7 @@ auto-pilot has not been engaged.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_CurrentAttitudeError">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_CurrentAttitudeError</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t" title="krpc_SpaceCenter_AutoPilot_t"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_CurrentAttitudeError" title="Link to this definition">#</a><br /></dt>
-<dd><p>The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel’s current
+<dd><p>The per-axis attitude error <code class="docutils literal notranslate"><span class="pre">(pitch,</span> <span class="pre">yaw,</span> <span class="pre">roll)</span></code>, in degrees, between the vessel’s current
 attitude and the target the auto-pilot is currently tracking (the slewed target, see
 <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_CurrentTargetRotation" title="krpc_SpaceCenter_AutoPilot_CurrentTargetRotation"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_CurrentTargetRotation()</span></code></a>). Like <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_AttitudeError" title="krpc_SpaceCenter_AutoPilot_AttitudeError"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_AutoPilot_AttitudeError()</span></code></a> but relative to the
 current target, so it stays small while a smoothed change (see
@@ -1423,10 +1424,10 @@ Defaults to 15 degrees.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_set_MaxAngularVelocity">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_set_MaxAngularVelocity</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t" title="krpc_SpaceCenter_AutoPilot_t"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_set_MaxAngularVelocity" title="Link to this definition">#</a><br /></dt>
-<dd><p>The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
-and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
-that vessels with very high torque availability do not spin faster than desired.
-Defaults to 1 rad/s for each axis.</p>
+<dd><p>The maximum angular velocity of the vessel, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, for each of the
+pitch, roll and yaw axes. Limits the target angular velocity computed by the bang-bang
+profile so that vessels with very high torque availability do not spin faster than
+desired. Defaults to 1 <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span> for each axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1760,10 +1761,11 @@ reduced at all times.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_set_OscillationBandwidthFloor">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_set_OscillationBandwidthFloor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_AutoPilot_t" title="krpc_SpaceCenter_AutoPilot_t"><span class="n"><span class="pre">krpc_SpaceCenter_AutoPilot_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_AutoPilot_t.krpc_SpaceCenter_AutoPilot_set_OscillationBandwidthFloor" title="Link to this definition">#</a><br /></dt>
-<dd><p>The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
-bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
-strongly; raising it keeps more control authority at the cost of allowing more wobble.
-Defaults to 1 rad/s. This is an advanced tuning parameter.</p>
+<dd><p>The inner control loop bandwidth, in <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>, that an axis is reduced
+towards while the bandwidth-floor mitigation is engaged on it. Lowering it suppresses
+oscillation more strongly; raising it keeps more control authority at the cost of
+allowing more wobble. Defaults to 1 <span class="math notranslate nohighlight">\(\mathrm{rad/s}\)</span>. This is an advanced tuning
+parameter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>

@@ -340,9 +340,9 @@ AutoPilot
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_StoppingVelocityThreshold(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_StoppingVelocityThreshold(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, float value)
 
-      The threshold angular velocity, in rad/s, below which the vessel's angular
+      The threshold angular velocity, in :math:`\mathrm{rad/s}`, below which the vessel's angular
       velocity magnitude must fall for :func:`krpc_SpaceCenter_AutoPilot_Wait` to return.
-      Defaults to 0.05 rad/s.
+      Defaults to 0.05 :math:`\mathrm{rad/s}`.
 
       :Game Scenes: Flight
 
@@ -363,7 +363,7 @@ AutoPilot
 
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_AttitudeError(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
 
-      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      The per-axis attitude error ``(pitch, yaw, roll)``, in degrees, between the vessel's current
       attitude and the commanded target. All three components come from one singularity-free
       residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
       of pitch/heading/roll angles). The scalar :func:`krpc_SpaceCenter_AutoPilot_PitchError`,
@@ -427,7 +427,7 @@ AutoPilot
 
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_CurrentAttitudeError(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
 
-      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      The per-axis attitude error ``(pitch, yaw, roll)``, in degrees, between the vessel's current
       attitude and the target the auto-pilot is currently tracking (the slewed target, see
       :func:`krpc_SpaceCenter_AutoPilot_CurrentTargetRotation`). Like :func:`krpc_SpaceCenter_AutoPilot_AttitudeError` but relative to the
       current target, so it stays small while a smoothed change (see
@@ -496,10 +496,10 @@ AutoPilot
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_MaxAngularVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_MaxAngularVelocity(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, const krpc_tuple_double_double_double_t * value)
 
-      The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
-      and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
-      that vessels with very high torque availability do not spin faster than desired.
-      Defaults to 1 rad/s for each axis.
+      The maximum angular velocity of the vessel, in :math:`\mathrm{rad/s}`, for each of the
+      pitch, roll and yaw axes. Limits the target angular velocity computed by the bang-bang
+      profile so that vessels with very high torque availability do not spin faster than
+      desired. Defaults to 1 :math:`\mathrm{rad/s}` for each axis.
 
       :Game Scenes: Flight
 
@@ -683,10 +683,11 @@ AutoPilot
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_OscillationBandwidthFloor(krpc_connection_t connection, double * returnValue, krpc_SpaceCenter_AutoPilot_t instance)
    .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_set_OscillationBandwidthFloor(krpc_connection_t connection, krpc_SpaceCenter_AutoPilot_t instance, double value)
 
-      The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
-      bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
-      strongly; raising it keeps more control authority at the cost of allowing more wobble.
-      Defaults to 1 rad/s. This is an advanced tuning parameter.
+      The inner control loop bandwidth, in :math:`\mathrm{rad/s}`, that an axis is reduced
+      towards while the bandwidth-floor mitigation is engaged on it. Lowering it suppresses
+      oscillation more strongly; raising it keeps more control authority at the cost of
+      allowing more wobble. Defaults to 1 :math:`\mathrm{rad/s}`. This is an advanced tuning
+      parameter.
 
       :Game Scenes: Flight
 

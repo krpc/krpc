@@ -50,7 +50,7 @@ Stage
 
    .. attribute:: delta_v: number
 
-      Delta-v for this stage in the current situation, in m/s.
+      Delta-v for this stage in the current situation, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -60,14 +60,14 @@ Stage
 
    .. attribute:: vacuum_delta_v: number
 
-      Vacuum delta-v for this stage, in m/s.
+      Vacuum delta-v for this stage, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: sea_level_delta_v: number
 
-      Sea-level delta-v for this stage, in m/s.
+      Sea-level delta-v for this stage, in :math:`\mathrm{m/s}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -144,21 +144,21 @@ Stage
 
    .. attribute:: start_mass: number
 
-      The mass of the vessel after the stage activates, in kg.
+      The mass of the vessel after the stage activates, in :math:`\mathrm{kg}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: end_mass: number
 
-      The mass of the vessel when the stage burns out, in kg.
+      The mass of the vessel when the stage burns out, in :math:`\mathrm{kg}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
 
    .. attribute:: dry_mass: number
 
-      The dry mass of the vessel after the stage activates, in kg.
+      The dry mass of the vessel after the stage activates, in :math:`\mathrm{kg}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number
@@ -169,7 +169,7 @@ Stage
 
    .. attribute:: fuel_mass: number
 
-      The fuel mass of the vessel when the stage activates, in kg.
+      The fuel mass of the vessel when the stage activates, in :math:`\mathrm{kg}`.
 
       :Attribute: Read-only, cannot be set
       :rtype: number

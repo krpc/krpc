@@ -1482,7 +1482,7 @@ includes the pressure of the water.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.Displacement">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Displacement</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.Displacement" title="Link to this definition">#</a></dt>
-<dd><p>The volume of water the part displaces when fully submerged, in <span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dd><p>The volume of water the part displaces when fully submerged, in <span class="math notranslate nohighlight">\(\mathrm{m^{3}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -1513,8 +1513,8 @@ density, in Newtons.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(kg/m^3\)</span>.</p></li>
-<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(m/s^2\)</span>.</p></li>
+<li><p><strong>density</strong> – The density of the fluid, in <span class="math notranslate nohighlight">\(\mathrm{kg/m^{3}}\)</span>.</p></li>
+<li><p><strong>gravity</strong> – The acceleration due to gravity, in <span class="math notranslate nohighlight">\(\mathrm{m/s^{2}}\)</span>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
@@ -1555,7 +1555,7 @@ part rather than what
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.DisplacedVolume">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">DisplacedVolume</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.DisplacedVolume" title="Link to this definition">#</a></dt>
-<dd><p>The volume of water the part is displacing, in <span class="math notranslate nohighlight">\(m^3\)</span>.</p>
+<dd><p>The volume of water the part is displacing, in <span class="math notranslate nohighlight">\(\mathrm{m^{3}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1663,7 +1663,7 @@ in the editor and at a body with no ocean.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.ImpactTolerance">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ImpactTolerance</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.ImpactTolerance" title="Link to this definition">#</a></dt>
-<dd><p>The impact tolerance of the part, in meters per second.</p>
+<dd><p>The impact tolerance of the part, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -2377,7 +2377,7 @@ the <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCent
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.</p>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -2396,7 +2396,7 @@ the <a class="reference internal" href="#function-KRPC.Client.Services.SpaceCent
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
+<dd class="field-even"><p>The rotation as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -2524,7 +2524,7 @@ it are reported by <a class="reference internal" href="#property-KRPC.Client.Ser
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Part.MomentOfInertia">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MomentOfInertia</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Part.MomentOfInertia" title="Link to this definition">#</a></dt>
-<dd><p>The moment of inertia of the part in <span class="math notranslate nohighlight">\(kg.m^2\)</span> around its center of mass
+<dd><p>The moment of inertia of the part in <span class="math notranslate nohighlight">\(\mathrm{kg \cdot m^{2}}\)</span> around its center of mass
 in the parts center of mass reference frame (<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.CenterOfMassReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Part.CenterOfMassReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.CenterOfMassReferenceFrame</span></code></a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -3830,7 +3830,7 @@ value between -1 and 1, mapped onto the surface’s deploy angle range.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ControlSurface.SurfaceArea">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SurfaceArea</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ControlSurface.SurfaceArea" title="Link to this definition">#</a></dt>
-<dd><p>Surface area of the control surface in <span class="math notranslate nohighlight">\(m^2\)</span>.</p>
+<dd><p>Surface area of the control surface in <span class="math notranslate nohighlight">\(\mathrm{m^{2}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -3841,7 +3841,7 @@ value between -1 and 1, mapped onto the surface’s deploy angle range.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ControlSurface.AvailableTorque">
 <a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.AxisRange" title="struct: KRPC.Client.Services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AvailableTorque</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ControlSurface.AvailableTorque" title="Link to this definition">#</a></dt>
-<dd><p>The available torque, in Newton meters, that can be produced by this control surface,
+<dd><p>The available torque, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>, that can be produced by this control surface,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>.</p>
 <dl class="field-list simple">
@@ -3914,7 +3914,7 @@ after calling this function, the object(s) returned by previous call(s) to
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Decoupler.Impulse">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Impulse</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Decoupler.Impulse" title="Link to this definition">#</a></dt>
-<dd><p>The impulse that the decoupler imparts when it is fired, in Newton seconds.</p>
+<dd><p>The impulse that the decoupler imparts when it is fired, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -4196,7 +4196,7 @@ port does not have a shield, setting this attribute has no effect.</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The rotation as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>.</p>
+<dd class="field-even"><p>The rotation as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -4761,7 +4761,7 @@ returns the current actuation.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Engine.AvailableTorque">
 <a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.AxisRange" title="struct: KRPC.Client.Services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AvailableTorque</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Engine.AvailableTorque" title="Link to this definition">#</a></dt>
-<dd><p>The available torque, in Newton meters, that can be produced by this engine,
+<dd><p>The available torque, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>, that can be produced by this engine,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>.
 Returns zero if the engine is inactive, or not gimballed.</p>
@@ -5392,7 +5392,7 @@ Supports both stock fairings, and those from the ProceduralFairings mod.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Intake.Speed">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Speed</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Intake.Speed" title="Link to this definition">#</a></dt>
-<dd><p>Speed of the flow into the intake, in <span class="math notranslate nohighlight">\(m/s\)</span>.</p>
+<dd><p>Speed of the flow into the intake, in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -5414,7 +5414,7 @@ Supports both stock fairings, and those from the ProceduralFairings mod.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Intake.Area">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Area</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Intake.Area" title="Link to this definition">#</a></dt>
-<dd><p>The area of the intake’s opening, in square meters.</p>
+<dd><p>The area of the intake’s opening, in <span class="math notranslate nohighlight">\(\mathrm{m^{2}}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
@@ -6156,7 +6156,7 @@ retracting.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ResourceHarvester.ExtractionRate">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ExtractionRate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ResourceHarvester.ExtractionRate" title="Link to this definition">#</a></dt>
-<dd><p>The rate at which the drill is extracting ore, in units per second.</p>
+<dd><p>The rate at which the drill is extracting ore, in <span class="math notranslate nohighlight">\(\mathrm{units/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -6242,7 +6242,7 @@ retracting.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ReactionWheel.AvailableTorque">
 <a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.AxisRange" title="struct: KRPC.Client.Services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AvailableTorque</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ReactionWheel.AvailableTorque" title="Link to this definition">#</a></dt>
-<dd><p>The available torque, in Newton meters, that can be produced by this reaction wheel,
+<dd><p>The available torque, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>, that can be produced by this reaction wheel,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>.
 Returns zero if the reaction wheel is inactive or broken.</p>
@@ -6256,7 +6256,7 @@ Returns zero if the reaction wheel is inactive or broken.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ReactionWheel.MaxTorque">
 <a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.AxisRange" title="struct: KRPC.Client.Services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">MaxTorque</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ReactionWheel.MaxTorque" title="Link to this definition">#</a></dt>
-<dd><p>The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+<dd><p>The maximum torque, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>, that can be produced by this reaction wheel,
 when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
 These axes correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>.</p>
 <dl class="field-list simple">
@@ -6698,7 +6698,7 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.RoboticHinge.Rate">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Rate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticHinge.Rate" title="Link to this definition">#</a></dt>
-<dd><p>Target movement rate in degrees per second.</p>
+<dd><p>Target movement rate in <span class="math notranslate nohighlight">\(\mathrm{{}^{\circ}/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -6828,7 +6828,7 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.RoboticPiston.Rate">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Rate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticPiston.Rate" title="Link to this definition">#</a></dt>
-<dd><p>Target movement rate in meters per second.</p>
+<dd><p>Target movement rate in <span class="math notranslate nohighlight">\(\mathrm{m/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -6970,7 +6970,7 @@ ignoring the angle limits.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.RoboticRotation.Rate">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Rate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticRotation.Rate" title="Link to this definition">#</a></dt>
-<dd><p>Target movement rate in degrees per second.</p>
+<dd><p>Target movement rate in <span class="math notranslate nohighlight">\(\mathrm{{}^{\circ}/s}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -7308,7 +7308,7 @@ and 1.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.RCS.AvailableTorque">
 <a class="reference internal" href="vessel.html#struct-KRPC.Client.Services.SpaceCenter.AxisRange" title="struct: KRPC.Client.Services.SpaceCenter.AxisRange"><span class="pre">AxisRange</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AvailableTorque</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RCS.AvailableTorque" title="Link to this definition">#</a></dt>
-<dd><p>The available torque, in Newton meters, that can be produced by this RCS,
+<dd><p>The available torque, in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>, that can be produced by this RCS,
 in the positive and negative pitch, roll and yaw axes of the vessel. These axes
 correspond to the coordinate axes of the <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>.
 Returns zero if RCS is disable.</p>
@@ -7362,7 +7362,7 @@ Returns zero if the RCS is inactive.</p>
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.RCS.Torque">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Torque</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RCS.Torque" title="Link to this definition">#</a></dt>
 <dd><p>The torque being applied by the RCS thrusters about the vessel’s center of mass,
-in Newton meters. The vector is in the vessel’s reference frame
+in <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>. The vector is in the vessel’s reference frame
 (<a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame" title="property: KRPC.Client.Services.SpaceCenter.Vessel.ReferenceFrame"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Vessel.ReferenceFrame</span></code></a>). Returns zero if the RCS is inactive.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -7374,7 +7374,7 @@ in Newton meters. The vector is in the vessel’s reference frame
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.SpaceCenter.RCS.OverrideWrench">
 <span id="function-KRPC.Client.Services.SpaceCenter.RCS.OverrideWrench(System.Tuple<double,double,double>,System.Tuple<double,double,double>)"></span><a class="reference internal" href="flight.html#struct-KRPC.Client.Services.SpaceCenter.Wrench" title="struct: KRPC.Client.Services.SpaceCenter.Wrench"><span class="pre">Wrench</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">OverrideWrench</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">rotation</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Tuple-3" title="type: msdn ~&gt; System.Tuple"><span class="pre">Tuple</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n"><span class="pre">translation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.SpaceCenter.RCS.OverrideWrench" title="Link to this definition">#</a></dt>
-<dd><p>The force and torque the given demands would produce, in Newtons and Newton meters.</p>
+<dd><p>The force and torque the given demands would produce, in Newtons and <span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -8011,7 +8011,8 @@ A value between 0 and 5 inclusive.</p>
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.Wheel.MotorOutput">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">MotorOutput</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Wheel.MotorOutput" title="Link to this definition">#</a></dt>
-<dd><p>The output of the motor. This is the torque currently being generated, in Newton meters.</p>
+<dd><p>The output of the motor. This is the torque currently being generated, in
+<span class="math notranslate nohighlight">\(\mathrm{N \cdot m}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
