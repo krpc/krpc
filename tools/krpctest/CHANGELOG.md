@@ -1,3 +1,7 @@
+## [v0.8.0] - unreleased
+- **Breaking:** Rename the environment variables to `KRPC_TEST_ADDRESS`,
+  `KRPC_TEST_AUTO_LAUNCH`, `KRPC_TEST_SKIP_MOD_INSTALL` and `KRPC_TEST_SKIP_GAMEDATA_CHECK` (#1168)
+
 ## [v0.7.0]
 - Install the maintained fork of KerbalAlarmClock, with its ClickThroughBlocker, ToolbarControl
   and Harmony dependencies (#1139)
