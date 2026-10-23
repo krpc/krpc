@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
@@ -42,7 +43,8 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/object-lifetime';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/object-lifetime';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
@@ -53,11 +55,11 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/external-links.js?v=e8892020"></script>
     <script src="../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/dev/tutorials/object-lifetime.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/user-guide/object-lifetime.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Control Loops" href="control-loops.html" />
-    <link rel="prev" title="Drawing" href="drawing.html" />
+    <link rel="next" title="AutoPilot" href="autopilot.html" />
+    <link rel="prev" title="Reference Frames" href="reference-frames.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -129,7 +131,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -151,6 +153,13 @@
 
 
 <li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
@@ -158,98 +167,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+  <a class="nav-link nav-internal" href="../changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -373,6 +309,13 @@
 
 
 <li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
@@ -380,78 +323,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -540,19 +420,13 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="suborbital-flight.html">Sub-Orbital Flight</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
-<li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launch into Orbit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pitch-heading-roll.html">Pitch, Heading and Roll</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parts.html">Interacting with Parts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buoyancy.html">Boats and Submarines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="drawing.html">Drawing</a></li>
 <li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Object Lifetime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buoyancy.html">Boats and Submarines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server-performance.html">Server Performance</a></li>
 </ul>
 </div>
 </nav></div>
@@ -594,7 +468,7 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
+    <li class="breadcrumb-item"><a href="../user-guide.html" class="nav-link">User Guides</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Object Lifetime</span></li>
   </ul>
@@ -703,7 +577,7 @@ loads. A stream over an object that is destroyed ends with <code class="docutils
 scenes, and carries on when the game returns to one where it is available.</p>
 <p><code class="docutils literal notranslate"><span class="pre">KRPC.GameStateLoads</span></code> counts the game states that have finished loading. A stream of it updates
 when a load is complete.</p>
-<p>A stream or event over a <a class="reference internal" href="server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">server side function</span></a> ends with
+<p>A stream or event over a <a class="reference internal" href="server-side-functions.html#server-side-functions"><span class="std std-ref">server side function</span></a> ends with
 <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectNotLoadedException</span></code>, unless the function catches it.</p>
 </section>
 <section id="objects-in-the-editor">
@@ -759,20 +633,20 @@ unavailable in the same way.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="drawing.html"
+       href="reference-frames.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Drawing</p>
+        <p class="prev-next-title">Reference Frames</p>
       </div>
     </a>
     <a class="right-next"
-       href="control-loops.html"
+       href="autopilot.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Control Loops</p>
+        <p class="prev-next-title">AutoPilot</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -806,7 +680,7 @@ unavailable in the same way.</p>
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/tutorials/object-lifetime.rst.txt">
+    <a href="../_sources/user-guide/object-lifetime.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

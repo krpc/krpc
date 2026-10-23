@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
@@ -42,6 +43,7 @@
     <script src="_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'extending';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -57,7 +59,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Communication Protocols" href="communication-protocols.html" />
-    <link rel="prev" title="Compiling kRPC" href="compiling.html" />
+    <link rel="prev" title="Developer Guide" href="developer-guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -129,7 +131,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -151,6 +153,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="tutorials.html">
     Tutorials
   </a>
@@ -158,98 +167,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" current active">
-  <a class="nav-link dropdown-item nav-internal" href="#" aria-current="page">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="changelog.html">
+  <a class="nav-link nav-internal" href="changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -373,6 +309,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="tutorials.html">
     Tutorials
   </a>
@@ -380,78 +323,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cnano.html">
-    C-nano
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="compiling.html">
-    Compiling kRPC
+  <a class="nav-link nav-internal" href="clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="#" aria-current="page">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -539,7 +419,19 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"></div>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Extending kRPC</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/tcpip.html">Protocol Buffers over TCP/IP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/localsocket.html">Protocol Buffers over a Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/websockets.html">Protocol Buffers over WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/serialio.html">Protocol Buffers over Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/messages.html">Messaging Protocol</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="compiling.html">Compiling kRPC</a></li>
+</ul>
+</div>
 </nav></div>
     </div>
   
@@ -578,6 +470,9 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
+    
+    <li class="breadcrumb-item"><a href="developer-guide.html" class="nav-link">Developer Guide</a></li>
+    
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Extending kRPC</span></li>
   </ul>
 </nav>
@@ -1616,8 +1511,8 @@ and sent to clients over the wire, as the <code class="docutils literal notransl
 by <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code>. Any <code class="docutils literal notranslate"><span class="pre">&lt;see</span> <span class="pre">cref='...'/&gt;</span></code> references in the message are resolved to the
 name of the referenced member; unqualified names are resolved against the declaring type. Clients then expose the deprecation using each language’s own
 mechanism: for example, the Python client emits a <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> when a deprecated member
-is called, and the generated C#, C++, Java and C-nano client code marks deprecated members with
-<code class="docutils literal notranslate"><span class="pre">[Obsolete]</span></code>, <code class="docutils literal notranslate"><span class="pre">[[deprecated]]</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;Deprecated</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> respectively.</p>
+is called, and the generated C#, C++, C-nano and Java client code marks deprecated members with
+<code class="docutils literal notranslate"><span class="pre">[Obsolete]</span></code>, <code class="docutils literal notranslate"><span class="pre">[[deprecated]]</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;Deprecated</span></code> respectively.</p>
 </section>
 <section id="extending-other-services">
 <span id="service-api-extension-members"></span><h3>Extending Other Services<a class="headerlink" href="#extending-other-services" title="Link to this heading">#</a></h3>
@@ -1637,7 +1532,7 @@ method, and joins the service that owns the type being extended:</p>
 </div>
 <p>The containing class needs no kRPC attribute, only <code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">static</span></code>. A dynamic client, such as
 Python or Lua, exposes the member as an ordinary member of the class it extends. A static client,
-such as C#, C++, Java or C-nano, reaches it once its code is regenerated from the mod’s assembly
+such as C#, C++, C-nano or Java, reaches it once its code is regenerated from the mod’s assembly
 and the assembly declaring the service being extended; see <a class="reference internal" href="#service-api-clientgen"><span class="std std-ref">Generating Service Code for Static Clients</span></a>.</p>
 <p>C# has no extension properties, so a property is a pair of extension methods named <code class="docutils literal notranslate"><span class="pre">GetX</span></code> and
 <code class="docutils literal notranslate"><span class="pre">SetX</span></code>, each carrying <a class="reference internal" href="#attribute-KRPCProperty" title="attribute: KRPCProperty"><code class="xref cs cs-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a>. The getter takes only the instance and returns
@@ -1891,12 +1786,12 @@ and include <cite>LaunchControl.cs</cite> in your project.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="compiling.html"
+       href="developer-guide.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Compiling kRPC</p>
+        <p class="prev-next-title">Developer Guide</p>
       </div>
     </a>
     <a class="right-next"

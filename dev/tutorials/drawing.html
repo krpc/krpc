@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
@@ -43,6 +44,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/drawing';</script>
     <script>
@@ -58,7 +60,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/tutorials/drawing.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Object Lifetime" href="object-lifetime.html" />
+    <link rel="next" title="Clients" href="../clients.html" />
     <link rel="prev" title="User Interface" href="user-interface.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
@@ -131,7 +133,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -152,6 +154,13 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
@@ -160,98 +169,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+  <a class="nav-link nav-internal" href="../changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -374,6 +310,13 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
@@ -382,78 +325,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -543,18 +423,12 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="suborbital-flight.html">Sub-Orbital Flight</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
 <li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launch into Orbit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pitch-heading-roll.html">Pitch, Heading and Roll</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parts.html">Interacting with Parts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buoyancy.html">Boats and Submarines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
 <li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Drawing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
 </ul>
 </div>
 </nav></div>
@@ -622,83 +496,40 @@ dashed green path shows a circular target orbit 250 km up. A flag marks the
 north pole in the map view, and a yellow arrow points prograde from the vessel.
 The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">C</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-0-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-4" name="0-4" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-0-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-5" name="0-5" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
-<span class="cp">#ifdef _WIN32</span>
-<span class="cp">#define WIN32_LEAN_AND_MEAN</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;windows.h&gt;</span>
-<span class="cp">#define sleep(seconds) Sleep((seconds) * 1000)</span>
-<span class="cp">#else</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
-<span class="cp">#endif</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/std_lib.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/ui.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/drawing.h&gt;</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-0-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-4" name="0-4" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-0-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-5" name="0-5" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Drawing Example"</span><span class="p">);</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_dictionary_string_object_t</span><span class="w"> </span><span class="n">bodies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KRPC_NULL_DICTIONARY</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Bodies</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">bodies</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_t</span><span class="w"> </span><span class="n">kerbin</span><span class="p">;</span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">bodies</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">bodies</span><span class="p">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="s">"Kerbin"</span><span class="p">))</span>
-<span class="w">      </span><span class="n">kerbin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bodies</span><span class="p">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">kerbin_ref</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_ReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">kerbin_ref</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">);</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Drawing Example"</span><span class="p">)</span>
+<span class="n">space_center</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span>
+<span class="n">drawing</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">drawing</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">kerbin</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">bodies</span><span class="p">[</span><span class="s2">"Kerbin"</span><span class="p">]</span>
 
-<span class="w">  </span><span class="c1">// Draw a circular orbit 250 km above Kerbin, as a dashed green path with</span>
-<span class="w">  </span><span class="c1">// a label</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">radius</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_EquatorialRadius</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">radius</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">);</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">ut</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_UT</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ut</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_t</span><span class="w"> </span><span class="n">orbit</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_CreateFromOrbitalElements</span><span class="p">(</span>
-<span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">orbit</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">250000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ut</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_Drawing_OrbitPath_t</span><span class="w"> </span><span class="n">path</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_Drawing_AddOrbit</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_StdLib_ColorRGB_t</span><span class="w"> </span><span class="n">green</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
-<span class="w">  </span><span class="n">krpc_Drawing_OrbitPath_set_Color</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">green</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_Drawing_OrbitPath_set_Dashed</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_Drawing_OrbitPath_set_Label</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="s">"Target orbit"</span><span class="p">);</span>
+<span class="c1"># Draw a circular orbit 250 km above Kerbin, as a dashed green path with a label</span>
+<span class="n">orbit</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">Orbit</span><span class="o">.</span><span class="n">create_from_orbital_elements</span><span class="p">(</span>
+    <span class="n">kerbin</span><span class="p">,</span> <span class="n">kerbin</span><span class="o">.</span><span class="n">equatorial_radius</span> <span class="o">+</span> <span class="mi">250000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">space_center</span><span class="o">.</span><span class="n">ut</span>
+<span class="p">)</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">drawing</span><span class="o">.</span><span class="n">add_orbit</span><span class="p">(</span><span class="n">orbit</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">std_lib</span><span class="o">.</span><span class="n">ColorRGB</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">path</span><span class="o">.</span><span class="n">dashed</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">path</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">"Target orbit"</span>
 
-<span class="w">  </span><span class="c1">// Mark the north pole in the map view, with the game's flag icon</span>
-<span class="w">  </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">site</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_SurfacePosition</span><span class="p">(</span>
-<span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">site</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin_ref</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_Drawing_AddMapMarker</span><span class="p">(</span>
-<span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">site</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin_ref</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_DRAWING_MAPMARKERICON_FLAG</span><span class="p">,</span>
-<span class="w">    </span><span class="s">"North pole"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="c1"># Mark the north pole in the map view, with the game's flag icon</span>
+<span class="n">site</span> <span class="o">=</span> <span class="n">kerbin</span><span class="o">.</span><span class="n">surface_position</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">kerbin</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">)</span>
+<span class="n">drawing</span><span class="o">.</span><span class="n">add_map_marker</span><span class="p">(</span>
+    <span class="n">site</span><span class="p">,</span> <span class="n">kerbin</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">,</span> <span class="n">drawing</span><span class="o">.</span><span class="n">MapMarkerIcon</span><span class="o">.</span><span class="n">flag</span><span class="p">,</span> <span class="s2">"North pole"</span>
+<span class="p">)</span>
 
-<span class="w">  </span><span class="c1">// Draw a yellow arrow from the vessel, pointing prograde</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">orbital_ref</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_OrbitalReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">orbital_ref</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">prograde</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
-<span class="w">  </span><span class="n">krpc_Drawing_Line_t</span><span class="w"> </span><span class="n">arrow</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_Drawing_AddDirectionFromCom</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">arrow</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">prograde</span><span class="p">,</span><span class="w"> </span><span class="n">orbital_ref</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_StdLib_ColorRGB_t</span><span class="w"> </span><span class="n">yellow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
-<span class="w">  </span><span class="n">krpc_Drawing_Line_set_Color</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">arrow</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">yellow</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_Drawing_Line_set_EndArrow</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">arrow</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="c1"># Draw a yellow arrow from the vessel, pointing prograde</span>
+<span class="n">arrow</span> <span class="o">=</span> <span class="n">drawing</span><span class="o">.</span><span class="n">add_direction_from_com</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbital_reference_frame</span><span class="p">)</span>
+<span class="n">arrow</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">std_lib</span><span class="o">.</span><span class="n">ColorRGB</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">arrow</span><span class="o">.</span><span class="n">end_arrow</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="w">  </span><span class="c1">// Label the arrow with the orbital speed of the vessel</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_t</span><span class="w"> </span><span class="n">vessel_orbit</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Orbit</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel_orbit</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Orbit_Speed</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="n">vessel_orbit</span><span class="p">);</span>
-<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">label</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
-<span class="w">    </span><span class="n">snprintf</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">label</span><span class="p">),</span><span class="w"> </span><span class="s">"%d m/s"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">speed</span><span class="p">);</span>
-<span class="w">    </span><span class="n">krpc_Drawing_Line_set_Label</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">arrow</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="p">);</span>
-<span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
+<span class="c1"># Label the arrow with the orbital speed of the vessel</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">arrow</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">"</span><span class="si">%d</span><span class="s2"> m/s"</span> <span class="o">%</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">speed</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
@@ -795,7 +626,86 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+</div><div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+<span class="cp">#ifdef _WIN32</span>
+<span class="cp">#define WIN32_LEAN_AND_MEAN</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;windows.h&gt;</span>
+<span class="cp">#define sleep(seconds) Sleep((seconds) * 1000)</span>
+<span class="cp">#else</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#endif</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/std_lib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/ui.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/drawing.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Drawing Example"</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_dictionary_string_object_t</span><span class="w"> </span><span class="n">bodies</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KRPC_NULL_DICTIONARY</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Bodies</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">bodies</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_t</span><span class="w"> </span><span class="n">kerbin</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">bodies</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">bodies</span><span class="p">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="s">"Kerbin"</span><span class="p">))</span>
+<span class="w">      </span><span class="n">kerbin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bodies</span><span class="p">.</span><span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">value</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">kerbin_ref</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_ReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">kerbin_ref</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Draw a circular orbit 250 km above Kerbin, as a dashed green path with</span>
+<span class="w">  </span><span class="c1">// a label</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">radius</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_EquatorialRadius</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">radius</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">ut</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_UT</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ut</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_t</span><span class="w"> </span><span class="n">orbit</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_CreateFromOrbitalElements</span><span class="p">(</span>
+<span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">orbit</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">,</span><span class="w"> </span><span class="n">radius</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">250000</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">ut</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_Drawing_OrbitPath_t</span><span class="w"> </span><span class="n">path</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_Drawing_AddOrbit</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_StdLib_ColorRGB_t</span><span class="w"> </span><span class="n">green</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_Drawing_OrbitPath_set_Color</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">green</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_Drawing_OrbitPath_set_Dashed</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_Drawing_OrbitPath_set_Label</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="s">"Target orbit"</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Mark the north pole in the map view, with the game's flag icon</span>
+<span class="w">  </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">site</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_SurfacePosition</span><span class="p">(</span>
+<span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">site</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin_ref</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_Drawing_AddMapMarker</span><span class="p">(</span>
+<span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">site</span><span class="p">,</span><span class="w"> </span><span class="n">kerbin_ref</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_DRAWING_MAPMARKERICON_FLAG</span><span class="p">,</span>
+<span class="w">    </span><span class="s">"North pole"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Draw a yellow arrow from the vessel, pointing prograde</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">orbital_ref</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_OrbitalReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">orbital_ref</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">prograde</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_Drawing_Line_t</span><span class="w"> </span><span class="n">arrow</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_Drawing_AddDirectionFromCom</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">arrow</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">prograde</span><span class="p">,</span><span class="w"> </span><span class="n">orbital_ref</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_StdLib_ColorRGB_t</span><span class="w"> </span><span class="n">yellow</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_Drawing_Line_set_Color</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">arrow</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">yellow</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_Drawing_Line_set_EndArrow</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">arrow</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Label the arrow with the orbital speed of the vessel</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_t</span><span class="w"> </span><span class="n">vessel_orbit</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Orbit</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel_orbit</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Orbit_Speed</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">speed</span><span class="p">,</span><span class="w"> </span><span class="n">vessel_orbit</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">label</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
+<span class="w">    </span><span class="n">snprintf</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">label</span><span class="p">),</span><span class="w"> </span><span class="s">"%d m/s"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">speed</span><span class="p">);</span>
+<span class="w">    </span><span class="n">krpc_Drawing_Line_set_Label</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">arrow</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="p">);</span>
+<span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.Drawing</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.Drawing.Line</span><span class="p">;</span>
@@ -852,7 +762,7 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+</div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc.platform'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">List</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'pl.List'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">'Drawing Example'</span><span class="p">)</span>
@@ -886,42 +796,6 @@ The script updates the label on the arrow with the vessel’s orbital speed.</p>
 <span class="kr">end</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
-
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Drawing Example"</span><span class="p">)</span>
-<span class="n">space_center</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span>
-<span class="n">drawing</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">drawing</span>
-<span class="n">vessel</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-<span class="n">kerbin</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">bodies</span><span class="p">[</span><span class="s2">"Kerbin"</span><span class="p">]</span>
-
-<span class="c1"># Draw a circular orbit 250 km above Kerbin, as a dashed green path with a label</span>
-<span class="n">orbit</span> <span class="o">=</span> <span class="n">space_center</span><span class="o">.</span><span class="n">Orbit</span><span class="o">.</span><span class="n">create_from_orbital_elements</span><span class="p">(</span>
-    <span class="n">kerbin</span><span class="p">,</span> <span class="n">kerbin</span><span class="o">.</span><span class="n">equatorial_radius</span> <span class="o">+</span> <span class="mi">250000</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">space_center</span><span class="o">.</span><span class="n">ut</span>
-<span class="p">)</span>
-<span class="n">path</span> <span class="o">=</span> <span class="n">drawing</span><span class="o">.</span><span class="n">add_orbit</span><span class="p">(</span><span class="n">orbit</span><span class="p">)</span>
-<span class="n">path</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">std_lib</span><span class="o">.</span><span class="n">ColorRGB</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">path</span><span class="o">.</span><span class="n">dashed</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">path</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">"Target orbit"</span>
-
-<span class="c1"># Mark the north pole in the map view, with the game's flag icon</span>
-<span class="n">site</span> <span class="o">=</span> <span class="n">kerbin</span><span class="o">.</span><span class="n">surface_position</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">kerbin</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">)</span>
-<span class="n">drawing</span><span class="o">.</span><span class="n">add_map_marker</span><span class="p">(</span>
-    <span class="n">site</span><span class="p">,</span> <span class="n">kerbin</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">,</span> <span class="n">drawing</span><span class="o">.</span><span class="n">MapMarkerIcon</span><span class="o">.</span><span class="n">flag</span><span class="p">,</span> <span class="s2">"North pole"</span>
-<span class="p">)</span>
-
-<span class="c1"># Draw a yellow arrow from the vessel, pointing prograde</span>
-<span class="n">arrow</span> <span class="o">=</span> <span class="n">drawing</span><span class="o">.</span><span class="n">add_direction_from_com</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbital_reference_frame</span><span class="p">)</span>
-<span class="n">arrow</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">std_lib</span><span class="o">.</span><span class="n">ColorRGB</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">arrow</span><span class="o">.</span><span class="n">end_arrow</span> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="c1"># Label the arrow with the orbital speed of the vessel</span>
-<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">arrow</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">"</span><span class="si">%d</span><span class="s2"> m/s"</span> <span class="o">%</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">speed</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
 </div></div>
 <p>The arrow is drawn in the flight scene. Switch to the map view to see the target
 orbit and the flag. Drawn objects remain until the script disconnects, which is
@@ -953,11 +827,11 @@ boxes, spheres, points and navball markers.</p>
       </div>
     </a>
     <a class="right-next"
-       href="object-lifetime.html"
+       href="../clients.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Object Lifetime</p>
+        <p class="prev-next-title">Clients</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

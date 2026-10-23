@@ -8,6 +8,11 @@ once per second.
 
 .. tabs::
 
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.py
+         :language: python
+
    .. tab:: C#
 
       .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.cs
@@ -33,11 +38,6 @@ once per second.
       .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.lua
          :language: lua
 
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/tutorials/pitch-heading-roll/PitchHeadingRoll.py
-         :language: python
-
 .. note:: Pitch, heading and roll are Euler angles, and are ill-defined when the vessel
    points near vertical (pitch approaching ±90°), where heading and roll become
    ambiguous. This applies both to the computation in this example (which prints
@@ -45,4 +45,4 @@ once per second.
    :attr:`Flight.pitch`, :attr:`Flight.heading` and :attr:`Flight.roll` telemetry. For a
    representation of the vessel's attitude that is always well-defined, use
    :attr:`Flight.rotation` or :attr:`Flight.direction`, or the auto-pilot's error
-   readouts described in the :doc:`autopilot tutorial </tutorials/autopilot>`.
+   readouts described in the :doc:`auto-pilot guide </user-guide/autopilot>`.

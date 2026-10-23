@@ -157,9 +157,9 @@ Vessel
       .. note:: When this is called with no arguments, the vessel's surface reference
                 frame is used. This reference frame moves with the vessel, therefore
                 velocities and speeds returned by the flight object will be zero. See
-                the :rst:ref:`reference frames tutorial <tutorial-reference-frames>`
+                the :rst:ref:`reference frames guide <reference-frames>`
                 for examples of getting :rst:ref:`the orbital and surface speeds of a
-                vessel <tutorial-reference-frames-vessel-speed>`.
+                vessel <reference-frames-vessel-speed>`.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Orbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * returnValue, krpc_SpaceCenter_Vessel_t instance)
 

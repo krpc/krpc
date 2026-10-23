@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
@@ -43,6 +44,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/user-interface';</script>
     <script>
@@ -131,7 +133,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -152,6 +154,13 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
@@ -160,98 +169,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+  <a class="nav-link nav-internal" href="../changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -374,6 +310,13 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
@@ -382,78 +325,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -543,18 +423,12 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="suborbital-flight.html">Sub-Orbital Flight</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
 <li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launch into Orbit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pitch-heading-roll.html">Pitch, Heading and Roll</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parts.html">Interacting with Parts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buoyancy.html">Boats and Submarines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
 <li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="drawing.html">Drawing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
 </ul>
 </div>
 </nav></div>
@@ -624,114 +498,67 @@ column: a button that sets the throttle to maximum, a slider that sets it
 directly, and text showing the current thrust produced by the vessel. A tooltip
 is shown while the mouse rests on the button.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">C</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-0-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-4" name="0-4" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-0-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-5" name="0-5" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
-<span class="cp">#ifdef _WIN32</span>
-<span class="cp">#define WIN32_LEAN_AND_MEAN</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;windows.h&gt;</span>
-<span class="cp">#define sleep(seconds) Sleep((seconds) * 1000)</span>
-<span class="cp">#else</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
-<span class="cp">#endif</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/std_lib.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/ui.h&gt;</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-0-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-4" name="0-4" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-0-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-5" name="0-5" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"User Interface Example"</span><span class="p">);</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
-<span class="w">  </span><span class="n">krpc_UI_Canvas_t</span><span class="w"> </span><span class="n">canvas</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_UI_StockCanvas</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">canvas</span><span class="p">);</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"User Interface Example"</span><span class="p">)</span>
+<span class="n">canvas</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">stock_canvas</span>
 
-<span class="w">  </span><span class="n">krpc_UI_RectTransform_t</span><span class="w"> </span><span class="n">canvas_rect</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_UI_Canvas_RectTransform</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">canvas_rect</span><span class="p">,</span><span class="w"> </span><span class="n">canvas</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_tuple_double_double_t</span><span class="w"> </span><span class="n">screen_size</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_UI_RectTransform_Size</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">screen_size</span><span class="p">,</span><span class="w"> </span><span class="n">canvas_rect</span><span class="p">);</span>
+<span class="c1"># Get the size of the game window in pixels</span>
+<span class="n">screen_size</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">rect_transform</span><span class="o">.</span><span class="n">size</span>
 
-<span class="w">  </span><span class="c1">// Add a panel to contain the UI elements. The user can drag it around the</span>
-<span class="w">  </span><span class="c1">// screen with the mouse.</span>
-<span class="w">  </span><span class="n">krpc_UI_Panel_t</span><span class="w"> </span><span class="n">panel</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_UI_Canvas_AddPanel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="n">canvas</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_UI_Panel_set_Draggable</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="c1"># Add a panel to contain the UI elements. The user can drag it around the</span>
+<span class="c1"># screen with the mouse.</span>
+<span class="n">panel</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">add_panel</span><span class="p">()</span>
+<span class="n">panel</span><span class="o">.</span><span class="n">draggable</span> <span class="o">=</span> <span class="kc">True</span>
 
-<span class="w">  </span><span class="c1">// Position the panel on the left of the screen</span>
-<span class="w">  </span><span class="n">krpc_UI_RectTransform_t</span><span class="w"> </span><span class="n">rect</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_UI_Panel_RectTransform</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rect</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_tuple_double_double_t</span><span class="w"> </span><span class="n">panel_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">120</span><span class="p">};</span>
-<span class="w">  </span><span class="n">krpc_UI_RectTransform_set_Size</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">panel_size</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_tuple_double_double_t</span><span class="w"> </span><span class="n">panel_pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">110</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">screen_size</span><span class="p">.</span><span class="n">e0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
-<span class="w">  </span><span class="n">krpc_UI_RectTransform_set_Position</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">panel_pos</span><span class="p">);</span>
+<span class="c1"># Position the panel on the left of the screen</span>
+<span class="n">rect</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">rect_transform</span>
+<span class="n">rect</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>
+<span class="n">rect</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">110</span> <span class="o">-</span> <span class="p">(</span><span class="n">screen_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 
-<span class="w">  </span><span class="c1">// Lay the contents of the panel out in a column</span>
-<span class="w">  </span><span class="n">krpc_UI_Layout_t</span><span class="w"> </span><span class="n">layout</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_UI_Panel_AddVerticalLayout</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layout</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_UI_Padding_t</span><span class="w"> </span><span class="n">padding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">};</span>
-<span class="w">  </span><span class="n">krpc_UI_Layout_set_Padding</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">layout</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">padding</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_UI_Layout_set_Spacing</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">layout</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span>
+<span class="c1"># Lay the contents of the panel out in a column</span>
+<span class="n">layout</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">add_vertical_layout</span><span class="p">()</span>
+<span class="n">layout</span><span class="o">.</span><span class="n">padding</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">Padding</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">layout</span><span class="o">.</span><span class="n">spacing</span> <span class="o">=</span> <span class="mi">6</span>
 
-<span class="w">  </span><span class="c1">// Add a button to set the throttle to maximum, with a tooltip shown while</span>
-<span class="w">  </span><span class="c1">// the mouse rests on it</span>
-<span class="w">  </span><span class="n">krpc_UI_Button_t</span><span class="w"> </span><span class="n">button</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_UI_Panel_AddButton</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">button</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="s">"Full Throttle"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_UI_Button_set_Tooltip</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">button</span><span class="p">,</span><span class="w"> </span><span class="s">"Set the throttle to maximum"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_UI_LayoutElement_t</span><span class="w"> </span><span class="n">button_element</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_UI_Button_LayoutElement</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">button_element</span><span class="p">,</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_tuple_double_double_t</span><span class="w"> </span><span class="n">button_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">};</span>
-<span class="w">  </span><span class="n">krpc_UI_LayoutElement_set_PreferredSize</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">button_element</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">button_size</span><span class="p">);</span>
+<span class="c1"># Add a button to set the throttle to maximum, with a tooltip shown while the</span>
+<span class="c1"># mouse rests on it</span>
+<span class="n">button</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">add_button</span><span class="p">(</span><span class="s2">"Full Throttle"</span><span class="p">)</span>
+<span class="n">button</span><span class="o">.</span><span class="n">tooltip</span> <span class="o">=</span> <span class="s2">"Set the throttle to maximum"</span>
+<span class="n">button</span><span class="o">.</span><span class="n">layout_element</span><span class="o">.</span><span class="n">preferred_size</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
 
-<span class="w">  </span><span class="c1">// Add a slider to set the throttle by hand</span>
-<span class="w">  </span><span class="n">krpc_UI_Slider_t</span><span class="w"> </span><span class="n">slider</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_UI_Panel_AddSlider</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">slider</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_UI_LayoutElement_t</span><span class="w"> </span><span class="n">slider_element</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_UI_Slider_LayoutElement</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">slider_element</span><span class="p">,</span><span class="w"> </span><span class="n">slider</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_tuple_double_double_t</span><span class="w"> </span><span class="n">slider_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">};</span>
-<span class="w">  </span><span class="n">krpc_UI_LayoutElement_set_PreferredSize</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">slider_element</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">slider_size</span><span class="p">);</span>
+<span class="c1"># Add a slider to set the throttle by hand</span>
+<span class="n">slider</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">add_slider</span><span class="p">()</span>
+<span class="n">slider</span><span class="o">.</span><span class="n">layout_element</span><span class="o">.</span><span class="n">preferred_size</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 
-<span class="w">  </span><span class="c1">// Add some text displaying the total engine thrust</span>
-<span class="w">  </span><span class="n">krpc_UI_Text_t</span><span class="w"> </span><span class="n">text</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_UI_Panel_AddText</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="s">"Thrust: 0 kN"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_StdLib_ColorRGBA_t</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">};</span>
-<span class="w">  </span><span class="n">krpc_UI_Text_set_Color</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">color</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_UI_Text_set_Size</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="mi">18</span><span class="p">);</span>
+<span class="c1"># Add some text displaying the total engine thrust</span>
+<span class="n">text</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="s2">"Thrust: 0 kN"</span><span class="p">)</span>
+<span class="n">text</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">std_lib</span><span class="o">.</span><span class="n">ColorRGBA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">text</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">18</span>
 
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+<span class="c1"># Set up streams to monitor the button and the slider</span>
+<span class="n">button_clicked</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">button</span><span class="p">,</span> <span class="s2">"clicked"</span><span class="p">)</span>
+<span class="n">slider_changed</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">slider</span><span class="p">,</span> <span class="s2">"changed"</span><span class="p">)</span>
 
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// Handle the throttle button being clicked</span>
-<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">clicked</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_UI_Button_Clicked</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">clicked</span><span class="p">,</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">clicked</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">krpc_SpaceCenter_Control_t</span><span class="w"> </span><span class="n">control</span><span class="p">;</span>
-<span class="w">      </span><span class="n">krpc_SpaceCenter_Vessel_Control</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">      </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
-<span class="w">      </span><span class="n">krpc_UI_Slider_set_Value</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">slider</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
-<span class="w">      </span><span class="n">krpc_UI_Button_set_Clicked</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">button</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="c1"># Handle the throttle button being clicked</span>
+    <span class="k">if</span> <span class="n">button_clicked</span><span class="p">():</span>
+        <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">slider</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">button</span><span class="o">.</span><span class="n">clicked</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="w">    </span><span class="c1">// Handle the user moving the throttle slider</span>
-<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">changed</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_UI_Slider_Changed</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">changed</span><span class="p">,</span><span class="w"> </span><span class="n">slider</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">changed</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="kt">float</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
-<span class="w">      </span><span class="n">krpc_UI_Slider_Value</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">slider</span><span class="p">);</span>
-<span class="w">      </span><span class="n">krpc_SpaceCenter_Control_t</span><span class="w"> </span><span class="n">control</span><span class="p">;</span>
-<span class="w">      </span><span class="n">krpc_SpaceCenter_Vessel_Control</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">      </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
-<span class="w">      </span><span class="n">krpc_UI_Slider_set_Changed</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">slider</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
-<span class="w">    </span><span class="p">}</span>
+    <span class="c1"># Handle the user moving the throttle slider</span>
+    <span class="k">if</span> <span class="n">slider_changed</span><span class="p">():</span>
+        <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="n">slider</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">slider</span><span class="o">.</span><span class="n">changed</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">thrust</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Vessel_Thrust</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">thrust</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">content</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
-<span class="w">    </span><span class="n">snprintf</span><span class="p">(</span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">content</span><span class="p">),</span><span class="w"> </span><span class="s">"Thrust: %d kN"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
-<span class="w">    </span><span class="n">krpc_UI_Text_set_Content</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="p">);</span>
+    <span class="c1"># Update the thrust text</span>
+    <span class="n">text</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s2">"Thrust: </span><span class="si">%d</span><span class="s2"> kN"</span> <span class="o">%</span> <span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">thrust</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
 
-<span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
@@ -881,7 +708,117 @@ is shown while the mouse rests on the button.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+</div><div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#ifdef _WIN32</span>
+<span class="cp">#define WIN32_LEAN_AND_MEAN</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;windows.h&gt;</span>
+<span class="cp">#define sleep(seconds) Sleep((seconds) * 1000)</span>
+<span class="cp">#else</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#endif</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/std_lib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/ui.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"User Interface Example"</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_UI_Canvas_t</span><span class="w"> </span><span class="n">canvas</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_UI_StockCanvas</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">canvas</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_UI_RectTransform_t</span><span class="w"> </span><span class="n">canvas_rect</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_UI_Canvas_RectTransform</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">canvas_rect</span><span class="p">,</span><span class="w"> </span><span class="n">canvas</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_tuple_double_double_t</span><span class="w"> </span><span class="n">screen_size</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_UI_RectTransform_Size</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">screen_size</span><span class="p">,</span><span class="w"> </span><span class="n">canvas_rect</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Add a panel to contain the UI elements. The user can drag it around the</span>
+<span class="w">  </span><span class="c1">// screen with the mouse.</span>
+<span class="w">  </span><span class="n">krpc_UI_Panel_t</span><span class="w"> </span><span class="n">panel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_UI_Canvas_AddPanel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="n">canvas</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_UI_Panel_set_Draggable</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Position the panel on the left of the screen</span>
+<span class="w">  </span><span class="n">krpc_UI_RectTransform_t</span><span class="w"> </span><span class="n">rect</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_UI_Panel_RectTransform</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rect</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_tuple_double_double_t</span><span class="w"> </span><span class="n">panel_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">120</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_UI_RectTransform_set_Size</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">panel_size</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_tuple_double_double_t</span><span class="w"> </span><span class="n">panel_pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">110</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">screen_size</span><span class="p">.</span><span class="n">e0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_UI_RectTransform_set_Position</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">rect</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">panel_pos</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Lay the contents of the panel out in a column</span>
+<span class="w">  </span><span class="n">krpc_UI_Layout_t</span><span class="w"> </span><span class="n">layout</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_UI_Panel_AddVerticalLayout</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">layout</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_UI_Padding_t</span><span class="w"> </span><span class="n">padding</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_UI_Layout_set_Padding</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">layout</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">padding</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_UI_Layout_set_Spacing</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">layout</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Add a button to set the throttle to maximum, with a tooltip shown while</span>
+<span class="w">  </span><span class="c1">// the mouse rests on it</span>
+<span class="w">  </span><span class="n">krpc_UI_Button_t</span><span class="w"> </span><span class="n">button</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_UI_Panel_AddButton</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">button</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="s">"Full Throttle"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_UI_Button_set_Tooltip</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">button</span><span class="p">,</span><span class="w"> </span><span class="s">"Set the throttle to maximum"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_UI_LayoutElement_t</span><span class="w"> </span><span class="n">button_element</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_UI_Button_LayoutElement</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">button_element</span><span class="p">,</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_tuple_double_double_t</span><span class="w"> </span><span class="n">button_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_UI_LayoutElement_set_PreferredSize</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">button_element</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">button_size</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Add a slider to set the throttle by hand</span>
+<span class="w">  </span><span class="n">krpc_UI_Slider_t</span><span class="w"> </span><span class="n">slider</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_UI_Panel_AddSlider</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">slider</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_UI_LayoutElement_t</span><span class="w"> </span><span class="n">slider_element</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_UI_Slider_LayoutElement</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">slider_element</span><span class="p">,</span><span class="w"> </span><span class="n">slider</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_tuple_double_double_t</span><span class="w"> </span><span class="n">slider_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_UI_LayoutElement_set_PreferredSize</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">slider_element</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">slider_size</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Add some text displaying the total engine thrust</span>
+<span class="w">  </span><span class="n">krpc_UI_Text_t</span><span class="w"> </span><span class="n">text</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_UI_Panel_AddText</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="n">panel</span><span class="p">,</span><span class="w"> </span><span class="s">"Thrust: 0 kN"</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_StdLib_ColorRGBA_t</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_UI_Text_set_Color</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">color</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_UI_Text_set_Size</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="mi">18</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Handle the throttle button being clicked</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">clicked</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_UI_Button_Clicked</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">clicked</span><span class="p">,</span><span class="w"> </span><span class="n">button</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">clicked</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_Control_t</span><span class="w"> </span><span class="n">control</span><span class="p">;</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_Vessel_Control</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">      </span><span class="n">krpc_UI_Slider_set_Value</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">slider</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">      </span><span class="n">krpc_UI_Button_set_Clicked</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">button</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Handle the user moving the throttle slider</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">changed</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_UI_Slider_Changed</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">changed</span><span class="p">,</span><span class="w"> </span><span class="n">slider</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">changed</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kt">float</span><span class="w"> </span><span class="n">value</span><span class="p">;</span>
+<span class="w">      </span><span class="n">krpc_UI_Slider_Value</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">value</span><span class="p">,</span><span class="w"> </span><span class="n">slider</span><span class="p">);</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_Control_t</span><span class="w"> </span><span class="n">control</span><span class="p">;</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_Vessel_Control</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="p">);</span>
+<span class="w">      </span><span class="n">krpc_UI_Slider_set_Changed</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">slider</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">thrust</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Vessel_Thrust</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">thrust</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">content</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
+<span class="w">    </span><span class="n">snprintf</span><span class="p">(</span><span class="n">content</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">content</span><span class="p">),</span><span class="w"> </span><span class="s">"Thrust: %d kN"</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
+<span class="w">    </span><span class="n">krpc_UI_Text_set_Content</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Stream</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
@@ -971,7 +908,7 @@ is shown while the mouse rests on the button.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+</div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc.platform'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">List</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'pl.List'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">'User Interface Example'</span><span class="p">)</span>
@@ -1030,69 +967,6 @@ is shown while the mouse rests on the button.</p>
 
 <span class="w">    </span><span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
 <span class="kr">end</span>
-</pre></div>
-</div>
-</div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
-
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"User Interface Example"</span><span class="p">)</span>
-<span class="n">canvas</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">stock_canvas</span>
-
-<span class="c1"># Get the size of the game window in pixels</span>
-<span class="n">screen_size</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">rect_transform</span><span class="o">.</span><span class="n">size</span>
-
-<span class="c1"># Add a panel to contain the UI elements. The user can drag it around the</span>
-<span class="c1"># screen with the mouse.</span>
-<span class="n">panel</span> <span class="o">=</span> <span class="n">canvas</span><span class="o">.</span><span class="n">add_panel</span><span class="p">()</span>
-<span class="n">panel</span><span class="o">.</span><span class="n">draggable</span> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="c1"># Position the panel on the left of the screen</span>
-<span class="n">rect</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">rect_transform</span>
-<span class="n">rect</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">120</span><span class="p">)</span>
-<span class="n">rect</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">110</span> <span class="o">-</span> <span class="p">(</span><span class="n">screen_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
-
-<span class="c1"># Lay the contents of the panel out in a column</span>
-<span class="n">layout</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">add_vertical_layout</span><span class="p">()</span>
-<span class="n">layout</span><span class="o">.</span><span class="n">padding</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">Padding</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="n">layout</span><span class="o">.</span><span class="n">spacing</span> <span class="o">=</span> <span class="mi">6</span>
-
-<span class="c1"># Add a button to set the throttle to maximum, with a tooltip shown while the</span>
-<span class="c1"># mouse rests on it</span>
-<span class="n">button</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">add_button</span><span class="p">(</span><span class="s2">"Full Throttle"</span><span class="p">)</span>
-<span class="n">button</span><span class="o">.</span><span class="n">tooltip</span> <span class="o">=</span> <span class="s2">"Set the throttle to maximum"</span>
-<span class="n">button</span><span class="o">.</span><span class="n">layout_element</span><span class="o">.</span><span class="n">preferred_size</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
-
-<span class="c1"># Add a slider to set the throttle by hand</span>
-<span class="n">slider</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">add_slider</span><span class="p">()</span>
-<span class="n">slider</span><span class="o">.</span><span class="n">layout_element</span><span class="o">.</span><span class="n">preferred_size</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-
-<span class="c1"># Add some text displaying the total engine thrust</span>
-<span class="n">text</span> <span class="o">=</span> <span class="n">panel</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="s2">"Thrust: 0 kN"</span><span class="p">)</span>
-<span class="n">text</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">std_lib</span><span class="o">.</span><span class="n">ColorRGBA</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">text</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">18</span>
-
-<span class="c1"># Set up streams to monitor the button and the slider</span>
-<span class="n">button_clicked</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">button</span><span class="p">,</span> <span class="s2">"clicked"</span><span class="p">)</span>
-<span class="n">slider_changed</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">slider</span><span class="p">,</span> <span class="s2">"changed"</span><span class="p">)</span>
-
-<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="c1"># Handle the throttle button being clicked</span>
-    <span class="k">if</span> <span class="n">button_clicked</span><span class="p">():</span>
-        <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">slider</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">button</span><span class="o">.</span><span class="n">clicked</span> <span class="o">=</span> <span class="kc">False</span>
-
-    <span class="c1"># Handle the user moving the throttle slider</span>
-    <span class="k">if</span> <span class="n">slider_changed</span><span class="p">():</span>
-        <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="n">slider</span><span class="o">.</span><span class="n">value</span>
-        <span class="n">slider</span><span class="o">.</span><span class="n">changed</span> <span class="o">=</span> <span class="kc">False</span>
-
-    <span class="c1"># Update the thrust text</span>
-    <span class="n">text</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="s2">"Thrust: </span><span class="si">%d</span><span class="s2"> kN"</span> <span class="o">%</span> <span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">thrust</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
-
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div></div>

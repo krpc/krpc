@@ -1,6 +1,6 @@
 .. currentmodule:: KRPC
 
-.. _tutorial-server-side-functions:
+.. _server-side-functions:
 
 Server Side Functions
 =====================
@@ -18,15 +18,15 @@ uses:
   a single RPC. They can set properties and trigger actions. The same calls made from your
   program take a round trip each, and the game advances between them.
 
-This tutorial is in two parts. :ref:`Using Server Side Functions <server-side-functions-compiled>`
+This guide is in two parts. :ref:`Using Server Side Functions <server-side-functions-compiled>`
 covers functions written in your own language and compiled by the client, and is all most users
 need. :ref:`The Expression API <server-side-functions-api>` covers the expression trees that
 compiled code translates into, which every client can build directly.
 
 .. note::
 
-   Compiled functions need the C# or Python client. Events, function streams and ``Run`` need the
-   C#, C++, Java or Python client.
+   Compiled functions need the Python or C# client. Events, function streams and ``Run`` need the
+   Python, C#, C++ or Java client.
 
 .. _server-side-functions-compiled:
 
@@ -47,14 +47,14 @@ This event fires when the vessel's altitude exceeds 1000 meters:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/AltitudeEvent.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeEvent.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/AltitudeEvent.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeEvent.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -81,14 +81,14 @@ For example:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/CapturedValue.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CapturedValue.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/CapturedValue.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CapturedValue.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -111,14 +111,14 @@ computation on each stream update:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/AltitudeStream.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeStream.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/AltitudeStream.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/AltitudeStream.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -131,14 +131,14 @@ read in a single physics tick per update:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/EngineThrusts.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/EngineThrusts.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/EngineThrusts.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/EngineThrusts.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -161,14 +161,14 @@ engines that staging reveals:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/OutOfFuelEvent.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/OutOfFuelEvent.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/OutOfFuelEvent.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/OutOfFuelEvent.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -184,14 +184,14 @@ liquid fuel left:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/FuelFraction.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FuelFraction.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/FuelFraction.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FuelFraction.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -215,14 +215,14 @@ with a type annotation:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/BurnRatings.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/BurnRatings.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/BurnRatings.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/BurnRatings.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -242,14 +242,14 @@ once, with every step in the same physics tick:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/RunOnce.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/RunOnce.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/RunOnce.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/RunOnce.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -276,14 +276,14 @@ serves many inputs. This computes how long a burn takes, for several changes in 
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/BurnTime.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/BurnTime.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/BurnTime.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/BurnTime.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -300,7 +300,7 @@ A function can keep a value from one evaluation to the next, such as a running t
 Python, declare a captured variable ``nonlocal``. This stream counts the stream updates in
 which the engines are firing:
 
-.. literalinclude:: /scripts/tutorials/server-side-functions/FiringCounter.py
+.. literalinclude:: /scripts/user-guide/server-side-functions/FiringCounter.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -326,14 +326,14 @@ them from the type of the value. This streams the vessel's name in upper case:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/UpperCaseName.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/UpperCaseName.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/UpperCaseName.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/UpperCaseName.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -367,14 +367,14 @@ on the stream or event evaluating the function:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/CheckFuel.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CheckFuel.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/CheckFuel.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CheckFuel.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -394,14 +394,14 @@ A function can also handle an exception, with the language's try statement:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/SwitchModes.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchModes.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/SwitchModes.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SwitchModes.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -434,14 +434,14 @@ angle between the vessel's facing direction and its velocity relative to the sur
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/SurfaceAngle.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SurfaceAngle.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/SurfaceAngle.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/SurfaceAngle.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -478,14 +478,14 @@ game's log, ``KSP.log``. This logs the vessel's mass from the server:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/PrintMass.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/PrintMass.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/PrintMass.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/PrintMass.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -540,19 +540,19 @@ running, catch the exception in the function:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/NotLoadedEvent.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedEvent.py
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/NotLoadedEvent.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedEvent.cs
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/NotLoadedEvent.cpp
+      .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedEvent.cpp
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/NotLoadedEvent.java
+      .. literalinclude:: /scripts/user-guide/server-side-functions/NotLoadedEvent.java
 
 The event's handler gives ``False``, so the event does not fire. A stream's handler can give a
 last good value, kept in a state variable. With the expression API, :meth:`Expression.try_catch`
@@ -583,14 +583,14 @@ other assignment to a variable or the other branch of a conditional:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/HeaviestEngine.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/HeaviestEngine.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/HeaviestEngine.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/HeaviestEngine.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -620,14 +620,14 @@ different values, give it parameters, as in :ref:`server-side-functions-argument
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/CompiledStep.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CompiledStep.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/CompiledStep.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CompiledStep.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -682,7 +682,7 @@ Two rules hold for every server side function:
 Expression Objects
 ^^^^^^^^^^^^^^^^^^
 
-The altitude event from the start of this tutorial has three nodes: an embedded call, a constant
+The altitude event from the start of this guide has three nodes: an embedded call, a constant
 and a comparison:
 
 .. tabs::
@@ -724,14 +724,14 @@ This truncates the altitude to a whole number of meters:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/TruncateAltitude.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TruncateAltitude.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/TruncateAltitude.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TruncateAltitude.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -739,7 +739,7 @@ This truncates the altitude to a whole number of meters:
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/TruncateAltitude.cpp
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TruncateAltitude.cpp
          :language: cpp
          :start-after: [docs]
          :end-before: [/docs]
@@ -747,7 +747,7 @@ This truncates the altitude to a whole number of meters:
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/TruncateAltitude.java
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TruncateAltitude.java
          :language: java
          :start-after: [docs]
          :end-before: [/docs]
@@ -778,11 +778,11 @@ A function whose value can be sent to a client can be streamed:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/FunctionStream.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStream.py
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/FunctionStream.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStream.cs
 
    .. group-tab:: C++
 
@@ -806,19 +806,19 @@ the procedure, so any engine can supply it:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/CollectionEvent.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CollectionEvent.py
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/CollectionEvent.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CollectionEvent.cs
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/CollectionEvent.cpp
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CollectionEvent.cpp
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/CollectionEvent.java
+      .. literalinclude:: /scripts/user-guide/server-side-functions/CollectionEvent.java
 
 A function passed to a collection operation is built from two pieces:
 
@@ -870,14 +870,14 @@ and build one. :meth:`Expression.get_field` reads a field by name:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/StructureField.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/StructureField.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/StructureField.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/StructureField.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -885,7 +885,7 @@ and build one. :meth:`Expression.get_field` reads a field by name:
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/StructureField.cpp
+      .. literalinclude:: /scripts/user-guide/server-side-functions/StructureField.cpp
          :language: cpp
          :start-after: [docs]
          :end-before: [/docs]
@@ -893,7 +893,7 @@ and build one. :meth:`Expression.get_field` reads a field by name:
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/StructureField.java
+      .. literalinclude:: /scripts/user-guide/server-side-functions/StructureField.java
          :language: java
          :start-after: [docs]
          :end-before: [/docs]
@@ -916,19 +916,19 @@ This builds and runs ``total = 0; for x in [1, 2, 3]: total += x``, which return
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/FunctionStatements.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.py
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/FunctionStatements.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.cs
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/FunctionStatements.cpp
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.cpp
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/FunctionStatements.java
+      .. literalinclude:: /scripts/user-guide/server-side-functions/FunctionStatements.java
 
 Statements are ordinary expression nodes. :meth:`Expression.block_with_variables` sequences
 statements and declares local variables, and its value is the value of its last statement.
@@ -949,14 +949,14 @@ particular vessel:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/TargetEvent.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TargetEvent.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/TargetEvent.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TargetEvent.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -964,7 +964,7 @@ particular vessel:
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/TargetEvent.cpp
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TargetEvent.cpp
          :language: cpp
          :start-after: [docs]
          :end-before: [/docs]
@@ -972,7 +972,7 @@ particular vessel:
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/TargetEvent.java
+      .. literalinclude:: /scripts/user-guide/server-side-functions/TargetEvent.java
          :language: java
          :start-after: [docs]
          :end-before: [/docs]
@@ -993,14 +993,14 @@ fuel check from :ref:`Exceptions <server-side-functions-exceptions>`:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/ThrowException.py
+      .. literalinclude:: /scripts/user-guide/server-side-functions/ThrowException.py
          :language: python
          :start-after: [docs]
          :end-before: [/docs]
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/ThrowException.cs
+      .. literalinclude:: /scripts/user-guide/server-side-functions/ThrowException.cs
          :language: csharp
          :start-after: [docs]
          :end-before: [/docs]
@@ -1008,7 +1008,7 @@ fuel check from :ref:`Exceptions <server-side-functions-exceptions>`:
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/ThrowException.cpp
+      .. literalinclude:: /scripts/user-guide/server-side-functions/ThrowException.cpp
          :language: cpp
          :start-after: [docs]
          :end-before: [/docs]
@@ -1016,7 +1016,7 @@ fuel check from :ref:`Exceptions <server-side-functions-exceptions>`:
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/server-side-functions/ThrowException.java
+      .. literalinclude:: /scripts/user-guide/server-side-functions/ThrowException.java
          :language: java
          :start-after: [docs]
          :end-before: [/docs]

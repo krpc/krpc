@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Internals of kRPC &#8212; kRPC vdev documentation</title>
+    <title>User Guides &#8212; kRPC vdev documentation</title>
   
   
   
@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
@@ -42,7 +43,8 @@
     <script src="_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'internals';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
@@ -53,11 +55,11 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="_static/external-links.js?v=e8892020"></script>
     <script src="_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/dev/internals.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/user-guide.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Changelog" href="changelog.html" />
-    <link rel="prev" title="Messaging Protocol" href="communication-protocols/messages.html" />
+    <link rel="next" title="Reference Frames" href="user-guide/reference-frames.html" />
+    <link rel="prev" title="Getting Started" href="getting-started.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -129,7 +131,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -150,6 +152,13 @@
 </li>
 
 
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#" aria-current="page">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="tutorials.html">
     Tutorials
@@ -158,98 +167,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" current active">
-  <a class="nav-link dropdown-item nav-internal" href="#" aria-current="page">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="changelog.html">
+  <a class="nav-link nav-internal" href="changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -372,6 +308,13 @@
 </li>
 
 
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#" aria-current="page">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="tutorials.html">
     Tutorials
@@ -380,78 +323,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="#" aria-current="page">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -539,7 +419,16 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"></div>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="user-guide/reference-frames.html">Reference Frames</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/object-lifetime.html">Object Lifetime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/autopilot.html">AutoPilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/control-loops.html">Control Loops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/server-side-functions.html">Server Side Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/buoyancy.html">Boats and Submarines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/server-performance.html">Server Performance</a></li>
+</ul>
+</div>
 </nav></div>
     </div>
   
@@ -578,7 +467,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Internals of kRPC</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">User Guides</span></li>
   </ul>
 </nav>
 </div>
@@ -595,84 +484,20 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="internals-of-krpc">
-<span id="internals"></span><h1>Internals of kRPC<a class="headerlink" href="#internals-of-krpc" title="Link to this heading">#</a></h1>
-<section id="server-performance-settings">
-<span id="id1"></span><h2>Server Performance Settings<a class="headerlink" href="#server-performance-settings" title="Link to this heading">#</a></h2>
-<figure class="align-right" id="id2">
-<img alt="_images/server-window-advanced.png" src="_images/server-window-advanced.png" />
-<figcaption>
-<p><span class="caption-text">Server window showing the advanced settings.</span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
-</figcaption>
-</figure>
-<p>kRPC processes its queue of remote procedures when its FixedUpdate method is
-invoked. This is called every fixed framerate frame, typically about 60 times a
-second. If kRPC were to only execute one RPC per FixedUpdate, it would only be
-able to execute at most 60 RPCs per second. In order to achieve a higher RPC
-throughput, it can execute multiple RPCs per FixedUpdate. However, if it is
-allowed to process too many RPCs per FixedUpdate, the game’s framerate would be
-adversely affected. The following settings control this behavior, and the
-resulting tradeoff between RPC throughput and game FPS:</p>
-<ol class="arabic simple">
-<li><p><strong>One RPC per update</strong>. When this is enabled, the server will execute at most
-one RPC per client per update. This will have minimal impact on the games
-framerate, while still allowing kRPC to execute RPCs. If you don’t need a
-high RPC throughput, this is a good option to use.</p></li>
-<li><p><strong>Maximum time per update</strong>. When one RPC per update is not enabled, this
-setting controls the maximum amount of time (in microseconds) that kRPC will
-spend executing RPCs per FixedUpdate.  Setting this to a high value, for
-example 20000 us, will allow the server to process many RPCs at the expense
-of the game’s framerate. A low value, for example 1000 us, won’t allow the
-server to execute many RPCs per update, but will allow the game to run at a
-much higher framerate.</p></li>
-<li><p><strong>Adaptive rate control</strong>. When enabled, kRPC will automatically adjust the
-maximum time per update parameter, so that the game has a minimum framerate
-of 60 FPS. Enabling this setting provides a good tradeoff between RPC
-throughput and the game framerate.</p></li>
-</ol>
-<p>Another consideration is the responsiveness of the server. Clients must execute
-RPCs in sequence, one after another, and there is usually a (short) delay
-between them. This means that when the server finishes executing an RPC, if it
-were to immediately check for a new RPC it will not find any and will return
-from the FixedUpdate. This means that any new RPCs will have to wait until the
-next FixedUpdate, and results in the server only executing a single RPC per
-FixedUpdate regardless of the maximum time per update setting.</p>
-<p>Instead, higher RPC throughput can be obtained if the server waits briefly after
-finishing an RPC to see if any new RPCs are received. This is done in such a way
-that the maximum time per update setting (above) is still observed.</p>
-<p>This behavior is enabled by the <strong>blocking receives</strong> option. <strong>Receive
-timeout</strong> sets the maximum amount of time the server will wait for a new RPC
-from a client.</p>
-<p>The receive timeout bounds the work a client may do between calls. A client
-that takes longer than the timeout to send its next call has that call executed
-in the following FixedUpdate. It is then served one RPC per update, however many
-it makes. The default timeout is one millisecond, which a program written in
-Python or Lua exceeds easily.</p>
-</section>
-<section id="holding-a-tick">
-<h2>Holding a Tick<a class="headerlink" href="#holding-a-tick" title="Link to this heading">#</a></h2>
-<p>A client can hold the game on its current physics tick, so every call it makes is
-executed before the game advances. A control loop can then read the game state,
-compute with it and write the result back within one tick. See <a class="reference internal" href="tutorials/control-loops.html#tutorial-control-loops"><span class="std std-ref">the control
-loops tutorial</span></a> for how a program uses it.</p>
-<p>What a hold means for the server:</p>
-<ul class="simple">
-<li><p><strong>Tick hold timeout</strong> sets how long a client may hold a tick, one second by
-default. It bounds how long the game can be made to appear frozen, and the
-server owns it rather than the client. A hold also ends when the client
-disconnects.</p></li>
-<li><p>The maximum time per update and one RPC per update settings do not apply while
-a tick is held. Adaptive rate control skips an update that held one, which
-would otherwise count the client’s own work as time the server spent on RPCs
-and wind the limit down for every client.</p></li>
-<li><p>The game renders no frame, takes no input and runs no physics while a tick is
-held. Physics runs on a fixed time step, so a game whose ticks are held runs
-slower than real time and simulates every tick in turn.</p></li>
-<li><p>Streams do not update inside a hold, as stream updates are sent once the update
-has finished executing calls. New connections are not accepted either, as the
-servers are polled between updates.</p></li>
+  <section id="user-guides">
+<h1>User Guides<a class="headerlink" href="#user-guides" title="Link to this heading">#</a></h1>
+<p>These guides describe how kRPC and the game behave, independent of the client language.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/reference-frames.html">Reference Frames</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/object-lifetime.html">Object Lifetime</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/autopilot.html">AutoPilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/control-loops.html">Control Loops</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/server-side-functions.html">Server Side Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/buoyancy.html">Boats and Submarines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-guide/server-performance.html">Server Performance</a></li>
 </ul>
-</section>
+</div>
 </section>
 
 
@@ -686,20 +511,20 @@ servers are polled between updates.</p></li>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="communication-protocols/messages.html"
+       href="getting-started.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Messaging Protocol</p>
+        <p class="prev-next-title">Getting Started</p>
       </div>
     </a>
     <a class="right-next"
-       href="changelog.html"
+       href="user-guide/reference-frames.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Changelog</p>
+        <p class="prev-next-title">Reference Frames</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -715,22 +540,9 @@ servers are polled between updates.</p></li>
 
 
   <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#server-performance-settings">Server Performance Settings</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#holding-a-tick">Holding a Tick</a></li>
-</ul>
-  </nav></div>
-
-  <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="_sources/internals.rst.txt">
+    <a href="_sources/user-guide.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

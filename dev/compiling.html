@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
@@ -42,6 +43,7 @@
     <script src="_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'compiling';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -56,8 +58,8 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/compiling.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Extending kRPC" href="extending.html" />
-    <link rel="prev" title="Other Clients, Services and Scripts" href="third-party.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Messaging Protocol" href="communication-protocols/messages.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -129,7 +131,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -151,6 +153,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="tutorials.html">
     Tutorials
   </a>
@@ -158,98 +167,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" current active">
-  <a class="nav-link dropdown-item nav-internal" href="#" aria-current="page">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="changelog.html">
+  <a class="nav-link nav-internal" href="changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -373,6 +309,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="tutorials.html">
     Tutorials
   </a>
@@ -380,78 +323,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cnano.html">
-    C-nano
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="third-party.html">
-    Other Clients, Services and Scripts
+  <a class="nav-link nav-internal" href="clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="#" aria-current="page">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -539,7 +419,19 @@
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
-  <div class="bd-toc-item navbar-nav"></div>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending kRPC</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/tcpip.html">Protocol Buffers over TCP/IP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/localsocket.html">Protocol Buffers over a Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/websockets.html">Protocol Buffers over WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/serialio.html">Protocol Buffers over Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/messages.html">Messaging Protocol</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Compiling kRPC</a></li>
+</ul>
+</div>
 </nav></div>
     </div>
   
@@ -578,6 +470,9 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
+    
+    <li class="breadcrumb-item"><a href="developer-guide.html" class="nav-link">Developer Guide</a></li>
+    
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Compiling kRPC</span></li>
   </ul>
 </nav>
@@ -612,20 +507,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="third-party.html"
+       href="communication-protocols/messages.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Other Clients, Services and Scripts</p>
+        <p class="prev-next-title">Messaging Protocol</p>
       </div>
     </a>
     <a class="right-next"
-       href="extending.html"
+       href="changelog.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Extending kRPC</p>
+        <p class="prev-next-title">Changelog</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
@@ -43,6 +44,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/pitch-heading-roll';</script>
     <script>
@@ -131,7 +133,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -152,6 +154,13 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
@@ -160,98 +169,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+  <a class="nav-link nav-internal" href="../changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -374,6 +310,13 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
@@ -382,78 +325,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -543,18 +423,12 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="suborbital-flight.html">Sub-Orbital Flight</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
 <li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launch into Orbit</a></li>
 <li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Pitch, Heading and Roll</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parts.html">Interacting with Parts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buoyancy.html">Boats and Submarines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="drawing.html">Drawing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
 </ul>
 </div>
 </nav></div>
@@ -620,7 +494,87 @@
 <p>This example calculates the pitch, heading and rolls angles of the active vessel
 once per second.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">C#</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-0-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-4" name="0-4" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-0-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-5" name="0-5" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-0-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-4" name="0-4" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-0-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-5" name="0-5" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Pitch/Heading/Roll"</span><span class="p">)</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">cross_product</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">dot_product</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">magnitude</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dot_product</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">angle_between_vectors</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Compute the angle between vector u and v"""</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="n">dot_product</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="n">um</span> <span class="o">=</span> <span class="n">magnitude</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="n">vm</span> <span class="o">=</span> <span class="n">magnitude</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">acos</span><span class="p">(</span><span class="n">dp</span> <span class="o">/</span> <span class="p">(</span><span class="n">um</span> <span class="o">*</span> <span class="n">vm</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="mf">180.0</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">vessel_direction</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">direction</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">surface_reference_frame</span><span class="p">)</span>
+
+    <span class="c1"># Get the direction of the vessel in the horizon plane</span>
+    <span class="n">horizon_direction</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">vessel_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vessel_direction</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="c1"># Compute the pitch - the angle between the vessels direction and</span>
+    <span class="c1"># the direction in the horizon plane</span>
+    <span class="n">pitch</span> <span class="o">=</span> <span class="n">angle_between_vectors</span><span class="p">(</span><span class="n">vessel_direction</span><span class="p">,</span> <span class="n">horizon_direction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">vessel_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">pitch</span> <span class="o">=</span> <span class="o">-</span><span class="n">pitch</span>
+
+    <span class="c1"># Compute the heading - the angle between north and</span>
+    <span class="c1"># the direction in the horizon plane</span>
+    <span class="n">north</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">heading</span> <span class="o">=</span> <span class="n">angle_between_vectors</span><span class="p">(</span><span class="n">north</span><span class="p">,</span> <span class="n">horizon_direction</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">horizon_direction</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">heading</span> <span class="o">=</span> <span class="mi">360</span> <span class="o">-</span> <span class="n">heading</span>
+
+    <span class="c1"># Compute the roll</span>
+    <span class="c1"># Compute the plane running through the vessels direction</span>
+    <span class="c1"># and the upwards direction</span>
+    <span class="n">up</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">plane_normal</span> <span class="o">=</span> <span class="n">cross_product</span><span class="p">(</span><span class="n">vessel_direction</span><span class="p">,</span> <span class="n">up</span><span class="p">)</span>
+    <span class="c1"># Compute the upwards direction of the vessel</span>
+    <span class="n">vessel_up</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">transform_direction</span><span class="p">(</span>
+        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">vessel</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">surface_reference_frame</span>
+    <span class="p">)</span>
+    <span class="c1"># Compute the angle between the upwards direction of</span>
+    <span class="c1"># the vessel and the plane normal</span>
+    <span class="n">roll</span> <span class="o">=</span> <span class="n">angle_between_vectors</span><span class="p">(</span><span class="n">vessel_up</span><span class="p">,</span> <span class="n">plane_normal</span><span class="p">)</span>
+    <span class="c1"># Adjust so that the angle is between -180 and 180 and</span>
+    <span class="c1"># rolling right is +ve and left is -ve</span>
+    <span class="k">if</span> <span class="n">vessel_up</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">roll</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">roll</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">roll</span> <span class="o">+=</span> <span class="mi">180</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">roll</span> <span class="o">-=</span> <span class="mi">180</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"pitch = </span><span class="si">% 5.1f</span><span class="s2">, heading = </span><span class="si">% 5.1f</span><span class="s2">, roll = </span><span class="si">% 5.1f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">pitch</span><span class="p">,</span> <span class="n">heading</span><span class="p">,</span> <span class="n">roll</span><span class="p">))</span>
+
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">Vector3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">System</span><span class="p">.</span><span class="n">Tuple</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span><span class="p">;</span>
@@ -712,7 +666,7 @@ once per second.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iomanip&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;tuple&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;thread&gt;</span>
@@ -810,7 +764,7 @@ once per second.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span>
+</div><div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span>
 <span class="cp">#ifdef _WIN32</span>
 <span class="cp">#define WIN32_LEAN_AND_MEAN</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;windows.h&gt;</span>
@@ -912,7 +866,7 @@ once per second.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
 
@@ -1018,7 +972,7 @@ once per second.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+</div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc.platform'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">math</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'math'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">List</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'pl.List'</span>
@@ -1101,86 +1055,6 @@ once per second.</p>
 <span class="kr">end</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
-
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Pitch/Heading/Roll"</span><span class="p">)</span>
-<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">cross_product</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span>
-        <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-        <span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-        <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-    <span class="p">)</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">dot_product</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">magnitude</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dot_product</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="p">))</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">angle_between_vectors</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Compute the angle between vector u and v"""</span>
-    <span class="n">dp</span> <span class="o">=</span> <span class="n">dot_product</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">dp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mi">0</span>
-    <span class="n">um</span> <span class="o">=</span> <span class="n">magnitude</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-    <span class="n">vm</span> <span class="o">=</span> <span class="n">magnitude</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">acos</span><span class="p">(</span><span class="n">dp</span> <span class="o">/</span> <span class="p">(</span><span class="n">um</span> <span class="o">*</span> <span class="n">vm</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="mf">180.0</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-
-
-<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="n">vessel_direction</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">direction</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">surface_reference_frame</span><span class="p">)</span>
-
-    <span class="c1"># Get the direction of the vessel in the horizon plane</span>
-    <span class="n">horizon_direction</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">vessel_direction</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vessel_direction</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-
-    <span class="c1"># Compute the pitch - the angle between the vessels direction and</span>
-    <span class="c1"># the direction in the horizon plane</span>
-    <span class="n">pitch</span> <span class="o">=</span> <span class="n">angle_between_vectors</span><span class="p">(</span><span class="n">vessel_direction</span><span class="p">,</span> <span class="n">horizon_direction</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">vessel_direction</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">pitch</span> <span class="o">=</span> <span class="o">-</span><span class="n">pitch</span>
-
-    <span class="c1"># Compute the heading - the angle between north and</span>
-    <span class="c1"># the direction in the horizon plane</span>
-    <span class="n">north</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">heading</span> <span class="o">=</span> <span class="n">angle_between_vectors</span><span class="p">(</span><span class="n">north</span><span class="p">,</span> <span class="n">horizon_direction</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">horizon_direction</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">heading</span> <span class="o">=</span> <span class="mi">360</span> <span class="o">-</span> <span class="n">heading</span>
-
-    <span class="c1"># Compute the roll</span>
-    <span class="c1"># Compute the plane running through the vessels direction</span>
-    <span class="c1"># and the upwards direction</span>
-    <span class="n">up</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">plane_normal</span> <span class="o">=</span> <span class="n">cross_product</span><span class="p">(</span><span class="n">vessel_direction</span><span class="p">,</span> <span class="n">up</span><span class="p">)</span>
-    <span class="c1"># Compute the upwards direction of the vessel</span>
-    <span class="n">vessel_up</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">transform_direction</span><span class="p">(</span>
-        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">vessel</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">surface_reference_frame</span>
-    <span class="p">)</span>
-    <span class="c1"># Compute the angle between the upwards direction of</span>
-    <span class="c1"># the vessel and the plane normal</span>
-    <span class="n">roll</span> <span class="o">=</span> <span class="n">angle_between_vectors</span><span class="p">(</span><span class="n">vessel_up</span><span class="p">,</span> <span class="n">plane_normal</span><span class="p">)</span>
-    <span class="c1"># Adjust so that the angle is between -180 and 180 and</span>
-    <span class="c1"># rolling right is +ve and left is -ve</span>
-    <span class="k">if</span> <span class="n">vessel_up</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">roll</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="k">elif</span> <span class="n">roll</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">roll</span> <span class="o">+=</span> <span class="mi">180</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">roll</span> <span class="o">-=</span> <span class="mi">180</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"pitch = </span><span class="si">% 5.1f</span><span class="s2">, heading = </span><span class="si">% 5.1f</span><span class="s2">, roll = </span><span class="si">% 5.1f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">pitch</span><span class="p">,</span> <span class="n">heading</span><span class="p">,</span> <span class="n">roll</span><span class="p">))</span>
-
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
 </div></div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -1191,7 +1065,7 @@ ambiguous. This applies both to the computation in this example (which prints
 <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.pitch" title="SpaceCenter.Flight.pitch"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.pitch</span></code></a>, <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.heading" title="SpaceCenter.Flight.heading"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.heading</span></code></a> and <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.roll" title="SpaceCenter.Flight.roll"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.roll</span></code></a> telemetry. For a
 representation of the vessel’s attitude that is always well-defined, use
 <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.rotation" title="SpaceCenter.Flight.rotation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.rotation</span></code></a> or <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.direction" title="SpaceCenter.Flight.direction"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.direction</span></code></a>, or the auto-pilot’s error
-readouts described in the <a class="reference internal" href="autopilot.html"><span class="doc">autopilot tutorial</span></a>.</p>
+readouts described in the <a class="reference internal" href="../user-guide/autopilot.html"><span class="doc">auto-pilot guide</span></a>.</p>
 </div>
 </section>
 

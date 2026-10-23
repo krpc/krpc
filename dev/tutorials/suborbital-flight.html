@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
@@ -43,6 +44,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/suborbital-flight';</script>
     <script>
@@ -58,7 +60,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/tutorials/suborbital-flight.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Reference Frames" href="reference-frames.html" />
+    <link rel="next" title="Launch into Orbit" href="launch-into-orbit.html" />
     <link rel="prev" title="Tutorials" href="../tutorials.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
@@ -131,7 +133,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -152,6 +154,13 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
@@ -160,98 +169,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+  <a class="nav-link nav-internal" href="../changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -374,6 +310,13 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
@@ -382,78 +325,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -543,18 +423,12 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Sub-Orbital Flight</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
 <li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launch into Orbit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pitch-heading-roll.html">Pitch, Heading and Roll</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parts.html">Interacting with Parts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buoyancy.html">Boats and Submarines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="drawing.html">Drawing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
 </ul>
 </div>
 </nav></div>
@@ -646,9 +520,7 @@ whole program in your chosen language:</p>
 <p>First we open a connection to the server, passing a name for the script. The name appears in the
 server window in the game:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-0-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-0-Qw==" class="sphinx-tabs-panel group-tab" id="panel-0-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Sub-orbital flight"</span><span class="p">);</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Sub-orbital flight"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-0-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="w"> </span><span class="p">(</span><span class="s">"Sub-orbital flight"</span><span class="p">);</span>
@@ -656,6 +528,11 @@ server window in the game:</p>
 </div>
 </div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">Client</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="s">"Sub-orbital flight"</span><span class="p">);</span>
 <span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="nf">space_center</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Sub-orbital flight"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-0-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">"Sub-orbital flight"</span><span class="p">);</span>
@@ -667,14 +544,20 @@ server window in the game:</p>
 <span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">'Sub-orbital flight'</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Sub-orbital flight"</span><span class="p">)</span>
-</pre></div>
-</div>
 </div></div>
 <p>Next we get an object representing the active vessel. We send instructions to the rocket through
 this object:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-1-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-1-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-1-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-1-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-1-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-1-Qw==" class="sphinx-tabs-panel group-tab" id="panel-1-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-1-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-1-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-1-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-1-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-1-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-1-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-1-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">;</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
 <span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
 
 <span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_t</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">;</span>
@@ -684,19 +567,10 @@ this object:</p>
 <span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Control</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">;</span>
-</pre></div>
-</div>
-</div><div aria-labelledby="tab-1-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">();</span>
-</pre></div>
-</div>
 </div><div aria-labelledby="tab-1-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">();</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-1-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
-</pre></div>
-</div>
-</div><div aria-labelledby="tab-1-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
 </pre></div>
 </div>
 </div></div>
@@ -704,10 +578,10 @@ this object:</p>
 hold a pitch and heading of 90°, pointing straight up. It then waits a second for the settings to
 take effect:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-2-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-2-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-2-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-2-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-2-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-2-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-2-Qw==" class="sphinx-tabs-panel group-tab" id="panel-2-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_set_Engaged</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
-<span class="w">  </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-2-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-2-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-2-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-2-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-2-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-2-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-2-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-2-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-2-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">.</span><span class="n">TargetPitchAndHeading</span><span class="w"> </span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
@@ -722,6 +596,12 @@ take effect:</p>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-2-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_set_Engaged</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</pre></div>
+</div>
 </div><div aria-labelledby="tab-2-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">().</span><span class="na">targetPitchAndHeading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
 <span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">().</span><span class="na">setEngaged</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
 <span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">setThrottle</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
@@ -734,20 +614,14 @@ take effect:</p>
 <span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-2-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
 </div></div>
 </section>
 <section id="part-two-lift-off">
 <h2>Part Two: Lift-off!<a class="headerlink" href="#part-two-lift-off" title="Link to this heading">#</a></h2>
 <p>We launch by activating the first stage, which is the same as pressing the space bar:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-3-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-3-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-3-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-3-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-3-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-3-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-3-Qw==" class="sphinx-tabs-panel group-tab" id="panel-3-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Launch!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-3-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-3-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-3-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-3-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-3-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-3-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-3-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-3-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Launch!"</span><span class="p">)</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-3-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">"Launch!"</span><span class="p">);</span>
@@ -758,6 +632,10 @@ take effect:</p>
 <span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">control</span><span class="p">().</span><span class="n">activate_next_stage</span><span class="p">();</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-3-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Launch!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
+</pre></div>
+</div>
 </div><div aria-labelledby="tab-3-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Launch!"</span><span class="p">);</span>
 <span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">activateNextStage</span><span class="p">();</span>
 </pre></div>
@@ -766,25 +644,15 @@ take effect:</p>
 <span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">:</span><span class="nf">activate_next_stage</span><span class="p">()</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Launch!"</span><span class="p">)</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
-</pre></div>
-</div>
 </div></div>
 <p>The solid fuel boosters soon run out, and the rocket has to jettison them. We wait for an event
 that fires when less than 0.1 units of solid fuel are left, then activate the next stage:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-4-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-4-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-4-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-4-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-4-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-4-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-4-Qw==" class="sphinx-tabs-panel group-tab" id="panel-4-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_Resources_t</span><span class="w"> </span><span class="n">resources</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Resources</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">resources</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">solid_fuel</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Resources_Amount</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">solid_fuel</span><span class="p">,</span><span class="w"> </span><span class="n">resources</span><span class="p">,</span><span class="w"> </span><span class="s">"SolidFuel"</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">solid_fuel</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.1</span><span class="p">)</span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-
-<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Booster separation</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-4-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-4-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-4-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-4-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-4-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-4-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-4-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-4-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">vessel</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">(</span><span class="s2">"SolidFuel"</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Booster separation"</span><span class="p">)</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-4-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="p">{</span>
@@ -812,6 +680,19 @@ that fires when less than 0.1 units of solid fuel are left, then activate the ne
 <span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">control</span><span class="p">().</span><span class="n">activate_next_stage</span><span class="p">();</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-4-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_Resources_t</span><span class="w"> </span><span class="n">resources</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Resources</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">resources</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">solid_fuel</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Resources_Amount</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">solid_fuel</span><span class="p">,</span><span class="w"> </span><span class="n">resources</span><span class="p">,</span><span class="w"> </span><span class="s">"SolidFuel"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">solid_fuel</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.1</span><span class="p">)</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Booster separation</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
+</pre></div>
+</div>
 </div><div aria-labelledby="tab-4-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="p">{</span>
 <span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">solidFuel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getResources</span><span class="p">(),</span><span class="w"> </span><span class="s">"amount"</span><span class="p">,</span><span class="w"> </span><span class="s">"SolidFuel"</span><span class="p">);</span>
 <span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">lessThan</span><span class="p">(</span>
@@ -834,16 +715,9 @@ that fires when less than 0.1 units of solid fuel are left, then activate the ne
 <span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">:</span><span class="nf">activate_next_stage</span><span class="p">()</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-4-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">vessel</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">(</span><span class="s2">"SolidFuel"</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
-    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Booster separation"</span><span class="p">)</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
-</pre></div>
-</div>
 </div></div>
 <p><code class="docutils literal notranslate"><span class="pre">vessel.resources</span></code> returns a <a class="reference internal" href="../python/api/space-center/resources.html#SpaceCenter.Resources" title="SpaceCenter.Resources"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resources</span></code></a> object, which gives the amounts of the
-resources in the rocket. The event is a <a class="reference internal" href="server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">server side function</span></a>
+resources in the rocket. The event is a <a class="reference internal" href="../user-guide/server-side-functions.html#server-side-functions"><span class="std std-ref">server side function</span></a>
 that compares the amount of solid fuel with 0.1. The server checks it every physics tick, and
 the script sleeps until it fires.</p>
 <p>The Python and C# clients compile the lambda into the function. The C++ and Java clients build it
@@ -855,14 +729,10 @@ Lua clients do not support events, so their scripts poll the amount in a loop.</
 <p>Next we start a gravity turn once the rocket is high enough. This waits for an event that fires
 at an altitude of 10 km:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-5-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-5-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-5-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-5-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-5-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-5-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-5-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-5-Qw==" class="sphinx-tabs-panel group-tab" id="panel-5-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_t</span><span class="w"> </span><span class="n">flight</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Flight</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_NULL</span><span class="p">);</span>
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">mean_altitude</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Flight_MeanAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mean_altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mean_altitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">10000</span><span class="p">)</span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-5-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-5-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-5-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-5-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-5-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-5-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-5-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-5-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-5-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span>
+<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">&gt;</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-5-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Flight</span><span class="w"> </span><span class="p">();</span>
@@ -885,6 +755,16 @@ at an altitude of 10 km:</p>
 <span class="w">  </span><span class="p">}</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-5-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_t</span><span class="w"> </span><span class="n">flight</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Flight</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_NULL</span><span class="p">);</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">mean_altitude</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Flight_MeanAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mean_altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">mean_altitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">10000</span><span class="p">)</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+</pre></div>
+</div>
 </div><div aria-labelledby="tab-5-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">Flight</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getMeanAltitude"</span><span class="p">);</span>
@@ -904,20 +784,14 @@ at an altitude of 10 km:</p>
 <span class="kr">end</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-5-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span>
-<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">&gt;</span> <span class="mi">10000</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
-    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-</pre></div>
-</div>
 </div></div>
 <p><code class="docutils literal notranslate"><span class="pre">vessel.flight()</span></code> returns a <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight" title="SpaceCenter.Flight"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flight</span></code></a> object, which gives information about the rocket in
 flight, such as its altitude, direction and velocity.</p>
 <p>Now we tilt the rocket over to a pitch of 60°, and hold a heading of 90°, due east. The autopilot
 takes the new target:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-6-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-6-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-6-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-6-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-6-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-6-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-6-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-6-Qw==" class="sphinx-tabs-panel group-tab" id="panel-6-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Gravity turn</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-6-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-6-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-6-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-6-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-6-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-6-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-6-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-6-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-6-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Gravity turn"</span><span class="p">)</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-6-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">"Gravity turn"</span><span class="p">);</span>
@@ -928,6 +802,10 @@ takes the new target:</p>
 <span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">().</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-6-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Gravity turn</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+</pre></div>
+</div>
 </div><div aria-labelledby="tab-6-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Gravity turn"</span><span class="p">);</span>
 <span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">().</span><span class="na">targetPitchAndHeading</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
 </pre></div>
@@ -936,28 +814,19 @@ takes the new target:</p>
 <span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span><span class="p">:</span><span class="nf">target_pitch_and_heading</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-6-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Gravity turn"</span><span class="p">)</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
-</pre></div>
-</div>
 </div></div>
 <p>Next we wait for an event that fires when the apoapsis reaches 100 km. Then we cut the throttle,
 jettison the launch stage and turn off the autopilot:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-7-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-7-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-7-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-7-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-7-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-7-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-7-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-7-Qw==" class="sphinx-tabs-panel group-tab" id="panel-7-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_t</span><span class="w"> </span><span class="n">orbit</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Orbit</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">orbit</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">apoapsis_altitude</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Orbit_ApoapsisAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">apoapsis_altitude</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apoapsis_altitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100000</span><span class="p">)</span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-7-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-7-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-7-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-7-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-7-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-7-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-7-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-7-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-7-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">apoapsis_altitude</span> <span class="o">&gt;</span> <span class="mi">100000</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 
-<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Launch stage separation</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="w">  </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_set_Engaged</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Launch stage separation"</span><span class="p">)</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">False</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-7-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-7-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="p">{</span>
@@ -991,6 +860,22 @@ jettison the launch stage and turn off the autopilot:</p>
 <span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">().</span><span class="n">set_engaged</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-7-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-7-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_t</span><span class="w"> </span><span class="n">orbit</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Orbit</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">orbit</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">apoapsis_altitude</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Orbit_ApoapsisAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">apoapsis_altitude</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apoapsis_altitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">100000</span><span class="p">)</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Launch stage separation</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_set_Engaged</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+</pre></div>
+</div>
 </div><div aria-labelledby="tab-7-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-7-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="p">{</span>
 <span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">apoapsisAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span>
 <span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="na">getOrbit</span><span class="p">(),</span><span class="w"> </span><span class="s">"getApoapsisAltitude"</span><span class="p">);</span>
@@ -1021,17 +906,6 @@ jettison the launch stage and turn off the autopilot:</p>
 <span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span><span class="p">.</span><span class="py">engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-7-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-7-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">apoapsis_altitude</span> <span class="o">&gt;</span> <span class="mi">100000</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
-    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Launch stage separation"</span><span class="p">)</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">False</span>
-</pre></div>
-</div>
 </div></div>
 <p><code class="docutils literal notranslate"><span class="pre">vessel.orbit</span></code> returns an <a class="reference internal" href="../python/api/space-center/orbit.html#SpaceCenter.Orbit" title="SpaceCenter.Orbit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Orbit</span></code></a> object, which describes the orbit of the rocket.</p>
 </section>
@@ -1041,14 +915,11 @@ jettison the launch stage and turn off the autopilot:</p>
 until they fall to 1 km above the surface, then deploy the parachutes. You can use time warp to
 skip ahead to just before this happens, and the script carries on working:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-8-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-8-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-8-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-8-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-8-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-8-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-8-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-8-Qw==" class="sphinx-tabs-panel group-tab" id="panel-8-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">srf_altitude</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Flight_SurfaceAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">srf_altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">srf_altitude</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-8-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-8-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-8-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-8-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-8-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-8-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-8-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-8-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-8-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">flight</span><span class="o">.</span><span class="n">surface_altitude</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-8-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-8-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="p">{</span>
@@ -1073,6 +944,16 @@ skip ahead to just before this happens, and the script carries on working:</p>
 <span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">control</span><span class="p">().</span><span class="n">activate_next_stage</span><span class="p">();</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-8-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-8-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">srf_altitude</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Flight_SurfaceAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">srf_altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">srf_altitude</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
+</pre></div>
+</div>
 </div><div aria-labelledby="tab-8-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-8-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="p">{</span>
 <span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">srfAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getSurfaceAltitude"</span><span class="p">);</span>
 <span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">lessThan</span><span class="p">(</span>
@@ -1094,18 +975,31 @@ skip ahead to just before this happens, and the script carries on working:</p>
 <span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">:</span><span class="nf">activate_next_stage</span><span class="p">()</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-8-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-8-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">flight</span><span class="o">.</span><span class="n">surface_altitude</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
-    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
-</pre></div>
-</div>
 </div></div>
 <p>The parachutes are now deployed. This prints the altitude of the capsule once a second, until its
 vertical speed reaches zero when it lands:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-9-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-9-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-9-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-9-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-9-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-9-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-9-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-9-Qw==" class="sphinx-tabs-panel group-tab" id="panel-9-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_t</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-9-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-9-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-9-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-9-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-9-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-9-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-9-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-9-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-9-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">)</span><span class="o">.</span><span class="n">vertical_speed</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude = </span><span class="si">%.1f</span><span class="s2"> meters"</span> <span class="o">%</span> <span class="n">flight</span><span class="o">.</span><span class="n">surface_altitude</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Landed!"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-9-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">Flight</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">Orbit</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ReferenceFrame</span><span class="p">).</span><span class="n">VerticalSpeed</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">"Altitude = {0:F1} meters"</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">SurfaceAltitude</span><span class="p">);</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="w"> </span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">"Landed!"</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-9-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">flight</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">orbit</span><span class="p">().</span><span class="n">body</span><span class="p">().</span><span class="n">reference_frame</span><span class="p">()).</span><span class="n">vertical_speed</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">-0.1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Altitude = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">surface_altitude</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" meters"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Landed!"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-9-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_t</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
 <span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_Body</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
 <span class="w">  </span><span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">body_ref_frame</span><span class="p">;</span>
 <span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_ReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">body_ref_frame</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
@@ -1125,20 +1019,6 @@ vertical speed reaches zero when it lands:</p>
 <span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Landed!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-9-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">Flight</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">Orbit</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ReferenceFrame</span><span class="p">).</span><span class="n">VerticalSpeed</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">"Altitude = {0:F1} meters"</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">SurfaceAltitude</span><span class="p">);</span>
-<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="w"> </span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">"Landed!"</span><span class="p">);</span>
-</pre></div>
-</div>
-</div><div aria-labelledby="tab-9-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">flight</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">orbit</span><span class="p">().</span><span class="n">body</span><span class="p">().</span><span class="n">reference_frame</span><span class="p">()).</span><span class="n">vertical_speed</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">-0.1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Altitude = "</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">surface_altitude</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" meters"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Landed!"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-</pre></div>
-</div>
 </div><div aria-labelledby="tab-9-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">flight</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getOrbit</span><span class="p">().</span><span class="na">getBody</span><span class="p">().</span><span class="na">getReferenceFrame</span><span class="p">()).</span><span class="na">getVerticalSpeed</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">printf</span><span class="p">(</span><span class="s">"Altitude = %.1f meters\n"</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="na">getSurfaceAltitude</span><span class="p">());</span>
 <span class="w">      </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
@@ -1154,17 +1034,11 @@ vertical speed reaches zero when it lands:</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Landed!'</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-9-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">)</span><span class="o">.</span><span class="n">vertical_speed</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"Altitude = </span><span class="si">%.1f</span><span class="s2"> meters"</span> <span class="o">%</span> <span class="n">flight</span><span class="o">.</span><span class="n">surface_altitude</span><span class="p">)</span>
-    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Landed!"</span><span class="p">)</span>
-</pre></div>
-</div>
 </div></div>
 <p>This calls <code class="docutils literal notranslate"><span class="pre">vessel.flight()</span></code> again, now with a <a class="reference internal" href="../python/api/space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>. We want the vertical
 speed relative to the surface of Kerbin, so the flight object has to give values in a frame fixed
 to Kerbin. <code class="docutils literal notranslate"><span class="pre">vessel.orbit.body.reference_frame</span></code> has its origin at the center of Kerbin, and
-rotates with the planet. See the <a class="reference internal" href="reference-frames.html#tutorial-reference-frames"><span class="std std-ref">Reference Frames</span></a> tutorial for more.</p>
+rotates with the planet. See the <a class="reference internal" href="../user-guide/reference-frames.html#reference-frames"><span class="std std-ref">Reference Frames</span></a> tutorial for more.</p>
 <p>Your Kerbals should now be safely back on the surface.</p>
 </section>
 </section>
@@ -1189,11 +1063,11 @@ rotates with the planet. See the <a class="reference internal" href="reference-f
       </div>
     </a>
     <a class="right-next"
-       href="reference-frames.html"
+       href="launch-into-orbit.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Reference Frames</p>
+        <p class="prev-next-title">Launch into Orbit</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -117,7 +117,7 @@ its altitude:
 .. literalinclude:: /scripts/cpp/client/RemoteProcedures.cpp
 
 Many procedures return an object identifying something in the game, such as a vessel or
-a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
+a part. See :doc:`Object Lifetime </user-guide/object-lifetime>` for how such an object
 behaves when a game is loaded or what it identifies is destroyed.
 
 Server Side Functions
@@ -132,7 +132,7 @@ the following reads the vessel's altitude and speed together:
 Use ``run`` for a function with effects, such as setting a property. An event or a function stream
 evaluates its function on every update, repeating the effects.
 
-The :ref:`server side functions tutorial <tutorial-server-side-functions>` shows how to build larger
+The :ref:`server side functions guide <server-side-functions>` shows how to build larger
 functions.
 
 .. note::
@@ -253,7 +253,7 @@ holds the stream instead. It resumes once the object or scene is available.
 
 .. seealso::
 
-   :doc:`/tutorials/object-lifetime`
+   :doc:`/user-guide/object-lifetime`
 
 To handle an ending in a callback, add an end callback with
 :func:`krpc::Stream::add_end_callback`. It is called once, with the exception.

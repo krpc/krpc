@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
@@ -43,6 +44,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/parts';</script>
     <script>
@@ -58,7 +60,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/tutorials/parts.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Boats and Submarines" href="buoyancy.html" />
+    <link rel="next" title="Docking Guidance" href="docking-guidance.html" />
     <link rel="prev" title="Pitch, Heading and Roll" href="pitch-heading-roll.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
@@ -131,7 +133,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -152,6 +154,13 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
@@ -160,98 +169,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+  <a class="nav-link nav-internal" href="../changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -374,6 +310,13 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
@@ -382,78 +325,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -543,18 +423,12 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="suborbital-flight.html">Sub-Orbital Flight</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
 <li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launch into Orbit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pitch-heading-roll.html">Pitch, Heading and Roll</a></li>
 <li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Interacting with Parts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buoyancy.html">Boats and Submarines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="drawing.html">Drawing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
 </ul>
 </div>
 </nav></div>
@@ -621,41 +495,41 @@
 achieve various tasks. More details on specific topics can also be found in the
 API documentation:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">C#</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-0-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-4" name="0-4" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-0-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-5" name="0-5" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><ul class="simple">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-0-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-4" name="0-4" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-0-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-5" name="0-5" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><ul class="simple">
+<li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
+<li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
+<li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
+<li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
+</ul>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><ul class="simple">
 <li><p><a class="reference internal" href="../csharp/api/space-center/parts.html#csharp-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
 <li><p><a class="reference internal" href="../csharp/api/space-center/parts.html#csharp-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
 <li><p><a class="reference internal" href="../csharp/api/space-center/parts.html#csharp-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
 <li><p><a class="reference internal" href="../csharp/api/space-center/parts.html#csharp-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
 </ul>
-</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><ul class="simple">
+</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><ul class="simple">
 <li><p><a class="reference internal" href="../cpp/api/space-center/parts.html#cpp-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
 <li><p><a class="reference internal" href="../cpp/api/space-center/parts.html#cpp-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
 <li><p><a class="reference internal" href="../cpp/api/space-center/parts.html#cpp-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
 <li><p><a class="reference internal" href="../cpp/api/space-center/parts.html#cpp-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
 </ul>
-</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><ul class="simple">
+</div><div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><ul class="simple">
 <li><p><a class="reference internal" href="../cnano/api/space-center/parts.html#cnano-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
 <li><p><a class="reference internal" href="../cnano/api/space-center/parts.html#cnano-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
 <li><p><a class="reference internal" href="../cnano/api/space-center/parts.html#cnano-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
 <li><p><a class="reference internal" href="../cnano/api/space-center/parts.html#cnano-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
 </ul>
-</div><div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><ul class="simple">
+</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><ul class="simple">
 <li><p><a class="reference internal" href="../java/api/space-center/parts.html#java-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
 <li><p><a class="reference internal" href="../java/api/space-center/parts.html#java-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
 <li><p><a class="reference internal" href="../java/api/space-center/parts.html#java-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
 <li><p><a class="reference internal" href="../java/api/space-center/parts.html#java-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
 </ul>
-</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><ul class="simple">
+</div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><ul class="simple">
 <li><p><a class="reference internal" href="../lua/api/space-center/parts.html#lua-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
 <li><p><a class="reference internal" href="../lua/api/space-center/parts.html#lua-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
 <li><p><a class="reference internal" href="../lua/api/space-center/parts.html#lua-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
 <li><p><a class="reference internal" href="../lua/api/space-center/parts.html#lua-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
-</ul>
-</div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><ul class="simple">
-<li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
-<li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
-<li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
-<li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
 </ul>
 </div></div>
 <div class="admonition note">
@@ -671,7 +545,16 @@ triggered.</p>
 <p>Sometimes things go horribly wrong. The following script does its best to save
 your Kerbals by deploying all the parachutes:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">C#</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">C++</button><button aria-controls="panel-1-1-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-2" name="1-2" role="tab" tabindex="-1">C</button><button aria-controls="panel-1-1-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-3" name="1-3" role="tab" tabindex="-1">Java</button><button aria-controls="panel-1-1-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-4" name="1-4" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-1-1-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-5" name="1-5" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Python</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-1-1-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-2" name="1-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-1-1-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-3" name="1-3" role="tab" tabindex="-1">C</button><button aria-controls="panel-1-1-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-4" name="1-4" role="tab" tabindex="-1">Java</button><button aria-controls="panel-1-1-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-5" name="1-5" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+
+<span class="k">for</span> <span class="n">parachute</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">parachutes</span><span class="p">:</span>
+    <span class="n">parachute</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">DeployParachutes</span>
@@ -687,7 +570,7 @@ your Kerbals by deploying all the parachutes:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+</div><div aria-labelledby="tab-1-1-2" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-2" name="1-2" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -699,7 +582,7 @@ your Kerbals by deploying all the parachutes:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-1-2" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-2" name="1-2" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+</div><div aria-labelledby="tab-1-1-3" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-3" name="1-3" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -722,7 +605,7 @@ your Kerbals by deploying all the parachutes:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-1-3" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-3" name="1-3" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+</div><div aria-labelledby="tab-1-1-4" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-4" name="1-4" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Parachute</span><span class="p">;</span>
@@ -743,7 +626,7 @@ your Kerbals by deploying all the parachutes:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-1-4" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-4" name="1-4" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+</div><div aria-labelledby="tab-1-1-5" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-5" name="1-5" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">'Example'</span><span class="p">)</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
 
@@ -752,18 +635,9 @@ your Kerbals by deploying all the parachutes:</p>
 <span class="kr">end</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-1-5" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-5" name="1-5" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
-
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-
-<span class="k">for</span> <span class="n">parachute</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">parachutes</span><span class="p">:</span>
-    <span class="n">parachute</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
-</pre></div>
-</div>
 </div></div>
 <p>The script deploys the parachutes one call at a time, and the game can advance between the
-calls. In Python, a <a class="reference internal" href="server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">server side function</span></a> deploys them all
+calls. In Python, a <a class="reference internal" href="../user-guide/server-side-functions.html#server-side-functions"><span class="std std-ref">server side function</span></a> deploys them all
 in the same physics tick, with a single call:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">deploy_parachutes</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">parachute</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">parachutes</span><span class="p">:</span>
@@ -779,7 +653,15 @@ in the same physics tick, with a single call:</p>
 <p>The following example will find a standard sized Clamp-O-Tron docking port, and
 control the vessel from it:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">C#</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">C++</button><button aria-controls="panel-2-2-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-2" name="2-2" role="tab" tabindex="-1">C</button><button aria-controls="panel-2-2-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-3" name="2-3" role="tab" tabindex="-1">Java</button><button aria-controls="panel-2-2-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-4" name="2-4" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-2-2-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-5" name="2-5" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">Python</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-2-2-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-2" name="2-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-2-2-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-3" name="2-3" role="tab" tabindex="-1">C</button><button aria-controls="panel-2-2-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-4" name="2-4" role="tab" tabindex="-1">Java</button><button aria-controls="panel-2-2-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-5" name="2-5" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">part</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">with_title</span><span class="p">(</span><span class="s2">"Clamp-O-Tron Docking Port"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">controlling</span> <span class="o">=</span> <span class="n">part</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Linq</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
@@ -797,7 +679,7 @@ control the vessel from it:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+</div><div aria-labelledby="tab-2-2-2" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-2" name="2-2" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
 
@@ -810,7 +692,7 @@ control the vessel from it:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-2-2-2" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-2" name="2-2" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+</div><div aria-labelledby="tab-2-2-3" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-3" name="2-3" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -831,7 +713,7 @@ control the vessel from it:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-2-2-3" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-3" name="2-3" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+</div><div aria-labelledby="tab-2-2-4" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-4" name="2-4" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Part</span><span class="p">;</span>
@@ -850,19 +732,11 @@ control the vessel from it:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-2-2-4" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-4" name="2-4" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+</div><div aria-labelledby="tab-2-2-5" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-5" name="2-5" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">parts</span><span class="p">:</span><span class="nf">with_title</span><span class="p">(</span><span class="s1">'Clamp-O-Tron Docking Port'</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 <span class="nv">vessel</span><span class="p">.</span><span class="py">parts</span><span class="p">.</span><span class="py">controlling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">part</span>
-</pre></div>
-</div>
-</div><div aria-labelledby="tab-2-2-5" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-5" name="2-5" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
-
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-<span class="n">part</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">with_title</span><span class="p">(</span><span class="s2">"Clamp-O-Tron Docking Port"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">controlling</span> <span class="o">=</span> <span class="n">part</span>
 </pre></div>
 </div>
 </div></div>
@@ -873,7 +747,27 @@ control the vessel from it:</p>
 active and fueled engines on a rocket. See here for a description of the maths:
 <a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines</a></p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-3-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-3-3-0" name="3-0" role="tab" tabindex="0">C#</button><button aria-controls="panel-3-3-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-1" name="3-1" role="tab" tabindex="-1">C++</button><button aria-controls="panel-3-3-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-2" name="3-2" role="tab" tabindex="-1">C</button><button aria-controls="panel-3-3-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-3" name="3-3" role="tab" tabindex="-1">Java</button><button aria-controls="panel-3-3-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-4" name="3-4" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-3-3-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-5" name="3-5" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-3-3-0" class="sphinx-tabs-panel" id="panel-3-3-0" name="3-0" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-3-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-3-3-0" name="3-0" role="tab" tabindex="0">Python</button><button aria-controls="panel-3-3-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-1" name="3-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-3-3-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-2" name="3-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-3-3-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-3" name="3-3" role="tab" tabindex="-1">C</button><button aria-controls="panel-3-3-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-4" name="3-4" role="tab" tabindex="-1">Java</button><button aria-controls="panel-3-3-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-5" name="3-5" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-3-3-0" class="sphinx-tabs-panel" id="panel-3-3-0" name="3-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+
+<span class="n">active_engines</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">engines</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">active</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">has_fuel</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Active engines:"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">active_engines</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"   </span><span class="si">%s</span><span class="s2"> in stage </span><span class="si">%d</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">engine</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">stage</span><span class="p">))</span>
+
+<span class="n">thrust</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">active_engines</span><span class="p">)</span>
+<span class="n">fuel_consumption</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+    <span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">engine</span><span class="o">.</span><span class="n">specific_impulse</span> <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">active_engines</span>
+<span class="p">)</span>
+<span class="n">isp</span> <span class="o">=</span> <span class="n">thrust</span> <span class="o">/</span> <span class="n">fuel_consumption</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Combined vacuum Isp = </span><span class="si">%d</span><span class="s2"> seconds"</span> <span class="o">%</span> <span class="n">isp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-3-1" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-1" name="3-1" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Linq</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
@@ -903,7 +797,7 @@ active and fueled engines on a rocket. See here for a description of the maths:
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-3-1" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-1" name="3-1" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+</div><div aria-labelledby="tab-3-3-2" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-2" name="3-2" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
@@ -938,7 +832,7 @@ active and fueled engines on a rocket. See here for a description of the maths:
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-3-2" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-2" name="3-2" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+</div><div aria-labelledby="tab-3-3-3" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-3" name="3-3" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
 <span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
 
 <span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -1002,7 +896,7 @@ active and fueled engines on a rocket. See here for a description of the maths:
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-3-3" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-3" name="3-3" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+</div><div aria-labelledby="tab-3-3-4" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-4" name="3-4" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Engine</span><span class="p">;</span>
@@ -1044,7 +938,7 @@ active and fueled engines on a rocket. See here for a description of the maths:
 <span class="p">}</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-3-4" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-4" name="3-4" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+</div><div aria-labelledby="tab-3-3-5" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-5" name="3-5" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
 
@@ -1071,39 +965,12 @@ active and fueled engines on a rocket. See here for a description of the maths:
 <span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span><span class="s1">'Combined vacuum Isp = %.1f seconds'</span><span class="p">,</span><span class="w"> </span><span class="nv">isp</span><span class="p">))</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-3-5" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-5" name="3-5" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
-
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-
-<span class="n">active_engines</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">engines</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">active</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">has_fuel</span><span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Active engines:"</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">active_engines</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">"   </span><span class="si">%s</span><span class="s2"> in stage </span><span class="si">%d</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">engine</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">stage</span><span class="p">))</span>
-
-<span class="n">thrust</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">active_engines</span><span class="p">)</span>
-<span class="n">fuel_consumption</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
-    <span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">engine</span><span class="o">.</span><span class="n">specific_impulse</span> <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">active_engines</span>
-<span class="p">)</span>
-<span class="n">isp</span> <span class="o">=</span> <span class="n">thrust</span> <span class="o">/</span> <span class="n">fuel_consumption</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Combined vacuum Isp = </span><span class="si">%d</span><span class="s2"> seconds"</span> <span class="o">%</span> <span class="n">isp</span><span class="p">)</span>
-</pre></div>
-</div>
 </div></div>
 <p>The script reads the thrust and specific impulse of each engine with separate calls, which can
-land in different physics ticks. A <a class="reference internal" href="server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">server side function</span></a>
+land in different physics ticks. A <a class="reference internal" href="../user-guide/server-side-functions.html#server-side-functions"><span class="std std-ref">server side function</span></a>
 reads them all in the same tick, with a single call:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-4-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-4-4-0" name="4-0" role="tab" tabindex="0">C#</button><button aria-controls="panel-4-4-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-1" name="4-1" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-4-4-0" class="sphinx-tabs-panel" id="panel-4-4-0" name="4-0" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">Run</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span>
-<span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Engines</span><span class="p">.</span><span class="n">Where</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Active</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">HasFuel</span><span class="p">)</span>
-<span class="w">        </span><span class="p">.</span><span class="n">Select</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Thrust</span><span class="p">).</span><span class="n">Sum</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">/</span>
-<span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Engines</span><span class="p">.</span><span class="n">Where</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Active</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">HasFuel</span><span class="p">)</span>
-<span class="w">        </span><span class="p">.</span><span class="n">Select</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">SpecificImpulse</span><span class="p">).</span><span class="n">Sum</span><span class="w"> </span><span class="p">());</span>
-</pre></div>
-</div>
-</div><div aria-labelledby="tab-4-4-1" class="sphinx-tabs-panel" hidden="true" id="panel-4-4-1" name="4-1" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">combined_isp</span><span class="p">():</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-4-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-4-4-0" name="4-0" role="tab" tabindex="0">Python</button><button aria-controls="panel-4-4-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-4-4-1" name="4-1" role="tab" tabindex="-1">C#</button></div><div aria-labelledby="tab-4-4-0" class="sphinx-tabs-panel" id="panel-4-4-0" name="4-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">combined_isp</span><span class="p">():</span>
     <span class="n">engines</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">engines</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">active</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">has_fuel</span><span class="p">]</span>
     <span class="n">thrust</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">engines</span><span class="p">)</span>
     <span class="n">fuel_consumption</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
@@ -1113,6 +980,13 @@ reads them all in the same tick, with a single call:</p>
 
 
 <span class="n">isp</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">combined_isp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-4-1" class="sphinx-tabs-panel" hidden="true" id="panel-4-4-1" name="4-1" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="kt">var</span><span class="w"> </span><span class="n">isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">Run</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span>
+<span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Engines</span><span class="p">.</span><span class="n">Where</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Active</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">HasFuel</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="n">Select</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Thrust</span><span class="p">).</span><span class="n">Sum</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">/</span>
+<span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Engines</span><span class="p">.</span><span class="n">Where</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Active</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">HasFuel</span><span class="p">)</span>
+<span class="w">        </span><span class="p">.</span><span class="n">Select</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">SpecificImpulse</span><span class="p">).</span><span class="n">Sum</span><span class="w"> </span><span class="p">());</span>
 </pre></div>
 </div>
 </div></div>
@@ -1145,11 +1019,11 @@ object returned by <a class="reference internal" href="../python/api/space-cente
       </div>
     </a>
     <a class="right-next"
-       href="buoyancy.html"
+       href="docking-guidance.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Boats and Submarines</p>
+        <p class="prev-next-title">Docking Guidance</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

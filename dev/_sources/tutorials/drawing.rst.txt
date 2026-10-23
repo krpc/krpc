@@ -8,10 +8,10 @@ The script updates the label on the arrow with the vessel's orbital speed.
 
 .. tabs::
 
-   .. tab:: C
+   .. tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/drawing/DrawingExample.c
-         :language: c
+      .. literalinclude:: /scripts/tutorials/drawing/DrawingExample.py
+         :language: python
 
    .. tab:: C#
 
@@ -23,6 +23,11 @@ The script updates the label on the arrow with the vessel's orbital speed.
       .. literalinclude:: /scripts/tutorials/drawing/DrawingExample.cpp
          :language: cpp
 
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/drawing/DrawingExample.c
+         :language: c
+
    .. tab:: Java
 
       .. literalinclude:: /scripts/tutorials/drawing/DrawingExample.java
@@ -32,11 +37,6 @@ The script updates the label on the arrow with the vessel's orbital speed.
 
       .. literalinclude:: /scripts/tutorials/drawing/DrawingExample.lua
          :language: lua
-
-   .. tab:: Python
-
-      .. literalinclude:: /scripts/tutorials/drawing/DrawingExample.py
-         :language: python
 
 The arrow is drawn in the flight scene. Switch to the map view to see the target
 orbit and the flag. Drawn objects remain until the script disconnects, which is

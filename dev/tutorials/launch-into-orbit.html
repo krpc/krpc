@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
@@ -43,6 +44,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/launch-into-orbit';</script>
     <script>
@@ -59,7 +61,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Pitch, Heading and Roll" href="pitch-heading-roll.html" />
-    <link rel="prev" title="Reference Frames" href="reference-frames.html" />
+    <link rel="prev" title="Sub-Orbital Flight" href="suborbital-flight.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -131,7 +133,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -152,6 +154,13 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
@@ -160,98 +169,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+  <a class="nav-link nav-internal" href="../changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -374,6 +310,13 @@
 </li>
 
 
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
@@ -382,78 +325,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -543,18 +423,12 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="suborbital-flight.html">Sub-Orbital Flight</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
 <li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Launch into Orbit</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pitch-heading-roll.html">Pitch, Heading and Roll</a></li>
 <li class="toctree-l1"><a class="reference internal" href="parts.html">Interacting with Parts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buoyancy.html">Boats and Submarines</a></li>
 <li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="drawing.html">Drawing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
-<li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
-<li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
 </ul>
 </div>
 </nav></div>
@@ -629,54 +503,38 @@ program assumes you are using <a class="reference download internal" download=""
 <p>The following code connects to the server, gets the active vessel, sets up a
 bunch of streams to get flight telemetry then prepares the rocket for launch.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-0-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-0-Qw==" class="sphinx-tabs-panel group-tab" id="panel-0-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span>
-<span class="cp">#ifdef _WIN32</span>
-<span class="cp">#define WIN32_LEAN_AND_MEAN</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;windows.h&gt;</span>
-<span class="cp">#define sleep(seconds) Sleep((seconds) * 1000)</span>
-<span class="cp">#else</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
-<span class="cp">#endif</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 
-<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Launch into orbit"</span><span class="p">);</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+<span class="n">turn_start_altitude</span> <span class="o">=</span> <span class="mi">250</span>
+<span class="n">turn_end_altitude</span> <span class="o">=</span> <span class="mi">45000</span>
+<span class="n">target_altitude</span> <span class="o">=</span> <span class="mi">150000</span>
 
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">turn_start_altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">250</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">turn_end_altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">45000</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">target_altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">150000</span><span class="p">;</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Launch into orbit"</span><span class="p">)</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
 
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_t</span><span class="w"> </span><span class="n">flight</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Flight</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_NULL</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_t</span><span class="w"> </span><span class="n">orbit</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Orbit</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">orbit</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Stage_t</span><span class="w"> </span><span class="n">stage_2</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_DecoupleStageAt</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stage_2</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Resources_t</span><span class="w"> </span><span class="n">stage_2_resources</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Stage_Resources</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stage_2_resources</span><span class="p">,</span><span class="w"> </span><span class="n">stage_2</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+<span class="c1"># Set up streams for telemetry</span>
+<span class="n">ut</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="p">,</span> <span class="s2">"ut"</span><span class="p">)</span>
+<span class="n">altitude</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">(),</span> <span class="s2">"mean_altitude"</span><span class="p">)</span>
+<span class="n">apoapsis</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="p">,</span> <span class="s2">"apoapsis_altitude"</span><span class="p">)</span>
+<span class="n">stage_2_resources</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">decouple_stage_at</span><span class="p">(</span><span class="n">stage</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">resources</span><span class="p">(</span><span class="n">cumulative</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">srb_fuel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">stage_2_resources</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="s2">"SolidFuel"</span><span class="p">)</span>
 
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_t</span><span class="w"> </span><span class="n">control</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Control</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_t</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_AutoPilot</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="c1"># Pre-launch setup</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">sas</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">rcs</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mf">1.0</span>
 
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_SAS</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_RCS</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
-
-<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"3...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"2...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"1...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Launch!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="c1"># Countdown...</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"3..."</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"2..."</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"1..."</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Launch!"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-0-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
@@ -759,6 +617,56 @@ bunch of streams to get flight telemetry then prepares the rocket for launch.</p
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"1..."</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
 <span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Launch!"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;math.h&gt;</span>
+<span class="cp">#ifdef _WIN32</span>
+<span class="cp">#define WIN32_LEAN_AND_MEAN</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;windows.h&gt;</span>
+<span class="cp">#define sleep(seconds) Sleep((seconds) * 1000)</span>
+<span class="cp">#else</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#endif</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Launch into orbit"</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">turn_start_altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">250</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">turn_end_altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">45000</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">target_altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">150000</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_t</span><span class="w"> </span><span class="n">flight</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Flight</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_NULL</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_t</span><span class="w"> </span><span class="n">orbit</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Orbit</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">orbit</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Stage_t</span><span class="w"> </span><span class="n">stage_2</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_DecoupleStageAt</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stage_2</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Resources_t</span><span class="w"> </span><span class="n">stage_2_resources</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Stage_Resources</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stage_2_resources</span><span class="p">,</span><span class="w"> </span><span class="n">stage_2</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_t</span><span class="w"> </span><span class="n">control</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Control</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_t</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_AutoPilot</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_SAS</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_RCS</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"3...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"2...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"1...</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Launch!</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-0-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
@@ -846,40 +754,6 @@ bunch of streams to get flight telemetry then prepares the rocket for launch.</p
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Launch!'</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
-
-<span class="n">turn_start_altitude</span> <span class="o">=</span> <span class="mi">250</span>
-<span class="n">turn_end_altitude</span> <span class="o">=</span> <span class="mi">45000</span>
-<span class="n">target_altitude</span> <span class="o">=</span> <span class="mi">150000</span>
-
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Launch into orbit"</span><span class="p">)</span>
-<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-
-<span class="c1"># Set up streams for telemetry</span>
-<span class="n">ut</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="p">,</span> <span class="s2">"ut"</span><span class="p">)</span>
-<span class="n">altitude</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">(),</span> <span class="s2">"mean_altitude"</span><span class="p">)</span>
-<span class="n">apoapsis</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="p">,</span> <span class="s2">"apoapsis_altitude"</span><span class="p">)</span>
-<span class="n">stage_2_resources</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">decouple_stage_at</span><span class="p">(</span><span class="n">stage</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">resources</span><span class="p">(</span><span class="n">cumulative</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">srb_fuel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_stream</span><span class="p">(</span><span class="n">stage_2_resources</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="s2">"SolidFuel"</span><span class="p">)</span>
-
-<span class="c1"># Pre-launch setup</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">sas</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">rcs</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mf">1.0</span>
-
-<span class="c1"># Countdown...</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"3..."</span><span class="p">)</span>
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"2..."</span><span class="p">)</span>
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"1..."</span><span class="p">)</span>
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Launch!"</span><span class="p">)</span>
-</pre></div>
-</div>
 </div></div>
 <p>The next part of the program launches the rocket. The main loop continuously
 updates the auto-pilot heading to gradually pitch the rocket towards the
@@ -887,42 +761,36 @@ horizon. It also monitors the amount of solid fuel remaining in the boosters,
 separating them when they run dry. The loop exits when the rockets apoapsis is
 close to the target apoapsis.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-1-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-1-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-1-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-1-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-1-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-1-Qw==" class="sphinx-tabs-panel group-tab" id="panel-1-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_set_Engaged</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-1-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-1-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-1-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-1-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-1-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-1-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-1-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Activate the first stage</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
 
-<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">srbs_separated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">turn_angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">altitude</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Flight_MeanAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
-<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">apoapsis</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Orbit_ApoapsisAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
+<span class="c1"># Main ascent loop</span>
+<span class="n">srbs_separated</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">turn_angle</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="c1"># Gravity turn</span>
+    <span class="k">if</span> <span class="n">altitude</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">turn_start_altitude</span> <span class="ow">and</span> <span class="n">altitude</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">turn_end_altitude</span><span class="p">:</span>
+        <span class="n">frac</span> <span class="o">=</span> <span class="p">(</span><span class="n">altitude</span><span class="p">()</span> <span class="o">-</span> <span class="n">turn_start_altitude</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+            <span class="n">turn_end_altitude</span> <span class="o">-</span> <span class="n">turn_start_altitude</span>
+        <span class="p">)</span>
+        <span class="n">new_turn_angle</span> <span class="o">=</span> <span class="n">frac</span> <span class="o">*</span> <span class="mi">90</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">new_turn_angle</span> <span class="o">-</span> <span class="n">turn_angle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
+            <span class="n">turn_angle</span> <span class="o">=</span> <span class="n">new_turn_angle</span>
+            <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span> <span class="o">-</span> <span class="n">turn_angle</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
 
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">altitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">turn_start_altitude</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">altitude</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">turn_end_altitude</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="kt">double</span><span class="w"> </span><span class="n">frac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">altitude</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">turn_start_altitude</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">turn_end_altitude</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">turn_start_altitude</span><span class="p">);</span>
-<span class="w">      </span><span class="kt">double</span><span class="w"> </span><span class="n">new_turn_angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frac</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">90.0</span><span class="p">;</span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">new_turn_angle</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">turn_angle</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">turn_angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">new_turn_angle</span><span class="p">;</span>
-<span class="w">        </span><span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">turn_angle</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
+    <span class="c1"># Separate SRBs when finished</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">srbs_separated</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">srb_fuel</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">:</span>
+            <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
+            <span class="n">srbs_separated</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"SRBs separated"</span><span class="p">)</span>
 
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">srbs_separated</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="kt">float</span><span class="w"> </span><span class="n">srb_fuel</span><span class="p">;</span>
-<span class="w">      </span><span class="n">krpc_SpaceCenter_Resources_Amount</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">srb_fuel</span><span class="p">,</span><span class="w"> </span><span class="n">stage_2_resources</span><span class="p">,</span><span class="w"> </span><span class="s">"SolidFuel"</span><span class="p">);</span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">srb_fuel</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
-<span class="w">        </span><span class="n">srbs_separated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
-<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">"SRBs separated</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}</span>
-
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apoapsis</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">target_altitude</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.9</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">printf</span><span class="p">(</span><span class="s">"Approaching target apoapsis</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">  </span><span class="p">}</span>
+    <span class="c1"># Decrease throttle when approaching target apoapsis</span>
+    <span class="k">if</span> <span class="n">apoapsis</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">target_altitude</span> <span class="o">*</span> <span class="mf">0.9</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Approaching target apoapsis"</span><span class="p">)</span>
+        <span class="k">break</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-1-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="c1">// Activate the first stage</span>
@@ -997,6 +865,44 @@ close to the target apoapsis.</p>
 <span class="w">    </span><span class="c1">// Decrease throttle when approaching target apoapsis</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apoapsis</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">target_altitude</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.9</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">"Approaching target apoapsis"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_set_Engaged</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="n">srbs_separated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">turn_angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">altitude</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Flight_MeanAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">apoapsis</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Orbit_ApoapsisAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">altitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">turn_start_altitude</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">altitude</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">turn_end_altitude</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kt">double</span><span class="w"> </span><span class="n">frac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">altitude</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">turn_start_altitude</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">turn_end_altitude</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">turn_start_altitude</span><span class="p">);</span>
+<span class="w">      </span><span class="kt">double</span><span class="w"> </span><span class="n">new_turn_angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">frac</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">90.0</span><span class="p">;</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">fabs</span><span class="p">(</span><span class="n">new_turn_angle</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">turn_angle</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">turn_angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">new_turn_angle</span><span class="p">;</span>
+<span class="w">        </span><span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">turn_angle</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">srbs_separated</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kt">float</span><span class="w"> </span><span class="n">srb_fuel</span><span class="p">;</span>
+<span class="w">      </span><span class="n">krpc_SpaceCenter_Resources_Amount</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">srb_fuel</span><span class="p">,</span><span class="w"> </span><span class="n">stage_2_resources</span><span class="p">,</span><span class="w"> </span><span class="s">"SolidFuel"</span><span class="p">);</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">srb_fuel</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">0.1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
+<span class="w">        </span><span class="n">srbs_separated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">"SRBs separated</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apoapsis</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">target_altitude</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">0.9</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">printf</span><span class="p">(</span><span class="s">"Approaching target apoapsis</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
 <span class="w">      </span><span class="k">break</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
@@ -1079,63 +985,27 @@ close to the target apoapsis.</p>
 <span class="kr">end</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-1-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Activate the first stage</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
-
-<span class="c1"># Main ascent loop</span>
-<span class="n">srbs_separated</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">turn_angle</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-    <span class="c1"># Gravity turn</span>
-    <span class="k">if</span> <span class="n">altitude</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">turn_start_altitude</span> <span class="ow">and</span> <span class="n">altitude</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">turn_end_altitude</span><span class="p">:</span>
-        <span class="n">frac</span> <span class="o">=</span> <span class="p">(</span><span class="n">altitude</span><span class="p">()</span> <span class="o">-</span> <span class="n">turn_start_altitude</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
-            <span class="n">turn_end_altitude</span> <span class="o">-</span> <span class="n">turn_start_altitude</span>
-        <span class="p">)</span>
-        <span class="n">new_turn_angle</span> <span class="o">=</span> <span class="n">frac</span> <span class="o">*</span> <span class="mi">90</span>
-        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">new_turn_angle</span> <span class="o">-</span> <span class="n">turn_angle</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
-            <span class="n">turn_angle</span> <span class="o">=</span> <span class="n">new_turn_angle</span>
-            <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span> <span class="o">-</span> <span class="n">turn_angle</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
-
-    <span class="c1"># Separate SRBs when finished</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">srbs_separated</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">srb_fuel</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.1</span><span class="p">:</span>
-            <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
-            <span class="n">srbs_separated</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">"SRBs separated"</span><span class="p">)</span>
-
-    <span class="c1"># Decrease throttle when approaching target apoapsis</span>
-    <span class="k">if</span> <span class="n">apoapsis</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">target_altitude</span> <span class="o">*</span> <span class="mf">0.9</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">"Approaching target apoapsis"</span><span class="p">)</span>
-        <span class="k">break</span>
-</pre></div>
-</div>
 </div></div>
 <p>Next, the program fine tunes the apoapsis using 25% thrust, then waits until the rocket has
 left Kerbin’s atmosphere. Each wait is an event, which the server checks every physics tick. See
-<a class="reference internal" href="server-side-functions.html#tutorial-server-side-functions"><span class="std std-ref">Server Side Functions</span></a> for how events work.</p>
+<a class="reference internal" href="../user-guide/server-side-functions.html#server-side-functions"><span class="std std-ref">Server Side Functions</span></a> for how events work.</p>
 <p>The Python and C# clients compile the event’s condition from a lambda, and the C++ and Java
-clients build it with the <a class="reference internal" href="server-side-functions.html#server-side-functions-api"><span class="std std-ref">expression API</span></a>. The C and Lua
+clients build it with the <a class="reference internal" href="../user-guide/server-side-functions.html#server-side-functions-api"><span class="std std-ref">expression API</span></a>. The C and Lua
 programs poll in a loop, as those clients have no events.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-2-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-2-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-2-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-2-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-2-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-2-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-2-Qw==" class="sphinx-tabs-panel group-tab" id="panel-2-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mf">0.25</span><span class="p">);</span>
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">apoapsis</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Orbit_ApoapsisAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apoapsis</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">target_altitude</span><span class="p">)</span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Target apoapsis reached</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-2-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-2-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-2-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-2-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-2-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-2-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-2-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-2-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Disable engines when target apoapsis is reached</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mf">0.25</span>
+<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">apoapsis_altitude</span> <span class="o">&gt;=</span> <span class="n">target_altitude</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Target apoapsis reached"</span><span class="p">)</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mf">0.0</span>
 
-<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Coasting out of atmosphere</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">altitude</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Flight_MeanAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">altitude</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">70500</span><span class="p">)</span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
+<span class="c1"># Wait until out of atmosphere</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Coasting out of atmosphere"</span><span class="p">)</span>
+<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">&gt;=</span> <span class="mi">70500</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-2-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="c1">// Disable engines when target apoapsis is reached</span>
@@ -1187,6 +1057,25 @@ programs poll in a loop, as those clients have no events.</p>
 <span class="w">  </span><span class="p">}</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-2-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mf">0.25</span><span class="p">);</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">apoapsis</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Orbit_ApoapsisAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">apoapsis</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">target_altitude</span><span class="p">)</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Target apoapsis reached</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Coasting out of atmosphere</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">altitude</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Flight_MeanAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">altitude</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">70500</span><span class="p">)</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+</pre></div>
+</div>
 </div><div aria-labelledby="tab-2-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="c1">// Disable engines when target apoapsis is reached</span>
 <span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">setThrottle</span><span class="p">(</span><span class="mf">0.25f</span><span class="p">);</span>
 <span class="w">        </span><span class="p">{</span>
@@ -1231,21 +1120,6 @@ programs poll in a loop, as those clients have no events.</p>
 <span class="kr">end</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-2-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Disable engines when target apoapsis is reached</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mf">0.25</span>
-<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">apoapsis_altitude</span> <span class="o">&gt;=</span> <span class="n">target_altitude</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
-    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Target apoapsis reached"</span><span class="p">)</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-<span class="c1"># Wait until out of atmosphere</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Coasting out of atmosphere"</span><span class="p">)</span>
-<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">&gt;=</span> <span class="mi">70500</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
-    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-</pre></div>
-</div>
 </div></div>
 <p>It is now time to plan the circularization burn. First, we calculate the delta-v
 required to circularize the orbit using the <a class="reference external" href="https://en.wikipedia.org/wiki/Vis-viva_equation">vis-viva equation</a>. We then calculate the burn
@@ -1260,36 +1134,24 @@ shown here because we need the burn time for a specific delta-v, rather than
 for burning the whole stage.</p>
 </div>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-3-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-3-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-3-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-3-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-3-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-3-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-3-Qw==" class="sphinx-tabs-panel group-tab" id="panel-3-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Planning circularization burn</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_t</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_Body</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_GravitationalParameter</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_Apoapsis</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">a1</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_SemiMajorAxis</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">a2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="n">mu</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">((</span><span class="mf">2.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">a1</span><span class="p">)));</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="n">mu</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">((</span><span class="mf">2.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">a2</span><span class="p">)));</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">delta_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">v1</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">ut</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_UT</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ut</span><span class="p">);</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">time_to_apoapsis</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_TimeToApoapsis</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">time_to_apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Node_t</span><span class="w"> </span><span class="n">node</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_AddNode</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">ut</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time_to_apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">delta_v</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-3-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-3-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-3-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-3-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-3-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-3-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-3-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-3-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plan circularization burn (using vis-viva equation)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Planning circularization burn"</span><span class="p">)</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">gravitational_parameter</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">apoapsis</span>
+<span class="n">a1</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">semi_major_axis</span>
+<span class="n">a2</span> <span class="o">=</span> <span class="n">r</span>
+<span class="n">v1</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mu</span> <span class="o">*</span> <span class="p">((</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">a1</span><span class="p">)))</span>
+<span class="n">v2</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mu</span> <span class="o">*</span> <span class="p">((</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">a2</span><span class="p">)))</span>
+<span class="n">delta_v</span> <span class="o">=</span> <span class="n">v2</span> <span class="o">-</span> <span class="n">v1</span>
+<span class="n">node</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">ut</span><span class="p">()</span> <span class="o">+</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">time_to_apoapsis</span><span class="p">,</span> <span class="n">prograde</span><span class="o">=</span><span class="n">delta_v</span><span class="p">)</span>
 
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">F</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_AvailableThrust</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">F</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">isp</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_SpecificImpulse</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">isp</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">Isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">isp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">9.82</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">m0</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Mass</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m0</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">m1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="n">delta_v</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Isp</span><span class="p">);</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">flow_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Isp</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">burn_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">m0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">m1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">flow_rate</span><span class="p">;</span>
+<span class="c1"># Calculate burn time (using rocket equation)</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">available_thrust</span>
+<span class="n">Isp</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">specific_impulse</span> <span class="o">*</span> <span class="mf">9.82</span>
+<span class="n">m0</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">mass</span>
+<span class="n">m1</span> <span class="o">=</span> <span class="n">m0</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">delta_v</span> <span class="o">/</span> <span class="n">Isp</span><span class="p">)</span>
+<span class="n">flow_rate</span> <span class="o">=</span> <span class="n">F</span> <span class="o">/</span> <span class="n">Isp</span>
+<span class="n">burn_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">m0</span> <span class="o">-</span> <span class="n">m1</span><span class="p">)</span> <span class="o">/</span> <span class="n">flow_rate</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-3-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="c1">// Plan circularization burn (using vis-viva equation)</span>
@@ -1330,6 +1192,38 @@ for burning the whole stage.</p>
 <span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">Isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">specific_impulse</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">9.82</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">m0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">mass</span><span class="p">();</span>
 <span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">m1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">exp</span><span class="p">(</span><span class="n">delta_v</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Isp</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">flow_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Isp</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">burn_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">m0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">m1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">flow_rate</span><span class="p">;</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Planning circularization burn</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_t</span><span class="w"> </span><span class="n">body</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_Body</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">body</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_CelestialBody_GravitationalParameter</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mu</span><span class="p">,</span><span class="w"> </span><span class="n">body</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_Apoapsis</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">r</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">a1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_SemiMajorAxis</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">a2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">v1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="n">mu</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">((</span><span class="mf">2.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">a1</span><span class="p">)));</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sqrt</span><span class="p">(</span><span class="n">mu</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">((</span><span class="mf">2.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">r</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="mf">1.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">a2</span><span class="p">)));</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">delta_v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">v1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">ut</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_UT</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ut</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">time_to_apoapsis</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_TimeToApoapsis</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">time_to_apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Node_t</span><span class="w"> </span><span class="n">node</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_AddNode</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">ut</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time_to_apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">delta_v</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">F</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_AvailableThrust</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">F</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">isp</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_SpecificImpulse</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">isp</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">Isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">isp</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">9.82</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="n">m0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Mass</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m0</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">m1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="n">delta_v</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Isp</span><span class="p">);</span>
 <span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">flow_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">F</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Isp</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">burn_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">m0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">m1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">flow_rate</span><span class="p">;</span>
 </pre></div>
@@ -1375,45 +1269,22 @@ for burning the whole stage.</p>
 <span class="kd">local</span><span class="w"> </span><span class="nv">burn_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nv">m0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">m1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">flow_rate</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-3-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plan circularization burn (using vis-viva equation)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Planning circularization burn"</span><span class="p">)</span>
-<span class="n">mu</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">gravitational_parameter</span>
-<span class="n">r</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">apoapsis</span>
-<span class="n">a1</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">semi_major_axis</span>
-<span class="n">a2</span> <span class="o">=</span> <span class="n">r</span>
-<span class="n">v1</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mu</span> <span class="o">*</span> <span class="p">((</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">a1</span><span class="p">)))</span>
-<span class="n">v2</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mu</span> <span class="o">*</span> <span class="p">((</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">r</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">a2</span><span class="p">)))</span>
-<span class="n">delta_v</span> <span class="o">=</span> <span class="n">v2</span> <span class="o">-</span> <span class="n">v1</span>
-<span class="n">node</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="n">ut</span><span class="p">()</span> <span class="o">+</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">time_to_apoapsis</span><span class="p">,</span> <span class="n">prograde</span><span class="o">=</span><span class="n">delta_v</span><span class="p">)</span>
-
-<span class="c1"># Calculate burn time (using rocket equation)</span>
-<span class="n">F</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">available_thrust</span>
-<span class="n">Isp</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">specific_impulse</span> <span class="o">*</span> <span class="mf">9.82</span>
-<span class="n">m0</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">mass</span>
-<span class="n">m1</span> <span class="o">=</span> <span class="n">m0</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">delta_v</span> <span class="o">/</span> <span class="n">Isp</span><span class="p">)</span>
-<span class="n">flow_rate</span> <span class="o">=</span> <span class="n">F</span> <span class="o">/</span> <span class="n">Isp</span>
-<span class="n">burn_time</span> <span class="o">=</span> <span class="p">(</span><span class="n">m0</span> <span class="o">-</span> <span class="n">m1</span><span class="p">)</span> <span class="o">/</span> <span class="n">flow_rate</span>
-</pre></div>
-</div>
 </div></div>
 <p>Next, we need to rotate the craft and wait until the circularization burn. We
 orientate the ship along the y-axis of the maneuver node’s reference frame
 (i.e. in the direction of the burn) then time warp to 5 seconds before the burn.</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-4-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-4-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-4-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-4-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-4-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-4-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-4-Qw==" class="sphinx-tabs-panel group-tab" id="panel-4-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Orientating ship for circularization burn</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">node_ref</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Node_ReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">node_ref</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_set_ReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="n">node_ref</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">burn_direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_set_TargetDirection</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">burn_direction</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_Wait</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-4-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-4-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-4-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-4-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-4-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-4-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-4-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-4-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Orientate ship</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Orientating ship for circularization burn"</span><span class="p">)</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">reference_frame</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">reference_frame</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_direction</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 
-<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Waiting until circularization burn</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_UT</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ut</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_TimeToApoapsis</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">time_to_apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">burn_ut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ut</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time_to_apoapsis</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">burn_time</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">2.0</span><span class="p">);</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">lead_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_WarpTo</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">burn_ut</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lead_time</span><span class="p">,</span><span class="w"> </span><span class="mi">100000</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
+<span class="c1"># Wait until burn</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Waiting until circularization burn"</span><span class="p">)</span>
+<span class="n">burn_ut</span> <span class="o">=</span> <span class="n">ut</span><span class="p">()</span> <span class="o">+</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">time_to_apoapsis</span> <span class="o">-</span> <span class="p">(</span><span class="n">burn_time</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+<span class="n">lead_time</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">warp_to</span><span class="p">(</span><span class="n">burn_ut</span> <span class="o">-</span> <span class="n">lead_time</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-4-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="c1">// Orientate ship</span>
@@ -1440,6 +1311,22 @@ orientate the ship along the y-axis of the maneuver node’s reference frame
 <span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">burn_ut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ut</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">orbit</span><span class="p">().</span><span class="n">time_to_apoapsis</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">burn_time</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">2.0</span><span class="p">);</span>
 <span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">lead_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 <span class="w">  </span><span class="n">space_center</span><span class="p">.</span><span class="n">warp_to</span><span class="p">(</span><span class="n">burn_ut</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lead_time</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Orientating ship for circularization burn</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ReferenceFrame_t</span><span class="w"> </span><span class="n">node_ref</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Node_ReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">node_ref</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_set_ReferenceFrame</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="n">node_ref</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">burn_direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">};</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_set_TargetDirection</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">burn_direction</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_Wait</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Waiting until circularization burn</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_UT</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ut</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Orbit_TimeToApoapsis</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">time_to_apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">burn_ut</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ut</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">time_to_apoapsis</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">burn_time</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">2.0</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">lead_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_WarpTo</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">burn_ut</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">lead_time</span><span class="p">,</span><span class="w"> </span><span class="mi">100000</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-4-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="c1">// Orientate ship</span>
@@ -1470,19 +1357,6 @@ orientate the ship along the y-axis of the maneuver node’s reference frame
 <span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="nf">warp_to</span><span class="p">(</span><span class="nv">burn_ut</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">lead_time</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-4-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Orientate ship</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Orientating ship for circularization burn"</span><span class="p">)</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">reference_frame</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">reference_frame</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_direction</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-
-<span class="c1"># Wait until burn</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Waiting until circularization burn"</span><span class="p">)</span>
-<span class="n">burn_ut</span> <span class="o">=</span> <span class="n">ut</span><span class="p">()</span> <span class="o">+</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">time_to_apoapsis</span> <span class="o">-</span> <span class="p">(</span><span class="n">burn_time</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
-<span class="n">lead_time</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">warp_to</span><span class="p">(</span><span class="n">burn_ut</span> <span class="o">-</span> <span class="n">lead_time</span><span class="p">)</span>
-</pre></div>
-</div>
 </div></div>
 <p>Finally, the program waits for an event that fires half the burn time before apoapsis, then sets
 maximum throttle to start the burn.</p>
@@ -1490,29 +1364,23 @@ maximum throttle to start the burn.</p>
 event fires when the remaining delta-v flips around to point retrograde, which marks the node as
 executed:</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-5-Qw==" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-5-Qw==" name="Qw==" role="tab" tabindex="0">C</button><button aria-controls="panel-5-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-5-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-5-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-5-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-5-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-5-Qw==" class="sphinx-tabs-panel group-tab" id="panel-5-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Ready to execute burn</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_UT</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ut</span><span class="p">);</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Orbit_TimeToApoapsis</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">time_to_apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">time_to_apoapsis</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">burn_time</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">2.0</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Executing burn</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
-<span class="w">  </span><span class="n">sleep</span><span class="p">((</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="p">)(</span><span class="n">burn_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">0.1</span><span class="p">));</span>
-<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Fine tuning</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05</span><span class="p">);</span>
-<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">remaining_burn</span><span class="p">;</span>
-<span class="w">    </span><span class="n">krpc_SpaceCenter_Node_RemainingBurnVector</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">remaining_burn</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">node_ref</span><span class="p">);</span>
-<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">remaining_burn</span><span class="p">.</span><span class="n">e1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
-<span class="w">      </span><span class="k">break</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
-<span class="w">  </span><span class="n">krpc_SpaceCenter_Node_Remove</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">);</span>
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-5-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-5-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-5-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-5-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-5-Qw==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-Qw==" name="Qw==" role="tab" tabindex="-1">C</button><button aria-controls="panel-5-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-5-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-THVh" name="THVh" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-5-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-5-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Execute burn</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Ready to execute burn"</span><span class="p">)</span>
+<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">time_to_apoapsis</span> <span class="o">&lt;=</span> <span class="n">burn_time</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Executing burn"</span><span class="p">)</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">burn_time</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Fine tuning"</span><span class="p">)</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">remaining_burn_vector</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">node</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
 
-<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Launch complete</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
-<span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Launch complete"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div><div aria-labelledby="tab-5-QyM=" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="c1">// Execute burn</span>
@@ -1579,6 +1447,31 @@ executed:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
+</div><div aria-labelledby="tab-5-Qw==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-Qw==" name="Qw==" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Ready to execute burn</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_UT</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ut</span><span class="p">);</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Orbit_TimeToApoapsis</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">time_to_apoapsis</span><span class="p">,</span><span class="w"> </span><span class="n">orbit</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">time_to_apoapsis</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">burn_time</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">2.0</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Executing burn</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">sleep</span><span class="p">((</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="p">)(</span><span class="n">burn_time</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">0.1</span><span class="p">));</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Fine tuning</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05</span><span class="p">);</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="nb">true</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_tuple_double_double_double_t</span><span class="w"> </span><span class="n">remaining_burn</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Node_RemainingBurnVector</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">remaining_burn</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">,</span><span class="w"> </span><span class="n">node_ref</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">remaining_burn</span><span class="p">.</span><span class="n">e1</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">      </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Node_Remove</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Launch complete</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </div><div aria-labelledby="tab-5-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="w">        </span><span class="c1">// Execute burn</span>
 <span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Ready to execute burn"</span><span class="p">);</span>
 <span class="w">        </span><span class="p">{</span>
@@ -1636,25 +1529,6 @@ executed:</p>
 <span class="nb">print</span><span class="p">(</span><span class="s1">'Launch complete'</span><span class="p">)</span>
 </pre></div>
 </div>
-</div><div aria-labelledby="tab-5-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Execute burn</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Ready to execute burn"</span><span class="p">)</span>
-<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">time_to_apoapsis</span> <span class="o">&lt;=</span> <span class="n">burn_time</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
-    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Executing burn"</span><span class="p">)</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">burn_time</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Fine tuning"</span><span class="p">)</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mf">0.05</span>
-<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">node</span><span class="o">.</span><span class="n">remaining_burn_vector</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
-    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="n">node</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">"Launch complete"</span><span class="p">)</span>
-</pre></div>
-</div>
 </div></div>
 <p>The rocket should now be in a circular 150km orbit above Kerbin.</p>
 </section>
@@ -1670,12 +1544,12 @@ executed:</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="reference-frames.html"
+       href="suborbital-flight.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Reference Frames</p>
+        <p class="prev-next-title">Sub-Orbital Flight</p>
       </div>
     </a>
     <a class="right-next"

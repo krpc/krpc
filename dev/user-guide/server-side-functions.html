@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
@@ -43,8 +44,9 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script src="../_static/tabs.js?v=3030b3cb"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/server-side-functions';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user-guide/server-side-functions';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
@@ -55,11 +57,11 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/external-links.js?v=e8892020"></script>
     <script src="../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/dev/tutorials/server-side-functions.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/user-guide/server-side-functions.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="C-nano" href="../cnano.html" />
-    <link rel="prev" title="AutoPilot" href="autopilot.html" />
+    <link rel="next" title="Boats and Submarines" href="buoyancy.html" />
+    <link rel="prev" title="Control Loops" href="control-loops.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -131,7 +133,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -153,6 +155,13 @@
 
 
 <li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
@@ -160,98 +169,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+  <a class="nav-link nav-internal" href="../changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -375,6 +311,13 @@
 
 
 <li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
@@ -382,78 +325,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -542,19 +422,13 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="suborbital-flight.html">Sub-Orbital Flight</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
-<li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launch into Orbit</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pitch-heading-roll.html">Pitch, Heading and Roll</a></li>
-<li class="toctree-l1"><a class="reference internal" href="parts.html">Interacting with Parts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="buoyancy.html">Boats and Submarines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="drawing.html">Drawing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="object-lifetime.html">Object Lifetime</a></li>
-<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="control-loops.html">Control Loops</a></li>
 <li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Server Side Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="buoyancy.html">Boats and Submarines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="server-performance.html">Server Performance</a></li>
 </ul>
 </div>
 </nav></div>
@@ -596,7 +470,7 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
+    <li class="breadcrumb-item"><a href="../user-guide.html" class="nav-link">User Guides</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Server Side Functions</span></li>
   </ul>
@@ -616,7 +490,7 @@
                 <article class="bd-article">
                   
   <section id="server-side-functions">
-<span id="tutorial-server-side-functions"></span><h1>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h1>
+<span id="id1"></span><h1>Server Side Functions<a class="headerlink" href="#server-side-functions" title="Link to this heading">#</a></h1>
 <p>A server side function is code that runs inside the game, on the server. It has three main
 uses:</p>
 <ul class="simple">
@@ -630,14 +504,14 @@ to your program when the result changes.</p></li>
 a single RPC. They can set properties and trigger actions. The same calls made from your
 program take a round trip each, and the game advances between them.</p></li>
 </ul>
-<p>This tutorial is in two parts. <a class="reference internal" href="#server-side-functions-compiled"><span class="std std-ref">Using Server Side Functions</span></a>
+<p>This guide is in two parts. <a class="reference internal" href="#server-side-functions-compiled"><span class="std std-ref">Using Server Side Functions</span></a>
 covers functions written in your own language and compiled by the client, and is all most users
 need. <a class="reference internal" href="#server-side-functions-api"><span class="std std-ref">The Expression API</span></a> covers the expression trees that
 compiled code translates into, which every client can build directly.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Compiled functions need the C# or Python client. Events, function streams and <code class="docutils literal notranslate"><span class="pre">Run</span></code> need the
-C#, C++, Java or Python client.</p>
+<p>Compiled functions need the Python or C# client. Events, function streams and <code class="docutils literal notranslate"><span class="pre">Run</span></code> need the
+Python, C#, C++ or Java client.</p>
 </div>
 <section id="using-server-side-functions">
 <span id="server-side-functions-compiled"></span><h2>Using Server Side Functions<a class="headerlink" href="#using-server-side-functions" title="Link to this heading">#</a></h2>
@@ -1361,7 +1235,7 @@ program read them over several ticks, as the game advances.</p></li>
 </section>
 <section id="expression-objects">
 <h3>Expression Objects<a class="headerlink" href="#expression-objects" title="Link to this heading">#</a></h3>
-<p>The altitude event from the start of this tutorial has three nodes: an embedded call, a constant
+<p>The altitude event from the start of this guide has three nodes: an embedded call, a constant
 and a comparison:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-17-UHl0aG9u" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-17-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="0">Python</button><button aria-controls="panel-17-QyM=" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-17-QyM=" name="QyM=" role="tab" tabindex="-1">C#</button><button aria-controls="panel-17-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-17-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-17-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-17-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button></div><div aria-labelledby="tab-17-UHl0aG9u" class="sphinx-tabs-panel group-tab" id="panel-17-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
@@ -2132,20 +2006,20 @@ embeds any procedure with <a class="reference internal" href="../python/api/krpc
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="autopilot.html"
+       href="control-loops.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">AutoPilot</p>
+        <p class="prev-next-title">Control Loops</p>
       </div>
     </a>
     <a class="right-next"
-       href="../cnano.html"
+       href="buoyancy.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">C-nano</p>
+        <p class="prev-next-title">Boats and Submarines</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -2204,7 +2078,7 @@ embeds any procedure with <a class="reference internal" href="../python/api/krpc
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/tutorials/server-side-functions.rst.txt">
+    <a href="../_sources/user-guide/server-side-functions.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

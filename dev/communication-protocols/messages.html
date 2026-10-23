@@ -31,6 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
@@ -42,6 +43,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'communication-protocols/messages';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -56,7 +58,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/communication-protocols/messages.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Internals of kRPC" href="../internals.html" />
+    <link rel="next" title="Compiling kRPC" href="../compiling.html" />
     <link rel="prev" title="Protocol Buffers over Serial IO" href="serialio.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
@@ -129,7 +131,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -151,6 +153,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
@@ -158,98 +167,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" current active">
-  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="../changelog.html">
+  <a class="nav-link nav-internal" href="../changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -373,6 +309,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
@@ -380,78 +323,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cnano.html">
-    C-nano
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../extending.html">
-    Extending kRPC
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -540,11 +420,16 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="tcpip.html">Protocol Buffers over TCP/IP</a></li>
-<li class="toctree-l1"><a class="reference internal" href="localsocket.html">Protocol Buffers over a Local Socket</a></li>
-<li class="toctree-l1"><a class="reference internal" href="websockets.html">Protocol Buffers over WebSockets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="serialio.html">Protocol Buffers over Serial IO</a></li>
-<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Messaging Protocol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../extending.html">Extending kRPC</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tcpip.html">Protocol Buffers over TCP/IP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="localsocket.html">Protocol Buffers over a Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="websockets.html">Protocol Buffers over WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialio.html">Protocol Buffers over Serial IO</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Messaging Protocol</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../compiling.html">Compiling kRPC</a></li>
 </ul>
 </div>
 </nav></div>
@@ -586,6 +471,9 @@
       </a>
     </li>
     
+    <li class="breadcrumb-item"><a href="../developer-guide.html" class="nav-link">Developer Guide</a></li>
+    
+    
     <li class="breadcrumb-item"><a href="../communication-protocols.html" class="nav-link">Communication Protocols</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Messaging Protocol</span></li>
@@ -609,8 +497,8 @@
 <h1>Messaging Protocol<a class="headerlink" href="#messaging-protocol" title="Link to this heading">#</a></h1>
 <p>Communication with a kRPC server is performed via Protocol Buffer messages. The <a class="reference external" href="https://github.com/krpc/krpc/releases/latest">kRPC download</a> comes with a protocol buffer message definitions
 file (<a class="extlink-github-blob reference external" href="https://github.com/krpc/krpc/blob/main/protobuf/krpc.proto">schema/krpc.proto</a>)
-that defines the structure of these messages. It also contains versions of this file for C#, C++,
-Java, Lua and Python, compiled using <a class="reference external" href="https://github.com/google/protobuf">Google’s protocol buffers compiler</a>.</p>
+that defines the structure of these messages. It also contains versions of this file for Python, C#,
+C++, Java and Lua, compiled using <a class="reference external" href="https://github.com/google/protobuf">Google’s protocol buffers compiler</a>.</p>
 <section id="invoking-remote-procedures">
 <h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
 <p>Remote procedures are arranged into groups called <em>services</em>. These act as a single-level
@@ -1400,11 +1288,11 @@ represent null on the wire.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../internals.html"
+       href="../compiling.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Internals of kRPC</p>
+        <p class="prev-next-title">Compiling kRPC</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

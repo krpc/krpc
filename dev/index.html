@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>kRPC Documentation &#8212; kRPC vdev documentation</title>
+    <title>kRPC - Remote Procedure Calls for Kerbal Space Program &#8212; kRPC vdev documentation</title>
   
   
   
@@ -31,6 +31,8 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
@@ -42,6 +44,8 @@
     <script src="_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -128,7 +132,7 @@
   
   
   
-    <p class="title logo__title">kRPC Documentation</p>
+    <p class="title logo__title">kRPC</p>
   
 </a></div>
     
@@ -150,6 +154,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="tutorials.html">
     Tutorials
   </a>
@@ -157,98 +168,25 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="csharp.html">
-    C#
+  <a class="nav-link nav-internal" href="developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="python.html">
-    Python
-  </a>
-</li>
-
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                aria-controls="pst-nav-more-links">
-                    More
-                </button>
-                <ul id="pst-nav-more-links" class="dropdown-menu">
-                    
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="internals.html">
-    Internals of kRPC
-  </a>
-</li>
-
-
-<li class=" ">
-  <a class="nav-link dropdown-item nav-internal" href="changelog.html">
+  <a class="nav-link nav-internal" href="changelog.html">
     Changelog
   </a>
 </li>
 
-                </ul>
-            </li>
-            
   </ul>
 </nav></div>
       
@@ -374,6 +312,13 @@
 
 
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="tutorials.html">
     Tutorials
   </a>
@@ -381,78 +326,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="cnano.html">
-    C-nano
+  <a class="nav-link nav-internal" href="clients.html">
+    Clients
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="csharp.html">
-    C#
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="cpp.html">
-    C++
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="java.html">
-    Java
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="lua.html">
-    Lua
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="python.html">
-    Python
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="third-party.html">
-    Other Clients, Services and Scripts
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="compiling.html">
-    Compiling kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="extending.html">
-    Extending kRPC
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="communication-protocols.html">
-    Communication Protocols
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="internals.html">
-    Internals of kRPC
+  <a class="nav-link nav-internal" href="developer-guide.html">
+    Developer Guide
   </a>
 </li>
 
@@ -555,46 +437,322 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="krpc-documentation">
-<h1>kRPC Documentation<a class="headerlink" href="#krpc-documentation" title="Link to this heading">#</a></h1>
-<p>kRPC allows you to control Kerbal Space Program from scripts running outside of
-the game.
-It comes with client libraries for many popular languages including
-<a class="reference internal" href="csharp/client.html"><span class="doc">C#</span></a>,
-<a class="reference internal" href="cpp/client.html"><span class="doc">C++</span></a>,
-<a class="reference internal" href="cnano/client.html"><span class="doc">C</span></a>,
-<a class="reference internal" href="java/client.html"><span class="doc">Java</span></a>,
-<a class="reference internal" href="lua/client.html"><span class="doc">Lua</span></a>,
-<a class="reference internal" href="python/client.html"><span class="doc">Python</span></a>
-and <a class="reference internal" href="third-party.html"><span class="doc">others</span></a>.
-It also supports websockets and serialio (for example on Arduino).</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cnano.html">C-nano</a></li>
-<li class="toctree-l1"><a class="reference internal" href="csharp.html">C#</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cpp.html">C++</a></li>
-<li class="toctree-l1"><a class="reference internal" href="java.html">Java</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lua.html">Lua</a></li>
-<li class="toctree-l1"><a class="reference internal" href="python.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="third-party.html">Other Clients, Services and Scripts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiling.html">Compiling kRPC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending kRPC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="communication-protocols.html">Communication Protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="internals.html">Internals of kRPC</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-</ul>
+  <section id="krpc-remote-procedure-calls-for-kerbal-space-program">
+<h1>kRPC - Remote Procedure Calls for Kerbal Space Program<a class="headerlink" href="#krpc-remote-procedure-calls-for-kerbal-space-program" title="Link to this heading">#</a></h1>
+<p>kRPC lets you control Kerbal Space Program from scripts running outside the game. A server
+inside the game exposes the game’s API, and client libraries call it from Python, C#, C++, C,
+Java and Lua. It also supports Ferram Aerospace Research, Kerbal Alarm Clock, Infernal Robotics
+and other popular mods.</p>
+<p>This script launches the active vessel straight up, then cuts the engines once it reaches
+an altitude of 10 km:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Python</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">C#</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-0-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-4" name="0-4" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-0-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-5" name="0-5" role="tab" tabindex="-1">Lua</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"Launch"</span><span class="p">)</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">flight</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span>
+
+<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has launched"</span><span class="p">)</span>
+
+<span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">flight</span><span class="o">.</span><span class="n">mean_altitude</span> <span class="o">&gt;</span> <span class="mi">10000</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+<span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">engaged</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> reached 10 km"</span><span class="p">)</span>
+</pre></div>
 </div>
-<p>The mod exposes most of KSPs API for controlling and interacting with rockets,
-and also includes support several popular mods including Ferram Aerospace
-Research, Kerbal Alarm Clock and Infernal Robotics.</p>
-<p>This functionality is provided to client programs via a server running in the
-game. Client scripts connect to this server and use it to execute ‘remote
-procedures’. This communication can be done on local machine only, over a local
-network, or even over the wider internet if configured correctly. The server is
-extensible - additional remote procedures (grouped into “services”) can be added
-to the server using the <a class="reference internal" href="extending.html"><span class="doc">Service API</span></a>.</p>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Launch</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="w"> </span><span class="p">(</span><span class="s">"Launch"</span><span class="p">);</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Flight</span><span class="w"> </span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">.</span><span class="n">TargetPitchAndHeading</span><span class="w"> </span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">.</span><span class="n">Engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span>
+<span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">Control</span><span class="p">.</span><span class="n">Throttle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">Control</span><span class="p">.</span><span class="n">ActivateNextStage</span><span class="w"> </span><span class="p">();</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">Name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" has launched"</span><span class="p">);</span>
+
+<span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">AddEvent</span><span class="w"> </span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">MeanAltitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">10000</span><span class="p">);</span>
+<span class="w">        </span><span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">evnt</span><span class="p">.</span><span class="n">Condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">evnt</span><span class="p">.</span><span class="n">Wait</span><span class="w"> </span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">Control</span><span class="p">.</span><span class="n">Throttle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">.</span><span class="n">Engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">Name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" reached 10 km"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/function_stream.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">Client</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="s">"Launch"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">space_center</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">().</span><span class="n">value</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">flight</span><span class="p">();</span>
+
+<span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">().</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">().</span><span class="n">set_engaged</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">control</span><span class="p">().</span><span class="n">set_throttle</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">control</span><span class="p">().</span><span class="n">activate_next_stage</span><span class="p">();</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">name</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" has launched"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">typedef</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">KRPC</span><span class="o">::</span><span class="n">Expression</span><span class="w"> </span><span class="n">Expr</span><span class="p">;</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">greater_than</span><span class="p">(</span>
+<span class="w">    </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">.</span><span class="n">mean_altitude_call</span><span class="p">()),</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p">));</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">  </span><span class="n">event</span><span class="p">.</span><span class="n">acquire</span><span class="p">();</span>
+<span class="w">  </span><span class="n">event</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+<span class="w">  </span><span class="n">event</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+
+<span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">control</span><span class="p">().</span><span class="n">set_throttle</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">().</span><span class="n">set_engaged</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">name</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">" reached 10 km"</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Launch"</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_t</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_AutoPilot</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_t</span><span class="w"> </span><span class="n">control</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Control</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_t</span><span class="w"> </span><span class="n">flight</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Flight</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_NULL</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Name</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_set_Engaged</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="nb">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_ActivateNextStage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%s has launched</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">);</span>
+
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">mean_altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">mean_altitude</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10000</span><span class="p">)</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Flight_MeanAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">mean_altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Control_set_Throttle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">control</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_AutoPilot_set_Engaged</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">auto_pilot</span><span class="p">,</span><span class="w"> </span><span class="nb">false</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%s reached 10 km</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="p">);</span>
+<span class="w">  </span><span class="n">free</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Event</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.StreamException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.KRPC.Expression</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.schema.KRPC.ProcedureCall</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">Launch</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="p">,</span><span class="w"> </span><span class="n">StreamException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">try</span><span class="w"> </span><span class="p">(</span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">"Launch"</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">();</span>
+<span class="w">      </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">Flight</span><span class="w"> </span><span class="n">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>
+
+<span class="w">      </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">().</span><span class="na">targetPitchAndHeading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="w">      </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">().</span><span class="na">setEngaged</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="w">      </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">setThrottle</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">      </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">activateNextStage</span><span class="p">();</span>
+<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" has launched"</span><span class="p">);</span>
+
+<span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="s">"getMeanAltitude"</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">greaterThan</span><span class="p">(</span>
+<span class="w">        </span><span class="n">connection</span><span class="p">,</span>
+<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">meanAltitude</span><span class="p">),</span>
+<span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p">));</span>
+<span class="w">      </span><span class="n">Event</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="w">      </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">event</span><span class="p">.</span><span class="na">waitFor</span><span class="p">();</span>
+<span class="w">      </span><span class="p">}</span>
+
+<span class="w">      </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">setThrottle</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">      </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">().</span><span class="na">setEngaged</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span>
+<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getName</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s">" reached 10 km"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc.platform'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">'Launch'</span><span class="p">)</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">flight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">:</span><span class="nf">flight</span><span class="p">()</span>
+
+<span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span><span class="p">:</span><span class="nf">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">)</span>
+<span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span><span class="p">.</span><span class="py">engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">.</span><span class="py">throttle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">:</span><span class="nf">activate_next_stage</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">vessel</span><span class="p">.</span><span class="py">name</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="s1">' has launched'</span><span class="p">)</span>
+
+<span class="kr">while</span><span class="w"> </span><span class="nv">flight</span><span class="p">.</span><span class="py">mean_altitude</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10000</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="kr">end</span>
+
+<span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">.</span><span class="py">throttle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span><span class="p">.</span><span class="py">engaged</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">vessel</span><span class="p">.</span><span class="py">name</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="s1">' reached 10 km'</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-3 sd-row-cols-lg-3 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-rocket"></span> Getting Started</div>
+<p class="sd-card-text">Install the server plugin, install a client and run your first script.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="getting-started.html"><span class="doc">Getting Started</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-book"></span> User Guides</div>
+<p class="sd-card-text">How kRPC and the game behave: reference frames, object lifetime, the auto-pilot and more.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="user-guide.html"><span class="doc">User Guides</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-graduation-cap"></span> Tutorials</div>
+<p class="sd-card-text">Complete scripts that launch into orbit, land, dock and draw in the game.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="tutorials.html"><span class="doc">Tutorials</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-code"></span> Clients</div>
+<p class="sd-card-text">The guide and API reference for each client library.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="clients.html"><span class="doc">Clients</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-screwdriver-wrench"></span> Developer Guide</div>
+<p class="sd-card-text">Write your own services, implement the protocol, or build kRPC from source.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="developer-guide.html"><span class="doc">Developer Guide</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<span class="fas fa-clock-rotate-left"></span> Changelog</div>
+<p class="sd-card-text">The changes in each release of kRPC.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="changelog.html"><span class="doc">Changelog</span></a></div>
+</div>
+</div>
+</div>
+<section id="clients">
+<h2>Clients<a class="headerlink" href="#clients" title="Link to this heading">#</a></h2>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-2 sd-row-cols-xs-2 sd-row-cols-sm-3 sd-row-cols-md-7 sd-row-cols-lg-7 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Python</div>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="python.html"><span class="doc">Python</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+C#</div>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="csharp.html"><span class="doc">C#</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+C++</div>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="cpp.html"><span class="doc">C++</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+C-nano</div>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="cnano.html"><span class="doc">C-nano</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Java</div>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="java.html"><span class="doc">Java</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Lua</div>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="lua.html"><span class="doc">Lua</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+Others</div>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="third-party.html"><span class="doc">Other Clients, Services and Scripts</span></a></div>
+</div>
+</div>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
 </section>
 
 
@@ -626,6 +784,18 @@ to the server using the <a class="reference internal" href="extending.html"><spa
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clients">Clients</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 
