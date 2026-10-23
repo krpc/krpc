@@ -75,7 +75,7 @@ class EchoServer {
     // path named after the test would take, so it goes in a short temporary directory
     directory_ = socket_directory() / ("krpc-cnano-test-" + std::to_string(counter_++));
     std::filesystem::create_directories(directory_);
-    path_ = (directory_ / "rpc").string();
+    path_ = (directory_ / "krpc.sock").string();
     struct sockaddr_un address;
     memset(&address, 0, sizeof(address));
     address.sun_family = AF_UNIX;

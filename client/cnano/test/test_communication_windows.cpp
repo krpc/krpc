@@ -14,14 +14,6 @@
 #include <chrono>
 #include <thread>
 
-// A serial port carries the RPC and stream connections over the one link, so the messages sent
-// over it are wrapped in a multiplexed message saying which connection they belong to. Which
-// framing a build uses is decided by the preprocessor, and the wrong choice shows up only in
-// what a server makes of the bytes, which needs a serial port to run against.
-#ifndef KRPC_MULTIPLEXED
-#error "The Windows serial transport must be built with the multiplexed framing"
-#endif
-
 // A read that returns fewer bytes than requested must resume at the point the previous one
 // finished, and not restart at the beginning of the buffer.
 TEST(test_communication, test_read_partial) {

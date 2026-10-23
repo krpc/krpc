@@ -236,9 +236,8 @@ cc_test(
 )
 
 # The client end to end against a TestServer, once per transport. They differ in more than the
-# socket: a serial port carries both of the connections to a server over the one link, so its
-# messages are wrapped in a multiplexed message saying which they belong to, where a transport
-# that opens a connection per server sends the messages themselves.
+# socket: a client on a serial port skips messages an earlier session left on the line while it
+# connects.
 client_test(
     name = "client-serialio",
     size = "small",

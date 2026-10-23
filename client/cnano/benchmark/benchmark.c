@@ -215,23 +215,23 @@ static void emit(const struct benchmark_case *cases, int count) {
    socket path for the local socket build, the port for the TCP/IP one. */
 #if defined(KRPC_COMMUNICATION_LOCALSOCKET)
 
-/* A default path for the RPC socket, matching the one the server uses unless it was
+/* A default path for the socket, matching the one the server uses unless it was
    configured with another. */
-static const char *default_rpc_path(void) {
+static const char *default_path(void) {
   static char path[256];
   const char *directory = getenv("XDG_RUNTIME_DIR");
   if (directory != NULL && directory[0] != '\0') {
-    snprintf(path, sizeof(path), "%s/krpc/rpc", directory);
+    snprintf(path, sizeof(path), "%s/krpc.sock", directory);
   } else {
     const char *user = getenv("USER");
-    snprintf(path, sizeof(path), "/tmp/krpc-%s/rpc", user == NULL ? "" : user);
+    snprintf(path, sizeof(path), "/tmp/krpc-%s.sock", user == NULL ? "" : user);
   }
   return path;
 }
 
 static krpc_error_t open_connection(void) {
-  const char *path = getenv("RPC_PATH");
-  return krpc_open(&connection, path == NULL ? default_rpc_path() : path);
+  const char *path = getenv("KRPC_TEST_LOCALSOCKET_PATH");
+  return krpc_open(&connection, path == NULL ? default_path() : path);
 }
 
 #else
@@ -244,7 +244,7 @@ static uint16_t port(const char *name, uint16_t fallback) {
 static krpc_error_t open_connection(void) {
   krpc_connection_config_t config;
   config.address = "127.0.0.1";
-  config.port = port("RPC_PORT", 50000);
+  config.port = port("KRPC_TEST_TCPIP_PORT", 50000);
   return krpc_open(&connection, &config);
 }
 

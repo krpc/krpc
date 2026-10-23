@@ -8,4 +8,5 @@ int main() {
   krpc_schema_Status status;
   krpc_KRPC_GetStatus(conn, &status);
   printf("Connected to kRPC server version %s\n", status.version);
+  krpc_disconnect(conn);
 }

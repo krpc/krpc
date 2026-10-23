@@ -16,7 +16,8 @@ typedef enum {
   KRPC_ERROR_RPC_FAILED = -5,
   KRPC_ERROR_ENCODING_FAILED = -6,
   KRPC_ERROR_DECODING_FAILED = -7,
-  KRPC_ERROR_BUFFER_TOO_SMALL = -8
+  KRPC_ERROR_BUFFER_TOO_SMALL = -8,
+  KRPC_ERROR_CONNECTION_REFUSED = -9
 } krpc_error_t;
 
 /* Convert an error code to a string */

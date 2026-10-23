@@ -22,6 +22,8 @@ const char* krpc_get_error(krpc_error_t error) {
       return "decoding failed";
     case KRPC_ERROR_BUFFER_TOO_SMALL:
       return "buffer too small";
+    case KRPC_ERROR_CONNECTION_REFUSED:
+      return "connection refused";
     default:
       return "";
   }

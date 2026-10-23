@@ -1,3 +1,7 @@
+# A callback on the content of a Message, called once nanopb has set up the case being decoded,
+# which is where the decode callbacks for a response are set
+krpc.schema.Message submsg_callback:true
+
 # These assume you don't want to batch RPC calls
 krpc.schema.Request.calls          max_count:1
 krpc.schema.Response.results       max_count:1
