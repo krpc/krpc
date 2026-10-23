@@ -1,4 +1,3 @@
-import base64
 import os
 import unittest
 
@@ -30,39 +29,21 @@ class WebSocketsTest(unittest.TestCase):
         return "127.0.0.1"
 
     @staticmethod
-    def rpc_port():
-        return int(os.getenv("RPC_PORT", "50000"))
-
-    @staticmethod
-    def stream_port():
-        return int(os.getenv("STREAM_PORT", "50001"))
+    def tcpip_port():
+        return int(os.getenv("KRPC_TEST_TCPIP_PORT", "50000"))
 
     @classmethod
-    def connect(cls, address, rpc_port, stream_port, name=None):
-        if name is not None:
-            name = "?name=" + name
-        else:
-            name = ""
-        cls.rpc_conn = websocket.create_connection(
-            "ws://%s:%d/%s" % (address, rpc_port, name), subprotocols=["krpc.1"]
-        )
-        assert cls.rpc_conn.getsubprotocol() == "krpc.1"
-        if stream_port is None:
-            cls.stream_conn = None
-        else:
-            call = KRPC.ProcedureCall()
-            call.service = "KRPC"
-            call.procedure = "GetClientID"
-            request = KRPC.Request()
-            request.calls.extend([call])
-            cls.send(cls.rpc_conn, request)
-            response = cls.recv(cls.rpc_conn, KRPC.Response)
-            client_identifier = cls.decode_bytes(response.results[0].value)
-            client_identifier = base64.b64encode(client_identifier).decode("utf-8")
-            cls.stream_conn = websocket.create_connection(
-                "ws://%s:%d/?id=%s" % (address, stream_port, client_identifier),
-                subprotocols=["krpc.1"],
-            )
+    def connect(cls, address, port, name="krpcwebsockets"):
+        """Upgrade to a websocket, then make the handshake in the first binary message."""
+        cls.conn = websocket.create_connection("ws://%s:%d/" % (address, port))
+        cls.next_id = 1
+        message = KRPC.Message()
+        message.connection_request.client_name = name
+        message.connection_request.protocol_version = 2
+        cls.send(cls.conn, message)
+        response = cls.recv(cls.conn).connection_response
+        assert response.status == KRPC.ConnectionResponse.OK
+        assert response.protocol_version == 2
 
     @staticmethod
     def send(conn, msg):
@@ -70,9 +51,9 @@ class WebSocketsTest(unittest.TestCase):
         conn.send_binary(data)
 
     @staticmethod
-    def recv(conn, msg_type):
+    def recv(conn):
         data = conn.recv()
-        msg = msg_type()
+        msg = KRPC.Message()
         msg.ParseFromString(data)
         return msg
 
@@ -95,109 +76,93 @@ class WebSocketsTest(unittest.TestCase):
         return cls.decode_bytes(data).decode("utf-8")
 
     def rpc_send(self, msg):
-        return self.send(self.rpc_conn, msg)
+        return self.send(self.conn, msg)
 
-    def rpc_recv(self, typ):
-        return self.recv(self.rpc_conn, typ)
+    def rpc_recv(self):
+        return self.recv(self.conn)
 
-    def stream_recv(self, typ):
-        return self.recv(self.stream_conn, typ)
+    def call(self, service, procedure, *arguments):
+        """Make a call, and return the response to it."""
+        message = KRPC.Message()
+        message.request.id = self.next_id
+        self.next_id += 1
+        call = message.request.calls.add()
+        call.service = service
+        call.procedure = procedure
+        for position, value in enumerate(arguments):
+            call.arguments.add(position=position, value=value)
+        self.rpc_send(message)
+        response = self.rpc_recv().response
+        self.assertEqual(message.request.id, response.id)
+        return response
 
 
 class TestConnection(WebSocketsTest):
     def test_named_client(self):
-        self.connect(self.address(), self.rpc_port(), None, name="TheClientName")
-        call = KRPC.ProcedureCall()
-        call.service = "KRPC"
-        call.procedure = "GetClientName"
-        request = KRPC.Request()
-        request.calls.extend([call])
-        self.rpc_send(request)
-        response = self.rpc_recv(KRPC.Response)
+        self.connect(self.address(), self.tcpip_port(), name="TheClientName")
+        response = self.call("KRPC", "GetClientName")
         self.assertEqual("TheClientName", self.decode_string(response.results[0].value))
 
-    def test_no_client_id(self):
+    def test_subprotocol_is_not_returned(self):
+        # The server ignores a subprotocol and returns none, which a client asking for one,
+        # such as a client from kRPC 0.7, rejects
         self.assertRaises(
-            websocket.WebSocketBadStatusException,
+            websocket.WebSocketException,
             websocket.create_connection,
-            "ws://%s:%d/" % (self.address(), self.stream_port()),
+            "ws://%s:%d/" % (self.address(), self.tcpip_port()),
+            subprotocols=["krpc.1"],
         )
 
-    def test_invalid_client_id(self):
-        self.assertRaises(
-            websocket.WebSocketBadStatusException,
-            websocket.create_connection,
-            "ws://%s:%d/?id=abc" % (self.address(), self.stream_port()),
+    def test_unsupported_protocol_version(self):
+        conn = websocket.create_connection(
+            "ws://%s:%d/" % (self.address(), self.tcpip_port())
         )
+        message = KRPC.Message()
+        message.connection_request.protocol_version = 1
+        self.send(conn, message)
+        response = self.recv(conn).connection_response
+        self.assertEqual(
+            KRPC.ConnectionResponse.WRONG_PROTOCOL_VERSION, response.status
+        )
+        conn.close()
 
 
-class TestRPCServer(WebSocketsTest):
+class TestServer(WebSocketsTest):
     @classmethod
     def setUpClass(cls):
-        cls.connect(cls.address(), cls.rpc_port(), None)
+        cls.connect(cls.address(), cls.tcpip_port())
 
     def test_procedure_call(self):
-        call = KRPC.ProcedureCall()
-        call.service = "KRPC"
-        call.procedure = "GetStatus"
-        request = KRPC.Request()
-        request.calls.extend([call])
-        self.rpc_send(request)
-        response = self.rpc_recv(KRPC.Response)
+        response = self.call("KRPC", "GetStatus")
         msg = KRPC.Status()
         msg.ParseFromString(response.results[0].value)
         self.assertNotEqual("", msg.version)
-        self.assertEqual(1, msg.protocol_version)
+        self.assertEqual(2, msg.protocol_version)
 
     def test_procedure_call_with_arg(self):
-        call = KRPC.ProcedureCall()
-        call.service = "TestService"
-        call.procedure = "Int32ToString"
-        arg = KRPC.Argument()
-        arg.position = 0
-        arg.value = self.encode_int32(42)
-        call.arguments.extend([arg])
-        request = KRPC.Request()
-        request.calls.extend([call])
-        self.rpc_send(request)
-        response = self.rpc_recv(KRPC.Response)
+        response = self.call("TestService", "Int32ToString", self.encode_int32(42))
         self.assertEqual("42", self.decode_string(response.results[0].value))
 
 
-class TestStreamServer(WebSocketsTest):
+class TestStreams(WebSocketsTest):
     @classmethod
     def setUpClass(cls):
-        cls.connect(
-            address=cls.address(),
-            rpc_port=cls.rpc_port(),
-            stream_port=cls.stream_port(),
-        )
+        cls.connect(cls.address(), cls.tcpip_port())
 
-    def test_procedure_call(self):
+    def test_stream_updates_arrive_on_the_same_connection(self):
         # Create call to be streamed
         call = KRPC.ProcedureCall()
         call.service = "TestService"
         call.procedure = "Counter"
 
-        # Call AddStream
-        add_stream = KRPC.ProcedureCall()
-        add_stream.service = "KRPC"
-        add_stream.procedure = "AddStream"
-        add_stream_arg = KRPC.Argument()
-        add_stream_arg.position = 0
-        add_stream_arg.value = call.SerializeToString()
-        add_stream.arguments.extend([add_stream_arg])
-        request = KRPC.Request()
-        request.calls.extend([add_stream])
-        self.rpc_send(request)
-        response = self.rpc_recv(KRPC.Response)
+        response = self.call("KRPC", "AddStream", call.SerializeToString())
         self.assertEqual(1, len(response.results))
         stream = KRPC.Stream()
         stream.ParseFromString(response.results[0].value)
 
-        # Receive some stream updates
+        # Receive some stream updates, which follow the response to the call that added it
         for expected in range(1, 10):
-            update = self.stream_recv(KRPC.StreamUpdate)
+            update = self.rpc_recv().stream_update
             self.assertEqual(1, len(update.results))
             self.assertEqual(stream.id, update.results[0].id)
             actual = self.decode_int32(update.results[0].result.value)
