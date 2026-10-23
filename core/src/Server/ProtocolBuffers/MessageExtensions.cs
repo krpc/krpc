@@ -205,6 +205,7 @@ namespace KRPC.Server.ProtocolBuffers
             result.Documentation = exception.Documentation;
             result.Deprecated = exception.Deprecated;
             result.DeprecatedReason = exception.DeprecatedReason;
+            result.MappedType = exception.MappedType;
             return result;
         }
 

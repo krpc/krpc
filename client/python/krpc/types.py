@@ -46,19 +46,27 @@ MESSAGE_TYPES = {
     KRPC.Type.STATUS: KRPC.Status,
 }
 
-EXCEPTION_TYPES = {
-    "InvalidOperationException": RuntimeError,
-    "ArgumentException": ValueError,
-    "ArgumentNullException": ValueError,
-    "ArgumentOutOfRangeException": ValueError,
-    "NullReferenceException": TypeError,
-    "KeyNotFoundException": KeyError,
-    "IndexOutOfRangeException": IndexError,
-    "DivideByZeroException": ZeroDivisionError,
-    "NotSupportedException": NotImplementedError,
-    "TimeoutException": TimeoutError,
-    "OverflowException": OverflowError,
+# The builtin each .NET exception a server maps onto a kRPC exception stands for, keyed by the
+# exception's mapped type. The kRPC exception is a subclass of the builtin. One without a
+# builtin is a subclass of RuntimeError
+NATIVE_EXCEPTIONS: dict[str, type[Exception]] = {
+    "System.InvalidOperationException": RuntimeError,
+    "System.ArgumentException": ValueError,
+    "System.ArgumentNullException": ValueError,
+    "System.ArgumentOutOfRangeException": ValueError,
+    "System.NullReferenceException": TypeError,
+    "System.Collections.Generic.KeyNotFoundException": KeyError,
+    "System.IndexOutOfRangeException": IndexError,
+    "System.DivideByZeroException": ZeroDivisionError,
+    "System.NotSupportedException": NotImplementedError,
+    "System.TimeoutException": TimeoutError,
+    "System.OverflowException": OverflowError,
 }
+
+
+def native_exception(mapped_type: str) -> type[Exception]:
+    """The builtin a kRPC exception with the given mapped type is a subclass of"""
+    return NATIVE_EXCEPTIONS.get(mapped_type, RuntimeError)
 
 
 # Every type code a type object can be built for. A definition from a newer server may name
@@ -258,12 +266,14 @@ class Types:
         return cast(StructType, typ)
 
     def exception_type(
-        self, service: str, name: str, doc: str | None = None
+        self, service: str, name: str, doc: str | None = None, mapped_type: str = ""
     ) -> type[Exception]:
         """Get an exception type"""
         key = (service, name)
         if key not in self._exception_types:
-            self._exception_types[key] = _create_exception_type(service, name, doc)
+            self._exception_types[key] = _create_exception_type(
+                service, name, doc, mapped_type
+            )
         return self._exception_types[key]
 
     def tuple_type(self, *value_types: TypeBase) -> TupleType:
@@ -771,13 +781,11 @@ def _create_struct_type(
 
 
 def _create_exception_type(
-    service_name: str, class_name: str, doc: str | None
+    service_name: str, class_name: str, doc: str | None, mapped_type: str
 ) -> type[Exception]:
-    if service_name == "KRPC" and class_name in EXCEPTION_TYPES:
-        return EXCEPTION_TYPES[class_name]
     return type(
         str(class_name),
-        (RuntimeError,),
+        (native_exception(mapped_type),),
         {"_service_name": service_name, "_class_name": class_name, "__doc__": doc},
     )
 

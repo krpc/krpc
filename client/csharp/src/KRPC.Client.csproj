@@ -58,17 +58,35 @@
     <Compile Include="$(bazel-bin)\client\csharp\Services\KRPC.cs">
       <Link>Services\KRPC.cs</Link>
     </Compile>
+    <Compile Include="$(bazel-bin)\client\csharp\Services\StdLib.cs">
+      <Link>Services\StdLib.cs</Link>
+    </Compile>
     <Compile Include="$(bazel-bin)\client\csharp\Services\SpaceCenter.cs">
       <Link>Services\SpaceCenter.cs</Link>
     </Compile>
-    <Compile Include="$(bazel-bin)\client\csharp\Services\KerbalAlarmClock.cs">
-      <Link>Services\KerbalAlarmClock.cs</Link>
+    <Compile Include="$(bazel-bin)\client\csharp\Services\Drawing.cs">
+      <Link>Services\Drawing.cs</Link>
+    </Compile>
+    <Compile Include="$(bazel-bin)\client\csharp\Services\UI.cs">
+      <Link>Services\UI.cs</Link>
     </Compile>
     <Compile Include="$(bazel-bin)\client\csharp\Services\InfernalRobotics.cs">
       <Link>Services\InfernalRobotics.cs</Link>
     </Compile>
-    <Compile Include="$(bazel-bin)\client\csharp\Services\StdLib.cs">
-      <Link>Services\StdLib.cs</Link>
+    <Compile Include="$(bazel-bin)\client\csharp\Services\KerbalAlarmClock.cs">
+      <Link>Services\KerbalAlarmClock.cs</Link>
+    </Compile>
+    <Compile Include="$(bazel-bin)\client\csharp\Services\RemoteTech.cs">
+      <Link>Services\RemoteTech.cs</Link>
+    </Compile>
+    <Compile Include="$(bazel-bin)\client\csharp\Services\LIDAR.cs">
+      <Link>Services\LIDAR.cs</Link>
+    </Compile>
+    <Compile Include="$(bazel-bin)\client\csharp\Services\DockingCamera.cs">
+      <Link>Services\DockingCamera.cs</Link>
+    </Compile>
+    <Compile Include="$(bazel-bin)\client\csharp\Services\Debug.cs">
+      <Link>Services\Debug.cs</Link>
     </Compile>
   </ItemGroup>
 </Project>

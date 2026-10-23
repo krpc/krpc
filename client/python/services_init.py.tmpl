@@ -1,0 +1,25 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    {TYPE_CHECKING_IMPORTS}
+else:
+    try:
+        {IMPORTS}
+    except ImportError:
+        # Without the generated stubs, every service attribute is None
+
+        def _unavailable(_: object) -> None:
+            return None
+
+        {UNAVAILABLE}
+
+
+class Client:
+    def __init__(self) -> None:
+        {ATTRIBUTES}
+
+        self._services = {
+            {SERVICES}
+        }

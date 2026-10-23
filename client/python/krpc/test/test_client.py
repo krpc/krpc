@@ -726,6 +726,21 @@ class TestClient(ServerTestCase, unittest.TestCase):
         )
         self.assertIn("foo", str(cm.exception))
 
+    def test_mapped_exception_classes(self) -> None:
+        dynamic = ServerTestCase.connect(
+            name="python_client_test_dynamic", use_pregenerated_stubs=False
+        )
+        try:
+            for conn in (self.conn, dynamic):
+                with self.assertRaises(conn.krpc.ArgumentNullException) as cm:
+                    conn.test_service.throw_argument_null_exception("")
+                self.assertIsInstance(cm.exception, ValueError)
+                self.assertNotIsInstance(cm.exception, conn.krpc.ArgumentException)
+                with self.assertRaises(conn.krpc.InvalidOperationException):
+                    conn.test_service.throw_invalid_operation_exception()
+        finally:
+            dynamic.close()
+
     def test_custom_exception(self) -> None:
         with self.assertRaises(self.conn.test_service.CustomException) as cm:
             self.conn.test_service.throw_custom_exception()

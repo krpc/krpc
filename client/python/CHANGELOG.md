@@ -3,6 +3,10 @@
 - Write the units and formulas in service documentation as Unicode text in docstrings (#1169)
 - Fix a `SyntaxWarning` for an invalid escape sequence on importing the `SpaceCenter` stubs (#1169)
 
+- Exceptions
+  - Raise a `KRPC` exception as its own class, derived from the builtin it was raised as
+    before, so `except conn.krpc.ArgumentException` catches it (#1172)
+
 ## [v0.7.0]
 
 - Streams and events

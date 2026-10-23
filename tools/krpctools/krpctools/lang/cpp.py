@@ -144,6 +144,21 @@ class CppLanguage(Language):
         (Type.UINT64, "max"): "(std::numeric_limits<uint64_t>::max)()",
     }
 
+    # The standard exceptions the mapped types derive from
+    native_exceptions = {
+        "System.InvalidOperationException": "std::logic_error",
+        "System.ArgumentException": "std::invalid_argument",
+        "System.ArgumentNullException": "std::invalid_argument",
+        "System.ArgumentOutOfRangeException": "std::out_of_range",
+        "System.Collections.Generic.KeyNotFoundException": "std::out_of_range",
+        "System.IndexOutOfRangeException": "std::out_of_range",
+        "System.DivideByZeroException": "std::domain_error",
+        "System.OverflowException": "std::overflow_error",
+    }
+
+    def native_exception(self, mapped_type: str) -> str | None:
+        return self.native_exceptions.get(mapped_type)
+
     def parse_name(self, name):
         return super().parse_name(snake_case(name))
 

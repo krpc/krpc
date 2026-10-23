@@ -34,7 +34,7 @@ from krpc.expressionutils import (
     unwrap_class,
     with_nullable,
 )
-from krpc.types import EXCEPTION_TYPES, ClassBase
+from krpc.types import NATIVE_EXCEPTIONS, ClassBase
 
 if TYPE_CHECKING:
     from krpc.functioncompiler import _Compiler
@@ -143,28 +143,6 @@ def _type_name(node: ast.expr) -> str | None:
     if isinstance(node, ast.Attribute):
         return node.attr
     return None
-
-
-# The kRPC exceptions each builtin Python exception stands for, as the Python client
-# raises the KRPC service's general exceptions as builtins. Catching a builtin
-# catches every exception it and its subclasses stand for. Raising one raises the
-# first, and raising Exception raises the KRPC service's Error. A service's own
-# exceptions are generated classes with their own names
-_BUILTIN_EXCEPTIONS = {
-    RuntimeError: [("KRPC", "InvalidOperationException")],
-    ValueError: [
-        ("KRPC", "ArgumentException"),
-        ("KRPC", "ArgumentNullException"),
-        ("KRPC", "ArgumentOutOfRangeException"),
-    ],
-    TypeError: [("KRPC", "NullReferenceException")],
-    KeyError: [("KRPC", "KeyNotFoundException")],
-    IndexError: [("KRPC", "IndexOutOfRangeException")],
-    ZeroDivisionError: [("KRPC", "DivideByZeroException")],
-    NotImplementedError: [("KRPC", "NotSupportedException")],
-    TimeoutError: [("KRPC", "TimeoutException")],
-    OverflowError: [("KRPC", "OverflowException")],
-}
 
 
 # The Python type and the literal of an empty collection, by its type code
@@ -1563,29 +1541,43 @@ class _StatementCompiler:
             if raising:
                 if value is Exception:
                     return [("KRPC", "Error")]
-                if value in _BUILTIN_EXCEPTIONS:
-                    return _BUILTIN_EXCEPTIONS[value]
+                builtins = self._builtin_exceptions()
+                if value in builtins:
+                    return builtins[value]
             elif issubclass(value, BaseException):
                 names = self._caught_names(value)
                 if names:
                     return names
         raise self._compiler._error(node, "not an exception type the server defines")
 
+    def _builtin_exceptions(self) -> dict[type, list[tuple[str, str]]]:
+        """The kRPC exceptions each builtin stands for, from their mapped types. Raising
+        a builtin raises the first."""
+        mapped_types = self._compiler._metadata.mapped_types
+        builtins: dict[type, list[tuple[str, str]]] = {}
+        for mapped_type, builtin in NATIVE_EXCEPTIONS.items():
+            for name, name_mapped_type in mapped_types.items():
+                if name_mapped_type == mapped_type:
+                    builtins.setdefault(builtin, []).append(name)
+        return builtins
+
     def _caught_names(self, value: type) -> list[tuple]:
         """The kRPC exceptions an except clause naming a builtin catches. The Python
-        client raises a service's own exception as a subclass of RuntimeError, so
+        client raises an exception without a builtin as a subclass of RuntimeError, so
         catching RuntimeError catches every exception the services declare, apart
-        from those the client represents as other builtins and KRPC.Error."""
+        from those with other builtins and KRPC.Error."""
+        builtins = self._builtin_exceptions()
         names = [
             name
-            for builtin, builtin_names in _BUILTIN_EXCEPTIONS.items()
+            for builtin, builtin_names in builtins.items()
             if issubclass(builtin, value)
             for name in builtin_names
         ]
+        mapped = {name for builtin_names in builtins.values() for name in builtin_names}
         if issubclass(RuntimeError, value):
             for service, name in self._compiler._metadata.exceptions:
                 # KRPC.Error is the exception raise Exception(...) raises
-                if service == "KRPC" and (name in EXCEPTION_TYPES or name == "Error"):
+                if (service, name) in mapped or (service, name) == ("KRPC", "Error"):
                     continue
                 if (service, name) not in names:
                     names.append((service, name))

@@ -32,7 +32,7 @@ from krpc.service import (
 )
 from krpc.stream import Stream
 from krpc.streammanager import StreamManager
-from krpc.types import EXCEPTION_TYPES, DefaultArgument, TypeBase, Types
+from krpc.types import DefaultArgument, TypeBase, Types
 from krpc.utils import snake_case
 
 
@@ -746,12 +746,7 @@ class Client(krpc.services.Client):
                 return RPCError(
                     "%s.%s: %s" % (error.service, type_name, self._error_message(error))
                 )
-            if error.service == "KRPC" and error.name in EXCEPTION_TYPES:
-                # Use a built-in exception type if it's in the mapping
-                cls = EXCEPTION_TYPES[type_name]
-            else:
-                cls = getattr(service, type_name)
-            return cls(self._error_message(error))
+            return getattr(service, type_name)(self._error_message(error))
         return RPCError(self._error_message(error))
 
     @staticmethod

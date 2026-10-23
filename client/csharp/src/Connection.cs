@@ -1246,10 +1246,8 @@ namespace KRPC.Client
         internal System.Exception GetException (Error error)
         {
             var message = error.Description;
-            if (error.StackTrace.Length > 0) {
-                var newline = Environment.NewLine;
-                message += newline + "Server stack trace: " + newline + error.StackTrace;
-            }
+            if (error.StackTrace.Length > 0)
+                message += "\nServer stack trace:\n" + error.StackTrace;
             if (error.Service.Length > 0 && error.Name.Length > 0) {
                 var key = error.Service + "." + error.Name;
                 if (key == "KRPC.InvalidOperationException")

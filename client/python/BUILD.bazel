@@ -2,28 +2,17 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("//:config.bzl", "python_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_sdist", "py_test")
-load("//tools/krpctools:clientgen.bzl", "clientgen_python")
+load("//tools/krpctools:clientgen.bzl", "clientgen_python_init", "clientgen_services")
 
 exports_files(["CHANGELOG.md"])
+
+services = clientgen_services("python")
 
 # The krpc package as an importable python library, for use by other python
 # targets in this workspace (the sdists below are what is released)
 py_library(
     name = "krpc_lib",
-    srcs = [
-        ":services-debug",
-        ":services-dockingcamera",
-        ":services-drawing",
-        ":services-infernalrobotics",
-        ":services-kerbalalarmclock",
-        ":services-krpc",
-        ":services-lidar",
-        ":services-remotetech",
-        ":services-spacecenter",
-        ":services-stdlib",
-        ":services-testservice",
-        ":services-ui",
-    ],
+    srcs = services + [":services-testservice"],
     visibility = ["//visibility:public"],
     deps = [":krpc_base_lib"],
 )
@@ -36,6 +25,7 @@ py_library(
     srcs = glob(["krpc/**/*.py"]) + [
         ":krpc-version-py",
         ":schema-py",
+        ":services-init",
     ],
     # The type stub for the generated protobuf module, so type checkers see
     # the message classes (the module itself builds them dynamically)
@@ -57,6 +47,12 @@ genrule(
     srcs = ["//protobuf:python"],
     outs = ["krpc/schema/KRPC_pb2.pyi"],
     cmd = "for f in $(execpaths //protobuf:python); do case $$f in *KRPC_pb2.pyi) cp $$f $@;; esac; done",
+)
+
+clientgen_python_init(
+    name = "services-init",
+    out = "krpc/services/__init__.py",
+    template = "services_init.py.tmpl",
 )
 
 genrule(
@@ -84,6 +80,7 @@ py_sdist(
         "LICENSE",
         "README.md",
         "pyproject.toml",
+        ":services-init",
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
@@ -114,102 +111,19 @@ py_sdist(
         "LICENSE",
         "README.md",
         "pyproject.toml",
-        ":services-debug",
-        ":services-dockingcamera",
-        ":services-drawing",
-        ":services-infernalrobotics",
-        ":services-kerbalalarmclock",
-        ":services-krpc",
-        ":services-lidar",
-        ":services-remotetech",
-        ":services-spacecenter",
-        ":services-stdlib",
+        ":services-init",
         ":services-testservice",
-        ":services-ui",
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
         "//:version",
         "//protobuf:python",
-    ] + glob(["krpc/**/*"]),
+    ] + services + glob(["krpc/**/*"]),
     path_map = {
         "version.py": "krpc/version.py",
         "client/python/": "",
         "protobuf/": "krpc/schema/",
     },
-)
-
-clientgen_python(
-    name = "services-krpc",
-    defs = "//core:ServiceDefinitions",
-    service = "KRPC",
-)
-
-clientgen_python(
-    name = "services-testservice",
-    defs = "//tools/TestServer:ServiceDefinitions",
-    service = "TestService",
-)
-
-clientgen_python(
-    name = "services-spacecenter",
-    defs = "//service/SpaceCenter:ServiceDefinitions",
-    service = "SpaceCenter",
-)
-
-clientgen_python(
-    name = "services-drawing",
-    defs = "//service/Drawing:ServiceDefinitions",
-    service = "Drawing",
-)
-
-clientgen_python(
-    name = "services-infernalrobotics",
-    defs = "//service/InfernalRobotics:ServiceDefinitions",
-    service = "InfernalRobotics",
-)
-
-clientgen_python(
-    name = "services-kerbalalarmclock",
-    defs = "//service/KerbalAlarmClock:ServiceDefinitions",
-    service = "KerbalAlarmClock",
-)
-
-clientgen_python(
-    name = "services-remotetech",
-    defs = "//service/RemoteTech:ServiceDefinitions",
-    service = "RemoteTech",
-)
-
-clientgen_python(
-    name = "services-ui",
-    defs = "//service/UI:ServiceDefinitions",
-    service = "UI",
-    deps = [":services-stdlib"],
-)
-
-clientgen_python(
-    name = "services-stdlib",
-    defs = "//core:StdLibServiceDefinitions",
-    service = "StdLib",
-)
-
-clientgen_python(
-    name = "services-lidar",
-    defs = "//service/LiDAR:ServiceDefinitions",
-    service = "LIDAR",
-)
-
-clientgen_python(
-    name = "services-dockingcamera",
-    defs = "//service/DockingCamera:ServiceDefinitions",
-    service = "DockingCamera",
-)
-
-clientgen_python(
-    name = "services-debug",
-    defs = "//service/Debug:ServiceDefinitions",
-    service = "Debug",
 )
 
 # The tests that need no server, and those that run against one. Splitting them keeps the
@@ -356,12 +270,12 @@ test_suite(
 py_ruff_test(
     name = "ruff",
     size = "small",
-    srcs = glob(["krpc/**/*.py"]),
+    srcs = glob(["krpc/**/*.py"]) + [":services-init"],
 )
 
 py_pyright_test(
     name = "pyright",
     size = "medium",
-    srcs = glob(["krpc/**/*.py"]),
+    srcs = glob(["krpc/**/*.py"]) + [":services-init"],
     deps = [":krpc_lib"],
 )

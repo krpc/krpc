@@ -12,11 +12,14 @@ namespace KRPC.Service.Messages
 
         public string DeprecatedReason { get; set; }
 
+        public string MappedType { get; set; }
+
         public Exception (string name)
         {
             Name = name;
             Documentation = string.Empty;
             DeprecatedReason = string.Empty;
+            MappedType = string.Empty;
         }
     }
 }

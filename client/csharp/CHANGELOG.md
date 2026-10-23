@@ -1,3 +1,9 @@
+## [v0.8.0] - unreleased
+
+- Exceptions
+  - **Breaking:** Remove the trailing space after `Server stack trace:` in an exception's
+    message, and separate its lines with `\n` on every platform (#1172)
+
 ## [v0.7.0]
 
 - Streams and events

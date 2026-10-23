@@ -467,7 +467,7 @@ public class ConnectionTest {
 
   @Test
   public void testInvalidOperationException() {
-    UnsupportedOperationException e = assertThrows(UnsupportedOperationException.class,
+    IllegalStateException e = assertThrows(IllegalStateException.class,
         () -> TestService.newInstance(connection).throwInvalidOperationException());
     assertTrue(e.getMessage().contains("Invalid operation"));
   }
@@ -490,8 +490,8 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testArgumentOutOfBoundsException() {
-    IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class,
+  public void testArgumentOutOfRangeException() {
+    IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
         () -> TestService.newInstance(connection).throwArgumentOutOfRangeException(0));
     assertTrue(e.getMessage().contains(
         "Specified argument was out of the range of valid values."));

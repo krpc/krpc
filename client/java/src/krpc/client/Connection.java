@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 import krpc.schema.KRPC;
 
@@ -585,44 +584,13 @@ public class Connection implements AutoCloseable {
     }
     if (!error.getService().isEmpty() && !error.getName().isEmpty()) {
       String key = error.getService() + "." + error.getName();
-      if (key.equals("KRPC.InvalidOperationException")) {
-        return new UnsupportedOperationException(message);
-      }
-      if (key.equals("KRPC.ArgumentException")) {
-        return new IllegalArgumentException(message);
-      }
-      if (key.equals("KRPC.ArgumentNullException")) {
-        return new IllegalArgumentException(message);
-      }
-      if (key.equals("KRPC.ArgumentOutOfRangeException")) {
-        return new IndexOutOfBoundsException(message);
-      }
-      if (key.equals("KRPC.NullReferenceException")) {
-        return new NullPointerException(message);
-      }
-      if (key.equals("KRPC.IndexOutOfRangeException")) {
-        return new IndexOutOfBoundsException(message);
-      }
-      if (key.equals("KRPC.KeyNotFoundException")) {
-        return new NoSuchElementException(message);
-      }
-      if (key.equals("KRPC.DivideByZeroException")) {
-        return new ArithmeticException(message);
-      }
-      if (key.equals("KRPC.OverflowException")) {
-        return new ArithmeticException(message);
-      }
-      if (key.equals("KRPC.NotSupportedException")) {
-        return new UnsupportedOperationException(message);
-      }
       Class<?> exnType = exceptionTypes.get(key);
       Constructor<?> ctor = null;
       if (exnType != null) {
-        for (Constructor<?> candidate : exnType.getDeclaredConstructors()) {
-          if (candidate.getParameterTypes().length == 1) {
-            ctor = candidate;
-            break;
-          }
+        try {
+          ctor = exnType.getDeclaredConstructor(String.class);
+        } catch (NoSuchMethodException exn) {
+          ctor = null;
         }
       }
       if (ctor == null) {
@@ -634,7 +602,7 @@ public class Connection implements AutoCloseable {
       }
       try {
         ctor.setAccessible(true);
-        return (RPCException) ctor.newInstance(message);
+        return (Exception) ctor.newInstance(message);
       } catch (IllegalAccessException exn) {
         return new RPCException("Failed to throw server exception");
       } catch (InstantiationException exn) {

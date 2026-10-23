@@ -70,8 +70,8 @@ public class {{ service_name }} {
     {% endfor %}
 
     private void addExceptionTypes(Connection connection) {
-        {% for exception_name in exceptions.keys() %}
-        connection.addExceptionType("{{ service_name }}", "{{ exception_name }}", {{ exception_name }}.class);
+        {% for exception_name,exception in exceptions.items() %}
+        connection.addExceptionType("{{ service_name }}", "{{ exception_name }}", {{ exception.native or exception_name }}.class);
         {% endfor %}
     }
     {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}

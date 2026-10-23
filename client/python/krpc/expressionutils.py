@@ -91,12 +91,17 @@ class Metadata:
         self.struct_fields: dict[tuple[str, str], list[str]] = {}
         # (service, exception name) of every exception the services declare
         self.exceptions: list[tuple[str, str]] = []
+        # (service, exception name) -> the exception's mapped type, where it has one
+        self.mapped_types: dict[tuple[str, str], str] = {}
         # (service, procedure name) -> procedure
         self.procedures: dict[tuple[str, str], KRPC.Procedure] = {}
         for service in client.krpc.get_services().services:
-            self.exceptions.extend(
-                (service.name, exception.name) for exception in service.exceptions
-            )
+            for exception in service.exceptions:
+                self.exceptions.append((service.name, exception.name))
+                if exception.mapped_type:
+                    self.mapped_types[(service.name, exception.name)] = (
+                        exception.mapped_type
+                    )
             for struct in service.structs:
                 self.struct_fields[(service.name, struct.name)] = [
                     field.name for field in struct.fields

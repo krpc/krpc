@@ -664,6 +664,10 @@ The fields are:
 * ``deprecated_reason`` - If the exception is deprecated, the reason for its deprecation. May be
   empty.
 
+* ``mapped_type`` - The full name of the .NET exception the server reports as this exception, for
+  example ``System.ArgumentException``. A client can raise its own equivalent of it. Empty if
+  there is none.
+
 .. _communication-protocol-procedure-names:
 
 Procedure Names
