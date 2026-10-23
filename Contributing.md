@@ -151,7 +151,7 @@ Some general guidelines on using git and the structure of the repository:
 
 ## Further Resources
 
- * A high-level summary of how the kRPC server works: https://krpc.github.io/krpc/internals.html
+ * How the kRPC server schedules remote procedure calls: https://krpc.github.io/krpc/user-guide/server-performance.html
  * How to write services for kRPC: https://krpc.github.io/krpc/extending.html
  * Documentation on the communication protocol:
    https://krpc.github.io/krpc/communication-protocols.html

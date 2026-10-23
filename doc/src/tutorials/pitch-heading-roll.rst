@@ -45,4 +45,4 @@ once per second.
    :attr:`Flight.pitch`, :attr:`Flight.heading` and :attr:`Flight.roll` telemetry. For a
    representation of the vessel's attitude that is always well-defined, use
    :attr:`Flight.rotation` or :attr:`Flight.direction`, or the auto-pilot's error
-   readouts described in the :doc:`autopilot tutorial </tutorials/autopilot>`.
+   readouts described in the :doc:`auto-pilot guide </user-guide/autopilot>`.

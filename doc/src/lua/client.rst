@@ -57,7 +57,7 @@ Calling methods, getting or setting properties, etc. are mapped to remote
 procedure calls and passed to the server by the lua client.
 
 Many procedures return an object identifying something in the game, such as a vessel or
-a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for how such an object
+a part. See :doc:`Object Lifetime </user-guide/object-lifetime>` for how such an object
 behaves when a game is loaded or what it identifies is destroyed.
 
 Streams and Events

@@ -4,7 +4,7 @@
 .. lua:currentmodule:: SpaceCenter
 .. py:currentmodule:: SpaceCenter
 
-.. _tutorial-reference-frames:
+.. _reference-frames:
 
 Reference Frames
 ================
@@ -69,32 +69,32 @@ reference frame:
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.cs
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.cpp
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.cpp
          :language: cpp
 
    .. tab:: C
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.c
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.c
          :language: c
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.java
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.lua
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselPosition.py
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselPosition.py
          :language: python
 
 For a vessel sat on the launchpad, the magnitude of this position vector will be
@@ -407,32 +407,32 @@ labeled arrow in the direction of the vessel's velocity relative to the surface:
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.cs
+      .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.cpp
+      .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.cpp
          :language: cpp
 
    .. tab:: C
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.c
+      .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.c
          :language: c
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.java
+      .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.lua
+      .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.py
+      .. literalinclude:: /scripts/user-guide/reference-frames/VisualDebugging.py
          :language: python
 
 .. note:: This example uses :attr:`Vessel.surface_velocity_reference_frame`, which is
@@ -457,32 +457,32 @@ the navball:
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.cs
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.cpp
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.cpp
          :language: cpp
 
    .. tab:: C
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.c
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.c
          :language: c
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.java
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.lua
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/NavballDirections.py
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballDirections.py
          :language: python
 
 The code uses the vessel's surface reference frame
@@ -514,32 +514,32 @@ directions, as seen on the navball when it is in 'orbit' mode. It uses
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.cs
+      .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.cpp
+      .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.cpp
          :language: cpp
 
    .. tab:: C
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.c
+      .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.c
          :language: c
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.java
+      .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.lua
+      .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/OrbitalDirections.py
+      .. literalinclude:: /scripts/user-guide/reference-frames/OrbitalDirections.py
          :language: python
 
 This code uses the vessel's orbital reference frame, pictured below:
@@ -558,32 +558,32 @@ velocity relative to the surface:
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.cs
+      .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.cpp
+      .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.cpp
          :language: cpp
 
    .. tab:: C
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.c
+      .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.c
          :language: c
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.java
+      .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.lua
+      .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/SurfacePrograde.py
+      .. literalinclude:: /scripts/user-guide/reference-frames/SurfacePrograde.py
          :language: python
 
 .. note:: :attr:`Vessel.surface_velocity_reference_frame` is singular when the
@@ -601,7 +601,7 @@ below:
    :attr:`Flight.surface_prograde` and :attr:`Flight.surface_retrograde` return
    it directly, matching the navball's surface mode.
 
-.. _tutorial-reference-frames-vessel-speed:
+.. _reference-frames-vessel-speed:
 
 Vessel Speed
 ^^^^^^^^^^^^
@@ -622,40 +622,40 @@ rotates with the body.
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.cs
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.cpp
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.cpp
          :language: cpp
 
    .. tab:: C
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.c
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.c
          :language: c
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.java
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.lua
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.py
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselSpeed.py
          :language: python
 
 .. seealso:: :attr:`Vessel.orbit_speed_reference_frame` and
    :attr:`Vessel.surface_speed_reference_frame` give the same two speeds
    directly, in frames centered on the vessel and oriented like the navball is in
-   each mode. See :ref:`tutorial-reference-frames-navball-speed`.
+   each mode. See :ref:`reference-frames-navball-speed`.
 
-.. _tutorial-reference-frames-vessel-velocity:
+.. _reference-frames-vessel-velocity:
 
 Vessel Velocity
 ^^^^^^^^^^^^^^^
@@ -677,40 +677,40 @@ the body.
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.cs
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.cpp
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.cpp
          :language: cpp
 
    .. tab:: C
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.c
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.c
          :language: c
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.java
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.lua
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.py
+      .. literalinclude:: /scripts/user-guide/reference-frames/VesselVelocity.py
          :language: python
 
 .. seealso:: :attr:`Vessel.surface_speed_reference_frame` gives the same velocity
    without constructing a frame, although in its own prograde/normal/radial axes
    rather than as upwards, north and east components. See
-   :ref:`tutorial-reference-frames-navball-speed`.
+   :ref:`reference-frames-navball-speed`.
 
-.. _tutorial-reference-frames-navball-speed:
+.. _reference-frames-navball-speed:
 
 Navball speed modes
 ^^^^^^^^^^^^^^^^^^^
@@ -745,32 +745,32 @@ This example prints the speeds the navball shows in orbit and surface modes:
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.cs
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.cpp
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.cpp
          :language: cpp
 
    .. tab:: C
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.c
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.c
          :language: c
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.java
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.lua
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.py
+      .. literalinclude:: /scripts/user-guide/reference-frames/NavballSpeed.py
          :language: python
 
 .. note:: :attr:`Vessel.target_speed_reference_frame` requires a target to be
@@ -786,32 +786,32 @@ and the direction that the vessel is moving in (relative to the surface):
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.cs
+      .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.cpp
+      .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.cpp
          :language: cpp
 
    .. tab:: C
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.c
+      .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.c
          :language: c
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.java
+      .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.lua
+      .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/AngleOfAttack.py
+      .. literalinclude:: /scripts/user-guide/reference-frames/AngleOfAttack.py
          :language: python
 
 Note that the orientation of the reference frame used to get the direction and
@@ -839,30 +839,30 @@ at a given altitude, which could be used as the target for a landing auto pilot.
 
    .. tab:: C#
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.cs
+      .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.cs
          :language: csharp
 
    .. tab:: C++
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.cpp
+      .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.cpp
          :language: cpp
 
    .. tab:: C
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.c
+      .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.c
          :language: c
 
    .. tab:: Java
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.java
+      .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.java
          :language: java
 
    .. tab:: Lua
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.lua
+      .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.lua
          :language: lua
 
    .. tab:: Python
 
-      .. literalinclude:: /scripts/tutorials/reference-frames/LandingSite.py
+      .. literalinclude:: /scripts/user-guide/reference-frames/LandingSite.py
          :language: python

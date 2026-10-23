@@ -96,7 +96,7 @@ your Kerbals by deploying all the parachutes:
          :language: python
 
 The script deploys the parachutes one call at a time, and the game can advance between the
-calls. In Python, a :ref:`server side function <tutorial-server-side-functions>` deploys them all
+calls. In Python, a :ref:`server side function <server-side-functions>` deploys them all
 in the same physics tick, with a single call:
 
 .. literalinclude:: /scripts/tutorials/parts/DeployParachutesFunction.py
@@ -182,7 +182,7 @@ https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
          :language: python
 
 The script reads the thrust and specific impulse of each engine with separate calls, which can
-land in different physics ticks. A :ref:`server side function <tutorial-server-side-functions>`
+land in different physics ticks. A :ref:`server side function <server-side-functions>`
 reads them all in the same tick, with a single call:
 
 .. tabs::

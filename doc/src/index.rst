@@ -17,6 +17,7 @@ It also supports websockets and serialio (for example on Arduino).
    :maxdepth: 1
 
    getting-started
+   user-guide
    tutorials
    cnano
    csharp
@@ -28,7 +29,6 @@ It also supports websockets and serialio (for example on Arduino).
    compiling
    extending
    communication-protocols
-   internals
    changelog
 
 The mod exposes most of KSPs API for controlling and interacting with rockets,

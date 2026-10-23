@@ -274,7 +274,7 @@ that fires when less than 0.1 units of solid fuel are left, then activate the ne
          :end-at: vessel.control.activate_next_stage()
 
 ``vessel.resources`` returns a :class:`Resources` object, which gives the amounts of the
-resources in the rocket. The event is a :ref:`server side function <tutorial-server-side-functions>`
+resources in the rocket. The event is a :ref:`server side function <server-side-functions>`
 that compares the amount of solid fuel with 0.1. The server checks it every physics tick, and
 the script sleeps until it fires.
 
@@ -530,6 +530,6 @@ vertical speed reaches zero when it lands:
 This calls ``vessel.flight()`` again, now with a :class:`ReferenceFrame`. We want the vertical
 speed relative to the surface of Kerbin, so the flight object has to give values in a frame fixed
 to Kerbin. ``vessel.orbit.body.reference_frame`` has its origin at the center of Kerbin, and
-rotates with the planet. See the :ref:`tutorial-reference-frames` tutorial for more.
+rotates with the planet. See the :ref:`reference-frames` tutorial for more.
 
 Your Kerbals should now be safely back on the surface.

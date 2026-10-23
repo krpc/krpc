@@ -4,7 +4,7 @@ AutoPilot
 kRPC provides an autopilot that can be used to hold a vessel in a chosen orientation. It
 automatically tunes itself to cope with vessels of differing size and control authority.
 
-This tutorial is in two parts. :ref:`Using the AutoPilot <using-the-autopilot>` covers
+This guide is in two parts. :ref:`Using the AutoPilot <using-the-autopilot>` covers
 how to drive the autopilot and configure it for your craft, and is all most users need.
 :ref:`How it works <how-it-works>` explains the control law and mathematics behind it,
 for those who want to fully understand or extend it.
@@ -22,7 +22,7 @@ rotation, as a direction for the nose, or as a direction together with an up vec
 
 A minimal use case looks like this:
 
-.. literalinclude:: /scripts/tutorials/autopilot/TargetPitchAndHeading.py
+.. literalinclude:: /scripts/user-guide/autopilot/TargetPitchAndHeading.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -89,7 +89,7 @@ turn the nose sweeps from straight up to downrange — straight through the poin
 roll measured against the vertical plane is undefined. Anchoring the roll to a fixed
 horizontal ``up`` (say north) keeps it defined the whole way:
 
-.. literalinclude:: /scripts/tutorials/autopilot/DirectionAndUp.py
+.. literalinclude:: /scripts/user-guide/autopilot/DirectionAndUp.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -134,7 +134,7 @@ Reading the state back
   .. warning::
 
      The scalar **pitch** / **heading** / **roll** readouts (on both the target and the
-     vessel's :ref:`flight <tutorial-reference-frames>` telemetry) are absolute Euler
+     vessel's :ref:`flight <reference-frames>` telemetry) are absolute Euler
      angles and are ill-defined near the vertical. Use **rotation** / **direction** or the
      error readouts above instead.
 
@@ -160,7 +160,7 @@ This matters most for a control loop that :ref:`holds a tick <holding-a-tick>`, 
 whole read, compute and write inside one tick. Manual mode then fixes the order: calls before
 **update** set what the loop flies the tick with, and calls after it read what the loop did.
 
-.. literalinclude:: /scripts/tutorials/autopilot/ManualUpdate.py
+.. literalinclude:: /scripts/user-guide/autopilot/ManualUpdate.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -261,7 +261,7 @@ spread over that time, with no per-tick scripting on your part.
 
 For example, to pitch the nose over by 10° across 20 seconds:
 
-.. literalinclude:: /scripts/tutorials/autopilot/TargetSmoothing.py
+.. literalinclude:: /scripts/user-guide/autopilot/TargetSmoothing.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -348,7 +348,7 @@ the same properties also seed the automatic estimator before it acquires. The **
 notch Q** (default 2.5) sets how narrow the notch is — higher is narrower, with less
 in-band lag but less tolerance to the mode frequency drifting.
 
-.. literalinclude:: /scripts/tutorials/autopilot/RateFilter.py
+.. literalinclude:: /scripts/user-guide/autopilot/RateFilter.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -581,7 +581,7 @@ The info window
 For debugging, the autopilot can display an in-game window showing its live internal
 state. It is enabled per vessel, and hidden again when the game restarts:
 
-.. literalinclude:: /scripts/tutorials/autopilot/InfoUi.py
+.. literalinclude:: /scripts/user-guide/autopilot/InfoUi.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]

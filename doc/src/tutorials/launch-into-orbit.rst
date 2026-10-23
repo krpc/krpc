@@ -109,7 +109,7 @@ close to the target apoapsis.
 
 Next, the program fine tunes the apoapsis using 25% thrust, then waits until the rocket has
 left Kerbin's atmosphere. Each wait is an event, which the server checks every physics tick. See
-:ref:`tutorial-server-side-functions` for how events work.
+:ref:`server-side-functions` for how events work.
 
 The Python and C# clients compile the event's condition from a lambda, and the C++ and Java
 clients build it with the :ref:`expression API <server-side-functions-api>`. The C and Lua

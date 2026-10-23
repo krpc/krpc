@@ -26,7 +26,7 @@ namespace KRPC.SpaceCenter.AutoPilot
     /// primitives act, making no decisions of their own. <see cref="DiagnosticLogBuffer"/> records a
     /// row per tick.
     ///
-    /// How the control law works is documented in doc/src/tutorials/autopilot.rst, under "How it
+    /// How the control law works is documented in doc/src/user-guide/autopilot.rst, under "How it
     /// works": the cascade, the roll-invariant frame, the velocity profile, the pole placement
     /// behind the auto-tuner and the oscillation mitigation.
     /// </summary>

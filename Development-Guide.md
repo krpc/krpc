@@ -7,7 +7,7 @@ documentation on the website:
 
  * [Extending kRPC](https://krpc.github.io/krpc/extending.html)
  * [Communication Protocols](https://krpc.github.io/krpc/communication-protocols.html)
- * [Internals of kRPC](https://krpc.github.io/krpc/internals.html)
+ * [Server Performance](https://krpc.github.io/krpc/user-guide/server-performance.html)
 
 ## Code Structure and Components
 

@@ -16,7 +16,7 @@ parts are rebuilt the same way whenever it comes back into range.
 An object obtained beforehand goes on working, and reads the state of the loaded game. So you
 can hold onto a vessel or a part across a quickload:
 
-.. literalinclude:: /scripts/tutorials/object-lifetime/Quickload.py
+.. literalinclude:: /scripts/user-guide/object-lifetime/Quickload.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -28,7 +28,7 @@ Once what an object identifies is destroyed, every member of it that reads the g
 ``KRPC.ObjectDestroyedException``. Catch it as you would any other exception the client
 library defines:
 
-.. literalinclude:: /scripts/tutorials/object-lifetime/DestroyedPart.py
+.. literalinclude:: /scripts/user-guide/object-lifetime/DestroyedPart.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -102,7 +102,7 @@ scenes, and carries on when the game returns to one where it is available.
 ``KRPC.GameStateLoads`` counts the game states that have finished loading. A stream of it updates
 when a load is complete.
 
-A stream or event over a :ref:`server side function <tutorial-server-side-functions>` ends with
+A stream or event over a :ref:`server side function <server-side-functions>` ends with
 ``KRPC.ObjectNotLoadedException``, unless the function catches it.
 
 Objects in the Editor

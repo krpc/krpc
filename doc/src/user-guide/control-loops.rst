@@ -1,4 +1,4 @@
-.. _tutorial-control-loops:
+.. _control-loops:
 
 Control Loops
 =============
@@ -33,7 +33,7 @@ Holding a Tick
 on. Every call made in between is executed before the game advances. A whole read, compute and
 write then happens in the state of one tick:
 
-.. literalinclude:: /scripts/tutorials/control-loops/HoldTick.py
+.. literalinclude:: /scripts/user-guide/control-loops/HoldTick.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -52,7 +52,7 @@ which ones.
 ``next_tick`` closes that gap. It releases the tick being held and holds the one immediately
 after it, in a single call. The game then runs no tick the loop has not held:
 
-.. literalinclude:: /scripts/tutorials/control-loops/NextTick.py
+.. literalinclude:: /scripts/user-guide/control-loops/NextTick.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -66,7 +66,7 @@ A Worked Example
 
 Holding a vessel's pitch with a proportional controller, one iteration per tick:
 
-.. literalinclude:: /scripts/tutorials/control-loops/PitchHold.py
+.. literalinclude:: /scripts/user-guide/control-loops/PitchHold.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
@@ -90,10 +90,10 @@ read what the loop did. See :ref:`when the control loop runs <autopilot-update-m
 Server Side Functions
 ---------------------
 
-A :ref:`server side function <tutorial-server-side-functions>` runs on the server, within a single
+A :ref:`server side function <server-side-functions>` runs on the server, within a single
 tick. One function reads the state, computes the control and writes it, all in that tick:
 
-.. literalinclude:: /scripts/tutorials/control-loops/CompiledStep.py
+.. literalinclude:: /scripts/user-guide/control-loops/CompiledStep.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]

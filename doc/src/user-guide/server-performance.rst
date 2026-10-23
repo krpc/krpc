@@ -1,12 +1,12 @@
-.. _internals:
+.. _server-performance:
 
-Internals of kRPC
-=================
+Server Performance
+==================
 
 .. _server-performance-settings:
 
-Server Performance Settings
----------------------------
+Settings
+--------
 
 .. figure:: /images/getting-started/server-window-advanced.png
    :align: right
@@ -68,7 +68,7 @@ Holding a Tick
 A client can hold the game on its current physics tick, so every call it makes is
 executed before the game advances. A control loop can then read the game state,
 compute with it and write the result back within one tick. See :ref:`the control
-loops tutorial <tutorial-control-loops>` for how a program uses it.
+loops guide <control-loops>` for how a program uses it.
 
 What a hold means for the server:
 
