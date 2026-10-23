@@ -107,7 +107,11 @@ local _value_encoders = {
 --
 -- These must match krpc.proto, which test_encoder checks by decoding what is written with them
 -- as messages.
+local _MESSAGE_REQUEST = '\10'
+local _MESSAGE_CONNECTION_REQUEST = '\34'
+local _MESSAGE_DISCONNECT = '\50'
 local _REQUEST_CALLS = '\10'
+local _REQUEST_ID = '\16'
 local _CALL_SERVICE = '\10'
 local _CALL_PROCEDURE = '\18'
 local _CALL_ARGUMENTS = '\26'
@@ -206,19 +210,24 @@ function encoder.encode(x, typ)
   error('Cannot encode object of type ' .. tostring(typ))
 end
 
-function encoder.encode_message_with_size(type_name, message)
-  -- Encode a message of the named type, prefixed by its size
-  local data = protobuf.encode(type_name, message)
-  local delimiter = _encode_varint(data:len())
-  return delimiter .. data
+local _MESSAGE_CASES = {
+  ConnectionRequest = _MESSAGE_CONNECTION_REQUEST,
+  Disconnect = _MESSAGE_DISCONNECT
+}
+
+--- Encode a Message holding a message of the named type, prefixed by its size, ready to send
+function encoder.encode_in_message(type_name, message)
+  local data = _delimited(_MESSAGE_CASES[type_name], protobuf.encode(type_name, message))
+  return _encode_varint(data:len()) .. data
 end
 
---- Encode the request carrying one procedure call, prefixed by its size, ready to send.
+--- Encode a Message holding the request with the given id, which carries one procedure call,
+-- prefixed by its size, ready to send.
 --
 -- The arguments are the already encoded value of each, in order, with Types.none where a call
--- passes nothing. Written here and not encoded from tables of the three messages a call needs,
+-- passes nothing. Written here and not encoded from tables of the four messages a call needs,
 -- which would be built for every call.
-function encoder.encode_request(service, procedure, arguments)
+function encoder.encode_request(id, service, procedure, arguments)
   local parts = { _delimited(_CALL_SERVICE, service), _delimited(_CALL_PROCEDURE, procedure) }
   local count = 2
   for i = 1, #arguments do
@@ -232,8 +241,18 @@ function encoder.encode_request(service, procedure, arguments)
     count = count + 1
     parts[count] = _delimited(_CALL_ARGUMENTS, argument)
   end
-  local request = _delimited(_REQUEST_CALLS, _concat(parts))
-  return _encode_varint(request:len()) .. request
+  local call = _concat(parts)
+  local call_length = _encode_varint(call:len())
+  local id_varint = _encode_varint(id)
+  -- The lengths of the request and the message are worked out from their parts, so the call is
+  -- copied once, into the bytes to send
+  local request_length = 2 + id_varint:len() + call_length:len() + call:len()
+  local request_length_varint = _encode_varint(request_length)
+  local message_length = 1 + request_length_varint:len() + request_length
+  return _concat({
+    _encode_varint(message_length), _MESSAGE_REQUEST, request_length_varint,
+    _REQUEST_ID, id_varint, _REQUEST_CALLS, call_length, call
+  })
 end
 
 return encoder

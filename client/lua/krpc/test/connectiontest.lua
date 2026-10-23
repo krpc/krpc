@@ -2,6 +2,9 @@ local luaunit = require 'luaunit'
 local class = require 'pl.class'
 local socket = require 'socket'
 local encoder = require 'krpc.encoder'
+local decoder = require 'krpc.decoder'
+local Client = require 'krpc.client'
+local Types = require 'krpc.types'
 
 -- A stand-in for a kRPC server, which sends back whatever it is sent. These tests are
 -- about how a transport moves bytes, so nothing above the transport has to be understood
@@ -21,6 +24,10 @@ end
 function EchoServer:echo(length)
   local data = self._accepted:receive(length)
   self._accepted:send(data)
+end
+
+function EchoServer:hang_up()
+  self._accepted:close()
 end
 
 function EchoServer:close()
@@ -74,16 +81,30 @@ function ConnectionTest:test_send_receive_in_pieces()
 end
 
 function ConnectionTest:test_send_receive_message()
-  local data = encoder.encode_message_with_size('Response', { results = { { value = 'foo' } } })
+  local data = encoder.encode_in_message('ConnectionRequest', { client_name = 'foo' })
   self.conn:send(data)
   self.server:echo(#data)
-  local received = self.conn:receive_message('Response')
-  luaunit.assertEquals(received.results[1].value, 'foo')
+  local received = decoder.decode_message(self.conn:receive_message_data(), 'Message')
+  luaunit.assertEquals(received.connection_request.client_name, 'foo')
 end
 
 function ConnectionTest:test_receive_on_closed_connection()
   self.conn:close()
   luaunit.assertError(function() self.conn:receive(1) end)
+end
+
+-- A failed read ends the connection, so a later call raises the same error without writing.
+-- The client is built without its constructor, which makes a call to fetch the services.
+function ConnectionTest:test_client_records_a_failed_read()
+  local client = setmetatable({ _connection = self.conn, _next_id = 1, _types = Types() }, Client)
+  self.server:hang_up()
+  local ok, err = pcall(client._invoke, client, 'KRPC', 'GetStatus')
+  luaunit.assertFalse(ok)
+  luaunit.assertStrContains(err, 'Socket error')
+  local wrote = false
+  self.conn.send = function() wrote = true end
+  luaunit.assertErrorMsgContains(err, client._invoke, client, 'KRPC', 'GetStatus')
+  luaunit.assertFalse(wrote)
 end
 
 -- A TCP listener on a port the system picks, and the address a client reaches it at.

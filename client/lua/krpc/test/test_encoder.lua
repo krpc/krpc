@@ -29,13 +29,6 @@ function TestEncoder:test_encode_unicode_string()
   luaunit.assertEquals('03e284a2', platform.hexlify(data))
 end
 
-function TestEncoder:test_encode_message_with_size()
-  local call = { service = 'ServiceName', procedure = 'ProcedureName' }
-  local data = encoder.encode_message_with_size('ProcedureCall', call)
-  local expected = '1c'..'0a0b536572766963654e616d65120d50726f6365647572654e616d65'
-  luaunit.assertEquals(expected, platform.hexlify(data))
-end
-
 -- Take the size prefix off a message and check it counted the rest correctly.
 local function without_size_prefix(data)
   local size = 0
@@ -55,8 +48,8 @@ local function without_size_prefix(data)
   return body
 end
 
--- encode_request writes the field numbers and wire types of Request, ProcedureCall and Argument
--- itself, so this decodes what it wrote as a Request message and checks the call arrived
+-- encode_request writes the field numbers and wire types of Message, Request, ProcedureCall and
+-- Argument itself, so this decodes what it wrote as a Message and checks the call arrived
 -- intact. A tag written wrongly, a length counted wrongly, or a field renumbered in the schema
 -- all show up here.
 function TestEncoder:test_encode_request_decodes_as_a_message()
@@ -83,8 +76,10 @@ function TestEncoder:test_encode_request_decodes_as_a_message()
   }
   for _, case in ipairs(cases) do
     local service, procedure, arguments = case[1], case[2], case[3]
-    local request = protobuf.decode(
-      'Request', without_size_prefix(encoder.encode_request(service, procedure, arguments)))
+    local message = protobuf.decode(
+      'Message', without_size_prefix(encoder.encode_request(300, service, procedure, arguments)))
+    local request = message.request
+    luaunit.assertEquals(300, request.id)
     luaunit.assertEquals(1, #request.calls)
     local call = request.calls[1]
     luaunit.assertEquals(service, call.service)
