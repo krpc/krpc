@@ -20,14 +20,6 @@ ENV BAZELISK_HOME=/usr/local/share/bazelisk
 RUN USE_BAZEL_VERSION=9.3.0 bazel version && \
     chmod -R a+rwX /usr/local/share/bazelisk
 
-# Install the .NET SDK for the build-csharp-sln CI job, which builds the
-# generated Visual Studio solution (KRPC.sln) with `dotnet build`. The Bazel
-# build uses rules_dotnet's own hermetic SDK/runtime, resolved through the test
-# runfiles, not this one.
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends dotnet-sdk-10.0 && \
-    apt-get clean
-
 # Install latex
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
