@@ -5,18 +5,12 @@ LABEL maintainer="djungelorm <djungelorm@users.noreply.github.com>"
 # the CI workflow steps. The Bazel build uses the hermetic rules_python toolchain.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    curl ca-certificates gnupg git wget \
-    python3 python-is-python3 && \
+    curl ca-certificates git python3 python-is-python3 && \
     apt-get clean
 
-# Install Bazel
-RUN wget https://github.com/bazelbuild/bazelisk/releases/download/v1.29.0/bazelisk-linux-amd64 -O /usr/local/bin/bazel && \
+# Install Bazelisk, which fetches the Bazel version in the repository's .bazelversion
+RUN curl -fsSL https://github.com/bazelbuild/bazelisk/releases/download/v1.29.0/bazelisk-linux-amd64 -o /usr/local/bin/bazel && \
     chmod +x /usr/local/bin/bazel
-
-ENV BAZELISK_HOME=/usr/local/share/bazelisk
-# Warm up bazelisk (download + extract Bazel 9.3.0) and make it world-readable.
-RUN USE_BAZEL_VERSION=9.3.0 bazel version && \
-    chmod -R a+rwX /usr/local/share/bazelisk
 
 # Install latex
 RUN apt-get update && \
@@ -36,8 +30,8 @@ RUN apt-get update && \
 # which uses this system toolchain via toolchains_llvm's path mode. Pinned to 23
 # to match the default hermetic clang 23.x, so clang-format/clang-tidy do not skew
 # between dev and CI. Installs a self-contained toolchain at /usr/lib/llvm-23.
-RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr/share/keyrings/llvm.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/llvm.gpg] http://apt.llvm.org/noble/ llvm-toolchain-noble-23 main" \
+RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key -o /usr/share/keyrings/llvm.asc && \
+    echo "deb [signed-by=/usr/share/keyrings/llvm.asc] http://apt.llvm.org/noble/ llvm-toolchain-noble-23 main" \
       > /etc/apt/sources.list.d/llvm.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -52,4 +46,3 @@ ARG UID=1001
 ARG GID=121
 RUN groupadd -g $GID runner
 RUN useradd -mr -d /home/runner -u $UID -g $GID runner
-RUN usermod -aG sudo runner
