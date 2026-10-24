@@ -1,3 +1,10 @@
+## [v0.8.0] - unreleased
+- Name the references in service documentation by their C names (#1185)
+- Document every parameter of a service function, with the value returned under
+  `returnValue` (#1185)
+- Fix the documentation of the services that Doxygen warns about, such as code holding an
+  `@` (#1185)
+
 ## [v0.7.0]
 - **Breaking:** Support null for any nullable type. A nullable non-class return adds a
   `bool* returnValueIsNull` out-parameter, and a nullable argument is a pointer (#1017)

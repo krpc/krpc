@@ -1,5 +1,8 @@
 ## [v0.8.0] - unreleased
 
+- Link the references in service docstrings with Sphinx roles (#1185)
+- Fix the lists and parameter references in service docstrings, which were invalid
+  reStructuredText (#1185)
 - Write the units and formulas in service documentation as Unicode text in docstrings (#1169)
 - Fix a `SyntaxWarning` for an invalid escape sequence on importing the `SpaceCenter` stubs (#1169)
 
