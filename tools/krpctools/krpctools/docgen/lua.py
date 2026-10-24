@@ -23,6 +23,7 @@ from .nodes import (
     ExceptionNode,
     Procedure,
     Property,
+    Service,
     Struct,
     StructField,
 )
@@ -91,6 +92,8 @@ class LuaDomain(Domain[LuaLanguage]):
         return name
 
     def see(self, obj):
+        if isinstance(obj, Service):
+            return ":mod:`%s`" % obj.name
         if isinstance(obj, (Property, ClassProperty, EnumerationValue, StructField)):
             prefix = "attr"
         elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):

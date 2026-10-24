@@ -23,6 +23,7 @@ from .nodes import (
     ExceptionNode,
     Procedure,
     Property,
+    Service,
     Struct,
     StructField,
 )
@@ -97,6 +98,8 @@ class CppDomain(Domain[CppLanguage]):
         return self.shorten_ref(".".join(name)).replace(".", "::")
 
     def see(self, obj):
+        if isinstance(obj, Service):
+            return ":class:`%s`" % obj.name
         if isinstance(obj, (Property, ClassProperty)):
             prefix = "func"
         elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):

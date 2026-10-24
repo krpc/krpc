@@ -23,6 +23,7 @@ from .nodes import (
     ExceptionNode,
     Procedure,
     Property,
+    Service,
     Struct,
     StructField,
 )
@@ -157,6 +158,9 @@ class CsharpDomain(Domain[CsharpLanguage]):
         return self.language.parse_default_value(value, typ)
 
     def see(self, obj):
+        # A service is documented as a class in its own namespace
+        if isinstance(obj, Service):
+            return ":type:`%s <%s.%s>`" % (obj.name, obj.name, obj.name)
         if isinstance(obj, (Property, ClassProperty)):
             prefix = "prop"
         elif isinstance(obj, EnumerationValue):

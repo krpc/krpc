@@ -24,6 +24,7 @@ from .nodes import (
     ExceptionNode,
     Procedure,
     Property,
+    Service,
     Struct,
     StructField,
 )
@@ -109,6 +110,8 @@ class PythonDomain(Domain[PythonLanguage]):
         return self.shorten_ref(name)
 
     def see(self, obj):
+        if isinstance(obj, Service):
+            return ":mod:`%s`" % obj.name
         if any(
             isinstance(obj, cls)
             for cls in (Property, ClassProperty, EnumerationValue, StructField)

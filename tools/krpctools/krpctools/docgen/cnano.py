@@ -23,6 +23,7 @@ from .nodes import (
     ExceptionNode,
     Procedure,
     Property,
+    Service,
     Struct,
     StructField,
 )
@@ -180,6 +181,9 @@ class CnanoDomain(Domain[CnanoLanguage]):
         return ref
 
     def see(self, obj):
+        # A service has no C type, and its page no target to link to
+        if isinstance(obj, Service):
+            return obj.name
         if isinstance(obj, (Property, ClassProperty)):
             prefix = "func"
         elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
