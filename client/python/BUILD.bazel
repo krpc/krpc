@@ -1,7 +1,7 @@
 load("@rules_python//python:defs.bzl", "py_library")
 load("//:config.bzl", "python_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
-load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_sdist", "py_test")
+load("//tools/build:python.bzl", "py_autodoc_test", "py_pyright_test", "py_ruff_test", "py_sdist", "py_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_python_init", "clientgen_services")
 
 exports_files(["CHANGELOG.md"])
@@ -159,6 +159,7 @@ client_tests = [
 test_suite(
     name = "test",
     tests = [
+        ":autodoc",
         ":client-base",
         ":client-localsocket",
         ":client-tcpip",
@@ -257,6 +258,15 @@ py_test(
     tags = ["requires-network"],
     tests = client_tests,
     deps = deps,
+)
+
+# The documentation of the client, which its users read through sphinx
+py_autodoc_test(
+    name = "autodoc",
+    size = "small",
+    exclude = ["krpc.test"],
+    package = "krpc",
+    deps = [":krpc_lib"],
 )
 
 test_suite(
