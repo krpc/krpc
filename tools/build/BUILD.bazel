@@ -9,6 +9,7 @@ exports_files([
     "run_buildifier.py",
     "run_checkstyle.py",
     "run_client_test.py",
+    "run_doxygen.py",
     "run_sphinx_test.py",
 ])
 

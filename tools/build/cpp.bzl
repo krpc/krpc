@@ -3,6 +3,7 @@
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@rules_cc//cc/common:cc_common.bzl", "cc_common")
 load("@rules_cc//cc/common:cc_info.bzl", "CcInfo")
+load("@rules_python//python:defs.bzl", "py_test")
 
 # The lint rules below run a hermetic LLVM tool (clang-tidy/clang-format) as a
 # build action and emit a stamp file on success; a build_test wrapper turns
@@ -172,5 +173,29 @@ def clang_format_test(name, srcs, config = None, **kwargs):
         name = name,
         targets = [":" + check],
         target_compatible_with = _FORMAT_ONLY_ON,
+        **kwargs
+    )
+
+def doxygen_test(name, srcs, c = False, unlinked = [], **kwargs):
+    """A test that Doxygen documents the given headers without a warning, linking each name.
+
+    Args:
+        name: the target name.
+        srcs: the headers.
+        c: whether the headers are C rather than C++.
+        unlinked: the names the documentation refers to that Doxygen may leave unlinked.
+        **kwargs: passed to the test.
+    """
+    doxygen = Label("//tools/build/doxygen")
+    args = ["--c"] if c else []
+    if unlinked:
+        args += ["--unlinked"] + unlinked
+    py_test(
+        name = name,
+        srcs = [Label("//tools/build:run_doxygen.py")],
+        main = Label("//tools/build:run_doxygen.py"),
+        args = args + ["--doxygen", "$(rootpaths %s)" % doxygen, "--"] +
+               ["$(rootpaths %s)" % src for src in srcs],
+        data = [doxygen] + srcs,
         **kwargs
     )
