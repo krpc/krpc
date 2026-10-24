@@ -1,3 +1,9 @@
+## [v3.14.0]
+- Remove the Bazel configuration and repository cache (CI configures Bazel from the repository)
+- Remove the .NET SDK (CI installs it with `actions/setup-dotnet`)
+- Remove gcc, CMake, ccache, ASIO, protobuf and nanopb (the CMake consumer jobs run on the bare runner)
+- Remove wget, gnupg and the preinstalled Bazel (Bazelisk fetches the version in `.bazelversion`)
+
 ## [v3.13.0]
 - Remove `buildifier` (the Bazel build fetches its own)
 
