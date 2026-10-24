@@ -93,7 +93,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <remarks>
         /// Fixed antennas are always deployed.
-        /// Returns an error if you try to deploy a fixed antenna.
+        /// Throws <see cref="InvalidOperationException"/> if set on a fixed antenna.
         /// </remarks>
         [KRPCProperty]
         public bool Deployed {

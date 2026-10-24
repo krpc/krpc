@@ -323,9 +323,9 @@ typedef enum {
  * Create an event from a server side function that evaluates to a boolean value.
  *
  * The function is evaluated on each update, and each call adds a new event. Any
- * exception from the function ends the event, including one for an object that is not
- * loaded. A procedure that pauses execution to resume on a later tick produces an
- * error on the event's stream.
+ * exception from the function ends the event, including
+ * KRPC::ObjectNotLoadedException. A procedure that pauses execution to resume
+ * on a later tick produces an error on the event's stream.
  */
 static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, krpc_schema_Event * returnValue, krpc_KRPC_Expression_t function);
 
@@ -334,7 +334,7 @@ static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, krpc
  *
  * Each call adds a new stream, with values of the type given by
  * KRPC::Expression::return_type. Any exception from the function ends the
- * stream, including one for an object that is not loaded. A procedure that pauses
+ * stream, including KRPC::ObjectNotLoadedException. A procedure that pauses
  * execution to resume on a later tick produces an error on the stream.
  */
 static inline krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, krpc_KRPC_Expression_t function);
@@ -1471,7 +1471,9 @@ static inline krpc_error_t krpc_KRPC_Expression_Take(krpc_connection_t connectio
  * A throw statement, which raises the named exception.
  *
  * The client receives the exception as an error from the function, or from the stream
- * or event evaluating it. Throws an exception if the service does not declare it.
+ * or event evaluating it. For example, the service KRPC and the name
+ * Error raise KRPC::Error. Throws an exception if the service does not
+ * declare it.
  * @param service The name of the service the exception is defined in.
  * @param name The name of the exception.
  * @param message The message of the exception.

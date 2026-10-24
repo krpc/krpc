@@ -124,9 +124,9 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         /// <remarks>
         /// The function is evaluated on each update, and each call adds a new event. Any
-        /// exception from the function ends the event, including one for an object that is not
-        /// loaded. A procedure that pauses execution to resume on a later tick produces an
-        /// error on the event's stream.
+        /// exception from the function ends the event, including
+        /// <see cref="T:KRPC.ObjectNotLoadedException" />. A procedure that pauses execution to resume
+        /// on a later tick produces an error on the event's stream.
         /// </remarks>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "AddEvent", typeof(TypeSpecs))]
         public global::KRPC.Client.Event AddEvent (global::KRPC.Client.Services.KRPC.Expression function)
@@ -144,7 +144,7 @@ namespace KRPC.Client.Services.KRPC
         /// <remarks>
         /// Each call adds a new stream, with values of the type given by
         /// <see cref="M:KRPC.Expression.ReturnType" />. Any exception from the function ends the
-        /// stream, including one for an object that is not loaded. A procedure that pauses
+        /// stream, including <see cref="T:KRPC.ObjectNotLoadedException" />. A procedure that pauses
         /// execution to resume on a later tick produces an error on the stream.
         /// </remarks>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "AddFunctionStream", typeof(TypeSpecs))]
@@ -1051,6 +1051,10 @@ namespace KRPC.Client.Services.KRPC
     /// so the object cannot be used. For example, the part it represents
     /// was destroyed, or the vessel it belongs to was recovered.
     /// </summary>
+    /// <remarks>
+    /// See <see cref="T:KRPC.ObjectNotLoadedException" /> for a game object that exists but is not
+    /// loaded.
+    /// </remarks>
     [Serializable]
     public class ObjectDestroyedException : global::KRPC.Client.RPCException
     {
@@ -1089,6 +1093,9 @@ namespace KRPC.Client.Services.KRPC
     /// The game object that a service object refers to exists, but is not loaded.
     /// For example, the game is loading, or the vessel carrying the part is unloaded.
     /// </summary>
+    /// <remarks>
+    /// See <see cref="T:KRPC.ObjectDestroyedException" /> for a game object that no longer exists.
+    /// </remarks>
     [Serializable]
     public class ObjectNotLoadedException : global::KRPC.Client.RPCException
     {
@@ -3633,7 +3640,9 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         /// <remarks>
         /// The client receives the exception as an error from the function, or from the stream
-        /// or event evaluating it. Throws an exception if the service does not declare it.
+        /// or event evaluating it. For example, the service <c>KRPC</c> and the name
+        /// <c>Error</c> raise <see cref="T:KRPC.Error" />. Throws an exception if the service does not
+        /// declare it.
         /// </remarks>
         /// <param name="service">The name of the service the exception is defined in.</param>
         /// <param name="name">The name of the exception.</param>

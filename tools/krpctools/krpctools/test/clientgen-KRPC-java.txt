@@ -183,6 +183,9 @@ public class KRPC {
      * The game object that a service object refers to no longer exists,
      * so the object cannot be used. For example, the part it represents
      * was destroyed, or the vessel it belongs to was recovered.
+     *
+     * See {@link KRPC.ObjectNotLoadedException} for a game object that exists but is not
+     * loaded.
      */
     public static class ObjectDestroyedException extends krpc.client.RPCException {
         private static final long serialVersionUID = 695669137678263694L;
@@ -199,6 +202,8 @@ public class KRPC {
     /**
      * The game object that a service object refers to exists, but is not loaded.
      * For example, the game is loading, or the vessel carrying the part is unloaded.
+     *
+     * See {@link KRPC.ObjectDestroyedException} for a game object that no longer exists.
      */
     public static class ObjectNotLoadedException extends krpc.client.RPCException {
         private static final long serialVersionUID = 607996955482065890L;
@@ -295,9 +300,9 @@ public class KRPC {
      * Create an event from a server side function that evaluates to a boolean value.
      *
      * The function is evaluated on each update, and each call adds a new event. Any
-     * exception from the function ends the event, including one for an object that is not
-     * loaded. A procedure that pauses execution to resume on a later tick produces an
-     * error on the event's stream.
+     * exception from the function ends the event, including
+     * {@link KRPC.ObjectNotLoadedException}. A procedure that pauses execution to resume
+     * on a later tick produces an error on the event's stream.
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "KRPC", procedure = "AddEvent", types = _Types.class)
@@ -314,7 +319,7 @@ public class KRPC {
      *
      * Each call adds a new stream, with values of the type given by
      * {@link KRPC.Expression#returnType}. Any exception from the function ends the
-     * stream, including one for an object that is not loaded. A procedure that pauses
+     * stream, including {@link KRPC.ObjectNotLoadedException}. A procedure that pauses
      * execution to resume on a later tick produces an error on the stream.
      */
     @SuppressWarnings({ "unchecked" })
@@ -3062,7 +3067,9 @@ public class KRPC {
          * A throw statement, which raises the named exception.
          *
          * The client receives the exception as an error from the function, or from the stream
-         * or event evaluating it. Throws an exception if the service does not declare it.
+         * or event evaluating it. For example, the service {@code KRPC} and the name
+         * {@code Error} raise {@link KRPC.Error}. Throws an exception if the service does not
+         * declare it.
          * @param service The name of the service the exception is defined in.
          * @param name The name of the exception.
          * @param message The message of the exception.

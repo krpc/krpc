@@ -276,7 +276,7 @@ namespace KRPC.Service.KRPC
         /// <remarks>
         /// Each call adds a new stream, with values of the type given by
         /// <see cref="Expression.ReturnType"/>. Any exception from the function ends the
-        /// stream, including one for an object that is not loaded. A procedure that pauses
+        /// stream, including <see cref="ObjectNotLoadedException"/>. A procedure that pauses
         /// execution to resume on a later tick produces an error on the stream.
         /// </remarks>
         [KRPCProcedure]
@@ -354,9 +354,9 @@ namespace KRPC.Service.KRPC
         /// </summary>
         /// <remarks>
         /// The function is evaluated on each update, and each call adds a new event. Any
-        /// exception from the function ends the event, including one for an object that is not
-        /// loaded. A procedure that pauses execution to resume on a later tick produces an
-        /// error on the event's stream.
+        /// exception from the function ends the event, including
+        /// <see cref="ObjectNotLoadedException"/>. A procedure that pauses execution to resume
+        /// on a later tick produces an error on the event's stream.
         /// </remarks>
         [KRPCProcedure]
         public static Messages.Event AddEvent(Expression function)
