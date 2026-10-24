@@ -781,12 +781,14 @@ namespace KRPC.SpaceCenter.Services
             set { Controller.MaxAngularVelocity = value.ToVector (); }
         }
 
+
         /// <summary>
         /// The angle, in degrees, at which the autopilot considers the vessel to be pointing close
         /// to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
         /// or above this error the target velocity is at full, and below it the target velocity
         /// ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
-        /// are controlled jointly, so a single angle applies to both. Defaults to 1°.
+        /// are controlled jointly, so a single angle applies to both. Defaults to 1°. The angle in
+        /// use shrinks in proportion to the share of the torque that comes from control surfaces.
         /// </summary>
         [KRPCProperty]
         public double PitchYawAttenuationAngle {
@@ -798,7 +800,9 @@ namespace KRPC.SpaceCenter.Services
         /// The angle, in degrees, at which the autopilot considers the vessel to be pointing close
         /// to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
         /// above this error the target velocity is at full, and below it the target velocity ramps
-        /// linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.
+        /// linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°. The
+        /// angle in use shrinks in proportion to the share of the torque that comes from control
+        /// surfaces.
         /// </summary>
         [KRPCProperty]
         public double RollAttenuationAngle {

@@ -107,6 +107,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         // and the command they have reached in the model
         Vector3d actuatorSlew;
         Vector3d actuatorDelivered;
+        // The share of each axis's available torque that comes from control surfaces
+        Vector3d surfaceShare;
         // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
         Vector3d smoothedFfRi;
         // The observation layer: chatter detector (level + latch), frequency trackers with their
@@ -479,6 +481,18 @@ namespace KRPC.SpaceCenter.AutoPilot
         // Pointing deadband high angle (degrees) for the coupled pitch/yaw group. As RollAttenuationAngle,
         // but keyed on the 2D pitch/yaw predicted stopping-point magnitude.
         public double PitchYawAttenuationAngle { get; set; }
+
+        // The deadband high angles in use. Control surfaces respond in proportion to the
+        // command and hold an aircraft's trim, so the band shrinks with their share of the torque.
+        // The pitch and yaw band covers the body pitch and yaw plane, so it takes the smaller
+        // body-axis share, whatever the roll.
+        double PitchYawBand {
+            get { return PitchYawAttenuationAngle * (1 - Math.Min (surfaceShare.x, surfaceShare.z)); }
+        }
+
+        double RollBand {
+            get { return RollAttenuationAngle * (1 - surfaceShare.y); }
+        }
 
         public double RollStartAngle { get; set; }
 
@@ -1356,6 +1370,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             }
             for (int axis = 0; axis < 3; axis++) {
                 var share = torque [axis] > 0 ? Math.Min (1.0, surfaceTorque [axis] / torque [axis]) : 0.0;
+                surfaceShare [axis] = share;
                 var time = swingTime [axis] * share;
                 actuatorSlew [axis] = time > 0 ? 1.0 / time : double.PositiveInfinity;
             }
@@ -1891,7 +1906,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // stopping coefficient uses the unfloored gain, see the note in ComputePitchYawVelocity.
             var rollBandwidth = moi [1] > 0 ? ProfileKp (1, RollPID) * torque [1] / moi [1] : 0.0;
             result.y = ComputeAxisVelocity (anglesRI.y, torque [1], moi [1], currentOmegaRi.y,
-                MaxAngularVelocity [1], RollAttenuationAngle, rollBandwidth, out rollSample);
+                MaxAngularVelocity [1], RollBand, rollBandwidth, out rollSample);
 
             // Pitch/yaw handled jointly so the nose follows a straight great-circle arc.
             double pitchVelocity, yawVelocity;
@@ -2043,7 +2058,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // ramp's slope into the setpoint and feedforward. theta is jitter-free, so the deadband
             // edge is quiet.
             var thetaMag = Math.Sqrt (thetaPitch * thetaPitch + thetaYaw * thetaYaw);
-            var deadband = DeadbandScale (thetaMag, PitchYawAttenuationAngle);
+            var deadband = DeadbandScale (thetaMag, PitchYawBand);
             sample.SPitch = sPitch;
             sample.SYaw = sYaw;
             sample.ThetaPitch = thetaPitch;
@@ -2257,7 +2272,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var tracking = s.Speed > 1e-9
                 ? Math.Min (1.0, Math.Max (0.0, omegaAlongCommand / s.Speed)) : 0.0;
             var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, tracking,
-                PitchYawAttenuationAngle);
+                PitchYawBand);
             // Overshoot gate, the same on-trajectory gating applied to the other
             // side. trackingFraction attenuates the FF when the craft is slower than the profile
             // at spin-up, and this attenuates it when the craft is faster, an overshoot. When the profile
@@ -2300,7 +2315,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var tracking = s.Speed > 1e-9
                 ? Math.Min (1.0, Math.Max (0.0, omegaAlongCommand / s.Speed)) : 0.0;
             var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, tracking,
-                RollAttenuationAngle);
+                RollBand);
             // Overshoot gate (see PitchYawAnalyticFf): attenuate the FF when the roll rate along
             // the command exceeds the commanded profile speed, so a fast crossing is not fed
             // forward into an overshoot. Near 1 on profile and when moving away.
