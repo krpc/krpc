@@ -169,6 +169,8 @@ class CnanoDomain(Domain[CnanoLanguage]):
             # domain addresses it through that declaration rather than by a name of its own
             field = snake_case(name.pop())
             return "krpc_" + "_".join(name) + "_t." + field
+        if isinstance(obj, (Property, ClassProperty)) and obj.getter is None:
+            name[-1] = "set_" + name[-1]
         ref = "krpc_" + "_".join(name)
         if isinstance(obj, EnumerationValue):
             ref = ref.upper()
