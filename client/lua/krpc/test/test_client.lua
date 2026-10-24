@@ -588,6 +588,7 @@ function TestClient:test_test_service_service_members()
      'int32_to_string',
      'int64_special_defaults',
      'int64_to_string',
+     'join_with_at_sign',
      'list_default',
      'nested_struct_echo',
      'not_nullable_object',

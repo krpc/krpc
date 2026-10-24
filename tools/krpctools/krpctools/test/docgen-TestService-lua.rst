@@ -227,10 +227,11 @@ Service documentation string.
 
 .. staticmethod:: echo_nullable_int(value)
 
+   Returns the given value.
 
-
-   :param value:
+   :param value: The value, or ``nil``.
    :type value: number or ``Types.none``
+   :returns: The value.
    :rtype: number or ``Types.none``
 
 
@@ -456,6 +457,22 @@ Service documentation string.
 
 
 
+.. staticmethod:: join_with_at_sign(first_value, from)
+
+   Returns *first_value* and *from* joined by an at
+   sign, e.g. ``jeb@kerbin``. The parameter names are:
+
+   * a name in camel case, and
+   * a name that is a keyword in some languages.
+
+   :param string first_value: The string before the at sign.
+   :param string from: The string after the at sign.
+   :returns: The strings joined.
+   :rtype: string
+
+
+
+
 .. staticmethod:: list_default([x = {1, 2, 3}])
 
 
@@ -508,9 +525,10 @@ Service documentation string.
 
 .. attribute:: object_property: TestService.TestClass
 
-
+   A property holding an object.
 
    :Attribute: Can be read or written
+   :returns: The object, or ``nil``.
    :rtype: :class:`TestService.TestClass` or ``Types.none``
 
 
@@ -807,9 +825,10 @@ Service documentation string.
 
    .. attribute:: object_property: TestService.TestClass
 
-
+      A property of the object, holding another object.
 
       :Attribute: Can be read or written
+      :returns: The other object, or ``nil``.
       :rtype: :class:`TestService.TestClass` or ``Types.none``
 
    .. method:: object_to_string(other)
@@ -833,10 +852,11 @@ Service documentation string.
 
    .. staticmethod:: static_method([a = ''], [b = ''])
 
+      Returns jeb followed by *a* and *b*.
 
-
-      :param string a:
-      :param string b:
+      :param string a: The first string.
+      :param string b: The second string.
+      :returns: The strings joined.
       :rtype: string
 
    .. staticmethod:: static_nullable_object(value)

@@ -228,12 +228,13 @@
 
    .. function:: std::optional<int32_t> echo_nullable_int(std::optional<int32_t> value)
 
-
+      Returns the given value.
 
       :Parameters:
 
+       * **value** -- The value, or ``NULL``.
 
-
+      :returns: The value.
    
 
    .. function:: std::optional<std::vector<int32_t>> echo_nullable_list(std::optional<std::vector<int32_t>> l)
@@ -451,6 +452,22 @@
 
    
 
+   .. function:: std::string join_with_at_sign(std::string first_value, std::string from)
+
+      Returns *first_value* and *from* joined by an at
+      sign, e.g. ``jeb@kerbin``. The parameter names are:
+
+      * a name in camel case, and
+      * a name that is a keyword in some languages.
+
+      :Parameters:
+
+       * **first_value** -- The string before the at sign.
+       * **from** -- The string after the at sign.
+
+      :returns: The strings joined.
+   
+
    .. function:: std::vector<int32_t> list_default(std::vector<int32_t> x = std::vector<int32_t>{1, 2, 3})
 
 
@@ -501,8 +518,9 @@
    .. function:: std::optional<TestClass> object_property()
    .. function:: void set_object_property(std::optional<TestClass> value)
 
+      A property holding an object.
 
-
+      :returns: The object, or ``NULL``.
    
 
    .. function:: ::krpc::Event on_timer(uint32_t milliseconds, uint32_t repeats = 1)
@@ -777,8 +795,9 @@
    .. function:: std::optional<TestClass> object_property()
    .. function:: void set_object_property(std::optional<TestClass> value)
 
+      A property of the object, holding another object.
 
-
+      :returns: The other object, or ``NULL``.
    
 
    .. function:: std::string object_to_string(std::optional<TestClass> other)
@@ -806,13 +825,14 @@
 
    .. function:: static std::string static_method(Client& connection, std::string a = "", std::string b = "")
 
-
+      Returns jeb followed by *a* and *b*.
 
       :Parameters:
 
+       * **a** -- The first string.
+       * **b** -- The second string.
 
-
-
+      :returns: The strings joined.
    
 
    .. function:: static std::optional<TestClass> static_nullable_object(Client& connection, std::optional<TestClass> value)

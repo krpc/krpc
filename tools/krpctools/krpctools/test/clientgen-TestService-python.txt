@@ -191,6 +191,11 @@ class TestClass(ClassBase):
 
     @property
     def object_property(self) -> Optional[TestClass]:
+        """
+        A property of the object, holding another object.
+
+        :returns: The other object, or ``None``.
+        """
         return self._client._invoke(
             "TestService",
             "TestClass_get_ObjectProperty",
@@ -367,6 +372,15 @@ class TestClass(ClassBase):
 
     @StaticMethod
     def static_method(cls, a: str = '', b: str = '') -> str:
+        """
+        Returns jeb followed by *a* and *b*.
+
+        :param a: The first string.
+
+        :param b: The second string.
+
+        :returns: The strings joined.
+        """
         self = cls
         return cls._client._invoke(
             "TestService",
@@ -582,6 +596,11 @@ class TestService(_TestServiceDefinitions):
 
     @property
     def object_property(self) -> Optional[TestClass]:
+        """
+        A property holding an object.
+
+        :returns: The object, or ``None``.
+        """
         return self._client._invoke(
             "TestService",
             "get_ObjectProperty",
@@ -1105,6 +1124,13 @@ class TestService(_TestServiceDefinitions):
         )
 
     def echo_nullable_int(self, value: Optional[int]) -> Optional[int]:
+        """
+        Returns the given value.
+
+        :param value: The value, or ``None``.
+
+        :returns: The value.
+        """
         return self._client._invoke(
             "TestService",
             "EchoNullableInt",
@@ -1576,6 +1602,40 @@ class TestService(_TestServiceDefinitions):
             "Int64ToString",
             [value],
             [self._client._types.sint64_type],
+            self._client._types.string_type
+        )
+
+    def join_with_at_sign(self, first_value: str, from_: str) -> str:
+        """
+        Returns *first_value* and *from_* joined by an at
+        sign, e.g. ``jeb@kerbin``. The parameter names are:
+
+        * a name in camel case, and
+        * a name that is a keyword in some languages.
+
+        :param first_value: The string before the at sign.
+
+        :param from_: The string after the at sign.
+
+        :returns: The strings joined.
+        """
+        return self._client._invoke(
+            "TestService",
+            "JoinWithAtSign",
+            [first_value, from_],
+            [self._client._types.string_type, self._client._types.string_type],
+            self._client._types.string_type
+        )
+
+    def _return_type_join_with_at_sign(self) -> TypeBase:
+        return self._client._types.string_type
+
+    def _build_call_join_with_at_sign(self, first_value: str, from_: str) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "JoinWithAtSign",
+            [first_value, from_],
+            [self._client._types.string_type, self._client._types.string_type],
             self._client._types.string_type
         )
 
