@@ -212,5 +212,64 @@ class TestPartsControlSurface(krpctest.TestCase):
         self.assertAlmostEqual((0, 0, 0), self.winglet.available_torque[1], places=3)
 
 
+class TestPartsControlSurfaceFlight(krpctest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.remove_other_vessels()
+        # The elevators sit well off the centerline, which a torque estimate scaled
+        # by the lever arm along the pitch axis would inflate
+        cls.launch_vessel_from_sph("Mallard")
+        cls.conn = cls.connect()
+        cls.vessel = cls.conn.space_center.active_vessel
+
+    def fly(self, pitch):
+        """The pitch torque the game applies to the vessel, and the fraction of its
+        range an elevator has deflected, 0.1 s after a pitch input from level flight.
+        Also the available pitch torque before the input."""
+        vessel = self.vessel
+        control = vessel.control
+        control.sas = False
+        control.pitch = 0
+        self.set_flight(altitude=3000, speed=120)
+        self.wait(1)
+        flight = vessel.flight(vessel.reference_frame)
+        elevator = next(x for x in vessel.parts.control_surfaces if x.pitch_enabled)
+        space_center = self.conn.space_center
+        available = vessel.available_control_surface_torque.positive[0]
+
+        def sample():
+            return (
+                space_center.ut,
+                flight.aerodynamic_torque,
+                elevator.deflection_angle,
+            )
+
+        function = self.conn.compile(sample)
+        with self.conn.stream(function) as stream:
+            start = stream()[0]
+            control.pitch = pitch
+            while True:
+                ut, torque, angle = stream()
+                if ut - start >= 0.1:
+                    break
+                self.wait(0.005)
+        control.pitch = 0
+        return torque[0], angle / elevator.control_range, available
+
+    def test_available_torque(self):
+        # Early on, before the attitude moves, the change in the applied pitch
+        # torque is the available torque scaled by the deflection
+        torque, _, _ = self.fly(0)
+        deflected_torque, deflection, available = self.fly(1)
+        self.assertGreater(available, 0)
+        self.assertGreater(abs(deflection), 0.05)
+        self.assertAlmostEqual(
+            available * abs(deflection),
+            abs(deflected_torque - torque),
+            delta=0.05 * available * abs(deflection),
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

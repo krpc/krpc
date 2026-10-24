@@ -209,18 +209,40 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal TupleV3 AvailableTorqueVectors {
             get {
-                // GetPotentialTorque already applies the authority limiter (via
-                // ModuleControlSurface.GetPotentialLift, which scales the deflection by
-                // authorityLimiter * 0.01), so no further scaling is needed here.
-                var torque = InternalControlSurface.GetPotentialTorque ();
-                // ModuleControlSurface.GetPotentialTorque negates the roll (y) axis of both the
-                // positive and negative torque vectors, unlike other ITorqueProvider
-                // implementations. Normalize to the kRPC convention (positive torque >= 0,
-                // negative torque <= 0) with Math.Abs, matching ITorqueProviderExtensions.Sum.
+                var surface = InternalControlSurface;
+                var torque = surface.displaceVelocity ? surface.GetPotentialTorque () : PotentialTorque (surface);
+                // Normalize to the kRPC convention (positive torque >= 0, negative torque <= 0),
+                // matching ITorqueProviderExtensions.Sum
                 return new TupleV3 (
                     new Vector3d (Math.Abs (torque.Item1.x), Math.Abs (torque.Item1.y), Math.Abs (torque.Item1.z)),
                     new Vector3d (-Math.Abs (torque.Item2.x), -Math.Abs (torque.Item2.y), -Math.Abs (torque.Item2.z)));
             }
+        }
+
+        /// <summary>
+        /// The torque of a full deflection each way, in N.m, in the vessel's axes.
+        /// ModuleControlSurface.GetPotentialTorque scales each axis of this by the lever arm
+        /// along that same axis, so we compute it from the lift the surface reports.
+        /// GetPotentialLift applies the authority limiter and is zero out of the airstream.
+        /// </summary>
+        static TupleV3 PotentialTorque (ModuleControlSurface surface)
+        {
+            var part = surface.part;
+            var rigidbody = part.Rigidbody;
+            if (rigidbody == null)
+                return new TupleV3 (Vector3d.zero, Vector3d.zero);
+            var vessel = surface.vessel;
+            var transform = vessel.ReferenceTransform;
+            var arm = rigidbody.worldCenterOfMass - vessel.CurrentCoM;
+            Vector3d pos = transform.InverseTransformDirection (UnityEngine.Vector3.Cross (arm, surface.GetPotentialLift (true)));
+            Vector3d neg = transform.InverseTransformDirection (UnityEngine.Vector3.Cross (arm, surface.GetPotentialLift (false)));
+            if (surface.ignorePitch)
+                pos.x = neg.x = 0;
+            if (surface.ignoreRoll)
+                pos.y = neg.y = 0;
+            if (surface.ignoreYaw)
+                pos.z = neg.z = 0;
+            return new TupleV3 (pos * 1000d, neg * 1000d);
         }
     }
 }
