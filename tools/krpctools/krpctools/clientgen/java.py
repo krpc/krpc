@@ -347,4 +347,4 @@ class JavaDocParser(DocParser):
             "<li>%s\n" % self.parse_node(item[0], indent=2)[2:].rstrip()
             for item in node
         ]
-        return "<p><ul>" + "\n" + "".join(content) + "</ul></p>"
+        return "<ul>\n" + "".join(content) + "</ul>"
