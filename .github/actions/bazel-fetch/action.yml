@@ -4,15 +4,14 @@ runs:
     - name: get-bazel-info
       shell: bash
       run: |
+        # Turn on the ci config for every later bazel command in the job
+        echo "common --config=ci" >> ~/.bazelrc
         echo "BAZEL_VERSION=$(bazel --version | cut -d' ' -f2)" >> "$GITHUB_ENV"
-        # Cache only the download archives -- /var/cache/bazel-repo/content_addressable
-        # (matches `common --repository_cache` in /etc/bazel.bazelrc). We deliberately
-        # do NOT cache the whole /var/cache/bazel-repo: Bazel 9 also puts a "repo
-        # contents cache" of *extracted* repositories under a sibling contents/ dir,
-        # which must stay out of the GitHub cache. CI uses a system LLVM, so no ~2 GB
-        # LLVM archive lands here -- the subdir is just the .NET SDK + misc. This
-        # action only runs in the Linux buildenv container, so the path is fixed.
-        echo "BAZEL_DOWNLOAD_CACHE=/var/cache/bazel-repo/content_addressable" >> "$GITHUB_ENV"
+        # Cache only the download archives, in the content_addressable subdir of the
+        # repository cache. Bazel 9 also keeps a "repo contents cache" of extracted
+        # repositories in a sibling contents/ dir, which must stay out of the GitHub
+        # cache. CI uses a system LLVM, so no ~2 GB LLVM archive lands here.
+        echo "BAZEL_DOWNLOAD_CACHE=$(bazel info repository_cache)/content_addressable" >> "$GITHUB_ENV"
     - name: restore-bazel-cache
       id: bazel-cache
       uses: actions/cache/restore@v6

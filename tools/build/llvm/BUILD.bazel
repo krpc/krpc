@@ -6,7 +6,7 @@ load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 # LLVM release; `system` uses the install baked into the buildenv image. Flip with
 # `--//tools/build/llvm:toolchain=system`, or the `--config=system-llvm` group in
 # the repo-root .bazelrc (which also swaps the compiler toolchain via
-# --extra_toolchains). CI sets that config in the container bazelrc.
+# --extra_toolchains). CI sets that config through the ci config.
 string_flag(
     name = "toolchain",
     build_setting_default = "hermetic",

@@ -14,22 +14,10 @@ RUN apt-get update && \
 # Install Bazel
 RUN wget https://github.com/bazelbuild/bazelisk/releases/download/v1.29.0/bazelisk-linux-amd64 -O /usr/local/bin/bazel && \
     chmod +x /usr/local/bin/bazel
-COPY bazelrc /etc/bazel.bazelrc
-RUN chmod 0644 /etc/bazel.bazelrc
-
-# Repository cache for Bazel's downloaded archives, referenced by
-# /etc/bazel.bazelrc (--repository_cache). Created before the first bazel
-# invocation below so the rc path always exists; world-writable because both root
-# and the (later-created) runner user invoke bazel. CI persists the small
-# content_addressable/ subdir via actions/cache (see .github/actions/bazel-fetch).
-RUN mkdir -p /var/cache/bazel-repo && chmod -R a+rwX /var/cache/bazel-repo
 
 ENV BAZELISK_HOME=/usr/local/share/bazelisk
 # Warm up bazelisk (download + extract Bazel 9.3.0) and make it world-readable.
-# --ignore_all_rc_files: this runs with no workspace present, so /etc/bazel.bazelrc's
-# `--config=system-llvm` (defined in the repo-root .bazelrc, absent here) would
-# otherwise fail to resolve. The warmup only needs to extract Bazel.
-RUN USE_BAZEL_VERSION=9.3.0 bazel --ignore_all_rc_files version && \
+RUN USE_BAZEL_VERSION=9.3.0 bazel version && \
     chmod -R a+rwX /usr/local/share/bazelisk
 
 # Install the .NET SDK for the build-csharp-sln CI job, which builds the
