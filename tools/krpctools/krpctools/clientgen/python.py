@@ -444,7 +444,8 @@ class PythonDocParser(DocParser):
         return "\n\n" + name + desc
 
     def parse_paramref(self, node):
-        return self.language.parse_name(node.attrib["name"])
+        # Emphasized, as reStructuredText reads a name ending in _ as a link
+        return "*%s*" % self.language.parse_name(node.attrib["name"])
 
     @staticmethod
     def parse_a(node):
@@ -456,8 +457,8 @@ class PythonDocParser(DocParser):
         return "``%s``" % code
 
     def parse_list(self, node):
+        # A reStructuredText list starts at the margin, set apart by blank lines
         lines = [
-            " * " + self.parse_node(item[0], indent=3)[3:].rstrip() for item in node
+            "* " + self.parse_node(item[0], indent=2)[2:].rstrip() for item in node
         ]
-        content = "\n".join(lines)
-        return content
+        return "\n" + "\n".join(lines) + "\n"
