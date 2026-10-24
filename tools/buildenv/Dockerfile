@@ -1,14 +1,12 @@
 FROM ubuntu:24.04
 LABEL maintainer="djungelorm <djungelorm@users.noreply.github.com>"
 
-# Install essential packages. python3 + pip are for the system nanopb generator
-# used by the C-nano CMake consumer jobs; python-is-python3 provides a `python`
-# executable for the build-setup action's version-stamping step. The Bazel build
-# uses the hermetic rules_python toolchain, not these.
+# Install essential packages. python-is-python3 provides a `python` executable for
+# the CI workflow steps. The Bazel build uses the hermetic rules_python toolchain.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     curl ca-certificates gnupg git wget \
-    python3 python3-pip python-is-python3 && \
+    python3 python-is-python3 && \
     apt-get clean
 
 # Install Bazel
@@ -27,12 +25,10 @@ RUN apt-get update && \
     texlive-latex-extra tex-gyre libenchant-2-2 && \
     apt-get clean
 
-# Install other build tools. gcc/g++/ccache/cmake are for the CMake consumer
-# jobs; socat for the serial transport tests; graphviz for the documentation's
-# dot graphs; unzip for the CI steps that unpack a release archive.
+# Install other build tools: socat for the serial transport tests, graphviz for
+# the documentation's dot graphs and unzip for the CI steps that unpack an archive
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    gcc g++ ccache cmake socat graphviz unzip && \
+    apt-get install -y --no-install-recommends socat graphviz unzip && \
     apt-get clean
 
 # Install system LLVM (clang-23) from apt.llvm.org for CI's C/C++ client build and
@@ -48,52 +44,6 @@ RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr
     clang-23 clang-tidy-23 clang-format-23 lld-23 llvm-23 \
     libc++-23-dev libc++abi-23-dev libclang-rt-23-dev libunwind-23-dev && \
     apt-get clean
-
-# Install ASIO
-RUN apt-get update && \
-    apt-get install -y libasio-dev && \
-    apt-get clean
-
-# Install Protobuf
-ARG PROTOBUF_VERSION=36.2
-RUN mkdir /protobuf && \
-    cd /protobuf && \
-    wget -O protobuf.tar.gz \
-      https://github.com/protocolbuffers/protobuf/releases/download/v${PROTOBUF_VERSION}/protobuf-${PROTOBUF_VERSION}.tar.gz && \
-    tar xf protobuf.tar.gz && \
-    cd protobuf-${PROTOBUF_VERSION} && \
-    cmake -S . -B build \
-      -DCMAKE_BUILD_TYPE=Release \
-      -Dprotobuf_BUILD_TESTS=OFF \
-      -DCMAKE_INSTALL_PREFIX=/usr/local && \
-    cmake --build build -j$(nproc) && \
-    cmake --install build && \
-    ldconfig && \
-    cd / && \
-    rm -rf /protobuf*
-
-# Install python-protobuf via pip, for the system nanopb generator used by the
-# C-nano CMake consumer jobs (needs runtime_version, protobuf >= 4.25). The
-# Bazel build's nanopb generator uses the hermetic pip hub.
-RUN pip3 install --break-system-packages protobuf
-
-# Install Nanopb
-ARG NANOPB_VERSION=0.4.9.2
-RUN mkdir /nanopb && \
-    cd /nanopb && \
-    wget -O nanopb.tar.gz \
-      https://github.com/nanopb/nanopb/archive/refs/tags/${NANOPB_VERSION}.tar.gz && \
-    tar xf nanopb.tar.gz && \
-    cd nanopb-${NANOPB_VERSION} && \
-    cmake -S . -B build \
-      -DCMAKE_BUILD_TYPE=Release \
-      -Dnanopb_BUILD_GENERATOR=ON \
-      -DCMAKE_INSTALL_PREFIX=/usr/local && \
-    cmake --build build -j$(nproc) && \
-    cmake --install build && \
-    ldconfig && \
-    cd / && \
-    rm -rf /nanopb*
 
 WORKDIR /build
 

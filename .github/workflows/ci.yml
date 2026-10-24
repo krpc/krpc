@@ -333,17 +333,11 @@ jobs:
     needs: linux-test-client-cnano
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    container:
-      image: ghcr.io/krpc/buildenv:3.13.0
-      options: --user runner:runner
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.github_token }}
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_MAXSIZE: 500M
-      CMAKE_C_COMPILER_LAUNCHER: ccache
-      CMAKE_CXX_COMPILER_LAUNCHER: ccache
+      # Match the compiler by its contents, which stay the same across runner images
+      CCACHE_COMPILERCHECK: content
     steps:
       - name: checkout
         uses: actions/checkout@v7
@@ -351,12 +345,27 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: client-cnano
+      - name: vcpkg
+        uses: ./.github/actions/vcpkg-linux
+        with:
+          packages: nanopb
+      - name: setup-cmake
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ccache
+          # The system scenarios find the packages the vcpkg step installed
+          echo "CMAKE_PREFIX_PATH=$RUNNER_TEMP/vcpkg-deps/x64-linux" >> "$GITHUB_ENV"
+          # Set after the vcpkg step, which builds and detects its compiler without ccache
+          echo "CMAKE_C_COMPILER_LAUNCHER=ccache" >> "$GITHUB_ENV"
+          echo "CMAKE_CXX_COMPILER_LAUNCHER=ccache" >> "$GITHUB_ENV"
       - name: cache-key
         id: cache-key
         run: |
           tmpl=$(sha256sum client/cnano/CMakeLists.txt.tmpl | cut -d' ' -f1)
           cc=$(cc --version 2>/dev/null | head -n1 || echo unknown-cc)
-          info=$(printf '%s\n' ccache cnano "$cc" "$tmpl")
+          # The packages the system scenarios build against, by their vcpkg ABI hashes
+          abis=$(sha256sum "$RUNNER_TEMP"/vcpkg-deps/*/share/*/vcpkg_abi_info.txt | cut -d' ' -f1 | sort -u)
+          info=$(printf '%s\n' ccache cnano "$cc" "$tmpl" "$abis")
           echo 'cache key inputs:'
           printf '%s\n' "$info" | sed 's/^/  /'
           hash=$(printf '%s' "$info" | sha256sum | cut -d' ' -f1)
@@ -483,17 +492,10 @@ jobs:
     needs: linux-test-client-cpp
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    container:
-      image: ghcr.io/krpc/buildenv:3.13.0
-      options: --user runner:runner
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.github_token }}
     env:
       CCACHE_DIR: ${{ github.workspace }}/.ccache
       CCACHE_MAXSIZE: 500M
-      CMAKE_C_COMPILER_LAUNCHER: ccache
-      CMAKE_CXX_COMPILER_LAUNCHER: ccache
+      CCACHE_COMPILERCHECK: content
     steps:
       - name: checkout
         uses: actions/checkout@v7
@@ -501,12 +503,25 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: client-cpp
+      - name: vcpkg
+        uses: ./.github/actions/vcpkg-linux
+        with:
+          packages: protobuf asio
+      - name: setup-cmake
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ccache
+          # The system scenarios find the packages the vcpkg step installed
+          echo "CMAKE_PREFIX_PATH=$RUNNER_TEMP/vcpkg-deps/x64-linux" >> "$GITHUB_ENV"
+          echo "CMAKE_C_COMPILER_LAUNCHER=ccache" >> "$GITHUB_ENV"
+          echo "CMAKE_CXX_COMPILER_LAUNCHER=ccache" >> "$GITHUB_ENV"
       - name: cache-key
         id: cache-key
         run: |
           tmpl=$(sha256sum client/cpp/CMakeLists.txt.tmpl | cut -d' ' -f1)
           cc=$(cc --version 2>/dev/null | head -n1 || echo unknown-cc)
-          info=$(printf '%s\n' ccache cpp "$cc" "$tmpl")
+          abis=$(sha256sum "$RUNNER_TEMP"/vcpkg-deps/*/share/*/vcpkg_abi_info.txt | cut -d' ' -f1 | sort -u)
+          info=$(printf '%s\n' ccache cpp "$cc" "$tmpl" "$abis")
           echo 'cache key inputs:'
           printf '%s\n' "$info" | sed 's/^/  /'
           hash=$(printf '%s' "$info" | sha256sum | cut -d' ' -f1)
