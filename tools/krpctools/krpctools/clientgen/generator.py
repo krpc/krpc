@@ -1,4 +1,5 @@
 import collections
+import re
 from typing import Generic, TypeVar
 
 import jinja2
@@ -27,6 +28,8 @@ from .crefs import resolve_cref
 from .docparser import flatten_deprecation_reason
 
 LanguageT = TypeVar("LanguageT", bound=Language)
+
+_RETURNS = re.compile(r"\s*<returns>.*?</returns>", re.DOTALL)
 
 
 class Generator(Generic[LanguageT]):
@@ -97,6 +100,16 @@ class Generator(Generic[LanguageT]):
         if cref[0] == "M":
             parts[-1] = self.parse_plain_cref_member(parts[-1])
         return self.plain_cref_separator.join(parts)
+
+    def parse_property_documentation(self, procedure):
+        """The documentation of a property, and of its setter, which returns nothing"""
+        documentation = procedure["documentation"]
+        return {
+            "documentation": self.parse_documentation(documentation),
+            "setter_documentation": self.parse_documentation(
+                _RETURNS.sub("", documentation)
+            ),
+        }
 
     def parse_cref(self, cref):
         """A cref in documentation, as a reference to what it names in the generated code, or
@@ -280,9 +293,7 @@ class Generator(Generic[LanguageT]):
                         "return_is_nullable": is_nullable(return_type),
                         "getter": None,
                         "setter": None,
-                        "documentation": self.parse_documentation(
-                            procedure["documentation"]
-                        ),
+                        **self.parse_property_documentation(procedure),
                         "deprecated": procedure.get("deprecated", False),
                         "deprecated_reason": self.parse_deprecation_reason(
                             procedure.get("deprecated_reason", "")
@@ -303,9 +314,7 @@ class Generator(Generic[LanguageT]):
                         "return_is_nullable": params[0]["nullable"],
                         "getter": None,
                         "setter": None,
-                        "documentation": self.parse_documentation(
-                            procedure["documentation"]
-                        ),
+                        **self.parse_property_documentation(procedure),
                         "deprecated": procedure.get("deprecated", False),
                         "deprecated_reason": self.parse_deprecation_reason(
                             procedure.get("deprecated_reason", "")
@@ -367,9 +376,7 @@ class Generator(Generic[LanguageT]):
                         "return_is_nullable": is_nullable(return_type),
                         "getter": None,
                         "setter": None,
-                        "documentation": self.parse_documentation(
-                            procedure["documentation"]
-                        ),
+                        **self.parse_property_documentation(procedure),
                         "deprecated": procedure.get("deprecated", False),
                         "deprecated_reason": self.parse_deprecation_reason(
                             procedure.get("deprecated_reason", "")
@@ -392,9 +399,7 @@ class Generator(Generic[LanguageT]):
                         "return_is_nullable": params[1]["nullable"],
                         "getter": None,
                         "setter": None,
-                        "documentation": self.parse_documentation(
-                            procedure["documentation"]
-                        ),
+                        **self.parse_property_documentation(procedure),
                         "deprecated": procedure.get("deprecated", False),
                         "deprecated_reason": self.parse_deprecation_reason(
                             procedure.get("deprecated_reason", "")

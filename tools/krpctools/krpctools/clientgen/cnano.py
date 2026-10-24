@@ -299,7 +299,7 @@ class CnanoGenerator(Generator[CnanoLanguage]):
                         info["setter"]["remote_name"], info["setter"]["procedure"]
                     ),
                     "return_type": {"ctype": "void", "cvtype": None, "name": None},
-                    "documentation": info["documentation"],
+                    "documentation": info["setter_documentation"],
                     "deprecated": info["deprecated"],
                     "deprecated_reason": info["deprecated_reason"],
                 }
@@ -327,7 +327,7 @@ class CnanoGenerator(Generator[CnanoLanguage]):
                         ],
                         "return_type": {"ctype": "void", "cvtype": None, "name": None},
                         "return_set_client": False,
-                        "documentation": info["documentation"],
+                        "documentation": info["setter_documentation"],
                         "deprecated": info["deprecated"],
                         "deprecated_reason": info["deprecated_reason"],
                     }

@@ -77,7 +77,7 @@ class CppGenerator(Generator[CppLanguage]):
                     ),
                     "return_type": "void",
                     "return_set_client": False,
-                    "documentation": info["documentation"],
+                    "documentation": info["setter_documentation"],
                     "deprecated": info["deprecated"],
                     "deprecated_reason": info["deprecated_reason"],
                 }
@@ -115,7 +115,7 @@ class CppGenerator(Generator[CppLanguage]):
                         ],
                         "return_type": "void",
                         "return_set_client": False,
-                        "documentation": info["documentation"],
+                        "documentation": info["setter_documentation"],
                         "deprecated": info["deprecated"],
                         "deprecated_reason": info["deprecated_reason"],
                     }

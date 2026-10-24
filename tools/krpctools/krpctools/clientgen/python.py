@@ -173,7 +173,7 @@ class PythonGenerator(Generator[StubLanguage]):
                         info["setter"]["remote_name"], info["setter"]["procedure"]
                     ),
                     "return_type": "None",
-                    "documentation": info["documentation"],
+                    "documentation": info["setter_documentation"],
                     "deprecated": info["deprecated"],
                     "deprecated_reason": info["deprecated_reason"],
                 }
@@ -206,7 +206,7 @@ class PythonGenerator(Generator[StubLanguage]):
                             )[1]
                         ],
                         "return_type": "None",
-                        "documentation": info["documentation"],
+                        "documentation": info["setter_documentation"],
                         "deprecated": info["deprecated"],
                         "deprecated_reason": info["deprecated_reason"],
                     }

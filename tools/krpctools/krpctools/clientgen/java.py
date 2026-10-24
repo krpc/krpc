@@ -144,7 +144,7 @@ class JavaGenerator(Generator[JavaLanguage]):
                         info["setter"]["remote_name"], info["setter"]["procedure"]
                     ),
                     "return_type": "void",
-                    "documentation": info["documentation"],
+                    "documentation": info["setter_documentation"],
                     "deprecated": info["deprecated"],
                     "deprecated_reason": info["deprecated_reason"],
                 }
@@ -175,7 +175,7 @@ class JavaGenerator(Generator[JavaLanguage]):
                             )[1]
                         ],
                         "return_type": "void",
-                        "documentation": info["documentation"],
+                        "documentation": info["setter_documentation"],
                         "deprecated": info["deprecated"],
                         "deprecated_reason": info["deprecated_reason"],
                     }
