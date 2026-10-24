@@ -275,6 +275,31 @@ class CnanoGenerator(Generator[CnanoLanguage]):
         setter = "" if target.getter else "set_"
         return name + "_" + setter + target.member + "()"
 
+    @staticmethod
+    def add_param_docs(info, instance=None, value="The value returned."):
+        """Document the parameters a function takes ahead of those of the procedure, in the
+        order the function declares them, where its documentation documents any parameters"""
+        lines = info["documentation"].split("\n")
+        starts = [i for i, line in enumerate(lines) if line.startswith(" * @param ")]
+        if not starts:
+            return
+        # Each parameter's tag runs to the next tag, or to the closing ' */'
+        ends = starts[1:] + [len(lines) - 1]
+        params = [lines[start:end] for start, end in zip(starts, ends)]
+        returns = [p for p in params if p[0].startswith(" * @param returnValue ")]
+        params = [p for p in params if p not in returns]
+        tags = [[" * @param connection A connection object."]]
+        return_type = info["return_type"]
+        if return_type["ctype"] != "void":
+            tags += returns or [[" * @param returnValue " + value]]
+            if return_type.get("nullable") and not return_type.get("is_class"):
+                is_null = "returnValueIsNull Set to whether the value returned is null."
+                tags.append([" * @param " + is_null])
+        if instance is not None:
+            tags.append([" * @param instance " + instance])
+        body = [line for tag in tags + params for line in tag]
+        info["documentation"] = "\n".join(lines[: starts[0]] + body + lines[-1:])
+
     def parse_context(self, context):
         def return_type(typ):
             typ["cvtype"] = typ["ctype"] + " *"
@@ -335,6 +360,22 @@ class CnanoGenerator(Generator[CnanoLanguage]):
 
         context["properties"] = properties
 
+        for info in context["procedures"].values():
+            self.add_param_docs(info)
+        for info in context["properties"].values():
+            self.add_param_docs(info, value="The value of the property.")
+        for class_info in context["classes"].values():
+            for info in class_info["methods"].values():
+                self.add_param_docs(info, instance="The object to call the method on.")
+            for info in class_info["static_methods"].values():
+                self.add_param_docs(info)
+            for info in class_info["properties"].values():
+                self.add_param_docs(
+                    info,
+                    instance="The object whose property this is.",
+                    value="The value of the property.",
+                )
+
         # C requires a struct to be declared before it is used, so a collection type has to
         # follow the collection types it contains. Several kRPC types share one C type, as
         # every class is a krpc_object_t and every enumeration a krpc_enum_t, so collections
@@ -363,7 +404,8 @@ class CNanoDocParser(DocParser):
         return "\n@param %s %s" % (node.attrib["name"], self.parse_node(node).strip())
 
     def parse_returns(self, node):
-        return "\n@return %s" % self.parse_node(node).strip()
+        # A function returns an error code, and the value through its returnValue parameter
+        return "\n@param returnValue %s" % self.parse_node(node).strip()
 
     @staticmethod
     def parse_paramref(node):

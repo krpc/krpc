@@ -435,8 +435,10 @@ static inline krpc_error_t krpc_KRPC_RemoveStream(krpc_connection_t connection, 
  * The arguments are encoded at the types given by krpc_KRPC_Expression_ParameterTypes().
  * Throws an exception if a procedure the function calls pauses execution, and the
  * effects up to the pause remain.
- * @return The encoded value of the function, or no bytes for a function with no
+ * @param connection A connection object.
+ * @param returnValue The encoded value of the function, or no bytes for a function with no
  * value.
+ * @param returnValueIsNull Set to whether the value returned is null.
  * @param function The function to run.
  * @param arguments The encoded arguments, one per parameter.
  */
@@ -502,6 +504,8 @@ static inline krpc_error_t krpc_KRPC_set_Paused(krpc_connection_t connection, bo
 
 /**
  * Numerical addition.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -511,7 +515,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Add(krpc_connection_t connection
  * The result of applying an accumulator function over a collection.
  *
  * Throws an exception if the collection is empty.
- * @return The accumulated value.
+ * @param connection A connection object.
+ * @param returnValue The accumulated value.
  * @param arg The collection.
  * @param func The accumulator function.
  */
@@ -521,7 +526,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Aggregate(krpc_connection_t conn
  * The result of applying an accumulator function over a collection, starting from a seed.
  *
  * The seed widens to the type of the accumulated value, the function's result.
- * @return The accumulated value.
+ * @param connection A connection object.
+ * @param returnValue The accumulated value.
  * @param arg The collection.
  * @param seed The seed value.
  * @param func The accumulator function.
@@ -530,7 +536,8 @@ static inline krpc_error_t krpc_KRPC_Expression_AggregateWithSeed(krpc_connectio
 
 /**
  * Whether a predicate function returns true for every value of a collection.
- * @return Whether all items satisfy the predicate.
+ * @param connection A connection object.
+ * @param returnValue Whether all items satisfy the predicate.
  * @param arg The collection.
  * @param predicate The predicate function.
  */
@@ -538,6 +545,8 @@ static inline krpc_error_t krpc_KRPC_Expression_All(krpc_connection_t connection
 
 /**
  * Logical or bitwise and, which evaluates both operands.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -545,7 +554,8 @@ static inline krpc_error_t krpc_KRPC_Expression_And(krpc_connection_t connection
 
 /**
  * Whether a predicate function returns true for any value of a collection.
- * @return Whether any item satisfies the predicate.
+ * @param connection A connection object.
+ * @param returnValue Whether any item satisfies the predicate.
  * @param arg The collection.
  * @param predicate The predicate function.
  */
@@ -555,6 +565,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Any(krpc_connection_t connection
  * A statement adding a value to a list or a set.
  *
  * The value goes on the end of a list. A set holding the value is left unchanged.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param collection The list or set to add to.
  * @param value The value to add.
  */
@@ -565,6 +577,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Append(krpc_connection_t connect
  *
  * The value's type must be assignable to the variable's type. A numeric value of a
  * different type is widened, and narrowing it requires a cast.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param variable The variable to assign to.
  * @param value The value to assign.
  */
@@ -574,13 +588,16 @@ static inline krpc_error_t krpc_KRPC_Expression_Assign(krpc_connection_t connect
  * The average of the values of a collection.
  *
  * Throws an exception if the collection is empty and its values are not nullable.
- * @return The average of the elements in the collection.
+ * @param connection A connection object.
+ * @param returnValue The average of the elements in the collection.
  * @param arg The list or set.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Average(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
 
 /**
  * A block of statements, whose value is that of its last statement.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param statements The statements.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Block(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, const krpc_list_object_t * statements);
@@ -590,6 +607,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Block(krpc_connection_t connecti
  *
  * The value of the block is that of its last statement. The variables are in scope
  * for the statements of the block, including within nested functions.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param variables The local variables of the block.
  * @param statements The statements.
  */
@@ -605,7 +624,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Break(krpc_connection_t connecti
  * element.
  *
  * A repeated key takes the last of its values.
- * @return The dictionary.
+ * @param connection A connection object.
+ * @param returnValue The dictionary.
  * @param arg The list or set.
  * @param keyFunc The function computing an element's key.
  * @param valueFunc The function computing an element's value.
@@ -619,6 +639,8 @@ static inline krpc_error_t krpc_KRPC_Expression_BuildDictionary(krpc_connection_
  * when the expression is created. A call to a procedure with no return value is
  * evaluated for its effects, as a statement in a krpc_KRPC_Expression_Block(). A collection the
  * procedure returns is copied, as a client would receive it.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param call The procedure call.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Call(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, const krpc_schema_ProcedureCall * call);
@@ -629,6 +651,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Call(krpc_connection_t connectio
  * Position 0 is the instance of a class method or property. A position with no
  * expression takes the argument encoded in the call, or the parameter's default. A
  * collection the procedure returns is copied, as a client would receive it.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param call The RPC to call.
  * @param args Expressions computing the call's arguments, by position.
  */
@@ -638,6 +662,8 @@ static inline krpc_error_t krpc_KRPC_Expression_CallWithArguments(krpc_connectio
  * A value cast to the given type.
  *
  * A tuple or collection is cast element by element.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg The value to cast.
  * @param type Type to cast the argument to.
  */
@@ -645,6 +671,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Cast(krpc_connection_t connectio
 
 /**
  * A statement removing every value from a list or a set, or every entry from a dictionary.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param collection The list, set or dictionary.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Clear(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t collection);
@@ -653,7 +681,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Clear(krpc_connection_t connecti
  * The values of one collection followed by those of another.
  *
  * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The first collection followed by the second.
+ * @param connection A connection object.
+ * @param returnValue The first collection followed by the second.
  * @param arg1 The first collection.
  * @param arg2 The second collection.
  */
@@ -663,6 +692,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Concat(krpc_connection_t connect
  * The second argument if the condition is true, and the third argument otherwise.
  *
  * Throws an exception if the two values have no common type.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param condition The boolean condition.
  * @param ifTrue The value when the condition is true.
  * @param ifFalse The value when the condition is false.
@@ -671,6 +702,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Conditional(krpc_connection_t co
 
 /**
  * Logical and, which evaluates the second operand only when the first is true.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -678,6 +711,8 @@ static inline krpc_error_t krpc_KRPC_Expression_ConditionalAnd(krpc_connection_t
 
 /**
  * Logical or, which evaluates the second operand only when the first is false.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -685,24 +720,32 @@ static inline krpc_error_t krpc_KRPC_Expression_ConditionalOr(krpc_connection_t 
 
 /**
  * A constant value of boolean type.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param value The value.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConstantBool(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, bool value);
 
 /**
  * A constant value of bytes type.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param value The value.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConstantBytes(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_bytes_t value);
 
 /**
  * A constant value of double precision floating point type.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param value The value.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConstantDouble(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, double value);
 
 /**
  * A constant value of an enumeration a service defines.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param service The name of the service the enumeration is defined in.
  * @param name The name of the enumeration.
  * @param value The value of the member of the enumeration.
@@ -711,18 +754,24 @@ static inline krpc_error_t krpc_KRPC_Expression_ConstantEnum(krpc_connection_t c
 
 /**
  * A constant value of single precision floating point type.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param value The value.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConstantFloat(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, float value);
 
 /**
  * A constant value of integer type.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param value The value.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConstantInt(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, int32_t value);
 
 /**
  * A constant value of long integer type.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param value The value.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConstantLong(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, int64_t value);
@@ -731,6 +780,8 @@ static inline krpc_error_t krpc_KRPC_Expression_ConstantLong(krpc_connection_t c
  * A null constant of the given type.
  *
  * The type is made nullable, as by krpc_KRPC_Type_NullableType().
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param type The type of the value.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConstantNull(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Type_t type);
@@ -739,31 +790,40 @@ static inline krpc_error_t krpc_KRPC_Expression_ConstantNull(krpc_connection_t c
  * A constant object, an instance of a class a service defines.
  *
  * The object is given by its object identifier.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param value The object identifier of the object.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConstantObject(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint64_t value);
 
 /**
  * A constant value of string type.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param value The value.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConstantString(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, const char * value);
 
 /**
  * A constant value of unsigned integer type.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param value The value.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConstantUInt(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint32_t value);
 
 /**
  * A constant value of unsigned long integer type.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param value The value.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConstantULong(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, uint64_t value);
 
 /**
  * Whether a collection contains a value.
- * @return Whether the collection contains the value.
+ * @param connection A connection object.
+ * @param returnValue Whether the collection contains the value.
  * @param arg The collection.
  * @param value The value to look for.
  */
@@ -771,7 +831,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Contains(krpc_connection_t conne
 
 /**
  * Whether a dictionary contains a key.
- * @return Whether the dictionary contains the key.
+ * @param connection A connection object.
+ * @param returnValue Whether the dictionary contains the key.
  * @param dictionary The dictionary.
  * @param key The key to look for.
  */
@@ -788,14 +849,16 @@ static inline krpc_error_t krpc_KRPC_Expression_Continue(krpc_connection_t conne
  * A value other than a number, boolean, string or enumeration converts as .NET
  * formats it, which for a collection is the name of its type. Throws an exception if
  * the value is null.
- * @return The string representation of the value.
+ * @param connection A connection object.
+ * @param returnValue The string representation of the value.
  * @param arg The value to convert.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConvertToString(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
 
 /**
  * The number of values in a collection.
- * @return The number of elements in the collection.
+ * @param connection A connection object.
+ * @param returnValue The number of elements in the collection.
  * @param arg The list, set or dictionary.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Count(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
@@ -806,7 +869,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Count(krpc_connection_t connecti
  * keys are not of a valid key type, or a key is null.
  *
  * A repeated key takes the last of its values.
- * @return The dictionary.
+ * @param connection A connection object.
+ * @param returnValue The dictionary.
  * @param keys The keys.
  * @param values The values.
  */
@@ -815,7 +879,8 @@ static inline krpc_error_t krpc_KRPC_Expression_CreateDictionary(krpc_connection
 /**
  * An empty dictionary of the given key and value types. Throws an exception if the
  * key type is nullable or not a valid key type.
- * @return The empty dictionary.
+ * @param connection A connection object.
+ * @param returnValue The empty dictionary.
  * @param keyType The type of the dictionary's keys.
  * @param valueType The type of the dictionary's values.
  */
@@ -823,7 +888,8 @@ static inline krpc_error_t krpc_KRPC_Expression_CreateEmptyDictionary(krpc_conne
 
 /**
  * An empty list of the given value type.
- * @return The empty list.
+ * @param connection A connection object.
+ * @param returnValue The empty list.
  * @param valueType The type of the values the list holds.
  */
 static inline krpc_error_t krpc_KRPC_Expression_CreateEmptyList(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Type_t valueType);
@@ -831,7 +897,8 @@ static inline krpc_error_t krpc_KRPC_Expression_CreateEmptyList(krpc_connection_
 /**
  * An empty set of the given value type. Throws an exception if the value type is
  * nullable.
- * @return The empty set.
+ * @param connection A connection object.
+ * @param returnValue The empty set.
  * @param valueType The type of the values the set holds.
  */
 static inline krpc_error_t krpc_KRPC_Expression_CreateEmptySet(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Type_t valueType);
@@ -839,7 +906,8 @@ static inline krpc_error_t krpc_KRPC_Expression_CreateEmptySet(krpc_connection_t
 /**
  * A list of the given values, with numbers widened to their common type. Throws an
  * exception if there are no values.
- * @return The list.
+ * @param connection A connection object.
+ * @param returnValue The list.
  * @param values The values.
  */
 static inline krpc_error_t krpc_KRPC_Expression_CreateList(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, const krpc_list_object_t * values);
@@ -849,7 +917,8 @@ static inline krpc_error_t krpc_KRPC_Expression_CreateList(krpc_connection_t con
  * exception if there are no values, or a value is null.
  *
  * The values are evaluated in an unspecified order.
- * @return The set.
+ * @param connection A connection object.
+ * @param returnValue The set.
  * @param values The values.
  */
 static inline krpc_error_t krpc_KRPC_Expression_CreateSet(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, const krpc_set_object_t * values);
@@ -857,7 +926,8 @@ static inline krpc_error_t krpc_KRPC_Expression_CreateSet(krpc_connection_t conn
 /**
  * A structure with the given field values. Throws an exception if the field values do
  * not match its fields.
- * @return The structure.
+ * @param connection A connection object.
+ * @param returnValue The structure.
  * @param type The type of the structure.
  * @param fieldValues The values of the structure's fields,
  * in the order the structure declares them.
@@ -867,7 +937,8 @@ static inline krpc_error_t krpc_KRPC_Expression_CreateStruct(krpc_connection_t c
 /**
  * A tuple of the given elements. Throws an exception if there are no elements or more
  * than seven.
- * @return The tuple.
+ * @param connection A connection object.
+ * @param returnValue The tuple.
  * @param elements The elements.
  */
 static inline krpc_error_t krpc_KRPC_Expression_CreateTuple(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, const krpc_list_object_t * elements);
@@ -877,14 +948,16 @@ static inline krpc_error_t krpc_KRPC_Expression_CreateTuple(krpc_connection_t co
  *
  * The collection operations take the keys of a dictionary from here, and its values
  * from krpc_KRPC_Expression_DictionaryValues().
- * @return The keys of the dictionary.
+ * @param connection A connection object.
+ * @param returnValue The keys of the dictionary.
  * @param dictionary The dictionary.
  */
 static inline krpc_error_t krpc_KRPC_Expression_DictionaryKeys(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t dictionary);
 
 /**
  * The values of a dictionary, as a list.
- * @return The values of the dictionary.
+ * @param connection A connection object.
+ * @param returnValue The values of the dictionary.
  * @param dictionary The dictionary.
  */
 static inline krpc_error_t krpc_KRPC_Expression_DictionaryValues(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t dictionary);
@@ -894,13 +967,16 @@ static inline krpc_error_t krpc_KRPC_Expression_DictionaryValues(krpc_connection
  * occurrence of each.
  *
  * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The distinct values of the collection.
+ * @param connection A connection object.
+ * @param returnValue The distinct values of the collection.
  * @param arg The collection.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Distinct(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
 
 /**
  * Numerical division.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -910,7 +986,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Divide(krpc_connection_t connect
  * The value at the given position in a collection.
  *
  * Throws an exception if the index is out of range.
- * @return The value at the given position.
+ * @param connection A connection object.
+ * @param returnValue The value at the given position.
  * @param arg The collection.
  * @param index The position of the value, counting from zero.
  */
@@ -921,6 +998,8 @@ static inline krpc_error_t krpc_KRPC_Expression_ElementAt(krpc_connection_t conn
  *
  * Collections, tuples, bytes and structures compare by their contents. Throws an
  * exception if the operands are of unrelated types.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -931,7 +1010,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Equal(krpc_connection_t connecti
  * duplicates removed.
  *
  * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The difference between the two collections.
+ * @param connection A connection object.
+ * @param returnValue The difference between the two collections.
  * @param arg1 The first collection.
  * @param arg2 The second collection.
  */
@@ -939,6 +1019,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Except(krpc_connection_t connect
 
 /**
  * Logical or bitwise exclusive or.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -948,7 +1030,8 @@ static inline krpc_error_t krpc_KRPC_Expression_ExclusiveOr(krpc_connection_t co
  * The first value of a collection.
  *
  * Throws an exception if the collection is empty.
- * @return The first value.
+ * @param connection A connection object.
+ * @param returnValue The first value.
  * @param arg The collection.
  */
 static inline krpc_error_t krpc_KRPC_Expression_First(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
@@ -959,6 +1042,8 @@ static inline krpc_error_t krpc_KRPC_Expression_First(krpc_connection_t connecti
  * The loop variable is a local variable declared by an enclosing
  * krpc_KRPC_Expression_BlockWithVariables(), or a parameter of an enclosing krpc_KRPC_Expression_Lambda().
  * A krpc_KRPC_Expression_Break() or krpc_KRPC_Expression_Continue() in the body applies to this loop.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param variable The loop variable.
  * @param collection The collection to iterate over.
  * @param body The statement evaluated on each iteration.
@@ -971,7 +1056,8 @@ static inline krpc_error_t krpc_KRPC_Expression_ForEach(krpc_connection_t connec
  * A tuple takes a constant integer index, a list a zero indexed integer and a
  * dictionary a key. Throws an exception if the index is out of range or the key is
  * missing, and for a tuple when the expression is created.
- * @return The element.
+ * @param connection A connection object.
+ * @param returnValue The element.
  * @param arg The tuple, list or dictionary.
  * @param index The index or key of the element.
  */
@@ -980,7 +1066,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Get(krpc_connection_t connection
 /**
  * The value of a field of a structure. Throws an exception if the value is not a
  * structure, or has no field of the given name.
- * @return The value of the field.
+ * @param connection A connection object.
+ * @param returnValue The value of the field.
  * @param arg The structure.
  * @param name The name of the field to access.
  */
@@ -988,6 +1075,8 @@ static inline krpc_error_t krpc_KRPC_Expression_GetField(krpc_connection_t conne
 
 /**
  * Greater than numerical comparison.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -995,6 +1084,8 @@ static inline krpc_error_t krpc_KRPC_Expression_GreaterThan(krpc_connection_t co
 
 /**
  * Greater than or equal numerical comparison.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -1002,7 +1093,8 @@ static inline krpc_error_t krpc_KRPC_Expression_GreaterThanOrEqual(krpc_connecti
 
 /**
  * The values of a collection grouped by the key a function produces for each of them.
- * @return A dictionary of each key to the values that produced it.
+ * @param connection A connection object.
+ * @param returnValue A dictionary of each key to the values that produced it.
  * @param arg The collection.
  * @param key A function producing the key to group values by.
  */
@@ -1012,6 +1104,8 @@ static inline krpc_error_t krpc_KRPC_Expression_GroupBy(krpc_connection_t connec
  * An if statement, with no value.
  *
  * Use krpc_KRPC_Expression_Conditional() for an if-then-else that produces a value.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param condition The boolean condition.
  * @param body The statement evaluated when the condition is true.
  */
@@ -1021,6 +1115,8 @@ static inline krpc_error_t krpc_KRPC_Expression_IfThen(krpc_connection_t connect
  * An if-else statement, with no value.
  *
  * Use krpc_KRPC_Expression_Conditional() for an if-then-else that produces a value.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param condition The boolean condition.
  * @param body The statement evaluated when the condition is true.
  * @param elseBody The statement evaluated when the condition is false.
@@ -1031,7 +1127,8 @@ static inline krpc_error_t krpc_KRPC_Expression_IfThenElse(krpc_connection_t con
  * The values in both of two collections, with duplicates removed.
  *
  * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The intersection of the two collections.
+ * @param connection A connection object.
+ * @param returnValue The intersection of the two collections.
  * @param arg1 The first collection.
  * @param arg2 The second collection.
  */
@@ -1039,7 +1136,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Intersect(krpc_connection_t conn
 
 /**
  * A function call.
- * @return A function call.
+ * @param connection A connection object.
+ * @param returnValue A function call.
  * @param function The function to call.
  * @param args The arguments to call the function with.
  */
@@ -1047,6 +1145,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Invoke(krpc_connection_t connect
 
 /**
  * Whether a value is null. Throws an exception if the type of the value cannot be null.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param value The value.
  */
 static inline krpc_error_t krpc_KRPC_Expression_IsNull(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t value);
@@ -1057,7 +1157,8 @@ static inline krpc_error_t krpc_KRPC_Expression_IsNull(krpc_connection_t connect
  * The body is an expression or a block of statements, and a body with no value is
  * evaluated for its effects. A krpc_KRPC_Expression_Return() or krpc_KRPC_Expression_ReturnNothing()
  * statement ends the evaluation.
- * @return A function.
+ * @param connection A connection object.
+ * @param returnValue A function.
  * @param parameters The parameters of the function.
  * @param body The body of the function.
  */
@@ -1067,7 +1168,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Lambda(krpc_connection_t connect
  * The last value of a collection.
  *
  * Throws an exception if the collection is empty.
- * @return The last value.
+ * @param connection A connection object.
+ * @param returnValue The last value.
  * @param arg The collection.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Last(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
@@ -1077,6 +1179,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Last(krpc_connection_t connectio
  *
  * Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
  * for a 64-bit value.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -1084,6 +1188,8 @@ static inline krpc_error_t krpc_KRPC_Expression_LeftShift(krpc_connection_t conn
 
 /**
  * Less than numerical comparison.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -1091,6 +1197,8 @@ static inline krpc_error_t krpc_KRPC_Expression_LessThan(krpc_connection_t conne
 
 /**
  * Less than or equal numerical comparison.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -1100,7 +1208,8 @@ static inline krpc_error_t krpc_KRPC_Expression_LessThanOrEqual(krpc_connection_
  * The largest value of a collection.
  *
  * Throws an exception if the collection is empty and its values are not nullable.
- * @return The largest value in the collection.
+ * @param connection A connection object.
+ * @param returnValue The largest value in the collection.
  * @param arg The list or set.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Max(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
@@ -1109,7 +1218,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Max(krpc_connection_t connection
  * The value of a collection with the largest key.
  *
  * Throws an exception if the collection is empty.
- * @return The value with the largest key.
+ * @param connection A connection object.
+ * @param returnValue The value with the largest key.
  * @param arg The collection.
  * @param key A function producing the key to compare values by.
  */
@@ -1119,7 +1229,8 @@ static inline krpc_error_t krpc_KRPC_Expression_MaxBy(krpc_connection_t connecti
  * The smallest value of a collection.
  *
  * Throws an exception if the collection is empty and its values are not nullable.
- * @return The smallest value in the collection.
+ * @param connection A connection object.
+ * @param returnValue The smallest value in the collection.
  * @param arg The list or set.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Min(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
@@ -1128,7 +1239,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Min(krpc_connection_t connection
  * The value of a collection with the smallest key.
  *
  * Throws an exception if the collection is empty.
- * @return The value with the smallest key.
+ * @param connection A connection object.
+ * @param returnValue The value with the smallest key.
  * @param arg The collection.
  * @param key A function producing the key to compare values by.
  */
@@ -1136,14 +1248,17 @@ static inline krpc_error_t krpc_KRPC_Expression_MinBy(krpc_connection_t connecti
 
 /**
  * Numerical modulo operator.
+ * @param connection A connection object.
+ * @param returnValue The remainder of arg0 divided by arg1
  * @param arg0 The first operand.
  * @param arg1 The second operand.
- * @return The remainder of arg0 divided by arg1
  */
 static inline krpc_error_t krpc_KRPC_Expression_Modulo(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1);
 
 /**
  * Numerical multiplication.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -1151,12 +1266,16 @@ static inline krpc_error_t krpc_KRPC_Expression_Multiply(krpc_connection_t conne
 
 /**
  * Numerical negation, which negates a uint as a long.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg The operand.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Negate(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
 
 /**
  * Logical or bitwise negation.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg The operand.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Not(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
@@ -1166,6 +1285,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Not(krpc_connection_t connection
  *
  * Collections, tuples, bytes and structures compare by their contents. Throws an
  * exception if the operands are of unrelated types.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -1173,6 +1294,8 @@ static inline krpc_error_t krpc_KRPC_Expression_NotEqual(krpc_connection_t conne
 
 /**
  * Logical or bitwise or, which evaluates both operands.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -1182,7 +1305,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Or(krpc_connection_t connection,
  * The values of a collection ordered by the key a function produces for each of them.
  *
  * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The ordered collection.
+ * @param connection A connection object.
+ * @param returnValue The ordered collection.
  * @param arg The collection to order.
  * @param key A function producing the key to order values by.
  */
@@ -1193,7 +1317,8 @@ static inline krpc_error_t krpc_KRPC_Expression_OrderBy(krpc_connection_t connec
  *
  * A value is bound to it by name with krpc_KRPC_Expression_Invoke(), or by its position in
  * the parameters of a krpc_KRPC_Expression_Lambda().
- * @return A named parameter.
+ * @param connection A connection object.
+ * @param returnValue A named parameter.
  * @param name The name of the parameter.
  * @param type The type of the parameter.
  */
@@ -1201,9 +1326,10 @@ static inline krpc_error_t krpc_KRPC_Expression_Parameter(krpc_connection_t conn
 
 /**
  * Numerical power operator.
+ * @param connection A connection object.
+ * @param returnValue arg0 raised to the power of arg1, at the common type of the operands
  * @param arg0 The first operand.
  * @param arg1 The second operand.
- * @return arg0 raised to the power of arg1, at the common type of the operands
  */
 static inline krpc_error_t krpc_KRPC_Expression_Power(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg0, krpc_KRPC_Expression_t arg1);
 
@@ -1211,7 +1337,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Power(krpc_connection_t connecti
  * A removal of a value from a list or a set, or of an entry from a dictionary.
  *
  * The first occurrence is removed from a list.
- * @return Whether the collection held the value.
+ * @param connection A connection object.
+ * @param returnValue Whether the collection held the value.
  * @param collection The list, set or dictionary.
  * @param value The value to remove, or the key of the entry to
  * remove.
@@ -1222,6 +1349,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Remove(krpc_connection_t connect
  * A statement removing the element at an index of a list.
  *
  * Throws an exception if the index is out of range.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param list The list.
  * @param index The index of the element, counting from zero.
  */
@@ -1229,6 +1358,8 @@ static inline krpc_error_t krpc_KRPC_Expression_RemoveAt(krpc_connection_t conne
 
 /**
  * A return statement, which ends the enclosing function with a value.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param value The value to return.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Return(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t value);
@@ -1242,7 +1373,8 @@ static inline krpc_error_t krpc_KRPC_Expression_ReturnNothing(krpc_connection_t 
  * The values of a collection in the opposite order.
  *
  * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The reversed collection.
+ * @param connection A connection object.
+ * @param returnValue The reversed collection.
  * @param arg The collection.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Reverse(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
@@ -1252,6 +1384,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Reverse(krpc_connection_t connec
  *
  * Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
  * for a 64-bit value.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -1261,7 +1395,8 @@ static inline krpc_error_t krpc_KRPC_Expression_RightShift(krpc_connection_t con
  * The result of a function for each value of a collection.
  *
  * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The collection of function results.
+ * @param connection A connection object.
+ * @param returnValue The collection of function results.
  * @param arg The list or set.
  * @param func The function, taking an element of the collection.
  */
@@ -1272,7 +1407,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Select(krpc_connection_t connect
  * flattened into one.
  *
  * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The flattened collection of function results.
+ * @param connection A connection object.
+ * @param returnValue The flattened collection of function results.
  * @param arg The list or set.
  * @param func The function, taking an element of the collection
  * and returning a collection.
@@ -1284,6 +1420,8 @@ static inline krpc_error_t krpc_KRPC_Expression_SelectMany(krpc_connection_t con
  *
  * A key the dictionary does not hold is added. Throws an exception if the index
  * is out of range for the list.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param collection The list or dictionary.
  * @param index The index of the element, counting from zero, or the key of the entry.
  * @param value The value to set.
@@ -1294,7 +1432,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Set(krpc_connection_t connection
  * A collection without its first count values.
  *
  * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The collection without its first count values.
+ * @param connection A connection object.
+ * @param returnValue The collection without its first count values.
  * @param arg The collection.
  * @param count The number of values to skip.
  */
@@ -1306,7 +1445,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Skip(krpc_connection_t connectio
  * The initial value is evaluated once, when the variable is created, and gives the
  * variable its type. The value belongs to the variable, so every function that
  * contains it shares it.
- * @return A state variable.
+ * @param connection A connection object.
+ * @param returnValue A state variable.
  * @param name The name of the variable.
  * @param initialValue The initial value of the variable.
  */
@@ -1316,14 +1456,16 @@ static inline krpc_error_t krpc_KRPC_Expression_StateVariable(krpc_connection_t 
  * The concatenation of strings.
  *
  * Use krpc_KRPC_Expression_ConvertToString() to convert other values to strings.
- * @return The concatenated string.
+ * @param connection A connection object.
+ * @param returnValue The concatenated string.
  * @param args The strings to concatenate, in order.
  */
 static inline krpc_error_t krpc_KRPC_Expression_StringConcat(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, const krpc_list_object_t * args);
 
 /**
  * Whether one string occurs within another.
- * @return Whether the value occurs in the string.
+ * @param connection A connection object.
+ * @param returnValue Whether the value occurs in the string.
  * @param arg The string to search.
  * @param value The string to search for.
  */
@@ -1331,7 +1473,8 @@ static inline krpc_error_t krpc_KRPC_Expression_StringContains(krpc_connection_t
 
 /**
  * Whether a string ends with another.
- * @return Whether the string ends with the value.
+ * @param connection A connection object.
+ * @param returnValue Whether the string ends with the value.
  * @param arg The string to test.
  * @param value The string to test for.
  */
@@ -1341,7 +1484,8 @@ static inline krpc_error_t krpc_KRPC_Expression_StringEndsWith(krpc_connection_t
  * The character at the given position in a string, as a string of length one.
  *
  * Throws an exception if the index is out of range.
- * @return The character at the given position.
+ * @param connection A connection object.
+ * @param returnValue The character at the given position.
  * @param arg The string.
  * @param index The position of the character, counting from zero.
  */
@@ -1349,7 +1493,8 @@ static inline krpc_error_t krpc_KRPC_Expression_StringGet(krpc_connection_t conn
 
 /**
  * The position of the first occurrence of one string within another.
- * @return The position of the value, counting from zero, or -1 if it does not occur.
+ * @param connection A connection object.
+ * @param returnValue The position of the value, counting from zero, or -1 if it does not occur.
  * @param arg The string to search.
  * @param value The string to search for.
  */
@@ -1357,7 +1502,8 @@ static inline krpc_error_t krpc_KRPC_Expression_StringIndexOf(krpc_connection_t 
 
 /**
  * Strings joined together, separated by another string.
- * @return The joined string.
+ * @param connection A connection object.
+ * @param returnValue The joined string.
  * @param separator The string to put between the values.
  * @param values The strings to join.
  */
@@ -1365,7 +1511,8 @@ static inline krpc_error_t krpc_KRPC_Expression_StringJoin(krpc_connection_t con
 
 /**
  * The number of characters in a string.
- * @return The length of the string.
+ * @param connection A connection object.
+ * @param returnValue The length of the string.
  * @param arg The string.
  */
 static inline krpc_error_t krpc_KRPC_Expression_StringLength(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
@@ -1374,7 +1521,8 @@ static inline krpc_error_t krpc_KRPC_Expression_StringLength(krpc_connection_t c
  * A string with every occurrence of one string replaced by another.
  *
  * Throws an exception if the string to replace is empty.
- * @return The string with the replacements made.
+ * @param connection A connection object.
+ * @param returnValue The string with the replacements made.
  * @param arg The string to search.
  * @param oldValue The string to replace.
  * @param newValue The string to replace it with.
@@ -1383,7 +1531,8 @@ static inline krpc_error_t krpc_KRPC_Expression_StringReplace(krpc_connection_t 
 
 /**
  * The parts of a string separated by another string.
- * @return The parts of the string.
+ * @param connection A connection object.
+ * @param returnValue The parts of the string.
  * @param arg The string to split.
  * @param separator The string that separates the parts.
  */
@@ -1391,7 +1540,8 @@ static inline krpc_error_t krpc_KRPC_Expression_StringSplit(krpc_connection_t co
 
 /**
  * Whether a string starts with another.
- * @return Whether the string starts with the value.
+ * @param connection A connection object.
+ * @param returnValue Whether the string starts with the value.
  * @param arg The string to test.
  * @param value The string to test for.
  */
@@ -1401,7 +1551,8 @@ static inline krpc_error_t krpc_KRPC_Expression_StringStartsWith(krpc_connection
  * Part of a string.
  *
  * Throws an exception if the start or the length is out of range.
- * @return The substring.
+ * @param connection A connection object.
+ * @param returnValue The substring.
  * @param arg The string.
  * @param start The position to start at, counting from zero.
  * @param length The number of characters to take.
@@ -1410,41 +1561,48 @@ static inline krpc_error_t krpc_KRPC_Expression_StringSubstring(krpc_connection_
 
 /**
  * A string in lower case, independently of the game's language.
- * @return The string in lower case.
+ * @param connection A connection object.
+ * @param returnValue The string in lower case.
  * @param arg The string.
  */
 static inline krpc_error_t krpc_KRPC_Expression_StringToLower(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
 
 /**
  * A string in upper case, independently of the game's language.
- * @return The string in upper case.
+ * @param connection A connection object.
+ * @param returnValue The string in upper case.
  * @param arg The string.
  */
 static inline krpc_error_t krpc_KRPC_Expression_StringToUpper(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
 
 /**
  * A string with white space removed from both ends.
- * @return The trimmed string.
+ * @param connection A connection object.
+ * @param returnValue The trimmed string.
  * @param arg The string.
  */
 static inline krpc_error_t krpc_KRPC_Expression_StringTrim(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
 
 /**
  * A string with white space removed from its end.
- * @return The trimmed string.
+ * @param connection A connection object.
+ * @param returnValue The trimmed string.
  * @param arg The string.
  */
 static inline krpc_error_t krpc_KRPC_Expression_StringTrimEnd(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
 
 /**
  * A string with white space removed from its start.
- * @return The trimmed string.
+ * @param connection A connection object.
+ * @param returnValue The trimmed string.
  * @param arg The string.
  */
 static inline krpc_error_t krpc_KRPC_Expression_StringTrimStart(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
 
 /**
  * Numerical subtraction.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param arg0 The first operand.
  * @param arg1 The second operand.
  */
@@ -1452,7 +1610,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Subtract(krpc_connection_t conne
 
 /**
  * The sum of the values of a collection.
- * @return The sum of the elements in the collection.
+ * @param connection A connection object.
+ * @param returnValue The sum of the elements in the collection.
  * @param arg The list or set.
  */
 static inline krpc_error_t krpc_KRPC_Expression_Sum(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
@@ -1461,7 +1620,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Sum(krpc_connection_t connection
  * The first count values of a collection.
  *
  * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The first count values of the collection.
+ * @param connection A connection object.
+ * @param returnValue The first count values of the collection.
  * @param arg The collection.
  * @param count The number of values to take.
  */
@@ -1474,6 +1634,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Take(krpc_connection_t connectio
  * or event evaluating it. For example, the service `KRPC` and the name
  * `Error` raise KRPC.Error. Throws an exception if the service does not
  * declare it.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param service The name of the service the exception is defined in.
  * @param name The name of the exception.
  * @param message The message of the exception.
@@ -1482,7 +1644,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Throw(krpc_connection_t connecti
 
 /**
  * A collection as a list.
- * @return The collection as a list.
+ * @param connection A connection object.
+ * @param returnValue The collection as a list.
  * @param arg The collection.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ToList(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
@@ -1491,7 +1654,8 @@ static inline krpc_error_t krpc_KRPC_Expression_ToList(krpc_connection_t connect
  * A collection as a set.
  *
  * Throws an exception if a value is null.
- * @return The collection as a set.
+ * @param connection A connection object.
+ * @param returnValue The collection as a set.
  * @param arg The collection.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ToSet(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg);
@@ -1501,6 +1665,8 @@ static inline krpc_error_t krpc_KRPC_Expression_ToSet(krpc_connection_t connecti
  *
  * Only an exception a service declares can be named, and krpc_KRPC_Expression_TryCatchAll()
  * handles any exception. Throws an exception if the service does not declare it.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param body The statement to evaluate.
  * @param service The name of the service the exception is defined in.
  * @param name The name of the exception.
@@ -1511,6 +1677,8 @@ static inline krpc_error_t krpc_KRPC_Expression_TryCatch(krpc_connection_t conne
 
 /**
  * A try-catch statement that handles any exception.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param body The statement to evaluate.
  * @param message A string variable assigned the exception's message, or null.
  * @param handler The statement evaluated when an exception is caught.
@@ -1522,6 +1690,8 @@ static inline krpc_error_t krpc_KRPC_Expression_TryCatchAll(krpc_connection_t co
  *
  * The finalizer is evaluated after the body, whether or not the body raises an
  * exception. A break, continue or return cannot leave the finalizer.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param body The statement to evaluate.
  * @param finalizer The statement evaluated after the body.
  */
@@ -1531,7 +1701,8 @@ static inline krpc_error_t krpc_KRPC_Expression_TryFinally(krpc_connection_t con
  * The values in either of two collections, with duplicates removed.
  *
  * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The union of the two collections.
+ * @param connection A connection object.
+ * @param returnValue The union of the two collections.
  * @param arg1 The first collection.
  * @param arg2 The second collection.
  */
@@ -1539,7 +1710,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Union(krpc_connection_t connecti
 
 /**
  * A local variable, declared by krpc_KRPC_Expression_BlockWithVariables().
- * @return A local variable.
+ * @param connection A connection object.
+ * @param returnValue A local variable.
  * @param name The name of the variable.
  * @param type The type of the variable.
  */
@@ -1549,7 +1721,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Variable(krpc_connection_t conne
  * The values of a collection for which a predicate function returns true.
  *
  * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The filtered collection.
+ * @param connection A connection object.
+ * @param returnValue The filtered collection.
  * @param arg The list or set.
  * @param func The predicate function, taking an element of the collection.
  */
@@ -1559,6 +1732,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Where(krpc_connection_t connecti
  * A while loop, which evaluates the body while the condition is true.
  *
  * A krpc_KRPC_Expression_Break() or krpc_KRPC_Expression_Continue() in the body applies to this loop.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param condition The boolean condition.
  * @param body The statement evaluated on each iteration.
  */
@@ -1569,7 +1744,8 @@ static inline krpc_error_t krpc_KRPC_Expression_While(krpc_connection_t connecti
  *
  * The result is as long as the shorter of the two collections. It is lazily
  * evaluated, and krpc_KRPC_Expression_ToList() makes it concrete.
- * @return The combined collection.
+ * @param connection A connection object.
+ * @param returnValue The combined collection.
  * @param arg1 The first collection.
  * @param arg2 The second collection.
  * @param func A function combining a value from each collection.
@@ -1613,6 +1789,8 @@ static inline krpc_error_t krpc_KRPC_Type_Bytes(krpc_connection_t connection, kr
 
 /**
  * The type of a class defined by a service.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param service The name of the service the class is defined in.
  * @param name The name of the class.
  */
@@ -1621,6 +1799,8 @@ static inline krpc_error_t krpc_KRPC_Type_ClassType(krpc_connection_t connection
 /**
  * A dictionary type. Throws an exception if the key type is nullable or not a valid
  * key type.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param keyType The type of the keys of the dictionary.
  * @param valueType The type of the values of the dictionary.
  */
@@ -1633,6 +1813,8 @@ static inline krpc_error_t krpc_KRPC_Type_Double(krpc_connection_t connection, k
 
 /**
  * The type of an enumeration defined by a service.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param service The name of the service the enumeration is defined in.
  * @param name The name of the enumeration.
  */
@@ -1650,6 +1832,8 @@ static inline krpc_error_t krpc_KRPC_Type_Int(krpc_connection_t connection, krpc
 
 /**
  * A list type.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param valueType The type of the elements of the list.
  */
 static inline krpc_error_t krpc_KRPC_Type_ListType(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, krpc_KRPC_Type_t valueType);
@@ -1661,12 +1845,16 @@ static inline krpc_error_t krpc_KRPC_Type_Long(krpc_connection_t connection, krp
 
 /**
  * A nullable type, holding a value of the given type or null.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param valueType The type of the value.
  */
 static inline krpc_error_t krpc_KRPC_Type_NullableType(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, krpc_KRPC_Type_t valueType);
 
 /**
  * A set type. Throws an exception if the element type is nullable.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param valueType The type of the elements of the set.
  */
 static inline krpc_error_t krpc_KRPC_Type_SetType(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, krpc_KRPC_Type_t valueType);
@@ -1678,6 +1866,8 @@ static inline krpc_error_t krpc_KRPC_Type_String(krpc_connection_t connection, k
 
 /**
  * The type of a structure defined by a service.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param service The name of the service the structure is defined in.
  * @param name The name of the structure.
  */
@@ -1685,6 +1875,8 @@ static inline krpc_error_t krpc_KRPC_Type_StructType(krpc_connection_t connectio
 
 /**
  * A tuple type. Throws an exception if there are no element types or more than seven.
+ * @param connection A connection object.
+ * @param returnValue The value returned.
  * @param valueTypes The types of the elements of the tuple.
  */
 static inline krpc_error_t krpc_KRPC_Type_TupleType(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, const krpc_list_object_t * valueTypes);
