@@ -617,6 +617,18 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             return deflection;
         }
 
+        /// <summary>
+        /// The transform a control surface's lift and deflection are worked out in, or null if
+        /// it cannot be read.
+        /// </summary>
+        internal static Transform GetControlSurfaceBaseTransform (ModuleControlSurface surface)
+        {
+            float deflection;
+            Transform baseTransform;
+            GetControlSurfaceState (surface, out deflection, out baseTransform);
+            return baseTransform;
+        }
+
         static void GetControlSurfaceState (
             ModuleControlSurface surface, out float deflection, out Transform baseTransform)
         {

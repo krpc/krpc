@@ -235,14 +235,60 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal TupleV3 AvailableTorqueVectors {
             get {
-                var surface = InternalControlSurface;
-                var torque = surface.displaceVelocity ? surface.GetPotentialTorque () : PotentialTorque (surface);
-                // Normalize to the kRPC convention (positive torque >= 0, negative torque <= 0),
-                // matching ITorqueProviderExtensions.Sum
-                return new TupleV3 (
-                    new Vector3d (Math.Abs (torque.Item1.x), Math.Abs (torque.Item1.y), Math.Abs (torque.Item1.z)),
-                    new Vector3d (-Math.Abs (torque.Item2.x), -Math.Abs (torque.Item2.y), -Math.Abs (torque.Item2.z)));
+                double rollGain, rollTorque;
+                return ComputeAvailableTorque (InternalControlSurface, out rollGain, out rollTorque);
             }
+        }
+
+        /// <summary>
+        /// The available torque of a control surface, in N.m, with the positive torque
+        /// non-negative and the negative torque non-positive, as in
+        /// ITorqueProviderExtensions.Sum. Also the surface's roll
+        /// gain, and its roll torque at full deflection, which a full roll input reaches only
+        /// when the gain is at least one.
+        /// </summary>
+        internal static TupleV3 ComputeAvailableTorque (
+            ModuleControlSurface surface, out double rollGain, out double rollTorque)
+        {
+            rollGain = RollGain (surface);
+            TupleV3 torque;
+            if (surface.displaceVelocity) {
+                // A rotor blade takes its torque from the game's blade lift model
+                torque = surface.GetPotentialTorque ();
+                rollTorque = Math.Abs (torque.Item1.y);
+            } else {
+                torque = PotentialTorque (surface);
+                rollTorque = Math.Abs (torque.Item1.y);
+                var reach = Math.Min (1.0, rollGain);
+                torque = new TupleV3 (
+                    new Vector3d (torque.Item1.x, torque.Item1.y * reach, torque.Item1.z),
+                    new Vector3d (torque.Item2.x, torque.Item2.y * reach, torque.Item2.z));
+            }
+            return new TupleV3 (
+                new Vector3d (Math.Abs (torque.Item1.x), Math.Abs (torque.Item1.y), Math.Abs (torque.Item1.z)),
+                new Vector3d (-Math.Abs (torque.Item2.x), -Math.Abs (torque.Item2.y), -Math.Abs (torque.Item2.z)));
+        }
+
+        /// <summary>
+        /// The fraction of its range the surface deflects by per unit of roll input, before the
+        /// game clamps the deflection to the range. The game scales the roll input by the
+        /// surface's offset from the center of mass, in meters. An outboard surface reaches full
+        /// deflection at part of full roll input, and an inboard one never does.
+        /// </summary>
+        static double RollGain (ModuleControlSurface surface)
+        {
+            if (surface.ignoreRoll)
+                return 0;
+            var baseTransform = StockAerodynamics.GetControlSurfaceBaseTransform (surface);
+            if (baseTransform == null)
+                return 1;
+            // As ModuleControlSurface.FixedCtrlSurfaceUpdate
+            var vessel = surface.vessel;
+            var com = baseTransform.InverseTransformPoint (vessel.CurrentCoM);
+            var offset = new UnityEngine.Vector3 (com.x, 0, com.z);
+            var up = UnityEngine.Quaternion.Inverse (baseTransform.rotation) * vessel.ReferenceTransform.up;
+            var tilt = Math.Abs (UnityEngine.Vector3.Dot (offset.normalized, up));
+            return Math.Abs (offset.x * (1 - (tilt * 0.5 + 0.5)));
         }
 
         /// <summary>
