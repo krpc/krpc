@@ -38,6 +38,7 @@
     <Compile Include="..\InternalsVisibleTo.cs">
       <Link>InternalsVisibleTo.cs</Link>
     </Compile>
+    <Compile Include="AutoPilot\AerodynamicRateLimit.cs" />
     <Compile Include="AutoPilot\AttitudeController.cs" />
     <Compile Include="AutoPilot\DiagnosticLogBuffer.cs" />
     <Compile Include="AutoPilot\MitigationPolicy.cs" />

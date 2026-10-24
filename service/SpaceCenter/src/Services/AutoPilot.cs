@@ -781,6 +781,19 @@ namespace KRPC.SpaceCenter.Services
             set { Controller.MaxAngularVelocity = value.ToVector (); }
         }
 
+        /// <summary>
+        /// Whether to also limit the angular velocity to what the control surfaces hold against
+        /// the aerodynamic forces. Defaults to <c>true</c>.
+        /// </summary>
+        /// <remarks>
+        /// When disabled, only <see cref="MaxAngularVelocity"/> limits the angular velocity. Not
+        /// applied when the Ferram Aerospace Research mod is installed.
+        /// </remarks>
+        [KRPCProperty]
+        public bool LimitAngularVelocity {
+            get { return Controller.LimitAngularVelocity; }
+            set { Controller.LimitAngularVelocity = value; }
+        }
 
         /// <summary>
         /// The angle, in degrees, at which the autopilot considers the vessel to be pointing close

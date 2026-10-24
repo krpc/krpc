@@ -1623,6 +1623,7 @@ SpaceCenter.AutoPilot.CurrentRollError
 SpaceCenter.AutoPilot.RollStartAngle
 SpaceCenter.AutoPilot.RollEngageAngle
 SpaceCenter.AutoPilot.MaxAngularVelocity
+SpaceCenter.AutoPilot.LimitAngularVelocity
 SpaceCenter.AutoPilot.PitchYawAttenuationAngle
 SpaceCenter.AutoPilot.RollAttenuationAngle
 SpaceCenter.AutoPilot.AutoTune

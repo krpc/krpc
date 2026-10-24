@@ -109,6 +109,11 @@ namespace KRPC.SpaceCenter.AutoPilot
         Vector3d actuatorDelivered;
         // The share of each axis's available torque that comes from control surfaces
         Vector3d surfaceShare;
+        readonly AerodynamicRateLimit aerodynamicRateLimit = new AerodynamicRateLimit ();
+        // The angular velocity limits in use this tick for a positive and a negative rate, with pitch
+        // and yaw in the roll-invariant frame
+        Vector3d rateLimit;
+        Vector3d negativeRateLimit;
         // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
         Vector3d smoothedFfRi;
         // The observation layer: chatter detector (level + latch), frequency trackers with their
@@ -471,6 +476,14 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public Vector3d MaxAngularVelocity { get; set; }
 
+        // Whether to also limit the angular velocity to what the control torque holds against
+        // the aerodynamics (see AerodynamicRateLimit)
+        public bool LimitAngularVelocity { get; set; }
+
+        // The fraction of the aerodynamic rate limit commanded. The estimate is the steady rate,
+        // and a vessel pulling a high load bleeds speed and falls short of it.
+        const double AerodynamicRateFraction = 0.7;
+
         // Pointing deadband high angle (degrees) for the roll axis. At or above this error the
         // target roll velocity is commanded in full. Below it the commanded velocity ramps linearly
         // to zero by DeadbandLowFraction of it, so the craft coasts to a stop and the actuator
@@ -744,6 +757,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             StoppingVelocityThreshold = 0.05f;
             ReferenceFrame = vessel.SurfaceReferenceFrame;
             MaxAngularVelocity = new Vector3d (1, 1, 1);
+            LimitAngularVelocity = true;
             RollAttenuationAngle = 1.0;
             PitchYawAttenuationAngle = 1.0;
             RollStartAngle = 20.0;
@@ -797,6 +811,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             RollPID.ResetState ();
             YawPID.ResetState ();
             actuatorDelivered = Vector3d.zero;
+            aerodynamicRateLimit.Reset ();
             pointRotationValid = false;
             antipodeLatched = false;
             logAntipodeWeight = 0;
@@ -938,6 +953,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             Vector3d currentDirection;
             double phi, cosPhi, sinPhi;
             ComputeRollInvariantFrame (internalVessel, out currentDirection, out phi, out cosPhi, out sinPhi);
+            UpdateRateLimit (cosPhi, sinPhi);
 
             // Measure the raw angular velocity from the root-part rigidbody. On a structurally
             // flexible craft it carries the bending mode on top of the rigid-body rate. The chatter
@@ -1158,9 +1174,14 @@ namespace KRPC.SpaceCenter.AutoPilot
             state.Roll = (float)RollInput (commandRoll, torque [1]);
             state.Yaw = (float)commandYaw;
 
-            // Store the delivered command for next tick's control-output oscillation envelope.
-            var delivered = new Vector3d (commandPitch, commandRoll, commandYaw);
-            detectors.RecordControl (delivered);
+            // The command as a fraction of the available torque, before the roll input inversion,
+            // for the aerodynamic trim and next tick's control-output oscillation envelope
+            var command = new Vector3d (commandPitch, commandRoll, commandYaw);
+            // Estimate the aerodynamic limit only when some axis has control surface torque.
+            // UpdateRateLimit applies it to each axis by its surface share.
+            var surfaces = surfaceShare.x > 0 || surfaceShare.y > 0 || surfaceShare.z > 0;
+            aerodynamicRateLimit.Update (vessel, torque, command, dt, LimitAngularVelocity && surfaces);
+            detectors.RecordControl (command);
 
 
             if (diagnosticLogging) {
@@ -1374,6 +1395,48 @@ namespace KRPC.SpaceCenter.AutoPilot
                 var time = swingTime [axis] * share;
                 actuatorSlew [axis] = time > 0 ? 1.0 / time : double.PositiveInfinity;
             }
+        }
+
+        /// <summary>
+        /// Combine <see cref="MaxAngularVelocity"/> with the aerodynamic rate limit. The
+        /// aerodynamic limit is per body axis, and pitch and yaw are controlled in the
+        /// roll-invariant frame, so each of those takes the radius of the body-axis limit ellipse
+        /// along it, for either direction of rotation.
+        /// </summary>
+        void UpdateRateLimit (double cosPhi, double sinPhi)
+        {
+            rateLimit = MaxAngularVelocity;
+            negativeRateLimit = MaxAngularVelocity;
+            if (!LimitAngularVelocity)
+                return;
+            // The controller's positive rate is a negative rotation in the sense of AngleAxis
+            var positive = aerodynamicRateLimit.NegativeLimit * AerodynamicRateFraction;
+            var negative = aerodynamicRateLimit.PositiveLimit * AerodynamicRateFraction;
+            // Only the control surfaces' share of an axis's torque lags the command and drives a
+            // limit cycle, so the limit applies in proportion to that share
+            var pitchAxis = FromRollInvariant (new Vector3d (1, 0, 0), cosPhi, sinPhi);
+            var yawAxis = FromRollInvariant (new Vector3d (0, 0, 1), cosPhi, sinPhi);
+            for (int axis = 0; axis < 3; axis++) {
+                var share = surfaceShare [axis];
+                positive [axis] = share > 0 ? positive [axis] / share : double.PositiveInfinity;
+                negative [axis] = share > 0 ? negative [axis] / share : double.PositiveInfinity;
+            }
+            rateLimit.x = Math.Min (rateLimit.x, EllipseRadius (pitchAxis, positive, negative));
+            rateLimit.y = Math.Min (rateLimit.y, positive.y);
+            rateLimit.z = Math.Min (rateLimit.z, EllipseRadius (yawAxis, positive, negative));
+            negativeRateLimit.x = Math.Min (negativeRateLimit.x, EllipseRadius (-pitchAxis, positive, negative));
+            negativeRateLimit.y = Math.Min (negativeRateLimit.y, negative.y);
+            negativeRateLimit.z = Math.Min (negativeRateLimit.z, EllipseRadius (-yawAxis, positive, negative));
+        }
+
+        // The radius along a body direction, in the pitch and yaw plane, of the ellipse with
+        // the pitch and yaw limits for the direction's sign on each axis as semi-axes
+        static double EllipseRadius (Vector3d direction, Vector3d positive, Vector3d negative)
+        {
+            var pitch = direction.x == 0 ? 0.0 : direction.x / (direction.x > 0 ? positive.x : negative.x);
+            var yaw = direction.z == 0 ? 0.0 : direction.z / (direction.z > 0 ? positive.z : negative.z);
+            var inverse = Math.Sqrt (pitch * pitch + yaw * yaw);
+            return inverse > 0 ? 1.0 / inverse : double.PositiveInfinity;
         }
 
         /// <summary>
@@ -1906,7 +1969,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // stopping coefficient uses the unfloored gain, see the note in ComputePitchYawVelocity.
             var rollBandwidth = moi [1] > 0 ? ProfileKp (1, RollPID) * torque [1] / moi [1] : 0.0;
             result.y = ComputeAxisVelocity (anglesRI.y, torque [1], moi [1], currentOmegaRi.y,
-                MaxAngularVelocity [1], RollBand, rollBandwidth, out rollSample);
+                rateLimit [1], RollBand, rollBandwidth, out rollSample);
 
             // Pitch/yaw handled jointly so the nose follows a straight great-circle arc.
             double pitchVelocity, yawVelocity;
@@ -2017,8 +2080,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             // constraint ellipse along s-hat.
             var alpha2d = sPitch * sPitch * alphaPitch + sYaw * sYaw * alphaYaw;
 
-            var maxVPitch = MaxAngularVelocity [0];
-            var maxVYaw = MaxAngularVelocity [2];
+            // The command opposes s-hat
+            var maxVPitch = sPitch > 0 ? negativeRateLimit [0] : rateLimit [0];
+            var maxVYaw = sYaw > 0 ? negativeRateLimit [2] : rateLimit [2];
             var maxV2d = (maxVPitch > 0 && maxVYaw > 0)
                 ? Math.Sqrt (1.0 / (sPitch * sPitch / (maxVPitch * maxVPitch) + sYaw * sYaw / (maxVYaw * maxVYaw)))
                 : Math.Min (maxVPitch, maxVYaw);
