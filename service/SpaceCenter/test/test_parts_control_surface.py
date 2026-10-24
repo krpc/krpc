@@ -203,6 +203,36 @@ class TestPartsControlSurface(krpctest.TestCase):
         self.assertAlmostEqual(1, self.ctrlsrf.surface_area)
         self.assertAlmostEqual(0.2, self.winglet.surface_area)
 
+    def test_control_range(self):
+        self.assertAlmostEqual(15, self.ctrlsrf.control_range)
+        self.assertAlmostEqual(25, self.winglet.control_range)
+
+    def test_actuator_speed(self):
+        self.assertAlmostEqual(25, self.ctrlsrf.actuator_speed)
+        self.assertAlmostEqual(25, self.winglet.actuator_speed)
+
+    def test_deflection_angle(self):
+        # A full pitch input moves the pitch-enabled winglet at its actuator speed,
+        # and releasing it returns the winglet to neutral
+        control = self.connect().space_center.active_vessel.control
+        self.assertAlmostEqual(0, self.winglet.deflection_angle, delta=0.01)
+        control.pitch = 1
+        try:
+            self.wait(0.4)
+            angle = abs(self.winglet.deflection_angle)
+            self.assertGreater(angle, 1)
+            self.assertLess(angle, self.winglet.control_range)
+            self.wait(1.5)
+            self.assertAlmostEqual(
+                self.winglet.control_range,
+                abs(self.winglet.deflection_angle),
+                delta=self.winglet.control_range * 0.5,
+            )
+        finally:
+            control.pitch = 0
+        self.wait(1.5)
+        self.assertAlmostEqual(0, self.winglet.deflection_angle, delta=0.01)
+
     def test_available_torque(self):
         # Not verified here: that authority_limiter scales available_torque proportionally
         # (mirrors test_authority_limiter in test_parts_reaction_wheel.py). This

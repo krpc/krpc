@@ -190,6 +190,32 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The current angle of the control surface from its neutral position, in degrees.
+        /// Includes the <see cref="DeployAngle"/> while the surface is deployed.
+        /// </summary>
+        [KRPCProperty]
+        public float DeflectionAngle {
+            get { return StockAerodynamics.GetControlSurfaceDeflection (InternalControlSurface); }
+        }
+
+        /// <summary>
+        /// The angle the control surface deflects by for a full control input, in degrees,
+        /// before the <see cref="AuthorityLimiter"/> is applied.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float ControlRange {
+            get { return InternalControlSurface.ctrlSurfaceRange; }
+        }
+
+        /// <summary>
+        /// The rate the control surface deflects at, in degrees per second.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float ActuatorSpeed {
+            get { return InternalControlSurface.actuatorSpeed; }
+        }
+
+        /// <summary>
         /// Surface area of the control surface in <unit>m^2</unit>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]

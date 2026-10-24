@@ -1146,6 +1146,9 @@ SpaceCenter.ControlSurface.MinDeployAngle
 SpaceCenter.ControlSurface.MaxDeployAngle
 SpaceCenter.ControlSurface.DeflectionOverride
 SpaceCenter.ControlSurface.Deflection
+SpaceCenter.ControlSurface.DeflectionAngle
+SpaceCenter.ControlSurface.ControlRange
+SpaceCenter.ControlSurface.ActuatorSpeed
 SpaceCenter.ControlSurface.SurfaceArea
 SpaceCenter.ControlSurface.AvailableTorque
 SpaceCenter.Decoupler
