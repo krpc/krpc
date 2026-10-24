@@ -91,6 +91,11 @@ build:windows --compilation_mode=dbg
 # flag) and the system C++ compiler toolchain (via --extra_toolchains, which
 # outranks the registered hermetic toolchain). Requires an LLVM install at the
 # path in MODULE.bazel's llvm.toolchain_root (present in the buildenv image).
-# CI activates this in the container bazelrc; dev can pass it to reproduce CI.
+# CI turns this on through the ci config below; dev can pass it to reproduce CI.
 common:system-llvm --//tools/build/llvm:toolchain=system
 common:system-llvm --extra_toolchains=@llvm_system//:all
+
+# The Linux CI jobs, which run in the buildenv container. The bazel-fetch action
+# turns this on from ~/.bazelrc, so every bazel command in the job picks it up.
+common:ci --config=system-llvm
+test:ci --test_output=errors
