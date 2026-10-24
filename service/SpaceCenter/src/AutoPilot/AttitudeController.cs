@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using KRPC.Server;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
@@ -99,6 +100,13 @@ namespace KRPC.SpaceCenter.AutoPilot
         // shutdown while a reaction wheel remains) does not cause a one-tick gain spike that
         // jerks the gimbal.
         Vector3d smoothedTorque;
+        // Roll gain and full-deflection roll torque of each control surface that rolls the vessel
+        readonly List<double> rollGains = new List<double> ();
+        readonly List<double> rollSurfaceTorques = new List<double> ();
+        // The fraction of full command per second the control surfaces can deliver on each axis,
+        // and the command they have reached in the model
+        Vector3d actuatorSlew;
+        Vector3d actuatorDelivered;
         // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
         Vector3d smoothedFfRi;
         // The observation layer: chatter detector (level + latch), frequency trackers with their
@@ -774,6 +782,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             PitchPID.ResetState ();
             RollPID.ResetState ();
             YawPID.ResetState ();
+            actuatorDelivered = Vector3d.zero;
             pointRotationValid = false;
             antipodeLatched = false;
             logAntipodeWeight = 0;
@@ -858,6 +867,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var torque = vessel.AvailableTorqueVectors.Item1;
             var moi = vessel.MomentOfInertiaVector;
             var dt = Time.fixedDeltaTime;
+            UpdateControlSurfaces (torque);
 
             // While the vessel sits on the launch clamps (PRELAUNCH) the autopilot is engaged but
             // must not act. The craft is physically held and the engines are unlit, so available
@@ -1113,12 +1123,29 @@ namespace KRPC.SpaceCenter.AutoPilot
             var smoothedPitch = SmoothOutput (0, uPitch, dt);
             var smoothedRoll = SmoothOutput (1, uRoll, dt);
             var smoothedYaw = SmoothOutput (2, uYaw, dt);
-            state.Pitch = (float)(softStart * smoothedPitch);
-            state.Roll = (float)(softStart * smoothedRoll);
-            state.Yaw = (float)(softStart * smoothedYaw);
+            // Hold the integrals on a tick the control surfaces cannot keep up with, so they do
+            // not wind up while the surfaces swing. Pitch and yaw integrate in the roll-invariant
+            // frame, so both hold together.
+            var commandPitch = softStart * smoothedPitch;
+            var commandRoll = softStart * smoothedRoll;
+            var commandYaw = softStart * smoothedYaw;
+            var pitchLimited = ActuatorLags (0, commandPitch, dt);
+            var rollLimited = ActuatorLags (1, commandRoll, dt);
+            var yawLimited = ActuatorLags (2, commandYaw, dt);
+            if (pitchLimited || yawLimited) {
+                PitchPID.HoldIntegralTerm ();
+                YawPID.HoldIntegralTerm ();
+            }
+            if (rollLimited)
+                RollPID.HoldIntegralTerm ();
+
+            // The loop commands roll as a fraction of the available roll torque
+            state.Pitch = (float)commandPitch;
+            state.Roll = (float)RollInput (commandRoll, torque [1]);
+            state.Yaw = (float)commandYaw;
 
             // Store the delivered command for next tick's control-output oscillation envelope.
-            var delivered = new Vector3d (state.Pitch, state.Roll, state.Yaw);
+            var delivered = new Vector3d (commandPitch, commandRoll, commandYaw);
             detectors.RecordControl (delivered);
 
 
@@ -1288,6 +1315,94 @@ namespace KRPC.SpaceCenter.AutoPilot
             }
 
             return new Vector3d (anglesBody.x, anglesBody.z, roll);
+        }
+
+        /// <summary>
+        /// Refresh the roll gain and full-deflection roll torque of each control surface that
+        /// rolls the vessel, and the rate the surfaces can deliver a change of command at on each
+        /// axis.
+        /// </summary>
+        /// <remarks>
+        /// A surface swings through its range at its actuator speed. An axis whose torque comes
+        /// only from surfaces takes the slowest surface's swing time to go from no command to
+        /// full command. Other torque sources respond at once, so the swing time is scaled by the
+        /// surfaces' share of the axis's torque.
+        /// </remarks>
+        void UpdateControlSurfaces (Vector3d torque)
+        {
+            rollGains.Clear ();
+            rollSurfaceTorques.Clear ();
+            var surfaceTorque = Vector3d.zero;
+            var swingTime = Vector3d.zero;
+            foreach (var part in vessel.InternalVessel.parts) {
+                var surface = part.FindModuleImplementing<ModuleControlSurface> ();
+                if (surface == null)
+                    continue;
+                double gain, rollTorque;
+                var available = Services.Parts.ControlSurface.ComputeAvailableTorque (
+                    surface, out gain, out rollTorque).Item1;
+                var range = surface.ctrlSurfaceRange * surface.authorityLimiter / 100.0;
+                var swing = surface.actuatorSpeed > 0 ? range / surface.actuatorSpeed : 0.0;
+                for (int axis = 0; axis < 3; axis++) {
+                    if (available [axis] <= 0)
+                        continue;
+                    surfaceTorque [axis] += available [axis];
+                    swingTime [axis] = Math.Max (swingTime [axis], swing);
+                }
+                if (gain <= 0)
+                    continue;
+                rollGains.Add (gain);
+                rollSurfaceTorques.Add (rollTorque);
+            }
+            for (int axis = 0; axis < 3; axis++) {
+                var share = torque [axis] > 0 ? Math.Min (1.0, surfaceTorque [axis] / torque [axis]) : 0.0;
+                var time = swingTime [axis] * share;
+                actuatorSlew [axis] = time > 0 ? 1.0 / time : double.PositiveInfinity;
+            }
+        }
+
+        /// <summary>
+        /// Move an axis's modeled actuator command toward the command by what the control
+        /// surfaces can deliver in a tick. Returns whether the actuators lag the command. The
+        /// command itself goes out unchanged: the game moves the surfaces at their own speed, and
+        /// the other torque sources respond at once.
+        /// </summary>
+        bool ActuatorLags (int axis, double command, double dt)
+        {
+            var step = actuatorSlew [axis] * dt;
+            var delivered = actuatorDelivered [axis];
+            var limited = command.Clamp (delivered - step, delivered + step);
+            actuatorDelivered [axis] = limited;
+            return limited != command;
+        }
+
+        /// <summary>
+        /// The roll input that delivers the given fraction of the available roll torque. A
+        /// control surface deflects by its roll gain times the input, clamped to its range, so its
+        /// share is piecewise linear in the input. The other torque sources are linear in it.
+        /// </summary>
+        double RollInput (double fraction, double torque)
+        {
+            if (rollGains.Count == 0 || torque <= 0)
+                return fraction;
+            var surfaces = 0.0;
+            for (int i = 0; i < rollGains.Count; i++)
+                surfaces += rollSurfaceTorques [i] * Math.Min (1.0, rollGains [i]);
+            var linear = Math.Max (0.0, torque - surfaces);
+            var wanted = Math.Min (1.0, Math.Abs (fraction)) * torque;
+            // The delivered torque rises monotonically with the input, so bisect
+            double low = 0, high = 1;
+            for (int iteration = 0; iteration < 24; iteration++) {
+                var input = 0.5 * (low + high);
+                var delivered = linear * input;
+                for (int i = 0; i < rollGains.Count; i++)
+                    delivered += rollSurfaceTorques [i] * Math.Min (1.0, rollGains [i] * input);
+                if (delivered < wanted)
+                    low = input;
+                else
+                    high = input;
+            }
+            return Math.Sign (fraction) * 0.5 * (low + high);
         }
 
         /// <summary>
