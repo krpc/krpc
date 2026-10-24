@@ -21,6 +21,7 @@ from .nodes import (
     ClassStaticMethod,
     Enumeration,
     EnumerationValue,
+    ExceptionNode,
     Procedure,
     Property,
     Struct,
@@ -117,7 +118,9 @@ class PythonDomain(Domain[PythonLanguage]):
             isinstance(obj, cls) for cls in (Procedure, ClassMethod, ClassStaticMethod)
         ):
             prefix = "meth"
-        elif any(isinstance(obj, cls) for cls in (Class, Enumeration, Struct)):
+        elif any(
+            isinstance(obj, cls) for cls in (Class, Enumeration, Struct, ExceptionNode)
+        ):
             prefix = "class"
         else:
             raise RuntimeError(str(obj))

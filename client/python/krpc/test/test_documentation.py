@@ -43,6 +43,10 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
             "Enum ValueC documentation string, in m/s\u00b2, equal to\n\u00bd \u03c1 v\u00b2.",
             self.conn.test_service.TestEnum.value_c,
         )
+        self.check_doc(
+            "Throws a TestService.CustomException.",
+            self.conn.test_service.throw_custom_exception,
+        )
 
     def test_deprecated(self) -> None:
         self.check_doc(

@@ -820,6 +820,9 @@ static inline krpc_error_t krpc_TestService_ThrowArgumentNullException(krpc_conn
 
 static inline krpc_error_t krpc_TestService_ThrowArgumentOutOfRangeException(krpc_connection_t connection, int32_t * returnValue, int32_t foo);
 
+/**
+ * Throws a TestService::CustomException.
+ */
 static inline krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t connection, int32_t * returnValue);
 
 static inline krpc_error_t krpc_TestService_ThrowCustomExceptionLater(krpc_connection_t connection, int32_t * returnValue);

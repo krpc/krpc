@@ -771,6 +771,9 @@ namespace KRPC.Client.Services.TestService
             return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
+        /// <summary>
+        /// Throws a <see cref="T:TestService.CustomException" />.
+        /// </summary>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowCustomException", typeof(TypeSpecs))]
         public int ThrowCustomException ()
         {

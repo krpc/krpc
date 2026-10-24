@@ -20,6 +20,7 @@ from .nodes import (
     ClassStaticMethod,
     Enumeration,
     EnumerationValue,
+    ExceptionNode,
     Procedure,
     Property,
     Struct,
@@ -94,7 +95,7 @@ class LuaDomain(Domain[LuaLanguage]):
             prefix = "attr"
         elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             prefix = "meth"
-        elif isinstance(obj, (Class, Enumeration, Struct)):
+        elif isinstance(obj, (Class, Enumeration, Struct, ExceptionNode)):
             prefix = "class"
         else:
             raise RuntimeError(str(obj))

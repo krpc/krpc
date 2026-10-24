@@ -699,6 +699,9 @@ namespace TestServer
             }
         }
 
+        /// <summary>
+        /// Throws a <see cref="CustomException"/>.
+        /// </summary>
         [KRPCProcedure]
         public static int ThrowCustomException ()
         {
@@ -894,7 +897,7 @@ namespace TestServer
         /// Deprecated exception documentation string.
         /// </summary>
         [KRPCException]
-        [Obsolete ("Use CustomException instead.")]
+        [Obsolete ("Use <see cref='CustomException'/> instead.")]
         public sealed class DeprecatedException : System.Exception
         {
             public DeprecatedException ()

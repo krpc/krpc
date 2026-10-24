@@ -178,7 +178,8 @@ namespace KRPC.Service
                 .Where (t => Reflection.HasAttribute<KRPCServiceAttribute> (t) ||
                         Reflection.HasAttribute<KRPCClassAttribute> (t) ||
                         Reflection.HasAttribute<KRPCEnumAttribute> (t) ||
-                        Reflection.HasAttribute<KRPCStructAttribute> (t))
+                        Reflection.HasAttribute<KRPCStructAttribute> (t) ||
+                        Reflection.HasAttribute<KRPCExceptionAttribute> (t))
                 .Where (t => t.Name == name ||
                         (t.FullName != null && t.FullName.Replace ('+', '.').EndsWith ("." + name, StringComparison.Ordinal)))
                 .ToList ();
@@ -211,9 +212,16 @@ namespace KRPC.Service
             } else if (Reflection.HasAttribute<KRPCStructAttribute> (type)) {
                 TypeUtils.ValidateKRPCStruct (type);
                 return "T:" + TypeUtils.GetStructServiceName (type) + "." + name;
+            } else if (Reflection.HasAttribute<KRPCExceptionAttribute> (type)) {
+                TypeUtils.ValidateKRPCException (type);
+                return "T:" + TypeUtils.GetExceptionServiceName (type) + "." + name;
             }
+            // A system exception that a kRPC exception maps
+            Type mappedType;
+            if (Scanner.Scanner.GetMappedExceptionTypes ().TryGetValue (type, out mappedType))
+                return FormatTypeCref (mappedType);
             throw new DocumentationException (
-                "Type '" + name + "' is not a kRPC service, class, enumeration or structure");
+                "Type '" + name + "' is not a kRPC service, class, enumeration, structure or exception");
         }
 
         static string ResolveMethodCref (string reference)

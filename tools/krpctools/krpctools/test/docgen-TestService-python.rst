@@ -758,7 +758,7 @@ Service documentation string.
 
 .. staticmethod:: throw_custom_exception()
 
-
+   Throws a :class:`CustomException`.
 
    :rtype: int
    
@@ -1124,6 +1124,6 @@ Service documentation string.
 
 .. class:: DeprecatedException
 
-   .. warning:: Deprecated. Use CustomException instead.
+   .. warning:: Deprecated. Use :class:`CustomException` instead.
 
    Deprecated exception documentation string.

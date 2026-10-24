@@ -659,7 +659,7 @@
 
    .. function:: int ThrowCustomException()
 
-
+      Throws a :type:`CustomException`.
 
 
       :Game Scenes: All
@@ -1003,6 +1003,6 @@
 
 .. class:: DeprecatedException
 
-   .. warning:: Deprecated. Use CustomException instead.
+   .. warning:: Deprecated. Use :type:`CustomException` instead.
 
    Deprecated exception documentation string.

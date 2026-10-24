@@ -498,7 +498,7 @@
 
    .. method:: int throwCustomException()
 
-
+      Throws a :type:`CustomException`.
 
    
 
@@ -814,6 +814,6 @@
 
 .. type:: public class DeprecatedException
 
-   .. warning:: Deprecated. Use CustomException instead.
+   .. warning:: Deprecated. Use :type:`CustomException` instead.
 
    Deprecated exception documentation string.

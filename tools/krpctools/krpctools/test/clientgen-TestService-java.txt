@@ -713,6 +713,9 @@ public class TestService {
         return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
+    /**
+     * Throws a {@link TestService.CustomException}.
+     */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowCustomException", types = _Types.class)
     public int throwCustomException() throws RPCException {

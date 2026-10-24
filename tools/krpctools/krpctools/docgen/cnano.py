@@ -20,6 +20,7 @@ from .nodes import (
     ClassStaticMethod,
     Enumeration,
     EnumerationValue,
+    ExceptionNode,
     Procedure,
     Property,
     Struct,
@@ -193,6 +194,9 @@ class CnanoDomain(Domain[CnanoLanguage]):
             prefix = "macro"
         elif isinstance(obj, StructField):
             prefix = "member"
+        elif isinstance(obj, ExceptionNode):
+            # The C-nano client has no exception types, only the name in an error message
+            return self.code(obj.fullname)
         else:
             raise RuntimeError(str(obj))
         return ":%s:`%s`" % (prefix, self.ref(obj))

@@ -20,6 +20,7 @@ from .nodes import (
     ClassStaticMethod,
     Enumeration,
     EnumerationValue,
+    ExceptionNode,
     Procedure,
     Property,
     Struct,
@@ -100,7 +101,7 @@ class CppDomain(Domain[CppLanguage]):
             prefix = "func"
         elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             prefix = "func"
-        elif isinstance(obj, Class):
+        elif isinstance(obj, (Class, ExceptionNode)):
             prefix = "class"
         elif isinstance(obj, Enumeration):
             prefix = "enum"

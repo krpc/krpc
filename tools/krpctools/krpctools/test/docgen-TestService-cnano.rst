@@ -860,7 +860,7 @@ Service documentation string.
 
 .. function:: krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t connection, int32_t * returnValue)
 
-
+   Throws a ``TestService.CustomException``.
 
 
    
@@ -1206,6 +1206,6 @@ Exception class CustomException
 
 Exception class DeprecatedException
 
-.. warning:: Deprecated. Use CustomException instead.
+.. warning:: Deprecated. Use ``TestService.CustomException`` instead.
 
 Deprecated exception documentation string.

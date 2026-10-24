@@ -668,7 +668,7 @@
 
    .. function:: int32_t throw_custom_exception()
 
-
+      Throws a :class:`CustomException`.
 
 
    
@@ -1003,6 +1003,6 @@
 .. namespace:: krpc::services::TestService
 .. class:: DeprecatedException
 
-   .. warning:: Deprecated. Use CustomException instead.
+   .. warning:: Deprecated. Use :class:`CustomException` instead.
 
    Deprecated exception documentation string.

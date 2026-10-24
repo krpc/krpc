@@ -698,7 +698,7 @@ Service documentation string.
 
 .. staticmethod:: throw_custom_exception()
 
-
+   Throws a :class:`TestService.CustomException`.
 
    :rtype: number
 
@@ -1049,6 +1049,6 @@ Service documentation string.
 
 .. class:: DeprecatedException
 
-   .. warning:: Deprecated. Use CustomException instead.
+   .. warning:: Deprecated. Use :class:`TestService.CustomException` instead.
 
    Deprecated exception documentation string.

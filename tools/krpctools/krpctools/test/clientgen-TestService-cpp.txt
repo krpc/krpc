@@ -244,6 +244,9 @@ class TestService : public Service {
 
   int32_t throw_argument_out_of_range_exception(int32_t foo);
 
+  /**
+   * Throws a TestService::CustomException.
+   */
   int32_t throw_custom_exception();
 
   int32_t throw_custom_exception_later();
