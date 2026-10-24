@@ -148,7 +148,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A list of parts whose <see cref="Part.Name"/> is <paramref name="name"/>.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">The name of the part.</param>
         [KRPCMethod]
         public IList<Part> WithName (string name)
         {
@@ -158,7 +158,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A list of all parts whose <see cref="Part.Title"/> is <paramref name="title"/>.
         /// </summary>
-        /// <param name="title"></param>
+        /// <param name="title">The title of the part.</param>
         [KRPCMethod]
         public IList<Part> WithTitle (string title)
         {
@@ -168,7 +168,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A list of all parts whose <see cref="Part.Tag"/> is <paramref name="tag"/>.
         /// </summary>
-        /// <param name="tag"></param>
+        /// <param name="tag">The name tag of the part.</param>
         [KRPCMethod]
         public IList<Part> WithTag (string tag)
         {
@@ -179,7 +179,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A list of all parts that contain a <see cref="Module"/> whose
         /// <see cref="Module.Name"/> is <paramref name="moduleName"/>.
         /// </summary>
-        /// <param name="moduleName"></param>
+        /// <param name="moduleName">The name of the module.</param>
         [KRPCMethod]
         public IList<Part> WithModule (string moduleName)
         {
@@ -190,7 +190,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A list of modules (combined across all parts in the vessel) whose
         /// <see cref="Module.Name"/> is <paramref name="moduleName"/>.
         /// </summary>
-        /// <param name="moduleName"></param>
+        /// <param name="moduleName">The name of the module.</param>
         [KRPCMethod]
         public IList<Module> ModulesWithName (string moduleName)
         {

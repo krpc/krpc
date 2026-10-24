@@ -58,7 +58,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="longitude">Longitude of the waypoint.</param>
         /// <param name="body">Celestial body the waypoint is attached to.</param>
         /// <param name="name">Name of the waypoint.</param>
-        /// <returns></returns>
         [KRPCMethod]
         public Waypoint AddWaypoint (double latitude, double longitude, CelestialBody body, string name)
         {
@@ -74,7 +73,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="altitude">Altitude (above sea level) of the waypoint.</param>
         /// <param name="body">Celestial body the waypoint is attached to.</param>
         /// <param name="name">Name of the waypoint.</param>
-        /// <returns></returns>
         [KRPCMethod]
         public Waypoint AddWaypointAtAltitude (double latitude, double longitude, double altitude, CelestialBody body, string name)
         {
