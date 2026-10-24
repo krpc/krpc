@@ -200,7 +200,7 @@ static inline krpc_error_t krpc_decode_set_object(
 #endif  // KRPC_TYPE_SET_OBJECT
 
 /**
- * The game scene. See KRPC::game_scene.
+ * The game scene. See krpc_KRPC_GameScene().
  */
 typedef enum {
   /**
@@ -302,19 +302,19 @@ typedef enum {
    */
   KRPC_KRPC_TYPECODE_STRUCT = 102,
   /**
-   * A tuple, with the types of its values in KRPC::Type::types.
+   * A tuple, with the types of its values in krpc_KRPC_Type_Types().
    */
   KRPC_KRPC_TYPECODE_TUPLE = 300,
   /**
-   * A list, with the type of its values in KRPC::Type::types.
+   * A list, with the type of its values in krpc_KRPC_Type_Types().
    */
   KRPC_KRPC_TYPECODE_LIST = 301,
   /**
-   * A set, with the type of its values in KRPC::Type::types.
+   * A set, with the type of its values in krpc_KRPC_Type_Types().
    */
   KRPC_KRPC_TYPECODE_SET = 302,
   /**
-   * A dictionary, with the types of its keys and values in KRPC::Type::types.
+   * A dictionary, with the types of its keys and values in krpc_KRPC_Type_Types().
    */
   KRPC_KRPC_TYPECODE_DICTIONARY = 303
 } krpc_KRPC_TypeCode_t;
@@ -324,7 +324,7 @@ typedef enum {
  *
  * The function is evaluated on each update, and each call adds a new event. Any
  * exception from the function ends the event, including
- * KRPC::ObjectNotLoadedException. A procedure that pauses execution to resume
+ * KRPC.ObjectNotLoadedException. A procedure that pauses execution to resume
  * on a later tick produces an error on the event's stream.
  */
 static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, krpc_schema_Event * returnValue, krpc_KRPC_Expression_t function);
@@ -333,8 +333,8 @@ static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, krpc
  * Add a stream of the value a server side function computes on each update.
  *
  * Each call adds a new stream, with values of the type given by
- * KRPC::Expression::return_type. Any exception from the function ends the
- * stream, including KRPC::ObjectNotLoadedException. A procedure that pauses
+ * krpc_KRPC_Expression_ReturnType(). Any exception from the function ends the
+ * stream, including KRPC.ObjectNotLoadedException. A procedure that pauses
  * execution to resume on a later tick produces an error on the stream.
  */
 static inline krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, krpc_KRPC_Expression_t function);
@@ -378,7 +378,7 @@ static inline krpc_error_t krpc_KRPC_GetServices(krpc_connection_t connection, k
 static inline krpc_error_t krpc_KRPC_GetStatus(krpc_connection_t connection, krpc_schema_Status * returnValue);
 
 /**
- * Hold the game on its current physics tick until KRPC::release_tick is called
+ * Hold the game on its current physics tick until krpc_KRPC_ReleaseTick() is called
  * or the hold times out. Every call made in between is executed before the game
  * advances, so a read, compute and write all happen in the state of one tick.
  *
@@ -407,15 +407,15 @@ static inline krpc_error_t krpc_KRPC_HoldTick(krpc_connection_t connection);
  * act on every tick, work, and come back to it.
  *
  * The game advances one tick per call, so it runs at the rate of the loop for as long
- * as the loop runs. End the loop with KRPC::release_tick.
+ * as the loop runs. End the loop with krpc_KRPC_ReleaseTick().
  *
- * Every limit of KRPC::hold_tick applies, the timeout included. A hold lost to
+ * Every limit of krpc_KRPC_HoldTick() applies, the timeout included. A hold lost to
  * the timeout is not reported, and the next call takes whatever tick it lands on.
  */
 static inline krpc_error_t krpc_KRPC_NextTick(krpc_connection_t connection);
 
 /**
- * Let the game move on from the tick that KRPC::hold_tick held it on. Does
+ * Let the game move on from the tick that krpc_KRPC_HoldTick() held it on. Does
  * nothing when no tick is held, which is the case once a hold has timed out.
  */
 static inline krpc_error_t krpc_KRPC_ReleaseTick(krpc_connection_t connection);
@@ -432,7 +432,7 @@ static inline krpc_error_t krpc_KRPC_RemoveStream(krpc_connection_t connection, 
  * Run a server side function once, within a single physics tick, and return
  * the value it produces.
  *
- * The arguments are encoded at the types given by KRPC::Expression::parameter_types.
+ * The arguments are encoded at the types given by krpc_KRPC_Expression_ParameterTypes().
  * Throws an exception if a procedure the function calls pauses execution, and the
  * effects up to the pause remain.
  * @return The encoded value of the function, or no bytes for a function with no
@@ -460,9 +460,9 @@ static inline krpc_error_t krpc_KRPC_Clients(krpc_connection_t connection, krpc_
  * scene, or opens/closes the corresponding facility for the pseudo-scenes.
  * Scene changes happen asynchronously: setting this property returns
  * immediately, and clients should poll it until it reports the requested
- * scene. Setting it to KRPC::GameScene::flight resumes the save's
+ * scene. Setting it to #KRPC_KRPC_GAMESCENE_FLIGHT resumes the save's
  * active vessel, and fails if there is none. Moving between
- * KRPC::GameScene::editor_vab and KRPC::GameScene::editor_sph
+ * #KRPC_KRPC_GAMESCENE_EDITORVAB and #KRPC_KRPC_GAMESCENE_EDITORSPH
  * keeps the vessel that is being constructed, as the game's own switch
  * editor button does. Leaving flight saves the game first, unless the game
  * cannot be saved, e.g. while under acceleration.
@@ -474,9 +474,9 @@ static inline krpc_error_t krpc_KRPC_GameScene(krpc_connection_t connection, krp
  * scene, or opens/closes the corresponding facility for the pseudo-scenes.
  * Scene changes happen asynchronously: setting this property returns
  * immediately, and clients should poll it until it reports the requested
- * scene. Setting it to KRPC::GameScene::flight resumes the save's
+ * scene. Setting it to #KRPC_KRPC_GAMESCENE_FLIGHT resumes the save's
  * active vessel, and fails if there is none. Moving between
- * KRPC::GameScene::editor_vab and KRPC::GameScene::editor_sph
+ * #KRPC_KRPC_GAMESCENE_EDITORVAB and #KRPC_KRPC_GAMESCENE_EDITORSPH
  * keeps the vessel that is being constructed, as the game's own switch
  * editor button does. Leaving flight saves the game first, unless the game
  * cannot be saved, e.g. while under acceleration.
@@ -617,7 +617,7 @@ static inline krpc_error_t krpc_KRPC_Expression_BuildDictionary(krpc_connection_
  *
  * The instance the call is made on, and the values of its arguments, are fixed
  * when the expression is created. A call to a procedure with no return value is
- * evaluated for its effects, as a statement in a KRPC::Expression::block. A collection the
+ * evaluated for its effects, as a statement in a krpc_KRPC_Expression_Block(). A collection the
  * procedure returns is copied, as a client would receive it.
  * @param call The procedure call.
  */
@@ -652,7 +652,7 @@ static inline krpc_error_t krpc_KRPC_Expression_Clear(krpc_connection_t connecti
 /**
  * The values of one collection followed by those of another.
  *
- * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+ * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The first collection followed by the second.
  * @param arg1 The first collection.
  * @param arg2 The second collection.
@@ -730,7 +730,7 @@ static inline krpc_error_t krpc_KRPC_Expression_ConstantLong(krpc_connection_t c
 /**
  * A null constant of the given type.
  *
- * The type is made nullable, as by KRPC::Type::nullable_type.
+ * The type is made nullable, as by krpc_KRPC_Type_NullableType().
  * @param type The type of the value.
  */
 static inline krpc_error_t krpc_KRPC_Expression_ConstantNull(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Type_t type);
@@ -876,7 +876,7 @@ static inline krpc_error_t krpc_KRPC_Expression_CreateTuple(krpc_connection_t co
  * The keys of a dictionary, as a list.
  *
  * The collection operations take the keys of a dictionary from here, and its values
- * from KRPC::Expression::dictionary_values.
+ * from krpc_KRPC_Expression_DictionaryValues().
  * @return The keys of the dictionary.
  * @param dictionary The dictionary.
  */
@@ -893,7 +893,7 @@ static inline krpc_error_t krpc_KRPC_Expression_DictionaryValues(krpc_connection
  * The values of a collection with duplicates removed, keeping the first
  * occurrence of each.
  *
- * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+ * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The distinct values of the collection.
  * @param arg The collection.
  */
@@ -930,7 +930,7 @@ static inline krpc_error_t krpc_KRPC_Expression_Equal(krpc_connection_t connecti
  * The values of the first collection that are not in the second, with
  * duplicates removed.
  *
- * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+ * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The difference between the two collections.
  * @param arg1 The first collection.
  * @param arg2 The second collection.
@@ -957,8 +957,8 @@ static inline krpc_error_t krpc_KRPC_Expression_First(krpc_connection_t connecti
  * A loop that evaluates the body once for each value of a collection.
  *
  * The loop variable is a local variable declared by an enclosing
- * KRPC::Expression::block_with_variables, or a parameter of an enclosing KRPC::Expression::lambda.
- * A KRPC::Expression::break or KRPC::Expression::continue in the body applies to this loop.
+ * krpc_KRPC_Expression_BlockWithVariables(), or a parameter of an enclosing krpc_KRPC_Expression_Lambda().
+ * A krpc_KRPC_Expression_Break() or krpc_KRPC_Expression_Continue() in the body applies to this loop.
  * @param variable The loop variable.
  * @param collection The collection to iterate over.
  * @param body The statement evaluated on each iteration.
@@ -1011,7 +1011,7 @@ static inline krpc_error_t krpc_KRPC_Expression_GroupBy(krpc_connection_t connec
 /**
  * An if statement, with no value.
  *
- * Use KRPC::Expression::conditional for an if-then-else that produces a value.
+ * Use krpc_KRPC_Expression_Conditional() for an if-then-else that produces a value.
  * @param condition The boolean condition.
  * @param body The statement evaluated when the condition is true.
  */
@@ -1020,7 +1020,7 @@ static inline krpc_error_t krpc_KRPC_Expression_IfThen(krpc_connection_t connect
 /**
  * An if-else statement, with no value.
  *
- * Use KRPC::Expression::conditional for an if-then-else that produces a value.
+ * Use krpc_KRPC_Expression_Conditional() for an if-then-else that produces a value.
  * @param condition The boolean condition.
  * @param body The statement evaluated when the condition is true.
  * @param elseBody The statement evaluated when the condition is false.
@@ -1030,7 +1030,7 @@ static inline krpc_error_t krpc_KRPC_Expression_IfThenElse(krpc_connection_t con
 /**
  * The values in both of two collections, with duplicates removed.
  *
- * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+ * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The intersection of the two collections.
  * @param arg1 The first collection.
  * @param arg2 The second collection.
@@ -1055,7 +1055,7 @@ static inline krpc_error_t krpc_KRPC_Expression_IsNull(krpc_connection_t connect
  * A function with the given parameters and body.
  *
  * The body is an expression or a block of statements, and a body with no value is
- * evaluated for its effects. A KRPC::Expression::return or KRPC::Expression::return_nothing
+ * evaluated for its effects. A krpc_KRPC_Expression_Return() or krpc_KRPC_Expression_ReturnNothing()
  * statement ends the evaluation.
  * @return A function.
  * @param parameters The parameters of the function.
@@ -1181,7 +1181,7 @@ static inline krpc_error_t krpc_KRPC_Expression_Or(krpc_connection_t connection,
 /**
  * The values of a collection ordered by the key a function produces for each of them.
  *
- * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+ * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The ordered collection.
  * @param arg The collection to order.
  * @param key A function producing the key to order values by.
@@ -1191,8 +1191,8 @@ static inline krpc_error_t krpc_KRPC_Expression_OrderBy(krpc_connection_t connec
 /**
  * A named parameter of a function.
  *
- * A value is bound to it by name with KRPC::Expression::invoke, or by its position in
- * the parameters of a KRPC::Expression::lambda.
+ * A value is bound to it by name with krpc_KRPC_Expression_Invoke(), or by its position in
+ * the parameters of a krpc_KRPC_Expression_Lambda().
  * @return A named parameter.
  * @param name The name of the parameter.
  * @param type The type of the parameter.
@@ -1241,7 +1241,7 @@ static inline krpc_error_t krpc_KRPC_Expression_ReturnNothing(krpc_connection_t 
 /**
  * The values of a collection in the opposite order.
  *
- * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+ * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The reversed collection.
  * @param arg The collection.
  */
@@ -1260,7 +1260,7 @@ static inline krpc_error_t krpc_KRPC_Expression_RightShift(krpc_connection_t con
 /**
  * The result of a function for each value of a collection.
  *
- * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+ * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The collection of function results.
  * @param arg The list or set.
  * @param func The function, taking an element of the collection.
@@ -1271,7 +1271,7 @@ static inline krpc_error_t krpc_KRPC_Expression_Select(krpc_connection_t connect
  * The values of the collections a function returns for each value of a collection,
  * flattened into one.
  *
- * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+ * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The flattened collection of function results.
  * @param arg The list or set.
  * @param func The function, taking an element of the collection
@@ -1293,7 +1293,7 @@ static inline krpc_error_t krpc_KRPC_Expression_Set(krpc_connection_t connection
 /**
  * A collection without its first count values.
  *
- * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+ * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The collection without its first count values.
  * @param arg The collection.
  * @param count The number of values to skip.
@@ -1315,7 +1315,7 @@ static inline krpc_error_t krpc_KRPC_Expression_StateVariable(krpc_connection_t 
 /**
  * The concatenation of strings.
  *
- * Use KRPC::Expression::convert_to_string to convert other values to strings.
+ * Use krpc_KRPC_Expression_ConvertToString() to convert other values to strings.
  * @return The concatenated string.
  * @param args The strings to concatenate, in order.
  */
@@ -1460,7 +1460,7 @@ static inline krpc_error_t krpc_KRPC_Expression_Sum(krpc_connection_t connection
 /**
  * The first count values of a collection.
  *
- * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+ * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The first count values of the collection.
  * @param arg The collection.
  * @param count The number of values to take.
@@ -1472,7 +1472,7 @@ static inline krpc_error_t krpc_KRPC_Expression_Take(krpc_connection_t connectio
  *
  * The client receives the exception as an error from the function, or from the stream
  * or event evaluating it. For example, the service KRPC and the name
- * Error raise KRPC::Error. Throws an exception if the service does not
+ * Error raise KRPC.Error. Throws an exception if the service does not
  * declare it.
  * @param service The name of the service the exception is defined in.
  * @param name The name of the exception.
@@ -1499,7 +1499,7 @@ static inline krpc_error_t krpc_KRPC_Expression_ToSet(krpc_connection_t connecti
 /**
  * A try-catch statement that handles the named exception.
  *
- * Only an exception a service declares can be named, and KRPC::Expression::try_catch_all
+ * Only an exception a service declares can be named, and krpc_KRPC_Expression_TryCatchAll()
  * handles any exception. Throws an exception if the service does not declare it.
  * @param body The statement to evaluate.
  * @param service The name of the service the exception is defined in.
@@ -1530,7 +1530,7 @@ static inline krpc_error_t krpc_KRPC_Expression_TryFinally(krpc_connection_t con
 /**
  * The values in either of two collections, with duplicates removed.
  *
- * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+ * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The union of the two collections.
  * @param arg1 The first collection.
  * @param arg2 The second collection.
@@ -1538,7 +1538,7 @@ static inline krpc_error_t krpc_KRPC_Expression_TryFinally(krpc_connection_t con
 static inline krpc_error_t krpc_KRPC_Expression_Union(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t arg1, krpc_KRPC_Expression_t arg2);
 
 /**
- * A local variable, declared by KRPC::Expression::block_with_variables.
+ * A local variable, declared by krpc_KRPC_Expression_BlockWithVariables().
  * @return A local variable.
  * @param name The name of the variable.
  * @param type The type of the variable.
@@ -1548,7 +1548,7 @@ static inline krpc_error_t krpc_KRPC_Expression_Variable(krpc_connection_t conne
 /**
  * The values of a collection for which a predicate function returns true.
  *
- * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+ * The result is lazily evaluated. krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The filtered collection.
  * @param arg The list or set.
  * @param func The predicate function, taking an element of the collection.
@@ -1558,7 +1558,7 @@ static inline krpc_error_t krpc_KRPC_Expression_Where(krpc_connection_t connecti
 /**
  * A while loop, which evaluates the body while the condition is true.
  *
- * A KRPC::Expression::break or KRPC::Expression::continue in the body applies to this loop.
+ * A krpc_KRPC_Expression_Break() or krpc_KRPC_Expression_Continue() in the body applies to this loop.
  * @param condition The boolean condition.
  * @param body The statement evaluated on each iteration.
  */
@@ -1568,7 +1568,7 @@ static inline krpc_error_t krpc_KRPC_Expression_While(krpc_connection_t connecti
  * The results of a function applied to the values of two collections in pairs.
  *
  * The result is as long as the shorter of the two collections. It is lazily
- * evaluated, and KRPC::Expression::to_list makes it concrete.
+ * evaluated, and krpc_KRPC_Expression_ToList() makes it concrete.
  * @return The combined collection.
  * @param arg1 The first collection.
  * @param arg2 The second collection.
@@ -1579,7 +1579,7 @@ static inline krpc_error_t krpc_KRPC_Expression_Zip(krpc_connection_t connection
 /**
  * Whether the expression evaluates to a value.
  *
- * An expression with no value has no KRPC::Expression::return_type. An empty
+ * An expression with no value has no krpc_KRPC_Expression_ReturnType(). An empty
  * collection and no value both encode to an empty sequence of bytes.
  */
 static inline krpc_error_t krpc_KRPC_Expression_HasReturnType(krpc_connection_t connection, bool * returnValue, krpc_KRPC_Expression_t instance);
@@ -1587,7 +1587,7 @@ static inline krpc_error_t krpc_KRPC_Expression_HasReturnType(krpc_connection_t 
 /**
  * The types of the function's parameters.
  *
- * Empty for a function that is not created with KRPC::Expression::lambda.
+ * Empty for a function that is not created with krpc_KRPC_Expression_Lambda().
  */
 static inline krpc_error_t krpc_KRPC_Expression_ParameterTypes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KRPC_Expression_t instance);
 
@@ -1595,9 +1595,9 @@ static inline krpc_error_t krpc_KRPC_Expression_ParameterTypes(krpc_connection_t
  * The type of the value the expression evaluates to. Throws an exception if the
  * value cannot be sent to a client.
  *
- * A function created with KRPC::Expression::lambda evaluates to the value it returns. A
- * lazily evaluated collection, such as from KRPC::Expression::select, is sent once
- * converted by KRPC::Expression::to_list or KRPC::Expression::to_set.
+ * A function created with krpc_KRPC_Expression_Lambda() evaluates to the value it returns. A
+ * lazily evaluated collection, such as from krpc_KRPC_Expression_Select(), is sent once
+ * converted by krpc_KRPC_Expression_ToList() or krpc_KRPC_Expression_ToSet().
  */
 static inline krpc_error_t krpc_KRPC_Expression_ReturnType(krpc_connection_t connection, krpc_KRPC_Type_t * returnValue, krpc_KRPC_Expression_t instance);
 

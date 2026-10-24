@@ -4,6 +4,7 @@ from krpc.types import ClassType
 from krpc.utils import snake_case
 
 from ..lang.cpp import CppLanguage
+from . import crefs
 from .docparser import DocParser
 from .generator import Generator
 
@@ -29,13 +30,26 @@ class CppGenerator(Generator[CppLanguage]):
     def parse_type(self, typ):
         return _cpp_template_fix(self.language.parse_type(typ))
 
-    @staticmethod
-    def parse_documentation(documentation):
-        documentation = CppDocParser().parse(documentation)
+    def parse_documentation(self, documentation):
+        documentation = CppDocParser(self.parse_cref).parse(documentation)
         if documentation == "":
             return ""
         lines = ["/**"] + [" * " + line for line in documentation.split("\n")] + [" */"]
         return "\n".join(line.rstrip() for line in lines)
+
+    def format_cref(self, target):
+        # Fully qualified, so that Doxygen links it from the header of any service
+        name = "krpc::services::" + target.service
+        if target.type is not None:
+            name += "::" + target.type
+        if target.member is None:
+            return name
+        member = self.language.parse_name(target.member)
+        if not target.getter:
+            member = "set_" + member
+        if target.kind in (crefs.ENUMERATION_VALUE, crefs.STRUCT_FIELD):
+            return name + "::" + member
+        return name + "::" + member + "()"
 
     def parse_context(self, context):
         for info in context["procedures"].values():
@@ -159,9 +173,6 @@ class CppDocParser(DocParser):
     def parse_returns(self, node):
         return "\n@return %s" % self.parse_node(node).strip()
 
-    def parse_see(self, node):
-        return self.parse_cref(node.attrib["cref"])
-
     @staticmethod
     def parse_paramref(node):
         return node.attrib["name"]
@@ -179,14 +190,3 @@ class CppDocParser(DocParser):
             "- %s\n" % self.parse_node(item[0], indent=2)[2:].rstrip() for item in node
         ]
         return "\n" + "".join(content)
-
-    @staticmethod
-    def parse_cref(cref):
-        if cref[0] == "M":
-            cref = cref[2:].split(".")
-            member = snake_case(cref[-1])
-            del cref[-1]
-            return "::".join(cref) + "::" + member
-        if cref[0] == "T":
-            return cref[2:].replace(".", "::")
-        raise RuntimeError("Unknown cref '%s'" % cref)

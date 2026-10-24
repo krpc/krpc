@@ -715,6 +715,14 @@ public class TestService {
 
     /**
      * Throws a {@link TestService.CustomException}.
+     *
+     * Links to each kind of member: {@link TestService}, {@link TestService.TestClass},
+     * {@link TestService.TestEnum}, {@link TestService.TestStruct}, {@link KRPC.InvalidOperationException},
+     * {@link TestService#floatToString}, {@link TestService#getStringProperty()},
+     * {@link TestService#setStringPropertyPrivateGet}, {@link TestService.TestClass#floatToString},
+     * {@link TestService.TestClass#staticMethod}, {@link TestService.TestClass#getIntProperty()},
+     * {@link TestService.TestClass#setStringPropertyPrivateGet}, {@link TestService.TestEnum#VALUE_A} and
+     * {@link TestService.TestStruct#getIntField()}.
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowCustomException", types = _Types.class)

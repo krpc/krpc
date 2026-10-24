@@ -821,7 +821,15 @@ static inline krpc_error_t krpc_TestService_ThrowArgumentNullException(krpc_conn
 static inline krpc_error_t krpc_TestService_ThrowArgumentOutOfRangeException(krpc_connection_t connection, int32_t * returnValue, int32_t foo);
 
 /**
- * Throws a TestService::CustomException.
+ * Throws a TestService.CustomException.
+ *
+ * Links to each kind of member: TestService, krpc_TestService_TestClass_t,
+ * krpc_TestService_TestEnum_t, krpc_TestService_TestStruct_t, KRPC.InvalidOperationException,
+ * krpc_TestService_FloatToString(), krpc_TestService_StringProperty(),
+ * krpc_TestService_set_StringPropertyPrivateGet(), krpc_TestService_TestClass_FloatToString(),
+ * krpc_TestService_TestClass_StaticMethod(), krpc_TestService_TestClass_IntProperty(),
+ * krpc_TestService_TestClass_set_StringPropertyPrivateGet(), #KRPC_TESTSERVICE_TESTENUM_VALUEA and
+ * krpc_TestService_TestStruct_t.int_field.
  */
 static inline krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t connection, int32_t * returnValue);
 

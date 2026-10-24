@@ -120,7 +120,7 @@ class KRPC : public Service {
    * so the object cannot be used. For example, the part it represents
    * was destroyed, or the vessel it belongs to was recovered.
    *
-   * See KRPC::ObjectNotLoadedException for a game object that exists but is not
+   * See krpc::services::KRPC::ObjectNotLoadedException for a game object that exists but is not
    * loaded.
    */
   class ObjectDestroyedException : public ::krpc::RPCError {
@@ -132,7 +132,7 @@ class KRPC : public Service {
    * The game object that a service object refers to exists, but is not loaded.
    * For example, the game is loading, or the vessel carrying the part is unloaded.
    *
-   * See KRPC::ObjectDestroyedException for a game object that no longer exists.
+   * See krpc::services::KRPC::ObjectDestroyedException for a game object that no longer exists.
    */
   class ObjectNotLoadedException : public ::krpc::RPCError {
    public:
@@ -172,7 +172,7 @@ class KRPC : public Service {
   };
 
   /**
-   * The game scene. See KRPC::game_scene.
+   * The game scene. See krpc::services::KRPC::game_scene().
    */
   enum struct GameScene {
     /**
@@ -274,19 +274,19 @@ class KRPC : public Service {
      */
     struct_ = 102,
     /**
-     * A tuple, with the types of its values in KRPC::Type::types.
+     * A tuple, with the types of its values in krpc::services::KRPC::Type::types().
      */
     tuple = 300,
     /**
-     * A list, with the type of its values in KRPC::Type::types.
+     * A list, with the type of its values in krpc::services::KRPC::Type::types().
      */
     list = 301,
     /**
-     * A set, with the type of its values in KRPC::Type::types.
+     * A set, with the type of its values in krpc::services::KRPC::Type::types().
      */
     set = 302,
     /**
-     * A dictionary, with the types of its keys and values in KRPC::Type::types.
+     * A dictionary, with the types of its keys and values in krpc::services::KRPC::Type::types().
      */
     dictionary = 303
   };
@@ -296,7 +296,7 @@ class KRPC : public Service {
    *
    * The function is evaluated on each update, and each call adds a new event. Any
    * exception from the function ends the event, including
-   * KRPC::ObjectNotLoadedException. A procedure that pauses execution to resume
+   * krpc::services::KRPC::ObjectNotLoadedException. A procedure that pauses execution to resume
    * on a later tick produces an error on the event's stream.
    */
   ::krpc::Event add_event(KRPC::Expression function);
@@ -305,8 +305,8 @@ class KRPC : public Service {
    * Add a stream of the value a server side function computes on each update.
    *
    * Each call adds a new stream, with values of the type given by
-   * KRPC::Expression::return_type. Any exception from the function ends the
-   * stream, including KRPC::ObjectNotLoadedException. A procedure that pauses
+   * krpc::services::KRPC::Expression::return_type(). Any exception from the function ends the
+   * stream, including krpc::services::KRPC::ObjectNotLoadedException. A procedure that pauses
    * execution to resume on a later tick produces an error on the stream.
    */
   krpc::schema::Stream add_function_stream(KRPC::Expression function);
@@ -350,7 +350,7 @@ class KRPC : public Service {
   krpc::schema::Status get_status();
 
   /**
-   * Hold the game on its current physics tick until KRPC::release_tick is called
+   * Hold the game on its current physics tick until krpc::services::KRPC::release_tick() is called
    * or the hold times out. Every call made in between is executed before the game
    * advances, so a read, compute and write all happen in the state of one tick.
    *
@@ -379,15 +379,15 @@ class KRPC : public Service {
    * act on every tick, work, and come back to it.
    *
    * The game advances one tick per call, so it runs at the rate of the loop for as long
-   * as the loop runs. End the loop with KRPC::release_tick.
+   * as the loop runs. End the loop with krpc::services::KRPC::release_tick().
    *
-   * Every limit of KRPC::hold_tick applies, the timeout included. A hold lost to
+   * Every limit of krpc::services::KRPC::hold_tick() applies, the timeout included. A hold lost to
    * the timeout is not reported, and the next call takes whatever tick it lands on.
    */
   void next_tick();
 
   /**
-   * Let the game move on from the tick that KRPC::hold_tick held it on. Does
+   * Let the game move on from the tick that krpc::services::KRPC::hold_tick() held it on. Does
    * nothing when no tick is held, which is the case once a hold has timed out.
    */
   void release_tick();
@@ -404,7 +404,7 @@ class KRPC : public Service {
    * Run a server side function once, within a single physics tick, and return
    * the value it produces.
    *
-   * The arguments are encoded at the types given by KRPC::Expression::parameter_types.
+   * The arguments are encoded at the types given by krpc::services::KRPC::Expression::parameter_types().
    * Throws an exception if a procedure the function calls pauses execution, and the
    * effects up to the pause remain.
    * @return The encoded value of the function, or no bytes for a function with no
@@ -432,9 +432,9 @@ class KRPC : public Service {
    * scene, or opens/closes the corresponding facility for the pseudo-scenes.
    * Scene changes happen asynchronously: setting this property returns
    * immediately, and clients should poll it until it reports the requested
-   * scene. Setting it to KRPC::GameScene::flight resumes the save's
+   * scene. Setting it to krpc::services::KRPC::GameScene::flight resumes the save's
    * active vessel, and fails if there is none. Moving between
-   * KRPC::GameScene::editor_vab and KRPC::GameScene::editor_sph
+   * krpc::services::KRPC::GameScene::editor_vab and krpc::services::KRPC::GameScene::editor_sph
    * keeps the vessel that is being constructed, as the game's own switch
    * editor button does. Leaving flight saves the game first, unless the game
    * cannot be saved, e.g. while under acceleration.
@@ -446,9 +446,9 @@ class KRPC : public Service {
    * scene, or opens/closes the corresponding facility for the pseudo-scenes.
    * Scene changes happen asynchronously: setting this property returns
    * immediately, and clients should poll it until it reports the requested
-   * scene. Setting it to KRPC::GameScene::flight resumes the save's
+   * scene. Setting it to krpc::services::KRPC::GameScene::flight resumes the save's
    * active vessel, and fails if there is none. Moving between
-   * KRPC::GameScene::editor_vab and KRPC::GameScene::editor_sph
+   * krpc::services::KRPC::GameScene::editor_vab and krpc::services::KRPC::GameScene::editor_sph
    * keeps the vessel that is being constructed, as the game's own switch
    * editor button does. Leaving flight saves the game first, unless the game
    * cannot be saved, e.g. while under acceleration.
@@ -662,7 +662,7 @@ class KRPC : public Service {
      *
      * The instance the call is made on, and the values of its arguments, are fixed
      * when the expression is created. A call to a procedure with no return value is
-     * evaluated for its effects, as a statement in a KRPC::Expression::block. A collection the
+     * evaluated for its effects, as a statement in a krpc::services::KRPC::Expression::block(). A collection the
      * procedure returns is copied, as a client would receive it.
      * @param call The procedure call.
      */
@@ -697,7 +697,7 @@ class KRPC : public Service {
     /**
      * The values of one collection followed by those of another.
      *
-     * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+     * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The first collection followed by the second.
      * @param arg1 The first collection.
      * @param arg2 The second collection.
@@ -775,7 +775,7 @@ class KRPC : public Service {
     /**
      * A null constant of the given type.
      *
-     * The type is made nullable, as by KRPC::Type::nullable_type.
+     * The type is made nullable, as by krpc::services::KRPC::Type::nullable_type().
      * @param type The type of the value.
      */
     static KRPC::Expression constant_null(Client& client, KRPC::Type type);
@@ -921,7 +921,7 @@ class KRPC : public Service {
      * The keys of a dictionary, as a list.
      *
      * The collection operations take the keys of a dictionary from here, and its values
-     * from KRPC::Expression::dictionary_values.
+     * from krpc::services::KRPC::Expression::dictionary_values().
      * @return The keys of the dictionary.
      * @param dictionary The dictionary.
      */
@@ -938,7 +938,7 @@ class KRPC : public Service {
      * The values of a collection with duplicates removed, keeping the first
      * occurrence of each.
      *
-     * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+     * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The distinct values of the collection.
      * @param arg The collection.
      */
@@ -975,7 +975,7 @@ class KRPC : public Service {
      * The values of the first collection that are not in the second, with
      * duplicates removed.
      *
-     * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+     * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The difference between the two collections.
      * @param arg1 The first collection.
      * @param arg2 The second collection.
@@ -1002,8 +1002,8 @@ class KRPC : public Service {
      * A loop that evaluates the body once for each value of a collection.
      *
      * The loop variable is a local variable declared by an enclosing
-     * KRPC::Expression::block_with_variables, or a parameter of an enclosing KRPC::Expression::lambda.
-     * A KRPC::Expression::break or KRPC::Expression::continue in the body applies to this loop.
+     * krpc::services::KRPC::Expression::block_with_variables(), or a parameter of an enclosing krpc::services::KRPC::Expression::lambda().
+     * A krpc::services::KRPC::Expression::break_() or krpc::services::KRPC::Expression::continue_() in the body applies to this loop.
      * @param variable The loop variable.
      * @param collection The collection to iterate over.
      * @param body The statement evaluated on each iteration.
@@ -1056,7 +1056,7 @@ class KRPC : public Service {
     /**
      * An if statement, with no value.
      *
-     * Use KRPC::Expression::conditional for an if-then-else that produces a value.
+     * Use krpc::services::KRPC::Expression::conditional() for an if-then-else that produces a value.
      * @param condition The boolean condition.
      * @param body The statement evaluated when the condition is true.
      */
@@ -1065,7 +1065,7 @@ class KRPC : public Service {
     /**
      * An if-else statement, with no value.
      *
-     * Use KRPC::Expression::conditional for an if-then-else that produces a value.
+     * Use krpc::services::KRPC::Expression::conditional() for an if-then-else that produces a value.
      * @param condition The boolean condition.
      * @param body The statement evaluated when the condition is true.
      * @param elseBody The statement evaluated when the condition is false.
@@ -1075,7 +1075,7 @@ class KRPC : public Service {
     /**
      * The values in both of two collections, with duplicates removed.
      *
-     * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+     * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The intersection of the two collections.
      * @param arg1 The first collection.
      * @param arg2 The second collection.
@@ -1100,7 +1100,7 @@ class KRPC : public Service {
      * A function with the given parameters and body.
      *
      * The body is an expression or a block of statements, and a body with no value is
-     * evaluated for its effects. A KRPC::Expression::return or KRPC::Expression::return_nothing
+     * evaluated for its effects. A krpc::services::KRPC::Expression::return_() or krpc::services::KRPC::Expression::return_nothing()
      * statement ends the evaluation.
      * @return A function.
      * @param parameters The parameters of the function.
@@ -1226,7 +1226,7 @@ class KRPC : public Service {
     /**
      * The values of a collection ordered by the key a function produces for each of them.
      *
-     * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+     * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The ordered collection.
      * @param arg The collection to order.
      * @param key A function producing the key to order values by.
@@ -1236,8 +1236,8 @@ class KRPC : public Service {
     /**
      * A named parameter of a function.
      *
-     * A value is bound to it by name with KRPC::Expression::invoke, or by its position in
-     * the parameters of a KRPC::Expression::lambda.
+     * A value is bound to it by name with krpc::services::KRPC::Expression::invoke(), or by its position in
+     * the parameters of a krpc::services::KRPC::Expression::lambda().
      * @return A named parameter.
      * @param name The name of the parameter.
      * @param type The type of the parameter.
@@ -1286,7 +1286,7 @@ class KRPC : public Service {
     /**
      * The values of a collection in the opposite order.
      *
-     * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+     * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The reversed collection.
      * @param arg The collection.
      */
@@ -1305,7 +1305,7 @@ class KRPC : public Service {
     /**
      * The result of a function for each value of a collection.
      *
-     * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+     * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The collection of function results.
      * @param arg The list or set.
      * @param func The function, taking an element of the collection.
@@ -1316,7 +1316,7 @@ class KRPC : public Service {
      * The values of the collections a function returns for each value of a collection,
      * flattened into one.
      *
-     * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+     * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The flattened collection of function results.
      * @param arg The list or set.
      * @param func The function, taking an element of the collection
@@ -1338,7 +1338,7 @@ class KRPC : public Service {
     /**
      * A collection without its first count values.
      *
-     * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+     * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The collection without its first count values.
      * @param arg The collection.
      * @param count The number of values to skip.
@@ -1360,7 +1360,7 @@ class KRPC : public Service {
     /**
      * The concatenation of strings.
      *
-     * Use KRPC::Expression::convert_to_string to convert other values to strings.
+     * Use krpc::services::KRPC::Expression::convert_to_string() to convert other values to strings.
      * @return The concatenated string.
      * @param args The strings to concatenate, in order.
      */
@@ -1505,7 +1505,7 @@ class KRPC : public Service {
     /**
      * The first count values of a collection.
      *
-     * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+     * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The first count values of the collection.
      * @param arg The collection.
      * @param count The number of values to take.
@@ -1517,7 +1517,7 @@ class KRPC : public Service {
      *
      * The client receives the exception as an error from the function, or from the stream
      * or event evaluating it. For example, the service KRPC and the name
-     * Error raise KRPC::Error. Throws an exception if the service does not
+     * Error raise krpc::services::KRPC::Error. Throws an exception if the service does not
      * declare it.
      * @param service The name of the service the exception is defined in.
      * @param name The name of the exception.
@@ -1544,7 +1544,7 @@ class KRPC : public Service {
     /**
      * A try-catch statement that handles the named exception.
      *
-     * Only an exception a service declares can be named, and KRPC::Expression::try_catch_all
+     * Only an exception a service declares can be named, and krpc::services::KRPC::Expression::try_catch_all()
      * handles any exception. Throws an exception if the service does not declare it.
      * @param body The statement to evaluate.
      * @param service The name of the service the exception is defined in.
@@ -1575,7 +1575,7 @@ class KRPC : public Service {
     /**
      * The values in either of two collections, with duplicates removed.
      *
-     * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+     * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The union of the two collections.
      * @param arg1 The first collection.
      * @param arg2 The second collection.
@@ -1583,7 +1583,7 @@ class KRPC : public Service {
     static KRPC::Expression union_(Client& client, KRPC::Expression arg1, KRPC::Expression arg2);
 
     /**
-     * A local variable, declared by KRPC::Expression::block_with_variables.
+     * A local variable, declared by krpc::services::KRPC::Expression::block_with_variables().
      * @return A local variable.
      * @param name The name of the variable.
      * @param type The type of the variable.
@@ -1593,7 +1593,7 @@ class KRPC : public Service {
     /**
      * The values of a collection for which a predicate function returns true.
      *
-     * The result is lazily evaluated. KRPC::Expression::to_list makes it concrete.
+     * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The filtered collection.
      * @param arg The list or set.
      * @param func The predicate function, taking an element of the collection.
@@ -1603,7 +1603,7 @@ class KRPC : public Service {
     /**
      * A while loop, which evaluates the body while the condition is true.
      *
-     * A KRPC::Expression::break or KRPC::Expression::continue in the body applies to this loop.
+     * A krpc::services::KRPC::Expression::break_() or krpc::services::KRPC::Expression::continue_() in the body applies to this loop.
      * @param condition The boolean condition.
      * @param body The statement evaluated on each iteration.
      */
@@ -1613,7 +1613,7 @@ class KRPC : public Service {
      * The results of a function applied to the values of two collections in pairs.
      *
      * The result is as long as the shorter of the two collections. It is lazily
-     * evaluated, and KRPC::Expression::to_list makes it concrete.
+     * evaluated, and krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The combined collection.
      * @param arg1 The first collection.
      * @param arg2 The second collection.
@@ -1624,7 +1624,7 @@ class KRPC : public Service {
     /**
      * Whether the expression evaluates to a value.
      *
-     * An expression with no value has no KRPC::Expression::return_type. An empty
+     * An expression with no value has no krpc::services::KRPC::Expression::return_type(). An empty
      * collection and no value both encode to an empty sequence of bytes.
      */
     bool has_return_type();
@@ -1632,7 +1632,7 @@ class KRPC : public Service {
     /**
      * The types of the function's parameters.
      *
-     * Empty for a function that is not created with KRPC::Expression::lambda.
+     * Empty for a function that is not created with krpc::services::KRPC::Expression::lambda().
      */
     std::vector<KRPC::Type> parameter_types();
 
@@ -1640,9 +1640,9 @@ class KRPC : public Service {
      * The type of the value the expression evaluates to. Throws an exception if the
      * value cannot be sent to a client.
      *
-     * A function created with KRPC::Expression::lambda evaluates to the value it returns. A
-     * lazily evaluated collection, such as from KRPC::Expression::select, is sent once
-     * converted by KRPC::Expression::to_list or KRPC::Expression::to_set.
+     * A function created with krpc::services::KRPC::Expression::lambda() evaluates to the value it returns. A
+     * lazily evaluated collection, such as from krpc::services::KRPC::Expression::select(), is sent once
+     * converted by krpc::services::KRPC::Expression::to_list() or krpc::services::KRPC::Expression::to_set().
      */
     KRPC::Type return_type();
 
@@ -2387,7 +2387,7 @@ class KRPC : public Service {
   /**
    * A client connected to the server.
    *
-   * See KRPC::clients.
+   * See krpc::services::KRPC::clients().
    */
   struct ClientInfo {
     /**

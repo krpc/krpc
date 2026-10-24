@@ -1980,7 +1980,15 @@ class TestService(_TestServiceDefinitions):
 
     def throw_custom_exception(self) -> int:
         """
-        Throws a TestService.CustomException.
+        Throws a :class:`krpc.services.testservice.CustomException`.
+
+        Links to each kind of member: :class:`krpc.services.testservice.TestService`, :class:`krpc.services.testservice.TestClass`,
+        :class:`krpc.services.testservice.TestEnum`, :class:`krpc.services.testservice.TestStruct`, :class:`krpc.services.krpc.InvalidOperationException`,
+        :meth:`krpc.services.testservice.TestService.float_to_string`, :attr:`krpc.services.testservice.TestService.string_property`,
+        :attr:`krpc.services.testservice.TestService.string_property_private_get`, :meth:`krpc.services.testservice.TestClass.float_to_string`,
+        :meth:`krpc.services.testservice.TestClass.static_method`, :attr:`krpc.services.testservice.TestClass.int_property`,
+        :attr:`krpc.services.testservice.TestClass.string_property_private_get`, :attr:`krpc.services.testservice.TestEnum.value_a` and
+        :attr:`krpc.services.testservice.TestStruct.int_field`.
         """
         return self._client._invoke(
             "TestService",

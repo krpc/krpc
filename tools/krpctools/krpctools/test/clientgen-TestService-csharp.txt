@@ -772,8 +772,17 @@ namespace KRPC.Client.Services.TestService
         }
 
         /// <summary>
-        /// Throws a <see cref="T:TestService.CustomException" />.
+        /// Throws a <see cref="global::KRPC.Client.Services.TestService.CustomException" />.
         /// </summary>
+        /// <remarks>
+        /// Links to each kind of member: <see cref="global::KRPC.Client.Services.TestService.Service" />, <see cref="global::KRPC.Client.Services.TestService.TestClass" />,
+        /// <see cref="global::KRPC.Client.Services.TestService.TestEnum" />, <see cref="global::KRPC.Client.Services.TestService.TestStruct" />, <see cref="global::KRPC.Client.Services.KRPC.InvalidOperationException" />,
+        /// <see cref="global::KRPC.Client.Services.TestService.Service.FloatToString" />, <see cref="global::KRPC.Client.Services.TestService.Service.StringProperty" />,
+        /// <see cref="global::KRPC.Client.Services.TestService.Service.StringPropertyPrivateGet" />, <see cref="global::KRPC.Client.Services.TestService.TestClass.FloatToString" />,
+        /// <see cref="global::KRPC.Client.Services.TestService.TestClass.StaticMethod" />, <see cref="global::KRPC.Client.Services.TestService.TestClass.IntProperty" />,
+        /// <see cref="global::KRPC.Client.Services.TestService.TestClass.StringPropertyPrivateGet" />, <see cref="global::KRPC.Client.Services.TestService.TestEnum.ValueA" /> and
+        /// <see cref="global::KRPC.Client.Services.TestService.TestStruct.IntField" />.
+        /// </remarks>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowCustomException", typeof(TypeSpecs))]
         public int ThrowCustomException ()
         {

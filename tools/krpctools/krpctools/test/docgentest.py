@@ -27,6 +27,15 @@ class DocGenTestCase(_Base):
             files("krpctools.test").joinpath(name + ".json").read_text(encoding="utf-8")
         )
 
+    @classmethod
+    def load_with_deps(cls, name, deps):
+        """The definitions in the named file, along with those of the services it depends on"""
+        defs = {}
+        for dep in deps:
+            defs.update(cls.load(dep))
+        defs.update(cls.load(name))
+        return defs
+
     def generate(self, service_name, defs):
         def sort(member):
             return member.fullname
@@ -97,8 +106,8 @@ class DocGenTestCase(_Base):
         content, _ = process_file(domain, services, path)
         return content
 
-    def run_test(self, service_name, name):
-        actual = self.generate(service_name, self.load(name))
+    def run_test(self, service_name, name, deps=()):
+        actual = self.generate(service_name, self.load_with_deps(name, deps))
 
         # with open('/home/alex/workspaces/krpc/krpc/' +
         #           'tools/krpctools/krpctools/test/' +
@@ -114,7 +123,7 @@ class DocGenTestCase(_Base):
 
         # A service may be defined after one that uses its types, so the definitions in the
         # reverse order have to generate the same thing
-        defs = self.load(name)
+        defs = self.load_with_deps(name, deps)
         reversed_defs = dict(reversed(list(defs.items())))
         self.assertEqual(actual, self.generate(service_name, reversed_defs))
 
@@ -122,7 +131,8 @@ class DocGenTestCase(_Base):
         self.run_test("EmptyService", "Empty")
 
     def test_test_service(self):
-        self.run_test("TestService", "TestService")
+        # The test service depends on KRPC, whose definitions its documentation links to
+        self.run_test("TestService", "TestService", deps=["KRPC"])
 
     def test_ordering(self):
         self.run_test("ServiceA", "Ordering")

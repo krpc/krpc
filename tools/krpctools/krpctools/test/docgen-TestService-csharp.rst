@@ -664,6 +664,17 @@
 
       :Game Scenes: All
 
+
+      .. note::
+
+         Links to each kind of member: :type:`TestService <TestService.TestService>`, :type:`TestClass`,
+         :type:`TestEnum`, :type:`TestStruct`, :type:`KRPC.InvalidOperationException`,
+         :meth:`TestService.FloatToString <TestService.TestService.FloatToString>`, :prop:`TestService.StringProperty <TestService.TestService.StringProperty>`,
+         :prop:`TestService.StringPropertyPrivateGet <TestService.TestService.StringPropertyPrivateGet>`, :meth:`TestClass.FloatToString`,
+         :meth:`TestClass.StaticMethod`, :prop:`TestClass.IntProperty`,
+         :prop:`TestClass.StringPropertyPrivateGet`, :value:`TestEnum.ValueA` and
+         :prop:`TestStruct.IntField`.
+
    .. function:: int ThrowCustomExceptionLater()
 
 

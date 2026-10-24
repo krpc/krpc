@@ -43,9 +43,16 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
             "Enum ValueC documentation string, in m/s\u00b2, equal to\n\u00bd \u03c1 v\u00b2.",
             self.conn.test_service.TestEnum.value_c,
         )
-        self.check_doc(
-            "Throws a TestService.CustomException.",
-            self.conn.test_service.throw_custom_exception,
+        # Generated stubs link a cref with a role, where dynamically-created services name it
+        doc = inspect.cleandoc(
+            cast(str, self.conn.test_service.throw_custom_exception.__doc__)
+        )
+        self.assertIn(
+            doc.split("\n\n")[0],
+            (
+                "Throws a TestService.CustomException.",
+                "Throws a :class:`krpc.services.testservice.CustomException`.",
+            ),
         )
 
     def test_deprecated(self) -> None:

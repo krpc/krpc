@@ -502,6 +502,16 @@
 
    
 
+      .. note::
+
+         Links to each kind of member: :type:`TestService`, :type:`TestClass`,
+         :type:`TestEnum`, :type:`TestStruct`, :type:`KRPC.InvalidOperationException`,
+         :meth:`floatToString(float)`, :meth:`getStringProperty()`,
+         :meth:`setStringPropertyPrivateGet(String)`, :meth:`TestClass.floatToString(float)`,
+         :meth:`TestClass.staticMethod(String, String)`, :meth:`TestClass.getIntProperty()`,
+         :meth:`TestClass.setStringPropertyPrivateGet(String)`, :meth:`TestEnum.VALUE_A` and
+         :meth:`TestStruct.getIntField()`.
+
    .. method:: int throwCustomExceptionLater()
 
 

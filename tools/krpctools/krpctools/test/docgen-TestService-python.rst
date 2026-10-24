@@ -763,6 +763,16 @@ Service documentation string.
    :rtype: int
    
 
+   .. note::
+
+      Links to each kind of member: :mod:`TestService`, :class:`TestClass`,
+      :class:`TestEnum`, :class:`TestStruct`, :class:`KRPC.InvalidOperationException`,
+      :meth:`float_to_string`, :attr:`string_property`,
+      :attr:`string_property_private_get`, :meth:`TestClass.float_to_string`,
+      :meth:`TestClass.static_method`, :attr:`TestClass.int_property`,
+      :attr:`TestClass.string_property_private_get`, :attr:`TestEnum.value_a` and
+      :attr:`TestStruct.int_field`.
+
 
 
 

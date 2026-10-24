@@ -702,6 +702,15 @@ namespace TestServer
         /// <summary>
         /// Throws a <see cref="CustomException"/>.
         /// </summary>
+        /// <remarks>
+        /// Links to each kind of member: <see cref="TestService"/>, <see cref="TestClass"/>,
+        /// <see cref="TestEnum"/>, <see cref="TestStruct"/>, <see cref="InvalidOperationException"/>,
+        /// <see cref="FloatToString"/>, <see cref="StringProperty"/>,
+        /// <see cref="StringPropertyPrivateGet"/>, <see cref="TestClass.FloatToString"/>,
+        /// <see cref="TestClass.StaticMethod"/>, <see cref="TestClass.IntProperty"/>,
+        /// <see cref="TestClass.StringPropertyPrivateGet"/>, <see cref="TestEnum.ValueA"/> and
+        /// <see cref="TestStruct.IntField"/>.
+        /// </remarks>
         [KRPCProcedure]
         public static int ThrowCustomException ()
         {

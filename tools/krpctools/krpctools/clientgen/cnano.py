@@ -15,6 +15,7 @@ from krpc.utils import snake_case
 
 from ..lang.cnano import CnanoLanguage
 from ..utils import as_type
+from . import crefs
 from .docparser import DocParser
 from .generator import Generator
 
@@ -248,13 +249,31 @@ class CnanoGenerator(Generator[CnanoLanguage]):
         # No default arguments in C
         return None
 
-    @staticmethod
-    def parse_documentation(documentation):
-        documentation = CNanoDocParser().parse(documentation)
+    def parse_documentation(self, documentation):
+        documentation = CNanoDocParser(self.parse_cref).parse(documentation)
         if documentation == "":
             return ""
         lines = ["/**"] + [" * " + line for line in documentation.split("\n")] + [" */"]
         return "\n".join(line.rstrip() for line in lines)
+
+    def format_cref(self, target):
+        if target.kind == crefs.SERVICE:
+            return target.service
+        # An exception has no C type, so it is named as the error message names it
+        if target.kind == crefs.EXCEPTION:
+            return target.service + "." + target.type
+        name = "krpc_" + target.service
+        if target.type is not None:
+            name += "_" + target.type
+        if target.member is None:
+            return name + "_t"
+        # Doxygen links a global enumeration value only when it is written with a #
+        if target.kind == crefs.ENUMERATION_VALUE:
+            return "#" + (name + "_" + target.member).upper()
+        if target.kind == crefs.STRUCT_FIELD:
+            return name + "_t." + self.parse_name(snake_case(target.member))
+        setter = "" if target.getter else "set_"
+        return name + "_" + setter + target.member + "()"
 
     def parse_context(self, context):
         def return_type(typ):
@@ -346,9 +365,6 @@ class CNanoDocParser(DocParser):
     def parse_returns(self, node):
         return "\n@return %s" % self.parse_node(node).strip()
 
-    def parse_see(self, node):
-        return self.parse_cref(node.attrib["cref"])
-
     @staticmethod
     def parse_paramref(node):
         return node.attrib["name"]
@@ -366,14 +382,3 @@ class CNanoDocParser(DocParser):
             "- %s\n" % self.parse_node(item[0], indent=2)[2:].rstrip() for item in node
         ]
         return "\n" + "".join(content)
-
-    @staticmethod
-    def parse_cref(cref):
-        if cref[0] == "M":
-            cref = cref[2:].split(".")
-            member = snake_case(cref[-1])
-            del cref[-1]
-            return "::".join(cref) + "::" + member
-        if cref[0] == "T":
-            return cref[2:].replace(".", "::")
-        raise RuntimeError("Unknown cref '%s'" % cref)

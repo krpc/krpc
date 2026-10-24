@@ -245,7 +245,15 @@ class TestService : public Service {
   int32_t throw_argument_out_of_range_exception(int32_t foo);
 
   /**
-   * Throws a TestService::CustomException.
+   * Throws a krpc::services::TestService::CustomException.
+   *
+   * Links to each kind of member: krpc::services::TestService, krpc::services::TestService::TestClass,
+   * krpc::services::TestService::TestEnum, krpc::services::TestService::TestStruct, krpc::services::KRPC::InvalidOperationException,
+   * krpc::services::TestService::float_to_string(), krpc::services::TestService::string_property(),
+   * krpc::services::TestService::set_string_property_private_get(), krpc::services::TestService::TestClass::float_to_string(),
+   * krpc::services::TestService::TestClass::static_method(), krpc::services::TestService::TestClass::int_property(),
+   * krpc::services::TestService::TestClass::set_string_property_private_get(), krpc::services::TestService::TestEnum::value_a and
+   * krpc::services::TestService::TestStruct::int_field.
    */
   int32_t throw_custom_exception();
 

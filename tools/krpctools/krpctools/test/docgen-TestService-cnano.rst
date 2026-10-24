@@ -865,6 +865,16 @@ Service documentation string.
 
    
 
+   .. note::
+
+      Links to each kind of member: TestService, :type:`krpc_TestService_TestClass_t`,
+      :type:`krpc_TestService_TestEnum_t`, :type:`krpc_TestService_TestStruct_t`, ``KRPC.InvalidOperationException``,
+      :func:`krpc_TestService_FloatToString`, :func:`krpc_TestService_StringProperty`,
+      :func:`krpc_TestService_set_StringPropertyPrivateGet`, :func:`krpc_TestService_TestClass_FloatToString`,
+      :func:`krpc_TestService_TestClass_StaticMethod`, :func:`krpc_TestService_TestClass_IntProperty`,
+      :func:`krpc_TestService_TestClass_set_StringPropertyPrivateGet`, :macro:`KRPC_TESTSERVICE_TESTENUM_VALUEA` and
+      :member:`krpc_TestService_TestStruct_t.int_field`.
+
 
 
 

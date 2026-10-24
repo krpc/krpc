@@ -673,6 +673,16 @@
 
    
 
+      .. note::
+
+         Links to each kind of member: :class:`TestService`, :class:`TestClass`,
+         :enum:`TestEnum`, :struct:`TestStruct`, :class:`KRPC::InvalidOperationException`,
+         :func:`float_to_string`, :func:`string_property`,
+         :func:`set_string_property_private_get`, :func:`TestClass::float_to_string`,
+         :func:`TestClass::static_method`, :func:`TestClass::int_property`,
+         :func:`TestClass::set_string_property_private_get`, :enumerator:`TestEnum::value_a` and
+         :member:`TestStruct::int_field`.
+
    .. function:: int32_t throw_custom_exception_later()
 
 
