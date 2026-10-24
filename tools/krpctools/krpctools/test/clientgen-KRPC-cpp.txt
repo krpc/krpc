@@ -547,6 +547,7 @@ class KRPC : public Service {
 
     /**
      * Numerical addition.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -557,6 +558,7 @@ class KRPC : public Service {
      *
      * Throws an exception if the collection is empty.
      * @return The accumulated value.
+     * @param client A client object.
      * @param arg The collection.
      * @param func The accumulator function.
      */
@@ -567,6 +569,7 @@ class KRPC : public Service {
      *
      * The seed widens to the type of the accumulated value, the function's result.
      * @return The accumulated value.
+     * @param client A client object.
      * @param arg The collection.
      * @param seed The seed value.
      * @param func The accumulator function.
@@ -576,6 +579,7 @@ class KRPC : public Service {
     /**
      * Whether a predicate function returns true for every value of a collection.
      * @return Whether all items satisfy the predicate.
+     * @param client A client object.
      * @param arg The collection.
      * @param predicate The predicate function.
      */
@@ -583,6 +587,7 @@ class KRPC : public Service {
 
     /**
      * Logical or bitwise and, which evaluates both operands.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -591,6 +596,7 @@ class KRPC : public Service {
     /**
      * Whether a predicate function returns true for any value of a collection.
      * @return Whether any item satisfies the predicate.
+     * @param client A client object.
      * @param arg The collection.
      * @param predicate The predicate function.
      */
@@ -600,6 +606,7 @@ class KRPC : public Service {
      * A statement adding a value to a list or a set.
      *
      * The value goes on the end of a list. A set holding the value is left unchanged.
+     * @param client A client object.
      * @param collection The list or set to add to.
      * @param value The value to add.
      */
@@ -610,6 +617,7 @@ class KRPC : public Service {
      *
      * The value's type must be assignable to the variable's type. A numeric value of a
      * different type is widened, and narrowing it requires a cast.
+     * @param client A client object.
      * @param variable The variable to assign to.
      * @param value The value to assign.
      */
@@ -620,12 +628,14 @@ class KRPC : public Service {
      *
      * Throws an exception if the collection is empty and its values are not nullable.
      * @return The average of the elements in the collection.
+     * @param client A client object.
      * @param arg The list or set.
      */
     static KRPC::Expression average(Client& client, KRPC::Expression arg);
 
     /**
      * A block of statements, whose value is that of its last statement.
+     * @param client A client object.
      * @param statements The statements.
      */
     static KRPC::Expression block(Client& client, std::vector<KRPC::Expression> statements);
@@ -635,6 +645,7 @@ class KRPC : public Service {
      *
      * The value of the block is that of its last statement. The variables are in scope
      * for the statements of the block, including within nested functions.
+     * @param client A client object.
      * @param variables The local variables of the block.
      * @param statements The statements.
      */
@@ -651,9 +662,10 @@ class KRPC : public Service {
      *
      * A repeated key takes the last of its values.
      * @return The dictionary.
+     * @param client A client object.
      * @param arg The list or set.
-     * @param keyFunc The function computing an element's key.
-     * @param valueFunc The function computing an element's value.
+     * @param key_func The function computing an element's key.
+     * @param value_func The function computing an element's value.
      */
     static KRPC::Expression build_dictionary(Client& client, KRPC::Expression arg, KRPC::Expression key_func, KRPC::Expression value_func);
 
@@ -664,6 +676,7 @@ class KRPC : public Service {
      * when the expression is created. A call to a procedure with no return value is
      * evaluated for its effects, as a statement in a krpc::services::KRPC::Expression::block(). A collection the
      * procedure returns is copied, as a client would receive it.
+     * @param client A client object.
      * @param call The procedure call.
      */
     static KRPC::Expression call(Client& client, krpc::schema::ProcedureCall call);
@@ -674,6 +687,7 @@ class KRPC : public Service {
      * Position 0 is the instance of a class method or property. A position with no
      * expression takes the argument encoded in the call, or the parameter's default. A
      * collection the procedure returns is copied, as a client would receive it.
+     * @param client A client object.
      * @param call The RPC to call.
      * @param args Expressions computing the call's arguments, by position.
      */
@@ -683,6 +697,7 @@ class KRPC : public Service {
      * A value cast to the given type.
      *
      * A tuple or collection is cast element by element.
+     * @param client A client object.
      * @param arg The value to cast.
      * @param type Type to cast the argument to.
      */
@@ -690,6 +705,7 @@ class KRPC : public Service {
 
     /**
      * A statement removing every value from a list or a set, or every entry from a dictionary.
+     * @param client A client object.
      * @param collection The list, set or dictionary.
      */
     static KRPC::Expression clear(Client& client, KRPC::Expression collection);
@@ -699,6 +715,7 @@ class KRPC : public Service {
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The first collection followed by the second.
+     * @param client A client object.
      * @param arg1 The first collection.
      * @param arg2 The second collection.
      */
@@ -708,14 +725,16 @@ class KRPC : public Service {
      * The second argument if the condition is true, and the third argument otherwise.
      *
      * Throws an exception if the two values have no common type.
+     * @param client A client object.
      * @param condition The boolean condition.
-     * @param ifTrue The value when the condition is true.
-     * @param ifFalse The value when the condition is false.
+     * @param if_true The value when the condition is true.
+     * @param if_false The value when the condition is false.
      */
     static KRPC::Expression conditional(Client& client, KRPC::Expression condition, KRPC::Expression if_true, KRPC::Expression if_false);
 
     /**
      * Logical and, which evaluates the second operand only when the first is true.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -723,6 +742,7 @@ class KRPC : public Service {
 
     /**
      * Logical or, which evaluates the second operand only when the first is false.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -730,24 +750,28 @@ class KRPC : public Service {
 
     /**
      * A constant value of boolean type.
+     * @param client A client object.
      * @param value The value.
      */
     static KRPC::Expression constant_bool(Client& client, bool value);
 
     /**
      * A constant value of bytes type.
+     * @param client A client object.
      * @param value The value.
      */
     static KRPC::Expression constant_bytes(Client& client, std::string value);
 
     /**
      * A constant value of double precision floating point type.
+     * @param client A client object.
      * @param value The value.
      */
     static KRPC::Expression constant_double(Client& client, double value);
 
     /**
      * A constant value of an enumeration a service defines.
+     * @param client A client object.
      * @param service The name of the service the enumeration is defined in.
      * @param name The name of the enumeration.
      * @param value The value of the member of the enumeration.
@@ -756,18 +780,21 @@ class KRPC : public Service {
 
     /**
      * A constant value of single precision floating point type.
+     * @param client A client object.
      * @param value The value.
      */
     static KRPC::Expression constant_float(Client& client, float value);
 
     /**
      * A constant value of integer type.
+     * @param client A client object.
      * @param value The value.
      */
     static KRPC::Expression constant_int(Client& client, int32_t value);
 
     /**
      * A constant value of long integer type.
+     * @param client A client object.
      * @param value The value.
      */
     static KRPC::Expression constant_long(Client& client, int64_t value);
@@ -776,6 +803,7 @@ class KRPC : public Service {
      * A null constant of the given type.
      *
      * The type is made nullable, as by krpc::services::KRPC::Type::nullable_type().
+     * @param client A client object.
      * @param type The type of the value.
      */
     static KRPC::Expression constant_null(Client& client, KRPC::Type type);
@@ -784,24 +812,28 @@ class KRPC : public Service {
      * A constant object, an instance of a class a service defines.
      *
      * The object is given by its object identifier.
+     * @param client A client object.
      * @param value The object identifier of the object.
      */
     static KRPC::Expression constant_object(Client& client, uint64_t value);
 
     /**
      * A constant value of string type.
+     * @param client A client object.
      * @param value The value.
      */
     static KRPC::Expression constant_string(Client& client, std::string value);
 
     /**
      * A constant value of unsigned integer type.
+     * @param client A client object.
      * @param value The value.
      */
     static KRPC::Expression constant_u_int(Client& client, uint32_t value);
 
     /**
      * A constant value of unsigned long integer type.
+     * @param client A client object.
      * @param value The value.
      */
     static KRPC::Expression constant_u_long(Client& client, uint64_t value);
@@ -809,6 +841,7 @@ class KRPC : public Service {
     /**
      * Whether a collection contains a value.
      * @return Whether the collection contains the value.
+     * @param client A client object.
      * @param arg The collection.
      * @param value The value to look for.
      */
@@ -817,6 +850,7 @@ class KRPC : public Service {
     /**
      * Whether a dictionary contains a key.
      * @return Whether the dictionary contains the key.
+     * @param client A client object.
      * @param dictionary The dictionary.
      * @param key The key to look for.
      */
@@ -834,6 +868,7 @@ class KRPC : public Service {
      * formats it, which for a collection is the name of its type. Throws an exception if
      * the value is null.
      * @return The string representation of the value.
+     * @param client A client object.
      * @param arg The value to convert.
      */
     static KRPC::Expression convert_to_string(Client& client, KRPC::Expression arg);
@@ -841,6 +876,7 @@ class KRPC : public Service {
     /**
      * The number of values in a collection.
      * @return The number of elements in the collection.
+     * @param client A client object.
      * @param arg The list, set or dictionary.
      */
     static KRPC::Expression count(Client& client, KRPC::Expression arg);
@@ -852,6 +888,7 @@ class KRPC : public Service {
      *
      * A repeated key takes the last of its values.
      * @return The dictionary.
+     * @param client A client object.
      * @param keys The keys.
      * @param values The values.
      */
@@ -861,15 +898,17 @@ class KRPC : public Service {
      * An empty dictionary of the given key and value types. Throws an exception if the
      * key type is nullable or not a valid key type.
      * @return The empty dictionary.
-     * @param keyType The type of the dictionary's keys.
-     * @param valueType The type of the dictionary's values.
+     * @param client A client object.
+     * @param key_type The type of the dictionary's keys.
+     * @param value_type The type of the dictionary's values.
      */
     static KRPC::Expression create_empty_dictionary(Client& client, KRPC::Type key_type, KRPC::Type value_type);
 
     /**
      * An empty list of the given value type.
      * @return The empty list.
-     * @param valueType The type of the values the list holds.
+     * @param client A client object.
+     * @param value_type The type of the values the list holds.
      */
     static KRPC::Expression create_empty_list(Client& client, KRPC::Type value_type);
 
@@ -877,7 +916,8 @@ class KRPC : public Service {
      * An empty set of the given value type. Throws an exception if the value type is
      * nullable.
      * @return The empty set.
-     * @param valueType The type of the values the set holds.
+     * @param client A client object.
+     * @param value_type The type of the values the set holds.
      */
     static KRPC::Expression create_empty_set(Client& client, KRPC::Type value_type);
 
@@ -885,6 +925,7 @@ class KRPC : public Service {
      * A list of the given values, with numbers widened to their common type. Throws an
      * exception if there are no values.
      * @return The list.
+     * @param client A client object.
      * @param values The values.
      */
     static KRPC::Expression create_list(Client& client, std::vector<KRPC::Expression> values);
@@ -895,6 +936,7 @@ class KRPC : public Service {
      *
      * The values are evaluated in an unspecified order.
      * @return The set.
+     * @param client A client object.
      * @param values The values.
      */
     static KRPC::Expression create_set(Client& client, std::set<KRPC::Expression> values);
@@ -903,8 +945,9 @@ class KRPC : public Service {
      * A structure with the given field values. Throws an exception if the field values do
      * not match its fields.
      * @return The structure.
+     * @param client A client object.
      * @param type The type of the structure.
-     * @param fieldValues The values of the structure's fields,
+     * @param field_values The values of the structure's fields,
      * in the order the structure declares them.
      */
     static KRPC::Expression create_struct(Client& client, KRPC::Type type, std::vector<KRPC::Expression> field_values);
@@ -913,6 +956,7 @@ class KRPC : public Service {
      * A tuple of the given elements. Throws an exception if there are no elements or more
      * than seven.
      * @return The tuple.
+     * @param client A client object.
      * @param elements The elements.
      */
     static KRPC::Expression create_tuple(Client& client, std::vector<KRPC::Expression> elements);
@@ -923,6 +967,7 @@ class KRPC : public Service {
      * The collection operations take the keys of a dictionary from here, and its values
      * from krpc::services::KRPC::Expression::dictionary_values().
      * @return The keys of the dictionary.
+     * @param client A client object.
      * @param dictionary The dictionary.
      */
     static KRPC::Expression dictionary_keys(Client& client, KRPC::Expression dictionary);
@@ -930,6 +975,7 @@ class KRPC : public Service {
     /**
      * The values of a dictionary, as a list.
      * @return The values of the dictionary.
+     * @param client A client object.
      * @param dictionary The dictionary.
      */
     static KRPC::Expression dictionary_values(Client& client, KRPC::Expression dictionary);
@@ -940,12 +986,14 @@ class KRPC : public Service {
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The distinct values of the collection.
+     * @param client A client object.
      * @param arg The collection.
      */
     static KRPC::Expression distinct(Client& client, KRPC::Expression arg);
 
     /**
      * Numerical division.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -956,6 +1004,7 @@ class KRPC : public Service {
      *
      * Throws an exception if the index is out of range.
      * @return The value at the given position.
+     * @param client A client object.
      * @param arg The collection.
      * @param index The position of the value, counting from zero.
      */
@@ -966,6 +1015,7 @@ class KRPC : public Service {
      *
      * Collections, tuples, bytes and structures compare by their contents. Throws an
      * exception if the operands are of unrelated types.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -977,6 +1027,7 @@ class KRPC : public Service {
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The difference between the two collections.
+     * @param client A client object.
      * @param arg1 The first collection.
      * @param arg2 The second collection.
      */
@@ -984,6 +1035,7 @@ class KRPC : public Service {
 
     /**
      * Logical or bitwise exclusive or.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -994,6 +1046,7 @@ class KRPC : public Service {
      *
      * Throws an exception if the collection is empty.
      * @return The first value.
+     * @param client A client object.
      * @param arg The collection.
      */
     static KRPC::Expression first(Client& client, KRPC::Expression arg);
@@ -1004,6 +1057,7 @@ class KRPC : public Service {
      * The loop variable is a local variable declared by an enclosing
      * krpc::services::KRPC::Expression::block_with_variables(), or a parameter of an enclosing krpc::services::KRPC::Expression::lambda().
      * A krpc::services::KRPC::Expression::break_() or krpc::services::KRPC::Expression::continue_() in the body applies to this loop.
+     * @param client A client object.
      * @param variable The loop variable.
      * @param collection The collection to iterate over.
      * @param body The statement evaluated on each iteration.
@@ -1017,6 +1071,7 @@ class KRPC : public Service {
      * dictionary a key. Throws an exception if the index is out of range or the key is
      * missing, and for a tuple when the expression is created.
      * @return The element.
+     * @param client A client object.
      * @param arg The tuple, list or dictionary.
      * @param index The index or key of the element.
      */
@@ -1026,6 +1081,7 @@ class KRPC : public Service {
      * The value of a field of a structure. Throws an exception if the value is not a
      * structure, or has no field of the given name.
      * @return The value of the field.
+     * @param client A client object.
      * @param arg The structure.
      * @param name The name of the field to access.
      */
@@ -1033,6 +1089,7 @@ class KRPC : public Service {
 
     /**
      * Greater than numerical comparison.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -1040,6 +1097,7 @@ class KRPC : public Service {
 
     /**
      * Greater than or equal numerical comparison.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -1048,6 +1106,7 @@ class KRPC : public Service {
     /**
      * The values of a collection grouped by the key a function produces for each of them.
      * @return A dictionary of each key to the values that produced it.
+     * @param client A client object.
      * @param arg The collection.
      * @param key A function producing the key to group values by.
      */
@@ -1057,6 +1116,7 @@ class KRPC : public Service {
      * An if statement, with no value.
      *
      * Use krpc::services::KRPC::Expression::conditional() for an if-then-else that produces a value.
+     * @param client A client object.
      * @param condition The boolean condition.
      * @param body The statement evaluated when the condition is true.
      */
@@ -1066,9 +1126,10 @@ class KRPC : public Service {
      * An if-else statement, with no value.
      *
      * Use krpc::services::KRPC::Expression::conditional() for an if-then-else that produces a value.
+     * @param client A client object.
      * @param condition The boolean condition.
      * @param body The statement evaluated when the condition is true.
-     * @param elseBody The statement evaluated when the condition is false.
+     * @param else_body The statement evaluated when the condition is false.
      */
     static KRPC::Expression if_then_else(Client& client, KRPC::Expression condition, KRPC::Expression body, KRPC::Expression else_body);
 
@@ -1077,6 +1138,7 @@ class KRPC : public Service {
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The intersection of the two collections.
+     * @param client A client object.
      * @param arg1 The first collection.
      * @param arg2 The second collection.
      */
@@ -1085,6 +1147,7 @@ class KRPC : public Service {
     /**
      * A function call.
      * @return A function call.
+     * @param client A client object.
      * @param function The function to call.
      * @param args The arguments to call the function with.
      */
@@ -1092,6 +1155,7 @@ class KRPC : public Service {
 
     /**
      * Whether a value is null. Throws an exception if the type of the value cannot be null.
+     * @param client A client object.
      * @param value The value.
      */
     static KRPC::Expression is_null(Client& client, KRPC::Expression value);
@@ -1103,6 +1167,7 @@ class KRPC : public Service {
      * evaluated for its effects. A krpc::services::KRPC::Expression::return_() or krpc::services::KRPC::Expression::return_nothing()
      * statement ends the evaluation.
      * @return A function.
+     * @param client A client object.
      * @param parameters The parameters of the function.
      * @param body The body of the function.
      */
@@ -1113,6 +1178,7 @@ class KRPC : public Service {
      *
      * Throws an exception if the collection is empty.
      * @return The last value.
+     * @param client A client object.
      * @param arg The collection.
      */
     static KRPC::Expression last(Client& client, KRPC::Expression arg);
@@ -1122,6 +1188,7 @@ class KRPC : public Service {
      *
      * Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
      * for a 64-bit value.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -1129,6 +1196,7 @@ class KRPC : public Service {
 
     /**
      * Less than numerical comparison.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -1136,6 +1204,7 @@ class KRPC : public Service {
 
     /**
      * Less than or equal numerical comparison.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -1146,6 +1215,7 @@ class KRPC : public Service {
      *
      * Throws an exception if the collection is empty and its values are not nullable.
      * @return The largest value in the collection.
+     * @param client A client object.
      * @param arg The list or set.
      */
     static KRPC::Expression max(Client& client, KRPC::Expression arg);
@@ -1155,6 +1225,7 @@ class KRPC : public Service {
      *
      * Throws an exception if the collection is empty.
      * @return The value with the largest key.
+     * @param client A client object.
      * @param arg The collection.
      * @param key A function producing the key to compare values by.
      */
@@ -1165,6 +1236,7 @@ class KRPC : public Service {
      *
      * Throws an exception if the collection is empty and its values are not nullable.
      * @return The smallest value in the collection.
+     * @param client A client object.
      * @param arg The list or set.
      */
     static KRPC::Expression min(Client& client, KRPC::Expression arg);
@@ -1174,6 +1246,7 @@ class KRPC : public Service {
      *
      * Throws an exception if the collection is empty.
      * @return The value with the smallest key.
+     * @param client A client object.
      * @param arg The collection.
      * @param key A function producing the key to compare values by.
      */
@@ -1181,6 +1254,7 @@ class KRPC : public Service {
 
     /**
      * Numerical modulo operator.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      * @return The remainder of arg0 divided by arg1
@@ -1189,6 +1263,7 @@ class KRPC : public Service {
 
     /**
      * Numerical multiplication.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -1196,12 +1271,14 @@ class KRPC : public Service {
 
     /**
      * Numerical negation, which negates a uint as a long.
+     * @param client A client object.
      * @param arg The operand.
      */
     static KRPC::Expression negate(Client& client, KRPC::Expression arg);
 
     /**
      * Logical or bitwise negation.
+     * @param client A client object.
      * @param arg The operand.
      */
     static KRPC::Expression not_(Client& client, KRPC::Expression arg);
@@ -1211,6 +1288,7 @@ class KRPC : public Service {
      *
      * Collections, tuples, bytes and structures compare by their contents. Throws an
      * exception if the operands are of unrelated types.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -1218,6 +1296,7 @@ class KRPC : public Service {
 
     /**
      * Logical or bitwise or, which evaluates both operands.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -1228,6 +1307,7 @@ class KRPC : public Service {
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The ordered collection.
+     * @param client A client object.
      * @param arg The collection to order.
      * @param key A function producing the key to order values by.
      */
@@ -1239,6 +1319,7 @@ class KRPC : public Service {
      * A value is bound to it by name with krpc::services::KRPC::Expression::invoke(), or by its position in
      * the parameters of a krpc::services::KRPC::Expression::lambda().
      * @return A named parameter.
+     * @param client A client object.
      * @param name The name of the parameter.
      * @param type The type of the parameter.
      */
@@ -1246,6 +1327,7 @@ class KRPC : public Service {
 
     /**
      * Numerical power operator.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      * @return arg0 raised to the power of arg1, at the common type of the operands
@@ -1257,6 +1339,7 @@ class KRPC : public Service {
      *
      * The first occurrence is removed from a list.
      * @return Whether the collection held the value.
+     * @param client A client object.
      * @param collection The list, set or dictionary.
      * @param value The value to remove, or the key of the entry to
      * remove.
@@ -1267,6 +1350,7 @@ class KRPC : public Service {
      * A statement removing the element at an index of a list.
      *
      * Throws an exception if the index is out of range.
+     * @param client A client object.
      * @param list The list.
      * @param index The index of the element, counting from zero.
      */
@@ -1274,6 +1358,7 @@ class KRPC : public Service {
 
     /**
      * A return statement, which ends the enclosing function with a value.
+     * @param client A client object.
      * @param value The value to return.
      */
     static KRPC::Expression return_(Client& client, KRPC::Expression value);
@@ -1288,6 +1373,7 @@ class KRPC : public Service {
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The reversed collection.
+     * @param client A client object.
      * @param arg The collection.
      */
     static KRPC::Expression reverse(Client& client, KRPC::Expression arg);
@@ -1297,6 +1383,7 @@ class KRPC : public Service {
      *
      * Only the low 5 bits of the count are used for a 32-bit value, and the low 6 bits
      * for a 64-bit value.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -1307,6 +1394,7 @@ class KRPC : public Service {
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The collection of function results.
+     * @param client A client object.
      * @param arg The list or set.
      * @param func The function, taking an element of the collection.
      */
@@ -1318,6 +1406,7 @@ class KRPC : public Service {
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The flattened collection of function results.
+     * @param client A client object.
      * @param arg The list or set.
      * @param func The function, taking an element of the collection
      * and returning a collection.
@@ -1329,6 +1418,7 @@ class KRPC : public Service {
      *
      * A key the dictionary does not hold is added. Throws an exception if the index
      * is out of range for the list.
+     * @param client A client object.
      * @param collection The list or dictionary.
      * @param index The index of the element, counting from zero, or the key of the entry.
      * @param value The value to set.
@@ -1340,6 +1430,7 @@ class KRPC : public Service {
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The collection without its first count values.
+     * @param client A client object.
      * @param arg The collection.
      * @param count The number of values to skip.
      */
@@ -1352,8 +1443,9 @@ class KRPC : public Service {
      * variable its type. The value belongs to the variable, so every function that
      * contains it shares it.
      * @return A state variable.
+     * @param client A client object.
      * @param name The name of the variable.
-     * @param initialValue The initial value of the variable.
+     * @param initial_value The initial value of the variable.
      */
     static KRPC::Expression state_variable(Client& client, std::string name, KRPC::Expression initial_value);
 
@@ -1362,6 +1454,7 @@ class KRPC : public Service {
      *
      * Use krpc::services::KRPC::Expression::convert_to_string() to convert other values to strings.
      * @return The concatenated string.
+     * @param client A client object.
      * @param args The strings to concatenate, in order.
      */
     static KRPC::Expression string_concat(Client& client, std::vector<KRPC::Expression> args);
@@ -1369,6 +1462,7 @@ class KRPC : public Service {
     /**
      * Whether one string occurs within another.
      * @return Whether the value occurs in the string.
+     * @param client A client object.
      * @param arg The string to search.
      * @param value The string to search for.
      */
@@ -1377,6 +1471,7 @@ class KRPC : public Service {
     /**
      * Whether a string ends with another.
      * @return Whether the string ends with the value.
+     * @param client A client object.
      * @param arg The string to test.
      * @param value The string to test for.
      */
@@ -1387,6 +1482,7 @@ class KRPC : public Service {
      *
      * Throws an exception if the index is out of range.
      * @return The character at the given position.
+     * @param client A client object.
      * @param arg The string.
      * @param index The position of the character, counting from zero.
      */
@@ -1395,6 +1491,7 @@ class KRPC : public Service {
     /**
      * The position of the first occurrence of one string within another.
      * @return The position of the value, counting from zero, or -1 if it does not occur.
+     * @param client A client object.
      * @param arg The string to search.
      * @param value The string to search for.
      */
@@ -1403,6 +1500,7 @@ class KRPC : public Service {
     /**
      * Strings joined together, separated by another string.
      * @return The joined string.
+     * @param client A client object.
      * @param separator The string to put between the values.
      * @param values The strings to join.
      */
@@ -1411,6 +1509,7 @@ class KRPC : public Service {
     /**
      * The number of characters in a string.
      * @return The length of the string.
+     * @param client A client object.
      * @param arg The string.
      */
     static KRPC::Expression string_length(Client& client, KRPC::Expression arg);
@@ -1420,15 +1519,17 @@ class KRPC : public Service {
      *
      * Throws an exception if the string to replace is empty.
      * @return The string with the replacements made.
+     * @param client A client object.
      * @param arg The string to search.
-     * @param oldValue The string to replace.
-     * @param newValue The string to replace it with.
+     * @param old_value The string to replace.
+     * @param new_value The string to replace it with.
      */
     static KRPC::Expression string_replace(Client& client, KRPC::Expression arg, KRPC::Expression old_value, KRPC::Expression new_value);
 
     /**
      * The parts of a string separated by another string.
      * @return The parts of the string.
+     * @param client A client object.
      * @param arg The string to split.
      * @param separator The string that separates the parts.
      */
@@ -1437,6 +1538,7 @@ class KRPC : public Service {
     /**
      * Whether a string starts with another.
      * @return Whether the string starts with the value.
+     * @param client A client object.
      * @param arg The string to test.
      * @param value The string to test for.
      */
@@ -1447,6 +1549,7 @@ class KRPC : public Service {
      *
      * Throws an exception if the start or the length is out of range.
      * @return The substring.
+     * @param client A client object.
      * @param arg The string.
      * @param start The position to start at, counting from zero.
      * @param length The number of characters to take.
@@ -1456,6 +1559,7 @@ class KRPC : public Service {
     /**
      * A string in lower case, independently of the game's language.
      * @return The string in lower case.
+     * @param client A client object.
      * @param arg The string.
      */
     static KRPC::Expression string_to_lower(Client& client, KRPC::Expression arg);
@@ -1463,6 +1567,7 @@ class KRPC : public Service {
     /**
      * A string in upper case, independently of the game's language.
      * @return The string in upper case.
+     * @param client A client object.
      * @param arg The string.
      */
     static KRPC::Expression string_to_upper(Client& client, KRPC::Expression arg);
@@ -1470,6 +1575,7 @@ class KRPC : public Service {
     /**
      * A string with white space removed from both ends.
      * @return The trimmed string.
+     * @param client A client object.
      * @param arg The string.
      */
     static KRPC::Expression string_trim(Client& client, KRPC::Expression arg);
@@ -1477,6 +1583,7 @@ class KRPC : public Service {
     /**
      * A string with white space removed from its end.
      * @return The trimmed string.
+     * @param client A client object.
      * @param arg The string.
      */
     static KRPC::Expression string_trim_end(Client& client, KRPC::Expression arg);
@@ -1484,12 +1591,14 @@ class KRPC : public Service {
     /**
      * A string with white space removed from its start.
      * @return The trimmed string.
+     * @param client A client object.
      * @param arg The string.
      */
     static KRPC::Expression string_trim_start(Client& client, KRPC::Expression arg);
 
     /**
      * Numerical subtraction.
+     * @param client A client object.
      * @param arg0 The first operand.
      * @param arg1 The second operand.
      */
@@ -1498,6 +1607,7 @@ class KRPC : public Service {
     /**
      * The sum of the values of a collection.
      * @return The sum of the elements in the collection.
+     * @param client A client object.
      * @param arg The list or set.
      */
     static KRPC::Expression sum(Client& client, KRPC::Expression arg);
@@ -1507,6 +1617,7 @@ class KRPC : public Service {
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The first count values of the collection.
+     * @param client A client object.
      * @param arg The collection.
      * @param count The number of values to take.
      */
@@ -1516,9 +1627,10 @@ class KRPC : public Service {
      * A throw statement, which raises the named exception.
      *
      * The client receives the exception as an error from the function, or from the stream
-     * or event evaluating it. For example, the service KRPC and the name
-     * Error raise krpc::services::KRPC::Error. Throws an exception if the service does not
+     * or event evaluating it. For example, the service `KRPC` and the name
+     * `Error` raise krpc::services::KRPC::Error. Throws an exception if the service does not
      * declare it.
+     * @param client A client object.
      * @param service The name of the service the exception is defined in.
      * @param name The name of the exception.
      * @param message The message of the exception.
@@ -1528,6 +1640,7 @@ class KRPC : public Service {
     /**
      * A collection as a list.
      * @return The collection as a list.
+     * @param client A client object.
      * @param arg The collection.
      */
     static KRPC::Expression to_list(Client& client, KRPC::Expression arg);
@@ -1537,6 +1650,7 @@ class KRPC : public Service {
      *
      * Throws an exception if a value is null.
      * @return The collection as a set.
+     * @param client A client object.
      * @param arg The collection.
      */
     static KRPC::Expression to_set(Client& client, KRPC::Expression arg);
@@ -1546,6 +1660,7 @@ class KRPC : public Service {
      *
      * Only an exception a service declares can be named, and krpc::services::KRPC::Expression::try_catch_all()
      * handles any exception. Throws an exception if the service does not declare it.
+     * @param client A client object.
      * @param body The statement to evaluate.
      * @param service The name of the service the exception is defined in.
      * @param name The name of the exception.
@@ -1556,6 +1671,7 @@ class KRPC : public Service {
 
     /**
      * A try-catch statement that handles any exception.
+     * @param client A client object.
      * @param body The statement to evaluate.
      * @param message A string variable assigned the exception's message, or null.
      * @param handler The statement evaluated when an exception is caught.
@@ -1567,6 +1683,7 @@ class KRPC : public Service {
      *
      * The finalizer is evaluated after the body, whether or not the body raises an
      * exception. A break, continue or return cannot leave the finalizer.
+     * @param client A client object.
      * @param body The statement to evaluate.
      * @param finalizer The statement evaluated after the body.
      */
@@ -1577,6 +1694,7 @@ class KRPC : public Service {
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The union of the two collections.
+     * @param client A client object.
      * @param arg1 The first collection.
      * @param arg2 The second collection.
      */
@@ -1585,6 +1703,7 @@ class KRPC : public Service {
     /**
      * A local variable, declared by krpc::services::KRPC::Expression::block_with_variables().
      * @return A local variable.
+     * @param client A client object.
      * @param name The name of the variable.
      * @param type The type of the variable.
      */
@@ -1595,6 +1714,7 @@ class KRPC : public Service {
      *
      * The result is lazily evaluated. krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The filtered collection.
+     * @param client A client object.
      * @param arg The list or set.
      * @param func The predicate function, taking an element of the collection.
      */
@@ -1604,6 +1724,7 @@ class KRPC : public Service {
      * A while loop, which evaluates the body while the condition is true.
      *
      * A krpc::services::KRPC::Expression::break_() or krpc::services::KRPC::Expression::continue_() in the body applies to this loop.
+     * @param client A client object.
      * @param condition The boolean condition.
      * @param body The statement evaluated on each iteration.
      */
@@ -1615,6 +1736,7 @@ class KRPC : public Service {
      * The result is as long as the shorter of the two collections. It is lazily
      * evaluated, and krpc::services::KRPC::Expression::to_list() makes it concrete.
      * @return The combined collection.
+     * @param client A client object.
      * @param arg1 The first collection.
      * @param arg2 The second collection.
      * @param func A function combining a value from each collection.
@@ -2178,6 +2300,7 @@ class KRPC : public Service {
 
     /**
      * The type of a class defined by a service.
+     * @param client A client object.
      * @param service The name of the service the class is defined in.
      * @param name The name of the class.
      */
@@ -2186,8 +2309,9 @@ class KRPC : public Service {
     /**
      * A dictionary type. Throws an exception if the key type is nullable or not a valid
      * key type.
-     * @param keyType The type of the keys of the dictionary.
-     * @param valueType The type of the values of the dictionary.
+     * @param client A client object.
+     * @param key_type The type of the keys of the dictionary.
+     * @param value_type The type of the values of the dictionary.
      */
     static KRPC::Type dictionary_type(Client& client, KRPC::Type key_type, KRPC::Type value_type);
 
@@ -2198,6 +2322,7 @@ class KRPC : public Service {
 
     /**
      * The type of an enumeration defined by a service.
+     * @param client A client object.
      * @param service The name of the service the enumeration is defined in.
      * @param name The name of the enumeration.
      */
@@ -2215,7 +2340,8 @@ class KRPC : public Service {
 
     /**
      * A list type.
-     * @param valueType The type of the elements of the list.
+     * @param client A client object.
+     * @param value_type The type of the elements of the list.
      */
     static KRPC::Type list_type(Client& client, KRPC::Type value_type);
 
@@ -2226,13 +2352,15 @@ class KRPC : public Service {
 
     /**
      * A nullable type, holding a value of the given type or null.
-     * @param valueType The type of the value.
+     * @param client A client object.
+     * @param value_type The type of the value.
      */
     static KRPC::Type nullable_type(Client& client, KRPC::Type value_type);
 
     /**
      * A set type. Throws an exception if the element type is nullable.
-     * @param valueType The type of the elements of the set.
+     * @param client A client object.
+     * @param value_type The type of the elements of the set.
      */
     static KRPC::Type set_type(Client& client, KRPC::Type value_type);
 
@@ -2243,6 +2371,7 @@ class KRPC : public Service {
 
     /**
      * The type of a structure defined by a service.
+     * @param client A client object.
      * @param service The name of the service the structure is defined in.
      * @param name The name of the structure.
      */
@@ -2250,7 +2379,8 @@ class KRPC : public Service {
 
     /**
      * A tuple type. Throws an exception if there are no element types or more than seven.
-     * @param valueTypes The types of the elements of the tuple.
+     * @param client A client object.
+     * @param value_types The types of the elements of the tuple.
      */
     static KRPC::Type tuple_type(Client& client, std::vector<KRPC::Type> value_types);
 

@@ -88,6 +88,7 @@ class CppGenerator(Generator[CppLanguage]):
 
             for info in class_info["static_methods"].values():
                 info["return_set_client"] = self.parse_set_client(info["procedure"])
+                self.add_client_param_doxygen(info)
 
             class_properties = collections.OrderedDict()
             for name, info in class_info["properties"].items():
@@ -147,6 +148,17 @@ class CppGenerator(Generator[CppLanguage]):
         return context
 
     @staticmethod
+    def add_client_param_doxygen(info):
+        """Document the client a static method takes ahead of its parameters, where its
+        documentation documents any parameters"""
+        lines = info.get("documentation", "").split("\n")
+        params = [i for i, line in enumerate(lines) if line.startswith(" * @param ")]
+        if not params:
+            return
+        lines.insert(params[0], " * @param client A client object.")
+        info["documentation"] = "\n".join(lines)
+
+    @staticmethod
     def add_deprecated_doxygen(info):
         if not info.get("deprecated") or not info.get("deprecated_reason"):
             return
@@ -161,6 +173,8 @@ class CppGenerator(Generator[CppLanguage]):
 
 
 class CppDocParser(DocParser):
+    language = CppLanguage()
+
     def parse_summary(self, node):
         return self.parse_node(node).strip()
 
@@ -168,14 +182,14 @@ class CppDocParser(DocParser):
         return "\n\n" + self.parse_node(node).strip()
 
     def parse_param(self, node):
-        return "\n@param %s %s" % (node.attrib["name"], self.parse_node(node).strip())
+        name = self.language.parse_name(node.attrib["name"])
+        return "\n@param %s %s" % (name, self.parse_node(node).strip())
 
     def parse_returns(self, node):
         return "\n@return %s" % self.parse_node(node).strip()
 
-    @staticmethod
-    def parse_paramref(node):
-        return node.attrib["name"]
+    def parse_paramref(self, node):
+        return self.language.parse_name(node.attrib["name"])
 
     @staticmethod
     def parse_a(node):
@@ -183,7 +197,8 @@ class CppDocParser(DocParser):
 
     @staticmethod
     def parse_c(node):
-        return node.text
+        # A Markdown code span, in which Doxygen reads no commands
+        return "`%s`" % node.text
 
     def parse_list(self, node):
         content = [

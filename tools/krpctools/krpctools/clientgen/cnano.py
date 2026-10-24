@@ -375,7 +375,8 @@ class CNanoDocParser(DocParser):
 
     @staticmethod
     def parse_c(node):
-        return node.text
+        # A Markdown code span, in which Doxygen reads no commands
+        return "`%s`" % node.text
 
     def parse_list(self, node):
         content = [

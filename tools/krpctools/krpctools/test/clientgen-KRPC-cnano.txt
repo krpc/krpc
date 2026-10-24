@@ -1471,8 +1471,8 @@ static inline krpc_error_t krpc_KRPC_Expression_Take(krpc_connection_t connectio
  * A throw statement, which raises the named exception.
  *
  * The client receives the exception as an error from the function, or from the stream
- * or event evaluating it. For example, the service KRPC and the name
- * Error raise KRPC.Error. Throws an exception if the service does not
+ * or event evaluating it. For example, the service `KRPC` and the name
+ * `Error` raise KRPC.Error. Throws an exception if the service does not
  * declare it.
  * @param service The name of the service the exception is defined in.
  * @param name The name of the exception.
