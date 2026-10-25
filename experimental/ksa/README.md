@@ -154,7 +154,7 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
 | Class | Members |
 |---|---|
 | `KSA` | `ActiveVehicle`, `Vehicles`, `Bodies`, `UT`, `SimulationSpeed`, `WarpTo()`, `TransformPosition()`, `TransformDirection()`, `TransformRotation()`, `TransformVelocity()` |
-| `Vehicle` | `Name`, `Situation`, `HasLaunched`, `LaunchTime`, `Mass`, `PropellantMass`, `Thrust`, `AvailableThrust`, `SpecificImpulse`, `DeltaV`, `Sequences`, `TargetVehicle`, `TargetBody`, `Burns`, `AddBurn()`, `Orbit`, `Flight`, `Control`, `AutoPilot`, `ReferenceFrame`, `SurfaceReferenceFrame`, `OrbitalReferenceFrame`, `Position()`, `Velocity()`, `Direction()`, `Rotation()`, `AngularVelocity()` |
+| `Vehicle` | `Name`, `Situation`, `HasLaunched`, `LaunchTime`, `Mass`, `PropellantMass`, `Thrust`, `AvailableThrust`, `SpecificImpulse`, `Parts`, `RootPart`, `Resources`, `DeltaV`, `Sequences`, `TargetVehicle`, `TargetBody`, `Burns`, `AddBurn()`, `Orbit`, `Flight`, `Control`, `AutoPilot`, `ReferenceFrame`, `SurfaceReferenceFrame`, `OrbitalReferenceFrame`, `Position()`, `Velocity()`, `Direction()`, `Rotation()`, `AngularVelocity()` |
 | `Sequence` | `Number`, `Activated`, `DeltaV`, `Thrust`, `SpecificImpulse`, `BurnTime`, `StartMass`, `EndMass`, `PropellantMass` |
 | `Orbit` | `Body`, `Apoapsis`, `Periapsis`, `ApoapsisAltitude`, `PeriapsisAltitude`, `SemiMajorAxis`, `Speed`, `Radius`, `Period`, `TimeToApoapsis`, `TimeToPeriapsis`, `Eccentricity`, `Inclination`, `LongitudeOfAscendingNode`, `ArgumentOfPeriapsis`, `TrueAnomaly`, `MeanAnomaly`, `TrueAnomalyAtUT()`, `UTAtTrueAnomaly()`, `RadiusAt()`, `PositionAt()`, `VelocityAt()`, `StartUT`, `EndUT`, `EndTransition`, `TimeToSOIChange`, `NextOrbit` |
 | `OrbitTransition` | `None`, `Encounter`, `Escape`, `Impact`, `Burn` |
@@ -166,6 +166,12 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
 | `Situation` | KSA's eight situations, from `Maneuvering` to `Bottomed` |
 | `AutoPilotMode` | `Attitude`, `Hold`, orbital and surface prograde, retrograde, normal and radial |
 | `Burn` | `UT`, `Prograde`, `Normal`, `Radial`, `DeltaV`, `RemainingDeltaV`, `IgnitionTime`, `BurnTime`, `Orbit`, `Direction()`, `Remove()` |
+| `Part` | `Name`, `Title`, `Vehicle`, `Parent`, `Children`, `Sequence`, `Mass`, `DryMass`, `Resources`, `Position()`, `Rotation()`, `Engine`, `RCS`, `Decoupler`, `Parachute`, `DockingPort` |
+| `Resource` | `Name`, `Amount`, `Max` |
+| `Engine`, `RCS` | `Part`, `Active`; engines also `HasPropellant`, `Thrust`, `AvailableThrust`, `SpecificImpulse` |
+| `Decoupler` | `Part`, `Enabled`, `Decoupled`, `Decouple()` |
+| `Parachute` | `Part`, `State`, `Fill`, `DeployAltitude`, `Deploy()`, `Cut()` |
+| `DockingPort` | `Part`, `Docked`, `DockedPart`, `Undock()` |
 
  * A `Vehicle` holds the game's vehicle object, as a KSA vehicle id is its name. It throws once the
    vehicle leaves the system, including after docking and undocking.
@@ -189,6 +195,10 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
  * `WarpTo` uses the game's auto-warp, and returns when the warp ends.
  * A vehicle's `Orbit` follows the vehicle. `NextOrbit` and `Burn.Orbit` are snapshots of the
    game's patched-conic prediction, which it updates on a worker thread.
+ * Part modules change through the game's input events, which apply at the start of the next
+   frame. The setters and actions wait for the change, up to ten updates. KSA has no landing
+   leg or wheel modules.
+ * Resources are the substances in tanks, in kilograms.
  * A `Sequence` is KSA's stage. Its performance is the game's prediction, which the game
    recomputes in flight only while its sequence or engine windows are open. The service
    recomputes it at most once per game time.

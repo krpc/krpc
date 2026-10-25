@@ -143,6 +143,30 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The vehicle's parts.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Part> Parts {
+            get { return InternalVehicle.Parts.Parts.ToArray ().Select (part => new Part (part)).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's root part, which the other parts are attached to.
+        /// </summary>
+        [KRPCProperty]
+        public Part RootPart {
+            get { return new Part (InternalVehicle.Parts.Root); }
+        }
+
+        /// <summary>
+        /// The resources the vehicle holds, one for each substance, totaled over its parts.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Resource> Resources {
+            get { return Resource.Of (InternalVehicle, null); }
+        }
+
+        /// <summary>
         /// The change in velocity of all the vehicle's sequences, in meters per second.
         /// </summary>
         [KRPCProperty]
