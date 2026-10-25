@@ -16,8 +16,10 @@ Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `version
  * `examples/` - client scripts.
  * `doc/` - the documentation sources, and the template for the generated API pages.
  * `stubs/` - the readme for the client stubs archive.
+ * `release/` - the licenses and install readme for the mod archive.
  * `build.sh` - builds the mod folder and the client stubs.
  * `docs.sh` - builds the documentation.
+ * `release.sh` - builds the release archives.
  * `install-starmap.sh`, `run-ksa.sh` - install StarMap, and launch the game through it on Linux.
  * `test.sh` - runs the tests.
 
@@ -58,6 +60,23 @@ experimental/ksa/docs.sh --serve   # also serve it on http://127.0.0.1:8000
    `bin/doc-venv` from `doc/requirements.txt`.
  * `examples/` is copied into the sources as `scripts/`, for the tutorial to include.
  * The pages are static, so `bin/docs/index.html` also opens straight from disk.
+
+## Release
+
+Build the release archives into `bin/release`:
+
+```bash
+experimental/ksa/release.sh
+```
+
+ * `kRPC.KSA-0.1.0.zip` - the mod folder, without `TestingTools`, with the licenses and an install
+   readme.
+ * `krpc-ksa-stubs-0.1.0.zip` - the client stubs and service definitions.
+ * `krpc-ksa-docs-0.1.0.zip` - the HTML documentation.
+ * `SHA256SUMS`.
+
+The mod is under the LGPL v3, as `KRPC.Core` is. The archive includes the licenses of the bundled
+`Google.Protobuf` and `System.IO.Ports` binaries.
 
 ## Install and Run
 
