@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>KRPC.KSA.Service</AssemblyName>
+    <RootNamespace>KRPC.KSA</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="src/Services/AutoPilot.cs" />
+    <Compile Include="src/Services/AutoPilotMode.cs" />
+    <Compile Include="src/Services/Body.cs" />
+    <Compile Include="src/Services/Control.cs" />
+    <Compile Include="src/Services/Flight.cs" />
+    <Compile Include="src/Services/KSA.cs" />
+    <Compile Include="src/Services/Orbit.cs" />
+    <Compile Include="src/Services/Situation.cs" />
+    <Compile Include="src/Services/Vehicle.cs" />
+    <Compile Include="src/Utils/Engines.cs" />
+    <Compile Include="src/Utils/Vehicles.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="BepuUtilities">
+      <HintPath>$(KSADir)BepuUtilities.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Planet.Core">
+      <HintPath>$(KSADir)Planet.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

@@ -19,7 +19,7 @@ out="$here/bin/kRPC.KSA"
 ksa_dir="$(readlink -f "${KSA_DIR:-$(dirname "$(dirname "$(dirname "$here")")")/KSA}")"
 
 install=0
-projects=(server/KRPC.KSA.csproj)
+projects=(server/KRPC.KSA.csproj service/KRPC.KSA.Service.csproj)
 for arg in "$@"; do
   case "$arg" in
     --install) install=1 ;;
@@ -33,8 +33,9 @@ if [ "$("$venv/bin/krpc-clientgen" --version 2>/dev/null)" != "krpc-clientgen ve
   python3 -m venv "$venv"
   "$venv/bin/pip" install --quiet --disable-pip-version-check "krpctools==$krpc_version"
 fi
-# The .NET build of KRPC.Core
+# The .NET builds of KRPC.Core and the ServiceDefinitions tool
 krpc_bin="$("$venv/bin/python" -c 'from importlib.resources import files; print(files("krpctools") / "bin")')"
+chmod +x "$krpc_bin/ServiceDefinitions"
 
 rm -rf "$out"
 for project in "${projects[@]}"; do
@@ -43,6 +44,12 @@ done
 # The server reads the API documentation from the XML file beside each assembly
 cp "$krpc_bin/KRPC.Core.xml" "$out/"
 rm -f "$out"/*.pdb
+
+# Generate the service definitions, which runs the server's service scan over the
+# service and checks its documentation
+"$krpc_bin/ServiceDefinitions" \
+  --output="$here/bin/KRPC.KSA.json" --reference-dir="$ksa_dir" --reference-dir="$out" \
+  KSA "$out/KRPC.KSA.Service.dll"
 
 if [ "$install" = 1 ]; then
   if [ -z "${KSA_MODS_DIR:-}" ]; then
