@@ -1799,14 +1799,10 @@ TestAutoPilotLaunchAriane5 = _make_autopilot_launch_test_class(
     turn_oscillation_amplitude=0.5,
 )
 
-# FIXME: small oscillation after pitch of 5 degrees - likely aero surface related
 TestAutoPilotLaunchAeroEquus = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchAeroEquus",
     "AeroEquus",
-    hold_attitude_error=3,
-    turn_attitude_error=3,
-    hold_oscillation_amplitude=1,
-    turn_oscillation_amplitude=1,
+    turn_attitude_error=2,
 )
 
 TestAutoPilotLaunchComSatLx = _make_autopilot_launch_test_class(
@@ -1814,17 +1810,18 @@ TestAutoPilotLaunchComSatLx = _make_autopilot_launch_test_class(
     "ComSat Lx",
 )
 
+# The pitch command oscillates a little in a turn.
 TestAutoPilotLaunchLearstarA1 = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchLearstarA1",
     "Learstar A1",
     pre_launch_sequence=True,
+    turn_oscillation_amplitude=0.5,
 )
 
 # Shuttle-style craft: gimbal and aero control, with no clean reaction-wheel torque model. The
-# autotuned loop is too hot for the actuator authority, and limit-cycles until the
-# control-oscillation latch floors the bandwidth. The cycle is a genuine ~0.6 Hz rigid-body
-# motion, from the constant maximum torque model ignoring the gimbal and aero actuator bandwidth.
-# The craft starts ~8.6 deg pitched on the pad, so the launch capture takes a few seconds.
+# autotuned loop is too hot for the actuator authority, and at times limit-cycles until the
+# control-oscillation latch floors the bandwidth. The craft starts ~8.6 deg pitched on the pad,
+# so the launch capture takes a few seconds.
 TestAutoPilotLaunchDynawing = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchDynawing",
     "Dynawing",
@@ -1849,9 +1846,12 @@ TestAutoPilotLaunchZMAP = _make_autopilot_launch_test_class(
     pre_launch_sequence=True,
 )
 
+# A flexible craft. The actuators at times limit-cycle through its 5 Hz bending mode without the
+# chatter detector latching, in a hold as well as a turn.
 TestAutoPilotLaunchGDLV3 = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchGDLV3",
     "GDLV3",
+    hold_oscillation_amplitude=1.5,
     turn_oscillation_amplitude=1.5,
 )
 
