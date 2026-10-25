@@ -602,6 +602,10 @@ From top to bottom it shows:
   control-output envelope and estimated mode frequency), the gate weights (hold factor,
   latch, ramp, back-off and the net gate), and a lamp per mitigation showing its mode and
   how strongly it is engaged.
+* **AERODYNAMICS** — the control surface handling: the share of the torque from control
+  surfaces, the angular velocity limit (amber while it holds the target rate), the time for
+  the surfaces to reverse, how often their speed holds back the command, and the bandwidth
+  cut that follows.
 
 It is purely a diagnostic aid, most useful on a flexible craft where it shows the
 oscillation detector, gates and mitigations working in real time.

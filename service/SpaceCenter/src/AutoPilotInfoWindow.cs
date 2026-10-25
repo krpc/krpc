@@ -10,9 +10,9 @@ namespace KRPC.SpaceCenter
     /// <summary>
     /// An Apollo-era control-panel style window showing the live state of a vessel's auto-pilot:
     /// backlit annunciator lamps for status (dim when nominal, amber to flag a problem), and
-    /// digital register readouts for the numeric target, attitude error, inner-loop PID gains and
-    /// oscillation detector/gate/mitigation values. One instance per vessel, managed by
-    /// <see cref="AutoPilotInfoAddon"/>.
+    /// digital register readouts for the numeric target, attitude error, inner-loop PID gains,
+    /// oscillation detector/gate/mitigation values and aerodynamic limits. One instance per
+    /// vessel, managed by <see cref="AutoPilotInfoAddon"/>.
     /// </summary>
     public class AutoPilotInfoWindow : Window
     {
@@ -429,6 +429,56 @@ namespace KRPC.SpaceCenter
             GUILayout.EndHorizontal ();
             RowTooltip ("Output smoothing: low-pass blend applied to the delivered control output.");
 
+            // Aerodynamic handling, per roll-invariant axis. SURF scales the other rows: the rate
+            // limit and the reversal time apply in proportion to it, and an axis with no control
+            // surface torque has none of them.
+            Header ("AERODYNAMICS", null);
+            AxisColumnHeader ("PCH", "YAW", "RLL");
+            var share = engaged ? ap.SurfaceShare : null;
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("SURF", registerLabelStyle);
+            RegisterCentered (share == null ? Blank : Percent (share.Item1));
+            RegisterCentered (share == null ? Blank : Percent (share.Item3));
+            RegisterCentered (share == null ? Blank : Percent (share.Item2));
+            GUILayout.EndHorizontal ();
+            RowTooltip ("Share of the available torque that comes from control surfaces.");
+            bool limitOn = engaged && ap.LimitAngularVelocity;
+            var limit = engaged ? ap.AngularVelocityLimit : null;
+            var maxRate = engaged ? ap.MaxAngularVelocity : null;
+            var target = engaged ? ap.TargetAngularVelocity : null;
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("LIMIT", registerLabelStyle);
+            RateLimitLamp (limitOn, limit, maxRate, target, t => t.Item1);
+            RateLimitLamp (limitOn, limit, maxRate, target, t => t.Item3);
+            RateLimitLamp (limitOn, limit, maxRate, target, t => t.Item2);
+            GUILayout.EndHorizontal ();
+            RowTooltip ("Angular velocity limit toward the target, in °/s. Amber while the aerodynamic limit holds the target rate.");
+            var lag = engaged ? ap.ActuatorLag : null;
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("LAG", registerLabelStyle);
+            Register (lag == null ? Blank : Seconds (lag.Item1));
+            Register (lag == null ? Blank : Seconds (lag.Item3));
+            Register (lag == null ? Blank : Seconds (lag.Item2));
+            GUILayout.EndHorizontal ();
+            RowTooltip ("Time for the control surfaces to reverse, added to the stopping distance.");
+            var limited = engaged ? ap.ActuatorLimitedFraction : null;
+            double limitedThreshold = engaged ? ap.ActuatorLimitedThreshold : double.PositiveInfinity;
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("SLEW", registerLabelStyle);
+            OscCell (engaged, limited == null ? 0.0 : limited.Item1, limitedThreshold);
+            OscCell (engaged, limited == null ? 0.0 : limited.Item3, limitedThreshold);
+            OscCell (engaged, limited == null ? 0.0 : limited.Item2, limitedThreshold);
+            GUILayout.EndHorizontal ();
+            RowTooltip ("Fraction of recent ticks the control surface speed held back the command. Amber at the level that engages BWCUT.");
+            var actuatorBackoff = engaged ? ap.ActuatorBackoff : null;
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label ("BWCUT", registerLabelStyle);
+            GateLamp (engaged, actuatorBackoff == null ? 0.0 : 1.0 - actuatorBackoff.Item1);
+            GateLamp (engaged, actuatorBackoff == null ? 0.0 : 1.0 - actuatorBackoff.Item3);
+            GateLamp (engaged, actuatorBackoff == null ? 0.0 : 1.0 - actuatorBackoff.Item2);
+            GUILayout.EndHorizontal ();
+            RowTooltip ("Bandwidth cut: reduction in the inner-loop bandwidth while the control surfaces cycle at their speed limit.");
+
             GUILayout.EndVertical ();
 
             DrawTooltip ();
@@ -595,6 +645,27 @@ namespace KRPC.SpaceCenter
             Lamp (engaged ? "AUTO" : Blank, false, amber, span);
         }
 
+        // Angular velocity limit lamp, in degrees per second: OFF when the aerodynamic limit is
+        // disabled, and amber while the aerodynamic limit is below MaxAngularVelocity and the
+        // target angular velocity is at it. The tuples are null when disengaged, and axis picks
+        // the lamp's axis from each.
+        void RateLimitLamp (bool limitOn, Tuple<double, double, double> limit,
+            Tuple<double, double, double> maxRate, Tuple<double, double, double> target,
+            Func<Tuple<double, double, double>, double> axis)
+        {
+            if (limit == null) {
+                DataLamp (Blank, false, amber);
+                return;
+            }
+            if (!limitOn) {
+                Lamp ("OFF", false, amber, 1);
+                return;
+            }
+            var value = axis (limit);
+            bool holding = value < axis (maxRate) && Math.Abs (axis (target)) >= 0.95 * value;
+            DataLamp (DegreesPerSecond (value), holding, amber);
+        }
+
         // The pitch/yaw group cell for a per-axis (pitch, roll, yaw) tuple: the two transverse
         // axes latch together, so the group shows the larger of the two.
         static double GroupMax (Tuple<double, double, double> t)
@@ -701,6 +772,21 @@ namespace KRPC.SpaceCenter
         static string Percent (double value)
         {
             return ((int) Math.Round (value * 100.0)).ToString (CultureInfo.CurrentCulture).PadLeft (3, ' ') + "%";
+        }
+
+        // An angular velocity in rad/s shown in degrees per second, with the fractional degree
+        // dropped past 100 to fit a one-column cell
+        static string DegreesPerSecond (double value)
+        {
+            if (double.IsInfinity (value))
+                return "—";
+            var degrees = value * 180.0 / Math.PI;
+            return string.Format (CultureInfo.CurrentCulture, degrees >= 100.0 ? "{0:F0}" : "{0:F1}", degrees);
+        }
+
+        static string Seconds (double value)
+        {
+            return string.Format (CultureInfo.CurrentCulture, "{0:F2}s", value);
         }
 
         static string ToolName (int tool)

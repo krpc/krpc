@@ -117,7 +117,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         const double ActuatorLimitedTimeConstant = 2.0;
         // The limited fraction above which the bandwidth backs off. A step limits the actuators
         // for a few tenths of a second; a rate-limit cycle limits them most of the time.
-        const double ActuatorLimitedThreshold = 0.5;
+        internal const double ActuatorLimitedThreshold = 0.5;
         // The rates the bandwidth scale backs off and recovers at, per second, and its floor
         const double ActuatorBackoffRate = 0.5;
         const double ActuatorRecoveryRate = 0.1;
@@ -701,6 +701,44 @@ namespace KRPC.SpaceCenter.AutoPilot
             get { return OscillationDetectors.ChatterLatchThreshold; }
         }
 
+        // Aerodynamic state for the in-game info window, in the roll-invariant frame
+
+        public Vector3d SurfaceShare {
+            get { return ToRollInvariantAxes (surfaceShare); }
+        }
+
+        // The angular velocity limit in the direction of the target angular velocity, in rad/s
+        public Vector3d AngularVelocityLimit {
+            get {
+                return new Vector3d (
+                    logTargetRi.x >= 0 ? rateLimit.x : negativeRateLimit.x,
+                    rateLimit.y,
+                    logTargetRi.z >= 0 ? rateLimit.z : negativeRateLimit.z);
+            }
+        }
+
+        // The control surface reversal time, in seconds
+        public Vector3d ActuatorLag {
+            get { return actuatorLag; }
+        }
+
+        public Vector3d ActuatorLimitedFraction {
+            get { return actuatorLimitedFraction; }
+        }
+
+        public Vector3d ActuatorBackoff {
+            get { return actuatorBackoff; }
+        }
+
+        // Weight each body axis by its squared projection onto the roll-invariant axis
+        Vector3d ToRollInvariantAxes (Vector3d body)
+        {
+            return new Vector3d (
+                riPitchAxis.x * riPitchAxis.x * body.x + riPitchAxis.z * riPitchAxis.z * body.z,
+                body.y,
+                riYawAxis.x * riYawAxis.x * body.x + riYawAxis.z * riYawAxis.z * body.z);
+        }
+
         public bool DiagnosticLogging {
             get { return diagnosticLogging; }
             set {
@@ -1197,10 +1235,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 ActuatorLags (0, commandPitch, dt) ? 1 : 0,
                 ActuatorLags (1, commandRoll, dt) ? 1 : 0,
                 ActuatorLags (2, commandYaw, dt) ? 1 : 0);
-            var limited = new Vector3d (
-                riPitchAxis.x * riPitchAxis.x * bodyLimited.x + riPitchAxis.z * riPitchAxis.z * bodyLimited.z,
-                bodyLimited.y,
-                riYawAxis.x * riYawAxis.x * bodyLimited.x + riYawAxis.z * riYawAxis.z * bodyLimited.z);
+            var limited = ToRollInvariantAxes (bodyLimited);
             if (limited.x > 0.5)
                 PitchPID.HoldIntegralTerm ();
             if (limited.y > 0.5)
@@ -1453,10 +1488,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                 double.IsInfinity (actuatorSlew.x) ? 0.0 : 1.0 / actuatorSlew.x,
                 double.IsInfinity (actuatorSlew.y) ? 0.0 : 1.0 / actuatorSlew.y,
                 double.IsInfinity (actuatorSlew.z) ? 0.0 : 1.0 / actuatorSlew.z);
-            actuatorLag = new Vector3d (
-                pitchAxis.x * pitchAxis.x * bodyLag.x + pitchAxis.z * pitchAxis.z * bodyLag.z,
-                bodyLag.y,
-                yawAxis.x * yawAxis.x * bodyLag.x + yawAxis.z * yawAxis.z * bodyLag.z);
+            actuatorLag = ToRollInvariantAxes (bodyLag);
             rateLimit = MaxAngularVelocity;
             negativeRateLimit = MaxAngularVelocity;
             if (!LimitAngularVelocity)

@@ -1261,6 +1261,53 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Per-axis share of the available torque from control surfaces, in [0,1], for the
+        /// in-game info window.
+        /// </summary>
+        internal Tuple3 SurfaceShare {
+            get { return Controller.SurfaceShare.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis angular velocity limit in the direction of the target, in rad/s, for the
+        /// in-game info window.
+        /// </summary>
+        internal Tuple3 AngularVelocityLimit {
+            get { return Controller.AngularVelocityLimit.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis control surface reversal time, in seconds, for the in-game info window.
+        /// </summary>
+        internal Tuple3 ActuatorLag {
+            get { return Controller.ActuatorLag.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis fraction of recent ticks the actuator rate held back the command, in [0,1],
+        /// for the in-game info window.
+        /// </summary>
+        internal Tuple3 ActuatorLimitedFraction {
+            get { return Controller.ActuatorLimitedFraction.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis bandwidth scale from the actuator back-off, in [0.2,1], for the in-game info
+        /// window.
+        /// </summary>
+        internal Tuple3 ActuatorBackoff {
+            get { return Controller.ActuatorBackoff.ToTuple (); }
+        }
+
+        /// <summary>
+        /// The actuator-limited fraction above which the bandwidth backs off, for the in-game
+        /// info window.
+        /// </summary>
+        internal double ActuatorLimitedThreshold {
+            get { return AttitudeController.ActuatorLimitedThreshold; }
+        }
+
+        /// <summary>
         /// The direction vector that the SAS autopilot is trying to hold in world space.
         /// </summary>
         Vector3d SASTargetDirection ()
