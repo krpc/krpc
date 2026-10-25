@@ -144,6 +144,9 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
  * The `Flight` scene is a loaded system with a controlled vehicle. Otherwise the scene is `None`.
  * `KRPC.Paused` sets the simulation speed to zero, and restores it.
  * Log output goes to the KSA log, under the `kRPC` category.
+ * On .NET, closing a `TcpClient` sets its socket to null, so `KRPC.Core`'s connected check
+   throws for a client that disconnects during a call that yields. A Harmony finalizer treats
+   it as disconnected, as the check does for a disposed socket on Mono.
 
 ## Service
 

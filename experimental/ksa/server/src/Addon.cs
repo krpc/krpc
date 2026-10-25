@@ -75,6 +75,16 @@ namespace KRPC.KSA
                 harmony.Patch (tick, prefix: new HarmonyMethod (
                     typeof (Addon).GetMethod (nameof (BeforeVehicleSolvers), BindingFlags.NonPublic | BindingFlags.Static)));
 
+            // On .NET, closing a TcpClient sets its socket to null, so KRPC.Core's connected check
+            // throws for a client that disconnected during a call that yields. We treat it as
+            // disconnected, as the check does for a disposed socket on Mono
+            var connected = AccessTools.PropertyGetter (AccessTools.TypeByName ("KRPC.Server.TCP.TCPClient"), "Connected");
+            if (connected == null)
+                Logger.WriteLine ("TCPClient.Connected not found, a client that disconnects during a call may stop the server", Logger.Severity.Error);
+            else
+                harmony.Patch (connected, finalizer: new HarmonyMethod (
+                    typeof (Addon).GetMethod (nameof (TCPClientConnectedFinalizer), BindingFlags.NonPublic | BindingFlags.Static)));
+
             if (config.AutoStartServers) {
                 Logger.WriteLine ("Auto-starting server");
                 try {
@@ -121,6 +131,14 @@ namespace KRPC.KSA
             harmony.UnpatchAll (harmony.Id);
             if (core != null)
                 core.StopAll ();
+        }
+
+        static Exception TCPClientConnectedFinalizer (Exception __exception, ref bool __result)
+        {
+            if (__exception is not NullReferenceException)
+                return __exception;
+            __result = false;
+            return null;
         }
 
         static void BeforeVehicleSolvers ()
