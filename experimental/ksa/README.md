@@ -57,9 +57,13 @@ experimental/ksa/docs.sh --serve   # also serve it on http://127.0.0.1:8000
 
  * `krpc-docgen` generates the API pages for each client language from `doc/api/api.tmpl` and
    `bin/KRPC.KSA.json`. `doc/order.txt` orders the members, and lists every one of them.
- * Sphinx and its extensions, at the versions of the kRPC 0.7.0 docs build, are installed into
+ * Sphinx and its extensions, at the versions of the kRPC docs build, are installed into
    `bin/doc-venv` from `doc/requirements.txt`.
- * `examples/` is copied into the sources as `scripts/`, for the tutorial to include.
+ * The pages follow the layout of the kRPC documentation, with sphinx-design cards on the home
+   page. `doc/scripts` holds the code the pages include, and `examples/` is copied beside it as
+   `scripts/` for the tutorials. The index example comes in each client language.
+ * `pyrightconfig.json` in `examples/` and `doc/scripts` turns off `reportAttributeAccessIssue`,
+   which reports the `KSA` service as the client builds it at run time.
  * The pages are static, so `bin/docs/index.html` also opens straight from disk.
 
 `publish-docs.sh` commits the docs into the `gh-pages` branch under `experimental/ksa/`, in a

@@ -8,7 +8,7 @@ import math
 import krpc
 
 conn = krpc.connect(name="Circularize")
-ksa = conn.ksa  # pyright: ignore[reportAttributeAccessIssue]
+ksa = conn.ksa
 vehicle = ksa.active_vehicle
 orbit = vehicle.orbit
 auto_pilot = vehicle.auto_pilot

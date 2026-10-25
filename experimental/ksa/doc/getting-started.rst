@@ -1,10 +1,16 @@
 Getting Started
 ===============
 
-Installing the Mod
-------------------
+This guide sets up the kRPC for KSA server, and runs a Python script that reads telemetry from
+the game.
 
-The mod runs in the game through StarMap, the KSA code mod loader:
+The Server Mod
+--------------
+
+Installation
+^^^^^^^^^^^^
+
+The server is a code mod, which runs in the game through StarMap, the KSA code mod loader:
 
 1. Install `StarMap <https://github.com/StarMapLoader/StarMap/releases>`_
    @STARMAP_VERSION@.
@@ -23,8 +29,8 @@ The mod runs in the game through StarMap, the KSA code mod loader:
 The server starts once the game has loaded its mods. It listens on ``127.0.0.1``, with RPC
 port 50000 and stream port 50001, and accepts every connection.
 
-Server Settings
----------------
+Configuration
+^^^^^^^^^^^^^
 
 The settings are in ``kRPC.KSA/settings.toml``:
 
@@ -42,20 +48,37 @@ The settings are in ``kRPC.KSA/settings.toml``:
 
 Set ``address`` to ``0.0.0.0`` to accept connections from other machines.
 
-Connecting
-----------
+The Python Client
+-----------------
 
-Install the Python client from PyPI:
+Installation
+^^^^^^^^^^^^
+
+Install the kRPC Python client from PyPI:
 
 .. code-block:: bash
 
    pip install krpc==@KRPC_VERSION@
 
-Then connect to the game and print the vehicles:
+Your First Script
+^^^^^^^^^^^^^^^^^
+
+This script connects to the game, and prints the bodies of the system and the active vehicle:
 
 .. literalinclude:: /scripts/telemetry.py
    :language: python
    :start-at: conn = krpc.connect
    :end-at: print(f"Active vehicle
 
-The :doc:`clients` page covers the other languages.
+The client builds the ``KSA`` service from the definitions the server sends when it connects,
+so the service is ``conn.ksa``. The complete script, :download:`telemetry.py
+</scripts/telemetry.py>`, goes on to print the vehicle's altitude, apoapsis and attitude once a
+second.
+
+Next Steps
+----------
+
+* The :doc:`tutorials` walk through complete scripts, from :doc:`tutorials/launch-into-orbit`
+  to planning and executing burns.
+* The :doc:`user-guide` describe how the server and the game behave.
+* The :doc:`clients` pages cover each client language, and the API reference.

@@ -9,7 +9,7 @@ import time
 import krpc
 
 conn = krpc.connect(name="KSA telemetry")
-ksa = conn.ksa  # pyright: ignore[reportAttributeAccessIssue]
+ksa = conn.ksa
 print(f"Bodies: {', '.join(sorted(ksa.bodies))}")
 
 vehicle = ksa.active_vehicle

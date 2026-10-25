@@ -17,7 +17,7 @@ TURN_END_ALTITUDE = 150_000
 TARGET_ALTITUDE = 200_000
 
 conn = krpc.connect(name="Launch into orbit")
-ksa = conn.ksa  # pyright: ignore[reportAttributeAccessIssue]
+ksa = conn.ksa
 vehicle = ksa.launch_vehicle("Rocket", "CCSFS LC-39A")
 control = vehicle.control
 auto_pilot = vehicle.auto_pilot

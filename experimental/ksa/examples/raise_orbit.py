@@ -11,7 +11,7 @@ import krpc
 TARGET_ALTITUDE = 400_000
 
 conn = krpc.connect(name="Raise orbit")
-ksa = conn.ksa  # pyright: ignore[reportAttributeAccessIssue]
+ksa = conn.ksa
 vehicle = ksa.active_vehicle
 orbit = vehicle.orbit
 control = vehicle.control

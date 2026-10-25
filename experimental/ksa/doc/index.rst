@@ -1,36 +1,129 @@
-kRPC for KSA
-============
+kRPC for KSA - Remote Procedure Calls for Kitten Space Agency
+=============================================================
 
-kRPC for KSA is an experimental `kRPC <https://krpc.github.io/krpc/>`_ server for Kitten
-Space Agency. You write scripts in Python, C#, C++, C, Java or Lua that read telemetry from
-the game and fly its vehicles. This script prints the active vehicle's altitude:
+kRPC for KSA lets you control Kitten Space Agency from scripts running outside the game. A
+server inside the game exposes the game's API, and the `kRPC <https://krpc.github.io/krpc/>`_
+@KRPC_VERSION@ client libraries call it from Python, C#, C++, C, Java and Lua.
 
-.. code-block:: python
+.. note::
 
-   import krpc
-   conn = krpc.connect()
-   vehicle = conn.ksa.active_vehicle
-   print(vehicle.name, vehicle.flight.mean_altitude)
+   kRPC for KSA is experimental, and its API may change between releases.
 
-The server is a `StarMap <https://github.com/StarMapLoader/StarMap>`_ code mod, and works
-with the kRPC @KRPC_VERSION@ clients.
+This script launches a rocket from Cape Canaveral straight up, then cuts the engines once it
+reaches an altitude of 10 km:
+
+.. tabs::
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/index/Launch.py
+         :language: python
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/index/Launch.cs
+         :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/index/Launch.cpp
+         :language: cpp
+
+   .. tab:: C
+
+      .. literalinclude:: /scripts/index/Launch.c
+         :language: c
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/index/Launch.java
+         :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/index/Launch.lua
+         :language: lua
+
+.. grid:: 1 2 3 3
+   :gutter: 3
+
+   .. grid-item-card:: :fas:`rocket` Getting Started
+      :link: getting-started
+      :link-type: doc
+
+      Install the server mod, install a client and run your first script.
+
+   .. grid-item-card:: :fas:`book` User Guides
+      :link: user-guide
+      :link-type: doc
+
+      How the server and the game behave: reference frames, object lifetime, the auto-pilot
+      and timing.
+
+   .. grid-item-card:: :fas:`graduation-cap` Tutorials
+      :link: tutorials
+      :link-type: doc
+
+      Complete scripts that launch into orbit, plan burns and change orbits.
+
+   .. grid-item-card:: :fas:`code` Clients
+      :link: clients
+      :link-type: doc
+
+      The guide and API reference for each client library.
+
+   .. grid-item-card:: :fas:`screwdriver-wrench` Developer Guide
+      :link: developer-guide
+      :link-type: doc
+
+      Build the mod, its client stubs and its documentation from source, and run the tests.
+
+   .. grid-item-card:: :fas:`satellite` kRPC for KSP
+      :link: https://krpc.github.io/krpc/
+
+      The kRPC documentation, for Kerbal Space Program.
+
+Clients
+-------
+
+.. grid:: 2 3 6 6
+   :gutter: 2
+
+   .. grid-item-card:: Python
+      :link: python
+      :link-type: doc
+      :text-align: center
+
+   .. grid-item-card:: C#
+      :link: csharp
+      :link-type: doc
+      :text-align: center
+
+   .. grid-item-card:: C++
+      :link: cpp
+      :link-type: doc
+      :text-align: center
+
+   .. grid-item-card:: C-nano
+      :link: cnano
+      :link-type: doc
+      :text-align: center
+
+   .. grid-item-card:: Java
+      :link: java
+      :link-type: doc
+      :text-align: center
+
+   .. grid-item-card:: Lua
+      :link: lua
+      :link-type: doc
+      :text-align: center
 
 .. toctree::
-   :maxdepth: 1
+   :hidden:
 
    getting-started
+   user-guide
+   tutorials
    clients
-   tutorials/launch-into-orbit
-   tutorials/raise-orbit
-   tutorials/circularize
-
-.. toctree::
-   :maxdepth: 1
-   :caption: API
-
-   api/python
-   api/csharp
-   api/cpp
-   api/cnano
-   api/java
-   api/lua
+   developer-guide
