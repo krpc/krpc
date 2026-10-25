@@ -109,6 +109,19 @@ namespace KRPC.SpaceCenter.AutoPilot
         Vector3d actuatorDelivered;
         // The share of each axis's available torque that comes from control surfaces
         Vector3d surfaceShare;
+        // The fraction of recent ticks each axis's command was held back by the actuator rate,
+        // and the bandwidth scale applied in response
+        Vector3d actuatorLimitedFraction;
+        Vector3d actuatorBackoff = new Vector3d (1, 1, 1);
+        // The time constant of actuatorLimitedFraction, in seconds
+        const double ActuatorLimitedTimeConstant = 2.0;
+        // The limited fraction above which the bandwidth backs off. A step limits the actuators
+        // for a few tenths of a second; a rate-limit cycle limits them most of the time.
+        const double ActuatorLimitedThreshold = 0.5;
+        // The rates the bandwidth scale backs off and recovers at, per second, and its floor
+        const double ActuatorBackoffRate = 0.5;
+        const double ActuatorRecoveryRate = 0.1;
+        const double ActuatorBackoffMin = 0.2;
         // The rate the target moves at, estimated from the error and the angular velocity, in the
         // roll-invariant frame, and the error last tick. The reversal lag acts on the angular
         // velocity relative to the target, as a surface tracking a moving target never reverses.
@@ -128,6 +141,9 @@ namespace KRPC.SpaceCenter.AutoPilot
         // The time to reverse the control surfaces on each axis, in seconds, with pitch and yaw in
         // the roll-invariant frame. The vessel carries on rotating meanwhile.
         Vector3d actuatorLag;
+        // The roll-invariant pitch and yaw axes in the body frame
+        Vector3d riPitchAxis;
+        Vector3d riYawAxis;
         // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
         Vector3d smoothedFfRi;
         // The observation layer: chatter detector (level + latch), frequency trackers with their
@@ -825,6 +841,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             RollPID.ResetState ();
             YawPID.ResetState ();
             actuatorDelivered = Vector3d.zero;
+            actuatorLimitedFraction = Vector3d.zero;
+            actuatorBackoff = new Vector3d (1, 1, 1);
             targetRate = Vector3d.zero;
             lastAnglesValid = false;
             aerodynamicRateLimit.Reset ();
@@ -1171,19 +1189,25 @@ namespace KRPC.SpaceCenter.AutoPilot
             var smoothedYaw = SmoothOutput (2, uYaw, dt);
             // Hold the integrals on a tick the control surfaces cannot keep up with, so they do
             // not wind up while the surfaces swing. Pitch and yaw integrate in the roll-invariant
-            // frame, so both hold together.
+            // frame, so each body axis counts toward a loop by its share of that loop's axis.
             var commandPitch = softStart * smoothedPitch;
             var commandRoll = softStart * smoothedRoll;
             var commandYaw = softStart * smoothedYaw;
-            var pitchLimited = ActuatorLags (0, commandPitch, dt);
-            var rollLimited = ActuatorLags (1, commandRoll, dt);
-            var yawLimited = ActuatorLags (2, commandYaw, dt);
-            if (pitchLimited || yawLimited) {
+            var bodyLimited = new Vector3d (
+                ActuatorLags (0, commandPitch, dt) ? 1 : 0,
+                ActuatorLags (1, commandRoll, dt) ? 1 : 0,
+                ActuatorLags (2, commandYaw, dt) ? 1 : 0);
+            var limited = new Vector3d (
+                riPitchAxis.x * riPitchAxis.x * bodyLimited.x + riPitchAxis.z * riPitchAxis.z * bodyLimited.z,
+                bodyLimited.y,
+                riYawAxis.x * riYawAxis.x * bodyLimited.x + riYawAxis.z * riYawAxis.z * bodyLimited.z);
+            if (limited.x > 0.5)
                 PitchPID.HoldIntegralTerm ();
-                YawPID.HoldIntegralTerm ();
-            }
-            if (rollLimited)
+            if (limited.y > 0.5)
                 RollPID.HoldIntegralTerm ();
+            if (limited.z > 0.5)
+                YawPID.HoldIntegralTerm ();
+            UpdateActuatorBackoff (limited, dt);
 
             // The loop commands roll as a fraction of the available roll torque
             state.Pitch = (float)commandPitch;
@@ -1423,6 +1447,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         {
             var pitchAxis = FromRollInvariant (new Vector3d (1, 0, 0), cosPhi, sinPhi);
             var yawAxis = FromRollInvariant (new Vector3d (0, 0, 1), cosPhi, sinPhi);
+            riPitchAxis = pitchAxis;
+            riYawAxis = yawAxis;
             var bodyLag = new Vector3d (
                 double.IsInfinity (actuatorSlew.x) ? 0.0 : 1.0 / actuatorSlew.x,
                 double.IsInfinity (actuatorSlew.y) ? 0.0 : 1.0 / actuatorSlew.y,
@@ -1483,6 +1509,26 @@ namespace KRPC.SpaceCenter.AutoPilot
             var yaw = direction.z == 0 ? 0.0 : direction.z / (direction.z > 0 ? positive.z : negative.z);
             var inverse = Math.Sqrt (pitch * pitch + yaw * yaw);
             return inverse > 0 ? 1.0 / inverse : double.PositiveInfinity;
+        }
+
+        /// <summary>
+        /// Back off the rate-loop bandwidth of an axis whose command the actuator rate holds back
+        /// most of the time. That is a limit cycle through the rate limit, which a lower bandwidth
+        /// stops. The bandwidth recovers slowly once the actuators keep up. The limited share of
+        /// each axis is in the roll-invariant frame.
+        /// </summary>
+        void UpdateActuatorBackoff (Vector3d limited, double dt)
+        {
+            var beta = 1.0 - Math.Exp (-dt / ActuatorLimitedTimeConstant);
+            for (int axis = 0; axis < 3; axis++) {
+                actuatorLimitedFraction [axis] += beta * (limited [axis] - actuatorLimitedFraction [axis]);
+                var backoff = actuatorBackoff [axis];
+                if (actuatorLimitedFraction [axis] > ActuatorLimitedThreshold)
+                    backoff -= ActuatorBackoffRate * backoff * dt;
+                else
+                    backoff += ActuatorRecoveryRate * dt;
+                actuatorBackoff [axis] = backoff.Clamp (ActuatorBackoffMin, 1.0);
+            }
         }
 
         /// <summary>
@@ -2486,10 +2532,18 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (torque [index] <= 0)
                 return;
             var accelerationInv = moi [index] / torque [index];
+            var bandwidth = twiceZetaOmega [index];
+            var bandwidthSquared = omegaSquared [index];
+
+            // Back off the bandwidth while the actuator rate limits the command (see
+            // UpdateActuatorBackoff). Scaling omega0 keeps the damping ratio.
+            var backoff = actuatorBackoff [index];
+            bandwidth *= backoff;
+            bandwidthSquared *= backoff * backoff;
 
             // Record the unfloored gain for the velocity profile's linear stopping coefficient
             // (see ProfileKp) before any bandwidth reduction below.
-            unflooredKp [index] = twiceZetaOmega [index] * accelerationInv;
+            unflooredKp [index] = bandwidth * accelerationInv;
 
             // Latched bandwidth reduction: a latched (flexible) axis has its rate-loop bandwidth
             // 2 * zeta * omega0 = twiceZetaOmega, since Kp * alpha = 2 * zeta * omega0, pulled down
@@ -2506,8 +2560,6 @@ namespace KRPC.SpaceCenter.AutoPilot
             var level = bandwidthFloorMode == Services.MitigationMode.Off ? 0.0
                 : bandwidthFloorMode == Services.MitigationMode.Forced ? 1.0
                 : policy.MitigationLevel (index);
-            var bandwidth = twiceZetaOmega [index];
-            var bandwidthSquared = omegaSquared [index];
             if (level > 0 && oscillationBandwidthFloor < bandwidth) {
                 var reduced = bandwidth + level * (oscillationBandwidthFloor - bandwidth);
                 var f = reduced / bandwidth;
