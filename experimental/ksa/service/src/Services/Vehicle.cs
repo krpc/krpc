@@ -205,6 +205,64 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The vehicle's planned burns, in time order.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Burn> Burns {
+            get {
+                var v = InternalVehicle;
+                var plan = v.BurnPlan;
+                var result = new List<Burn> ();
+                for (var i = 0; i < plan.BurnCount; i++) {
+                    if (plan.TryGetBurn (i, out var burn) && !burn.ParentDepartureBurn)
+                        result.Add (new Burn (v, burn));
+                }
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Plan a burn, and add it to the vehicle's burn plan.
+        /// </summary>
+        /// <param name="ut">Universal time of the burn, in seconds.</param>
+        /// <param name="prograde">Change in velocity in the prograde direction, in meters per
+        /// second.</param>
+        /// <param name="normal">Change in velocity along the orbit normal, in meters per
+        /// second.</param>
+        /// <param name="radial">Change in velocity radially outward, in meters per second.</param>
+        /// <returns>The burn.</returns>
+        /// <remarks>
+        /// Returns once the flight computer has timed the burn, if it is the next one. Throws
+        /// an exception if the time is in the past, or beyond the vehicle's predicted
+        /// trajectory.
+        /// </remarks>
+        [KRPCMethod]
+        public Burn AddBurn (double ut, double prograde = 0, double normal = 0, double radial = 0)
+        {
+            var v = InternalVehicle;
+            if (!double.IsFinite (prograde) || !double.IsFinite (normal) || !double.IsFinite (radial))
+                throw new ArgumentException ("The change in velocity is not finite");
+            if (!(ut > Universe.GetElapsedSeconds ()))
+                throw new ArgumentException ("The time of the burn is not in the future");
+            var time = new UniverseTime (ut);
+            var patch = v.FlightPlan.TryFindPatch (time)
+                ?? throw new ArgumentException ("The time of the burn is beyond the predicted trajectory");
+            var burn = global::KSA.Burn.Create (patch.Orbit.GetPointAt (time), ut, new double3 (prograde, normal, radial), patch, v);
+            v.FlightComputer.AddBurn (burn);
+            return WaitForTiming (v, burn, 0);
+        }
+
+        // The flight computer times the next burn in its solver step. We wait for that, so the
+        // ignition time is known on return, unless the game is paused
+        static Burn WaitForTiming (global::KSA.Vehicle vehicle, global::KSA.Burn burn, int updates)
+        {
+            var result = new Burn (vehicle, burn);
+            if (updates < 10 && !Universe.IsPaused () && !result.IsTimed)
+                throw new YieldException<Func<Burn>> (() => WaitForTiming (vehicle, burn, updates + 1));
+            return result;
+        }
+
+        /// <summary>
         /// The current orbit of the vehicle.
         /// </summary>
         [KRPCProperty]

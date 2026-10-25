@@ -7,6 +7,7 @@
     <Compile Include="src/Services/AutoPilot.cs" />
     <Compile Include="src/Services/AutoPilotMode.cs" />
     <Compile Include="src/Services/Body.cs" />
+    <Compile Include="src/Services/Burn.cs" />
     <Compile Include="src/Services/Control.cs" />
     <Compile Include="src/Services/Flight.cs" />
     <Compile Include="src/Services/KSA.cs" />

@@ -196,6 +196,28 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// Whether the flight computer executes the next burn in
+        /// <see cref="Vehicle.Burns"/>. It points the vehicle along the burn, fires the
+        /// engines at <see cref="Burn.IgnitionTime"/>, and stops once the burn is complete.
+        /// </summary>
+        /// <remarks>
+        /// The flight computer clears it when the burn completes, and removes the burn if
+        /// another follows it. The engines fire only at normal speed, so warp to shortly before
+        /// the burn with <see cref="KSA.WarpTo"/>. Setting it with no burn planned throws an
+        /// exception.
+        /// </remarks>
+        [KRPCProperty]
+        public bool AutoBurn {
+            get { return Computer.BurnMode == FlightComputerBurnMode.Auto; }
+            set {
+                var computer = Computer;
+                if (value && computer.Burn == null)
+                    throw new InvalidOperationException ("The vehicle has no burn planned");
+                computer.BurnMode = value ? FlightComputerBurnMode.Auto : FlightComputerBurnMode.Manual;
+            }
+        }
+
+        /// <summary>
         /// Point the vehicle in a direction, and set the mode to
         /// <see cref="AutoPilotMode.Attitude"/>. Sets <see cref="TargetPitch"/> and
         /// <see cref="TargetHeading"/> to the direction at the time of the call, so the target

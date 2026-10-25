@@ -21,6 +21,8 @@ KSA.Vehicle.DeltaV
 KSA.Vehicle.Sequences
 KSA.Vehicle.TargetVehicle
 KSA.Vehicle.TargetBody
+KSA.Vehicle.Burns
+KSA.Vehicle.AddBurn
 KSA.Vehicle.Orbit
 KSA.Vehicle.Flight
 KSA.Vehicle.Control
@@ -116,6 +118,7 @@ KSA.AutoPilot.TargetDirection
 KSA.AutoPilot.Error
 KSA.AutoPilot.RollError
 KSA.AutoPilot.Wait
+KSA.AutoPilot.AutoBurn
 KSA.AutoPilotMode.Attitude
 KSA.AutoPilotMode.Hold
 KSA.AutoPilotMode.Prograde
@@ -127,3 +130,13 @@ KSA.AutoPilotMode.RadialIn
 KSA.AutoPilotMode.SurfacePrograde
 KSA.AutoPilotMode.SurfaceRetrograde
 KSA.AutoPilotMode.Other
+KSA.Burn.UT
+KSA.Burn.Prograde
+KSA.Burn.Normal
+KSA.Burn.Radial
+KSA.Burn.DeltaV
+KSA.Burn.RemainingDeltaV
+KSA.Burn.IgnitionTime
+KSA.Burn.BurnTime
+KSA.Burn.Direction
+KSA.Burn.Remove
