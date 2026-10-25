@@ -20,6 +20,7 @@ Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `version
  * `build.sh` - builds the mod folder and the client stubs.
  * `docs.sh` - builds the documentation.
  * `release.sh` - builds the release archives.
+ * `publish-docs.sh` - commits the docs to the `gh-pages` branch.
  * `install-starmap.sh`, `run-ksa.sh` - install StarMap, and launch the game through it on Linux.
  * `test.sh` - runs the tests.
 
@@ -60,6 +61,11 @@ experimental/ksa/docs.sh --serve   # also serve it on http://127.0.0.1:8000
    `bin/doc-venv` from `doc/requirements.txt`.
  * `examples/` is copied into the sources as `scripts/`, for the tutorial to include.
  * The pages are static, so `bin/docs/index.html` also opens straight from disk.
+
+`publish-docs.sh` commits the docs into the `gh-pages` branch under `experimental/ksa/`, in a
+worktree at `bin/gh-pages`, and `--push` pushes the commit. They are served at
+<https://krpc.github.io/krpc/experimental/ksa/>. The docs workflow replaces only its own `dev/`
+and version folders, and the version switcher lists only those.
 
 ## Release
 
