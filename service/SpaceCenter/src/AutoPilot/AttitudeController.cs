@@ -109,11 +109,25 @@ namespace KRPC.SpaceCenter.AutoPilot
         Vector3d actuatorDelivered;
         // The share of each axis's available torque that comes from control surfaces
         Vector3d surfaceShare;
+        // The rate the target moves at, estimated from the error and the angular velocity, in the
+        // roll-invariant frame, and the error last tick. The reversal lag acts on the angular
+        // velocity relative to the target, as a surface tracking a moving target never reverses.
+        Vector3d targetRate;
+        Vector3d lastAngles;
+        bool lastAnglesValid;
+        // Time constant of the target rate estimate, in seconds
+        const double TargetRateTimeConstant = 0.5;
+        // The largest target rate the estimate follows, in rad/s. A faster change in the error is
+        // a step in the target.
+        const double MaxTargetRate = 0.2;
         readonly AerodynamicRateLimit aerodynamicRateLimit = new AerodynamicRateLimit ();
         // The angular velocity limits in use this tick for a positive and a negative rate, with pitch
         // and yaw in the roll-invariant frame
         Vector3d rateLimit;
         Vector3d negativeRateLimit;
+        // The time to reverse the control surfaces on each axis, in seconds, with pitch and yaw in
+        // the roll-invariant frame. The vessel carries on rotating meanwhile.
+        Vector3d actuatorLag;
         // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
         Vector3d smoothedFfRi;
         // The observation layer: chatter detector (level + latch), frequency trackers with their
@@ -811,6 +825,8 @@ namespace KRPC.SpaceCenter.AutoPilot
             RollPID.ResetState ();
             YawPID.ResetState ();
             actuatorDelivered = Vector3d.zero;
+            targetRate = Vector3d.zero;
+            lastAnglesValid = false;
             aerodynamicRateLimit.Reset ();
             pointRotationValid = false;
             antipodeLatched = false;
@@ -1405,6 +1421,16 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// </summary>
         void UpdateRateLimit (double cosPhi, double sinPhi)
         {
+            var pitchAxis = FromRollInvariant (new Vector3d (1, 0, 0), cosPhi, sinPhi);
+            var yawAxis = FromRollInvariant (new Vector3d (0, 0, 1), cosPhi, sinPhi);
+            var bodyLag = new Vector3d (
+                double.IsInfinity (actuatorSlew.x) ? 0.0 : 1.0 / actuatorSlew.x,
+                double.IsInfinity (actuatorSlew.y) ? 0.0 : 1.0 / actuatorSlew.y,
+                double.IsInfinity (actuatorSlew.z) ? 0.0 : 1.0 / actuatorSlew.z);
+            actuatorLag = new Vector3d (
+                pitchAxis.x * pitchAxis.x * bodyLag.x + pitchAxis.z * pitchAxis.z * bodyLag.z,
+                bodyLag.y,
+                yawAxis.x * yawAxis.x * bodyLag.x + yawAxis.z * yawAxis.z * bodyLag.z);
             rateLimit = MaxAngularVelocity;
             negativeRateLimit = MaxAngularVelocity;
             if (!LimitAngularVelocity)
@@ -1414,8 +1440,6 @@ namespace KRPC.SpaceCenter.AutoPilot
             var negative = aerodynamicRateLimit.PositiveLimit * AerodynamicRateFraction;
             // Only the control surfaces' share of an axis's torque lags the command and drives a
             // limit cycle, so the limit applies in proportion to that share
-            var pitchAxis = FromRollInvariant (new Vector3d (1, 0, 0), cosPhi, sinPhi);
-            var yawAxis = FromRollInvariant (new Vector3d (0, 0, 1), cosPhi, sinPhi);
             for (int axis = 0; axis < 3; axis++) {
                 var share = surfaceShare [axis];
                 positive [axis] = share > 0 ? positive [axis] / share : double.PositiveInfinity;
@@ -1427,6 +1451,28 @@ namespace KRPC.SpaceCenter.AutoPilot
             negativeRateLimit.x = Math.Min (negativeRateLimit.x, EllipseRadius (-pitchAxis, positive, negative));
             negativeRateLimit.y = Math.Min (negativeRateLimit.y, negative.y);
             negativeRateLimit.z = Math.Min (negativeRateLimit.z, EllipseRadius (-yawAxis, positive, negative));
+        }
+
+        /// <summary>
+        /// Update the estimate of the rate the target moves at. With a still target, the error
+        /// changes at the angular velocity, so the difference between the two is the target's
+        /// rate. The error angles are in degrees.
+        /// </summary>
+        void UpdateTargetRate (Vector3d angles, Vector3d omega)
+        {
+            var radians = angles * (Math.PI / 180);
+            if (lastAnglesValid) {
+                var dt = Time.fixedDeltaTime;
+                var beta = 1.0 - Math.Exp (-dt / TargetRateTimeConstant);
+                for (int axis = 0; axis < 3; axis++) {
+                    var rate = omega [axis] - (radians [axis] - lastAngles [axis]) / dt;
+                    if (Math.Abs (rate) > MaxTargetRate)
+                        rate = 0;
+                    targetRate [axis] += beta * (rate - targetRate [axis]);
+                }
+            }
+            lastAngles = radians;
+            lastAnglesValid = true;
         }
 
         // The radius along a body direction, in the pitch and yaw plane, of the ellipse with
@@ -1962,6 +2008,8 @@ namespace KRPC.SpaceCenter.AutoPilot
 
             // Rotate currentOmega into roll-invariant frame for stopping-distance feedforward.
             var currentOmegaRi = ToRollInvariant (currentOmega, cosPhi, sinPhi);
+            // Update the target rate this tick, before the profiles below read it
+            UpdateTargetRate (anglesRI, currentOmegaRi);
 
             var result = Vector3d.zero;
 
@@ -1969,7 +2017,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // stopping coefficient uses the unfloored gain, see the note in ComputePitchYawVelocity.
             var rollBandwidth = moi [1] > 0 ? ProfileKp (1, RollPID) * torque [1] / moi [1] : 0.0;
             result.y = ComputeAxisVelocity (anglesRI.y, torque [1], moi [1], currentOmegaRi.y,
-                rateLimit [1], RollBand, rollBandwidth, out rollSample);
+                rateLimit [1], RollBand, rollBandwidth, actuatorLag.y, targetRate.y, out rollSample);
 
             // Pitch/yaw handled jointly so the nose follows a straight great-circle arc.
             double pitchVelocity, yawVelocity;
@@ -2063,8 +2111,9 @@ namespace KRPC.SpaceCenter.AutoPilot
                 }
             }
 
-            var eStopPitch = thetaPitch + coeff * omegaPitch;
-            var eStopYaw = thetaYaw + coeff * omegaYaw;
+            // The rotation relative to the target carries on while the control surfaces reverse
+            var eStopPitch = thetaPitch + coeff * omegaPitch + actuatorLag.x * (omegaPitch - targetRate.x);
+            var eStopYaw = thetaYaw + coeff * omegaYaw + actuatorLag.z * (omegaYaw - targetRate.z);
             var eStopMag = Math.Sqrt (eStopPitch * eStopPitch + eStopYaw * eStopYaw);
 
             // Singularity guard on |e_stop| (not theta): both the error and the predicted drift must
@@ -2164,8 +2213,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// Compute target angular velocity for a single axis using the bang-bang profile.
         /// </summary>
         double ComputeAxisVelocity (double angleDeg, double torque, double moi, double currentOmega,
-            double maxVelocity, double deadbandHighDeg, double pidBandwidth,
-            out ProfileSample sample)
+            double maxVelocity, double deadbandHighDeg, double pidBandwidth, double actuatorLag,
+            double targetRate, out ProfileSample sample)
         {
             sample = default (ProfileSample);
             var theta = GeometryExtensions.ToRadians (angleDeg);
@@ -2180,7 +2229,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                     linearActive = Math.Abs (corrLinear) > Math.Abs (corrQuad);
                     corr = Math.Abs (corrQuad) >= Math.Abs (corrLinear) ? corrQuad : corrLinear;
                 }
-                theta += corr;
+                theta += corr + (currentOmega - targetRate) * actuatorLag;
             }
             // The leading -Math.Sign defines the controller's positive angular-velocity direction as
             // the left-handed sense about the axis; it is the matched partner of the negation in
