@@ -1,0 +1,10 @@
+# The Sphinx versions of the documentation build of the kRPC release
+sphinx==9.1.1
+docutils==0.22.4
+pydata-sphinx-theme==0.23.0
+sphinx-tabs==3.5.0
+sphinx-csharp==1.0.0
+sphinxcontrib-luadomain==1.2.0
+javasphinx @ https://krpc.s3.amazonaws.com/lib/javasphinx/javasphinx-0.9.16.tar.gz
+# sphinxcontrib-luadomain declares its namespace package through pkg_resources
+setuptools==80.9.0

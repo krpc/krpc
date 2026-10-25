@@ -14,8 +14,10 @@ Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `version
  * `testing/` - the `TestingTools` service, installed only for the tests.
  * `test/` - integration tests, and their harness `ksatest.py`.
  * `examples/` - client scripts.
+ * `doc/` - the documentation sources, and the template for the generated API pages.
  * `stubs/` - the readme for the client stubs archive.
  * `build.sh` - builds the mod folder and the client stubs.
+ * `docs.sh` - builds the documentation.
  * `install-starmap.sh`, `run-ksa.sh` - install StarMap, and launch the game through it on Linux.
  * `test.sh` - runs the tests.
 
@@ -40,6 +42,22 @@ The build uses a kRPC release, set by `krpc_version` in `versions.sh`, and needs
    which also holds the definitions.
 
 Documentation comments use the markup of that release, so units are words rather than `<unit>`.
+
+## Documentation
+
+Build the HTML documentation into `bin/docs`, after `build.sh`:
+
+```bash
+experimental/ksa/docs.sh
+experimental/ksa/docs.sh --serve   # also serve it on http://127.0.0.1:8000
+```
+
+ * `krpc-docgen` generates the API pages for each client language from `doc/api/api.tmpl` and
+   `bin/KRPC.KSA.json`. `doc/order.txt` orders the members, and lists every one of them.
+ * Sphinx and its extensions, at the versions of the kRPC 0.7.0 docs build, are installed into
+   `bin/doc-venv` from `doc/requirements.txt`.
+ * `examples/` is copied into the sources as `scripts/`, for the tutorial to include.
+ * The pages are static, so `bin/docs/index.html` also opens straight from disk.
 
 ## Install and Run
 
