@@ -40,10 +40,11 @@ engaged raises an ``InvalidOperationException``.
 
 The autopilot handles structurally flexible craft automatically, detecting and
 suppressing any structural oscillation (wobble) with no tuning required (see
-:ref:`Flexible craft <flexible-craft>`), and can ease target changes in over time for
-smooth maneuvers (see :ref:`Smoothing target changes <target-smoothing>`). Internally it
-is a two-loop cascade controller; if you want to know how it turns an attitude error into
-control inputs, see :ref:`How it works <how-it-works>`.
+:ref:`Flexible craft <flexible-craft>`). It models the authority and speed of aircraft
+control surfaces (see :ref:`Aircraft and control surfaces <aircraft>`), and can ease
+target changes in over time for smooth maneuvers (see :ref:`Smoothing target changes
+<target-smoothing>`). Internally it is a two-loop cascade controller; if you want to know
+how it turns an attitude error into control inputs, see :ref:`How it works <how-it-works>`.
 
 .. _setting-target-attitude:
 
@@ -194,12 +195,20 @@ suffice in most cases, but they can be adjusted to fit your needs.
   moderate control authority rarely reach this cap; it mainly prevents very high-torque
   craft from rotating faster than desired.
 
+* **Limit angular velocity** (default ``True``) also caps the target angular velocity at
+  the rate the vessel's spare control torque holds against the aerodynamic forces. It
+  applies in proportion to the control surfaces' share of each axis's torque. See
+  :ref:`Aircraft and control surfaces <aircraft>`.
+
 * The **pitch/yaw attenuation angle** and the **roll attenuation angle** (both default
   to 1 degree) set the region in which the autopilot considers the vessel to be 'close'
   to the target. The target velocity is at full above this angle and ramps linearly to
   zero at half of it — a *pointing deadband* — so the vessel coasts to a stop rather than
   the controls chasing sub-degree jitter when the vessel is pointing in the correct
-  direction.
+  direction. The band shrinks in proportion to the control surfaces' share of the axis's
+  torque, reaching zero on an axis controlled only by surfaces. Control surfaces respond
+  in proportion to the command, and a wide band leaves an aircraft holding its trim off
+  the target.
 
 * **PI auto-tuning** (default ``True``) controls whether the PI controller gains are
   automatically tuned from the vessel's available torque and moment of inertia, as
@@ -467,6 +476,48 @@ held at zero throughout the fade, so they only begin to accumulate once the ramp
 complete — and the controls are therefore not kicked when it finishes. Setting the
 soft-start time to zero disables the fade-in.
 
+.. _aircraft:
+
+Aircraft and control surfaces
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Control surfaces differ from reaction wheels, RCS and engine gimbals in two ways. Their
+torque depends on the airflow, and they take time to deflect. The autopilot models both,
+so an aircraft holds and steps its attitude with the default settings. A rocket with fins
+gets the same handling, in proportion to the fins' share of its torque.
+
+The autopilot reads each control surface's torque, deflection range and actuator speed
+every physics tick, and uses them in four ways:
+
+* **Angular velocity limit.** The target angular velocity is capped at the rate the
+  vessel's spare control torque holds against the aerodynamic forces. Rotating faster
+  saturates the surfaces, and on an aircraft with little authority that drives an
+  oscillation.
+* **Actuator lag.** The autopilot allows for the time the surfaces take to reverse when it
+  predicts where the vessel will stop. The integral term holds while the surfaces lag the
+  command, so it does not wind up during a swing.
+* **Bandwidth back-off.** An axis whose surfaces sit at their rate limit most of the time is
+  in a limit cycle through that limit. The autopilot lowers the axis's bandwidth until the
+  cycle stops, then restores it slowly.
+* **Roll gain.** The game deflects each surface for roll in proportion to its distance from
+  the center of mass, so an outboard aileron reaches full deflection at part of full roll
+  input. The autopilot inverts this, so its roll command is linear in roll torque.
+
+The angular velocity limit is controlled by the **limit angular velocity** property. To
+limit the angular velocity by the **maximum angular velocity** alone:
+
+.. literalinclude:: /scripts/user-guide/autopilot/LimitAngularVelocity.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
+
+The :ref:`info window <info-window>` shows each of these per axis, in its AERODYNAMICS
+section. The mechanism is described under :ref:`Control surfaces <control-surfaces>`.
+
+.. note::
+   The angular velocity limit is not applied when the Ferram Aerospace Research mod is
+   installed.
+
 .. _corner-cases:
 
 Corner cases
@@ -545,9 +596,9 @@ so the flexibility detector does not see it. Instead, the autopilot treats a sus
 :ref:`bandwidth floor <bandwidth-floor>` it uses for a flexible craft — but keeping the
 feedforward, which the slower loop needs to hold attitude — which lets it hold cleanly. As
 with a flexible craft, the reduced bandwidth makes it track a large, continuous slew less
-precisely. Modeling the actuator's *response*, not just its peak torque, would let the
-loop keep a higher bandwidth here; until then such a craft is held gently rather than
-tracked tightly.
+precisely. The autopilot models the actuator speed of control surfaces, as described
+under :ref:`Aircraft and control surfaces <aircraft>`, but not the slew of an engine
+gimbal. A gimbal-steered craft in this state is held gently rather than tracked tightly.
 
 While the autopilot detects and damps structural flexibility automatically, it leans
 most heavily on **reducing the affected craft's control bandwidth** while it holds
@@ -563,15 +614,18 @@ slowly than a rigid craft would, because it is deliberately running at a reduced
 bandwidth. For the same reason, recovering from a maneuver that has excited the bending
 mode runs at the reduced bandwidth and can take several seconds.
 
-The autopilot is primarily designed for, and tested in, vacuum. It is a closed-loop
-attitude tracker: aerodynamic torques appear to it as disturbances that the inner loop
-only rejects once an error has built up. In a thick atmosphere — during ascent through
-maximum dynamic pressure, or re-entry at a high angle of attack — the aerodynamic torque
-can be large and fast-changing, and may even exceed the vessel's control authority. The
-autopilot will still drive towards the target, but a low-authority craft can lag the
-target by many degrees, or fail to hold attitude at all. It also does **not** manage
-angle of attack: keeping the vessel within safe structural and thermal limits in
-atmosphere is the responsibility of your script, not the autopilot.
+In atmosphere, the autopilot models the control surfaces' authority and speed, and the
+rate the aerodynamics let the vessel turn at. Other aerodynamic torques, such as trim and
+the moment at an angle of attack, appear to it as disturbances. The inner loop rejects
+these only once an error has built up. In a thick atmosphere, during ascent through
+maximum dynamic pressure or re-entry at a high angle of attack, the aerodynamic torque can
+be large, fast-changing, and above the vessel's control authority. A low-authority craft
+can then lag the target by many degrees, or fail to hold attitude at all.
+
+The autopilot also does **not** manage angle of attack. Keeping the vessel within safe
+structural and thermal limits in atmosphere is the responsibility of your script. It turns
+the nose by the shortest rotation, so a heading change on an aircraft uses the rudder
+instead of a banked turn. For a large heading change, bank the aircraft from your script.
 
 .. _info-window:
 
@@ -797,7 +851,9 @@ This is used as the target speed. It is the minimum-time profile: the vessel
 accelerates up to this speed and then decelerates at full torque, coming to rest
 on the target.
 
-The target speed is capped at the maximum angular velocity :math:`\omega_{max}`.
+The target speed is capped at the maximum angular velocity :math:`\omega_{max}`. With the
+**limit angular velocity** property set, :math:`\omega_{max}` is also capped by the
+:ref:`aerodynamic rate limit <aerodynamic-rate-limit>`.
 
 Speed cone
 """"""""""
@@ -1523,3 +1579,109 @@ hunting once the craft has settled.
 
 A rigid or high-authority craft never latches and so triggers none of this; the adaptation
 is safe to leave always on.
+
+.. _control-surfaces:
+
+Control surfaces
+^^^^^^^^^^^^^^^^
+
+A control surface's torque scales with dynamic pressure, and the surface moves to a new
+deflection at a fixed actuator speed. The autopilot models the surfaces through the share
+:math:`s` of each axis's available torque they provide. An axis with no surfaces has
+:math:`s = 0`, and the mechanisms below then leave it unchanged.
+
+Torque and roll gain
+""""""""""""""""""""
+
+Each surface's torque is the cross product of its offset from the center of mass and the
+change in lift between no deflection and full deflection. For roll, the game deflects each
+surface by its roll input :math:`u` times a roll gain :math:`K_i`, clamped to its range.
+The gain grows with the surface's distance from the center of mass. The roll torque is
+therefore linear in the input until each surface in turn reaches its range:
+
+.. math::
+   \tau(u) = \tau_{lin}\,u + \sum_i \tau_i \min(1, K_i u)
+
+where :math:`\tau_i` is surface :math:`i`'s torque at full deflection and
+:math:`\tau_{lin}` is the torque of the other sources. The roll PI controller outputs a
+fraction :math:`x` of the available roll torque, and the autopilot solves
+:math:`\tau(u) = x\,\tau(1)` for :math:`u` by bisection. A surface with :math:`K_i < 1`
+never reaches full deflection, so its available roll torque is scaled by :math:`K_i`.
+
+Actuator model
+""""""""""""""
+
+A surface swings through its range :math:`r` at its actuator speed :math:`v` in
+:math:`r/v` seconds. An axis's swing time :math:`T_s` is that of its slowest surface. The
+other torque sources respond at once, so the axis lags the command by:
+
+.. math::
+   T = s\,T_s
+
+The autopilot tracks a modeled delivered command that moves toward the command at
+:math:`1/T` per second. On a tick where the model lags the command, the axis's integral
+term holds, and the tick counts toward the bandwidth back-off below. The command itself
+goes to the game unchanged.
+
+Reversal lag
+""""""""""""
+
+A rotating vessel keeps turning for about :math:`T` after the command reverses, while the
+surfaces swing back. The :ref:`stopping-distance feedforward
+<stopping-distance-feedforward>` adds this to the predicted stopping point:
+
+.. math::
+   \theta_{ff} = \theta + \Delta\theta + T\,(\omega - \omega_t)
+
+The rate :math:`\omega_t` is the target's own rotation, as a surface tracking a steadily
+moving target never reverses. It is estimated as the angular velocity minus the rate of
+change of the error, low-pass filtered with a 0.5 second time constant. A change in the
+error faster than 0.2 rad/s is a step in the target, and the estimate ignores it.
+
+Bandwidth back-off
+""""""""""""""""""
+
+A step lags the surfaces for a few tenths of a second. A limit cycle through the rate
+limit lags them most of the time. The autopilot tells the two apart by the fraction
+:math:`f` of ticks on which the model lags the command, and sets each axis's bandwidth
+scale :math:`b` from it:
+
+* :math:`f` is low-pass filtered with a 2 second time constant.
+* While :math:`f > 0.5`, :math:`b` decays by half its value per second, to a floor of 0.2.
+* Otherwise :math:`b` recovers at 0.1 per second.
+
+The scale multiplies :math:`\omega_0` in the :ref:`gain tuning <tuning-the-controllers>`,
+so :math:`K_P` scales with :math:`b`, :math:`K_I` with :math:`b^2`, and the damping ratio
+is kept.
+
+.. _aerodynamic-rate-limit:
+
+Aerodynamic rate limit
+""""""""""""""""""""""
+
+The steady rate a vessel holds on an axis is set by the spare control torque: the
+available torque less the trim, the slowly varying average of the command over 3 seconds.
+Every 0.5 seconds the autopilot evaluates the vessel's aerodynamics at a range of
+attitudes and rates, and finds that steady rate for each axis:
+
+* **Pitch and yaw.** It searches for the incidence :math:`i`, up to 30°, at which the
+  aerodynamic restoring moment uses up the spare torque. At that incidence the aerodynamic
+  force :math:`F`, the thrust :math:`T_h` and the weight across the flight path
+  :math:`W_\perp` turn the flight path at:
+
+  .. math::
+     \omega = \frac{F + T_h \sin i \pm W_\perp}{m v}
+
+  where :math:`m` is the vessel's mass and :math:`v` its airspeed. The weight helps a turn
+  toward it and opposes a turn away from it, so each axis has a limit per direction. Each
+  limit is at least the rate that leans the nose to :math:`i` in 10 seconds, so the vessel
+  still corrects a small error in a direction it cannot sustain a turn in.
+
+* **Roll.** It finds the roll rate, up to 3 rad/s, at which the aerodynamic damping moment
+  uses up the spare torque.
+
+The limit is 0.7 times that rate, divided by the surface share :math:`s`, as only the
+surfaces' share of the torque lags the command. Pitch and yaw are controlled in the
+:ref:`roll-invariant frame <roll-invariant-frame>`, so each takes the radius along it of
+the ellipse with the body-axis limits as its semi-axes. The limit is infinite out of the
+atmosphere.
