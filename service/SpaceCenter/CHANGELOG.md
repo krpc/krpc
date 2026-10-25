@@ -4,6 +4,19 @@
   client documentation, e.g. `m/s²` (#1169)
 - Allow the rails warp rates the game allows the player, which ignore the altitude limits when
   the periapsis is clear of the atmosphere and terrain (#1167)
+- Fix the `MomentOfInertia` and `InertiaTensor` of `Vessel` and `EditorVessel` measuring each
+  part from its origin instead of its center of mass (#1191)
+- Fix `ControlSurface.AvailableTorque` scaling the torque about each axis by the surface's
+  distance along that axis, and overstating the roll torque of a surface close to the center
+  line (#1191)
+- Add `ControlSurface.DeflectionAngle`, `ControlRange` and `ActuatorSpeed` (#1191)
+- Fix the auto-pilot oscillating or departing on aircraft (#1191, #526)
+- Add `AutoPilot.LimitAngularVelocity`, on by default, which limits the angular velocity to what
+  the control surfaces hold against the aerodynamics (#1191, #526)
+- Shrink the auto-pilot's attenuation angles with the share of the torque that comes from control
+  surfaces (#1191, #526)
+- Add an aerodynamics section to the auto-pilot info window, and make its sections
+  collapsible (#1191)
 
 ## [v0.7.0]
 
