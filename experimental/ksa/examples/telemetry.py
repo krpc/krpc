@@ -24,6 +24,7 @@ while True:
     print(
         f"UT {ksa.ut:.0f} s  altitude {altitude():.0f} m  "
         f"apoapsis {apoapsis():.0f} m  speed {flight.speed:.1f} m/s  "
-        f"pitch {flight.pitch:.1f} heading {flight.heading:.1f} roll {flight.roll:.1f}"
+        f"pitch {flight.pitch:.1f} heading {flight.heading:.1f} roll {flight.roll:.1f}  "
+        f"delta-v {vehicle.delta_v:.0f} m/s"
     )
     time.sleep(1)

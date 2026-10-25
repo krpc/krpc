@@ -21,6 +21,7 @@ with the kRPC @KRPC_VERSION@ clients.
    getting-started
    clients
    tutorials/raise-orbit
+   tutorials/circularize
 
 .. toctree::
    :maxdepth: 1

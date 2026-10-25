@@ -127,9 +127,10 @@ vehicle = conn.ksa.active_vehicle
 print(vehicle.name, vehicle.flight.mean_altitude)
 ```
 
-`examples/telemetry.py` prints telemetry for the active vehicle, and `examples/raise_orbit.py`
-raises the orbit of the active vehicle with two burns. Lua also builds services at run
-time.
+`examples/telemetry.py` prints telemetry for the active vehicle. `examples/raise_orbit.py`
+raises its orbit with two burns that the script flies, and `examples/circularize.py`
+circularizes it with a burn that the flight computer executes. Lua also builds services at
+run time.
 
 The C#, C++, C-nano and Java clients use the stubs in `bin/krpc-ksa-stubs-0.1.0.zip`, together
 with the kRPC 0.7.0 client libraries. Its readme shows each language.
@@ -219,8 +220,8 @@ experimental/ksa/test.sh --no-launch            # against a game started with ru
    after a load, and the harness unpauses it.
  * `build.sh --install` without `--testing` removes `TestingTools` from the installed mod.
 
-All the tests pass on Linux, with KSA 2026.10.19.5638, and `examples/raise_orbit.py` raises the
-Rocket's orbit from 207 km to 400 km.
+All the tests pass on Linux, with KSA 2026.10.19.5638. `examples/raise_orbit.py` raises the
+Rocket's orbit from 207 km to 400 km, and `examples/circularize.py` circularizes it.
 
 ## Open Questions
 
