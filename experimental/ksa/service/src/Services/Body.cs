@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KSA;
@@ -76,6 +78,63 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public double AtmosphereRadius {
             get { return InternalBody.GetAtmosphereRadius (); }
+        }
+
+        /// <summary>
+        /// The acceleration due to gravity at the body's mean radius, in meters per second
+        /// squared.
+        /// </summary>
+        [KRPCProperty]
+        public double SurfaceGravity {
+            get { return InternalBody.Mu / (InternalBody.MeanRadius * InternalBody.MeanRadius); }
+        }
+
+        /// <summary>
+        /// The rate at which the body rotates about its axis, in radians per second.
+        /// </summary>
+        [KRPCProperty]
+        public double RotationalSpeed {
+            get { return InternalBody.GetAngularVelocity (); }
+        }
+
+        /// <summary>
+        /// The time the body takes to rotate once about its axis, relative to the stars, in
+        /// seconds. Infinite for a body that does not rotate.
+        /// </summary>
+        [KRPCProperty]
+        public double RotationalPeriod {
+            get {
+                var speed = Math.Abs (InternalBody.GetAngularVelocity ());
+                return speed > 0 ? 2 * Math.PI / speed : double.PositiveInfinity;
+            }
+        }
+
+        /// <summary>
+        /// The radius of the body's sphere of influence, in meters. Not a number for a body
+        /// that orbits nothing.
+        /// </summary>
+        [KRPCProperty]
+        public double SphereOfInfluence {
+            get { return InternalBody.SphereOfInfluence; }
+        }
+
+        /// <summary>
+        /// The body this body orbits, or <c>null</c> if it orbits nothing.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Body Parent {
+            get {
+                var parent = (InternalBody as IOrbiter)?.Orbit?.Parent;
+                return parent == null ? null : new Body (parent);
+            }
+        }
+
+        /// <summary>
+        /// The bodies that orbit this body.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Body> Satellites {
+            get { return InternalBody.Children.OfType<IParentBody> ().Select (body => new Body (body)).ToList (); }
         }
     }
 }

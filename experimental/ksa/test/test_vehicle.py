@@ -47,3 +47,29 @@ class TestVehicle(ksatest.TestCase):
         with self.assertRaises(RuntimeError):
             _ = vehicle.name
         type(self).vehicle = self.find_vehicle("Gemini7")
+
+    def test_target_vehicle(self):
+        rocket = self.find_vehicle("Rocket")
+        try:
+            rocket.target_vehicle = self.vehicle
+            self.assertEqual(self.vehicle, rocket.target_vehicle)
+            self.assertIsNone(rocket.target_body)
+        finally:
+            rocket.target_vehicle = None
+        self.assertIsNone(rocket.target_vehicle)
+
+    def test_target_body(self):
+        luna = self.ksa.bodies["Luna"]
+        try:
+            self.vehicle.target_body = luna
+            self.assertEqual(luna, self.vehicle.target_body)
+            self.assertIsNone(self.vehicle.target_vehicle)
+        finally:
+            self.vehicle.target_body = None
+        self.assertIsNone(self.vehicle.target_body)
+
+    def test_invalid_targets(self):
+        with self.assertRaises(ValueError):
+            self.vehicle.target_vehicle = self.vehicle
+        with self.assertRaises(ValueError):
+            self.vehicle.target_body = self.ksa.bodies["Sol"]

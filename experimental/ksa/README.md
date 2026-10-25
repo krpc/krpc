@@ -153,9 +153,10 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
 | Class | Members |
 |---|---|
 | `KSA` | `ActiveVehicle`, `Vehicles`, `Bodies`, `UT`, `SimulationSpeed`, `WarpTo()` |
-| `Vehicle` | `Name`, `Situation`, `HasLaunched`, `LaunchTime`, `Mass`, `PropellantMass`, `Thrust`, `AvailableThrust`, `SpecificImpulse`, `Orbit`, `Flight`, `Control`, `AutoPilot` |
+| `Vehicle` | `Name`, `Situation`, `HasLaunched`, `LaunchTime`, `Mass`, `PropellantMass`, `Thrust`, `AvailableThrust`, `SpecificImpulse`, `DeltaV`, `Sequences`, `TargetVehicle`, `TargetBody`, `Orbit`, `Flight`, `Control`, `AutoPilot` |
+| `Sequence` | `Number`, `Activated`, `DeltaV`, `Thrust`, `SpecificImpulse`, `BurnTime`, `StartMass`, `EndMass`, `PropellantMass` |
 | `Orbit` | `Body`, `Apoapsis`, `Periapsis`, `ApoapsisAltitude`, `PeriapsisAltitude`, `SemiMajorAxis`, `Speed`, `Period`, `TimeToApoapsis`, `TimeToPeriapsis`, `Eccentricity`, `Inclination`, `LongitudeOfAscendingNode`, `ArgumentOfPeriapsis` |
-| `Body` | `Name`, `Mass`, `GravitationalParameter`, `Radius`, `AtmosphereRadius` |
+| `Body` | `Name`, `Mass`, `GravitationalParameter`, `Radius`, `AtmosphereRadius`, `SurfaceGravity`, `RotationalSpeed`, `RotationalPeriod`, `SphereOfInfluence`, `Parent`, `Satellites` |
 | `Flight` | `MeanAltitude`, `SurfaceAltitude`, `Latitude`, `Longitude`, `Speed`, `HorizontalSpeed`, `VerticalSpeed`, `Pitch`, `Heading`, `Roll`, `StaticPressure`, `AtmosphereDensity`, `DynamicPressure`, `GForce` |
 | `Control` | `Throttle`, `EngineOn`, `Stabilization`, `RCS`, `ActiveSequence`, `ActivateNextSequence()` |
 | `AutoPilot` | `Engage()`, `Disengage()`, `Engaged`, `Mode`, `TargetPitch`, `TargetHeading`, `TargetRoll`, `TargetPitchAndHeading()`, `Error`, `RollError`, `Wait()` |
@@ -182,6 +183,9 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
  * `Thrust` and `SpecificImpulse` sum the active engines' performance at their commanded and at
    full throttle, at the current pressure.
  * `WarpTo` uses the game's auto-warp, and returns when the warp ends.
+ * A `Sequence` is KSA's stage. Its performance is the game's prediction, which the game
+   recomputes in flight only while its sequence or engine windows are open. The service
+   recomputes it at most once per game time.
 
 ## Tests
 

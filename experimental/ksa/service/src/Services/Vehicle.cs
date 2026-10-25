@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using KRPC.KSA.Utils;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using KSA;
 
 namespace KRPC.KSA.Services
 {
@@ -135,6 +138,68 @@ namespace KRPC.KSA.Services
             get {
                 var (thrust, massFlowRate) = Engines.Performance (InternalVehicle, fullThrottle: true);
                 return massFlowRate > 0 ? thrust / (massFlowRate * Engines.G0) : 0;
+            }
+        }
+
+        /// <summary>
+        /// The change in velocity of all the vehicle's sequences, in meters per second.
+        /// </summary>
+        [KRPCProperty]
+        public float DeltaV {
+            get { return Utils.Sequences.TotalDeltaV (InternalVehicle); }
+        }
+
+        /// <summary>
+        /// The vehicle's sequences, in activation order.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Sequence> Sequences {
+            get {
+                var v = InternalVehicle;
+                return Utils.Sequences.Numbers (v).Select (number => new Sequence (v, number)).ToList ();
+            }
+        }
+
+        /// <summary>
+        /// The vehicle targeted by this vehicle, or <c>null</c>. Setting it replaces the
+        /// target, and <c>null</c> clears it.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Vehicle TargetVehicle {
+            get {
+                var target = InternalVehicle.Target as global::KSA.Vehicle;
+                return target == null || target is KittenEva ? null : new Vehicle (target);
+            }
+            set {
+                var v = InternalVehicle;
+                if (value != null && ReferenceEquals (value.InternalVehicle, v))
+                    throw new ArgumentException ("A vehicle cannot target itself");
+                v.SetTarget (value?.InternalVehicle);
+            }
+        }
+
+        /// <summary>
+        /// The body targeted by this vehicle, or <c>null</c>. Setting it replaces the target,
+        /// and <c>null</c> clears it.
+        /// </summary>
+        /// <remarks>
+        /// Setting a body that orbits nothing, such as the star, throws an exception.
+        /// </remarks>
+        [KRPCProperty (Nullable = true)]
+        public Body TargetBody {
+            get {
+                var target = InternalVehicle.Target as IParentBody;
+                return target == null ? null : new Body (target);
+            }
+            set {
+                var v = InternalVehicle;
+                if (value == null) {
+                    v.SetTarget (null);
+                    return;
+                }
+                if (value.InternalBody is not IOrbiter orbiter)
+                    throw new ArgumentException ("The body cannot be targeted");
+                v.SetTarget (orbiter);
             }
         }
 
