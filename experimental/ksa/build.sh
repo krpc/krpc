@@ -4,8 +4,8 @@
 #   build.sh            build the mod folder
 #   build.sh --install  also copy it into the KSA mods folder and enable it
 #
-# The mod is built from a kRPC release: the server core comes from its krpctools
-# package, installed into a virtualenv.
+# The mod and the client stubs are built from a kRPC release: the server core and
+# the code generator come from its krpctools package, installed into a virtualenv.
 #
 # KSA_DIR is the game install, defaulting to ../KSA beside the repo.
 # KSA_MODS_DIR is the user mods folder, defaulting to
@@ -50,6 +50,27 @@ rm -f "$out"/*.pdb
 "$krpc_bin/ServiceDefinitions" \
   --output="$here/bin/KRPC.KSA.json" --reference-dir="$ksa_dir" --reference-dir="$out" \
   KSA "$out/KRPC.KSA.Service.dll"
+
+# Client stubs, at the paths each client includes them from
+stubs="$here/bin/stubs"
+rm -rf "$stubs"
+mkdir -p "$stubs"
+declare -A stub_paths=(
+  [csharp]="csharp/KSA.cs"
+  [cpp]="cpp/include/krpc/services/ksa.hpp"
+  [cnano]="cnano/include/krpc_cnano/services/ksa.h"
+  [java]="java/krpc/client/services/KSA.java"
+)
+for language in "${!stub_paths[@]}"; do
+  path="$stubs/${stub_paths[$language]}"
+  mkdir -p "$(dirname "$path")"
+  "$venv/bin/krpc-clientgen" "$language" KSA "$here/bin/KRPC.KSA.json" --output="$path"
+done
+sed "s/@CLIENT_VERSION@/$krpc_version/" "$here/stubs/README.md" > "$stubs/README.md"
+cp "$here/bin/KRPC.KSA.json" "$stubs/"
+rm -f "$here"/bin/krpc-ksa-stubs-*.zip
+(cd "$stubs" && zip -qr "$here/bin/krpc-ksa-stubs-$mod_version.zip" .)
+echo "Client stubs in $here/bin/krpc-ksa-stubs-$mod_version.zip"
 
 if [ "$install" = 1 ]; then
   if [ -z "${KSA_MODS_DIR:-}" ]; then

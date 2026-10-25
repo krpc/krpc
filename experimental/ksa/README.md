@@ -11,7 +11,8 @@ Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `version
    game lifecycle code is in `Addon.cs`.
  * `service/` - the `KSA` service.
  * `examples/` - client scripts.
- * `build.sh` - builds the mod folder.
+ * `stubs/` - the readme for the client stubs archive.
+ * `build.sh` - builds the mod folder and the client stubs.
  * `install-starmap.sh`, `run-ksa.sh` - install StarMap, and launch the game through it on Linux.
 
 ## Build
@@ -22,15 +23,17 @@ Build the mod into `bin/kRPC.KSA`:
 experimental/ksa/build.sh
 ```
 
-The build uses a kRPC release, set by `krpc_version` in `versions.sh`, and needs Python 3 and the
-.NET 10 SDK:
+The build uses a kRPC release, set by `krpc_version` in `versions.sh`, and needs Python 3, the .NET
+10 SDK and `zip`:
 
- * `krpctools` from PyPI, installed into `bin/venv`, provides the .NET `KRPC.Core.dll` and the
-   `ServiceDefinitions` tool.
+ * `krpctools` from PyPI, installed into `bin/venv`, provides the .NET `KRPC.Core.dll`, the
+   `ServiceDefinitions` tool and `krpc-clientgen`.
  * Both projects compile against that `KRPC.Core.dll` and the KSA assemblies in `KSA_DIR`, which
    defaults to `../KSA` beside the repo.
  * `ServiceDefinitions` writes `bin/KRPC.KSA.json`, which runs the server's service scan and
    checks the documentation.
+ * `krpc-clientgen` builds client stubs from the definitions into `bin/krpc-ksa-stubs-0.1.0.zip`,
+   which also holds the definitions.
 
 Documentation comments use the markup of that release, so units are words rather than `<unit>`.
 
@@ -77,6 +80,9 @@ print(vehicle.name, vehicle.flight.mean_altitude)
 `examples/telemetry.py` prints telemetry for the active vehicle, and `examples/raise_orbit.py`
 raises the orbit of the active vehicle with two burns. Lua also builds services at run
 time.
+
+The C#, C++, C-nano and Java clients use the stubs in `bin/krpc-ksa-stubs-0.1.0.zip`, together
+with the kRPC 0.7.0 client libraries. Its readme shows each language.
 
 ## Server
 
