@@ -1,5 +1,5 @@
-kRPC for KSA - Remote Procedure Calls for Kitten Space Agency
-=============================================================
+kRPC - Remote Procedure Calls for Kitten Space Agency
+=====================================================
 
 kRPC for KSA lets you control Kitten Space Agency from scripts running outside the game. A
 server inside the game exposes the game's API, and the `kRPC <https://krpc.github.io/krpc/>`_

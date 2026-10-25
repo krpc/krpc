@@ -1,6 +1,6 @@
 # kRPC for KSA
 
-Prototype kRPC server for Kitten Space Agency (KSA). It is a [StarMap](https://github.com/StarMapLoader/StarMap)
+A kRPC server for Kitten Space Agency (KSA). It is a [StarMap](https://github.com/StarMapLoader/StarMap)
 code mod that serves the `KRPC` service and a `KSA` service written for KSA's own model. The tests
 pass in game on Linux. Windows is untested.
 

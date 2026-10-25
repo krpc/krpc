@@ -4,11 +4,11 @@
 
 import os
 
-project = "kRPC for KSA"
+project = "kRPC"
 copyright = "2015-2026 kRPC Org"
 version = os.environ.get("KSA_DOC_VERSION", "")
 release = version
-html_title = f"kRPC for KSA v{release} documentation"
+html_title = f"kRPC v{release} documentation"
 
 extensions = [
     "sphinx_design",
@@ -26,7 +26,7 @@ html_static_path = ["_static"]
 html_css_files = ["custom.css"]
 html_js_files = ["external-links.js"]
 html_theme_options = {
-    "logo": {"text": "kRPC for KSA"},
+    "logo": {"text": "kRPC"},
     "header_links_before_dropdown": 6,
     "navbar_end": ["theme-switcher", "navbar-icon-links"],
     "icon_links": [
