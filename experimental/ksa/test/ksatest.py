@@ -56,12 +56,18 @@ def ensure_game() -> None:
 def _launch() -> None:
     LOG_PATH.parent.mkdir(exist_ok=True)
     print(f"ksatest: launching KSA, log in {LOG_PATH}")
+    if os.name == "nt":
+        script = "run-ksa.bat"
+        session: dict[str, Any] = {"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP}
+    else:
+        script = "run-ksa.sh"
+        session = {"start_new_session": True}
     with open(LOG_PATH, "w", encoding="utf-8") as log:
         process = subprocess.Popen(
-            [str(ROOT / "run-ksa.sh")],
+            [str(ROOT / script)],
             stdout=log,
             stderr=subprocess.STDOUT,
-            start_new_session=True,
+            **session,
         )
     _Game.process = process
     deadline = time.monotonic() + LAUNCH_TIMEOUT
@@ -100,7 +106,16 @@ def stop_game() -> None:
     try:
         process.wait(timeout=30)
     except subprocess.TimeoutExpired:
-        os.killpg(process.pid, signal.SIGTERM)
+        if os.name == "nt":
+            # The script's cmd.exe and the game under it
+            subprocess.run(
+                ["taskkill", "/f", "/t", "/pid", str(process.pid)],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False,
+            )
+        else:
+            os.killpg(process.pid, signal.SIGTERM)
         process.wait()
     if _Game.connection is not None:
         _Game.connection.close()

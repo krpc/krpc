@@ -2,7 +2,7 @@
 
 A kRPC server for Kitten Space Agency (KSA). It is a [StarMap](https://github.com/StarMapLoader/StarMap)
 code mod that serves the `KRPC` service and a `KSA` service written for KSA's own model. The tests
-pass in game on Linux. Windows is untested.
+run in game on Linux and Windows.
 
 Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `versions.sh`.
 
@@ -23,6 +23,8 @@ Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `version
  * `publish-docs.sh` - commits the docs to the `gh-pages` branch.
  * `install-starmap.sh`, `run-ksa.sh` - install StarMap, and launch the game through it on Linux.
  * `test.sh` - runs the tests.
+ * `build.bat`, `install-starmap.bat`, `run-ksa.bat`, `test.bat` - the Windows versions of those
+   scripts, with the same arguments.
 
 ## Build
 
@@ -115,7 +117,7 @@ experimental/ksa/run-ksa.sh
 ```
 
 The StarMap release targets Windows. `run-ksa.sh` runs it with `dotnet`, with the KSA folder on
-`LD_LIBRARY_PATH` for the game's native libraries.
+`LD_LIBRARY_PATH` for the game's native libraries. `run-ksa.bat` runs `StarMap.exe`.
 
 The game opens a configuration window before loading. Untick "Always Show" in it for the tests
 to run unattended.
@@ -235,8 +237,8 @@ experimental/ksa/test.sh -k test_rename         # by name
 experimental/ksa/test.sh --no-launch            # against a game started with run-ksa.sh
 ```
 
- * With no server running, the harness launches KSA through `run-ksa.sh`, logging to
-   `bin/ksa.log`. It quits the game when the session ends.
+ * With no server running, the harness launches KSA through `run-ksa.sh`, or `run-ksa.bat` on
+   Windows, logging to `bin/ksa.log`. It quits the game when the session ends.
  * A launched game is saved as `krpctest` once it has loaded the system. Each test class loads
    that save, so starts from the game's default start state. `--no-launch` needs the save from
    an earlier launched run.
@@ -250,7 +252,7 @@ experimental/ksa/test.sh --no-launch            # against a game started with ru
  * `test_examples.py` flies `examples/launch_into_orbit.py` to orbit, which takes about eight
    minutes. It is marked `slow`, so `-m "not slow"` skips it.
 
-All the tests pass on Linux, with KSA 2026.10.19.5638.
+All the tests pass on Linux, with KSA 2026.10.19.5638. On Windows, `test_parachute.py` is unrun.
 
 ## Open Questions
 
