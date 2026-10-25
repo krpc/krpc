@@ -1875,7 +1875,6 @@ def _make_autopilot_flight_test_class(  # noqa: PLR0913
     hold_oscillation_amplitude=1,
     hold_attitude_error=2,
     attitude_tolerance=2,
-    no_pitch_upset=False,
     step_overshoot=15,
     step_settle_time=8,
 ):
@@ -2016,7 +2015,6 @@ def _make_autopilot_flight_test_class(  # noqa: PLR0913
             # A small heading change, wings level, settles without departing
             self.step(1, 5, 0.5)
 
-        @unittest.skipIf(no_pitch_upset, "not supported on this craft")
         def test_recover_from_pitch_upset(self):
             # Place the aircraft pitched up, command level flight, and confirm the
             # autopilot pushes the nose back down to level and then holds it steadily.
@@ -2043,7 +2041,6 @@ TestAutoPilotFlightAeris4A = _make_autopilot_flight_test_class(
     "TestAutoPilotFlightAeris4A",
     "Aeris 4A",
     speed=100,
-    no_pitch_upset=True,
 )
 
 # A small, slow stock light aircraft. Its pitch takes about 8 seconds to settle after a step.
