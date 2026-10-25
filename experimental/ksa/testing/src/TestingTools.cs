@@ -23,6 +23,21 @@ namespace KRPC.KSA.Testing
         }
 
         /// <summary>
+        /// Add a vehicle to the game's default vehicles, from a folder holding its
+        /// <c>vehicle.xml</c> and <c>meta.toml</c>, so that it can be launched.
+        /// </summary>
+        /// <param name="directory">Path of the folder.</param>
+        /// <returns>The name of the vehicle.</returns>
+        [KRPCProcedure]
+        public static string RegisterVehicle (string directory)
+        {
+            var save = UncompressedVehicleSave.FromDirectory (directory, defaultVehicle: true);
+            if (save == null)
+                throw new ArgumentException ("No vehicle in '" + directory + "'");
+            return save.Id;
+        }
+
+        /// <summary>
         /// Whether a save with the given name exists.
         /// </summary>
         /// <param name="name">Name of the save.</param>

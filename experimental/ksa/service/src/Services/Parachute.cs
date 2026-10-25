@@ -76,6 +76,17 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// Whether the parachute can be cut away. Main parachutes cannot.
+        /// </summary>
+        [KRPCProperty]
+        public bool CanCut {
+            get {
+                var cut = Part.InternalPart.SubtreeModules.Get<ParachuteCut> ();
+                return cut.Length > 0 && cut[0].IsEnabled;
+            }
+        }
+
+        /// <summary>
         /// Arm the parachute, so that it deploys at <see cref="DeployAltitude"/>. Returns once
         /// it is armed. Throws an exception if it is not stowed.
         /// </summary>
@@ -91,16 +102,16 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
-        /// Cut the parachute away. Returns once it is cut. Throws an exception if the part
-        /// cannot cut its parachute.
+        /// Cut the parachute away. Returns once it is cut. Throws an exception if it cannot
+        /// be cut. See <see cref="CanCut"/>.
         /// </summary>
         [KRPCMethod]
         public void Cut ()
         {
+            if (!CanCut)
+                throw new InvalidOperationException ("The parachute cannot be cut");
             var p = Part.InternalPart;
             var cut = p.SubtreeModules.Get<ParachuteCut> ();
-            if (cut.Length == 0 || !cut[0].IsEnabled)
-                throw new InvalidOperationException ("The parachute cannot be cut");
             cut[0].SetIsActive (p.Tree.OwningVehicle, true);
             Waits.Until (() => parachute.State == ChuteState.Cut);
         }

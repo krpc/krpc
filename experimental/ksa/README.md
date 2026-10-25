@@ -11,7 +11,7 @@ Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `version
  * `server/` - the StarMap entry point (`Addon.cs`), settings and `mod.toml`. All StarMap and
    game lifecycle code is in `Addon.cs`.
  * `service/` - the `KSA` service.
- * `testing/` - the `TestingTools` service, installed only for the tests.
+ * `testing/` - the `TestingTools` service, installed only for the tests, and test vehicles.
  * `test/` - integration tests, and their harness `ksatest.py`.
  * `examples/` - client scripts.
  * `doc/` - the documentation sources, and the template for the generated API pages.
@@ -170,7 +170,7 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
 | `Resource` | `Name`, `Amount`, `Max` |
 | `Engine`, `RCS` | `Part`, `Active`; engines also `HasPropellant`, `Thrust`, `AvailableThrust`, `SpecificImpulse` |
 | `Decoupler` | `Part`, `Enabled`, `Decoupled`, `Decouple()` |
-| `Parachute` | `Part`, `State`, `Fill`, `DeployAltitude`, `Deploy()`, `Cut()` |
+| `Parachute` | `Part`, `State`, `Fill`, `DeployAltitude`, `CanCut`, `Deploy()`, `Cut()` |
 | `DockingPort` | `Part`, `Docked`, `DockedPart`, `Undock()` |
 
  * A `Vehicle` holds the game's vehicle object, as a KSA vehicle id is its name. It throws once the
@@ -234,6 +234,8 @@ experimental/ksa/test.sh --no-launch            # against a game started with ru
  * `TestingTools` saves, loads and quits the game. `LoadSave` loads at the end of the frame,
    where the game's menus load saves, and returns once the load is done. The game is paused
    after a load, and the harness unpauses it.
+ * `TestingTools.RegisterVehicle` adds a vehicle in `testing/vehicles` to the game's default
+   vehicles. `test_parachute.py` launches single parachute parts from there.
  * `build.sh --install` without `--testing` removes `TestingTools` from the installed mod.
  * `test_examples.py` flies `examples/launch_into_orbit.py` to orbit, which takes about eight
    minutes. It is marked `slow`, so `-m "not slow"` skips it.
