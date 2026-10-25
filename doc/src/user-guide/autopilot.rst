@@ -589,8 +589,9 @@ state. It is enabled per vessel, and hidden again when the game restarts:
 The window is laid out like a control panel of annunciator lamps and digital registers.
 Lamps are dim when nominal and light amber to flag something worth attention; the
 **ENGAGED** lamp reads green (amber **HELD** while the craft is held on the launch
-clamps). Hovering the mouse over a row shows a tooltip with a short description of it.
-From top to bottom it shows:
+clamps). Hovering the mouse over a row shows a tooltip with a short description of it,
+and clicking a section title collapses or expands that section. From top to bottom it
+shows:
 
 * **TARGET** — the attitude being tracked, in pitch, heading and roll (``CURRENT``, the
   target the loop is currently tracking, and ``COMMAND``, the commanded target, shown only

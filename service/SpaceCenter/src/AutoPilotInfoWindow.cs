@@ -1,6 +1,7 @@
 #pragma warning disable 1591
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using KRPC.UI;
 using UnityEngine;
@@ -30,15 +31,20 @@ namespace KRPC.SpaceCenter
         const float baseWidth = 250f;
 
         // Unscaled point sizes of the panel's monospace font: body text (registers, lamps, labels)
-        // and the slightly smaller sub-labels (units, column headers).
+        // and the slightly smaller sub-labels (column headers).
         const int BodyFontSize = 12;
         const int SmallFontSize = 10;
 
         public Guid VesselId { get; set; }
 
         Texture2D lampTexture, registerTexture, tooltipTexture;
-        GUIStyle lampStyle, registerStyle, registerCenterStyle, registerLabelStyle, headerStyle, unitStyle, columnHeadStyle, separatorStyle, tooltipStyle;
+        GUIStyle lampStyle, registerStyle, registerCenterStyle, registerLabelStyle, headerStyle, columnHeadStyle, separatorStyle, tooltipStyle, expandStyle;
         Font monoFont;
+
+        // The titles of the collapsed sections, shared by the windows of every vessel
+        static readonly HashSet<string> collapsedSections = new HashSet<string> ();
+        // Whether a section was collapsed or expanded, so the window shrinks to its content
+        bool sectionToggled;
 
         // Description of the row currently under the mouse (or null), and that row's rect, which
         // the tooltip is anchored to, so a row's tooltip always appears in the same place.
@@ -136,8 +142,10 @@ namespace KRPC.SpaceCenter
                 margin = new RectOffset (0, 0, 4, 1)
             };
 
-            unitStyle = new GUIStyle (skin.label) {
-                alignment = TextAnchor.MiddleRight
+            // The expand and collapse arrow of a section header, as in the server window
+            expandStyle = new GUIStyle (skin.button) {
+                margin = new RectOffset (0, 4, 4, 1),
+                padding = new RectOffset (0, 0, 0, 0)
             };
 
             // Sub-header that labels the two stretch columns of a register/lamp row. Centered so it
@@ -177,7 +185,7 @@ namespace KRPC.SpaceCenter
                 (int) (BodyFontSize * GameSettings.UI_SCALE));
             foreach (var style in new[] {
                 lampStyle, registerStyle, registerCenterStyle, registerLabelStyle, headerStyle,
-                unitStyle, columnHeadStyle })
+                columnHeadStyle })
                 style.font = monoFont;
             ApplyFontSizes (GameSettings.UI_SCALE);
         }
@@ -206,7 +214,8 @@ namespace KRPC.SpaceCenter
             registerCenterStyle.fontSize = body;
             registerLabelStyle.fontSize = body;
             headerStyle.fontSize = body;
-            unitStyle.fontSize = small;
+            expandStyle.fixedWidth = 16f * scale;
+            expandStyle.fixedHeight = 16f * scale;
             columnHeadStyle.fontSize = small;
             tooltipStyle.fontSize = body;
         }
@@ -224,8 +233,11 @@ namespace KRPC.SpaceCenter
                 Style.fixedWidth = baseWidth * scale;
                 ComputeGrid ();
                 ApplyFontSizes (scale);
+            }
+            if (needRescale || sectionToggled) {
                 // Force the window to shrink back to its content height.
                 Position = new Rect (Position.x, Position.y, Position.width, 0f);
+                sectionToggled = false;
             }
 
             var ap = Services.AutoPilot.GetEngaged (VesselId);
@@ -242,13 +254,35 @@ namespace KRPC.SpaceCenter
             GUILayout.EndHorizontal ();
             RowTooltip ("Auto-pilot engagement. HELD: engaged but held inert on the launch clamps.");
 
-            // Target: axis column headers, then the target the auto-pilot is tracking right now
-            // (CURRENT) and below it the commanded target (COMMAND). COMMAND is shown only while
-            // smoothing is active (TargetSmoothingTime > 0), as CURRENT always equals the command
-            // without it. RLL is blank when no specific roll is held. Values carry a degree
-            // symbol, so the section needs no unit label.
+            if (Section ("TARGET"))
+                DrawTarget (ap, engaged);
+            if (Section ("ATTITUDE ERROR"))
+                DrawAttitudeError (ap, engaged);
+            if (Section ("PID GAIN"))
+                DrawPIDGain (ap, engaged);
+            if (Section ("OSCILLATION"))
+                DrawOscillation (ap, engaged);
+            if (Section ("GATES"))
+                DrawGates (ap, engaged);
+            if (Section ("MITIGATIONS"))
+                DrawMitigations (ap, engaged);
+            if (Section ("AERODYNAMICS"))
+                DrawAerodynamics (ap, engaged);
+
+            GUILayout.EndVertical ();
+
+            DrawTooltip ();
+            GUI.DragWindow ();
+        }
+
+        // Target: axis column headers, then the target the auto-pilot is tracking right now
+        // (CURRENT) and below it the commanded target (COMMAND). COMMAND is shown only while
+        // smoothing is active (TargetSmoothingTime > 0), as CURRENT always equals the command
+        // without it. RLL is blank when no specific roll is held. Values carry a degree
+        // symbol, so the section needs no unit label.
+        void DrawTarget (Services.AutoPilot ap, bool engaged)
+        {
             bool showCmd = engaged && ap.TargetSmoothingTime > 0;
-            Header ("TARGET", null);
             AxisColumnHeader ("PCH", "HDG", "RLL");
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("CURRENT", registerLabelStyle);
@@ -264,12 +298,14 @@ namespace KRPC.SpaceCenter
             Register (showCmd ? DegOrBlank (ap.TargetRoll) : Blank);
             GUILayout.EndHorizontal ();
             RowTooltip ("Commanded (requested) target; shown while target smoothing is still slewing CURRENT toward it.");
+        }
 
-            // Attitude error: the four axis column headers on one row, error lamps on the next,
-            // each dim within the AutoPilot.Wait() stopping angle threshold and amber outside it.
-            // These are errors to the CURRENT (tracked) target, so they stay small while a
-            // smoothed change is being slewed in.
-            Header ("ATTITUDE ERROR", null);
+        // Attitude error: the four axis column headers on one row, error lamps on the next,
+        // each dim within the AutoPilot.Wait() stopping angle threshold and amber outside it.
+        // These are errors to the CURRENT (tracked) target, so they stay small while a
+        // smoothed change is being slewed in.
+        void DrawAttitudeError (Services.AutoPilot ap, bool engaged)
+        {
             GUILayout.BeginHorizontal ();
             ColumnHead ("TOT");
             ColumnHead ("PCH");
@@ -287,13 +323,15 @@ namespace KRPC.SpaceCenter
             ErrorLamp (rollShown, rollShown ? ap.CurrentRollError : 0f, errorThreshold);
             GUILayout.EndHorizontal ();
             RowTooltip ("Attitude error to the current target, total and per axis. Amber when outside the stopping angle threshold.");
+        }
 
-            // Inner-loop PID gains (autotuned each tick when AutoTune is on): axis column headers,
-            // then a Kp and a Ki row.
+        // Inner-loop PID gains (autotuned each tick when AutoTune is on): axis column headers,
+        // then a Kp and a Ki row.
+        void DrawPIDGain (Services.AutoPilot ap, bool engaged)
+        {
             var gainP = engaged ? ap.PitchPIDGains : null;
             var gainR = engaged ? ap.RollPIDGains : null;
             var gainY = engaged ? ap.YawPIDGains : null;
-            Header ("PID GAIN", null);
             AxisColumnHeader ("PCH", "YAW", "RLL");
             GUILayout.BeginHorizontal ();
             GUILayout.Label ("KP", registerLabelStyle);
@@ -309,14 +347,16 @@ namespace KRPC.SpaceCenter
             Register (gainR == null ? Blank : Gain (gainR.Item2));
             GUILayout.EndHorizontal ();
             RowTooltip ("Inner rate-loop integral gain (set by the autotuner each tick when auto-tune is on).");
+        }
 
-            // Oscillation handling, mirroring the controller's detector, gates and mitigations
-            // structure. DETECTOR: the per-axis structural level, the post-floor loop bandwidth,
-            // the estimated mode frequency and the control-output envelope. GATES: the [0,1]
-            // weights that decide how strongly the mitigations engage. MITIGATIONS: one combined
-            // mode and engagement lamp per individually controllable mitigation, dim whenever the
-            // mitigation is not acting (manually Off or automatically idle), amber when engaged.
-            Header ("OSCILLATION", null);
+        // Oscillation handling, mirroring the controller's detector, gates and mitigations
+        // structure. DETECTOR: the per-axis structural level, the post-floor loop bandwidth,
+        // the estimated mode frequency and the control-output envelope. GATES: the [0,1]
+        // weights that decide how strongly the mitigations engage. MITIGATIONS: one combined
+        // mode and engagement lamp per individually controllable mitigation, dim whenever the
+        // mitigation is not acting (manually Off or automatically idle), amber when engaged.
+        void DrawOscillation (Services.AutoPilot ap, bool engaged)
+        {
             var level = engaged ? ap.OscillationLevel : null;
             // Beyond reach of a level of 0 when disengaged, so the lamp stays green while not engaged.
             double latchThreshold = engaged ? ap.OscillationLatchThreshold : double.PositiveInfinity;
@@ -350,12 +390,14 @@ namespace KRPC.SpaceCenter
             RegisterCentered (engaged ? FreqText (ap.RollOscillationDetectedFrequency) : Blank);
             GUILayout.EndHorizontal ();
             RowTooltip ("Estimated structural mode frequency; holds the last acquired lock. Routes the rate filter (FILTER).");
+        }
 
-            // The gates: HOLD (the pointing-error hold factor, global), LATCH (the detector's
-            // persistent flexible-craft verdict), RAMP (the eased latch weight), BACKOFF (the
-            // limit-cycle back-off) and GATE (the net hold-gated mitigation level,
-            // ramp * max(hold, bko), which drives the floor and the feedforward cut).
-            Header ("GATES", null);
+        // The gates: HOLD (the pointing-error hold factor, global), LATCH (the detector's
+        // persistent flexible-craft verdict), RAMP (the eased latch weight), BACKOFF (the
+        // limit-cycle back-off) and GATE (the net hold-gated mitigation level,
+        // ramp * max(hold, bko), which drives the floor and the feedforward cut).
+        void DrawGates (Services.AutoPilot ap, bool engaged)
+        {
             var ramp = engaged ? ap.SuppressionRamp : null;
             var backoff = engaged ? ap.OscillationBackoff : null;
             var mitigation = engaged ? ap.MitigationLevel : null;
@@ -390,12 +432,15 @@ namespace KRPC.SpaceCenter
             GateLamp (engaged, mitigation == null ? 0.0 : mitigation.Item2);
             GUILayout.EndHorizontal ();
             RowTooltip ("Net mitigation level, RAMP × max(HOLD, BACKOFF); drives FLOOR and FFCUT.");
+        }
 
-            // The mitigations, one combined mode and engagement lamp each. FILTER is the rate
-            // filter, per group, showing the tool Automatic routed to or the forced tool. FLOOR is
-            // the bandwidth-floor engagement, FFCUT the applied feedforward-cut fraction, and
-            // SMOOTH the output-smoothing blend weight.
-            Header ("MITIGATIONS", null);
+        // The mitigations, one combined mode and engagement lamp each. FILTER is the rate
+        // filter, per group, showing the tool Automatic routed to or the forced tool. FLOOR is
+        // the bandwidth-floor engagement, FFCUT the applied feedforward-cut fraction, and
+        // SMOOTH the output-smoothing blend weight.
+        void DrawMitigations (Services.AutoPilot ap, bool engaged)
+        {
+            var mitigation = engaged ? ap.MitigationLevel : null;
             var ffCut = engaged ? ap.FeedforwardCut : null;
             var outWeight = engaged ? ap.OutputFilterWeight : null;
             TwoColumnHeader ("PCH/YAW", "RLL");
@@ -428,11 +473,13 @@ namespace KRPC.SpaceCenter
             MitigationLamp (engaged, outMode, outWeight == null ? 0.0 : outWeight.Item2);
             GUILayout.EndHorizontal ();
             RowTooltip ("Output smoothing: low-pass blend applied to the delivered control output.");
+        }
 
-            // Aerodynamic handling, per roll-invariant axis. SURF scales the other rows: the rate
-            // limit and the reversal time apply in proportion to it, and an axis with no control
-            // surface torque has none of them.
-            Header ("AERODYNAMICS", null);
+        // Aerodynamic handling, per roll-invariant axis. SURF scales the other rows: the rate
+        // limit and the reversal time apply in proportion to it, and an axis with no control
+        // surface torque has none of them.
+        void DrawAerodynamics (Services.AutoPilot ap, bool engaged)
+        {
             AxisColumnHeader ("PCH", "YAW", "RLL");
             var share = engaged ? ap.SurfaceShare : null;
             GUILayout.BeginHorizontal ();
@@ -478,11 +525,6 @@ namespace KRPC.SpaceCenter
             GateLamp (engaged, actuatorBackoff == null ? 0.0 : 1.0 - actuatorBackoff.Item2);
             GUILayout.EndHorizontal ();
             RowTooltip ("Bandwidth cut: reduction in the inner-loop bandwidth while the control surfaces cycle at their speed limit.");
-
-            GUILayout.EndVertical ();
-
-            DrawTooltip ();
-            GUI.DragWindow ();
         }
 
         // Marks the row group just closed by GUILayout.EndHorizontal as a tooltip hover target:
@@ -673,17 +715,27 @@ namespace KRPC.SpaceCenter
             return t == null ? 0.0 : Math.Max (t.Item1, t.Item3);
         }
 
-        void Header (string text, string unit)
+        // Draws a section header with an expand and collapse arrow, and returns whether the
+        // section is expanded. Clicking the header row toggles the section.
+        bool Section (string title)
         {
             GUILayoutExtensions.Separator (separatorStyle);
-            if (unit == null) {
-                GUILayout.Label (text, headerStyle);
-            } else {
-                GUILayout.BeginHorizontal ();
-                GUILayout.Label (text, headerStyle);
-                GUILayout.Label (unit, unitStyle);
-                GUILayout.EndHorizontal ();
+            bool expanded = !collapsedSections.Contains (title);
+            var icons = Icons.Instance;
+            GUILayout.BeginHorizontal ();
+            GUILayout.Label (new GUIContent (expanded ? icons.ButtonCollapse : icons.ButtonExpand), expandStyle);
+            GUILayout.Label (title, headerStyle);
+            GUILayout.EndHorizontal ();
+            if (Event.current.type == EventType.MouseDown &&
+                GUILayoutUtility.GetLastRect ().Contains (Event.current.mousePosition)) {
+                if (expanded)
+                    collapsedSections.Add (title);
+                else
+                    collapsedSections.Remove (title);
+                sectionToggled = true;
+                Event.current.Use ();
             }
+            return expanded;
         }
 
         void RegisterRow (string label, string value)
