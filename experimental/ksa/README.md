@@ -1,7 +1,8 @@
 # kRPC for KSA
 
 Prototype kRPC server for Kitten Space Agency (KSA). It is a [StarMap](https://github.com/StarMapLoader/StarMap)
-code mod that serves the `KRPC` service and a `KSA` service written for KSA's own model.
+code mod that serves the `KRPC` service and a `KSA` service written for KSA's own model. The tests
+pass in game on Linux. Windows is untested.
 
 Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `versions.sh`.
 
@@ -10,10 +11,13 @@ Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `version
  * `server/` - the StarMap entry point (`Addon.cs`), settings and `mod.toml`. All StarMap and
    game lifecycle code is in `Addon.cs`.
  * `service/` - the `KSA` service.
+ * `testing/` - the `TestingTools` service, installed only for the tests.
+ * `test/` - integration tests, and their harness `ksatest.py`.
  * `examples/` - client scripts.
  * `stubs/` - the readme for the client stubs archive.
  * `build.sh` - builds the mod folder and the client stubs.
  * `install-starmap.sh`, `run-ksa.sh` - install StarMap, and launch the game through it on Linux.
+ * `test.sh` - runs the tests.
 
 ## Build
 
@@ -60,6 +64,9 @@ experimental/ksa/run-ksa.sh
 
 The StarMap release targets Windows. `run-ksa.sh` runs it with `dotnet`, with the KSA folder on
 `LD_LIBRARY_PATH` for the game's native libraries.
+
+The game opens a configuration window before loading. Untick "Always Show" in it for the tests
+to run unattended.
 
 The server starts when the game has loaded its mods. Server settings are in
 `kRPC.KSA/settings.toml`. By default it listens on `127.0.0.1`, ports 50000 and 50001, and
@@ -123,11 +130,38 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
  * The solver step copies the flight computer settings in when it is queued, and back out when
    its results are applied. Writes from the server land between the two.
  * Pitch is positive above the horizon, and heading is clockwise from north. Roll is zero with the
-   vehicle's +z axis toward the ground.
+   vehicle's +z axis toward the ground. `test_autopilot.py` checks pitch and heading against
+   the game's prograde, normal and radial targets.
  * `GForce` is the measured acceleration, which excludes gravity. It is zero in free fall.
  * `Thrust` and `SpecificImpulse` sum the active engines' performance at their commanded and at
    full throttle, at the current pressure.
  * `WarpTo` uses the game's auto-warp, and returns when the warp ends.
+
+## Tests
+
+Python tests that drive a live game, run with pytest. `test.sh` builds and installs the mod with
+the `TestingTools` service, then runs the tests. Arguments go to pytest:
+
+```bash
+experimental/ksa/test.sh                        # launch KSA, run every test, quit
+experimental/ksa/test.sh test/test_orbit.py -v  # one file
+experimental/ksa/test.sh -k test_rename         # by name
+experimental/ksa/test.sh --no-launch            # against a game started with run-ksa.sh
+```
+
+ * With no server running, the harness launches KSA through `run-ksa.sh`, logging to
+   `bin/ksa.log`. It quits the game when the session ends.
+ * A launched game is saved as `krpctest` once it has loaded the system. Each test class loads
+   that save, so starts from the game's default start state. `--no-launch` needs the save from
+   an earlier launched run.
+ * The client is `krpc` 0.7.0 from PyPI, in `bin/test-venv`.
+ * `TestingTools` saves, loads and quits the game. `LoadSave` loads at the end of the frame,
+   where the game's menus load saves, and returns once the load is done. The game is paused
+   after a load, and the harness unpauses it.
+ * `build.sh --install` without `--testing` removes `TestingTools` from the installed mod.
+
+All the tests pass on Linux, with KSA 2026.10.19.5638, and `examples/raise_orbit.py` raises the
+Rocket's orbit from 207 km to 400 km.
 
 ## Open Questions
 

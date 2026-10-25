@@ -3,6 +3,7 @@
 #
 #   build.sh            build the mod folder
 #   build.sh --install  also copy it into the KSA mods folder and enable it
+#   build.sh --testing  also build the TestingTools service, for the tests
 #
 # The mod and the client stubs are built from a kRPC release: the server core and
 # the code generator come from its krpctools package, installed into a virtualenv.
@@ -23,6 +24,7 @@ projects=(server/KRPC.KSA.csproj service/KRPC.KSA.Service.csproj)
 for arg in "$@"; do
   case "$arg" in
     --install) install=1 ;;
+    --testing) projects+=(testing/KRPC.KSA.TestingTools.csproj) ;;
     *) echo "unknown argument: $arg" >&2; exit 1 ;;
   esac
 done

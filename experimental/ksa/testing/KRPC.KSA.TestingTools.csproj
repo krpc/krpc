@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>KRPC.KSA.TestingTools</AssemblyName>
+    <RootNamespace>KRPC.KSA.Testing</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="src/TestingTools.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../server/KRPC.KSA.csproj" Private="false" />
+  </ItemGroup>
+</Project>
