@@ -132,13 +132,18 @@ class TestReferenceFrame(ksatest.TestCase):
         self.assertVectorAlmostEqual(position, round_trip, 1e-3)
 
     def test_transform_velocity(self):
-        self.assertVectorAlmostEqual(
-            self.vehicle.velocity(self.inertial),
-            self.ksa.transform_velocity(
-                (0, 0, 0), (0, 0, 0), self.vehicle.reference_frame, self.inertial
-            ),
-            1e-6,
-        )
+        # Paused, so both calls see the same game time
+        self.ksa.simulation_speed = 0
+        try:
+            self.assertVectorAlmostEqual(
+                self.vehicle.velocity(self.inertial),
+                self.ksa.transform_velocity(
+                    (0, 0, 0), (0, 0, 0), self.vehicle.reference_frame, self.inertial
+                ),
+                1e-6,
+            )
+        finally:
+            self.ksa.simulation_speed = 1
         # A point fixed to the surface moves with the body's rotation
         position = (self.earth.radius, 0, 0)
         velocity = self.ksa.transform_velocity(

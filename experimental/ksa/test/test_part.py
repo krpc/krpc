@@ -81,10 +81,15 @@ class TestPart(ksatest.TestCase):
     def test_engines(self):
         engines = [part.engine for part in self.engine_parts()]
         self.assertTrue(engines)
-        self.assertAlmostEqual(
-            self.vehicle.available_thrust,
-            sum(engine.available_thrust for engine in engines),
-            delta=self.vehicle.available_thrust * 1e-3,
+        # An engine's performance updates in the solver step after it changes
+        ksatest.wait_until(
+            lambda: (
+                abs(
+                    self.vehicle.available_thrust
+                    - sum(engine.available_thrust for engine in engines)
+                )
+                < self.vehicle.available_thrust * 1e-3
+            )
         )
         for engine in engines:
             self.assertEqual(0, engine.thrust)
@@ -137,6 +142,7 @@ class TestPart(ksatest.TestCase):
         finally:
             control.engine_on = False
             control.throttle = throttle
+        ksatest.wait_until(lambda: self.vehicle.thrust == 0, timeout=5)
 
     def test_docking_port(self):
         port = next(
