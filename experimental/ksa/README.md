@@ -19,7 +19,7 @@ Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `version
  * `release/` - the licenses and install readme for the mod archive.
  * `build.sh` - builds the mod folder and the client stubs.
  * `docs.sh` - builds the documentation.
- * `release.sh` - builds the release archives.
+ * `release.sh` - builds the release archive.
  * `publish-docs.sh` - commits the docs to the `gh-pages` branch.
  * `install-starmap.sh`, `run-ksa.sh` - install StarMap, and launch the game through it on Linux.
  * `test.sh` - runs the tests.
@@ -41,8 +41,8 @@ The build uses a kRPC release, set by `krpc_version` in `versions.sh`, and needs
    defaults to `../KSA` beside the repo.
  * `ServiceDefinitions` writes `bin/KRPC.KSA.json`, which runs the server's service scan and
    checks the documentation.
- * `krpc-clientgen` builds client stubs from the definitions into `bin/krpc-ksa-stubs-0.1.0.zip`,
-   which also holds the definitions.
+ * `krpc-clientgen` builds client stubs from the definitions into `bin/stubs`, which also holds
+   the definitions.
 
 Documentation comments use the markup of that release, so units are words rather than `<unit>`.
 
@@ -75,17 +75,20 @@ and version folders, and the version switcher lists only those.
 
 ## Release
 
-Build the release archives into `bin/release`:
+Build the release archive, `bin/release/kRPC-KSA-0.1.0.zip`, and its `SHA256SUMS`:
 
 ```bash
 experimental/ksa/release.sh
 ```
 
- * `kRPC.KSA-0.1.0.zip` - the mod folder, without `TestingTools`, with the licenses and an install
-   readme.
- * `krpc-ksa-stubs-0.1.0.zip` - the client stubs and service definitions.
- * `krpc-ksa-docs-0.1.0.zip` - the HTML documentation.
- * `SHA256SUMS`.
+The archive holds one folder, `kRPC-KSA-0.1.0`, with the readme and licenses at the top, as the
+featured mods on SpaceDock lay out theirs:
+
+ * `kRPC.KSA/` - the mod folder, without `TestingTools`, which players copy into the KSA mods folder.
+ * `stubs/` - the client stubs and service definitions.
+ * `examples/` - the example scripts.
+
+The documentation is published online rather than in the archive, see `publish-docs.sh`.
 
 The mod is under the LGPL v3, as `KRPC.Core` is. The archive includes the licenses of the bundled
 `Google.Protobuf` and `System.IO.Ports` binaries.
@@ -138,8 +141,9 @@ launches the Rocket from Cape Canaveral into orbit. `examples/raise_orbit.py` ra
 with two burns that the script flies, and `examples/circularize.py` circularizes it with a burn
 that the flight computer executes. Lua also builds services at run time.
 
-The C#, C++, C-nano and Java clients use the stubs in `bin/krpc-ksa-stubs-0.1.0.zip`, together
-with the kRPC 0.7.0 client libraries. Its readme shows each language.
+The C#, C++, C-nano and Java clients use the stubs in `bin/stubs`, which the release archive
+holds as `stubs`, together with the kRPC 0.7.0 client libraries. Its readme shows each
+language.
 
 ## Server
 

@@ -12,7 +12,8 @@ Install the kRPC C++ client @KRPC_VERSION@, for example from `vcpkg <https://vcp
 
    vcpkg install krpc
 
-Add ``cpp/include`` from ``krpc-ksa-stubs-@VERSION@.zip`` to the include path.
+Add ``cpp/include`` from the ``stubs`` folder of the release archive to the include
+path.
 
 Using the KSA Service
 ---------------------

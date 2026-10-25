@@ -7,8 +7,8 @@ Installing
 ----------
 
 Put the kRPC Java client jar @KRPC_VERSION@, and its protobuf and javatuples dependencies, on
-the classpath. Add ``java/krpc/client/services/KSA.java`` from ``krpc-ksa-stubs-@VERSION@.zip``
-to the sources.
+the classpath. Add ``java/krpc/client/services/KSA.java`` from the ``stubs`` folder of
+the release archive to the sources.
 
 Using the KSA Service
 ---------------------

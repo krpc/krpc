@@ -53,5 +53,6 @@ the members, and lists every one of them.
 Releasing
 ---------
 
-``release.sh`` builds the mod, stubs and documentation archives into ``bin/release``, with
-their checksums.
+``release.sh`` builds the release archive into ``bin/release``, with its checksum. The archive
+holds one folder, with a readme and the licenses, the ``kRPC.KSA`` mod folder, the client stubs
+and the example scripts.

@@ -7,7 +7,8 @@ Installing
 ----------
 
 Add the `KRPC.Client <https://www.nuget.org/packages/KRPC.Client>`_ @KRPC_VERSION@ NuGet
-package to the project, and ``csharp/KSA.cs`` from ``krpc-ksa-stubs-@VERSION@.zip``.
+package to the project, and ``csharp/KSA.cs`` from the ``stubs`` folder of the release
+archive.
 
 Using the KSA Service
 ---------------------

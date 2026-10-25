@@ -13,7 +13,8 @@ The server listens over TCP/IP, so build the kRPC C-nano client @KRPC_VERSION@ w
 
    vcpkg install "krpc-cnano[tcp]"
 
-Add ``cnano/include`` from ``krpc-ksa-stubs-@VERSION@.zip`` to the include path.
+Add ``cnano/include`` from the ``stubs`` folder of the release archive to the include
+path.
 
 Using the KSA Service
 ---------------------

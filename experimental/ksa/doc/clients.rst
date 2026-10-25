@@ -16,6 +16,6 @@ service provides.
    lua
 
 Python and Lua build the ``KSA`` service when they connect. The C#, C++, C-nano and Java
-clients compile against the stubs in ``krpc-ksa-stubs-@VERSION@.zip``. The archive also holds
-``KRPC.KSA.json``, the service definitions, from which ``krpc-clientgen`` in the ``krpctools``
-package generates stubs for another client version.
+clients compile against the stubs in the ``stubs`` folder of the release archive. The
+folder also holds ``KRPC.KSA.json``, the service definitions, from which ``krpc-clientgen`` in the
+``krpctools`` package generates stubs for another client version.

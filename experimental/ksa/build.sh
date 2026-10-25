@@ -70,9 +70,7 @@ for language in "${!stub_paths[@]}"; do
 done
 sed "s/@CLIENT_VERSION@/$krpc_version/" "$here/stubs/README.md" > "$stubs/README.md"
 cp "$here/bin/KRPC.KSA.json" "$stubs/"
-rm -f "$here"/bin/krpc-ksa-stubs-*.zip
-(cd "$stubs" && zip -qr "$here/bin/krpc-ksa-stubs-$mod_version.zip" .)
-echo "Client stubs in $here/bin/krpc-ksa-stubs-$mod_version.zip"
+echo "Client stubs in $stubs"
 
 if [ "$install" = 1 ]; then
   if [ -z "${KSA_MODS_DIR:-}" ]; then
