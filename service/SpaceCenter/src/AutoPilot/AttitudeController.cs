@@ -1717,6 +1717,14 @@ namespace KRPC.SpaceCenter.AutoPilot
             log.AddVector ("u_pre", controlPreFilter, "F3");
             log.Add ("soft_start", softStart, "F3");
             log.AddVector ("ctrl", new Vector3d (state.Pitch, state.Roll, state.Yaw), "F3");
+            log.AddVector ("aero_limit", aerodynamicRateLimit.PositiveLimit, "F3");
+            log.AddVector ("aero_limit_neg", aerodynamicRateLimit.NegativeLimit, "F3");
+            log.AddVector ("rate_limit", rateLimit, "F3");
+            log.AddVector ("rate_limit_neg", negativeRateLimit, "F3");
+            log.AddVector ("slew", actuatorSlew, "F3");
+            log.AddVector ("actuator_limited", actuatorLimitedFraction, "F3");
+            log.AddVector ("actuator_backoff", actuatorBackoff, "F3");
+            log.AddVector ("target_rate", targetRate, "F4");
 
             // Oscillation detectors (info window: STRUC / CTRL / FREQ): chatter level and the
             // raw per-tick trigger margin (>=1 fires), the control-output envelope, and the
