@@ -1651,7 +1651,6 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
     turn_attitude_error=1.2,
     pitch_settle_delay=5,
     launch_settle_delay=3,
-    disable_control_surfaces=False,
 ):
     class TestAutoPilotLaunchBase(krpctest.TestCase):
         @classmethod
@@ -1716,18 +1715,6 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
         def test_sharp_turn(self):
             # Launch, hold vertical for 10 seconds, pitch over 5 degrees, then assert
             # the actuators have settled to a smooth hold with little oscillation.
-            if disable_control_surfaces:
-                # TODO: the autopilot does not yet model aerodynamic control
-                # surface actuation lag, so the PI loop sees the deflection lag
-                # as a disturbance and oscillates during the pitch-over.
-                # Disable the aero surfaces for this test as a workaround until
-                # the autopilot models them. Only done for this test, as other
-                # tests (e.g. the gravity turns) need the control authority
-                # they provide.
-                for surface in self.vessel.parts.control_surfaces:
-                    surface.pitch_enabled = False
-                    surface.yaw_enabled = False
-                    surface.roll_enabled = False
             self.launch()
             self.wait(10)
             self.ap.target_pitch_and_heading(85, 90)
@@ -1774,13 +1761,6 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
 TestAutoPilotLaunchKerbal1 = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchKerbal1",
     "Kerbal 1",
-    # The sharp turn oscillates during the pitch-over with the AV-R8 winglets
-    # active; see the disable_control_surfaces TODO above. A small residual
-    # oscillation (~0.24) remains with the winglets disabled, likely from
-    # unmodeled aero effects on the fixed surfaces, hence the raised amplitude
-    # threshold.
-    disable_control_surfaces=True,
-    hold_oscillation_amplitude=0.3,
 )
 
 TestAutoPilotLaunchKerbal2 = _make_autopilot_launch_test_class(
