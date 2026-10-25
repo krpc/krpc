@@ -213,6 +213,37 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The height of the terrain or the sea surface, whichever is higher, at a point on
+        /// the body, in meters above the body's mean radius.
+        /// </summary>
+        /// <param name="latitude">Latitude, in degrees.</param>
+        /// <param name="longitude">Longitude, in degrees.</param>
+        [KRPCMethod]
+        public double SurfaceHeight (double latitude, double longitude)
+        {
+            var height = BedrockHeight (latitude, longitude);
+            var ocean = (InternalBody as Celestial)?.BodyTemplate.OceanReference;
+            return ocean == null ? height : Math.Max (height, ocean.Level);
+        }
+
+        /// <summary>
+        /// The height of the terrain at a point on the body, in meters above the body's mean
+        /// radius. Below the sea, this is the height of the sea floor.
+        /// </summary>
+        /// <param name="latitude">Latitude, in degrees.</param>
+        /// <param name="longitude">Longitude, in degrees.</param>
+        /// <remarks>
+        /// Zero for a body with no terrain, such as a gas giant.
+        /// </remarks>
+        [KRPCMethod]
+        public double BedrockHeight (double latitude, double longitude)
+        {
+            if (InternalBody is not Celestial celestial)
+                return 0;
+            return celestial.GetTerrainHeightFromDirCcf (celestial.GetDirCcfFromLatLon (latitude, longitude));
+        }
+
+        /// <summary>
         /// The position of a point on the surface, at the body's mean radius, in meters.
         /// </summary>
         /// <param name="latitude">Latitude, in degrees.</param>

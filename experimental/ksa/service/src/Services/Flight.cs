@@ -205,6 +205,47 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The altitude above the terrain, in meters. Over the sea, this is the altitude above
+        /// the sea floor.
+        /// </summary>
+        [KRPCProperty]
+        public double BedrockAltitude {
+            get { return MeanAltitude - Elevation; }
+        }
+
+        /// <summary>
+        /// The height of the terrain below the vehicle, in meters above the mean radius of the
+        /// body. Below the sea, this is the height of the sea floor.
+        /// </summary>
+        [KRPCProperty]
+        public double Elevation {
+            get {
+                var v = InternalVehicle;
+                if (v.Orbit.Parent is not Celestial celestial)
+                    return 0;
+                return celestial.GetTerrainHeightFromDirCcf (PositionCcf.NormalizeOrZero ());
+            }
+        }
+
+        /// <summary>
+        /// The time until the vehicle hits the surface on its current trajectory, in seconds.
+        /// Not a number if its trajectory does not hit the surface.
+        /// </summary>
+        /// <remarks>
+        /// The game predicts the trajectory on a worker thread, so a change to it shows here
+        /// shortly after.
+        /// </remarks>
+        [KRPCProperty]
+        public double TimeToImpact {
+            get {
+                var patch = InternalVehicle.FlightPlan.Patches[0];
+                if (patch.EndTransition != PatchTransition.Impact)
+                    return double.NaN;
+                return (patch.EndTime - Universe.GetElapsedTime ()).Seconds ();
+            }
+        }
+
+        /// <summary>
         /// The angle between the direction the vehicle points in and its velocity relative to
         /// the surface, in the vehicle's pitch plane, in degrees. Positive when the nose is
         /// above the velocity.

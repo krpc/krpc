@@ -99,6 +99,8 @@ KSA.Body.SphereOfInfluence
 KSA.Body.Parent
 KSA.Body.Satellites
 KSA.Body.Orbit
+KSA.Body.SurfaceHeight
+KSA.Body.BedrockHeight
 KSA.Body.ReferenceFrame
 KSA.Body.NonRotatingReferenceFrame
 KSA.Body.Position
@@ -108,6 +110,9 @@ KSA.Body.AngularVelocity
 KSA.Body.SurfacePosition
 KSA.Flight.MeanAltitude
 KSA.Flight.SurfaceAltitude
+KSA.Flight.BedrockAltitude
+KSA.Flight.Elevation
+KSA.Flight.TimeToImpact
 KSA.Flight.Latitude
 KSA.Flight.Longitude
 KSA.Flight.Speed

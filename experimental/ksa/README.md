@@ -158,9 +158,9 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
 | `Sequence` | `Number`, `Activated`, `DeltaV`, `Thrust`, `SpecificImpulse`, `BurnTime`, `StartMass`, `EndMass`, `PropellantMass` |
 | `Orbit` | `Body`, `Apoapsis`, `Periapsis`, `ApoapsisAltitude`, `PeriapsisAltitude`, `SemiMajorAxis`, `Speed`, `Radius`, `Period`, `TimeToApoapsis`, `TimeToPeriapsis`, `Eccentricity`, `Inclination`, `LongitudeOfAscendingNode`, `ArgumentOfPeriapsis`, `TrueAnomaly`, `MeanAnomaly`, `TrueAnomalyAtUT()`, `UTAtTrueAnomaly()`, `RadiusAt()`, `PositionAt()`, `VelocityAt()`, `StartUT`, `EndUT`, `EndTransition`, `TimeToSOIChange`, `NextOrbit` |
 | `OrbitTransition` | `None`, `Encounter`, `Escape`, `Impact`, `Burn` |
-| `Body` | `Name`, `Mass`, `GravitationalParameter`, `Radius`, `AtmosphereRadius`, `SurfaceGravity`, `RotationalSpeed`, `RotationalPeriod`, `SphereOfInfluence`, `Parent`, `Satellites`, `Orbit`, `ReferenceFrame`, `NonRotatingReferenceFrame`, `Position()`, `Velocity()`, `Rotation()`, `AngularVelocity()`, `SurfacePosition()` |
+| `Body` | `Name`, `Mass`, `GravitationalParameter`, `Radius`, `AtmosphereRadius`, `SurfaceGravity`, `RotationalSpeed`, `RotationalPeriod`, `SphereOfInfluence`, `Parent`, `Satellites`, `Orbit`, `SurfaceHeight()`, `BedrockHeight()`, `ReferenceFrame`, `NonRotatingReferenceFrame`, `Position()`, `Velocity()`, `Rotation()`, `AngularVelocity()`, `SurfacePosition()` |
 | `ReferenceFrame` | Obtained from vehicles and bodies |
-| `Flight` | `MeanAltitude`, `SurfaceAltitude`, `Latitude`, `Longitude`, `Speed`, `HorizontalSpeed`, `VerticalSpeed`, `Pitch`, `Heading`, `Roll`, `StaticPressure`, `AtmosphereDensity`, `DynamicPressure`, `GForce`, `AngleOfAttack`, `SideslipAngle` |
+| `Flight` | `MeanAltitude`, `SurfaceAltitude`, `BedrockAltitude`, `Elevation`, `TimeToImpact`, `Latitude`, `Longitude`, `Speed`, `HorizontalSpeed`, `VerticalSpeed`, `Pitch`, `Heading`, `Roll`, `StaticPressure`, `AtmosphereDensity`, `DynamicPressure`, `GForce`, `AngleOfAttack`, `SideslipAngle` |
 | `Control` | `Throttle`, `EngineOn`, `Stabilization`, `RCS`, `ActiveSequence`, `ActivateNextSequence()` |
 | `AutoPilot` | `Engage()`, `Disengage()`, `Engaged`, `Mode`, `TargetPitch`, `TargetHeading`, `TargetRoll`, `TargetPitchAndHeading()`, `TargetDirection()`, `Error`, `RollError`, `Wait()`, `AutoBurn` |
 | `Situation` | KSA's eight situations, from `Maneuvering` to `Bottomed` |
@@ -198,7 +198,8 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
  * Part modules change through the game's input events, which apply at the start of the next
    frame. The setters and actions wait for the change, up to ten updates. KSA has no landing
    leg or wheel modules.
- * Resources are the substances in tanks, in kilograms.
+ * Resources are the substances in tanks, in kilograms. Sea level is a single height per body,
+   so `SurfaceHeight` is zero over inland depressions such as the Dead Sea.
  * A `Sequence` is KSA's stage. Its performance is the game's prediction, which the game
    recomputes in flight only while its sequence or engine windows are open. The service
    recomputes it at most once per game time.
