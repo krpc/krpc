@@ -161,6 +161,18 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The orbit after the burn.
+        /// </summary>
+        /// <remarks>
+        /// The game predicts it in the solver step after the burn changes, so it reflects a
+        /// change to the burn one update later.
+        /// </remarks>
+        [KRPCProperty]
+        public Orbit Orbit {
+            get { return new Orbit (InternalBurn.FlightPlan, 0); }
+        }
+
+        /// <summary>
         /// The direction of the change in velocity at the time of the burn, as a unit vector.
         /// </summary>
         /// <param name="referenceFrame">The reference frame of the direction.</param>

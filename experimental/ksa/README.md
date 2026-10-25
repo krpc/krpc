@@ -156,15 +156,16 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
 | `KSA` | `ActiveVehicle`, `Vehicles`, `Bodies`, `UT`, `SimulationSpeed`, `WarpTo()`, `TransformPosition()`, `TransformDirection()`, `TransformRotation()`, `TransformVelocity()` |
 | `Vehicle` | `Name`, `Situation`, `HasLaunched`, `LaunchTime`, `Mass`, `PropellantMass`, `Thrust`, `AvailableThrust`, `SpecificImpulse`, `DeltaV`, `Sequences`, `TargetVehicle`, `TargetBody`, `Burns`, `AddBurn()`, `Orbit`, `Flight`, `Control`, `AutoPilot`, `ReferenceFrame`, `SurfaceReferenceFrame`, `OrbitalReferenceFrame`, `Position()`, `Velocity()`, `Direction()`, `Rotation()`, `AngularVelocity()` |
 | `Sequence` | `Number`, `Activated`, `DeltaV`, `Thrust`, `SpecificImpulse`, `BurnTime`, `StartMass`, `EndMass`, `PropellantMass` |
-| `Orbit` | `Body`, `Apoapsis`, `Periapsis`, `ApoapsisAltitude`, `PeriapsisAltitude`, `SemiMajorAxis`, `Speed`, `Period`, `TimeToApoapsis`, `TimeToPeriapsis`, `Eccentricity`, `Inclination`, `LongitudeOfAscendingNode`, `ArgumentOfPeriapsis` |
-| `Body` | `Name`, `Mass`, `GravitationalParameter`, `Radius`, `AtmosphereRadius`, `SurfaceGravity`, `RotationalSpeed`, `RotationalPeriod`, `SphereOfInfluence`, `Parent`, `Satellites`, `ReferenceFrame`, `NonRotatingReferenceFrame`, `Position()`, `Velocity()`, `Rotation()`, `AngularVelocity()`, `SurfacePosition()` |
+| `Orbit` | `Body`, `Apoapsis`, `Periapsis`, `ApoapsisAltitude`, `PeriapsisAltitude`, `SemiMajorAxis`, `Speed`, `Radius`, `Period`, `TimeToApoapsis`, `TimeToPeriapsis`, `Eccentricity`, `Inclination`, `LongitudeOfAscendingNode`, `ArgumentOfPeriapsis`, `TrueAnomaly`, `MeanAnomaly`, `TrueAnomalyAtUT()`, `UTAtTrueAnomaly()`, `RadiusAt()`, `PositionAt()`, `VelocityAt()`, `StartUT`, `EndUT`, `EndTransition`, `TimeToSOIChange`, `NextOrbit` |
+| `OrbitTransition` | `None`, `Encounter`, `Escape`, `Impact`, `Burn` |
+| `Body` | `Name`, `Mass`, `GravitationalParameter`, `Radius`, `AtmosphereRadius`, `SurfaceGravity`, `RotationalSpeed`, `RotationalPeriod`, `SphereOfInfluence`, `Parent`, `Satellites`, `Orbit`, `ReferenceFrame`, `NonRotatingReferenceFrame`, `Position()`, `Velocity()`, `Rotation()`, `AngularVelocity()`, `SurfacePosition()` |
 | `ReferenceFrame` | Obtained from vehicles and bodies |
 | `Flight` | `MeanAltitude`, `SurfaceAltitude`, `Latitude`, `Longitude`, `Speed`, `HorizontalSpeed`, `VerticalSpeed`, `Pitch`, `Heading`, `Roll`, `StaticPressure`, `AtmosphereDensity`, `DynamicPressure`, `GForce`, `AngleOfAttack`, `SideslipAngle` |
 | `Control` | `Throttle`, `EngineOn`, `Stabilization`, `RCS`, `ActiveSequence`, `ActivateNextSequence()` |
 | `AutoPilot` | `Engage()`, `Disengage()`, `Engaged`, `Mode`, `TargetPitch`, `TargetHeading`, `TargetRoll`, `TargetPitchAndHeading()`, `TargetDirection()`, `Error`, `RollError`, `Wait()`, `AutoBurn` |
 | `Situation` | KSA's eight situations, from `Maneuvering` to `Bottomed` |
 | `AutoPilotMode` | `Attitude`, `Hold`, orbital and surface prograde, retrograde, normal and radial |
-| `Burn` | `UT`, `Prograde`, `Normal`, `Radial`, `DeltaV`, `RemainingDeltaV`, `IgnitionTime`, `BurnTime`, `Direction()`, `Remove()` |
+| `Burn` | `UT`, `Prograde`, `Normal`, `Radial`, `DeltaV`, `RemainingDeltaV`, `IgnitionTime`, `BurnTime`, `Orbit`, `Direction()`, `Remove()` |
 
  * A `Vehicle` holds the game's vehicle object, as a KSA vehicle id is its name. It throws once the
    vehicle leaves the system, including after docking and undocking.
@@ -186,6 +187,8 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
  * `Thrust` and `SpecificImpulse` sum the active engines' performance at their commanded and at
    full throttle, at the current pressure.
  * `WarpTo` uses the game's auto-warp, and returns when the warp ends.
+ * A vehicle's `Orbit` follows the vehicle. `NextOrbit` and `Burn.Orbit` are snapshots of the
+   game's patched-conic prediction, which it updates on a worker thread.
  * A `Sequence` is KSA's stage. Its performance is the game's prediction, which the game
    recomputes in flight only while its sequence or engine windows are open. The service
    recomputes it at most once per game time.

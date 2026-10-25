@@ -59,6 +59,7 @@ KSA.Orbit.ApoapsisAltitude
 KSA.Orbit.PeriapsisAltitude
 KSA.Orbit.SemiMajorAxis
 KSA.Orbit.Speed
+KSA.Orbit.Radius
 KSA.Orbit.Period
 KSA.Orbit.TimeToApoapsis
 KSA.Orbit.TimeToPeriapsis
@@ -66,6 +67,23 @@ KSA.Orbit.Eccentricity
 KSA.Orbit.Inclination
 KSA.Orbit.LongitudeOfAscendingNode
 KSA.Orbit.ArgumentOfPeriapsis
+KSA.Orbit.TrueAnomaly
+KSA.Orbit.MeanAnomaly
+KSA.Orbit.TrueAnomalyAtUT
+KSA.Orbit.UTAtTrueAnomaly
+KSA.Orbit.RadiusAt
+KSA.Orbit.PositionAt
+KSA.Orbit.VelocityAt
+KSA.Orbit.StartUT
+KSA.Orbit.EndUT
+KSA.Orbit.EndTransition
+KSA.Orbit.TimeToSOIChange
+KSA.Orbit.NextOrbit
+KSA.OrbitTransition.None
+KSA.OrbitTransition.Encounter
+KSA.OrbitTransition.Escape
+KSA.OrbitTransition.Impact
+KSA.OrbitTransition.Burn
 KSA.Body.Name
 KSA.Body.Mass
 KSA.Body.GravitationalParameter
@@ -77,6 +95,7 @@ KSA.Body.RotationalPeriod
 KSA.Body.SphereOfInfluence
 KSA.Body.Parent
 KSA.Body.Satellites
+KSA.Body.Orbit
 KSA.Body.ReferenceFrame
 KSA.Body.NonRotatingReferenceFrame
 KSA.Body.Position
@@ -138,5 +157,6 @@ KSA.Burn.DeltaV
 KSA.Burn.RemainingDeltaV
 KSA.Burn.IgnitionTime
 KSA.Burn.BurnTime
+KSA.Burn.Orbit
 KSA.Burn.Direction
 KSA.Burn.Remove

@@ -132,6 +132,17 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The orbit of the body, or <c>null</c> if it orbits nothing.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Orbit Orbit {
+            get {
+                var orbit = (InternalBody as IOrbiter)?.Orbit;
+                return orbit == null ? null : new Orbit (orbit);
+            }
+        }
+
+        /// <summary>
         /// The bodies that orbit this body.
         /// </summary>
         [KRPCProperty]
