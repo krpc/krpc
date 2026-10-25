@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Brutal.Numerics;
 using KRPC.KSA.Utils;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -233,6 +234,90 @@ namespace KRPC.KSA.Services
         [KRPCProperty (GameScene = GameScene.Flight)]
         public AutoPilot AutoPilot {
             get { return new AutoPilot (InternalVehicle); }
+        }
+
+        /// <summary>
+        /// The reference frame fixed to the vehicle, with its origin at the vehicle's position.
+        /// The x axis points forward, the y axis to the right and the z axis down, relative to
+        /// the vehicle's control point.
+        /// </summary>
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame {
+            get { return new ReferenceFrame (ReferenceFrame.Kind.Vehicle, InternalVehicle); }
+        }
+
+        /// <summary>
+        /// The reference frame with its origin at the vehicle's position, and axes aligned with
+        /// the surface below it. The x axis points east, the y axis north and the z axis up.
+        /// The frame rotates with the body.
+        /// </summary>
+        [KRPCProperty]
+        public ReferenceFrame SurfaceReferenceFrame {
+            get { return new ReferenceFrame (ReferenceFrame.Kind.VehicleSurface, InternalVehicle); }
+        }
+
+        /// <summary>
+        /// The reference frame with its origin at the vehicle's position, and axes aligned with
+        /// its orbit. The x axis points prograde, the y axis along the orbit normal and the z
+        /// axis radially outward, perpendicular to the x axis.
+        /// </summary>
+        [KRPCProperty]
+        public ReferenceFrame OrbitalReferenceFrame {
+            get { return new ReferenceFrame (ReferenceFrame.Kind.VehicleOrbital, InternalVehicle); }
+        }
+
+        /// <summary>
+        /// The position of the vehicle, in meters.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the position.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> Position (ReferenceFrame referenceFrame)
+        {
+            return Vectors.ToTuple (referenceFrame.PositionFromEcl (InternalVehicle.GetPositionEcl ()));
+        }
+
+        /// <summary>
+        /// The velocity of the vehicle, in meters per second.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the velocity.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> Velocity (ReferenceFrame referenceFrame)
+        {
+            var v = InternalVehicle;
+            return Vectors.ToTuple (referenceFrame.VelocityFromEcl (v.GetPositionEcl (), v.GetVelocityEcl ()));
+        }
+
+        /// <summary>
+        /// The unit vector in which the vehicle points, the x axis of
+        /// <see cref="ReferenceFrame"/>.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the direction.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> Direction (ReferenceFrame referenceFrame)
+        {
+            var forward = double3.UnitX.Transform (InternalVehicle.GetHelm2Cce ());
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (forward));
+        }
+
+        /// <summary>
+        /// The rotation of <see cref="ReferenceFrame"/> relative to the given frame.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the rotation.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double, double> Rotation (ReferenceFrame referenceFrame)
+        {
+            return Vectors.ToTuple (referenceFrame.RotationFromEcl (InternalVehicle.GetHelm2Cce ()));
+        }
+
+        /// <summary>
+        /// The angular velocity of the vehicle, in radians per second. The vector points along
+        /// the axis of rotation, and its length is the rate of rotation.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the angular velocity.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> AngularVelocity (ReferenceFrame referenceFrame)
+        {
+            return Vectors.ToTuple (referenceFrame.AngularVelocityFromEcl (Vectors.AngularVelocityEcl (InternalVehicle)));
         }
     }
 }

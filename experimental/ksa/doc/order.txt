@@ -4,6 +4,10 @@ KSA.Bodies
 KSA.UT
 KSA.SimulationSpeed
 KSA.WarpTo
+KSA.TransformPosition
+KSA.TransformDirection
+KSA.TransformRotation
+KSA.TransformVelocity
 KSA.Vehicle.Name
 KSA.Vehicle.Situation
 KSA.Vehicle.HasLaunched
@@ -21,6 +25,14 @@ KSA.Vehicle.Orbit
 KSA.Vehicle.Flight
 KSA.Vehicle.Control
 KSA.Vehicle.AutoPilot
+KSA.Vehicle.ReferenceFrame
+KSA.Vehicle.SurfaceReferenceFrame
+KSA.Vehicle.OrbitalReferenceFrame
+KSA.Vehicle.Position
+KSA.Vehicle.Velocity
+KSA.Vehicle.Direction
+KSA.Vehicle.Rotation
+KSA.Vehicle.AngularVelocity
 KSA.Situation.Maneuvering
 KSA.Situation.Freefall
 KSA.Situation.Rolling
@@ -63,6 +75,13 @@ KSA.Body.RotationalPeriod
 KSA.Body.SphereOfInfluence
 KSA.Body.Parent
 KSA.Body.Satellites
+KSA.Body.ReferenceFrame
+KSA.Body.NonRotatingReferenceFrame
+KSA.Body.Position
+KSA.Body.Velocity
+KSA.Body.Rotation
+KSA.Body.AngularVelocity
+KSA.Body.SurfacePosition
 KSA.Flight.MeanAltitude
 KSA.Flight.SurfaceAltitude
 KSA.Flight.Latitude
@@ -77,6 +96,8 @@ KSA.Flight.StaticPressure
 KSA.Flight.AtmosphereDensity
 KSA.Flight.DynamicPressure
 KSA.Flight.GForce
+KSA.Flight.AngleOfAttack
+KSA.Flight.SideslipAngle
 KSA.Control.Throttle
 KSA.Control.EngineOn
 KSA.Control.Stabilization
@@ -91,6 +112,7 @@ KSA.AutoPilot.TargetPitch
 KSA.AutoPilot.TargetHeading
 KSA.AutoPilot.TargetRoll
 KSA.AutoPilot.TargetPitchAndHeading
+KSA.AutoPilot.TargetDirection
 KSA.AutoPilot.Error
 KSA.AutoPilot.RollError
 KSA.AutoPilot.Wait

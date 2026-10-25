@@ -99,5 +99,67 @@ namespace KRPC.KSA.Services
             if (Universe.IsAutoWarpActive)
                 throw new YieldException<Action> (WaitForWarp);
         }
+
+        /// <summary>
+        /// Convert a position from one reference frame to another.
+        /// </summary>
+        /// <param name="position">Position, in meters, in the frame <paramref name="from"/>.</param>
+        /// <param name="from">The reference frame the position is in.</param>
+        /// <param name="to">The reference frame to convert the position to.</param>
+        /// <returns>The position in the frame <paramref name="to"/>.</returns>
+        [KRPCProcedure]
+        public static Tuple<double, double, double> TransformPosition (
+            Tuple<double, double, double> position, ReferenceFrame from, ReferenceFrame to)
+        {
+            return Vectors.ToTuple (to.PositionFromEcl (from.PositionToEcl (Vectors.ToVector (position))));
+        }
+
+        /// <summary>
+        /// Convert a direction from one reference frame to another.
+        /// </summary>
+        /// <param name="direction">Direction in the frame <paramref name="from"/>.</param>
+        /// <param name="from">The reference frame the direction is in.</param>
+        /// <param name="to">The reference frame to convert the direction to.</param>
+        /// <returns>The direction in the frame <paramref name="to"/>.</returns>
+        [KRPCProcedure]
+        public static Tuple<double, double, double> TransformDirection (
+            Tuple<double, double, double> direction, ReferenceFrame from, ReferenceFrame to)
+        {
+            return Vectors.ToTuple (to.DirectionFromEcl (from.DirectionToEcl (Vectors.ToVector (direction))));
+        }
+
+        /// <summary>
+        /// Convert a rotation from one reference frame to another.
+        /// </summary>
+        /// <param name="rotation">Rotation in the frame <paramref name="from"/>.</param>
+        /// <param name="from">The reference frame the rotation is in.</param>
+        /// <param name="to">The reference frame to convert the rotation to.</param>
+        /// <returns>The rotation in the frame <paramref name="to"/>.</returns>
+        [KRPCProcedure]
+        public static Tuple<double, double, double, double> TransformRotation (
+            Tuple<double, double, double, double> rotation, ReferenceFrame from, ReferenceFrame to)
+        {
+            return Vectors.ToTuple (to.RotationFromEcl (from.RotationToEcl (Vectors.ToRotation (rotation))));
+        }
+
+        /// <summary>
+        /// Convert a velocity from one reference frame to another. The velocity of a point
+        /// depends on its position in a rotating frame, so the position is also needed.
+        /// </summary>
+        /// <param name="position">Position, in meters, in the frame <paramref name="from"/>.</param>
+        /// <param name="velocity">Velocity, in meters per second, in the frame
+        /// <paramref name="from"/>.</param>
+        /// <param name="from">The reference frame the position and velocity are in.</param>
+        /// <param name="to">The reference frame to convert the velocity to.</param>
+        /// <returns>The velocity in the frame <paramref name="to"/>.</returns>
+        [KRPCProcedure]
+        public static Tuple<double, double, double> TransformVelocity (
+            Tuple<double, double, double> position, Tuple<double, double, double> velocity,
+            ReferenceFrame from, ReferenceFrame to)
+        {
+            var positionEcl = from.PositionToEcl (Vectors.ToVector (position));
+            var velocityEcl = from.VelocityToEcl (positionEcl, Vectors.ToVector (velocity));
+            return Vectors.ToTuple (to.VelocityFromEcl (positionEcl, velocityEcl));
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using KRPC.KSA.Utils;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -192,6 +193,29 @@ namespace KRPC.KSA.Services
             target.Y = DegreesToRadians (pitch);
             target.Z = Flight.HeadingToYaw (heading);
             SetAttitude (computer, target);
+        }
+
+        /// <summary>
+        /// Point the vehicle in a direction, and set the mode to
+        /// <see cref="AutoPilotMode.Attitude"/>. Sets <see cref="TargetPitch"/> and
+        /// <see cref="TargetHeading"/> to the direction at the time of the call, so the target
+        /// stays fixed relative to the surface.
+        /// </summary>
+        /// <param name="direction">The direction to point in.</param>
+        /// <param name="referenceFrame">The reference frame of the direction.</param>
+        [KRPCMethod]
+        public void TargetDirection (Tuple<double, double, double> direction, ReferenceFrame referenceFrame)
+        {
+            var v = new Vehicle (vehicle).InternalVehicle;
+            var surface = new ReferenceFrame (ReferenceFrame.Kind.VehicleSurface, v);
+            var enu = surface.DirectionFromEcl (referenceFrame.DirectionToEcl (Vectors.ToVector (direction)));
+            var length = enu.Length ();
+            if (!(length > 0) || !double.IsFinite (length))
+                throw new ArgumentException ("The direction is not a finite, non-zero vector");
+            enu /= length;
+            var pitch = Math.Asin (Math.Clamp (enu.Z, -1d, 1d)) * (180d / Math.PI);
+            var heading = Math.Atan2 (enu.X, enu.Y) * (180d / Math.PI);
+            TargetPitchAndHeading (pitch, heading < 0 ? heading + 360 : heading);
         }
 
         /// <summary>

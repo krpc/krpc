@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Brutal.Numerics;
+using KRPC.KSA.Utils;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KSA;
@@ -135,6 +137,84 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public IList<Body> Satellites {
             get { return InternalBody.Children.OfType<IParentBody> ().Select (body => new Body (body)).ToList (); }
+        }
+
+        /// <summary>
+        /// The reference frame fixed to the body, with its origin at the body's center. The
+        /// z axis points to the north pole, the x axis to latitude and longitude zero, and the
+        /// y axis to latitude zero and longitude 90 degrees east. The frame rotates with the
+        /// body.
+        /// </summary>
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame {
+            get { return new ReferenceFrame (ReferenceFrame.Kind.Body, InternalBody); }
+        }
+
+        /// <summary>
+        /// The reference frame with its origin at the body's center that does not rotate. The
+        /// z axis points to the north pole, and the x and y axes are fixed relative to the
+        /// stars.
+        /// </summary>
+        [KRPCProperty]
+        public ReferenceFrame NonRotatingReferenceFrame {
+            get { return new ReferenceFrame (ReferenceFrame.Kind.BodyNonRotating, InternalBody); }
+        }
+
+        /// <summary>
+        /// The position of the center of the body, in meters.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the position.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> Position (ReferenceFrame referenceFrame)
+        {
+            return Vectors.ToTuple (referenceFrame.PositionFromEcl (InternalBody.GetPositionEcl ()));
+        }
+
+        /// <summary>
+        /// The velocity of the body, in meters per second.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the velocity.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> Velocity (ReferenceFrame referenceFrame)
+        {
+            return Vectors.ToTuple (referenceFrame.VelocityFromEcl (InternalBody.GetPositionEcl (), InternalBody.GetVelocityEcl ()));
+        }
+
+        /// <summary>
+        /// The rotation of <see cref="ReferenceFrame"/> relative to the given frame.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the rotation.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double, double> Rotation (ReferenceFrame referenceFrame)
+        {
+            return Vectors.ToTuple (referenceFrame.RotationFromEcl (InternalBody.GetCcf2Cce ()));
+        }
+
+        /// <summary>
+        /// The angular velocity of the body, in radians per second. The vector points along
+        /// the axis of rotation, and its length is the rate of rotation.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the angular velocity.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> AngularVelocity (ReferenceFrame referenceFrame)
+        {
+            return Vectors.ToTuple (referenceFrame.AngularVelocityFromEcl (InternalBody.GetAngularVelocityCce ()));
+        }
+
+        /// <summary>
+        /// The position of a point on the surface, at the body's mean radius, in meters.
+        /// </summary>
+        /// <param name="latitude">Latitude, in degrees.</param>
+        /// <param name="longitude">Longitude, in degrees.</param>
+        /// <param name="referenceFrame">The reference frame of the position.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> SurfacePosition (double latitude, double longitude, ReferenceFrame referenceFrame)
+        {
+            var lat = latitude * (Math.PI / 180d);
+            var lon = longitude * (Math.PI / 180d);
+            var positionCcf = new double3 (Math.Cos (lat) * Math.Cos (lon), Math.Cos (lat) * Math.Sin (lon), Math.Sin (lat)) * InternalBody.MeanRadius;
+            var positionEcl = InternalBody.GetPositionEcl () + positionCcf.Transform (InternalBody.GetCcf2Cce ());
+            return Vectors.ToTuple (referenceFrame.PositionFromEcl (positionEcl));
         }
     }
 }

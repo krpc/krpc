@@ -204,6 +204,41 @@ namespace KRPC.KSA.Services
             get { return InternalVehicle.AccelerationBody.Length () / Engines.G0; }
         }
 
+        /// <summary>
+        /// The angle between the direction the vehicle points in and its velocity relative to
+        /// the surface, in the vehicle's pitch plane, in degrees. Positive when the nose is
+        /// above the velocity.
+        /// </summary>
+        [KRPCProperty]
+        public double AngleOfAttack {
+            get {
+                var velocity = SurfaceVelocityHelm;
+                return velocity == double3.Zero ? 0 : RadiansToDegrees (Math.Atan2 (velocity.Z, velocity.X));
+            }
+        }
+
+        /// <summary>
+        /// The angle between the direction the vehicle points in and its velocity relative to
+        /// the surface, in the vehicle's yaw plane, in degrees. Positive when the nose is to
+        /// the right of the velocity.
+        /// </summary>
+        [KRPCProperty]
+        public double SideslipAngle {
+            get {
+                var velocity = SurfaceVelocityHelm;
+                return velocity == double3.Zero ? 0 : RadiansToDegrees (Math.Atan2 (-velocity.Y, velocity.X));
+            }
+        }
+
+        // The velocity relative to the surface in the vehicle's frame, with x forward, y right
+        // and z down
+        double3 SurfaceVelocityHelm {
+            get {
+                var v = InternalVehicle;
+                return v.GetSurfaceVelocityCci ().Transform (v.GetHelm2Cci ().Inverse ());
+            }
+        }
+
         static double RadiansToDegrees (double radians)
         {
             return radians * (180d / Math.PI);

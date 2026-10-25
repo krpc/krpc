@@ -121,3 +121,41 @@ class TestAutoPilot(ksatest.TestCase):
         self.auto_pilot.engage()
         self.auto_pilot.wait()
         self.assertLess(self.auto_pilot.error, 2)
+
+    def test_target_direction(self):
+        frame = self.vehicle.orbital_reference_frame
+        self.auto_pilot.target_direction((0, 1, 0), frame)
+        self.assertEqual(self.modes.attitude, self.auto_pilot.mode)
+        self.auto_pilot.engage()
+        self.auto_pilot.wait()
+        direction = self.vehicle.direction(frame)
+        self.assertGreater(direction[1], math.cos(math.radians(3)))
+
+    def test_invalid_direction(self):
+        with self.assertRaises(ValueError):
+            self.auto_pilot.target_direction((0, 0, 0), self.vehicle.reference_frame)
+
+    def surface_velocity_pitch_and_heading(self):
+        body_frame = self.vehicle.orbit.body.reference_frame
+        velocity = self.ksa.transform_direction(
+            self.vehicle.velocity(body_frame),
+            body_frame,
+            self.vehicle.surface_reference_frame,
+        )
+        speed = math.sqrt(sum(x * x for x in velocity))
+        pitch = math.degrees(math.asin(velocity[2] / speed))
+        heading = math.degrees(math.atan2(velocity[0], velocity[1])) % 360
+        return pitch, heading
+
+    def test_angle_of_attack_and_sideslip(self):
+        # Pitching above and turning right of the velocity, with the vehicle level
+        pitch, heading = self.surface_velocity_pitch_and_heading()
+        for offset_pitch, offset_heading in ((10, 0), (-10, 0), (0, 10)):
+            self.auto_pilot.target_pitch_and_heading(
+                pitch + offset_pitch, (heading + offset_heading) % 360
+            )
+            self.auto_pilot.target_roll = 0
+            self.auto_pilot.engage()
+            self.auto_pilot.wait()
+            self.assertAlmostEqual(offset_pitch, self.flight.angle_of_attack, delta=3)
+            self.assertAlmostEqual(offset_heading, self.flight.sideslip_angle, delta=3)
