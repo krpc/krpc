@@ -20,6 +20,7 @@ with the kRPC @KRPC_VERSION@ clients.
 
    getting-started
    clients
+   tutorials/launch-into-orbit
    tutorials/raise-orbit
    tutorials/circularize
 
