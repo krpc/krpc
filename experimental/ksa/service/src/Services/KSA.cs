@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Brutal.Numerics;
 using KRPC.KSA.Utils;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -98,6 +99,75 @@ namespace KRPC.KSA.Services
         {
             if (Universe.IsAutoWarpActive)
                 throw new YieldException<Action> (WaitForWarp);
+        }
+
+        /// <summary>
+        /// Launch a vehicle from a launch site, and make it the active vehicle. Returns once
+        /// the vehicle is on the launch site.
+        /// </summary>
+        /// <param name="name">The name of the vehicle, one of the game's default vehicles or
+        /// a vehicle saved by the player.</param>
+        /// <param name="site">The name of the launch site. See <see cref="Body.LaunchSites"/>.</param>
+        /// <returns>The vehicle. Its name is the vehicle's name, with a number appended if
+        /// another vehicle has that name.</returns>
+        /// <remarks>
+        /// Throws an exception if there is no such vehicle or launch site.
+        /// </remarks>
+        [KRPCProcedure]
+        public static Vehicle LaunchVehicle (string name, string site)
+        {
+            var save = DefaultVehicleSaves.FindSave (name);
+            if (save == null) {
+                foreach (var playerSave in VehicleSaves.AsSpan ()) {
+                    if (playerSave.Id == name)
+                        save = playerSave;
+                }
+            }
+            if (save == null)
+                throw new ArgumentException ("No vehicle named " + name);
+            Celestial celestial = null;
+            LocationReference location = null;
+            foreach (var body in Utils.Vehicles.Bodies) {
+                if (body is Celestial candidate && candidate.GetLocation (site) is LandmarkReference { IsLaunchPad: true } landmark) {
+                    celestial = candidate;
+                    location = landmark;
+                }
+            }
+            if (location == null)
+                throw new ArgumentException ("No launch site named " + site);
+            var tree = save.Load (Program.MainViewport) ?? throw new InvalidOperationException ("Failed to load vehicle " + name);
+            tree.ApplyTankAssignments ();
+            var id = name;
+            for (var i = 1; Universe.CurrentSystem.All.TryGet (id, out Astronomical _); i++)
+                id = name + "_" + i;
+            CrewAssignmentWindow.ValidateSeatAssignments (tree, id, hasLaunched: false);
+            // As the game's launch menu places a vehicle
+            var mass = tree.ComputeInertMassPropertiesAsmb () + tree.ComputePropellantMassPropertiesAsmb ();
+            var (min, max) = tree.ComputeBoundingBoxAsmb ();
+            var state = global::KSA.Vehicle.GetInitialKinematicStateForLocation (
+                celestial, Universe.GetNextSimStep ().NextTime, location.Latitude.ToDegrees (), location.Longitude.ToDegrees (),
+                min, max, double3.Unpack (in mass.Offset), new Random ().RandomColor ());
+            InputEvents.CreateVehicleBuffer.Add (new InputEvents.CreateVehicleData {
+                System = Universe.CurrentSystem,
+                Parent = state.Orbit.Parent,
+                Id = id,
+                Body2Cce = state.Body2Cce,
+                BodyRates = state.BodyRates,
+                Orbit = state.Orbit,
+                Root = tree.Root
+            });
+            return WaitForLaunch (id, 0);
+        }
+
+        static Vehicle WaitForLaunch (string id, int updates)
+        {
+            if (Universe.CurrentSystem.All.TryGet (id, out Astronomical created) && created is global::KSA.Vehicle vehicle) {
+                Universe.FollowInHoveredViewport (vehicle);
+                return new Vehicle (vehicle);
+            }
+            if (updates >= 10)
+                throw new InvalidOperationException ("The vehicle was not created");
+            throw new YieldException<Func<Vehicle>> (() => WaitForLaunch (id, updates + 1));
         }
 
         /// <summary>

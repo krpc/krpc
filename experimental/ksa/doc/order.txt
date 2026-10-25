@@ -4,6 +4,7 @@ KSA.Bodies
 KSA.UT
 KSA.SimulationSpeed
 KSA.WarpTo
+KSA.LaunchVehicle
 KSA.TransformPosition
 KSA.TransformDirection
 KSA.TransformRotation
@@ -101,6 +102,7 @@ KSA.Body.Satellites
 KSA.Body.Orbit
 KSA.Body.SurfaceHeight
 KSA.Body.BedrockHeight
+KSA.Body.LaunchSites
 KSA.Body.ReferenceFrame
 KSA.Body.NonRotatingReferenceFrame
 KSA.Body.Position

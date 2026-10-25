@@ -151,6 +151,19 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The names of the launch sites on the body. See <see cref="KSA.LaunchVehicle"/>.
+        /// </summary>
+        [KRPCProperty]
+        public IList<string> LaunchSites {
+            get {
+                if (InternalBody is not Celestial celestial)
+                    return new List<string> ();
+                return celestial.BodyTemplate.Locations.OfType<LandmarkReference> ()
+                    .Where (landmark => landmark.IsLaunchPad).Select (landmark => landmark.Id).ToList ();
+            }
+        }
+
+        /// <summary>
         /// The reference frame fixed to the body, with its origin at the body's center. The
         /// z axis points to the north pole, the x axis to latitude and longitude zero, and the
         /// y axis to latitude zero and longitude 90 degrees east. The frame rotates with the

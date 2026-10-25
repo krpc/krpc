@@ -153,12 +153,12 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
 
 | Class | Members |
 |---|---|
-| `KSA` | `ActiveVehicle`, `Vehicles`, `Bodies`, `UT`, `SimulationSpeed`, `WarpTo()`, `TransformPosition()`, `TransformDirection()`, `TransformRotation()`, `TransformVelocity()` |
+| `KSA` | `ActiveVehicle`, `Vehicles`, `Bodies`, `UT`, `SimulationSpeed`, `WarpTo()`, `LaunchVehicle()`, `TransformPosition()`, `TransformDirection()`, `TransformRotation()`, `TransformVelocity()` |
 | `Vehicle` | `Name`, `Situation`, `HasLaunched`, `LaunchTime`, `Mass`, `PropellantMass`, `Thrust`, `AvailableThrust`, `SpecificImpulse`, `Parts`, `RootPart`, `Resources`, `DeltaV`, `Sequences`, `TargetVehicle`, `TargetBody`, `Burns`, `AddBurn()`, `Orbit`, `Flight`, `Control`, `AutoPilot`, `ReferenceFrame`, `SurfaceReferenceFrame`, `OrbitalReferenceFrame`, `Position()`, `Velocity()`, `Direction()`, `Rotation()`, `AngularVelocity()` |
 | `Sequence` | `Number`, `Activated`, `DeltaV`, `Thrust`, `SpecificImpulse`, `BurnTime`, `StartMass`, `EndMass`, `PropellantMass` |
 | `Orbit` | `Body`, `Apoapsis`, `Periapsis`, `ApoapsisAltitude`, `PeriapsisAltitude`, `SemiMajorAxis`, `Speed`, `Radius`, `Period`, `TimeToApoapsis`, `TimeToPeriapsis`, `Eccentricity`, `Inclination`, `LongitudeOfAscendingNode`, `ArgumentOfPeriapsis`, `TrueAnomaly`, `MeanAnomaly`, `TrueAnomalyAtUT()`, `UTAtTrueAnomaly()`, `RadiusAt()`, `PositionAt()`, `VelocityAt()`, `StartUT`, `EndUT`, `EndTransition`, `TimeToSOIChange`, `NextOrbit` |
 | `OrbitTransition` | `None`, `Encounter`, `Escape`, `Impact`, `Burn` |
-| `Body` | `Name`, `Mass`, `GravitationalParameter`, `Radius`, `AtmosphereRadius`, `SurfaceGravity`, `RotationalSpeed`, `RotationalPeriod`, `SphereOfInfluence`, `Parent`, `Satellites`, `Orbit`, `SurfaceHeight()`, `BedrockHeight()`, `ReferenceFrame`, `NonRotatingReferenceFrame`, `Position()`, `Velocity()`, `Rotation()`, `AngularVelocity()`, `SurfacePosition()` |
+| `Body` | `Name`, `Mass`, `GravitationalParameter`, `Radius`, `AtmosphereRadius`, `SurfaceGravity`, `RotationalSpeed`, `RotationalPeriod`, `SphereOfInfluence`, `Parent`, `Satellites`, `Orbit`, `SurfaceHeight()`, `BedrockHeight()`, `LaunchSites`, `ReferenceFrame`, `NonRotatingReferenceFrame`, `Position()`, `Velocity()`, `Rotation()`, `AngularVelocity()`, `SurfacePosition()` |
 | `ReferenceFrame` | Obtained from vehicles and bodies |
 | `Flight` | `MeanAltitude`, `SurfaceAltitude`, `BedrockAltitude`, `Elevation`, `TimeToImpact`, `Latitude`, `Longitude`, `Speed`, `HorizontalSpeed`, `VerticalSpeed`, `Pitch`, `Heading`, `Roll`, `StaticPressure`, `AtmosphereDensity`, `DynamicPressure`, `GForce`, `AngleOfAttack`, `SideslipAngle` |
 | `Control` | `Throttle`, `EngineOn`, `Stabilization`, `RCS`, `ActiveSequence`, `ActivateNextSequence()` |
@@ -193,6 +193,8 @@ with the kRPC 0.7.0 client libraries. Its readme shows each language.
  * `Thrust` and `SpecificImpulse` sum the active engines' performance at their commanded and at
    full throttle, at the current pressure.
  * `WarpTo` uses the game's auto-warp, and returns when the warp ends.
+ * `LaunchVehicle` places a default or saved vehicle on a launch pad, as the game's launch menu
+   does.
  * A vehicle's `Orbit` follows the vehicle. `NextOrbit` and `Burn.Orbit` are snapshots of the
    game's patched-conic prediction, which it updates on a worker thread.
  * Part modules change through the game's input events, which apply at the start of the next

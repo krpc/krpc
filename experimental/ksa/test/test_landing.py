@@ -1,4 +1,8 @@
+import math
+
 import ksatest
+
+SITE = "CCSFS LC-39A"
 
 
 class TestTerrain(ksatest.TestCase):
@@ -41,3 +45,68 @@ class TestTerrain(ksatest.TestCase):
             delta=10,
         )
 
+
+class TestLaunch(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.earth = cls.ksa.bodies["Earth"]
+        cls.vehicle = cls.ksa.launch_vehicle("Rocket", SITE)
+        cls.flight = cls.vehicle.flight
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.load_save()
+
+    def test_launch_sites(self):
+        self.assertIn(SITE, self.earth.launch_sites)
+        self.assertEqual([], self.ksa.bodies["Jupiter"].launch_sites)
+
+    def test_on_the_pad(self):
+        self.assertEqual("Rocket_1", self.vehicle.name)
+        self.assertEqual(self.vehicle, self.ksa.active_vehicle)
+        self.assertEqual(self.earth, self.vehicle.orbit.body)
+        self.assertAlmostEqual(28.608, self.flight.latitude, delta=0.01)
+        self.assertAlmostEqual(-80.604, self.flight.longitude, delta=0.01)
+        self.assertLess(self.flight.surface_altitude, 50)
+        self.assertAlmostEqual(90, self.flight.pitch, delta=1)
+        self.assertLess(self.flight.speed, 1)
+
+    def test_invalid_launch(self):
+        with self.assertRaises(ValueError):
+            self.ksa.launch_vehicle("No such vehicle", SITE)
+        with self.assertRaises(ValueError):
+            self.ksa.launch_vehicle("Rocket", "No such site")
+
+
+class TestHop(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.vehicle = cls.ksa.launch_vehicle("Rocket", SITE)
+        cls.flight = cls.vehicle.flight
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.load_save()
+
+    def test_hop(self):
+        # A short burn straight up, and the predicted impact on the way back down
+        control = self.vehicle.control
+        self.assertTrue(math.isnan(self.flight.time_to_impact))
+        control.throttle = 1
+        control.activate_next_sequence()
+        control.engine_on = True
+        ksatest.wait_until(lambda: self.flight.surface_altitude > 200, timeout=30)
+        control.engine_on = False
+        ksatest.wait_until(
+            lambda: not math.isnan(self.flight.time_to_impact), timeout=30
+        )
+        self.assertGreater(self.flight.time_to_impact, 0)
+        orbit = self.vehicle.orbit
+        self.assertEqual(self.ksa.OrbitTransition.impact, orbit.end_transition)
+        self.assertAlmostEqual(
+            orbit.end_ut - self.ksa.ut, self.flight.time_to_impact, delta=1
+        )
