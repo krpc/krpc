@@ -5,4 +5,4 @@ C-nano
    :maxdepth: 2
 
    cnano/client
-   api/cnano
+   cnano/api/ksa

@@ -5,4 +5,4 @@ C++
    :maxdepth: 2
 
    cpp/client
-   api/cpp
+   cpp/api/ksa

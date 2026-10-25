@@ -55,8 +55,10 @@ experimental/ksa/docs.sh
 experimental/ksa/docs.sh --serve   # also serve it on http://127.0.0.1:8000
 ```
 
- * `krpc-docgen` generates the API pages for each client language from `doc/api/api.tmpl` and
-   `bin/KRPC.KSA.json`. `doc/order.txt` orders the members, and lists every one of them.
+ * `krpc-docgen` generates the API pages for each client language from the templates in
+   `doc/api` and `bin/KRPC.KSA.json`, one page per template. `doc/api/ksa.tmpl` lists the pages,
+   and each page in `doc/api/ksa` covers a group of classes. `doc/order.txt` orders the members,
+   and lists every one of them.
  * Sphinx and its extensions, at the versions of the kRPC docs build, are installed into
    `bin/doc-venv` from `doc/requirements.txt`.
  * The pages follow the layout of the kRPC documentation, with sphinx-design cards on the home

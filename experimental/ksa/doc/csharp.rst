@@ -5,4 +5,4 @@ C#
    :maxdepth: 2
 
    csharp/client
-   api/csharp
+   csharp/api/ksa

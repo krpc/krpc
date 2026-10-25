@@ -5,4 +5,4 @@ Python
    :maxdepth: 2
 
    python/client
-   api/python
+   python/api/ksa

@@ -5,4 +5,4 @@ Lua
    :maxdepth: 2
 
    lua/client
-   api/lua
+   lua/api/ksa

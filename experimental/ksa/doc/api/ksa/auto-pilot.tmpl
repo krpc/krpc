@@ -1,0 +1,10 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('KSA') }}
+{% import domain.macros as macros with context %}
+
+Auto-Pilot
+==========
+
+{{ macros.class(services['KSA'].classes['AutoPilot']) }}
+{{ macros.enumeration(services['KSA'].enumerations['AutoPilotMode']) }}

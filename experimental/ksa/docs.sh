@@ -40,9 +40,14 @@ cp -r "$here/doc" "$src"
 rm "$src/requirements.txt"
 mkdir -p "$src/scripts"
 cp "$here"/examples/*.py "$src/scripts/"
+# One API page per template, under each language's api folder
 for language in python csharp cpp cnano java lua; do
-  "$here/bin/venv/bin/krpc-docgen" "$language" "$here/doc/api/api.tmpl" "$here/doc/order.txt" \
-    "$src/api/$language.rst" "$here/bin/KRPC.KSA.json"
+  (cd "$here/doc/api" && find . -name '*.tmpl') | while read -r template; do
+    page="$src/$language/api/${template%.tmpl}.rst"
+    mkdir -p "$(dirname "$page")"
+    "$here/bin/venv/bin/krpc-docgen" "$language" "$here/doc/api/$template" "$here/doc/order.txt" \
+      "$page" "$here/bin/KRPC.KSA.json"
+  done
 done
 
 find "$src" -name '*.rst' -exec sed -i \

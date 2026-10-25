@@ -1,0 +1,10 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('KSA') }}
+{% import domain.macros as macros with context %}
+
+Vehicle
+=======
+
+{{ macros.class(services['KSA'].classes['Vehicle']) }}
+{{ macros.enumeration(services['KSA'].enumerations['Situation']) }}

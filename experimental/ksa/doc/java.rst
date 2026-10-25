@@ -5,4 +5,4 @@ Java
    :maxdepth: 2
 
    java/client
-   api/java
+   java/api/ksa

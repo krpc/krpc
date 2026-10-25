@@ -19,7 +19,7 @@ extensions = [
 ]
 suppress_warnings = ["design.fa-build"]
 
-exclude_patterns = ["api/api.tmpl", "order.txt"]
+exclude_patterns = ["api", "order.txt"]
 
 html_theme = "pydata_sphinx_theme"
 html_static_path = ["_static"]
