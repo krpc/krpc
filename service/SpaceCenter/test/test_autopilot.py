@@ -1876,14 +1876,10 @@ TestAutoPilotLaunchGDLV3 = _make_autopilot_launch_test_class(
 )
 
 
-# Straight-and-level flight-hold tests for stock aircraft: place the craft in level
-# atmospheric flight and confirm the autopilot holds (or recovers to) a smooth, steady
-# wings-level attitude. Each craft is flown near a speed at which level flight is
-# sustainable; too slow and it mushes (the commanded pitch is not an equilibrium), which
-# is a craft limitation rather than an autopilot one. A roll upset is deliberately not
-# tested here: on aircraft the autopilot's roll control excites a sustained roll
-# limit-cycle (a known limitation of the constant-torque model on aero-controlled craft),
-# so these focus on the pitch/heading hold that does converge cleanly.
+# Flight tests for stock aircraft: place the craft in level atmospheric flight, confirm the
+# autopilot holds a steady wings-level attitude, and step the pitch, bank and heading. Each
+# craft is flown near a speed at which level flight is sustainable. Too slow and it mushes,
+# as the commanded pitch is not an equilibrium.
 def _make_autopilot_flight_test_class(  # noqa: PLR0913
     test_name,
     vessel_name,
@@ -1900,6 +1896,8 @@ def _make_autopilot_flight_test_class(  # noqa: PLR0913
     hold_attitude_error=2,
     attitude_tolerance=2,
     no_pitch_upset=False,
+    step_overshoot=15,
+    step_settle_time=8,
 ):
     class TestAutoPilotFlightBase(krpctest.TestCase):
         @classmethod
@@ -1985,6 +1983,59 @@ def _make_autopilot_flight_test_class(  # noqa: PLR0913
             self.assert_steady(samples)
             self.assert_level()
 
+        def step(self, axis, target, band, settle_time=step_settle_time):
+            """Hold level, step one of (pitch, heading offset, roll) to the target, and
+            check the response: the overshoot, the time to settle within the band, and
+            the final error, all in degrees."""
+            self.place(0, 0)
+            self.hold(0, 0)
+            self.wait(settle_delay)
+            conn = self.connect()
+            space_center = conn.space_center
+            flight = self.vessel.flight(self.vessel.surface_reference_frame)
+
+            def attitude():
+                return (space_center.ut, flight.pitch, flight.heading, flight.roll)
+
+            targets = [0.0, 0.0, 0.0]
+            targets[axis] = target
+            samples = []
+            with conn.stream(conn.compile(attitude)) as stream:
+                start = stream()[0]
+                self.ap.target_pitch_and_heading(targets[0], heading + targets[1])
+                self.ap.target_roll = targets[2]
+                while True:
+                    ut, pitch, actual_heading, roll = stream()
+                    value = (pitch, (actual_heading - heading + 180) % 360 - 180, roll)
+                    if not samples or ut != samples[-1][0]:
+                        samples.append((ut - start, value[axis]))
+                    if ut - start > settle_time + 4:
+                        break
+                    self.wait(0.01)
+            # Overshoot past the target, as a percentage of the step
+            overshoot = max((v - target) * math.copysign(1, target) for _, v in samples)
+            self.assertLess(
+                100 * overshoot / abs(target), step_overshoot, "overshot the step"
+            )
+            # The last time outside the band
+            unsettled = [t for t, v in samples if abs(v - target) > band]
+            self.assertLess(
+                unsettled[-1] if unsettled else 0, settle_time, "did not settle"
+            )
+            self.assertAlmostEqual(target, samples[-1][1], delta=band)
+
+        def test_pitch_step(self):
+            # A 10 degree pitch step settles without oscillating
+            self.step(0, 10, 0.5)
+
+        def test_bank_step(self):
+            # A 30 degree bank settles without the roll limit-cycling
+            self.step(2, 30, 1)
+
+        def test_heading_step(self):
+            # A small heading change, wings level, settles without departing
+            self.step(1, 5, 0.5)
+
         @unittest.skipIf(no_pitch_upset, "not supported on this craft")
         def test_recover_from_pitch_upset(self):
             # Place the aircraft pitched up, command level flight, and confirm the
@@ -2015,11 +2066,28 @@ TestAutoPilotFlightAeris4A = _make_autopilot_flight_test_class(
     no_pitch_upset=True,
 )
 
-# A small, slow stock light aircraft.
+# A small, slow stock light aircraft. Its pitch takes about 8 seconds to settle after a step.
 TestAutoPilotFlightGull = _make_autopilot_flight_test_class(
     "TestAutoPilotFlightGull",
     "Gull",
     speed=35,
+    step_settle_time=10,
+)
+
+# A mid-size stock jet, whose elevators limit-cycled above about 150 m/s with the
+# actuator rate ignored.
+TestAutoPilotFlightThunderbird = _make_autopilot_flight_test_class(
+    "TestAutoPilotFlightThunderbird",
+    "Thunderbird",
+    speed=150,
+)
+
+# A large stock airliner, with little elevator authority and outboard ailerons that
+# reach full deflection at about a quarter of full roll input.
+TestAutoPilotFlightMallard = _make_autopilot_flight_test_class(
+    "TestAutoPilotFlightMallard",
+    "Mallard",
+    speed=120,
 )
 
 
