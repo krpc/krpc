@@ -1,11 +1,30 @@
-# kRPC for KSA server settings. Read once, when the game starts.
+# kRPC for KSA server settings, also set from the kRPC window in game.
 
 auto_start = true
 auto_accept_connections = true
+confirm_remove_client = true
+pause_server_with_game = false
+
+# Rate control. Times are in microseconds
+one_rpc_per_update = false
+max_time_per_update = 5000
+adaptive_rate_control = true
+blocking_recv = true
+recv_timeout = 1000
+tick_hold_timeout = 1000000
+
+verbose_errors = true
+debug_logging = false
+main_window_visible = false
+info_window_visible = false
+# Window (x, y, width, height) in pixels, with a zero width for the default
+main_window_rect = [0, 0, 0, 0]
+info_window_rect = [0, 0, 0, 0]
 
 [[servers]]
 name = "Default Server"
-# ProtocolBuffersOverTCP, ProtocolBuffersOverWebsockets or ProtocolBuffersOverLocalSocket
+# ProtocolBuffersOverTCP, ProtocolBuffersOverWebsockets, ProtocolBuffersOverLocalSocket
+# or ProtocolBuffersOverSerialIO
 protocol = "ProtocolBuffersOverTCP"
 address = "127.0.0.1"
 rpc_port = 50000

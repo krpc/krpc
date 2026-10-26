@@ -8,6 +8,12 @@
   <ItemGroup>
     <Compile Include="src/Addon.cs" />
     <Compile Include="src/ConfigurationFile.cs" />
+    <Compile Include="src/UI/ConsoleWindow.cs" />
+    <Compile Include="src/UI/EditServer.cs" />
+    <Compile Include="src/UI/InfoWindow.cs" />
+    <Compile Include="src/UI/MainWindow.cs" />
+    <Compile Include="src/UI/MenuBar.cs" />
+    <Compile Include="src/UI/PromptPopup.cs" />
   </ItemGroup>
   <ItemGroup>
     <!-- Shipped with StarMap, which loads them before any mod -->
