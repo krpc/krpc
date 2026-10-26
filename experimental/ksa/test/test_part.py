@@ -1,0 +1,182 @@
+import ksatest
+
+
+class TestPart(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.vehicle = cls.ksa.active_vehicle
+        cls.parts = cls.vehicle.parts
+
+    def engine_parts(self):
+        return [part for part in self.parts if part.engine is not None]
+
+    def test_tree(self):
+        root = self.vehicle.root_part
+        self.assertIn(root, self.parts)
+        self.assertIsNone(root.parent)
+        for part in self.parts:
+            self.assertEqual(self.vehicle, part.vehicle)
+            for child in part.children:
+                self.assertEqual(part, child.parent)
+        # Every part is reachable from the root
+        reached = []
+        pending = [root]
+        while pending:
+            part = pending.pop()
+            reached.append(part)
+            pending.extend(part.children)
+        self.assertEqual(len(self.parts), len(reached))
+
+    def test_names(self):
+        for part in self.parts:
+            self.assertTrue(part.name)
+            self.assertTrue(part.title)
+
+    def test_mass(self):
+        self.assertAlmostEqual(
+            self.vehicle.mass,
+            sum(part.mass for part in self.parts),
+            delta=self.vehicle.mass * 1e-4,
+        )
+        for part in self.parts:
+            self.assertGreaterEqual(part.mass, part.dry_mass)
+
+    def test_resources(self):
+        resources = self.vehicle.resources
+        self.assertTrue(resources)
+        self.assertAlmostEqual(
+            self.vehicle.propellant_mass,
+            sum(resource.amount for resource in resources),
+            delta=self.vehicle.propellant_mass * 1e-4,
+        )
+        for resource in resources:
+            self.assertGreater(resource.amount, 0)
+            self.assertLessEqual(resource.amount, resource.max * (1 + 1e-5))
+            in_parts = sum(
+                r.amount
+                for part in self.parts
+                for r in part.resources
+                if r.name == resource.name
+            )
+            self.assertAlmostEqual(resource.amount, in_parts, delta=1)
+
+    def test_sequences(self):
+        numbers = [sequence.number for sequence in self.vehicle.sequences]
+        for part in self.engine_parts():
+            self.assertIn(part.sequence, numbers)
+
+    def test_position(self):
+        # The vehicle frame points forward along x, so the engines are behind the capsule
+        frame = self.vehicle.reference_frame
+        capsule = self.vehicle.root_part.position(frame)
+        for part in self.engine_parts():
+            self.assertLess(part.position(frame)[0], capsule[0])
+
+    def test_rotation(self):
+        rotation = self.vehicle.root_part.rotation(self.vehicle.reference_frame)
+        self.assertAlmostEqual(1, sum(x * x for x in rotation), delta=1e-6)
+
+    def test_engines(self):
+        engines = [part.engine for part in self.engine_parts()]
+        self.assertTrue(engines)
+        # An engine's performance updates in the solver step after it changes
+        ksatest.wait_until(
+            lambda: (
+                abs(
+                    self.vehicle.available_thrust
+                    - sum(engine.available_thrust for engine in engines)
+                )
+                < self.vehicle.available_thrust * 1e-3
+            )
+        )
+        for engine in engines:
+            self.assertEqual(0, engine.thrust)
+            if engine.available_thrust > 0:
+                self.assertTrue(engine.active)
+                self.assertTrue(engine.has_propellant)
+                self.assertGreater(engine.specific_impulse, 0)
+
+    def test_engine_active(self):
+        engine = next(
+            part.engine
+            for part in self.engine_parts()
+            if part.engine.available_thrust > 0
+        )
+        thrust = self.vehicle.available_thrust
+        try:
+            engine.active = False
+            self.assertFalse(engine.active)
+            self.assertEqual(0, engine.available_thrust)
+            self.assertLess(self.vehicle.available_thrust, thrust)
+        finally:
+            engine.active = True
+        self.assertTrue(engine.active)
+
+    def test_rcs(self):
+        rcs = next(part.rcs for part in self.parts if part.rcs is not None)
+        active = rcs.active
+        try:
+            rcs.active = not active
+            self.assertEqual(not active, rcs.active)
+        finally:
+            rcs.active = active
+        self.assertEqual(active, rcs.active)
+
+    def test_burn_uses_propellant(self):
+        amounts = {r.name: r.amount for r in self.vehicle.resources}
+        control = self.vehicle.control
+        throttle = control.throttle
+        try:
+            control.throttle = 1
+            control.engine_on = True
+            ksatest.wait_until(lambda: self.vehicle.thrust > 0, timeout=5)
+            engine = next(
+                part.engine for part in self.engine_parts() if part.engine.thrust > 0
+            )
+            self.assertGreater(engine.thrust, 0)
+            ksatest.wait_until(
+                lambda: any(r.amount < amounts[r.name] for r in self.vehicle.resources)
+            )
+        finally:
+            control.engine_on = False
+            control.throttle = throttle
+        ksatest.wait_until(lambda: self.vehicle.thrust == 0, timeout=5)
+
+    def test_docking_port(self):
+        port = next(
+            part.docking_port for part in self.parts if part.docking_port is not None
+        )
+        self.assertFalse(port.docked)
+        self.assertIsNone(port.docked_part)
+        with self.assertRaises(RuntimeError):
+            port.undock()
+
+
+class TestDecoupler(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        cls.vehicle = cls.ksa.active_vehicle
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.load_save()
+
+    def test_decouple(self):
+        # The lowest decoupler separates the first stage
+        decouplers = [part for part in self.vehicle.parts if part.decoupler is not None]
+        part = min(decouplers, key=lambda part: part.sequence)
+        decoupler = part.decoupler
+        self.assertTrue(decoupler.enabled)
+        self.assertFalse(decoupler.decoupled)
+        count = len(self.ksa.vehicles)
+        parts = len(self.vehicle.parts)
+        decoupler.decouple()
+        self.assertTrue(decoupler.decoupled)
+        ksatest.wait_until(lambda: len(self.ksa.vehicles) > count)
+        self.assertLess(len(self.vehicle.parts), parts)
+        with self.assertRaises(RuntimeError):
+            decoupler.decouple()

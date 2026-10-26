@@ -1,0 +1,44 @@
+<Project>
+  <!-- The repository's analyzer settings, including the culture analyzers -->
+  <Import Project="$(MSBuildThisFileDirectory)../../Directory.Build.props" />
+
+  <!--
+    The game assemblies come from a local KSA install. KRPC.Core is the .NET build
+    from the krpctools package of a kRPC release, located by build.sh.
+  -->
+  <PropertyGroup>
+    <KSADir Condition="'$(KSADir)' == '' and '$(KSA_DIR)' != ''">$(KSA_DIR)</KSADir>
+    <KSADir Condition="'$(KSADir)' == ''">$(MSBuildThisFileDirectory)../../../KSA</KSADir>
+    <KSADir>$([MSBuild]::EnsureTrailingSlash('$(KSADir)'))</KSADir>
+    <TargetFramework>net10.0</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <Deterministic>true</Deterministic>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+
+  <Target Name="CheckKSAPaths" BeforeTargets="ResolveAssemblyReferences">
+    <Error Condition="!Exists('$(KSADir)KSA.dll')" Text="KSA.dll not found in '$(KSADir)'. Set KSA_DIR to the KSA install." />
+    <Error Condition="'$(KRPCCoreDll)' == '' or !Exists('$(KRPCCoreDll)')" Text="KRPC.Core.dll not found at '$(KRPCCoreDll)'. Build with build.sh." />
+  </Target>
+
+  <ItemGroup>
+    <Reference Include="KRPC.Core">
+      <HintPath>$(KRPCCoreDll)</HintPath>
+    </Reference>
+    <!-- Loaded by the game, so never copied into the mod -->
+    <Reference Include="KSA">
+      <HintPath>$(KSADir)KSA.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="$(KSADir)Brutal.*.dll">
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

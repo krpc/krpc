@@ -1,0 +1,19 @@
+/* Site-specific tweaks on top of pydata-sphinx-theme, as in the kRPC docs. */
+
+/* pydata-sphinx-theme's heading scale is subtle and puts no rule under section
+   headings, so h2 sections and h3 subsections read almost the same. Rule off
+   each section heading and widen the size/weight/spacing gap between the levels
+   so the section -> subsection boundary is clear. */
+.bd-article h2 {
+    margin-top: 2.5rem;
+    padding-bottom: 0.3rem;
+    font-size: 1.9rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--pst-color-border);
+}
+
+.bd-article h3 {
+    margin-top: 2rem;
+    font-size: 1.35rem;
+    font-weight: 600;
+}
