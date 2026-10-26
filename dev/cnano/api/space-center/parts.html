@@ -3742,6 +3742,41 @@ value between -1 and 1, mapped onto the surface’s deploy angle range.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeflectionAngle">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_DeflectionAngle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t" title="krpc_SpaceCenter_ControlSurface_t"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeflectionAngle" title="Link to this definition">#</a><br /></dt>
+<dd><p>The current angle of the control surface from its neutral position, in degrees.
+Includes the <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_DeployAngle" title="krpc_SpaceCenter_ControlSurface_DeployAngle"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ControlSurface_DeployAngle()</span></code></a> while the surface is deployed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_ControlRange">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_ControlRange</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t" title="krpc_SpaceCenter_ControlSurface_t"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_ControlRange" title="Link to this definition">#</a><br /></dt>
+<dd><p>The angle the control surface deflects by for a full control input, in degrees,
+before the <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_AuthorityLimiter" title="krpc_SpaceCenter_ControlSurface_AuthorityLimiter"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ControlSurface_AuthorityLimiter()</span></code></a> is applied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_ActuatorSpeed">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_ActuatorSpeed</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t" title="krpc_SpaceCenter_ControlSurface_t"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_ActuatorSpeed" title="Link to this definition">#</a><br /></dt>
+<dd><p>The rate the control surface deflects at, in degrees per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_SurfaceArea">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_SurfaceArea</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ControlSurface_t" title="krpc_SpaceCenter_ControlSurface_t"><span class="n"><span class="pre">krpc_SpaceCenter_ControlSurface_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">instance</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ControlSurface_t.krpc_SpaceCenter_ControlSurface_SurfaceArea" title="Link to this definition">#</a><br /></dt>
 <dd><p>Surface area of the control surface in <span class="math notranslate nohighlight">\(\mathrm{m^{2}}\)</span>.</p>

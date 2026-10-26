@@ -1748,13 +1748,31 @@ desired. Defaults to 1 <span class="math notranslate nohighlight">\(\mathrm{rad/
 </dd></dl>
 
 <dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.LimitAngularVelocity">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">LimitAngularVelocity</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.LimitAngularVelocity" title="Link to this definition">#</a></dt>
+<dd><p>Whether to also limit the angular velocity to what the control surfaces hold against
+the aerodynamic forces. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When disabled, only <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.MaxAngularVelocity" title="property: KRPC.Client.Services.SpaceCenter.AutoPilot.MaxAngularVelocity"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">AutoPilot.MaxAngularVelocity</span></code></a> limits the angular velocity. Not
+applied when the Ferram Aerospace Research mod is installed.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawAttenuationAngle">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">PitchYawAttenuationAngle</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.AutoPilot.PitchYawAttenuationAngle" title="Link to this definition">#</a></dt>
 <dd><p>The angle, in degrees, at which the autopilot considers the vessel to be pointing close
 to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
 or above this error the target velocity is at full, and below it the target velocity
 ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
-are controlled jointly, so a single angle applies to both. Defaults to 1°.</p>
+are controlled jointly, so a single angle applies to both. Defaults to 1°. The angle in
+use shrinks in proportion to the share of the torque that comes from control surfaces.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1768,7 +1786,9 @@ are controlled jointly, so a single angle applies to both. Defaults to 1°.</p>
 <dd><p>The angle, in degrees, at which the autopilot considers the vessel to be pointing close
 to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
 above this error the target velocity is at full, and below it the target velocity ramps
-linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.</p>
+linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°. The
+angle in use shrinks in proportion to the share of the torque that comes from control
+surfaces.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>

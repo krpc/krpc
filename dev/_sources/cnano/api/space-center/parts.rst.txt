@@ -1983,6 +1983,26 @@ Control Surface
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_DeflectionAngle(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_ControlSurface_t instance)
+
+      The current angle of the control surface from its neutral position, in degrees.
+      Includes the :func:`krpc_SpaceCenter_ControlSurface_DeployAngle` while the surface is deployed.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_ControlRange(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_ControlSurface_t instance)
+
+      The angle the control surface deflects by for a full control input, in degrees,
+      before the :func:`krpc_SpaceCenter_ControlSurface_AuthorityLimiter` is applied.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_ActuatorSpeed(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_ControlSurface_t instance)
+
+      The rate the control surface deflects at, in degrees per second.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_SurfaceArea(krpc_connection_t connection, float * returnValue, krpc_SpaceCenter_ControlSurface_t instance)
 
       Surface area of the control surface in :math:`\mathrm{m^{2}}`.

@@ -1985,6 +1985,26 @@ Control Surface
 
       :Game Scenes: Flight
 
+   .. function:: float deflection_angle()
+
+      The current angle of the control surface from its neutral position, in degrees.
+      Includes the :func:`ControlSurface::deploy_angle` while the surface is deployed.
+
+      :Game Scenes: Flight
+
+   .. function:: float control_range()
+
+      The angle the control surface deflects by for a full control input, in degrees,
+      before the :func:`ControlSurface::authority_limiter` is applied.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. function:: float actuator_speed()
+
+      The rate the control surface deflects at, in degrees per second.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
    .. function:: float surface_area()
 
       Surface area of the control surface in :math:`\mathrm{m^{2}}`.

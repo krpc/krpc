@@ -503,6 +503,20 @@ AutoPilot
 
       :Game Scenes: Flight
 
+   .. function:: bool limit_angular_velocity()
+   .. function:: void set_limit_angular_velocity(bool value)
+
+      Whether to also limit the angular velocity to what the control surfaces hold against
+      the aerodynamic forces. Defaults to ``true``.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When disabled, only :func:`AutoPilot::max_angular_velocity` limits the angular velocity. Not
+         applied when the Ferram Aerospace Research mod is installed.
+
    .. function:: double pitch_yaw_attenuation_angle()
    .. function:: void set_pitch_yaw_attenuation_angle(double value)
 
@@ -510,7 +524,8 @@ AutoPilot
       to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
       or above this error the target velocity is at full, and below it the target velocity
       ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
-      are controlled jointly, so a single angle applies to both. Defaults to 1°.
+      are controlled jointly, so a single angle applies to both. Defaults to 1°. The angle in
+      use shrinks in proportion to the share of the torque that comes from control surfaces.
 
       :Game Scenes: Flight
 
@@ -520,7 +535,9 @@ AutoPilot
       The angle, in degrees, at which the autopilot considers the vessel to be pointing close
       to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
       above this error the target velocity is at full, and below it the target velocity ramps
-      linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.
+      linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°. The
+      angle in use shrinks in proportion to the share of the torque that comes from control
+      surfaces.
 
       :Game Scenes: Flight
 

@@ -4225,6 +4225,41 @@ value between -1 and 1, mapped onto the surface’s deploy angle range.</p>
 </dd></dl>
 
 <dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ControlSurface.DeflectionAngle">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">DeflectionAngle</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ControlSurface.DeflectionAngle" title="Link to this definition">#</a></dt>
+<dd><p>The current angle of the control surface from its neutral position, in degrees.
+Includes the <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.ControlSurface.DeployAngle" title="property: KRPC.Client.Services.SpaceCenter.ControlSurface.DeployAngle"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">ControlSurface.DeployAngle</span></code></a> while the surface is deployed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ControlSurface.ControlRange">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ControlRange</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ControlSurface.ControlRange" title="Link to this definition">#</a></dt>
+<dd><p>The angle the control surface deflects by for a full control input, in degrees,
+before the <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.ControlSurface.AuthorityLimiter" title="property: KRPC.Client.Services.SpaceCenter.ControlSurface.AuthorityLimiter"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">ControlSurface.AuthorityLimiter</span></code></a> is applied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ControlSurface.ActuatorSpeed">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ActuatorSpeed</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ControlSurface.ActuatorSpeed" title="Link to this definition">#</a></dt>
+<dd><p>The rate the control surface deflects at, in degrees per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.SpaceCenter.ControlSurface.SurfaceArea">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SurfaceArea</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ControlSurface.SurfaceArea" title="Link to this definition">#</a></dt>
 <dd><p>Surface area of the control surface in <span class="math notranslate nohighlight">\(\mathrm{m^{2}}\)</span>.</p>

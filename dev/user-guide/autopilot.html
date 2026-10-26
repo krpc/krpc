@@ -523,10 +523,10 @@ each other for control of the vessel. Attempting to enable SAS while the autopil
 engaged raises an <code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code>.</p>
 <p>The autopilot handles structurally flexible craft automatically, detecting and
 suppressing any structural oscillation (wobble) with no tuning required (see
-<a class="reference internal" href="#flexible-craft"><span class="std std-ref">Flexible craft</span></a>), and can ease target changes in over time for
-smooth maneuvers (see <a class="reference internal" href="#target-smoothing"><span class="std std-ref">Smoothing target changes</span></a>). Internally it
-is a two-loop cascade controller; if you want to know how it turns an attitude error into
-control inputs, see <a class="reference internal" href="#how-it-works"><span class="std std-ref">How it works</span></a>.</p>
+<a class="reference internal" href="#flexible-craft"><span class="std std-ref">Flexible craft</span></a>). It models the authority and speed of aircraft
+control surfaces (see <a class="reference internal" href="#aircraft"><span class="std std-ref">Aircraft and control surfaces</span></a>), and can ease
+target changes in over time for smooth maneuvers (see <a class="reference internal" href="#target-smoothing"><span class="std std-ref">Smoothing target changes</span></a>). Internally it is a two-loop cascade controller; if you want to know
+how it turns an attitude error into control inputs, see <a class="reference internal" href="#how-it-works"><span class="std std-ref">How it works</span></a>.</p>
 <section id="setting-the-target-attitude">
 <span id="setting-target-attitude"></span><h3>Setting the target attitude<a class="headerlink" href="#setting-the-target-attitude" title="Link to this heading">#</a></h3>
 <p>An orientation has two parts: where the nose points, and how the vessel is rolled about
@@ -675,12 +675,19 @@ angular velocity used when slewing the vessel towards the target. It is a vector
 three values, one for each of the pitch, roll and yaw axes. Vessels with low or
 moderate control authority rarely reach this cap; it mainly prevents very high-torque
 craft from rotating faster than desired.</p></li>
+<li><p><strong>Limit angular velocity</strong> (default <code class="docutils literal notranslate"><span class="pre">True</span></code>) also caps the target angular velocity at
+the rate the vessel’s spare control torque holds against the aerodynamic forces. It
+applies in proportion to the control surfaces’ share of each axis’s torque. See
+<a class="reference internal" href="#aircraft"><span class="std std-ref">Aircraft and control surfaces</span></a>.</p></li>
 <li><p>The <strong>pitch/yaw attenuation angle</strong> and the <strong>roll attenuation angle</strong> (both default
 to 1 degree) set the region in which the autopilot considers the vessel to be ‘close’
 to the target. The target velocity is at full above this angle and ramps linearly to
 zero at half of it — a <em>pointing deadband</em> — so the vessel coasts to a stop rather than
 the controls chasing sub-degree jitter when the vessel is pointing in the correct
-direction.</p></li>
+direction. The band shrinks in proportion to the control surfaces’ share of the axis’s
+torque, reaching zero on an axis controlled only by surfaces. Control surfaces respond
+in proportion to the command, and a wide band leaves an aircraft holding its trim off
+the target.</p></li>
 <li><p><strong>PI auto-tuning</strong> (default <code class="docutils literal notranslate"><span class="pre">True</span></code>) controls whether the PI controller gains are
 automatically tuned from the vessel’s available torque and moment of inertia, as
 described in <a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">Controller gain tuning</span></a>. When disabled,
@@ -913,6 +920,45 @@ complete — and the controls are therefore not kicked when it finishes. Setting
 soft-start time to zero disables the fade-in.</p>
 </section>
 </section>
+<section id="aircraft-and-control-surfaces">
+<span id="aircraft"></span><h3>Aircraft and control surfaces<a class="headerlink" href="#aircraft-and-control-surfaces" title="Link to this heading">#</a></h3>
+<p>Control surfaces differ from reaction wheels, RCS and engine gimbals in two ways. Their
+torque depends on the airflow, and they take time to deflect. The autopilot models both,
+so an aircraft holds and steps its attitude with the default settings. A rocket with fins
+gets the same handling, in proportion to the fins’ share of its torque.</p>
+<p>The autopilot reads each control surface’s torque, deflection range and actuator speed
+every physics tick, and uses them in four ways:</p>
+<ul class="simple">
+<li><p><strong>Angular velocity limit.</strong> The target angular velocity is capped at the rate the
+vessel’s spare control torque holds against the aerodynamic forces. Rotating faster
+saturates the surfaces, and on an aircraft with little authority that drives an
+oscillation.</p></li>
+<li><p><strong>Actuator lag.</strong> The autopilot allows for the time the surfaces take to reverse when it
+predicts where the vessel will stop. The integral term holds while the surfaces lag the
+command, so it does not wind up during a swing.</p></li>
+<li><p><strong>Bandwidth back-off.</strong> An axis whose surfaces sit at their rate limit most of the time is
+in a limit cycle through that limit. The autopilot lowers the axis’s bandwidth until the
+cycle stops, then restores it slowly.</p></li>
+<li><p><strong>Roll gain.</strong> The game deflects each surface for roll in proportion to its distance from
+the center of mass, so an outboard aileron reaches full deflection at part of full roll
+input. The autopilot inverts this, so its roll command is linear in roll torque.</p></li>
+</ul>
+<p>The angular velocity limit is controlled by the <strong>limit angular velocity</strong> property. To
+limit the angular velocity by the <strong>maximum angular velocity</strong> alone:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ap</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span>
+<span class="c1"># limit the angular velocity by max_angular_velocity only</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">limit_angular_velocity</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">ap</span><span class="o">.</span><span class="n">max_angular_velocity</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#info-window"><span class="std std-ref">info window</span></a> shows each of these per axis, in its AERODYNAMICS
+section. The mechanism is described under <a class="reference internal" href="#control-surfaces"><span class="std std-ref">Control surfaces</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The angular velocity limit is not applied when the Ferram Aerospace Research mod is
+installed.</p>
+</div>
+</section>
 <section id="corner-cases">
 <span id="id7"></span><h3>Corner cases<a class="headerlink" href="#corner-cases" title="Link to this heading">#</a></h3>
 <section id="when-sitting-on-the-launchpad">
@@ -979,9 +1025,9 @@ so the flexibility detector does not see it. Instead, the autopilot treats a sus
 <a class="reference internal" href="#bandwidth-floor"><span class="std std-ref">bandwidth floor</span></a> it uses for a flexible craft — but keeping the
 feedforward, which the slower loop needs to hold attitude — which lets it hold cleanly. As
 with a flexible craft, the reduced bandwidth makes it track a large, continuous slew less
-precisely. Modeling the actuator’s <em>response</em>, not just its peak torque, would let the
-loop keep a higher bandwidth here; until then such a craft is held gently rather than
-tracked tightly.</p>
+precisely. The autopilot models the actuator speed of control surfaces, as described
+under <a class="reference internal" href="#aircraft"><span class="std std-ref">Aircraft and control surfaces</span></a>, but not the slew of an engine
+gimbal. A gimbal-steered craft in this state is held gently rather than tracked tightly.</p>
 <p>While the autopilot detects and damps structural flexibility automatically, it leans
 most heavily on <strong>reducing the affected craft’s control bandwidth</strong> while it holds
 attitude, rather than on the notch filter it also applies. In principle a notch placed
@@ -995,15 +1041,17 @@ while holding, the craft rejects a <em>small</em> disturbance (a light nudge, or
 slowly than a rigid craft would, because it is deliberately running at a reduced
 bandwidth. For the same reason, recovering from a maneuver that has excited the bending
 mode runs at the reduced bandwidth and can take several seconds.</p>
-<p>The autopilot is primarily designed for, and tested in, vacuum. It is a closed-loop
-attitude tracker: aerodynamic torques appear to it as disturbances that the inner loop
-only rejects once an error has built up. In a thick atmosphere — during ascent through
-maximum dynamic pressure, or re-entry at a high angle of attack — the aerodynamic torque
-can be large and fast-changing, and may even exceed the vessel’s control authority. The
-autopilot will still drive towards the target, but a low-authority craft can lag the
-target by many degrees, or fail to hold attitude at all. It also does <strong>not</strong> manage
-angle of attack: keeping the vessel within safe structural and thermal limits in
-atmosphere is the responsibility of your script, not the autopilot.</p>
+<p>In atmosphere, the autopilot models the control surfaces’ authority and speed, and the
+rate the aerodynamics let the vessel turn at. Other aerodynamic torques, such as trim and
+the moment at an angle of attack, appear to it as disturbances. The inner loop rejects
+these only once an error has built up. In a thick atmosphere, during ascent through
+maximum dynamic pressure or re-entry at a high angle of attack, the aerodynamic torque can
+be large, fast-changing, and above the vessel’s control authority. A low-authority craft
+can then lag the target by many degrees, or fail to hold attitude at all.</p>
+<p>The autopilot also does <strong>not</strong> manage angle of attack. Keeping the vessel within safe
+structural and thermal limits in atmosphere is the responsibility of your script. It turns
+the nose by the shortest rotation, so a heading change on an aircraft uses the rudder
+instead of a banked turn. For a large heading change, bank the aircraft from your script.</p>
 </section>
 <section id="the-info-window">
 <span id="info-window"></span><h3>The info window<a class="headerlink" href="#the-info-window" title="Link to this heading">#</a></h3>
@@ -1015,8 +1063,9 @@ state. It is enabled per vessel, and hidden again when the game restarts:</p>
 <p>The window is laid out like a control panel of annunciator lamps and digital registers.
 Lamps are dim when nominal and light amber to flag something worth attention; the
 <strong>ENGAGED</strong> lamp reads green (amber <strong>HELD</strong> while the craft is held on the launch
-clamps). Hovering the mouse over a row shows a tooltip with a short description of it.
-From top to bottom it shows:</p>
+clamps). Hovering the mouse over a row shows a tooltip with a short description of it,
+and clicking a section title collapses or expands that section. From top to bottom it
+shows:</p>
 <ul class="simple">
 <li><p><strong>TARGET</strong> — the attitude being tracked, in pitch, heading and roll (<code class="docutils literal notranslate"><span class="pre">CURRENT</span></code>, the
 target the loop is currently tracking, and <code class="docutils literal notranslate"><span class="pre">COMMAND</span></code>, the commanded target, shown only
@@ -1028,6 +1077,10 @@ mitigations</span></a> structure: the detector readouts (structural level,
 control-output envelope and estimated mode frequency), the gate weights (hold factor,
 latch, ramp, back-off and the net gate), and a lamp per mitigation showing its mode and
 how strongly it is engaged.</p></li>
+<li><p><strong>AERODYNAMICS</strong> — the control surface handling: the share of the torque from control
+surfaces, the angular velocity limit (amber while it holds the target rate), the time for
+the surfaces to reverse, how often their speed holds back the command, and the bandwidth
+cut that follows.</p></li>
 </ul>
 <p>It is purely a diagnostic aid, most useful on a flexible craft where it shows the
 oscillation detector, gates and mitigations working in real time.</p>
@@ -1179,7 +1232,9 @@ the remaining error <span class="math notranslate nohighlight">\(\theta\)</span>
 <p>This is used as the target speed. It is the minimum-time profile: the vessel
 accelerates up to this speed and then decelerates at full torque, coming to rest
 on the target.</p>
-<p>The target speed is capped at the maximum angular velocity <span class="math notranslate nohighlight">\(\omega_{max}\)</span>.</p>
+<p>The target speed is capped at the maximum angular velocity <span class="math notranslate nohighlight">\(\omega_{max}\)</span>. With the
+<strong>limit angular velocity</strong> property set, <span class="math notranslate nohighlight">\(\omega_{max}\)</span> is also capped by the
+<a class="reference internal" href="#aerodynamic-rate-limit"><span class="std std-ref">aerodynamic rate limit</span></a>.</p>
 </section>
 <section id="speed-cone">
 <h4>Speed cone<a class="headerlink" href="#speed-cone" title="Link to this heading">#</a></h4>
@@ -1628,7 +1683,7 @@ on its own without disturbing the others (see <a class="reference internal" href
 the manual controls).</p>
 <p>In outline, the signals flow from the two measured inputs, through the observation and
 gating layers, to the four mitigations that tap into the control loop:</p>
-<figure class="align-center" id="id12">
+<figure class="align-center" id="id14">
 <div class="graphviz"><object data="../_images/graphviz-81e86d43d9fbf730fdc7f0f826012af3fc5a7f8a.svg" type="image/svg+xml" class="graphviz">
 <p class="warning">digraph oscillation {
     rankdir=TB;
@@ -1695,7 +1750,7 @@ gating layers, to the four mitigations that tap into the control loop:</p>
     outf  -&gt; loop;
 }</p></object></div>
 <figcaption>
-<p><span class="caption-text">Oscillation observation, gating and mitigation pipeline.</span><a class="headerlink" href="#id12" title="Link to this image">#</a></p>
+<p><span class="caption-text">Oscillation observation, gating and mitigation pipeline.</span><a class="headerlink" href="#id14" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <p>The observation layer never acts on the craft; it only sets the latch, frequency and
@@ -1787,6 +1842,93 @@ hunting once the craft has settled.</p>
 is safe to leave always on.</p>
 </section>
 </section>
+<section id="control-surfaces">
+<span id="id12"></span><h3>Control surfaces<a class="headerlink" href="#control-surfaces" title="Link to this heading">#</a></h3>
+<p>A control surface’s torque scales with dynamic pressure, and the surface moves to a new
+deflection at a fixed actuator speed. The autopilot models the surfaces through the share
+<span class="math notranslate nohighlight">\(s\)</span> of each axis’s available torque they provide. An axis with no surfaces has
+<span class="math notranslate nohighlight">\(s = 0\)</span>, and the mechanisms below then leave it unchanged.</p>
+<section id="torque-and-roll-gain">
+<h4>Torque and roll gain<a class="headerlink" href="#torque-and-roll-gain" title="Link to this heading">#</a></h4>
+<p>Each surface’s torque is the cross product of its offset from the center of mass and the
+change in lift between no deflection and full deflection. For roll, the game deflects each
+surface by its roll input <span class="math notranslate nohighlight">\(u\)</span> times a roll gain <span class="math notranslate nohighlight">\(K_i\)</span>, clamped to its range.
+The gain grows with the surface’s distance from the center of mass. The roll torque is
+therefore linear in the input until each surface in turn reaches its range:</p>
+<div class="math notranslate nohighlight">
+\[\tau(u) = \tau_{lin}\,u + \sum_i \tau_i \min(1, K_i u)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tau_i\)</span> is surface <span class="math notranslate nohighlight">\(i\)</span>’s torque at full deflection and
+<span class="math notranslate nohighlight">\(\tau_{lin}\)</span> is the torque of the other sources. The roll PI controller outputs a
+fraction <span class="math notranslate nohighlight">\(x\)</span> of the available roll torque, and the autopilot solves
+<span class="math notranslate nohighlight">\(\tau(u) = x\,\tau(1)\)</span> for <span class="math notranslate nohighlight">\(u\)</span> by bisection. A surface with <span class="math notranslate nohighlight">\(K_i &lt; 1\)</span>
+never reaches full deflection, so its available roll torque is scaled by <span class="math notranslate nohighlight">\(K_i\)</span>.</p>
+</section>
+<section id="actuator-model">
+<h4>Actuator model<a class="headerlink" href="#actuator-model" title="Link to this heading">#</a></h4>
+<p>A surface swings through its range <span class="math notranslate nohighlight">\(r\)</span> at its actuator speed <span class="math notranslate nohighlight">\(v\)</span> in
+<span class="math notranslate nohighlight">\(r/v\)</span> seconds. An axis’s swing time <span class="math notranslate nohighlight">\(T_s\)</span> is that of its slowest surface. The
+other torque sources respond at once, so the axis lags the command by:</p>
+<div class="math notranslate nohighlight">
+\[T = s\,T_s\]</div>
+<p>The autopilot tracks a modeled delivered command that moves toward the command at
+<span class="math notranslate nohighlight">\(1/T\)</span> per second. On a tick where the model lags the command, the axis’s integral
+term holds, and the tick counts toward the bandwidth back-off below. The command itself
+goes to the game unchanged.</p>
+</section>
+<section id="reversal-lag">
+<h4>Reversal lag<a class="headerlink" href="#reversal-lag" title="Link to this heading">#</a></h4>
+<p>A rotating vessel keeps turning for about <span class="math notranslate nohighlight">\(T\)</span> after the command reverses, while the
+surfaces swing back. The <a class="reference internal" href="#stopping-distance-feedforward"><span class="std std-ref">stopping-distance feedforward</span></a> adds this to the predicted stopping point:</p>
+<div class="math notranslate nohighlight">
+\[\theta_{ff} = \theta + \Delta\theta + T\,(\omega - \omega_t)\]</div>
+<p>The rate <span class="math notranslate nohighlight">\(\omega_t\)</span> is the target’s own rotation, as a surface tracking a steadily
+moving target never reverses. It is estimated as the angular velocity minus the rate of
+change of the error, low-pass filtered with a 0.5 second time constant. A change in the
+error faster than 0.2 rad/s is a step in the target, and the estimate ignores it.</p>
+</section>
+<section id="bandwidth-back-off">
+<h4>Bandwidth back-off<a class="headerlink" href="#bandwidth-back-off" title="Link to this heading">#</a></h4>
+<p>A step lags the surfaces for a few tenths of a second. A limit cycle through the rate
+limit lags them most of the time. The autopilot tells the two apart by the fraction
+<span class="math notranslate nohighlight">\(f\)</span> of ticks on which the model lags the command, and sets each axis’s bandwidth
+scale <span class="math notranslate nohighlight">\(b\)</span> from it:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(f\)</span> is low-pass filtered with a 2 second time constant.</p></li>
+<li><p>While <span class="math notranslate nohighlight">\(f &gt; 0.5\)</span>, <span class="math notranslate nohighlight">\(b\)</span> decays by half its value per second, to a floor of 0.2.</p></li>
+<li><p>Otherwise <span class="math notranslate nohighlight">\(b\)</span> recovers at 0.1 per second.</p></li>
+</ul>
+<p>The scale multiplies <span class="math notranslate nohighlight">\(\omega_0\)</span> in the <a class="reference internal" href="#tuning-the-controllers"><span class="std std-ref">gain tuning</span></a>,
+so <span class="math notranslate nohighlight">\(K_P\)</span> scales with <span class="math notranslate nohighlight">\(b\)</span>, <span class="math notranslate nohighlight">\(K_I\)</span> with <span class="math notranslate nohighlight">\(b^2\)</span>, and the damping ratio
+is kept.</p>
+</section>
+<section id="aerodynamic-rate-limit">
+<span id="id13"></span><h4>Aerodynamic rate limit<a class="headerlink" href="#aerodynamic-rate-limit" title="Link to this heading">#</a></h4>
+<p>The steady rate a vessel holds on an axis is set by the spare control torque: the
+available torque less the trim, the slowly varying average of the command over 3 seconds.
+Every 0.5 seconds the autopilot evaluates the vessel’s aerodynamics at a range of
+attitudes and rates, and finds that steady rate for each axis:</p>
+<ul>
+<li><p><strong>Pitch and yaw.</strong> It searches for the incidence <span class="math notranslate nohighlight">\(i\)</span>, up to 30°, at which the
+aerodynamic restoring moment uses up the spare torque. At that incidence the aerodynamic
+force <span class="math notranslate nohighlight">\(F\)</span>, the thrust <span class="math notranslate nohighlight">\(T_h\)</span> and the weight across the flight path
+<span class="math notranslate nohighlight">\(W_\perp\)</span> turn the flight path at:</p>
+<div class="math notranslate nohighlight">
+\[\omega = \frac{F + T_h \sin i \pm W_\perp}{m v}\]</div>
+<p>where <span class="math notranslate nohighlight">\(m\)</span> is the vessel’s mass and <span class="math notranslate nohighlight">\(v\)</span> its airspeed. The weight helps a turn
+toward it and opposes a turn away from it, so each axis has a limit per direction. Each
+limit is at least the rate that leans the nose to <span class="math notranslate nohighlight">\(i\)</span> in 10 seconds, so the vessel
+still corrects a small error in a direction it cannot sustain a turn in.</p>
+</li>
+<li><p><strong>Roll.</strong> It finds the roll rate, up to 3 rad/s, at which the aerodynamic damping moment
+uses up the spare torque.</p></li>
+</ul>
+<p>The limit is 0.7 times that rate, divided by the surface share <span class="math notranslate nohighlight">\(s\)</span>, as only the
+surfaces’ share of the torque lags the command. Pitch and yaw are controlled in the
+<a class="reference internal" href="#roll-invariant-frame"><span class="std std-ref">roll-invariant frame</span></a>, so each takes the radius along it of
+the ellipse with the body-axis limits as its semi-axes. The limit is infinite out of the
+atmosphere.</p>
+</section>
+</section>
 </section>
 </section>
 
@@ -1857,6 +1999,7 @@ is safe to leave always on.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#when-first-engaging">When first engaging</a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#aircraft-and-control-surfaces">Aircraft and control surfaces</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#corner-cases">Corner cases</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#when-sitting-on-the-launchpad">When sitting on the launchpad</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#when-the-available-torque-is-zero">When the available torque is zero</a></li>
@@ -1901,6 +2044,14 @@ is safe to leave always on.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-feedforward-cut">The feedforward cut</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-output-filter">The output filter</a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-hold-gate">The hold gate</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#control-surfaces">Control surfaces</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#torque-and-roll-gain">Torque and roll gain</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#actuator-model">Actuator model</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reversal-lag">Reversal lag</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bandwidth-back-off">Bandwidth back-off</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#aerodynamic-rate-limit">Aerodynamic rate limit</a></li>
 </ul>
 </li>
 </ul>

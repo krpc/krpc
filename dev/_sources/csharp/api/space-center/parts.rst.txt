@@ -1979,6 +1979,26 @@ Control Surface
 
       :Game Scenes: Flight
 
+   .. property:: float DeflectionAngle { get; }
+
+      The current angle of the control surface from its neutral position, in degrees.
+      Includes the :prop:`ControlSurface.DeployAngle` while the surface is deployed.
+
+      :Game Scenes: Flight
+
+   .. property:: float ControlRange { get; }
+
+      The angle the control surface deflects by for a full control input, in degrees,
+      before the :prop:`ControlSurface.AuthorityLimiter` is applied.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. property:: float ActuatorSpeed { get; }
+
+      The rate the control surface deflects at, in degrees per second.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
    .. property:: float SurfaceArea { get; }
 
       Surface area of the control surface in :math:`\mathrm{m^{2}}`.

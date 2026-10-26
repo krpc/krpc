@@ -26,6 +26,13 @@ SpaceCenter service
 
 * Typeset units and formulas in the API documentation, and write them as Unicode text in client documentation, e.g. ``m/s²`` (:issue:`1169`)
 * Allow the rails warp rates the game allows the player, which ignore the altitude limits when the periapsis is clear of the atmosphere and terrain (:issue:`1167`)
+* Fix the ``MomentOfInertia`` and ``InertiaTensor`` of ``Vessel`` and ``EditorVessel`` measuring each part from its origin instead of its center of mass (:issue:`1191`)
+* Fix ``ControlSurface.AvailableTorque`` scaling the torque about each axis by the surface's distance along that axis, and overstating the roll torque of a surface close to the center line (:issue:`1191`)
+* Add ``ControlSurface.DeflectionAngle``, ``ControlRange`` and ``ActuatorSpeed`` (:issue:`1191`)
+* Fix the auto-pilot oscillating or departing on aircraft (:issue:`1191`, :issue:`526`)
+* Add ``AutoPilot.LimitAngularVelocity``, on by default, which limits the angular velocity to what the control surfaces hold against the aerodynamics (:issue:`1191`, :issue:`526`)
+* Shrink the auto-pilot's attenuation angles with the share of the torque that comes from control surfaces (:issue:`1191`, :issue:`526`)
+* Add an aerodynamics section to the auto-pilot info window, and make its sections collapsible (:issue:`1191`)
 
 
 C# client

@@ -3757,6 +3757,41 @@ value between -1 and 1, mapped onto the surface’s deploy angle range.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlSurface.getDeflectionAngle()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDeflectionAngle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlSurface.getDeflectionAngle()" title="Link to this definition">#</a></dt>
+<dd><p>The current angle of the control surface from its neutral position, in degrees.
+Includes the <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlSurface.getDeployAngle()" title="krpc.client.services.SpaceCenter.ControlSurface.getDeployAngle()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ControlSurface.getDeployAngle()</span></code></a> while the surface is deployed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlSurface.getControlRange()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getControlRange</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlSurface.getControlRange()" title="Link to this definition">#</a></dt>
+<dd><p>The angle the control surface deflects by for a full control input, in degrees,
+before the <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlSurface.getAuthorityLimiter()" title="krpc.client.services.SpaceCenter.ControlSurface.getAuthorityLimiter()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ControlSurface.getAuthorityLimiter()</span></code></a> is applied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlSurface.getActuatorSpeed()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getActuatorSpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlSurface.getActuatorSpeed()" title="Link to this definition">#</a></dt>
+<dd><p>The rate the control surface deflects at, in degrees per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlSurface.getSurfaceArea()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSurfaceArea</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlSurface.getSurfaceArea()" title="Link to this definition">#</a></dt>
 <dd><p>Surface area of the control surface in <span class="math notranslate nohighlight">\(\mathrm{m^{2}}\)</span>.</p>

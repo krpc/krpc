@@ -2083,6 +2083,29 @@ Control Surface
 
       :Game Scenes: Flight
 
+   .. method:: float getDeflectionAngle()
+
+
+      The current angle of the control surface from its neutral position, in degrees.
+      Includes the :meth:`ControlSurface.getDeployAngle()` while the surface is deployed.
+
+      :Game Scenes: Flight
+
+   .. method:: float getControlRange()
+
+
+      The angle the control surface deflects by for a full control input, in degrees,
+      before the :meth:`ControlSurface.getAuthorityLimiter()` is applied.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. method:: float getActuatorSpeed()
+
+
+      The rate the control surface deflects at, in degrees per second.
+
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
    .. method:: float getSurfaceArea()
 
 

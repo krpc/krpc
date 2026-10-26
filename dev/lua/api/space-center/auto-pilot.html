@@ -1823,13 +1823,34 @@ desired. Defaults to 1 <span class="math notranslate nohighlight">\(\mathrm{rad/
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.limit_angular_velocity">
+<span class="sig-name descname"><span class="pre">limit_angular_velocity</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.limit_angular_velocity" title="Link to this definition">#</a></dt>
+<dd><p>Whether to also limit the angular velocity to what the control surfaces hold against
+the aerodynamic forces. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When disabled, only <a class="reference internal" href="#SpaceCenter.SpaceCenter.AutoPilot.max_angular_velocity" title="SpaceCenter.SpaceCenter.AutoPilot.max_angular_velocity"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.max_angular_velocity</span></code></a> limits the angular velocity. Not
+applied when the Ferram Aerospace Research mod is installed.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_attenuation_angle">
 <span class="sig-name descname"><span class="pre">pitch_yaw_attenuation_angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.AutoPilot.pitch_yaw_attenuation_angle" title="Link to this definition">#</a></dt>
 <dd><p>The angle, in degrees, at which the autopilot considers the vessel to be pointing close
 to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
 or above this error the target velocity is at full, and below it the target velocity
 ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
-are controlled jointly, so a single angle applies to both. Defaults to 1°.</p>
+are controlled jointly, so a single angle applies to both. Defaults to 1°. The angle in
+use shrinks in proportion to the share of the torque that comes from control surfaces.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -1846,7 +1867,9 @@ are controlled jointly, so a single angle applies to both. Defaults to 1°.</p>
 <dd><p>The angle, in degrees, at which the autopilot considers the vessel to be pointing close
 to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
 above this error the target velocity is at full, and below it the target velocity ramps
-linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.</p>
+linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°. The
+angle in use shrinks in proportion to the share of the torque that comes from control
+surfaces.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>

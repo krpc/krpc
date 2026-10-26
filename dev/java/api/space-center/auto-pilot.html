@@ -1833,6 +1833,28 @@ desired. Defaults to 1 <span class="math notranslate nohighlight">\(\mathrm{rad/
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getLimitAngularVelocity()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getLimitAngularVelocity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getLimitAngularVelocity()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.setLimitAngularVelocity(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setLimitAngularVelocity</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.setLimitAngularVelocity(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether to also limit the angular velocity to what the control surfaces hold against
+the aerodynamic forces. Defaults to <code class="docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When disabled, only <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getMaxAngularVelocity()" title="krpc.client.services.SpaceCenter.AutoPilot.getMaxAngularVelocity()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getMaxAngularVelocity()</span></code></a> limits the angular velocity. Not
+applied when the Ferram Aerospace Research mod is installed.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.AutoPilot.getPitchYawAttenuationAngle()">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getPitchYawAttenuationAngle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.AutoPilot.getPitchYawAttenuationAngle()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -1844,7 +1866,8 @@ desired. Defaults to 1 <span class="math notranslate nohighlight">\(\mathrm{rad/
 to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
 or above this error the target velocity is at full, and below it the target velocity
 ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
-are controlled jointly, so a single angle applies to both. Defaults to 1°.</p>
+are controlled jointly, so a single angle applies to both. Defaults to 1°. The angle in
+use shrinks in proportion to the share of the torque that comes from control surfaces.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1863,7 +1886,9 @@ are controlled jointly, so a single angle applies to both. Defaults to 1°.</p>
 <dd><p>The angle, in degrees, at which the autopilot considers the vessel to be pointing close
 to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
 above this error the target velocity is at full, and below it the target velocity ramps
-linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.</p>
+linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°. The
+angle in use shrinks in proportion to the share of the torque that comes from control
+surfaces.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
