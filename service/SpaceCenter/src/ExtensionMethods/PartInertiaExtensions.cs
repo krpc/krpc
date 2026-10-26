@@ -83,9 +83,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// <summary>
         /// Inertia tensor of a vessel in the editor about its center of mass, in
         /// the root part's reference transform, in tonne.m^2. Those are the same
-        /// pitch, roll and yaw axes a vessel reports in flight. The parallel-axis
-        /// contribution of each part is measured from the part's origin, not its
-        /// center of mass, which is how KSP assembles a vessel's tensor in flight.
+        /// pitch, roll and yaw axes a vessel reports in flight.
         /// </summary>
         public static Matrix4x4 ComputeInertiaTensor (this ShipConstruct ship)
         {
@@ -111,7 +109,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 var invMatrix = Matrix4x4.TRS (Vector3.zero, Quaternion.Inverse (rot), Vector3.one);
                 inertiaTensor = inertiaTensor.Add (rotMatrix * partTensor * invMatrix);
 
-                var position = vesselTransform.InverseTransformDirection (part.transform.position - com);
+                var position = vesselTransform.InverseTransformDirection (part.WorldCenterOfMass () - com);
                 inertiaTensor = inertiaTensor.Add ((mass * position.sqrMagnitude).ToDiagonalMatrix ());
                 inertiaTensor = inertiaTensor.Add (position.OuterProduct (-mass * position));
             }

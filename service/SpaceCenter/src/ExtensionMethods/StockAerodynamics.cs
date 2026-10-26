@@ -605,6 +605,30 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 drag += surface.GetDragVector (nVel, movingAbsDot, liftQ, mach) * area;
         }
 
+        /// <summary>
+        /// The current angle of the moving part of a control surface from its neutral
+        /// position, in degrees.
+        /// </summary>
+        internal static float GetControlSurfaceDeflection (ModuleControlSurface surface)
+        {
+            float deflection;
+            Transform baseTransform;
+            GetControlSurfaceState (surface, out deflection, out baseTransform);
+            return deflection;
+        }
+
+        /// <summary>
+        /// The transform a control surface's lift and deflection are worked out in, or null if
+        /// it cannot be read.
+        /// </summary>
+        internal static Transform GetControlSurfaceBaseTransform (ModuleControlSurface surface)
+        {
+            float deflection;
+            Transform baseTransform;
+            GetControlSurfaceState (surface, out deflection, out baseTransform);
+            return baseTransform;
+        }
+
         static void GetControlSurfaceState (
             ModuleControlSurface surface, out float deflection, out Transform baseTransform)
         {

@@ -20,6 +20,7 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         double lastInput;
         double integralTerm;
+        double previousIntegralTerm;
 
         /// <summary>
         /// The accumulated integral term (already scaled by Ki, clamped to the output range).
@@ -49,6 +50,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         public void ResetState ()
         {
             integralTerm = 0;
+            previousIntegralTerm = 0;
             lastInput = 0;
         }
 
@@ -66,6 +68,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         {
             var error = setpoint - input;
             var deltaIntegral = Ki * error * deltaTime;
+            previousIntegralTerm = integralTerm;
             if (!((integralTerm >= OutputMax && deltaIntegral > 0) || (integralTerm <= OutputMin && deltaIntegral < 0)))
                 integralTerm += deltaIntegral;
             integralTerm = integralTerm.Clamp (OutputMin, OutputMax);
@@ -79,6 +82,16 @@ namespace KRPC.SpaceCenter.AutoPilot
         public void ClearIntegralTerm ()
         {
             integralTerm = 0;
+            previousIntegralTerm = 0;
+        }
+
+        /// <summary>
+        /// Undo the change the last <see cref="Update"/> made to the integral term, for a tick
+        /// whose output the actuators could not deliver.
+        /// </summary>
+        public void HoldIntegralTerm ()
+        {
+            integralTerm = previousIntegralTerm;
         }
     }
 }

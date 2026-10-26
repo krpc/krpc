@@ -190,6 +190,32 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The current angle of the control surface from its neutral position, in degrees.
+        /// Includes the <see cref="DeployAngle"/> while the surface is deployed.
+        /// </summary>
+        [KRPCProperty]
+        public float DeflectionAngle {
+            get { return StockAerodynamics.GetControlSurfaceDeflection (InternalControlSurface); }
+        }
+
+        /// <summary>
+        /// The angle the control surface deflects by for a full control input, in degrees,
+        /// before the <see cref="AuthorityLimiter"/> is applied.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float ControlRange {
+            get { return InternalControlSurface.ctrlSurfaceRange; }
+        }
+
+        /// <summary>
+        /// The rate the control surface deflects at, in degrees per second.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
+        public float ActuatorSpeed {
+            get { return InternalControlSurface.actuatorSpeed; }
+        }
+
+        /// <summary>
         /// Surface area of the control surface in <unit>m^2</unit>.
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
@@ -209,18 +235,86 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal TupleV3 AvailableTorqueVectors {
             get {
-                // GetPotentialTorque already applies the authority limiter (via
-                // ModuleControlSurface.GetPotentialLift, which scales the deflection by
-                // authorityLimiter * 0.01), so no further scaling is needed here.
-                var torque = InternalControlSurface.GetPotentialTorque ();
-                // ModuleControlSurface.GetPotentialTorque negates the roll (y) axis of both the
-                // positive and negative torque vectors, unlike other ITorqueProvider
-                // implementations. Normalize to the kRPC convention (positive torque >= 0,
-                // negative torque <= 0) with Math.Abs, matching ITorqueProviderExtensions.Sum.
-                return new TupleV3 (
-                    new Vector3d (Math.Abs (torque.Item1.x), Math.Abs (torque.Item1.y), Math.Abs (torque.Item1.z)),
-                    new Vector3d (-Math.Abs (torque.Item2.x), -Math.Abs (torque.Item2.y), -Math.Abs (torque.Item2.z)));
+                double rollGain, rollTorque;
+                return ComputeAvailableTorque (InternalControlSurface, out rollGain, out rollTorque);
             }
+        }
+
+        /// <summary>
+        /// The available torque of a control surface, in N.m, with the positive torque
+        /// non-negative and the negative torque non-positive, as in
+        /// ITorqueProviderExtensions.Sum. Also the surface's roll
+        /// gain, and its roll torque at full deflection, which a full roll input reaches only
+        /// when the gain is at least one.
+        /// </summary>
+        internal static TupleV3 ComputeAvailableTorque (
+            ModuleControlSurface surface, out double rollGain, out double rollTorque)
+        {
+            rollGain = RollGain (surface);
+            TupleV3 torque;
+            if (surface.displaceVelocity) {
+                // A rotor blade takes its torque from the game's blade lift model
+                torque = surface.GetPotentialTorque ();
+                rollTorque = Math.Abs (torque.Item1.y);
+            } else {
+                torque = PotentialTorque (surface);
+                rollTorque = Math.Abs (torque.Item1.y);
+                var reach = Math.Min (1.0, rollGain);
+                torque = new TupleV3 (
+                    new Vector3d (torque.Item1.x, torque.Item1.y * reach, torque.Item1.z),
+                    new Vector3d (torque.Item2.x, torque.Item2.y * reach, torque.Item2.z));
+            }
+            return new TupleV3 (
+                new Vector3d (Math.Abs (torque.Item1.x), Math.Abs (torque.Item1.y), Math.Abs (torque.Item1.z)),
+                new Vector3d (-Math.Abs (torque.Item2.x), -Math.Abs (torque.Item2.y), -Math.Abs (torque.Item2.z)));
+        }
+
+        /// <summary>
+        /// The fraction of its range the surface deflects by per unit of roll input, before the
+        /// game clamps the deflection to the range. The game scales the roll input by the
+        /// surface's offset from the center of mass, in meters. An outboard surface reaches full
+        /// deflection at part of full roll input, and an inboard one never does.
+        /// </summary>
+        static double RollGain (ModuleControlSurface surface)
+        {
+            if (surface.ignoreRoll)
+                return 0;
+            var baseTransform = StockAerodynamics.GetControlSurfaceBaseTransform (surface);
+            if (baseTransform == null)
+                return 1;
+            // As ModuleControlSurface.FixedCtrlSurfaceUpdate
+            var vessel = surface.vessel;
+            var com = baseTransform.InverseTransformPoint (vessel.CurrentCoM);
+            var offset = new UnityEngine.Vector3 (com.x, 0, com.z);
+            var up = UnityEngine.Quaternion.Inverse (baseTransform.rotation) * vessel.ReferenceTransform.up;
+            var tilt = Math.Abs (UnityEngine.Vector3.Dot (offset.normalized, up));
+            return Math.Abs (offset.x * (1 - (tilt * 0.5 + 0.5)));
+        }
+
+        /// <summary>
+        /// The torque of a full deflection each way, in N.m, in the vessel's axes.
+        /// ModuleControlSurface.GetPotentialTorque scales each axis of this by the lever arm
+        /// along that same axis, so we compute it from the lift the surface reports.
+        /// GetPotentialLift applies the authority limiter and is zero out of the airstream.
+        /// </summary>
+        static TupleV3 PotentialTorque (ModuleControlSurface surface)
+        {
+            var part = surface.part;
+            var rigidbody = part.Rigidbody;
+            if (rigidbody == null)
+                return new TupleV3 (Vector3d.zero, Vector3d.zero);
+            var vessel = surface.vessel;
+            var transform = vessel.ReferenceTransform;
+            var arm = rigidbody.worldCenterOfMass - vessel.CurrentCoM;
+            Vector3d pos = transform.InverseTransformDirection (UnityEngine.Vector3.Cross (arm, surface.GetPotentialLift (true)));
+            Vector3d neg = transform.InverseTransformDirection (UnityEngine.Vector3.Cross (arm, surface.GetPotentialLift (false)));
+            if (surface.ignorePitch)
+                pos.x = neg.x = 0;
+            if (surface.ignoreRoll)
+                pos.y = neg.y = 0;
+            if (surface.ignoreYaw)
+                pos.z = neg.z = 0;
+            return new TupleV3 (pos * 1000d, neg * 1000d);
         }
     }
 }

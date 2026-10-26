@@ -1651,7 +1651,6 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
     turn_attitude_error=1.2,
     pitch_settle_delay=5,
     launch_settle_delay=3,
-    disable_control_surfaces=False,
 ):
     class TestAutoPilotLaunchBase(krpctest.TestCase):
         @classmethod
@@ -1716,18 +1715,6 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
         def test_sharp_turn(self):
             # Launch, hold vertical for 10 seconds, pitch over 5 degrees, then assert
             # the actuators have settled to a smooth hold with little oscillation.
-            if disable_control_surfaces:
-                # TODO: the autopilot does not yet model aerodynamic control
-                # surface actuation lag, so the PI loop sees the deflection lag
-                # as a disturbance and oscillates during the pitch-over.
-                # Disable the aero surfaces for this test as a workaround until
-                # the autopilot models them. Only done for this test, as other
-                # tests (e.g. the gravity turns) need the control authority
-                # they provide.
-                for surface in self.vessel.parts.control_surfaces:
-                    surface.pitch_enabled = False
-                    surface.yaw_enabled = False
-                    surface.roll_enabled = False
             self.launch()
             self.wait(10)
             self.ap.target_pitch_and_heading(85, 90)
@@ -1774,13 +1761,6 @@ def _make_autopilot_launch_test_class(  # noqa: PLR0913
 TestAutoPilotLaunchKerbal1 = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchKerbal1",
     "Kerbal 1",
-    # The sharp turn oscillates during the pitch-over with the AV-R8 winglets
-    # active; see the disable_control_surfaces TODO above. A small residual
-    # oscillation (~0.24) remains with the winglets disabled, likely from
-    # unmodeled aero effects on the fixed surfaces, hence the raised amplitude
-    # threshold.
-    disable_control_surfaces=True,
-    hold_oscillation_amplitude=0.3,
 )
 
 TestAutoPilotLaunchKerbal2 = _make_autopilot_launch_test_class(
@@ -1819,14 +1799,10 @@ TestAutoPilotLaunchAriane5 = _make_autopilot_launch_test_class(
     turn_oscillation_amplitude=0.5,
 )
 
-# FIXME: small oscillation after pitch of 5 degrees - likely aero surface related
 TestAutoPilotLaunchAeroEquus = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchAeroEquus",
     "AeroEquus",
-    hold_attitude_error=3,
-    turn_attitude_error=3,
-    hold_oscillation_amplitude=1,
-    turn_oscillation_amplitude=1,
+    turn_attitude_error=2,
 )
 
 TestAutoPilotLaunchComSatLx = _make_autopilot_launch_test_class(
@@ -1834,17 +1810,18 @@ TestAutoPilotLaunchComSatLx = _make_autopilot_launch_test_class(
     "ComSat Lx",
 )
 
+# The pitch command oscillates a little in a turn.
 TestAutoPilotLaunchLearstarA1 = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchLearstarA1",
     "Learstar A1",
     pre_launch_sequence=True,
+    turn_oscillation_amplitude=0.5,
 )
 
 # Shuttle-style craft: gimbal and aero control, with no clean reaction-wheel torque model. The
-# autotuned loop is too hot for the actuator authority, and limit-cycles until the
-# control-oscillation latch floors the bandwidth. The cycle is a genuine ~0.6 Hz rigid-body
-# motion, from the constant maximum torque model ignoring the gimbal and aero actuator bandwidth.
-# The craft starts ~8.6 deg pitched on the pad, so the launch capture takes a few seconds.
+# autotuned loop is too hot for the actuator authority, and at times limit-cycles until the
+# control-oscillation latch floors the bandwidth. The craft starts ~8.6 deg pitched on the pad,
+# so the launch capture takes a few seconds.
 TestAutoPilotLaunchDynawing = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchDynawing",
     "Dynawing",
@@ -1869,21 +1846,20 @@ TestAutoPilotLaunchZMAP = _make_autopilot_launch_test_class(
     pre_launch_sequence=True,
 )
 
+# A flexible craft. The actuators at times limit-cycle through its 5 Hz bending mode without the
+# chatter detector latching, in a hold as well as a turn.
 TestAutoPilotLaunchGDLV3 = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchGDLV3",
     "GDLV3",
+    hold_oscillation_amplitude=1.5,
     turn_oscillation_amplitude=1.5,
 )
 
 
-# Straight-and-level flight-hold tests for stock aircraft: place the craft in level
-# atmospheric flight and confirm the autopilot holds (or recovers to) a smooth, steady
-# wings-level attitude. Each craft is flown near a speed at which level flight is
-# sustainable; too slow and it mushes (the commanded pitch is not an equilibrium), which
-# is a craft limitation rather than an autopilot one. A roll upset is deliberately not
-# tested here: on aircraft the autopilot's roll control excites a sustained roll
-# limit-cycle (a known limitation of the constant-torque model on aero-controlled craft),
-# so these focus on the pitch/heading hold that does converge cleanly.
+# Flight tests for stock aircraft: place the craft in level atmospheric flight, confirm the
+# autopilot holds a steady wings-level attitude, and step the pitch, bank and heading. Each
+# craft is flown near a speed at which level flight is sustainable. Too slow and it mushes,
+# as the commanded pitch is not an equilibrium.
 def _make_autopilot_flight_test_class(  # noqa: PLR0913
     test_name,
     vessel_name,
@@ -1899,7 +1875,8 @@ def _make_autopilot_flight_test_class(  # noqa: PLR0913
     hold_oscillation_amplitude=1,
     hold_attitude_error=2,
     attitude_tolerance=2,
-    no_pitch_upset=False,
+    step_overshoot=15,
+    step_settle_time=8,
 ):
     class TestAutoPilotFlightBase(krpctest.TestCase):
         @classmethod
@@ -1985,7 +1962,59 @@ def _make_autopilot_flight_test_class(  # noqa: PLR0913
             self.assert_steady(samples)
             self.assert_level()
 
-        @unittest.skipIf(no_pitch_upset, "not supported on this craft")
+        def step(self, axis, target, band, settle_time=step_settle_time):
+            """Hold level, step one of (pitch, heading offset, roll) to the target, and
+            check the response: the overshoot, the time to settle within the band, and
+            the final error, all in degrees."""
+            self.place(0, 0)
+            self.hold(0, 0)
+            self.wait(settle_delay)
+            conn = self.connect()
+            space_center = conn.space_center
+            flight = self.vessel.flight(self.vessel.surface_reference_frame)
+
+            def attitude():
+                return (space_center.ut, flight.pitch, flight.heading, flight.roll)
+
+            targets = [0.0, 0.0, 0.0]
+            targets[axis] = target
+            samples = []
+            with conn.stream(conn.compile(attitude)) as stream:
+                start = stream()[0]
+                self.ap.target_pitch_and_heading(targets[0], heading + targets[1])
+                self.ap.target_roll = targets[2]
+                while True:
+                    ut, pitch, actual_heading, roll = stream()
+                    value = (pitch, (actual_heading - heading + 180) % 360 - 180, roll)
+                    if not samples or ut != samples[-1][0]:
+                        samples.append((ut - start, value[axis]))
+                    if ut - start > settle_time + 4:
+                        break
+                    self.wait(0.01)
+            # Overshoot past the target, as a percentage of the step
+            overshoot = max((v - target) * math.copysign(1, target) for _, v in samples)
+            self.assertLess(
+                100 * overshoot / abs(target), step_overshoot, "overshot the step"
+            )
+            # The last time outside the band
+            unsettled = [t for t, v in samples if abs(v - target) > band]
+            self.assertLess(
+                unsettled[-1] if unsettled else 0, settle_time, "did not settle"
+            )
+            self.assertAlmostEqual(target, samples[-1][1], delta=band)
+
+        def test_pitch_step(self):
+            # A 10 degree pitch step settles without oscillating
+            self.step(0, 10, 0.5)
+
+        def test_bank_step(self):
+            # A 30 degree bank settles without the roll limit-cycling
+            self.step(2, 30, 1)
+
+        def test_heading_step(self):
+            # A small heading change, wings level, settles without departing
+            self.step(1, 5, 0.5)
+
         def test_recover_from_pitch_upset(self):
             # Place the aircraft pitched up, command level flight, and confirm the
             # autopilot pushes the nose back down to level and then holds it steadily.
@@ -2012,14 +2041,30 @@ TestAutoPilotFlightAeris4A = _make_autopilot_flight_test_class(
     "TestAutoPilotFlightAeris4A",
     "Aeris 4A",
     speed=100,
-    no_pitch_upset=True,
 )
 
-# A small, slow stock light aircraft.
+# A small, slow stock light aircraft. Its pitch takes about 8 seconds to settle after a step.
 TestAutoPilotFlightGull = _make_autopilot_flight_test_class(
     "TestAutoPilotFlightGull",
     "Gull",
     speed=35,
+    step_settle_time=10,
+)
+
+# A mid-size stock jet, whose elevators limit-cycled above about 150 m/s with the
+# actuator rate ignored.
+TestAutoPilotFlightThunderbird = _make_autopilot_flight_test_class(
+    "TestAutoPilotFlightThunderbird",
+    "Thunderbird",
+    speed=150,
+)
+
+# A large stock airliner, with little elevator authority and outboard ailerons that
+# reach full deflection at about a quarter of full roll input.
+TestAutoPilotFlightMallard = _make_autopilot_flight_test_class(
+    "TestAutoPilotFlightMallard",
+    "Mallard",
+    speed=120,
 )
 
 

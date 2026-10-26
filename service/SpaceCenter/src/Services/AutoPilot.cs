@@ -782,11 +782,26 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether to also limit the angular velocity to what the control surfaces hold against
+        /// the aerodynamic forces. Defaults to <c>true</c>.
+        /// </summary>
+        /// <remarks>
+        /// When disabled, only <see cref="MaxAngularVelocity"/> limits the angular velocity. Not
+        /// applied when the Ferram Aerospace Research mod is installed.
+        /// </remarks>
+        [KRPCProperty]
+        public bool LimitAngularVelocity {
+            get { return Controller.LimitAngularVelocity; }
+            set { Controller.LimitAngularVelocity = value; }
+        }
+
+        /// <summary>
         /// The angle, in degrees, at which the autopilot considers the vessel to be pointing close
         /// to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
         /// or above this error the target velocity is at full, and below it the target velocity
         /// ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
-        /// are controlled jointly, so a single angle applies to both. Defaults to 1°.
+        /// are controlled jointly, so a single angle applies to both. Defaults to 1°. The angle in
+        /// use shrinks in proportion to the share of the torque that comes from control surfaces.
         /// </summary>
         [KRPCProperty]
         public double PitchYawAttenuationAngle {
@@ -798,7 +813,9 @@ namespace KRPC.SpaceCenter.Services
         /// The angle, in degrees, at which the autopilot considers the vessel to be pointing close
         /// to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
         /// above this error the target velocity is at full, and below it the target velocity ramps
-        /// linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.
+        /// linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°. The
+        /// angle in use shrinks in proportion to the share of the torque that comes from control
+        /// surfaces.
         /// </summary>
         [KRPCProperty]
         public double RollAttenuationAngle {
@@ -1241,6 +1258,53 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         internal double OscillationLatchThreshold {
             get { return Controller.OscillationLatchThreshold; }
+        }
+
+        /// <summary>
+        /// Per-axis share of the available torque from control surfaces, in [0,1], for the
+        /// in-game info window.
+        /// </summary>
+        internal Tuple3 SurfaceShare {
+            get { return Controller.SurfaceShare.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis angular velocity limit in the direction of the target, in rad/s, for the
+        /// in-game info window.
+        /// </summary>
+        internal Tuple3 AngularVelocityLimit {
+            get { return Controller.AngularVelocityLimit.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis control surface reversal time, in seconds, for the in-game info window.
+        /// </summary>
+        internal Tuple3 ActuatorLag {
+            get { return Controller.ActuatorLag.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis fraction of recent ticks the actuator rate held back the command, in [0,1],
+        /// for the in-game info window.
+        /// </summary>
+        internal Tuple3 ActuatorLimitedFraction {
+            get { return Controller.ActuatorLimitedFraction.ToTuple (); }
+        }
+
+        /// <summary>
+        /// Per-axis bandwidth scale from the actuator back-off, in [0.2,1], for the in-game info
+        /// window.
+        /// </summary>
+        internal Tuple3 ActuatorBackoff {
+            get { return Controller.ActuatorBackoff.ToTuple (); }
+        }
+
+        /// <summary>
+        /// The actuator-limited fraction above which the bandwidth backs off, for the in-game
+        /// info window.
+        /// </summary>
+        internal double ActuatorLimitedThreshold {
+            get { return AttitudeController.ActuatorLimitedThreshold; }
         }
 
         /// <summary>

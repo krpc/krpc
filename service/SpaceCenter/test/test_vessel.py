@@ -77,15 +77,70 @@ class TestVessel(krpctest.TestCase):
 
     def test_moment_of_inertia(self):
         self.assertAlmostEqual(
-            (13383, 2221, 13338), self.vessel.moment_of_inertia, delta=1
+            (13421, 2278, 13375), self.vessel.moment_of_inertia, delta=1
         )
 
     def test_inertia_tensor(self):
         self.assertAlmostEqual(
-            [13383.5, 0, 0, 0, 2220.5, 0, 0, 0, 13337.5],
+            [13421.3, 0, 0, 0, 2277.9, 0, 0, 0, 13375.4],
             self.vessel.inertia_tensor,
             delta=1,
         )
+
+    def test_moment_of_inertia_matches_response(self):
+        # The reaction wheels spin the vessel up at their torque divided by the
+        # moment of inertia, about each axis
+        conn = self.connect()
+        std = conn.std_lib
+        vessel = self.vessel
+        control = vessel.control
+        frame = vessel.orbit.body.non_rotating_reference_frame
+        torque = vessel.available_reaction_wheel_torque.positive
+        moi = vessel.moment_of_inertia
+
+        def sample():
+            rotation = std.quaternion_inverse(vessel.rotation(frame))
+            return (
+                self.space_center.ut,
+                std.quaternion_rotate_vector(rotation, vessel.angular_velocity(frame)),
+            )
+
+        function = conn.compile(sample)
+        inputs = ("pitch", "roll", "yaw")
+        rcs = control.rcs
+        control.rcs = False
+        try:
+            for axis, name in enumerate(inputs):
+                conn.testing_tools.clear_rotation()
+                self.wait(0.5)
+                samples = []
+                setattr(control, name, 1)
+                with conn.stream(function) as stream:
+                    start = stream()[0]
+                    while True:
+                        ut, rate = stream()
+                        if not samples or ut != samples[-1][0]:
+                            samples.append((ut, abs(rate[axis])))
+                        if ut - start > 1.2:
+                            break
+                        self.wait(0.01)
+                setattr(control, name, 0)
+                # Least squares slope, after the wheels have spun up
+                points = [(t - start, w) for t, w in samples if t - start > 0.3]
+                n = len(points)
+                mean_t = sum(t for t, _ in points) / n
+                mean_w = sum(w for _, w in points) / n
+                slope = sum((t - mean_t) * (w - mean_w) for t, w in points) / sum(
+                    (t - mean_t) ** 2 for t, _ in points
+                )
+                self.assertAlmostEqual(
+                    torque[axis] / moi[axis], slope, delta=0.03 * slope
+                )
+        finally:
+            for name in inputs:
+                setattr(control, name, 0)
+            control.rcs = rcs
+            conn.testing_tools.clear_rotation()
 
     def test_available_torque(self):
         # 5000 from the reaction wheels plus the RCS share

@@ -762,8 +762,9 @@ namespace KRPC.SpaceCenter.Services
             get { return MomentOfInertiaVector.ToTuple (); }
         }
 
+        // Note: Vessel.MOI measures each part's offset from the part's origin, not its center of mass
         internal Vector3d MomentOfInertiaVector {
-            get { return InternalVessel.MOI * 1000; }
+            get { return ComputeInertiaTensor ().Diagonal (); }
         }
 
         /// <summary>
@@ -796,7 +797,7 @@ namespace KRPC.SpaceCenter.Services
                     Quaternion rot = Quaternion.Inverse (vesselTransform.rotation) * part.transform.rotation;
                     inertiaTensor = inertiaTensor.Add (part.RigidbodyInertiaTensor (rot));
 
-                    Vector3 position = vesselTransform.InverseTransformDirection (part.rb.position - CoM);
+                    Vector3 position = vesselTransform.InverseTransformDirection (part.rb.worldCenterOfMass - CoM);
 
                     // add the part mass to the ship inertiaTensor
                     inertiaTensor = inertiaTensor.Add ((part.rb.mass * position.sqrMagnitude).ToDiagonalMatrix ());

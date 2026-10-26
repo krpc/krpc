@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using KRPC.Server;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
@@ -99,6 +100,50 @@ namespace KRPC.SpaceCenter.AutoPilot
         // shutdown while a reaction wheel remains) does not cause a one-tick gain spike that
         // jerks the gimbal.
         Vector3d smoothedTorque;
+        // Roll gain and full-deflection roll torque of each control surface that rolls the vessel
+        readonly List<double> rollGains = new List<double> ();
+        readonly List<double> rollSurfaceTorques = new List<double> ();
+        // The fraction of full command per second the control surfaces can deliver on each axis,
+        // and the command they have reached in the model
+        Vector3d actuatorSlew;
+        Vector3d actuatorDelivered;
+        // The share of each axis's available torque that comes from control surfaces
+        Vector3d surfaceShare;
+        // The fraction of recent ticks each axis's command was held back by the actuator rate,
+        // and the bandwidth scale applied in response
+        Vector3d actuatorLimitedFraction;
+        Vector3d actuatorBackoff = new Vector3d (1, 1, 1);
+        // The time constant of actuatorLimitedFraction, in seconds
+        const double ActuatorLimitedTimeConstant = 2.0;
+        // The limited fraction above which the bandwidth backs off. A step limits the actuators
+        // for a few tenths of a second; a rate-limit cycle limits them most of the time.
+        internal const double ActuatorLimitedThreshold = 0.5;
+        // The rates the bandwidth scale backs off and recovers at, per second, and its floor
+        const double ActuatorBackoffRate = 0.5;
+        const double ActuatorRecoveryRate = 0.1;
+        const double ActuatorBackoffMin = 0.2;
+        // The rate the target moves at, estimated from the error and the angular velocity, in the
+        // roll-invariant frame, and the error last tick. The reversal lag acts on the angular
+        // velocity relative to the target, as a surface tracking a moving target never reverses.
+        Vector3d targetRate;
+        Vector3d lastAngles;
+        bool lastAnglesValid;
+        // Time constant of the target rate estimate, in seconds
+        const double TargetRateTimeConstant = 0.5;
+        // The largest target rate the estimate follows, in rad/s. A faster change in the error is
+        // a step in the target.
+        const double MaxTargetRate = 0.2;
+        readonly AerodynamicRateLimit aerodynamicRateLimit = new AerodynamicRateLimit ();
+        // The angular velocity limits in use this tick for a positive and a negative rate, with pitch
+        // and yaw in the roll-invariant frame
+        Vector3d rateLimit;
+        Vector3d negativeRateLimit;
+        // The time to reverse the control surfaces on each axis, in seconds, with pitch and yaw in
+        // the roll-invariant frame. The vessel carries on rotating meanwhile.
+        Vector3d actuatorLag;
+        // The roll-invariant pitch and yaw axes in the body frame
+        Vector3d riPitchAxis;
+        Vector3d riYawAxis;
         // Low-pass-filtered acceleration feedforward (see the feedforward filter in Update).
         Vector3d smoothedFfRi;
         // The observation layer: chatter detector (level + latch), frequency trackers with their
@@ -461,6 +506,14 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         public Vector3d MaxAngularVelocity { get; set; }
 
+        // Whether to also limit the angular velocity to what the control torque holds against
+        // the aerodynamics (see AerodynamicRateLimit)
+        public bool LimitAngularVelocity { get; set; }
+
+        // The fraction of the aerodynamic rate limit commanded. The estimate is the steady rate,
+        // and a vessel pulling a high load bleeds speed and falls short of it.
+        const double AerodynamicRateFraction = 0.7;
+
         // Pointing deadband high angle (degrees) for the roll axis. At or above this error the
         // target roll velocity is commanded in full. Below it the commanded velocity ramps linearly
         // to zero by DeadbandLowFraction of it, so the craft coasts to a stop and the actuator
@@ -471,6 +524,18 @@ namespace KRPC.SpaceCenter.AutoPilot
         // Pointing deadband high angle (degrees) for the coupled pitch/yaw group. As RollAttenuationAngle,
         // but keyed on the 2D pitch/yaw predicted stopping-point magnitude.
         public double PitchYawAttenuationAngle { get; set; }
+
+        // The deadband high angles in use. Control surfaces respond in proportion to the
+        // command and hold an aircraft's trim, so the band shrinks with their share of the torque.
+        // The pitch and yaw band covers the body pitch and yaw plane, so it takes the smaller
+        // body-axis share, whatever the roll.
+        double PitchYawBand {
+            get { return PitchYawAttenuationAngle * (1 - Math.Min (surfaceShare.x, surfaceShare.z)); }
+        }
+
+        double RollBand {
+            get { return RollAttenuationAngle * (1 - surfaceShare.y); }
+        }
 
         public double RollStartAngle { get; set; }
 
@@ -636,6 +701,44 @@ namespace KRPC.SpaceCenter.AutoPilot
             get { return OscillationDetectors.ChatterLatchThreshold; }
         }
 
+        // Aerodynamic state for the in-game info window, in the roll-invariant frame
+
+        public Vector3d SurfaceShare {
+            get { return ToRollInvariantAxes (surfaceShare); }
+        }
+
+        // The angular velocity limit in the direction of the target angular velocity, in rad/s
+        public Vector3d AngularVelocityLimit {
+            get {
+                return new Vector3d (
+                    logTargetRi.x >= 0 ? rateLimit.x : negativeRateLimit.x,
+                    rateLimit.y,
+                    logTargetRi.z >= 0 ? rateLimit.z : negativeRateLimit.z);
+            }
+        }
+
+        // The control surface reversal time, in seconds
+        public Vector3d ActuatorLag {
+            get { return actuatorLag; }
+        }
+
+        public Vector3d ActuatorLimitedFraction {
+            get { return actuatorLimitedFraction; }
+        }
+
+        public Vector3d ActuatorBackoff {
+            get { return actuatorBackoff; }
+        }
+
+        // Weight each body axis by its squared projection onto the roll-invariant axis
+        Vector3d ToRollInvariantAxes (Vector3d body)
+        {
+            return new Vector3d (
+                riPitchAxis.x * riPitchAxis.x * body.x + riPitchAxis.z * riPitchAxis.z * body.z,
+                body.y,
+                riYawAxis.x * riYawAxis.x * body.x + riYawAxis.z * riYawAxis.z * body.z);
+        }
+
         public bool DiagnosticLogging {
             get { return diagnosticLogging; }
             set {
@@ -722,6 +825,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             StoppingVelocityThreshold = 0.05f;
             ReferenceFrame = vessel.SurfaceReferenceFrame;
             MaxAngularVelocity = new Vector3d (1, 1, 1);
+            LimitAngularVelocity = true;
             RollAttenuationAngle = 1.0;
             PitchYawAttenuationAngle = 1.0;
             RollStartAngle = 20.0;
@@ -774,6 +878,12 @@ namespace KRPC.SpaceCenter.AutoPilot
             PitchPID.ResetState ();
             RollPID.ResetState ();
             YawPID.ResetState ();
+            actuatorDelivered = Vector3d.zero;
+            actuatorLimitedFraction = Vector3d.zero;
+            actuatorBackoff = new Vector3d (1, 1, 1);
+            targetRate = Vector3d.zero;
+            lastAnglesValid = false;
+            aerodynamicRateLimit.Reset ();
             pointRotationValid = false;
             antipodeLatched = false;
             logAntipodeWeight = 0;
@@ -858,6 +968,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var torque = vessel.AvailableTorqueVectors.Item1;
             var moi = vessel.MomentOfInertiaVector;
             var dt = Time.fixedDeltaTime;
+            UpdateControlSurfaces (torque);
 
             // While the vessel sits on the launch clamps (PRELAUNCH) the autopilot is engaged but
             // must not act. The craft is physically held and the engines are unlit, so available
@@ -914,6 +1025,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             Vector3d currentDirection;
             double phi, cosPhi, sinPhi;
             ComputeRollInvariantFrame (internalVessel, out currentDirection, out phi, out cosPhi, out sinPhi);
+            UpdateRateLimit (cosPhi, sinPhi);
 
             // Measure the raw angular velocity from the root-part rigidbody. On a structurally
             // flexible craft it carries the bending mode on top of the rigid-body rate. The chatter
@@ -1113,13 +1225,38 @@ namespace KRPC.SpaceCenter.AutoPilot
             var smoothedPitch = SmoothOutput (0, uPitch, dt);
             var smoothedRoll = SmoothOutput (1, uRoll, dt);
             var smoothedYaw = SmoothOutput (2, uYaw, dt);
-            state.Pitch = (float)(softStart * smoothedPitch);
-            state.Roll = (float)(softStart * smoothedRoll);
-            state.Yaw = (float)(softStart * smoothedYaw);
+            // Hold the integrals on a tick the control surfaces cannot keep up with, so they do
+            // not wind up while the surfaces swing. Pitch and yaw integrate in the roll-invariant
+            // frame, so each body axis counts toward a loop by its share of that loop's axis.
+            var commandPitch = softStart * smoothedPitch;
+            var commandRoll = softStart * smoothedRoll;
+            var commandYaw = softStart * smoothedYaw;
+            var bodyLimited = new Vector3d (
+                ActuatorLags (0, commandPitch, dt) ? 1 : 0,
+                ActuatorLags (1, commandRoll, dt) ? 1 : 0,
+                ActuatorLags (2, commandYaw, dt) ? 1 : 0);
+            var limited = ToRollInvariantAxes (bodyLimited);
+            if (limited.x > 0.5)
+                PitchPID.HoldIntegralTerm ();
+            if (limited.y > 0.5)
+                RollPID.HoldIntegralTerm ();
+            if (limited.z > 0.5)
+                YawPID.HoldIntegralTerm ();
+            UpdateActuatorBackoff (limited, dt);
 
-            // Store the delivered command for next tick's control-output oscillation envelope.
-            var delivered = new Vector3d (state.Pitch, state.Roll, state.Yaw);
-            detectors.RecordControl (delivered);
+            // The loop commands roll as a fraction of the available roll torque
+            state.Pitch = (float)commandPitch;
+            state.Roll = (float)RollInput (commandRoll, torque [1]);
+            state.Yaw = (float)commandYaw;
+
+            // The command as a fraction of the available torque, before the roll input inversion,
+            // for the aerodynamic trim and next tick's control-output oscillation envelope
+            var command = new Vector3d (commandPitch, commandRoll, commandYaw);
+            // Estimate the aerodynamic limit only when some axis has control surface torque.
+            // UpdateRateLimit applies it to each axis by its surface share.
+            var surfaces = surfaceShare.x > 0 || surfaceShare.y > 0 || surfaceShare.z > 0;
+            aerodynamicRateLimit.Update (vessel, torque, command, dt, LimitAngularVelocity && surfaces);
+            detectors.RecordControl (command);
 
 
             if (diagnosticLogging) {
@@ -1291,6 +1428,186 @@ namespace KRPC.SpaceCenter.AutoPilot
         }
 
         /// <summary>
+        /// Refresh the roll gain and full-deflection roll torque of each control surface that
+        /// rolls the vessel, and the rate the surfaces can deliver a change of command at on each
+        /// axis.
+        /// </summary>
+        /// <remarks>
+        /// A surface swings through its range at its actuator speed. An axis whose torque comes
+        /// only from surfaces takes the slowest surface's swing time to go from no command to
+        /// full command. Other torque sources respond at once, so the swing time is scaled by the
+        /// surfaces' share of the axis's torque.
+        /// </remarks>
+        void UpdateControlSurfaces (Vector3d torque)
+        {
+            rollGains.Clear ();
+            rollSurfaceTorques.Clear ();
+            var surfaceTorque = Vector3d.zero;
+            var swingTime = Vector3d.zero;
+            foreach (var part in vessel.InternalVessel.parts) {
+                var surface = part.FindModuleImplementing<ModuleControlSurface> ();
+                if (surface == null)
+                    continue;
+                double gain, rollTorque;
+                var available = Services.Parts.ControlSurface.ComputeAvailableTorque (
+                    surface, out gain, out rollTorque).Item1;
+                var range = surface.ctrlSurfaceRange * surface.authorityLimiter / 100.0;
+                var swing = surface.actuatorSpeed > 0 ? range / surface.actuatorSpeed : 0.0;
+                for (int axis = 0; axis < 3; axis++) {
+                    if (available [axis] <= 0)
+                        continue;
+                    surfaceTorque [axis] += available [axis];
+                    swingTime [axis] = Math.Max (swingTime [axis], swing);
+                }
+                if (gain <= 0)
+                    continue;
+                rollGains.Add (gain);
+                rollSurfaceTorques.Add (rollTorque);
+            }
+            for (int axis = 0; axis < 3; axis++) {
+                var share = torque [axis] > 0 ? Math.Min (1.0, surfaceTorque [axis] / torque [axis]) : 0.0;
+                surfaceShare [axis] = share;
+                var time = swingTime [axis] * share;
+                actuatorSlew [axis] = time > 0 ? 1.0 / time : double.PositiveInfinity;
+            }
+        }
+
+        /// <summary>
+        /// Combine <see cref="MaxAngularVelocity"/> with the aerodynamic rate limit. The
+        /// aerodynamic limit is per body axis, and pitch and yaw are controlled in the
+        /// roll-invariant frame, so each of those takes the radius of the body-axis limit ellipse
+        /// along it, for either direction of rotation.
+        /// </summary>
+        void UpdateRateLimit (double cosPhi, double sinPhi)
+        {
+            var pitchAxis = FromRollInvariant (new Vector3d (1, 0, 0), cosPhi, sinPhi);
+            var yawAxis = FromRollInvariant (new Vector3d (0, 0, 1), cosPhi, sinPhi);
+            riPitchAxis = pitchAxis;
+            riYawAxis = yawAxis;
+            var bodyLag = new Vector3d (
+                double.IsInfinity (actuatorSlew.x) ? 0.0 : 1.0 / actuatorSlew.x,
+                double.IsInfinity (actuatorSlew.y) ? 0.0 : 1.0 / actuatorSlew.y,
+                double.IsInfinity (actuatorSlew.z) ? 0.0 : 1.0 / actuatorSlew.z);
+            actuatorLag = ToRollInvariantAxes (bodyLag);
+            rateLimit = MaxAngularVelocity;
+            negativeRateLimit = MaxAngularVelocity;
+            if (!LimitAngularVelocity)
+                return;
+            // The controller's positive rate is a negative rotation in the sense of AngleAxis
+            var positive = aerodynamicRateLimit.NegativeLimit * AerodynamicRateFraction;
+            var negative = aerodynamicRateLimit.PositiveLimit * AerodynamicRateFraction;
+            // Only the control surfaces' share of an axis's torque lags the command and drives a
+            // limit cycle, so the limit applies in proportion to that share
+            for (int axis = 0; axis < 3; axis++) {
+                var share = surfaceShare [axis];
+                positive [axis] = share > 0 ? positive [axis] / share : double.PositiveInfinity;
+                negative [axis] = share > 0 ? negative [axis] / share : double.PositiveInfinity;
+            }
+            rateLimit.x = Math.Min (rateLimit.x, EllipseRadius (pitchAxis, positive, negative));
+            rateLimit.y = Math.Min (rateLimit.y, positive.y);
+            rateLimit.z = Math.Min (rateLimit.z, EllipseRadius (yawAxis, positive, negative));
+            negativeRateLimit.x = Math.Min (negativeRateLimit.x, EllipseRadius (-pitchAxis, positive, negative));
+            negativeRateLimit.y = Math.Min (negativeRateLimit.y, negative.y);
+            negativeRateLimit.z = Math.Min (negativeRateLimit.z, EllipseRadius (-yawAxis, positive, negative));
+        }
+
+        /// <summary>
+        /// Update the estimate of the rate the target moves at. With a still target, the error
+        /// changes at the angular velocity, so the difference between the two is the target's
+        /// rate. The error angles are in degrees.
+        /// </summary>
+        void UpdateTargetRate (Vector3d angles, Vector3d omega)
+        {
+            var radians = angles * (Math.PI / 180);
+            if (lastAnglesValid) {
+                var dt = Time.fixedDeltaTime;
+                var beta = 1.0 - Math.Exp (-dt / TargetRateTimeConstant);
+                for (int axis = 0; axis < 3; axis++) {
+                    var rate = omega [axis] - (radians [axis] - lastAngles [axis]) / dt;
+                    if (Math.Abs (rate) > MaxTargetRate)
+                        rate = 0;
+                    targetRate [axis] += beta * (rate - targetRate [axis]);
+                }
+            }
+            lastAngles = radians;
+            lastAnglesValid = true;
+        }
+
+        // The radius along a body direction, in the pitch and yaw plane, of the ellipse with
+        // the pitch and yaw limits for the direction's sign on each axis as semi-axes
+        static double EllipseRadius (Vector3d direction, Vector3d positive, Vector3d negative)
+        {
+            var pitch = direction.x == 0 ? 0.0 : direction.x / (direction.x > 0 ? positive.x : negative.x);
+            var yaw = direction.z == 0 ? 0.0 : direction.z / (direction.z > 0 ? positive.z : negative.z);
+            var inverse = Math.Sqrt (pitch * pitch + yaw * yaw);
+            return inverse > 0 ? 1.0 / inverse : double.PositiveInfinity;
+        }
+
+        /// <summary>
+        /// Back off the rate-loop bandwidth of an axis whose command the actuator rate holds back
+        /// most of the time. That is a limit cycle through the rate limit, which a lower bandwidth
+        /// stops. The bandwidth recovers slowly once the actuators keep up. The limited share of
+        /// each axis is in the roll-invariant frame.
+        /// </summary>
+        void UpdateActuatorBackoff (Vector3d limited, double dt)
+        {
+            var beta = 1.0 - Math.Exp (-dt / ActuatorLimitedTimeConstant);
+            for (int axis = 0; axis < 3; axis++) {
+                actuatorLimitedFraction [axis] += beta * (limited [axis] - actuatorLimitedFraction [axis]);
+                var backoff = actuatorBackoff [axis];
+                if (actuatorLimitedFraction [axis] > ActuatorLimitedThreshold)
+                    backoff -= ActuatorBackoffRate * backoff * dt;
+                else
+                    backoff += ActuatorRecoveryRate * dt;
+                actuatorBackoff [axis] = backoff.Clamp (ActuatorBackoffMin, 1.0);
+            }
+        }
+
+        /// <summary>
+        /// Move an axis's modeled actuator command toward the command by what the control
+        /// surfaces can deliver in a tick. Returns whether the actuators lag the command. The
+        /// command itself goes out unchanged: the game moves the surfaces at their own speed, and
+        /// the other torque sources respond at once.
+        /// </summary>
+        bool ActuatorLags (int axis, double command, double dt)
+        {
+            var step = actuatorSlew [axis] * dt;
+            var delivered = actuatorDelivered [axis];
+            var limited = command.Clamp (delivered - step, delivered + step);
+            actuatorDelivered [axis] = limited;
+            return limited != command;
+        }
+
+        /// <summary>
+        /// The roll input that delivers the given fraction of the available roll torque. A
+        /// control surface deflects by its roll gain times the input, clamped to its range, so its
+        /// share is piecewise linear in the input. The other torque sources are linear in it.
+        /// </summary>
+        double RollInput (double fraction, double torque)
+        {
+            if (rollGains.Count == 0 || torque <= 0)
+                return fraction;
+            var surfaces = 0.0;
+            for (int i = 0; i < rollGains.Count; i++)
+                surfaces += rollSurfaceTorques [i] * Math.Min (1.0, rollGains [i]);
+            var linear = Math.Max (0.0, torque - surfaces);
+            var wanted = Math.Min (1.0, Math.Abs (fraction)) * torque;
+            // The delivered torque rises monotonically with the input, so bisect
+            double low = 0, high = 1;
+            for (int iteration = 0; iteration < 24; iteration++) {
+                var input = 0.5 * (low + high);
+                var delivered = linear * input;
+                for (int i = 0; i < rollGains.Count; i++)
+                    delivered += rollSurfaceTorques [i] * Math.Min (1.0, rollGains [i] * input);
+                if (delivered < wanted)
+                    low = input;
+                else
+                    high = input;
+            }
+            return Math.Sign (fraction) * 0.5 * (low + high);
+        }
+
+        /// <summary>
         /// Update the one-sided torque smoothing: track increases immediately (gains going down is
         /// safe) but decay decreases at tauabout 0.5s so a sudden torque drop (e.g. engine shutdown while a
         /// small reaction wheel keeps torque > 0) does not cause a single-tick gain spike. The
@@ -1432,6 +1749,14 @@ namespace KRPC.SpaceCenter.AutoPilot
             log.AddVector ("u_pre", controlPreFilter, "F3");
             log.Add ("soft_start", softStart, "F3");
             log.AddVector ("ctrl", new Vector3d (state.Pitch, state.Roll, state.Yaw), "F3");
+            log.AddVector ("aero_limit", aerodynamicRateLimit.PositiveLimit, "F3");
+            log.AddVector ("aero_limit_neg", aerodynamicRateLimit.NegativeLimit, "F3");
+            log.AddVector ("rate_limit", rateLimit, "F3");
+            log.AddVector ("rate_limit_neg", negativeRateLimit, "F3");
+            log.AddVector ("slew", actuatorSlew, "F3");
+            log.AddVector ("actuator_limited", actuatorLimitedFraction, "F3");
+            log.AddVector ("actuator_backoff", actuatorBackoff, "F3");
+            log.AddVector ("target_rate", targetRate, "F4");
 
             // Oscillation detectors (info window: STRUC / CTRL / FREQ): chatter level and the
             // raw per-tick trigger margin (>=1 fires), the control-output envelope, and the
@@ -1769,6 +2094,8 @@ namespace KRPC.SpaceCenter.AutoPilot
 
             // Rotate currentOmega into roll-invariant frame for stopping-distance feedforward.
             var currentOmegaRi = ToRollInvariant (currentOmega, cosPhi, sinPhi);
+            // Update the target rate this tick, before the profiles below read it
+            UpdateTargetRate (anglesRI, currentOmegaRi);
 
             var result = Vector3d.zero;
 
@@ -1776,7 +2103,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // stopping coefficient uses the unfloored gain, see the note in ComputePitchYawVelocity.
             var rollBandwidth = moi [1] > 0 ? ProfileKp (1, RollPID) * torque [1] / moi [1] : 0.0;
             result.y = ComputeAxisVelocity (anglesRI.y, torque [1], moi [1], currentOmegaRi.y,
-                MaxAngularVelocity [1], RollAttenuationAngle, rollBandwidth, out rollSample);
+                rateLimit [1], RollBand, rollBandwidth, actuatorLag.y, targetRate.y, out rollSample);
 
             // Pitch/yaw handled jointly so the nose follows a straight great-circle arc.
             double pitchVelocity, yawVelocity;
@@ -1870,8 +2197,9 @@ namespace KRPC.SpaceCenter.AutoPilot
                 }
             }
 
-            var eStopPitch = thetaPitch + coeff * omegaPitch;
-            var eStopYaw = thetaYaw + coeff * omegaYaw;
+            // The rotation relative to the target carries on while the control surfaces reverse
+            var eStopPitch = thetaPitch + coeff * omegaPitch + actuatorLag.x * (omegaPitch - targetRate.x);
+            var eStopYaw = thetaYaw + coeff * omegaYaw + actuatorLag.z * (omegaYaw - targetRate.z);
             var eStopMag = Math.Sqrt (eStopPitch * eStopPitch + eStopYaw * eStopYaw);
 
             // Singularity guard on |e_stop| (not theta): both the error and the predicted drift must
@@ -1887,8 +2215,9 @@ namespace KRPC.SpaceCenter.AutoPilot
             // constraint ellipse along s-hat.
             var alpha2d = sPitch * sPitch * alphaPitch + sYaw * sYaw * alphaYaw;
 
-            var maxVPitch = MaxAngularVelocity [0];
-            var maxVYaw = MaxAngularVelocity [2];
+            // The command opposes s-hat
+            var maxVPitch = sPitch > 0 ? negativeRateLimit [0] : rateLimit [0];
+            var maxVYaw = sYaw > 0 ? negativeRateLimit [2] : rateLimit [2];
             var maxV2d = (maxVPitch > 0 && maxVYaw > 0)
                 ? Math.Sqrt (1.0 / (sPitch * sPitch / (maxVPitch * maxVPitch) + sYaw * sYaw / (maxVYaw * maxVYaw)))
                 : Math.Min (maxVPitch, maxVYaw);
@@ -1928,7 +2257,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // ramp's slope into the setpoint and feedforward. theta is jitter-free, so the deadband
             // edge is quiet.
             var thetaMag = Math.Sqrt (thetaPitch * thetaPitch + thetaYaw * thetaYaw);
-            var deadband = DeadbandScale (thetaMag, PitchYawAttenuationAngle);
+            var deadband = DeadbandScale (thetaMag, PitchYawBand);
             sample.SPitch = sPitch;
             sample.SYaw = sYaw;
             sample.ThetaPitch = thetaPitch;
@@ -1970,8 +2299,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// Compute target angular velocity for a single axis using the bang-bang profile.
         /// </summary>
         double ComputeAxisVelocity (double angleDeg, double torque, double moi, double currentOmega,
-            double maxVelocity, double deadbandHighDeg, double pidBandwidth,
-            out ProfileSample sample)
+            double maxVelocity, double deadbandHighDeg, double pidBandwidth, double actuatorLag,
+            double targetRate, out ProfileSample sample)
         {
             sample = default (ProfileSample);
             var theta = GeometryExtensions.ToRadians (angleDeg);
@@ -1986,7 +2315,7 @@ namespace KRPC.SpaceCenter.AutoPilot
                     linearActive = Math.Abs (corrLinear) > Math.Abs (corrQuad);
                     corr = Math.Abs (corrQuad) >= Math.Abs (corrLinear) ? corrQuad : corrLinear;
                 }
-                theta += corr;
+                theta += corr + (currentOmega - targetRate) * actuatorLag;
             }
             // The leading -Math.Sign defines the controller's positive angular-velocity direction as
             // the left-handed sense about the axis; it is the matched partner of the negation in
@@ -2142,7 +2471,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var tracking = s.Speed > 1e-9
                 ? Math.Min (1.0, Math.Max (0.0, omegaAlongCommand / s.Speed)) : 0.0;
             var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, tracking,
-                PitchYawAttenuationAngle);
+                PitchYawBand);
             // Overshoot gate, the same on-trajectory gating applied to the other
             // side. trackingFraction attenuates the FF when the craft is slower than the profile
             // at spin-up, and this attenuates it when the craft is faster, an overshoot. When the profile
@@ -2185,7 +2514,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             var tracking = s.Speed > 1e-9
                 ? Math.Min (1.0, Math.Max (0.0, omegaAlongCommand / s.Speed)) : 0.0;
             var gDot = ProfileMagnitudeRate (s, thetaDot, slewRateRad, tracking,
-                RollAttenuationAngle);
+                RollBand);
             // Overshoot gate (see PitchYawAnalyticFf): attenuate the FF when the roll rate along
             // the command exceeds the commanded profile speed, so a fast crossing is not fed
             // forward into an overshoot. Near 1 on profile and when moving away.
@@ -2243,10 +2572,18 @@ namespace KRPC.SpaceCenter.AutoPilot
             if (torque [index] <= 0)
                 return;
             var accelerationInv = moi [index] / torque [index];
+            var bandwidth = twiceZetaOmega [index];
+            var bandwidthSquared = omegaSquared [index];
+
+            // Back off the bandwidth while the actuator rate limits the command (see
+            // UpdateActuatorBackoff). Scaling omega0 keeps the damping ratio.
+            var backoff = actuatorBackoff [index];
+            bandwidth *= backoff;
+            bandwidthSquared *= backoff * backoff;
 
             // Record the unfloored gain for the velocity profile's linear stopping coefficient
             // (see ProfileKp) before any bandwidth reduction below.
-            unflooredKp [index] = twiceZetaOmega [index] * accelerationInv;
+            unflooredKp [index] = bandwidth * accelerationInv;
 
             // Latched bandwidth reduction: a latched (flexible) axis has its rate-loop bandwidth
             // 2 * zeta * omega0 = twiceZetaOmega, since Kp * alpha = 2 * zeta * omega0, pulled down
@@ -2263,8 +2600,6 @@ namespace KRPC.SpaceCenter.AutoPilot
             var level = bandwidthFloorMode == Services.MitigationMode.Off ? 0.0
                 : bandwidthFloorMode == Services.MitigationMode.Forced ? 1.0
                 : policy.MitigationLevel (index);
-            var bandwidth = twiceZetaOmega [index];
-            var bandwidthSquared = omegaSquared [index];
             if (level > 0 && oscillationBandwidthFloor < bandwidth) {
                 var reduced = bandwidth + level * (oscillationBandwidthFloor - bandwidth);
                 var f = reduced / bandwidth;

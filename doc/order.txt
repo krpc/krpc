@@ -1146,6 +1146,9 @@ SpaceCenter.ControlSurface.MinDeployAngle
 SpaceCenter.ControlSurface.MaxDeployAngle
 SpaceCenter.ControlSurface.DeflectionOverride
 SpaceCenter.ControlSurface.Deflection
+SpaceCenter.ControlSurface.DeflectionAngle
+SpaceCenter.ControlSurface.ControlRange
+SpaceCenter.ControlSurface.ActuatorSpeed
 SpaceCenter.ControlSurface.SurfaceArea
 SpaceCenter.ControlSurface.AvailableTorque
 SpaceCenter.Decoupler
@@ -1620,6 +1623,7 @@ SpaceCenter.AutoPilot.CurrentRollError
 SpaceCenter.AutoPilot.RollStartAngle
 SpaceCenter.AutoPilot.RollEngageAngle
 SpaceCenter.AutoPilot.MaxAngularVelocity
+SpaceCenter.AutoPilot.LimitAngularVelocity
 SpaceCenter.AutoPilot.PitchYawAttenuationAngle
 SpaceCenter.AutoPilot.RollAttenuationAngle
 SpaceCenter.AutoPilot.AutoTune
