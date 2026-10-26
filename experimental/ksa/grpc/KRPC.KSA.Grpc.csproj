@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>KRPC.KSA.Grpc</AssemblyName>
+    <RootNamespace>KRPC.KSA.Grpc</RootNamespace>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="src/GrpcClient.cs" />
+    <Compile Include="src/GrpcServer.cs" />
+    <Compile Include="src/ProcedureMethods.cs" />
+    <Compile Include="src/ProtoCodec.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- The game assemblies reference newer Microsoft.Extensions builds than ASP.NET Core -->
+    <Reference Remove="KSA" />
+    <Reference Remove="$(KSADir)Brutal.*.dll" />
+    <!-- Shared with the server, from the mod folder -->
+    <Reference Update="KRPC.Core" Private="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- KSA ships no ASP.NET Core, so build.sh copies the shared framework into the mod.
+         Addon loads all of it into its own load context, apart from the game's
+         Microsoft.Extensions assemblies -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.71.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.36.2" ExcludeAssets="runtime" />
+    <!-- Compiles against the internals of the KRPC.Core release -->
+    <PackageReference Include="Krafs.Publicizer" Version="2.3.0" PrivateAssets="all" />
+    <Publicize Include="KRPC.Core" />
+  </ItemGroup>
+</Project>

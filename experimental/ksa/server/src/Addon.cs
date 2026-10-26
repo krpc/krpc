@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
@@ -12,6 +14,7 @@ using HarmonyLib;
 using KRPC.KSA.UI;
 using KRPC.Server;
 using KRPC.Service;
+using KRPC.Utils;
 using KSA;
 using StarMap.API;
 using Logger = KRPC.Utils.Logger;
@@ -34,6 +37,7 @@ namespace KRPC.KSA
         Core core;
         ConfigurationFile config;
         ClientRequestingConnectionEventArgs connectionRequest;
+        GrpcLoadContext grpcContext;
         // Whether the server was updated before the solver step of the current frame
         bool updatedThisFrame;
         double unpausedSpeed = 1.0;
@@ -64,8 +68,17 @@ namespace KRPC.KSA
             core.Version = version.Major + "." + version.Minor + "." + version.Build;
             config = new ConfigurationFile (Path.Combine (modDirectory, "settings.toml"));
             config.Load ();
-            foreach (var server in config.Configuration.Servers)
-                core.Add (server.Create ());
+            foreach (var server in config.Configuration.Servers) {
+                if (server.Protocol != ConfigurationFile.GrpcProtocol) {
+                    core.Add (server.Create ());
+                    continue;
+                }
+                try {
+                    core.Add (CreateGrpcServer (server));
+                } catch (Exception e) {
+                    Logger.WriteLine ("Failed to create gRPC server '" + server.Name + "': " + e, Logger.Severity.Error);
+                }
+            }
             core.OnClientRequestingConnection += OnClientRequestingConnection;
 
             CallContext.GameScene = GameScene.None;
@@ -495,6 +508,21 @@ namespace KRPC.KSA
                     break;
                 }
             };
+        }
+
+        /// <summary>
+        /// Create a gRPC server, from the grpc folder of the mod. Throws an exception if the
+        /// platform has no ASP.NET Core build in the folder.
+        /// </summary>
+        KRPC.Server.Server CreateGrpcServer (Configuration.Server config)
+        {
+            grpcContext ??= new GrpcLoadContext (
+                Path.Combine (modDirectory, "grpc"), AssemblyLoadContext.GetLoadContext (typeof (Addon).Assembly));
+            var type = grpcContext.LoadFromAssemblyName (new AssemblyName ("KRPC.KSA.Grpc")).GetType ("KRPC.KSA.Grpc.GrpcServer");
+            var address = IPAddress.Parse (config.Settings.GetValueOrDefault ("address", IPAddress.Loopback.ToString ()));
+            var port = ushort.Parse (config.Settings.GetValueOrDefault ("port", "50002"), CultureInfo.InvariantCulture);
+            return (KRPC.Server.Server)type.GetMethod ("Create").Invoke (
+                null, new object [] { config.Id, config.Protocol, config.Name, address, port });
         }
 
         /// <summary>

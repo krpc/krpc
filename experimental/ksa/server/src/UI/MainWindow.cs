@@ -188,6 +188,8 @@ namespace KRPC.KSA.UI
                 return ProtobufOverWebSocketsText;
             case Protocol.ProtocolBuffersOverLocalSocket:
                 return ProtobufOverLocalSocketText;
+            case ConfigurationFile.GrpcProtocol:
+                return "gRPC";
             default:
                 return ProtobufOverSerialIOText;
             }
