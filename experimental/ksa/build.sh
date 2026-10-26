@@ -45,6 +45,9 @@ for project in "${projects[@]}"; do
 done
 # The server reads the API documentation from the XML file beside each assembly
 cp "$krpc_bin/KRPC.Core.xml" "$out/"
+if [ -f "$out/KRPC.KSA.TestingTools.dll" ]; then
+  cp "$here/testing/settings.toml" "$out/"
+fi
 rm -f "$out"/*.pdb
 
 # Generate the service definitions, which runs the server's service scan over the
