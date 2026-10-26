@@ -57,13 +57,13 @@ public class Connection implements AutoCloseable {
 
   private static String EMPTY_NAME = "";
   private static InetAddress DEFAULT_ADDRESS = InetAddress.getLoopbackAddress();
-  private static int DEFAULT_RPC_PORT = 50000;
-  private static int DEFAULT_STREAM_PORT = 50001;
+  private static final int DEFAULT_RPC_PORT = 50000;
+  private static final int DEFAULT_STREAM_PORT = 50001;
   private static Duration DEFAULT_TIMEOUT = Duration.ZERO;
 
   /**
-   * Connect to a kRPC server using a blank client name, on the default
-   * address {@value #DEFAULT_ADDRESS}, RPC port number
+   * Connect to a kRPC server using a blank client name, on the loopback
+   * address, RPC port number
    * {@value #DEFAULT_RPC_PORT} and stream port number
    * {@value #DEFAULT_STREAM_PORT}.
    *
@@ -74,8 +74,8 @@ public class Connection implements AutoCloseable {
   }
 
   /**
-   * Connect to a kRPC server using the given client name, on the default
-   * address {@value #DEFAULT_ADDRESS}, RPC port number
+   * Connect to a kRPC server using the given client name, on the loopback
+   * address, RPC port number
    * {@value #DEFAULT_RPC_PORT} and stream port number
    * {@value #DEFAULT_STREAM_PORT}.
    *

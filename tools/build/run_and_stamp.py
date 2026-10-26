@@ -1,7 +1,7 @@
 """Runs a command and, on success, writes a stamp file.
 
-Used by the clang-tidy / clang-format lint rules to gate a stamp file on the
-tool succeeding, portably across platforms. Usage:
+Used by the clang-tidy, clang-format and javadoc rules to gate a stamp file on
+the tool succeeding, portably across platforms. Usage:
 
     run_and_stamp.py <stamp> <tool> [tool args...]
 

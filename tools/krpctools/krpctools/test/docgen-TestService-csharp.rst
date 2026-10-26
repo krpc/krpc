@@ -222,12 +222,13 @@
 
    .. function:: int? EchoNullableInt(int? value)
 
-
+      Returns the given value.
 
       :parameters:
 
+       * **value** -- The value, or ``null``.
 
-
+      :returns: The value.
       :Game Scenes: All
 
    .. function:: System.Collections.Generic.IList<int> EchoNullableList(System.Collections.Generic.IList<int> l)
@@ -445,6 +446,22 @@
 
       :Game Scenes: All
 
+   .. function:: string JoinWithAtSign(string firstValue, string from)
+
+      Returns *firstValue* and *from* joined by an at
+      sign, e.g. ``jeb@kerbin``. The parameter names are:
+
+      * a name in camel case, and
+      * a name that is a keyword in some languages.
+
+      :parameters:
+
+       * **firstValue** -- The string before the at sign.
+       * **from** -- The string after the at sign.
+
+      :returns: The strings joined.
+      :Game Scenes: All
+
    .. function:: System.Collections.Generic.IList<int> ListDefault(System.Collections.Generic.IList<int> x = null)
 
 
@@ -493,8 +510,9 @@
 
    .. property:: TestClass ObjectProperty { get; set; }
 
+      A property holding an object.
 
-
+      :returns: The object, or ``null``.
       :Game Scenes: All
 
    .. function:: KRPC.Client.Event OnTimer(uint milliseconds, uint repeats = 1)
@@ -659,10 +677,21 @@
 
    .. function:: int ThrowCustomException()
 
-
+      Throws a :type:`CustomException`.
 
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Links to each kind of member: :type:`TestService <TestService.TestService>`, :type:`TestClass`,
+         :type:`TestEnum`, :type:`TestStruct`, :type:`KRPC.InvalidOperationException`,
+         :meth:`TestService.FloatToString <TestService.TestService.FloatToString>`, :prop:`TestService.StringProperty <TestService.TestService.StringProperty>`,
+         :prop:`TestService.StringPropertyPrivateGet <TestService.TestService.StringPropertyPrivateGet>`, :meth:`TestClass.FloatToString`,
+         :meth:`TestClass.StaticMethod`, :prop:`TestClass.IntProperty`,
+         :prop:`TestClass.StringPropertyPrivateGet`, :value:`TestEnum.ValueA` and
+         :prop:`TestStruct.IntField`.
 
    .. function:: int ThrowCustomExceptionLater()
 
@@ -756,8 +785,9 @@
 
    .. property:: TestClass ObjectProperty { get; set; }
 
+      A property of the object, holding another object.
 
-
+      :returns: The other object, or ``null``.
       :Game Scenes: All
 
    .. function:: string ObjectToString(TestClass other)
@@ -785,13 +815,14 @@
 
    .. function:: static string StaticMethod(IConnection connection, string a = "", string b = "")
 
-
+      Returns jeb followed by *a* and *b*.
 
       :parameters:
 
+       * **a** -- The first string.
+       * **b** -- The second string.
 
-
-
+      :returns: The strings joined.
       :Game Scenes: All
 
    .. function:: static TestClass StaticNullableObject(IConnection connection, TestClass value)
@@ -1003,6 +1034,6 @@
 
 .. class:: DeprecatedException
 
-   .. warning:: Deprecated. Use CustomException instead.
+   .. warning:: Deprecated. Use :type:`CustomException` instead.
 
    Deprecated exception documentation string.

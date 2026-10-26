@@ -167,9 +167,10 @@
 
    .. method:: Integer echoNullableInt(Integer value)
 
+      Returns the given value.
 
-
-      :param Integer value:
+      :param Integer value: The value, or ``null``.
+      :returns: The value.
    
 
    .. method:: java.util.List<Integer> echoNullableList(java.util.List<Integer> l)
@@ -326,6 +327,19 @@
       :param long value:
    
 
+   .. method:: String joinWithAtSign(String firstValue, String from)
+
+      Returns *firstValue* and *from* joined by an at
+      sign, e.g. ``jeb@kerbin``. The parameter names are:
+
+      * a name in camel case, and
+      * a name that is a keyword in some languages.
+
+      :param String firstValue: The string before the at sign.
+      :param String from: The string after the at sign.
+      :returns: The strings joined.
+   
+
    .. method:: java.util.List<Integer> listDefault(java.util.List<Integer> x)
 
 
@@ -366,8 +380,9 @@
 
    .. method:: void setObjectProperty(TestClass value)
 
+      A property holding an object.
 
-
+      :returns: The object, or ``null``.
    
 
    .. method:: krpc.client.Event onTimer(int milliseconds, int repeats)
@@ -498,9 +513,19 @@
 
    .. method:: int throwCustomException()
 
-
+      Throws a :type:`CustomException`.
 
    
+
+      .. note::
+
+         Links to each kind of member: :type:`TestService`, :type:`TestClass`,
+         :type:`TestEnum`, :type:`TestStruct`, :type:`KRPC.InvalidOperationException`,
+         :meth:`floatToString(float)`, :meth:`getStringProperty()`,
+         :meth:`setStringPropertyPrivateGet(String)`, :meth:`TestClass.floatToString(float)`,
+         :meth:`TestClass.staticMethod(String, String)`, :meth:`TestClass.getIntProperty()`,
+         :meth:`TestClass.setStringPropertyPrivateGet(String)`, :meth:`TestEnum.VALUE_A` and
+         :meth:`TestStruct.getIntField()`.
 
    .. method:: int throwCustomExceptionLater()
 
@@ -579,8 +604,9 @@
 
    .. method:: void setObjectProperty(TestClass value)
 
+      A property of the object, holding another object.
 
-
+      :returns: The other object, or ``null``.
    
 
    .. method:: String objectToString(TestClass other)
@@ -602,10 +628,11 @@
 
    .. method:: static String staticMethod(Connection connection, String a, String b)
 
+      Returns jeb followed by *a* and *b*.
 
-
-      :param String a:
-      :param String b:
+      :param String a: The first string.
+      :param String b: The second string.
+      :returns: The strings joined.
    
 
    .. method:: static TestClass staticNullableObject(Connection connection, TestClass value)
@@ -814,6 +841,6 @@
 
 .. type:: public class DeprecatedException
 
-   .. warning:: Deprecated. Use CustomException instead.
+   .. warning:: Deprecated. Use :type:`CustomException` instead.
 
    Deprecated exception documentation string.

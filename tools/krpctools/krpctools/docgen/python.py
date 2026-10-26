@@ -21,8 +21,10 @@ from .nodes import (
     ClassStaticMethod,
     Enumeration,
     EnumerationValue,
+    ExceptionNode,
     Procedure,
     Property,
+    Service,
     Struct,
     StructField,
 )
@@ -108,6 +110,8 @@ class PythonDomain(Domain[PythonLanguage]):
         return self.shorten_ref(name)
 
     def see(self, obj):
+        if isinstance(obj, Service):
+            return ":mod:`%s`" % obj.name
         if any(
             isinstance(obj, cls)
             for cls in (Property, ClassProperty, EnumerationValue, StructField)
@@ -117,7 +121,9 @@ class PythonDomain(Domain[PythonLanguage]):
             isinstance(obj, cls) for cls in (Procedure, ClassMethod, ClassStaticMethod)
         ):
             prefix = "meth"
-        elif any(isinstance(obj, cls) for cls in (Class, Enumeration, Struct)):
+        elif any(
+            isinstance(obj, cls) for cls in (Class, Enumeration, Struct, ExceptionNode)
+        ):
             prefix = "class"
         else:
             raise RuntimeError(str(obj))

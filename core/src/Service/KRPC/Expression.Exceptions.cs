@@ -23,7 +23,9 @@ namespace KRPC.Service.KRPC
         /// </summary>
         /// <remarks>
         /// The client receives the exception as an error from the function, or from the stream
-        /// or event evaluating it. Throws an exception if the service does not declare it.
+        /// or event evaluating it. For example, the service <c>KRPC</c> and the name
+        /// <c>Error</c> raise <see cref="Error"/>. Throws an exception if the service does not
+        /// declare it.
         /// </remarks>
         /// <param name="service">The name of the service the exception is defined in.</param>
         /// <param name="name">The name of the exception.</param>

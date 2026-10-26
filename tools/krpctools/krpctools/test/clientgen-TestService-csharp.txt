@@ -344,6 +344,11 @@ namespace KRPC.Client.Services.TestService
             return (global::KRPC.Client.Services.TestService.TestNestedNullableStruct)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec10, connection);
         }
 
+        /// <summary>
+        /// Returns the given value.
+        /// </summary>
+        /// <param name="value">The value, or <c>null</c>.</param>
+        /// <returns>The value.</returns>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableInt", typeof(TypeSpecs))]
         public int? EchoNullableInt (int? value)
         {
@@ -589,6 +594,24 @@ namespace KRPC.Client.Services.TestService
             return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
+        /// <summary>
+        /// Returns <paramref name="firstValue" /> and <paramref name="from" /> joined by an at
+        /// sign, e.g. <c>jeb@kerbin</c>. The parameter names are:
+        /// <list type="bullet"><item><description>a name in camel case, and</description></item><item><description>a name that is a keyword in some languages.</description></item></list></summary>
+        /// <param name="firstValue">The string before the at sign.</param>
+        /// <param name="from">The string after the at sign.</param>
+        /// <returns>The strings joined.</returns>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "JoinWithAtSign", typeof(TypeSpecs))]
+        public string JoinWithAtSign (string firstValue, string from)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (firstValue, TypeSpecs.Spec5),
+                global::KRPC.Client.Encoder.Encode (from, TypeSpecs.Spec5)
+            };
+            var _result = connection.Invoke ("TestService", "JoinWithAtSign", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ListDefault", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<int> ListDefault (global::System.Collections.Generic.IList<int> x = null)
         {
@@ -771,6 +794,18 @@ namespace KRPC.Client.Services.TestService
             return (int)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec2, connection);
         }
 
+        /// <summary>
+        /// Throws a <see cref="global::KRPC.Client.Services.TestService.CustomException" />.
+        /// </summary>
+        /// <remarks>
+        /// Links to each kind of member: <see cref="global::KRPC.Client.Services.TestService.Service" />, <see cref="global::KRPC.Client.Services.TestService.TestClass" />,
+        /// <see cref="global::KRPC.Client.Services.TestService.TestEnum" />, <see cref="global::KRPC.Client.Services.TestService.TestStruct" />, <see cref="global::KRPC.Client.Services.KRPC.InvalidOperationException" />,
+        /// <see cref="global::KRPC.Client.Services.TestService.Service.FloatToString" />, <see cref="global::KRPC.Client.Services.TestService.Service.StringProperty" />,
+        /// <see cref="global::KRPC.Client.Services.TestService.Service.StringPropertyPrivateGet" />, <see cref="global::KRPC.Client.Services.TestService.TestClass.FloatToString" />,
+        /// <see cref="global::KRPC.Client.Services.TestService.TestClass.StaticMethod" />, <see cref="global::KRPC.Client.Services.TestService.TestClass.IntProperty" />,
+        /// <see cref="global::KRPC.Client.Services.TestService.TestClass.StringPropertyPrivateGet" />, <see cref="global::KRPC.Client.Services.TestService.TestEnum.ValueA" /> and
+        /// <see cref="global::KRPC.Client.Services.TestService.TestStruct.IntField" />.
+        /// </remarks>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowCustomException", typeof(TypeSpecs))]
         public int ThrowCustomException ()
         {
@@ -869,6 +904,10 @@ namespace KRPC.Client.Services.TestService
             }
         }
 
+        /// <summary>
+        /// A property holding an object.
+        /// </summary>
+        /// <returns>The object, or <c>null</c>.</returns>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_ObjectProperty", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestClass ObjectProperty {
             get {
@@ -1758,6 +1797,12 @@ namespace KRPC.Client.Services.TestService
             return (string)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec5, connection);
         }
 
+        /// <summary>
+        /// Returns jeb followed by <paramref name="a" /> and <paramref name="b" />.
+        /// </summary>
+        /// <param name="a">The first string.</param>
+        /// <param name="b">The second string.</param>
+        /// <returns>The strings joined.</returns>
         /// <param name="connection">A connection object.</param>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_static_StaticMethod", typeof(TypeSpecs))]
         public static string StaticMethod (IConnection connection, string a = "", string b = "")
@@ -1808,6 +1853,10 @@ namespace KRPC.Client.Services.TestService
             }
         }
 
+        /// <summary>
+        /// A property of the object, holding another object.
+        /// </summary>
+        /// <returns>The other object, or <c>null</c>.</returns>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_get_ObjectProperty", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.TestService.TestClass ObjectProperty {
             get {

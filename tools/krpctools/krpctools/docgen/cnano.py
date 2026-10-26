@@ -20,8 +20,10 @@ from .nodes import (
     ClassStaticMethod,
     Enumeration,
     EnumerationValue,
+    ExceptionNode,
     Procedure,
     Property,
+    Service,
     Struct,
     StructField,
 )
@@ -169,6 +171,8 @@ class CnanoDomain(Domain[CnanoLanguage]):
             # domain addresses it through that declaration rather than by a name of its own
             field = snake_case(name.pop())
             return "krpc_" + "_".join(name) + "_t." + field
+        if isinstance(obj, (Property, ClassProperty)) and obj.getter is None:
+            name[-1] = "set_" + name[-1]
         ref = "krpc_" + "_".join(name)
         if isinstance(obj, EnumerationValue):
             ref = ref.upper()
@@ -177,6 +181,9 @@ class CnanoDomain(Domain[CnanoLanguage]):
         return ref
 
     def see(self, obj):
+        # A service has no C type, and its page no target to link to
+        if isinstance(obj, Service):
+            return obj.name
         if isinstance(obj, (Property, ClassProperty)):
             prefix = "func"
         elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
@@ -191,6 +198,9 @@ class CnanoDomain(Domain[CnanoLanguage]):
             prefix = "macro"
         elif isinstance(obj, StructField):
             prefix = "member"
+        elif isinstance(obj, ExceptionNode):
+            # The C-nano client has no exception types, only the name in an error message
+            return self.code(obj.fullname)
         else:
             raise RuntimeError(str(obj))
         return ":%s:`%s`" % (prefix, self.ref(obj))

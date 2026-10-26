@@ -1,9 +1,10 @@
-_services_lookup = None
+# The services the lookup was last built from, and the lookup
+_services_lookup = (None, {})
 
 
 def lookup_cref(cref, services):
     global _services_lookup  # noqa: PLW0603
-    if _services_lookup is None:
+    if _services_lookup[0] is not services:
         objs = []
         for service in services.values():
             objs.append(service)
@@ -20,5 +21,5 @@ def lookup_cref(cref, services):
                 objs.extend(enumeration.values.values())
                 for value in enumeration.values.values():
                     objs.append(value)
-        _services_lookup = {x.cref: x for x in objs}
-    return _services_lookup[cref]
+        _services_lookup = (services, {x.cref: x for x in objs})
+    return _services_lookup[1][cref]

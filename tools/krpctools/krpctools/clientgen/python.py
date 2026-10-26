@@ -17,6 +17,7 @@ from krpc.utils import snake_case
 
 from ..lang.python import PythonLanguage
 from ..utils import as_type
+from . import crefs
 from .docparser import DocParser
 from .generator import Generator
 
@@ -172,7 +173,7 @@ class PythonGenerator(Generator[StubLanguage]):
                         info["setter"]["remote_name"], info["setter"]["procedure"]
                     ),
                     "return_type": "None",
-                    "documentation": info["documentation"],
+                    "documentation": info["setter_documentation"],
                     "deprecated": info["deprecated"],
                     "deprecated_reason": info["deprecated_reason"],
                 }
@@ -205,7 +206,7 @@ class PythonGenerator(Generator[StubLanguage]):
                             )[1]
                         ],
                         "return_type": "None",
-                        "documentation": info["documentation"],
+                        "documentation": info["setter_documentation"],
                         "deprecated": info["deprecated"],
                         "deprecated_reason": info["deprecated_reason"],
                     }
@@ -393,9 +394,27 @@ class PythonGenerator(Generator[StubLanguage]):
         else:
             info["documentation"] = '"""\n' + line + '\n"""'
 
-    @staticmethod
-    def parse_documentation(documentation):
-        documentation = PythonDocParser().parse(documentation)
+    def format_cref(self, target):
+        # The module the stubs of the service are generated in, and in it the class of the
+        # service when the target is a member of the service itself
+        name = "krpc.services." + target.service.lower() + "."
+        name += target.type or target.service
+        if target.member is not None:
+            name += "." + self.language.parse_name(target.member)
+        if target.kind in (
+            crefs.PROCEDURE,
+            crefs.CLASS_METHOD,
+            crefs.CLASS_STATIC_METHOD,
+        ):
+            role = "meth"
+        elif target.member is not None:
+            role = "attr"
+        else:
+            role = "class"
+        return ":%s:`%s`" % (role, name)
+
+    def parse_documentation(self, documentation):
+        documentation = PythonDocParser(self.parse_cref).parse(documentation)
         if len(documentation) == 0:
             return ""
         return '"""\n' + documentation + '\n"""'
@@ -424,11 +443,9 @@ class PythonDocParser(DocParser):
             return ""
         return "\n\n" + name + desc
 
-    def parse_see(self, node):
-        return self.parse_cref(node.attrib["cref"])
-
     def parse_paramref(self, node):
-        return self.language.parse_name(node.attrib["name"])
+        # Emphasized, as reStructuredText reads a name ending in _ as a link
+        return "*%s*" % self.language.parse_name(node.attrib["name"])
 
     @staticmethod
     def parse_a(node):
@@ -440,19 +457,8 @@ class PythonDocParser(DocParser):
         return "``%s``" % code
 
     def parse_list(self, node):
+        # A reStructuredText list starts at the margin, set apart by blank lines
         lines = [
-            " * " + self.parse_node(item[0], indent=3)[3:].rstrip() for item in node
+            "* " + self.parse_node(item[0], indent=2)[2:].rstrip() for item in node
         ]
-        content = "\n".join(lines)
-        return content
-
-    @staticmethod
-    def parse_cref(cref):
-        if cref[0] == "M":
-            cref = cref[2:].split(".")
-            member = snake_case(cref[-1])
-            del cref[-1]
-            return ".".join(cref) + "#" + member
-        if cref[0] == "T":
-            return cref[2:]
-        raise RuntimeError("Unknown cref '%s'" % cref)
+        return "\n" + "\n".join(lines) + "\n"

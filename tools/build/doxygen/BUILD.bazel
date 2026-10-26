@@ -1,0 +1,19 @@
+# Doxygen, from the release binaries for the platforms CI runs on. A target that uses it is
+# skipped on any other platform.
+filegroup(
+    name = "doxygen",
+    srcs = select({
+        "@platforms//os:linux": ["@doxygen_linux//:bin/doxygen"],
+        "@platforms//os:windows": [
+            "@doxygen_windows//:doxygen.exe",
+            "@doxygen_windows//:libclang.dll",
+        ],
+        "//conditions:default": [],
+    }),
+    target_compatible_with = select({
+        "@platforms//os:linux": [],
+        "@platforms//os:windows": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    visibility = ["//visibility:public"],
+)

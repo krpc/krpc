@@ -11,11 +11,12 @@ from krpc.types import (
 
 from ..lang.csharp import CsharpLanguage
 from ..utils import as_type
-from .docparser import render_markup
+from .docparser import render_markup, warn_markup
 from .generator import Generator
 
 # The <math> and <unit> elements, which C# documentation tools do not know
 _MATH = re.compile(r"<(math|unit)>(.*?)</\1>", re.DOTALL)
+_CREF = re.compile(r'cref="([^"]*)"')
 
 
 def _render_math(match):
@@ -31,10 +32,18 @@ class CsharpGenerator(Generator[CsharpLanguage]):
         # The specs the generated stubs name, each held in a static field of its own
         self._type_specs = {}
 
-    @staticmethod
-    def parse_documentation(documentation):
+    def parse_documentation(self, documentation):
         documentation = documentation.replace("<doc>", "").replace("</doc>", "").strip()
         documentation = _MATH.sub(_render_math, documentation)
+
+        def resolve(match):
+            reference = self.parse_cref(match.group(1))
+            if reference is None:
+                warn_markup("unknown cref '%s'" % match.group(1), documentation)
+                return match.group(0)
+            return 'cref="%s"' % reference
+
+        documentation = _CREF.sub(resolve, documentation)
         if documentation == "":
             return ""
         lines = ["/// " + line for line in documentation.split("\n")]
@@ -43,6 +52,15 @@ class CsharpGenerator(Generator[CsharpLanguage]):
         content = content.replace("  <returns", "<returns")
         content = content.replace("  <remarks", "<remarks")
         return content
+
+    def format_cref(self, target):
+        # Without a prefix, so that the compiler resolves and checks it. A member of the
+        # service is a member of its Service class.
+        name = "global::KRPC.Client.Services." + target.service + "."
+        name += target.type or "Service"
+        if target.member is not None:
+            name += "." + self.language.parse_name(target.member)
+        return name
 
     def generate_context_parameters(self, name, procedure):
         parameters = super().generate_context_parameters(name, procedure)

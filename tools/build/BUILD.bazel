@@ -9,6 +9,8 @@ exports_files([
     "run_buildifier.py",
     "run_checkstyle.py",
     "run_client_test.py",
+    "run_doxygen.py",
+    "run_sphinx_autodoc.py",
     "run_sphinx_test.py",
 ])
 
@@ -56,6 +58,7 @@ py_pyright_test(
     deps = [
         "@krpc_pypi//cogapp",
         "@krpc_pypi//pyvips",
+        "@krpc_pypi//sphinx",
         "@rules_python//python/runfiles",
     ],
 )

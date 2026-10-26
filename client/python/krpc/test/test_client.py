@@ -877,6 +877,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "nullable_object",
                     "empty_list_default",
                     "TestClass",
+                    "join_with_at_sign",
                     "optional_arguments",
                     "TestEnum",
                     "enum_return",

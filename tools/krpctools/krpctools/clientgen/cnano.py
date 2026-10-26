@@ -15,6 +15,7 @@ from krpc.utils import snake_case
 
 from ..lang.cnano import CnanoLanguage
 from ..utils import as_type
+from . import crefs
 from .docparser import DocParser
 from .generator import Generator
 
@@ -248,13 +249,56 @@ class CnanoGenerator(Generator[CnanoLanguage]):
         # No default arguments in C
         return None
 
-    @staticmethod
-    def parse_documentation(documentation):
-        documentation = CNanoDocParser().parse(documentation)
+    def parse_documentation(self, documentation):
+        documentation = CNanoDocParser(self.parse_cref).parse(documentation)
         if documentation == "":
             return ""
         lines = ["/**"] + [" * " + line for line in documentation.split("\n")] + [" */"]
         return "\n".join(line.rstrip() for line in lines)
+
+    def format_cref(self, target):
+        if target.kind == crefs.SERVICE:
+            return target.service
+        # An exception has no C type, so it is named as the error message names it
+        if target.kind == crefs.EXCEPTION:
+            return target.service + "." + target.type
+        name = "krpc_" + target.service
+        if target.type is not None:
+            name += "_" + target.type
+        if target.member is None:
+            return name + "_t"
+        # Doxygen links a global enumeration value only when it is written with a #
+        if target.kind == crefs.ENUMERATION_VALUE:
+            return "#" + (name + "_" + target.member).upper()
+        if target.kind == crefs.STRUCT_FIELD:
+            return name + "_t." + self.parse_name(snake_case(target.member))
+        setter = "" if target.getter else "set_"
+        return name + "_" + setter + target.member + "()"
+
+    @staticmethod
+    def add_param_docs(info, instance=None, value="The value returned."):
+        """Document the parameters a function takes ahead of those of the procedure, in the
+        order the function declares them, where its documentation documents any parameters"""
+        lines = info["documentation"].split("\n")
+        starts = [i for i, line in enumerate(lines) if line.startswith(" * @param ")]
+        if not starts:
+            return
+        # Each parameter's tag runs to the next tag, or to the closing ' */'
+        ends = starts[1:] + [len(lines) - 1]
+        params = [lines[start:end] for start, end in zip(starts, ends)]
+        returns = [p for p in params if p[0].startswith(" * @param returnValue ")]
+        params = [p for p in params if p not in returns]
+        tags = [[" * @param connection A connection object."]]
+        return_type = info["return_type"]
+        if return_type["ctype"] != "void":
+            tags += returns or [[" * @param returnValue " + value]]
+            if return_type.get("nullable") and not return_type.get("is_class"):
+                is_null = "returnValueIsNull Set to whether the value returned is null."
+                tags.append([" * @param " + is_null])
+        if instance is not None:
+            tags.append([" * @param instance " + instance])
+        body = [line for tag in tags + params for line in tag]
+        info["documentation"] = "\n".join(lines[: starts[0]] + body + lines[-1:])
 
     def parse_context(self, context):
         def return_type(typ):
@@ -280,7 +324,7 @@ class CnanoGenerator(Generator[CnanoLanguage]):
                         info["setter"]["remote_name"], info["setter"]["procedure"]
                     ),
                     "return_type": {"ctype": "void", "cvtype": None, "name": None},
-                    "documentation": info["documentation"],
+                    "documentation": info["setter_documentation"],
                     "deprecated": info["deprecated"],
                     "deprecated_reason": info["deprecated_reason"],
                 }
@@ -308,13 +352,29 @@ class CnanoGenerator(Generator[CnanoLanguage]):
                         ],
                         "return_type": {"ctype": "void", "cvtype": None, "name": None},
                         "return_set_client": False,
-                        "documentation": info["documentation"],
+                        "documentation": info["setter_documentation"],
                         "deprecated": info["deprecated"],
                         "deprecated_reason": info["deprecated_reason"],
                     }
             class_info["properties"] = class_properties
 
         context["properties"] = properties
+
+        for info in context["procedures"].values():
+            self.add_param_docs(info)
+        for info in context["properties"].values():
+            self.add_param_docs(info, value="The value of the property.")
+        for class_info in context["classes"].values():
+            for info in class_info["methods"].values():
+                self.add_param_docs(info, instance="The object to call the method on.")
+            for info in class_info["static_methods"].values():
+                self.add_param_docs(info)
+            for info in class_info["properties"].values():
+                self.add_param_docs(
+                    info,
+                    instance="The object whose property this is.",
+                    value="The value of the property.",
+                )
 
         # C requires a struct to be declared before it is used, so a collection type has to
         # follow the collection types it contains. Several kRPC types share one C type, as
@@ -344,10 +404,8 @@ class CNanoDocParser(DocParser):
         return "\n@param %s %s" % (node.attrib["name"], self.parse_node(node).strip())
 
     def parse_returns(self, node):
-        return "\n@return %s" % self.parse_node(node).strip()
-
-    def parse_see(self, node):
-        return self.parse_cref(node.attrib["cref"])
+        # A function returns an error code, and the value through its returnValue parameter
+        return "\n@param returnValue %s" % self.parse_node(node).strip()
 
     @staticmethod
     def parse_paramref(node):
@@ -359,21 +417,11 @@ class CNanoDocParser(DocParser):
 
     @staticmethod
     def parse_c(node):
-        return node.text
+        # A Markdown code span, in which Doxygen reads no commands
+        return "`%s`" % node.text
 
     def parse_list(self, node):
         content = [
             "- %s\n" % self.parse_node(item[0], indent=2)[2:].rstrip() for item in node
         ]
         return "\n" + "".join(content)
-
-    @staticmethod
-    def parse_cref(cref):
-        if cref[0] == "M":
-            cref = cref[2:].split(".")
-            member = snake_case(cref[-1])
-            del cref[-1]
-            return "::".join(cref) + "::" + member
-        if cref[0] == "T":
-            return cref[2:].replace(".", "::")
-        raise RuntimeError("Unknown cref '%s'" % cref)

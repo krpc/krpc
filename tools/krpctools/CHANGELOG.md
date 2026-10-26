@@ -5,6 +5,10 @@
   `krpc-clientgen` (#1169)
 - Write the `mapped_type` of each exception to the service definitions (#1172)
 - Generate Python, C++ and Java exceptions that stand for their language's equivalent (#1172)
+- Link each `<see cref>` in generated client documentation to the member it names, and warn
+  about one `krpc-clientgen` cannot resolve (#1185)
+- Allow a `<see cref>` to a service in `krpc-docgen` (#1185)
+- Fix the `krpc-docgen` link to a C-nano property that has only a setter (#1185)
 
 ## [v0.7.0]
 - **Breaking:** Require `--include` in `krpc-clientgen` for each service whose types a C++ or C

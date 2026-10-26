@@ -8,7 +8,8 @@ class DocumentationMarkupWarning(UserWarning):
     """Documentation markup that docgen rejects, which clientgen renders as text."""
 
 
-def _warn(message, xml):
+def warn_markup(message, xml):
+    """Warn about documentation markup that docgen rejects, in the given documentation"""
     context = " ".join(xml.split())
     if len(context) > 120:
         context = context[:117] + "..."
@@ -24,7 +25,7 @@ def render_markup(tag, source, xml):
     unit = tag == "unit"
     message = problem(source, unit)
     if message is not None:
-        _warn(message, xml)
+        warn_markup(message, xml)
     return to_text(source, unit)
 
 
@@ -58,6 +59,10 @@ def _flatten_node(node, parse_cref, reason):
 class DocParser:
     _xml = ""
 
+    def __init__(self, parse_cref):
+        # Maps a cref to a reference, or to None if it names nothing the definitions define
+        self._parse_cref = parse_cref
+
     def parse(self, xml):
         if xml.strip() == "":
             return ""
@@ -85,9 +90,17 @@ class DocParser:
     def inner_parse_node(self, node):
         # An unknown tag is rendered as its content
         if not hasattr(self, "parse_" + node.tag):
-            _warn("unknown tag '%s'" % node.tag, self._xml)
+            warn_markup("unknown tag '%s'" % node.tag, self._xml)
             return self.parse_node(node)
         return getattr(self, "parse_" + node.tag)(node)
+
+    def parse_see(self, node):
+        cref = node.attrib["cref"]
+        reference = self._parse_cref(cref)
+        if reference is None:
+            warn_markup("unknown cref '%s'" % cref, self._xml)
+            return cref[2:]
+        return reference
 
     def parse_math(self, node):
         return render_markup("math", node.text or "", self._xml)

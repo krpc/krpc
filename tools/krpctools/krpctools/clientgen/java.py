@@ -17,6 +17,7 @@ from krpc.types import (
 
 from ..lang.java import JavaLanguage
 from ..utils import as_type, is_nullable, lower_camel_case, upper_camel_case
+from . import crefs
 from .docparser import DocParser
 from .generator import Generator
 
@@ -81,13 +82,28 @@ class JavaGenerator(Generator[JavaLanguage]):
         spec = self.parse_type_specification(typ)
         return "krpc.client.Types.nullable(%s)" % spec if typ.nullable else spec
 
-    @staticmethod
-    def parse_documentation(documentation):
-        documentation = JavaDocParser().parse(documentation)
+    def parse_documentation(self, documentation):
+        documentation = JavaDocParser(self.parse_cref).parse(documentation)
         if documentation == "":
             return ""
         lines = ["/**"] + [" * " + line for line in documentation.split("\n")] + [" */"]
         return "\n".join(line.rstrip() for line in lines)
+
+    def format_cref(self, target):
+        name = target.service
+        if target.type is not None:
+            name += "." + target.type
+        if target.member is None:
+            return "{@link %s}" % name
+        member = self.language.parse_name(target.member)
+        if target.kind in (crefs.PROPERTY, crefs.CLASS_PROPERTY):
+            member = upper_camel_case(member)
+            member = "get" + member + "()" if target.getter else "set" + member
+        elif target.kind == crefs.ENUMERATION_VALUE:
+            member = self.language.parse_const_name(member)
+        elif target.kind == crefs.STRUCT_FIELD:
+            member = "get" + upper_camel_case(member) + "()"
+        return "{@link %s#%s}" % (name, member)
 
     def _make_return_type(self, info):
         return_type = self.get_return_type(info["procedure"])
@@ -128,7 +144,7 @@ class JavaGenerator(Generator[JavaLanguage]):
                         info["setter"]["remote_name"], info["setter"]["procedure"]
                     ),
                     "return_type": "void",
-                    "documentation": info["documentation"],
+                    "documentation": info["setter_documentation"],
                     "deprecated": info["deprecated"],
                     "deprecated_reason": info["deprecated_reason"],
                 }
@@ -159,7 +175,7 @@ class JavaGenerator(Generator[JavaLanguage]):
                             )[1]
                         ],
                         "return_type": "void",
-                        "documentation": info["documentation"],
+                        "documentation": info["setter_documentation"],
                         "deprecated": info["deprecated"],
                         "deprecated_reason": info["deprecated_reason"],
                     }
@@ -314,9 +330,6 @@ class JavaDocParser(DocParser):
     def parse_returns(self, node):
         return "\n@return %s" % self.parse_node(node).strip()
 
-    def parse_see(self, node):
-        return "{@link %s}" % self.parse_cref(node.attrib["cref"])
-
     @staticmethod
     def parse_paramref(node):
         return node.attrib["name"]
@@ -334,15 +347,4 @@ class JavaDocParser(DocParser):
             "<li>%s\n" % self.parse_node(item[0], indent=2)[2:].rstrip()
             for item in node
         ]
-        return "<p><ul>" + "\n" + "".join(content) + "</ul></p>"
-
-    @staticmethod
-    def parse_cref(cref):
-        if cref[0] == "M":
-            cref = cref[2:].split(".")
-            member = lower_camel_case(cref[-1])
-            del cref[-1]
-            return ".".join(cref) + "#" + member
-        if cref[0] == "T":
-            return cref[2:]
-        raise RuntimeError("Unknown cref '%s'" % cref)
+        return "<ul>\n" + "".join(content) + "</ul>"

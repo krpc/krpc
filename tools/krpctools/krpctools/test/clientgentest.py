@@ -69,8 +69,17 @@ class ClientGenTestCase(_Base):
             files("krpctools.test").joinpath(name + ".json").read_text(encoding="utf-8")
         )
 
-    def run_test(self, service_name, name):
-        defs = self.load(name)
+    @classmethod
+    def load_with_deps(cls, name, deps):
+        """The definitions in the named file, along with those of the services it depends on"""
+        defs = {}
+        for dep in deps:
+            defs.update(cls.load(dep))
+        defs.update(cls.load(name))
+        return defs
+
+    def run_test(self, service_name, name, deps=()):
+        defs = self.load_with_deps(name, deps)
         actual = self.generate(service_name, defs)
 
         # with open('/home/alex/workspaces/krpc/krpc/' +
@@ -94,7 +103,8 @@ class ClientGenTestCase(_Base):
         self.run_test("EmptyService", "Empty")
 
     def test_test_service(self):
-        self.run_test("TestService", "TestService")
+        # The test service depends on KRPC, whose definitions its documentation links to
+        self.run_test("TestService", "TestService", deps=["KRPC"])
 
     def test_krpc(self):
         self.run_test("KRPC", "KRPC")
@@ -142,6 +152,22 @@ class ClientGenTestCase(_Base):
             self.generate("BadService", self.load("UndeclaredEnumValue"))
         self.assertIn("BadService.Frob parameter mode", str(cm.exception))
         self.assertIn("7 is not a valid Mode", str(cm.exception))
+
+    def test_cref_the_definitions_do_not_define(self):
+        # A cref to a service the generator was not given is rendered as written, with a warning
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            actual = self.generate(
+                "BadService",
+                documented_enumeration('See <see cref="T:Elsewhere.Thing" />.'),
+            )
+        self.assertTrue(
+            any("unknown cref 'T:Elsewhere.Thing'" in str(w.message) for w in caught)
+        )
+        if self.language == "csharp":
+            self.assertIn('See <see cref="T:Elsewhere.Thing" />.', actual)
+        else:
+            self.assertIn("See Elsewhere.Thing.", actual)
 
     def test_invalid_documentation_markup(self):
         # Invalid markup is rendered as text, with a warning for each problem

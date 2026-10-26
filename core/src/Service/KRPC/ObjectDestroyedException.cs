@@ -7,6 +7,10 @@ namespace KRPC.Service.KRPC
     /// so the object cannot be used. For example, the part it represents
     /// was destroyed, or the vessel it belongs to was recovered.
     /// </summary>
+    /// <remarks>
+    /// See <see cref="ObjectNotLoadedException"/> for a game object that exists but is not
+    /// loaded.
+    /// </remarks>
     [KRPCException (Service = "KRPC")]
     public sealed class ObjectDestroyedException : System.Exception
     {

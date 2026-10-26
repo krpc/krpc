@@ -22,8 +22,10 @@ from .nodes import (
     ClassStaticMethod,
     Enumeration,
     EnumerationValue,
+    ExceptionNode,
     Procedure,
     Property,
+    Service,
     Struct,
     StructField,
 )
@@ -144,6 +146,8 @@ class JavaDomain(Domain[JavaLanguage]):
         return self.shorten_ref(name)
 
     def see(self, obj):
+        if isinstance(obj, Service):
+            return ":type:`%s`" % obj.name
         if any(
             isinstance(obj, cls)
             for cls in (
@@ -157,7 +161,9 @@ class JavaDomain(Domain[JavaLanguage]):
             )
         ):
             prefix = "meth"
-        elif any(isinstance(obj, cls) for cls in (Class, Enumeration, Struct)):
+        elif any(
+            isinstance(obj, cls) for cls in (Class, Enumeration, Struct, ExceptionNode)
+        ):
             prefix = "type"
         else:
             raise RuntimeError(str(obj))

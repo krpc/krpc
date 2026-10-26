@@ -1,7 +1,7 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load("//:config.bzl", "cmake_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
-load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test")
+load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test", "doxygen_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:cpp.bzl", "protobuf_cpp")
 load("//tools/krpctools:clientgen.bzl", "clientgen_services")
@@ -74,6 +74,7 @@ test_suite(
         ":client-tcpip",
         ":communication-localsocket",
         ":communication-tcpip",
+        ":doxygen",
         ":lint",
         ":unit",
     ],
@@ -223,4 +224,12 @@ protobuf_cpp(
     include = "krpc/krpc.pb.hpp",
     header = "include/krpc/krpc.pb.hpp",
     source = "src/krpc.pb.cpp",
+)
+
+# The documentation of the client and of the test service, which exercises every form the
+# documentation takes, as Doxygen reads it
+doxygen_test(
+    name = "doxygen",
+    size = "small",
+    srcs = hdrs + [":services-testservice"],
 )

@@ -907,7 +907,6 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="maxRailsRate">The maximum warp rate in regular "on-rails" time warp.
         /// </param>
         /// <param name="maxPhysicsRate">The maximum warp rate in physical time warp.</param>
-        /// <returns>When the time warp is complete.</returns>
         [KRPCProcedure (GameScene = WarpScenes)]
         public static void WarpTo (double ut, float maxRailsRate = 100000, float maxPhysicsRate = 2)
         {

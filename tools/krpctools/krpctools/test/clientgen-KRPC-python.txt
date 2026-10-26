@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 class GameScene(DocEnum):
     """
-    The game scene. See KRPC#game_scene.
+    The game scene. See :attr:`krpc.services.krpc.KRPC.game_scene`.
     """
     space_center = 0, """
 The game scene showing the Kerbal Space Center buildings.
@@ -91,16 +91,16 @@ An enumeration defined by a service.
 A structure defined by a service.
 """
     tuple = 300, """
-A tuple, with the types of its values in KRPC.Type#types.
+A tuple, with the types of its values in :attr:`krpc.services.krpc.Type.types`.
 """
     list = 301, """
-A list, with the type of its values in KRPC.Type#types.
+A list, with the type of its values in :attr:`krpc.services.krpc.Type.types`.
 """
     set = 302, """
-A set, with the type of its values in KRPC.Type#types.
+A set, with the type of its values in :attr:`krpc.services.krpc.Type.types`.
 """
     dictionary = 303, """
-A dictionary, with the types of its keys and values in KRPC.Type#types.
+A dictionary, with the types of its keys and values in :attr:`krpc.services.krpc.Type.types`.
 """
 
 
@@ -108,7 +108,7 @@ class ClientInfo(NamedTuple):
     """
     A client connected to the server.
 
-    See KRPC#clients.
+    See :attr:`krpc.services.krpc.KRPC.clients`.
     """
     id: bytes
     """
@@ -211,6 +211,9 @@ class ObjectDestroyedException(RuntimeError):
     The game object that a service object refers to no longer exists,
     so the object cannot be used. For example, the part it represents
     was destroyed, or the vessel it belongs to was recovered.
+
+    See :class:`krpc.services.krpc.ObjectNotLoadedException` for a game object that exists but is not
+    loaded.
     """
     _service_name = 'KRPC'
     _class_name = 'ObjectDestroyedException'
@@ -220,6 +223,8 @@ class ObjectNotLoadedException(RuntimeError):
     """
     The game object that a service object refers to exists, but is not loaded.
     For example, the game is loading, or the vessel carrying the part is unloaded.
+
+    See :class:`krpc.services.krpc.ObjectDestroyedException` for a game object that no longer exists.
     """
     _service_name = 'KRPC'
     _class_name = 'ObjectNotLoadedException'
@@ -268,7 +273,7 @@ class Expression(ClassBase):
         """
         Whether the expression evaluates to a value.
 
-        An expression with no value has no KRPC.Expression#return_type. An empty
+        An expression with no value has no :attr:`krpc.services.krpc.Expression.return_type`. An empty
         collection and no value both encode to an empty sequence of bytes.
         """
         return self._client._invoke(
@@ -296,7 +301,7 @@ class Expression(ClassBase):
         """
         The types of the function's parameters.
 
-        Empty for a function that is not created with KRPC.Expression#lambda.
+        Empty for a function that is not created with :meth:`krpc.services.krpc.Expression.lambda_`.
         """
         return self._client._invoke(
             "KRPC",
@@ -324,9 +329,9 @@ class Expression(ClassBase):
         The type of the value the expression evaluates to. Throws an exception if the
         value cannot be sent to a client.
 
-        A function created with KRPC.Expression#lambda evaluates to the value it returns. A
-        lazily evaluated collection, such as from KRPC.Expression#select, is sent once
-        converted by KRPC.Expression#to_list or KRPC.Expression#to_set.
+        A function created with :meth:`krpc.services.krpc.Expression.lambda_` evaluates to the value it returns. A
+        lazily evaluated collection, such as from :meth:`krpc.services.krpc.Expression.select`, is sent once
+        converted by :meth:`krpc.services.krpc.Expression.to_list` or :meth:`krpc.services.krpc.Expression.to_set`.
         """
         return self._client._invoke(
             "KRPC",
@@ -822,7 +827,7 @@ class Expression(ClassBase):
 
         The instance the call is made on, and the values of its arguments, are fixed
         when the expression is created. A call to a procedure with no return value is
-        evaluated for its effects, as a statement in a KRPC.Expression#block. A collection the
+        evaluated for its effects, as a statement in a :meth:`krpc.services.krpc.Expression.block`. A collection the
         procedure returns is copied, as a client would receive it.
 
         :param call: The procedure call.
@@ -963,7 +968,7 @@ class Expression(ClassBase):
         """
         The values of one collection followed by those of another.
 
-        The result is lazily evaluated. KRPC.Expression#to_list makes it concrete.
+        The result is lazily evaluated. :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The first collection followed by the second.
 
@@ -1335,7 +1340,7 @@ class Expression(ClassBase):
         """
         A null constant of the given type.
 
-        The type is made nullable, as by KRPC.Type#nullable_type.
+        The type is made nullable, as by :meth:`krpc.services.krpc.Type.nullable_type`.
 
         :param type: The type of the value.
         """
@@ -1965,7 +1970,7 @@ class Expression(ClassBase):
         The keys of a dictionary, as a list.
 
         The collection operations take the keys of a dictionary from here, and its values
-        from KRPC.Expression#dictionary_values.
+        from :meth:`krpc.services.krpc.Expression.dictionary_values`.
 
         :returns: The keys of the dictionary.
 
@@ -2036,7 +2041,7 @@ class Expression(ClassBase):
         The values of a collection with duplicates removed, keeping the first
         occurrence of each.
 
-        The result is lazily evaluated. KRPC.Expression#to_list makes it concrete.
+        The result is lazily evaluated. :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The distinct values of the collection.
 
@@ -2182,7 +2187,7 @@ class Expression(ClassBase):
         The values of the first collection that are not in the second, with
         duplicates removed.
 
-        The result is lazily evaluated. KRPC.Expression#to_list makes it concrete.
+        The result is lazily evaluated. :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The difference between the two collections.
 
@@ -2291,8 +2296,8 @@ class Expression(ClassBase):
         A loop that evaluates the body once for each value of a collection.
 
         The loop variable is a local variable declared by an enclosing
-        KRPC.Expression#block_with_variables, or a parameter of an enclosing KRPC.Expression#lambda.
-        A KRPC.Expression#break or KRPC.Expression#continue in the body applies to this loop.
+        :meth:`krpc.services.krpc.Expression.block_with_variables`, or a parameter of an enclosing :meth:`krpc.services.krpc.Expression.lambda_`.
+        A :meth:`krpc.services.krpc.Expression.break_` or :meth:`krpc.services.krpc.Expression.continue_` in the body applies to this loop.
 
         :param variable: The loop variable.
 
@@ -2511,7 +2516,7 @@ class Expression(ClassBase):
         """
         An if statement, with no value.
 
-        Use KRPC.Expression#conditional for an if-then-else that produces a value.
+        Use :meth:`krpc.services.krpc.Expression.conditional` for an if-then-else that produces a value.
 
         :param condition: The boolean condition.
 
@@ -2547,7 +2552,7 @@ class Expression(ClassBase):
         """
         An if-else statement, with no value.
 
-        Use KRPC.Expression#conditional for an if-then-else that produces a value.
+        Use :meth:`krpc.services.krpc.Expression.conditional` for an if-then-else that produces a value.
 
         :param condition: The boolean condition.
 
@@ -2585,7 +2590,7 @@ class Expression(ClassBase):
         """
         The values in both of two collections, with duplicates removed.
 
-        The result is lazily evaluated. KRPC.Expression#to_list makes it concrete.
+        The result is lazily evaluated. :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The intersection of the two collections.
 
@@ -2692,7 +2697,7 @@ class Expression(ClassBase):
         A function with the given parameters and body.
 
         The body is an expression or a block of statements, and a body with no value is
-        evaluated for its effects. A KRPC.Expression#return or KRPC.Expression#return_nothing
+        evaluated for its effects. A :meth:`krpc.services.krpc.Expression.return_` or :meth:`krpc.services.krpc.Expression.return_nothing`
         statement ends the evaluation.
 
         :returns: A function.
@@ -3225,7 +3230,7 @@ class Expression(ClassBase):
         """
         The values of a collection ordered by the key a function produces for each of them.
 
-        The result is lazily evaluated. KRPC.Expression#to_list makes it concrete.
+        The result is lazily evaluated. :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The ordered collection.
 
@@ -3263,8 +3268,8 @@ class Expression(ClassBase):
         """
         A named parameter of a function.
 
-        A value is bound to it by name with KRPC.Expression#invoke, or by its position in
-        the parameters of a KRPC.Expression#lambda.
+        A value is bound to it by name with :meth:`krpc.services.krpc.Expression.invoke`, or by its position in
+        the parameters of a :meth:`krpc.services.krpc.Expression.lambda_`.
 
         :returns: A named parameter.
 
@@ -3475,7 +3480,7 @@ class Expression(ClassBase):
         """
         The values of a collection in the opposite order.
 
-        The result is lazily evaluated. KRPC.Expression#to_list makes it concrete.
+        The result is lazily evaluated. :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The reversed collection.
 
@@ -3548,7 +3553,7 @@ class Expression(ClassBase):
         """
         The result of a function for each value of a collection.
 
-        The result is lazily evaluated. KRPC.Expression#to_list makes it concrete.
+        The result is lazily evaluated. :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The collection of function results.
 
@@ -3587,7 +3592,7 @@ class Expression(ClassBase):
         The values of the collections a function returns for each value of a collection,
         flattened into one.
 
-        The result is lazily evaluated. KRPC.Expression#to_list makes it concrete.
+        The result is lazily evaluated. :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The flattened collection of function results.
 
@@ -3665,7 +3670,7 @@ class Expression(ClassBase):
         """
         A collection without its first count values.
 
-        The result is lazily evaluated. KRPC.Expression#to_list makes it concrete.
+        The result is lazily evaluated. :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The collection without its first count values.
 
@@ -3743,7 +3748,7 @@ class Expression(ClassBase):
         """
         The concatenation of strings.
 
-        Use KRPC.Expression#convert_to_string to convert other values to strings.
+        Use :meth:`krpc.services.krpc.Expression.convert_to_string` to convert other values to strings.
 
         :returns: The concatenated string.
 
@@ -4385,7 +4390,7 @@ class Expression(ClassBase):
         """
         The first count values of a collection.
 
-        The result is lazily evaluated. KRPC.Expression#to_list makes it concrete.
+        The result is lazily evaluated. :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The first count values of the collection.
 
@@ -4424,7 +4429,9 @@ class Expression(ClassBase):
         A throw statement, which raises the named exception.
 
         The client receives the exception as an error from the function, or from the stream
-        or event evaluating it. Throws an exception if the service does not declare it.
+        or event evaluating it. For example, the service ``KRPC`` and the name
+        ``Error`` raise :class:`krpc.services.krpc.Error`. Throws an exception if the service does not
+        declare it.
 
         :param service: The name of the service the exception is defined in.
 
@@ -4532,7 +4539,7 @@ class Expression(ClassBase):
         """
         A try-catch statement that handles the named exception.
 
-        Only an exception a service declares can be named, and KRPC.Expression#try_catch_all
+        Only an exception a service declares can be named, and :meth:`krpc.services.krpc.Expression.try_catch_all`
         handles any exception. Throws an exception if the service does not declare it.
 
         :param body: The statement to evaluate.
@@ -4648,7 +4655,7 @@ class Expression(ClassBase):
         """
         The values in either of two collections, with duplicates removed.
 
-        The result is lazily evaluated. KRPC.Expression#to_list makes it concrete.
+        The result is lazily evaluated. :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The union of the two collections.
 
@@ -4684,7 +4691,7 @@ class Expression(ClassBase):
     @StaticMethod
     def variable(cls, name: str, type: Type) -> Expression:
         """
-        A local variable, declared by KRPC.Expression#block_with_variables.
+        A local variable, declared by :meth:`krpc.services.krpc.Expression.block_with_variables`.
 
         :returns: A local variable.
 
@@ -4722,7 +4729,7 @@ class Expression(ClassBase):
         """
         The values of a collection for which a predicate function returns true.
 
-        The result is lazily evaluated. KRPC.Expression#to_list makes it concrete.
+        The result is lazily evaluated. :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The filtered collection.
 
@@ -4760,7 +4767,7 @@ class Expression(ClassBase):
         """
         A while loop, which evaluates the body while the condition is true.
 
-        A KRPC.Expression#break or KRPC.Expression#continue in the body applies to this loop.
+        A :meth:`krpc.services.krpc.Expression.break_` or :meth:`krpc.services.krpc.Expression.continue_` in the body applies to this loop.
 
         :param condition: The boolean condition.
 
@@ -4797,7 +4804,7 @@ class Expression(ClassBase):
         The results of a function applied to the values of two collections in pairs.
 
         The result is as long as the shorter of the two collections. It is lazily
-        evaluated, and KRPC.Expression#to_list makes it concrete.
+        evaluated, and :meth:`krpc.services.krpc.Expression.to_list` makes it concrete.
 
         :returns: The combined collection.
 
@@ -5656,9 +5663,9 @@ class KRPC(_KRPCDefinitions):
         scene, or opens/closes the corresponding facility for the pseudo-scenes.
         Scene changes happen asynchronously: setting this property returns
         immediately, and clients should poll it until it reports the requested
-        scene. Setting it to KRPC.GameScene#flight resumes the save's
+        scene. Setting it to :attr:`krpc.services.krpc.GameScene.flight` resumes the save's
         active vessel, and fails if there is none. Moving between
-        KRPC.GameScene#editor_vab and KRPC.GameScene#editor_sph
+        :attr:`krpc.services.krpc.GameScene.editor_vab` and :attr:`krpc.services.krpc.GameScene.editor_sph`
         keeps the vessel that is being constructed, as the game's own switch
         editor button does. Leaving flight saves the game first, unless the game
         cannot be saved, e.g. while under acceleration.
@@ -5760,9 +5767,9 @@ class KRPC(_KRPCDefinitions):
         Create an event from a server side function that evaluates to a boolean value.
 
         The function is evaluated on each update, and each call adds a new event. Any
-        exception from the function ends the event, including one for an object that is not
-        loaded. A procedure that pauses execution to resume on a later tick produces an
-        error on the event's stream.
+        exception from the function ends the event, including
+        :class:`krpc.services.krpc.ObjectNotLoadedException`. A procedure that pauses execution to resume
+        on a later tick produces an error on the event's stream.
         """
         return self._client._invoke(
             "KRPC",
@@ -5789,8 +5796,8 @@ class KRPC(_KRPCDefinitions):
         Add a stream of the value a server side function computes on each update.
 
         Each call adds a new stream, with values of the type given by
-        KRPC.Expression#return_type. Any exception from the function ends the
-        stream, including one for an object that is not loaded. A procedure that pauses
+        :attr:`krpc.services.krpc.Expression.return_type`. Any exception from the function ends the
+        stream, including :class:`krpc.services.krpc.ObjectNotLoadedException`. A procedure that pauses
         execution to resume on a later tick produces an error on the stream.
         """
         return self._client._invoke(
@@ -5967,7 +5974,7 @@ class KRPC(_KRPCDefinitions):
 
     def hold_tick(self) -> None:
         """
-        Hold the game on its current physics tick until KRPC#release_tick is called
+        Hold the game on its current physics tick until :meth:`krpc.services.krpc.KRPC.release_tick` is called
         or the hold times out. Every call made in between is executed before the game
         advances, so a read, compute and write all happen in the state of one tick.
 
@@ -6015,9 +6022,9 @@ class KRPC(_KRPCDefinitions):
         act on every tick, work, and come back to it.
 
         The game advances one tick per call, so it runs at the rate of the loop for as long
-        as the loop runs. End the loop with KRPC#release_tick.
+        as the loop runs. End the loop with :meth:`krpc.services.krpc.KRPC.release_tick`.
 
-        Every limit of KRPC#hold_tick applies, the timeout included. A hold lost to
+        Every limit of :meth:`krpc.services.krpc.KRPC.hold_tick` applies, the timeout included. A hold lost to
         the timeout is not reported, and the next call takes whatever tick it lands on.
         """
         return self._client._invoke(
@@ -6042,7 +6049,7 @@ class KRPC(_KRPCDefinitions):
 
     def release_tick(self) -> None:
         """
-        Let the game move on from the tick that KRPC#hold_tick held it on. Does
+        Let the game move on from the tick that :meth:`krpc.services.krpc.KRPC.hold_tick` held it on. Does
         nothing when no tick is held, which is the case once a hold has timed out.
         """
         return self._client._invoke(
@@ -6097,7 +6104,7 @@ class KRPC(_KRPCDefinitions):
         Run a server side function once, within a single physics tick, and return
         the value it produces.
 
-        The arguments are encoded at the types given by KRPC.Expression#parameter_types.
+        The arguments are encoded at the types given by :attr:`krpc.services.krpc.Expression.parameter_types`.
         Throws an exception if a procedure the function calls pauses execution, and the
         effects up to the pause remain.
 

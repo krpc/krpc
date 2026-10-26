@@ -1,5 +1,8 @@
 ## [v0.8.0] - unreleased
 
+- Fix the links to members in the javadoc of the services, which named no method (#1185)
+- Fix the javadoc of the services that `javadoc` rejects, such as lists and setters with a
+  `@return` tag (#1185)
 - Exceptions
   - **Breaking:** Throw `InvalidOperationException` as `IllegalStateException`, and
     `ArgumentOutOfRangeException` as `IllegalArgumentException` (#1172)

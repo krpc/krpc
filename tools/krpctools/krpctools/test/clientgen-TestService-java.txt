@@ -281,6 +281,11 @@ public class TestService {
         return (krpc.client.services.TestService.TestNestedNullableStruct) Encoder.decode(_data.getValue(), krpc.client.Types.createStruct("TestService", "TestNestedNullableStruct"), this.connection);
     }
 
+    /**
+     * Returns the given value.
+     * @param value The value, or {@code null}.
+     * @return The value.
+     */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableInt", types = _Types.class)
     public Integer echoNullableInt(Integer value) throws RPCException {
@@ -530,6 +535,28 @@ public class TestService {
         return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
+    /**
+     * Returns firstValue and from joined by an at
+     * sign, e.g. {@code jeb@kerbin}. The parameter names are:
+     * <ul>
+     * <li>a name in camel case, and
+     * <li>a name that is a keyword in some languages.
+     * </ul>
+     * @param firstValue The string before the at sign.
+     * @param from The string after the at sign.
+     * @return The strings joined.
+     */
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "JoinWithAtSign", types = _Types.class)
+    public String joinWithAtSign(String firstValue, String from) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(firstValue, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
+            Encoder.encode(from, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "JoinWithAtSign", _args);
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+    }
+
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ListDefault", types = _Types.class)
     public java.util.List<Integer> listDefault(java.util.List<Integer> x) throws RPCException {
@@ -713,6 +740,17 @@ public class TestService {
         return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
+    /**
+     * Throws a {@link TestService.CustomException}.
+     *
+     * Links to each kind of member: {@link TestService}, {@link TestService.TestClass},
+     * {@link TestService.TestEnum}, {@link TestService.TestStruct}, {@link KRPC.InvalidOperationException},
+     * {@link TestService#floatToString}, {@link TestService#getStringProperty()},
+     * {@link TestService#setStringPropertyPrivateGet}, {@link TestService.TestClass#floatToString},
+     * {@link TestService.TestClass#staticMethod}, {@link TestService.TestClass#getIntProperty()},
+     * {@link TestService.TestClass#setStringPropertyPrivateGet}, {@link TestService.TestEnum#VALUE_A} and
+     * {@link TestService.TestStruct#getIntField()}.
+     */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowCustomException", types = _Types.class)
     public int throwCustomException() throws RPCException {
@@ -824,6 +862,10 @@ public class TestService {
         this.connection.invoke("TestService", "set_NullableObject", _args);
     }
 
+    /**
+     * A property holding an object.
+     * @return The object, or {@code null}.
+     */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "get_ObjectProperty", types = _Types.class)
     public krpc.client.services.TestService.TestClass getObjectProperty() throws RPCException {
@@ -834,6 +876,9 @@ public class TestService {
         return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
     }
 
+    /**
+     * A property holding an object.
+     */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "set_ObjectProperty", types = _Types.class)
     public void setObjectProperty(krpc.client.services.TestService.TestClass value) throws RPCException {
@@ -1604,6 +1649,10 @@ public class TestService {
             this.connection.invoke("TestService", "TestClass_set_IntProperty", _args);
         }
 
+        /**
+         * A property of the object, holding another object.
+         * @return The other object, or {@code null}.
+         */
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_get_ObjectProperty", types = _Types.class)
         public krpc.client.services.TestService.TestClass getObjectProperty() throws RPCException
@@ -1618,6 +1667,9 @@ public class TestService {
             return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
         }
 
+        /**
+         * A property of the object, holding another object.
+         */
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_set_ObjectProperty", types = _Types.class)
         public void setObjectProperty(krpc.client.services.TestService.TestClass value) throws RPCException
@@ -1651,6 +1703,12 @@ public class TestService {
             return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
 
+        /**
+         * Returns jeb followed by a and b.
+         * @param a The first string.
+         * @param b The second string.
+         * @return The strings joined.
+         */
         @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_static_StaticMethod", types = _Types.class)
         public static String staticMethod(Connection connection, String a, String b) throws RPCException
@@ -1776,6 +1834,8 @@ public class TestService {
             PARAMETER_TYPES.put("Int64SpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64) });
             RETURN_TYPES.put("Int64ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("Int64ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64) });
+            RETURN_TYPES.put("JoinWithAtSign", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("JoinWithAtSign", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("ListDefault", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
             PARAMETER_TYPES.put("ListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
             RETURN_TYPES.put("NestedStructEcho", krpc.client.Types.createStruct("TestService", "TestNestedStruct"));
@@ -1792,11 +1852,11 @@ public class TestService {
             PARAMETER_TYPES.put("OptionalArguments", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("RemoveEventAfter", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT));
             PARAMETER_TYPES.put("RemoveEventAfter", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
-            RETURN_TYPES.put("ResetCustomExceptionLater", null);
-            PARAMETER_TYPES.put("ResetCustomExceptionLater", new krpc.schema.KRPC.Type[] {  });
         }
 
         private static void initTypes1() {
+            RETURN_TYPES.put("ResetCustomExceptionLater", null);
+            PARAMETER_TYPES.put("ResetCustomExceptionLater", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ResetInvalidOperationExceptionLater", null);
             PARAMETER_TYPES.put("ResetInvalidOperationExceptionLater", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ReturnNullWhenNotAllowed", krpc.client.Types.createClass("TestService", "TestClass"));

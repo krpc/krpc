@@ -16,6 +16,9 @@ namespace KRPC.Test.Service
         [TestCase ("<see cref=\"P:KRPC.Test.Service.TestService.TestClass.IntProperty\" />", "<see cref=\"M:TestService.TestClass.IntProperty\" />")]
         [TestCase ("<see cref=\"T:KRPC.Test.Service.TestService+TestStruct\" />", "<see cref=\"T:TestService.TestStruct\" />")]
         [TestCase ("<see cref=\"P:KRPC.Test.Service.TestService.TestStruct.IntField\" />", "<see cref=\"M:TestService.TestStruct.IntField\" />")]
+        [TestCase ("<see cref=\"T:KRPC.Test.Service.TestService+MyException\" />", "<see cref=\"T:TestService.MyException\" />")]
+        [TestCase ("<see cref=\"T:KRPC.Service.KRPC.ObjectNotLoadedException\" />", "<see cref=\"T:KRPC.ObjectNotLoadedException\" />")]
+        [TestCase ("<see cref=\"T:System.InvalidOperationException\" />", "<see cref=\"T:KRPC.InvalidOperationException\" />")]
         [TestCase ("<doc>\n<summary>\nThe game scene. See <see cref=\"P:KRPC.Service.KRPC.KRPC.GameScene\" />.\n</summary>\n</doc>",
             "<doc>\n<summary>\nThe game scene. See <see cref=\"M:KRPC.GameScene\" />.\n</summary>\n</doc>")]
         public void ResolveCrefs (string input, string output)
@@ -27,6 +30,7 @@ namespace KRPC.Test.Service
         [TestCase ("<see cref=\"Foo\" />")]
         [TestCase ("<see cref=\"Foo.Bar\" />")]
         [TestCase ("<see cref=\"T:Foo.Bar\" />")]
+        [TestCase ("<see cref=\"T:System.FormatException\" />")]
         [TestCase ("<see cref=\"M:Foo.Bar\" />")]
         [TestCase ("<see cref=\"P:Foo.Bar\" />")]
         [TestCase ("<see cref=\"F:Foo.Bar\" />")]
@@ -55,6 +59,8 @@ namespace KRPC.Test.Service
             "Use <see cref=\"T:TestService.TestStruct\" /> instead.")]
         [TestCase ("Use <see cref='TestStruct.IntField'/> instead.",
             "Use <see cref=\"M:TestService.TestStruct.IntField\" /> instead.")]
+        [TestCase ("Use <see cref='MyException'/> instead.",
+            "Use <see cref=\"T:TestService.MyException\" /> instead.")]
         [TestCase ("See <see cref='M:KRPC.Test.Service.TestService.ProcedureNoArgsNoReturn'/> and <see cref='TestClass'/>.",
             "See <see cref=\"M:TestService.ProcedureNoArgsNoReturn\" /> and <see cref=\"T:TestService.TestClass\" />.")]
         public void ResolveDeprecationReason (string input, string output)

@@ -2,7 +2,7 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load("//:config.bzl", "cmake_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:cog.bzl", "cog_test")
-load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test")
+load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test", "doxygen_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:nanopb.bzl", "protobuf_nanopb")
 load("//tools/krpctools:clientgen.bzl", "clientgen_services")
@@ -76,6 +76,7 @@ test_suite(
         ":communication-localsocket",
         ":communication-serialio",
         ":communication-tcpip",
+        ":doxygen",
         ":lint",
         ":unit",
     ],
@@ -379,3 +380,18 @@ protobuf_nanopb(
 )
 
 exports_files(["CHANGELOG.md"])
+
+# The documentation of the client and of the test service, which exercises every form the
+# documentation takes, as Doxygen reads it. Doxygen on Linux links no static function from
+# another header, and every function of the client is static.
+doxygen_test(
+    name = "doxygen",
+    size = "small",
+    srcs = hdrs + [":services-testservice"],
+    c = True,
+    unlinked = [
+        "krpc_KRPC_GameScene()",
+        "krpc_SpaceCenter_Vessel_Position()",
+        "krpc_SpaceCenter_Vessel_Velocity()",
+    ],
+)

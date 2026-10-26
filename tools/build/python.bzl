@@ -132,3 +132,22 @@ def py_pyright_test(name, srcs, deps = [], python_version = None, disable = [], 
         legacy_create_init = False,
         **kwargs
     )
+
+def py_autodoc_test(name, package, deps, exclude = [], **kwargs):
+    """A test that sphinx documents the modules of a package without a warning.
+
+    Args:
+        name: the target name.
+        package: the package, by its import name.
+        deps: the libraries that hold the package.
+        exclude: the packages within it to leave out.
+        **kwargs: passed to the test.
+    """
+    _native_py_test(
+        name = name,
+        srcs = [Label("//tools/build:run_sphinx_autodoc.py")],
+        main = Label("//tools/build:run_sphinx_autodoc.py"),
+        args = [package] + (["--exclude"] + exclude if exclude else []),
+        deps = deps + ["@krpc_pypi//sphinx"],
+        **kwargs
+    )

@@ -4,6 +4,7 @@ from krpc.types import ClassType
 from krpc.utils import snake_case
 
 from ..lang.cpp import CppLanguage
+from . import crefs
 from .docparser import DocParser
 from .generator import Generator
 
@@ -29,13 +30,26 @@ class CppGenerator(Generator[CppLanguage]):
     def parse_type(self, typ):
         return _cpp_template_fix(self.language.parse_type(typ))
 
-    @staticmethod
-    def parse_documentation(documentation):
-        documentation = CppDocParser().parse(documentation)
+    def parse_documentation(self, documentation):
+        documentation = CppDocParser(self.parse_cref).parse(documentation)
         if documentation == "":
             return ""
         lines = ["/**"] + [" * " + line for line in documentation.split("\n")] + [" */"]
         return "\n".join(line.rstrip() for line in lines)
+
+    def format_cref(self, target):
+        # Fully qualified, so that Doxygen links it from the header of any service
+        name = "krpc::services::" + target.service
+        if target.type is not None:
+            name += "::" + target.type
+        if target.member is None:
+            return name
+        member = self.language.parse_name(target.member)
+        if not target.getter:
+            member = "set_" + member
+        if target.kind in (crefs.ENUMERATION_VALUE, crefs.STRUCT_FIELD):
+            return name + "::" + member
+        return name + "::" + member + "()"
 
     def parse_context(self, context):
         for info in context["procedures"].values():
@@ -63,7 +77,7 @@ class CppGenerator(Generator[CppLanguage]):
                     ),
                     "return_type": "void",
                     "return_set_client": False,
-                    "documentation": info["documentation"],
+                    "documentation": info["setter_documentation"],
                     "deprecated": info["deprecated"],
                     "deprecated_reason": info["deprecated_reason"],
                 }
@@ -74,6 +88,7 @@ class CppGenerator(Generator[CppLanguage]):
 
             for info in class_info["static_methods"].values():
                 info["return_set_client"] = self.parse_set_client(info["procedure"])
+                self.add_client_param_doxygen(info)
 
             class_properties = collections.OrderedDict()
             for name, info in class_info["properties"].items():
@@ -100,7 +115,7 @@ class CppGenerator(Generator[CppLanguage]):
                         ],
                         "return_type": "void",
                         "return_set_client": False,
-                        "documentation": info["documentation"],
+                        "documentation": info["setter_documentation"],
                         "deprecated": info["deprecated"],
                         "deprecated_reason": info["deprecated_reason"],
                     }
@@ -133,6 +148,17 @@ class CppGenerator(Generator[CppLanguage]):
         return context
 
     @staticmethod
+    def add_client_param_doxygen(info):
+        """Document the client a static method takes ahead of its parameters, where its
+        documentation documents any parameters"""
+        lines = info.get("documentation", "").split("\n")
+        params = [i for i, line in enumerate(lines) if line.startswith(" * @param ")]
+        if not params:
+            return
+        lines.insert(params[0], " * @param client A client object.")
+        info["documentation"] = "\n".join(lines)
+
+    @staticmethod
     def add_deprecated_doxygen(info):
         if not info.get("deprecated") or not info.get("deprecated_reason"):
             return
@@ -147,6 +173,8 @@ class CppGenerator(Generator[CppLanguage]):
 
 
 class CppDocParser(DocParser):
+    language = CppLanguage()
+
     def parse_summary(self, node):
         return self.parse_node(node).strip()
 
@@ -154,17 +182,14 @@ class CppDocParser(DocParser):
         return "\n\n" + self.parse_node(node).strip()
 
     def parse_param(self, node):
-        return "\n@param %s %s" % (node.attrib["name"], self.parse_node(node).strip())
+        name = self.language.parse_name(node.attrib["name"])
+        return "\n@param %s %s" % (name, self.parse_node(node).strip())
 
     def parse_returns(self, node):
         return "\n@return %s" % self.parse_node(node).strip()
 
-    def parse_see(self, node):
-        return self.parse_cref(node.attrib["cref"])
-
-    @staticmethod
-    def parse_paramref(node):
-        return node.attrib["name"]
+    def parse_paramref(self, node):
+        return self.language.parse_name(node.attrib["name"])
 
     @staticmethod
     def parse_a(node):
@@ -172,21 +197,11 @@ class CppDocParser(DocParser):
 
     @staticmethod
     def parse_c(node):
-        return node.text
+        # A Markdown code span, in which Doxygen reads no commands
+        return "`%s`" % node.text
 
     def parse_list(self, node):
         content = [
             "- %s\n" % self.parse_node(item[0], indent=2)[2:].rstrip() for item in node
         ]
         return "\n" + "".join(content)
-
-    @staticmethod
-    def parse_cref(cref):
-        if cref[0] == "M":
-            cref = cref[2:].split(".")
-            member = snake_case(cref[-1])
-            del cref[-1]
-            return "::".join(cref) + "::" + member
-        if cref[0] == "T":
-            return cref[2:].replace(".", "::")
-        raise RuntimeError("Unknown cref '%s'" % cref)

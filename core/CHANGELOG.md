@@ -3,6 +3,8 @@
 - Exceptions
   - Report the .NET exception each kRPC exception stands for, as `mapped_type` in
     `KRPC.Exception` (#1172)
+  - Allow a `<see cref>` in service documentation to link to an exception, including a .NET
+    exception that a kRPC exception maps (#1185)
 
 ## [v0.7.0]
 

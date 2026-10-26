@@ -1,5 +1,6 @@
 ## [v0.8.0] - unreleased
 
+- Fix the links in service documentation, which named no type or member (#1185)
 - Exceptions
   - **Breaking:** Remove the trailing space after `Server stack trace:` in an exception's
     message, and separate its lines with `\n` on every platform (#1172)

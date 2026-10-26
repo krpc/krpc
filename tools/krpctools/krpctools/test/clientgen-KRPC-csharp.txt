@@ -124,9 +124,9 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         /// <remarks>
         /// The function is evaluated on each update, and each call adds a new event. Any
-        /// exception from the function ends the event, including one for an object that is not
-        /// loaded. A procedure that pauses execution to resume on a later tick produces an
-        /// error on the event's stream.
+        /// exception from the function ends the event, including
+        /// <see cref="global::KRPC.Client.Services.KRPC.ObjectNotLoadedException" />. A procedure that pauses execution to resume
+        /// on a later tick produces an error on the event's stream.
         /// </remarks>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "AddEvent", typeof(TypeSpecs))]
         public global::KRPC.Client.Event AddEvent (global::KRPC.Client.Services.KRPC.Expression function)
@@ -143,8 +143,8 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         /// <remarks>
         /// Each call adds a new stream, with values of the type given by
-        /// <see cref="M:KRPC.Expression.ReturnType" />. Any exception from the function ends the
-        /// stream, including one for an object that is not loaded. A procedure that pauses
+        /// <see cref="global::KRPC.Client.Services.KRPC.Expression.ReturnType" />. Any exception from the function ends the
+        /// stream, including <see cref="global::KRPC.Client.Services.KRPC.ObjectNotLoadedException" />. A procedure that pauses
         /// execution to resume on a later tick produces an error on the stream.
         /// </remarks>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "AddFunctionStream", typeof(TypeSpecs))]
@@ -233,7 +233,7 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
-        /// Hold the game on its current physics tick until <see cref="M:KRPC.ReleaseTick" /> is called
+        /// Hold the game on its current physics tick until <see cref="global::KRPC.Client.Services.KRPC.Service.ReleaseTick" /> is called
         /// or the hold times out. Every call made in between is executed before the game
         /// advances, so a read, compute and write all happen in the state of one tick.
         /// </summary>
@@ -268,9 +268,9 @@ namespace KRPC.Client.Services.KRPC
         /// act on every tick, work, and come back to it.
         ///
         /// The game advances one tick per call, so it runs at the rate of the loop for as long
-        /// as the loop runs. End the loop with <see cref="M:KRPC.ReleaseTick" />.
+        /// as the loop runs. End the loop with <see cref="global::KRPC.Client.Services.KRPC.Service.ReleaseTick" />.
         ///
-        /// Every limit of <see cref="M:KRPC.HoldTick" /> applies, the timeout included. A hold lost to
+        /// Every limit of <see cref="global::KRPC.Client.Services.KRPC.Service.HoldTick" /> applies, the timeout included. A hold lost to
         /// the timeout is not reported, and the next call takes whatever tick it lands on.
         /// </remarks>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "NextTick", typeof(TypeSpecs))]
@@ -280,7 +280,7 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
-        /// Let the game move on from the tick that <see cref="M:KRPC.HoldTick" /> held it on. Does
+        /// Let the game move on from the tick that <see cref="global::KRPC.Client.Services.KRPC.Service.HoldTick" /> held it on. Does
         /// nothing when no tick is held, which is the case once a hold has timed out.
         /// </summary>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "ReleaseTick", typeof(TypeSpecs))]
@@ -310,7 +310,7 @@ namespace KRPC.Client.Services.KRPC
         /// the value it produces.
         /// </summary>
         /// <remarks>
-        /// The arguments are encoded at the types given by <see cref="M:KRPC.Expression.ParameterTypes" />.
+        /// The arguments are encoded at the types given by <see cref="global::KRPC.Client.Services.KRPC.Expression.ParameterTypes" />.
         /// Throws an exception if a procedure the function calls pauses execution, and the
         /// effects up to the pause remain.
         /// </remarks>
@@ -364,9 +364,9 @@ namespace KRPC.Client.Services.KRPC
         /// scene, or opens/closes the corresponding facility for the pseudo-scenes.
         /// Scene changes happen asynchronously: setting this property returns
         /// immediately, and clients should poll it until it reports the requested
-        /// scene. Setting it to <see cref="M:KRPC.GameScene.Flight" /> resumes the save's
+        /// scene. Setting it to <see cref="global::KRPC.Client.Services.KRPC.GameScene.Flight" /> resumes the save's
         /// active vessel, and fails if there is none. Moving between
-        /// <see cref="M:KRPC.GameScene.EditorVAB" /> and <see cref="M:KRPC.GameScene.EditorSPH" />
+        /// <see cref="global::KRPC.Client.Services.KRPC.GameScene.EditorVAB" /> and <see cref="global::KRPC.Client.Services.KRPC.GameScene.EditorSPH" />
         /// keeps the vessel that is being constructed, as the game's own switch
         /// editor button does. Leaving flight saves the game first, unless the game
         /// cannot be saved, e.g. while under acceleration.
@@ -418,7 +418,7 @@ namespace KRPC.Client.Services.KRPC
     }
 
     /// <summary>
-    /// The game scene. See <see cref="M:KRPC.GameScene" />.
+    /// The game scene. See <see cref="global::KRPC.Client.Services.KRPC.Service.GameScene" />.
     /// </summary>
     [Serializable]
     public enum GameScene
@@ -524,19 +524,19 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         Struct = 102,
         /// <summary>
-        /// A tuple, with the types of its values in <see cref="M:KRPC.Type.Types" />.
+        /// A tuple, with the types of its values in <see cref="global::KRPC.Client.Services.KRPC.Type.Types" />.
         /// </summary>
         Tuple = 300,
         /// <summary>
-        /// A list, with the type of its values in <see cref="M:KRPC.Type.Types" />.
+        /// A list, with the type of its values in <see cref="global::KRPC.Client.Services.KRPC.Type.Types" />.
         /// </summary>
         List = 301,
         /// <summary>
-        /// A set, with the type of its values in <see cref="M:KRPC.Type.Types" />.
+        /// A set, with the type of its values in <see cref="global::KRPC.Client.Services.KRPC.Type.Types" />.
         /// </summary>
         Set = 302,
         /// <summary>
-        /// A dictionary, with the types of its keys and values in <see cref="M:KRPC.Type.Types" />.
+        /// A dictionary, with the types of its keys and values in <see cref="global::KRPC.Client.Services.KRPC.Type.Types" />.
         /// </summary>
         Dictionary = 303
     }
@@ -545,7 +545,7 @@ namespace KRPC.Client.Services.KRPC
     /// A client connected to the server.
     /// </summary>
     /// <remarks>
-    /// See <see cref="M:KRPC.Clients" />.
+    /// See <see cref="global::KRPC.Client.Services.KRPC.Service.Clients" />.
     /// </remarks>
     [Serializable]
     [global::KRPC.Client.Attributes.KRPCStruct]
@@ -1051,6 +1051,10 @@ namespace KRPC.Client.Services.KRPC
     /// so the object cannot be used. For example, the part it represents
     /// was destroyed, or the vessel it belongs to was recovered.
     /// </summary>
+    /// <remarks>
+    /// See <see cref="global::KRPC.Client.Services.KRPC.ObjectNotLoadedException" /> for a game object that exists but is not
+    /// loaded.
+    /// </remarks>
     [Serializable]
     public class ObjectDestroyedException : global::KRPC.Client.RPCException
     {
@@ -1089,6 +1093,9 @@ namespace KRPC.Client.Services.KRPC
     /// The game object that a service object refers to exists, but is not loaded.
     /// For example, the game is loading, or the vessel carrying the part is unloaded.
     /// </summary>
+    /// <remarks>
+    /// See <see cref="global::KRPC.Client.Services.KRPC.ObjectDestroyedException" /> for a game object that no longer exists.
+    /// </remarks>
     [Serializable]
     public class ObjectNotLoadedException : global::KRPC.Client.RPCException
     {
@@ -1563,7 +1570,7 @@ namespace KRPC.Client.Services.KRPC
         /// <remarks>
         /// The instance the call is made on, and the values of its arguments, are fixed
         /// when the expression is created. A call to a procedure with no return value is
-        /// evaluated for its effects, as a statement in a <see cref="M:KRPC.Expression.Block" />. A collection the
+        /// evaluated for its effects, as a statement in a <see cref="global::KRPC.Client.Services.KRPC.Expression.Block" />. A collection the
         /// procedure returns is copied, as a client would receive it.
         /// </remarks>
         /// <param name="call">The procedure call.</param>
@@ -1647,7 +1654,7 @@ namespace KRPC.Client.Services.KRPC
         /// The values of one collection followed by those of another.
         /// </summary>
         /// <remarks>
-        /// The result is lazily evaluated. <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The first collection followed by the second.</returns>
         /// <param name="arg1">The first collection.</param>
@@ -1855,7 +1862,7 @@ namespace KRPC.Client.Services.KRPC
         /// A null constant of the given type.
         /// </summary>
         /// <remarks>
-        /// The type is made nullable, as by <see cref="M:KRPC.Type.NullableType" />.
+        /// The type is made nullable, as by <see cref="global::KRPC.Client.Services.KRPC.Type.NullableType" />.
         /// </remarks>
         /// <param name="type">The type of the value.</param>
         /// <param name="connection">A connection object.</param>
@@ -2206,7 +2213,7 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         /// <remarks>
         /// The collection operations take the keys of a dictionary from here, and its values
-        /// from <see cref="M:KRPC.Expression.DictionaryValues" />.
+        /// from <see cref="global::KRPC.Client.Services.KRPC.Expression.DictionaryValues" />.
         /// </remarks>
         /// <returns>The keys of the dictionary.</returns>
         /// <param name="dictionary">The dictionary.</param>
@@ -2246,7 +2253,7 @@ namespace KRPC.Client.Services.KRPC
         /// occurrence of each.
         /// </summary>
         /// <remarks>
-        /// The result is lazily evaluated. <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The distinct values of the collection.</returns>
         /// <param name="arg">The collection.</param>
@@ -2333,7 +2340,7 @@ namespace KRPC.Client.Services.KRPC
         /// duplicates removed.
         /// </summary>
         /// <remarks>
-        /// The result is lazily evaluated. <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The difference between the two collections.</returns>
         /// <param name="arg1">The first collection.</param>
@@ -2397,8 +2404,8 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         /// <remarks>
         /// The loop variable is a local variable declared by an enclosing
-        /// <see cref="M:KRPC.Expression.BlockWithVariables" />, or a parameter of an enclosing <see cref="M:KRPC.Expression.Lambda" />.
-        /// A <see cref="M:KRPC.Expression.Break" /> or <see cref="M:KRPC.Expression.Continue" /> in the body applies to this loop.
+        /// <see cref="global::KRPC.Client.Services.KRPC.Expression.BlockWithVariables" />, or a parameter of an enclosing <see cref="global::KRPC.Client.Services.KRPC.Expression.Lambda" />.
+        /// A <see cref="global::KRPC.Client.Services.KRPC.Expression.Break" /> or <see cref="global::KRPC.Client.Services.KRPC.Expression.Continue" /> in the body applies to this loop.
         /// </remarks>
         /// <param name="variable">The loop variable.</param>
         /// <param name="collection">The collection to iterate over.</param>
@@ -2526,7 +2533,7 @@ namespace KRPC.Client.Services.KRPC
         /// An if statement, with no value.
         /// </summary>
         /// <remarks>
-        /// Use <see cref="M:KRPC.Expression.Conditional" /> for an if-then-else that produces a value.
+        /// Use <see cref="global::KRPC.Client.Services.KRPC.Expression.Conditional" /> for an if-then-else that produces a value.
         /// </remarks>
         /// <param name="condition">The boolean condition.</param>
         /// <param name="body">The statement evaluated when the condition is true.</param>
@@ -2548,7 +2555,7 @@ namespace KRPC.Client.Services.KRPC
         /// An if-else statement, with no value.
         /// </summary>
         /// <remarks>
-        /// Use <see cref="M:KRPC.Expression.Conditional" /> for an if-then-else that produces a value.
+        /// Use <see cref="global::KRPC.Client.Services.KRPC.Expression.Conditional" /> for an if-then-else that produces a value.
         /// </remarks>
         /// <param name="condition">The boolean condition.</param>
         /// <param name="body">The statement evaluated when the condition is true.</param>
@@ -2572,7 +2579,7 @@ namespace KRPC.Client.Services.KRPC
         /// The values in both of two collections, with duplicates removed.
         /// </summary>
         /// <remarks>
-        /// The result is lazily evaluated. <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The intersection of the two collections.</returns>
         /// <param name="arg1">The first collection.</param>
@@ -2633,7 +2640,7 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         /// <remarks>
         /// The body is an expression or a block of statements, and a body with no value is
-        /// evaluated for its effects. A <see cref="M:KRPC.Expression.Return" /> or <see cref="M:KRPC.Expression.ReturnNothing" />
+        /// evaluated for its effects. A <see cref="global::KRPC.Client.Services.KRPC.Expression.Return" /> or <see cref="global::KRPC.Client.Services.KRPC.Expression.ReturnNothing" />
         /// statement ends the evaluation.
         /// </remarks>
         /// <returns>A function.</returns>
@@ -2942,7 +2949,7 @@ namespace KRPC.Client.Services.KRPC
         /// The values of a collection ordered by the key a function produces for each of them.
         /// </summary>
         /// <remarks>
-        /// The result is lazily evaluated. <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The ordered collection.</returns>
         /// <param name="arg">The collection to order.</param>
@@ -2965,8 +2972,8 @@ namespace KRPC.Client.Services.KRPC
         /// A named parameter of a function.
         /// </summary>
         /// <remarks>
-        /// A value is bound to it by name with <see cref="M:KRPC.Expression.Invoke" />, or by its position in
-        /// the parameters of a <see cref="M:KRPC.Expression.Lambda" />.
+        /// A value is bound to it by name with <see cref="global::KRPC.Client.Services.KRPC.Expression.Invoke" />, or by its position in
+        /// the parameters of a <see cref="global::KRPC.Client.Services.KRPC.Expression.Lambda" />.
         /// </remarks>
         /// <returns>A named parameter.</returns>
         /// <param name="name">The name of the parameter.</param>
@@ -3085,7 +3092,7 @@ namespace KRPC.Client.Services.KRPC
         /// The values of a collection in the opposite order.
         /// </summary>
         /// <remarks>
-        /// The result is lazily evaluated. <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The reversed collection.</returns>
         /// <param name="arg">The collection.</param>
@@ -3129,7 +3136,7 @@ namespace KRPC.Client.Services.KRPC
         /// The result of a function for each value of a collection.
         /// </summary>
         /// <remarks>
-        /// The result is lazily evaluated. <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The collection of function results.</returns>
         /// <param name="arg">The list or set.</param>
@@ -3153,7 +3160,7 @@ namespace KRPC.Client.Services.KRPC
         /// flattened into one.
         /// </summary>
         /// <remarks>
-        /// The result is lazily evaluated. <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The flattened collection of function results.</returns>
         /// <param name="arg">The list or set.</param>
@@ -3202,7 +3209,7 @@ namespace KRPC.Client.Services.KRPC
         /// A collection without its first count values.
         /// </summary>
         /// <remarks>
-        /// The result is lazily evaluated. <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The collection without its first count values.</returns>
         /// <param name="arg">The collection.</param>
@@ -3250,7 +3257,7 @@ namespace KRPC.Client.Services.KRPC
         /// The concatenation of strings.
         /// </summary>
         /// <remarks>
-        /// Use <see cref="M:KRPC.Expression.ConvertToString" /> to convert other values to strings.
+        /// Use <see cref="global::KRPC.Client.Services.KRPC.Expression.ConvertToString" /> to convert other values to strings.
         /// </remarks>
         /// <returns>The concatenated string.</returns>
         /// <param name="args">The strings to concatenate, in order.</param>
@@ -3609,7 +3616,7 @@ namespace KRPC.Client.Services.KRPC
         /// The first count values of a collection.
         /// </summary>
         /// <remarks>
-        /// The result is lazily evaluated. <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The first count values of the collection.</returns>
         /// <param name="arg">The collection.</param>
@@ -3633,7 +3640,9 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         /// <remarks>
         /// The client receives the exception as an error from the function, or from the stream
-        /// or event evaluating it. Throws an exception if the service does not declare it.
+        /// or event evaluating it. For example, the service <c>KRPC</c> and the name
+        /// <c>Error</c> raise <see cref="global::KRPC.Client.Services.KRPC.Error" />. Throws an exception if the service does not
+        /// declare it.
         /// </remarks>
         /// <param name="service">The name of the service the exception is defined in.</param>
         /// <param name="name">The name of the exception.</param>
@@ -3696,7 +3705,7 @@ namespace KRPC.Client.Services.KRPC
         /// A try-catch statement that handles the named exception.
         /// </summary>
         /// <remarks>
-        /// Only an exception a service declares can be named, and <see cref="M:KRPC.Expression.TryCatchAll" />
+        /// Only an exception a service declares can be named, and <see cref="global::KRPC.Client.Services.KRPC.Expression.TryCatchAll" />
         /// handles any exception. Throws an exception if the service does not declare it.
         /// </remarks>
         /// <param name="body">The statement to evaluate.</param>
@@ -3769,7 +3778,7 @@ namespace KRPC.Client.Services.KRPC
         /// The values in either of two collections, with duplicates removed.
         /// </summary>
         /// <remarks>
-        /// The result is lazily evaluated. <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The union of the two collections.</returns>
         /// <param name="arg1">The first collection.</param>
@@ -3789,7 +3798,7 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
-        /// A local variable, declared by <see cref="M:KRPC.Expression.BlockWithVariables" />.
+        /// A local variable, declared by <see cref="global::KRPC.Client.Services.KRPC.Expression.BlockWithVariables" />.
         /// </summary>
         /// <returns>A local variable.</returns>
         /// <param name="name">The name of the variable.</param>
@@ -3812,7 +3821,7 @@ namespace KRPC.Client.Services.KRPC
         /// The values of a collection for which a predicate function returns true.
         /// </summary>
         /// <remarks>
-        /// The result is lazily evaluated. <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// The result is lazily evaluated. <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The filtered collection.</returns>
         /// <param name="arg">The list or set.</param>
@@ -3835,7 +3844,7 @@ namespace KRPC.Client.Services.KRPC
         /// A while loop, which evaluates the body while the condition is true.
         /// </summary>
         /// <remarks>
-        /// A <see cref="M:KRPC.Expression.Break" /> or <see cref="M:KRPC.Expression.Continue" /> in the body applies to this loop.
+        /// A <see cref="global::KRPC.Client.Services.KRPC.Expression.Break" /> or <see cref="global::KRPC.Client.Services.KRPC.Expression.Continue" /> in the body applies to this loop.
         /// </remarks>
         /// <param name="condition">The boolean condition.</param>
         /// <param name="body">The statement evaluated on each iteration.</param>
@@ -3858,7 +3867,7 @@ namespace KRPC.Client.Services.KRPC
         /// </summary>
         /// <remarks>
         /// The result is as long as the shorter of the two collections. It is lazily
-        /// evaluated, and <see cref="M:KRPC.Expression.ToList" /> makes it concrete.
+        /// evaluated, and <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> makes it concrete.
         /// </remarks>
         /// <returns>The combined collection.</returns>
         /// <param name="arg1">The first collection.</param>
@@ -3883,7 +3892,7 @@ namespace KRPC.Client.Services.KRPC
         /// Whether the expression evaluates to a value.
         /// </summary>
         /// <remarks>
-        /// An expression with no value has no <see cref="M:KRPC.Expression.ReturnType" />. An empty
+        /// An expression with no value has no <see cref="global::KRPC.Client.Services.KRPC.Expression.ReturnType" />. An empty
         /// collection and no value both encode to an empty sequence of bytes.
         /// </remarks>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_get_HasReturnType", typeof(TypeSpecs))]
@@ -3901,7 +3910,7 @@ namespace KRPC.Client.Services.KRPC
         /// The types of the function's parameters.
         /// </summary>
         /// <remarks>
-        /// Empty for a function that is not created with <see cref="M:KRPC.Expression.Lambda" />.
+        /// Empty for a function that is not created with <see cref="global::KRPC.Client.Services.KRPC.Expression.Lambda" />.
         /// </remarks>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_get_ParameterTypes", typeof(TypeSpecs))]
         public global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.Type> ParameterTypes {
@@ -3919,9 +3928,9 @@ namespace KRPC.Client.Services.KRPC
         /// value cannot be sent to a client.
         /// </summary>
         /// <remarks>
-        /// A function created with <see cref="M:KRPC.Expression.Lambda" /> evaluates to the value it returns. A
-        /// lazily evaluated collection, such as from <see cref="M:KRPC.Expression.Select" />, is sent once
-        /// converted by <see cref="M:KRPC.Expression.ToList" /> or <see cref="M:KRPC.Expression.ToSet" />.
+        /// A function created with <see cref="global::KRPC.Client.Services.KRPC.Expression.Lambda" /> evaluates to the value it returns. A
+        /// lazily evaluated collection, such as from <see cref="global::KRPC.Client.Services.KRPC.Expression.Select" />, is sent once
+        /// converted by <see cref="global::KRPC.Client.Services.KRPC.Expression.ToList" /> or <see cref="global::KRPC.Client.Services.KRPC.Expression.ToSet" />.
         /// </remarks>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "Expression_get_ReturnType", typeof(TypeSpecs))]
         public global::KRPC.Client.Services.KRPC.Type ReturnType {

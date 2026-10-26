@@ -282,12 +282,13 @@ Service documentation string.
 
 .. function:: krpc_error_t krpc_TestService_EchoNullableInt(krpc_connection_t connection, int32_t * returnValue, bool * returnValueIsNull, const int32_t * value)
 
-
+   Returns the given value.
 
    :Parameters:
 
+    * **value** -- The value, or ``nullptr``.
 
-
+   :returns: The value.
    
 
 
@@ -571,6 +572,25 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_JoinWithAtSign(krpc_connection_t connection, char * * returnValue, const char * firstValue, const char * from)
+
+   Returns *firstValue* and *from* joined by an at
+   sign, e.g. ``jeb@kerbin``. The parameter names are:
+
+   * a name in camel case, and
+   * a name that is a keyword in some languages.
+
+   :Parameters:
+
+    * **firstValue** -- The string before the at sign.
+    * **from** -- The string after the at sign.
+
+   :returns: The strings joined.
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_ListDefault(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * x)
 
 
@@ -636,8 +656,9 @@ Service documentation string.
 .. function:: krpc_error_t krpc_TestService_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue)
 .. function:: krpc_error_t krpc_TestService_set_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t value)
 
+   A property holding an object.
 
-
+   :returns: The object, or ``nullptr``.
    
 
 
@@ -860,10 +881,20 @@ Service documentation string.
 
 .. function:: krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t connection, int32_t * returnValue)
 
-
+   Throws a ``TestService.CustomException``.
 
 
    
+
+   .. note::
+
+      Links to each kind of member: TestService, :type:`krpc_TestService_TestClass_t`,
+      :type:`krpc_TestService_TestEnum_t`, :type:`krpc_TestService_TestStruct_t`, ``KRPC.InvalidOperationException``,
+      :func:`krpc_TestService_FloatToString`, :func:`krpc_TestService_StringProperty`,
+      :func:`krpc_TestService_set_StringPropertyPrivateGet`, :func:`krpc_TestService_TestClass_FloatToString`,
+      :func:`krpc_TestService_TestClass_StaticMethod`, :func:`krpc_TestService_TestClass_IntProperty`,
+      :func:`krpc_TestService_TestClass_set_StringPropertyPrivateGet`, :macro:`KRPC_TESTSERVICE_TESTENUM_VALUEA` and
+      :member:`krpc_TestService_TestStruct_t.int_field`.
 
 
 
@@ -979,8 +1010,9 @@ Service documentation string.
    .. function:: krpc_error_t krpc_TestService_TestClass_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t instance)
    .. function:: krpc_error_t krpc_TestService_TestClass_set_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t value)
 
+      A property of the object, holding another object.
 
-
+      :returns: The other object, or ``nullptr``.
    
 
    .. function:: krpc_error_t krpc_TestService_TestClass_ObjectToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t other)
@@ -1008,13 +1040,14 @@ Service documentation string.
 
    .. function:: krpc_error_t krpc_TestService_TestClass_StaticMethod(krpc_connection_t connection, char * * returnValue, const char * a, const char * b)
 
-
+      Returns jeb followed by *a* and *b*.
 
       :Parameters:
 
+       * **a** -- The first string.
+       * **b** -- The second string.
 
-
-
+      :returns: The strings joined.
    
 
    .. function:: krpc_error_t krpc_TestService_TestClass_StaticNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t value)
@@ -1206,6 +1239,6 @@ Exception class CustomException
 
 Exception class DeprecatedException
 
-.. warning:: Deprecated. Use CustomException instead.
+.. warning:: Deprecated. Use ``TestService.CustomException`` instead.
 
 Deprecated exception documentation string.

@@ -95,6 +95,10 @@ namespace TestServer
             return value;
         }
 
+        /// <summary>
+        /// A property holding an object.
+        /// </summary>
+        /// <returns>The object, or <c>null</c>.</returns>
         [KRPCProperty (Nullable = true)]
         public static TestClass ObjectProperty { get; set; }
 
@@ -122,6 +126,11 @@ namespace TestServer
             return l;
         }
 
+        /// <summary>
+        /// Returns the given value.
+        /// </summary>
+        /// <param name="value">The value, or <c>null</c>.</param>
+        /// <returns>The value.</returns>
         [KRPCProcedure]
         public static int? EchoNullableInt (int? value)
         {
@@ -198,6 +207,10 @@ namespace TestServer
             [KRPCProperty]
             public int IntProperty { get; set; }
 
+            /// <summary>
+            /// A property of the object, holding another object.
+            /// </summary>
+            /// <returns>The other object, or <c>null</c>.</returns>
             [KRPCProperty (Nullable = true)]
             public TestClass ObjectProperty { get; set; }
 
@@ -217,6 +230,12 @@ namespace TestServer
                 return x + y + z + (obj == null ? "null" : obj.instanceValue);
             }
 
+            /// <summary>
+            /// Returns jeb followed by <paramref name="a"/> and <paramref name="b"/>.
+            /// </summary>
+            /// <param name="a">The first string.</param>
+            /// <param name="b">The second string.</param>
+            /// <returns>The strings joined.</returns>
             [KRPCMethod]
             public static string StaticMethod (string a = "", string b = "")
             {
@@ -228,6 +247,23 @@ namespace TestServer
             {
                 return value;
             }
+        }
+
+        /// <summary>
+        /// Returns <paramref name="firstValue"/> and <paramref name="from"/> joined by an at
+        /// sign, e.g. <c>jeb@kerbin</c>. The parameter names are:
+        /// <list type="bullet">
+        /// <item><description>a name in camel case, and</description></item>
+        /// <item><description>a name that is a keyword in some languages.</description></item>
+        /// </list>
+        /// </summary>
+        /// <param name="firstValue">The string before the at sign.</param>
+        /// <param name="from">The string after the at sign.</param>
+        /// <returns>The strings joined.</returns>
+        [KRPCProcedure]
+        public static string JoinWithAtSign (string firstValue, string from)
+        {
+            return firstValue + "@" + from;
         }
 
         [KRPCProcedure]
@@ -699,6 +735,18 @@ namespace TestServer
             }
         }
 
+        /// <summary>
+        /// Throws a <see cref="CustomException"/>.
+        /// </summary>
+        /// <remarks>
+        /// Links to each kind of member: <see cref="TestService"/>, <see cref="TestClass"/>,
+        /// <see cref="TestEnum"/>, <see cref="TestStruct"/>, <see cref="InvalidOperationException"/>,
+        /// <see cref="FloatToString"/>, <see cref="StringProperty"/>,
+        /// <see cref="StringPropertyPrivateGet"/>, <see cref="TestClass.FloatToString"/>,
+        /// <see cref="TestClass.StaticMethod"/>, <see cref="TestClass.IntProperty"/>,
+        /// <see cref="TestClass.StringPropertyPrivateGet"/>, <see cref="TestEnum.ValueA"/> and
+        /// <see cref="TestStruct.IntField"/>.
+        /// </remarks>
         [KRPCProcedure]
         public static int ThrowCustomException ()
         {
@@ -894,7 +942,7 @@ namespace TestServer
         /// Deprecated exception documentation string.
         /// </summary>
         [KRPCException]
-        [Obsolete ("Use CustomException instead.")]
+        [Obsolete ("Use <see cref='CustomException'/> instead.")]
         public sealed class DeprecatedException : System.Exception
         {
             public DeprecatedException ()

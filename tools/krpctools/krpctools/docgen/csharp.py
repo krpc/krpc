@@ -20,8 +20,10 @@ from .nodes import (
     ClassStaticMethod,
     Enumeration,
     EnumerationValue,
+    ExceptionNode,
     Procedure,
     Property,
+    Service,
     Struct,
     StructField,
 )
@@ -156,6 +158,9 @@ class CsharpDomain(Domain[CsharpLanguage]):
         return self.language.parse_default_value(value, typ)
 
     def see(self, obj):
+        # A service is documented as a class in its own namespace
+        if isinstance(obj, Service):
+            return ":type:`%s <%s.%s>`" % (obj.name, obj.name, obj.name)
         if isinstance(obj, (Property, ClassProperty)):
             prefix = "prop"
         elif isinstance(obj, EnumerationValue):
@@ -164,7 +169,7 @@ class CsharpDomain(Domain[CsharpLanguage]):
             prefix = "prop"
         elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             prefix = "meth"
-        elif isinstance(obj, (Class, Enumeration, Struct)):
+        elif isinstance(obj, (Class, Enumeration, Struct, ExceptionNode)):
             prefix = "type"
         else:
             raise RuntimeError(str(obj))

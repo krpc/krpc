@@ -594,7 +594,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// In map mode, the celestial body that the camera is focussed on.
         /// Returns <c>null</c> if the camera is not focussed on a celestial body.
-        /// Returns an error is the camera is not in map mode.
+        /// Throws <see cref="InvalidOperationException"/> if the camera is not in map mode.
         /// </summary>
         [KRPCProperty (Nullable = true)]
         public CelestialBody FocussedBody {
@@ -614,7 +614,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// In map mode, the vessel that the camera is focussed on.
         /// Returns <c>null</c> if the camera is not focussed on a vessel.
-        /// Returns an error is the camera is not in map mode.
+        /// Throws <see cref="InvalidOperationException"/> if the camera is not in map mode.
         /// </summary>
         [KRPCProperty (Nullable = true)]
         public Vessel FocussedVessel {
@@ -634,7 +634,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// In map mode, the maneuver node that the camera is focussed on.
         /// Returns <c>null</c> if the camera is not focussed on a maneuver node.
-        /// Returns an error is the camera is not in map mode.
+        /// Throws <see cref="InvalidOperationException"/> if the camera is not in map mode.
         /// </summary>
         [KRPCProperty (Nullable = true)]
         public Node FocussedNode {
@@ -654,7 +654,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// In IVA mode, the crew member whose view the camera is showing.
         /// Returns <c>null</c> if no crew member is in view.
-        /// Returns an error if the camera is not in IVA mode.
+        /// Throws <see cref="InvalidOperationException"/> if the camera is not in IVA mode.
         /// Setting this moves the view to the given crew member, switching the camera to
         /// IVA mode if it is not already. The crew member must be in the active vessel,
         /// and in a part whose interior the game has placed them in.

@@ -1,7 +1,7 @@
 load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test")
 load("//:config.bzl", "version")
 load("//tools/build:client_test.bzl", "client_test")
-load("//tools/build:java.bzl", "java_checkstyle_test")
+load("//tools/build:java.bzl", "java_checkstyle_test", "javadoc_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_services")
 
 exports_files(["CHANGELOG.md"])
@@ -130,6 +130,7 @@ test_suite(
         ":client-tcpip",
         ":communication-localsocket",
         ":communication-tcpip",
+        ":javadoc",
         ":lint",
         ":unit",
     ],
@@ -158,4 +159,13 @@ java_checkstyle_test(
     name = "lint",
     size = "small",
     srcs = glob(["**/*.java"]),
+)
+
+# The documentation of the client and of the test service, which exercises every form the
+# documentation takes, as javadoc reads it
+javadoc_test(
+    name = "javadoc",
+    size = "small",
+    srcs = glob(["src/krpc/**/*.java"]) + services + [":services-testservice"],
+    deps = [":krpc"],
 )

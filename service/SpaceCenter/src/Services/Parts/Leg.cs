@@ -98,7 +98,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <remarks>
         /// Fixed landing legs are always deployed.
-        /// Returns an error if you try to deploy fixed landing gear.
+        /// Throws <see cref="InvalidOperationException"/> if set on a fixed landing leg.
         /// </remarks>
         [KRPCProperty]
         public bool Deployed {
