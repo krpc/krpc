@@ -99,6 +99,7 @@ for language in "${!stub_paths[@]}"; do
   mkdir -p "$(dirname "$path")"
   "$venv/bin/krpc-clientgen" "$language" KSA "$here/bin/KRPC.KSA.json" "$here/bin/StdLib.json" --output="$path" ${stdlib_includes[$language]:-}
 done
+python3 "$here/grpc/protogen.py" "$here/bin/KRPC.KSA.json" KSA "$stubs/grpc/KSA.proto"
 sed "s/@CLIENT_VERSION@/$krpc_version/" "$here/stubs/README.md" > "$stubs/README.md"
 cp "$here/bin/KRPC.KSA.json" "$stubs/"
 echo "Client stubs in $stubs"
