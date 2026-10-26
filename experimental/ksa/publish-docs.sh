@@ -26,10 +26,12 @@ done
 "$here/docs.sh"
 
 git -C "$repo" fetch --no-tags origin gh-pages
+# FETCH_HEAD belongs to the main checkout, so resolve it there
+commit="$(git -C "$repo" rev-parse FETCH_HEAD)"
 if [ -d "$worktree" ]; then
-  git -C "$worktree" checkout --quiet --detach FETCH_HEAD
+  git -C "$worktree" checkout --quiet --detach "$commit"
 else
-  git -C "$repo" worktree add --detach "$worktree" FETCH_HEAD
+  git -C "$repo" worktree add --detach "$worktree" "$commit"
 fi
 
 rm -rf "${worktree:?}/$subpath"
