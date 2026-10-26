@@ -581,7 +581,9 @@ assembled and run.
       .. note::
 
          The client receives the exception as an error from the function, or from the stream
-         or event evaluating it. Throws an exception if the service does not declare it.
+         or event evaluating it. For example, the service ``KRPC`` and the name
+         ``Error`` raise :class:`KRPC.Error`. Throws an exception if the service does not
+         declare it.
 
    .. staticmethod:: try_catch(body, service, name, message, handler)
 

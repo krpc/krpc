@@ -737,7 +737,9 @@ assembled and run.
       .. note::
 
          The client receives the exception as an error from the function, or from the stream
-         or event evaluating it. Throws an exception if the service does not declare it.
+         or event evaluating it. For example, the service ``KRPC`` and the name
+         ``Error`` raise ``KRPC.Error``. Throws an exception if the service does not
+         declare it.
 
    .. function:: krpc_error_t krpc_KRPC_Expression_TryCatch(krpc_connection_t connection, krpc_KRPC_Expression_t * returnValue, krpc_KRPC_Expression_t body, const char * service, const char * name, krpc_KRPC_Expression_t message, krpc_KRPC_Expression_t handler)
 

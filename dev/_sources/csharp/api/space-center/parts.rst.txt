@@ -60,7 +60,7 @@ Parts
 
       :parameters:
 
-
+       * **name** -- The name of the part.
 
       :Game Scenes: All
 
@@ -70,7 +70,7 @@ Parts
 
       :parameters:
 
-
+       * **title** -- The title of the part.
 
       :Game Scenes: All
 
@@ -80,7 +80,7 @@ Parts
 
       :parameters:
 
-
+       * **tag** -- The name tag of the part.
 
       :Game Scenes: All
 
@@ -91,7 +91,7 @@ Parts
 
       :parameters:
 
-
+       * **moduleName** -- The name of the module.
 
       :Game Scenes: All
 
@@ -102,7 +102,7 @@ Parts
 
       :parameters:
 
-
+       * **moduleName** -- The name of the module.
 
       :Game Scenes: All
 
@@ -1779,7 +1779,7 @@ Antenna
       .. note::
 
          Fixed antennas are always deployed.
-         Returns an error if you try to deploy a fixed antenna.
+         Throws :type:`KRPC.InvalidOperationException` if set on a fixed antenna.
 
    .. property:: bool CanTransmit { get; }
 
@@ -3079,7 +3079,7 @@ Leg
       .. note::
 
          Fixed landing legs are always deployed.
-         Returns an error if you try to deploy fixed landing gear.
+         Throws :type:`KRPC.InvalidOperationException` if set on a fixed landing leg.
 
    .. property:: bool IsGrounded { get; }
 

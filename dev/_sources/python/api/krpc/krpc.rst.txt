@@ -85,7 +85,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
       Each call adds a new stream, with values of the type given by
       :attr:`Expression.return_type`. Any exception from the function ends the
-      stream, including one for an object that is not loaded. A procedure that pauses
+      stream, including :class:`ObjectNotLoadedException`. A procedure that pauses
       execution to resume on a later tick produces an error on the stream.
 
 
@@ -393,14 +393,19 @@ Main kRPC service, used by clients to interact with basic server functionality.
    so the object cannot be used. For example, the part it represents
    was destroyed, or the vessel it belongs to was recovered.
 
+   .. note::
 
+      See :class:`ObjectNotLoadedException` for a game object that exists but is not
+      loaded.
 
 .. class:: ObjectNotLoadedException
 
    The game object that a service object refers to exists, but is not loaded.
    For example, the game is loading, or the vessel carrying the part is unloaded.
 
+   .. note::
 
+      See :class:`ObjectDestroyedException` for a game object that no longer exists.
 
 .. class:: UnsupportedSceneException
 

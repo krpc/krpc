@@ -60,7 +60,7 @@ Parts
 
       :Parameters:
 
-
+       * **name** -- The name of the part.
 
    
 
@@ -70,7 +70,7 @@ Parts
 
       :Parameters:
 
-
+       * **title** -- The title of the part.
 
    
 
@@ -80,7 +80,7 @@ Parts
 
       :Parameters:
 
-
+       * **tag** -- The name tag of the part.
 
    
 
@@ -91,7 +91,7 @@ Parts
 
       :Parameters:
 
-
+       * **module_name** -- The name of the module.
 
    
 
@@ -102,7 +102,7 @@ Parts
 
       :Parameters:
 
-
+       * **module_name** -- The name of the module.
 
    
 
@@ -1774,7 +1774,7 @@ Antenna
       .. note::
 
          Fixed antennas are always deployed.
-         Returns an error if you try to deploy a fixed antenna.
+         Throws :class:`KRPC::InvalidOperationException` if set on a fixed antenna.
 
    .. function:: bool can_transmit()
 
@@ -3097,7 +3097,7 @@ Leg
       .. note::
 
          Fixed landing legs are always deployed.
-         Returns an error if you try to deploy fixed landing gear.
+         Throws :class:`KRPC::InvalidOperationException` if set on a fixed landing leg.
 
    .. function:: bool is_grounded()
 

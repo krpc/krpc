@@ -59,21 +59,21 @@ Parts
 
       A list of parts whose :attr:`SpaceCenter.Part.name` is *name*.
 
-      :param string name:
+      :param string name: The name of the part.
       :rtype: List
 
    .. method:: with_title(title)
 
       A list of all parts whose :attr:`SpaceCenter.Part.title` is *title*.
 
-      :param string title:
+      :param string title: The title of the part.
       :rtype: List
 
    .. method:: with_tag(tag)
 
       A list of all parts whose :attr:`SpaceCenter.Part.tag` is *tag*.
 
-      :param string tag:
+      :param string tag: The name tag of the part.
       :rtype: List
 
    .. method:: with_module(module_name)
@@ -81,7 +81,7 @@ Parts
       A list of all parts that contain a :class:`SpaceCenter.Module` whose
       :attr:`SpaceCenter.Module.name` is *module_name*.
 
-      :param string module_name:
+      :param string module_name: The name of the module.
       :rtype: List
 
    .. method:: modules_with_name(module_name)
@@ -89,7 +89,7 @@ Parts
       A list of modules (combined across all parts in the vessel) whose
       :attr:`SpaceCenter.Module.name` is *module_name*.
 
-      :param string module_name:
+      :param string module_name: The name of the module.
       :rtype: List
 
    .. attribute:: antennas: List
@@ -1813,7 +1813,7 @@ Antenna
       .. note::
 
          Fixed antennas are always deployed.
-         Returns an error if you try to deploy a fixed antenna.
+         Throws :class:`KRPC.InvalidOperationException` if set on a fixed antenna.
 
    .. attribute:: can_transmit: boolean
 
@@ -3192,7 +3192,7 @@ Leg
       .. note::
 
          Fixed landing legs are always deployed.
-         Returns an error if you try to deploy fixed landing gear.
+         Throws :class:`KRPC.InvalidOperationException` if set on a fixed landing leg.
 
    .. attribute:: is_grounded: boolean
 

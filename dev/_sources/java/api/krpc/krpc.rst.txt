@@ -63,7 +63,7 @@ KRPC
 
          Each call adds a new stream, with values of the type given by
          :meth:`Expression.getReturnType()`. Any exception from the function ends the
-         stream, including one for an object that is not loaded. A procedure that pauses
+         stream, including :type:`ObjectNotLoadedException`. A procedure that pauses
          execution to resume on a later tick produces an error on the stream.
 
    .. method:: void holdTick()
@@ -343,14 +343,19 @@ KRPC
    so the object cannot be used. For example, the part it represents
    was destroyed, or the vessel it belongs to was recovered.
 
+   .. note::
 
+      See :type:`ObjectNotLoadedException` for a game object that exists but is not
+      loaded.
 
 .. type:: public class ObjectNotLoadedException
 
    The game object that a service object refers to exists, but is not loaded.
    For example, the game is loading, or the vessel carrying the part is unloaded.
 
+   .. note::
 
+      See :type:`ObjectDestroyedException` for a game object that no longer exists.
 
 .. type:: public class UnsupportedSceneException
 

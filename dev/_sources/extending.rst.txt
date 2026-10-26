@@ -1008,6 +1008,22 @@ Documentation can be added using `C# XML documentation
 as the Python and Lua clients, the documentation will be automatically exported to clients when they
 connect.
 
+A ``<see cref='...'/>`` links to another member of a service, or to an exception:
+
+.. literalinclude:: /scripts/extending/DocumentationCrefs.lib.cs
+   :language: csharp
+   :start-after: [docs]
+   :end-before: [/docs]
+   :dedent:
+
+The reference can name a service, procedure, property, class, method, enumeration, structure or
+exception. A .NET exception that kRPC maps, such as ``System.InvalidOperationException``, links to
+the kRPC exception of the same name. The API reference and the generated client code link to the
+same member.
+
+``krpc-clientgen`` needs the definitions of every service the documentation links to, and warns
+about a reference to a service it was not given.
+
 Units and formulas are marked up with ``<unit>`` and ``<math>`` tags:
 
 .. literalinclude:: /scripts/extending/Documentation.lib.cs

@@ -1220,7 +1220,7 @@ equivalent to “Control From Here” in game.</p>
 <dd><p>A list of parts whose <a class="reference internal" href="#SpaceCenter.SpaceCenter.Part.name" title="SpaceCenter.SpaceCenter.Part.name"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.name</span></code></a> is <em>name</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>)</p>
+<dd class="field-odd"><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the part.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
@@ -1234,7 +1234,7 @@ equivalent to “Control From Here” in game.</p>
 <dd><p>A list of all parts whose <a class="reference internal" href="#SpaceCenter.SpaceCenter.Part.title" title="SpaceCenter.SpaceCenter.Part.title"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.title</span></code></a> is <em>title</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>title</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>)</p>
+<dd class="field-odd"><p><strong>title</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The title of the part.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
@@ -1248,7 +1248,7 @@ equivalent to “Control From Here” in game.</p>
 <dd><p>A list of all parts whose <a class="reference internal" href="#SpaceCenter.SpaceCenter.Part.tag" title="SpaceCenter.SpaceCenter.Part.tag"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.tag</span></code></a> is <em>tag</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tag</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>)</p>
+<dd class="field-odd"><p><strong>tag</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name tag of the part.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
@@ -1263,7 +1263,7 @@ equivalent to “Control From Here” in game.</p>
 <a class="reference internal" href="#SpaceCenter.SpaceCenter.Module.name" title="SpaceCenter.SpaceCenter.Module.name"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Module.name</span></code></a> is <em>module_name</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>module_name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>)</p>
+<dd class="field-odd"><p><strong>module_name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the module.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
@@ -1278,7 +1278,7 @@ equivalent to “Control From Here” in game.</p>
 <a class="reference internal" href="#SpaceCenter.SpaceCenter.Module.name" title="SpaceCenter.SpaceCenter.Module.name"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Module.name</span></code></a> is <em>module_name</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>module_name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>)</p>
+<dd class="field-odd"><p><strong>module_name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the module.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
@@ -4334,7 +4334,7 @@ This class is only for stock KSP antennas.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Fixed antennas are always deployed.
-Returns an error if you try to deploy a fixed antenna.</p>
+Throws <a class="reference internal" href="../krpc/krpc.html#KRPC.InvalidOperationException" title="KRPC.InvalidOperationException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if set on a fixed antenna.</p>
 </div>
 </dd></dl>
 
@@ -6684,7 +6684,7 @@ Supports both stock fairings, and those from the ProceduralFairings mod.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Fixed landing legs are always deployed.
-Returns an error if you try to deploy fixed landing gear.</p>
+Throws <a class="reference internal" href="../krpc/krpc.html#KRPC.InvalidOperationException" title="KRPC.InvalidOperationException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if set on a fixed landing leg.</p>
 </div>
 </dd></dl>
 

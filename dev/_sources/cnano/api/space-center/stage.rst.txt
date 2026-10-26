@@ -18,7 +18,7 @@ Stage
 
       Delta-v, thrust, TWR, specific impulse, burn time and mass members are only
       available on activation stages. On decouple stages those members throw
-      InvalidOperationException because stock delta-v data does not
+      ``KRPC.InvalidOperationException`` because stock delta-v data does not
       apply. Thrust is reported in newtons and masses in kilograms (stock values
       are converted from kilonewtons and tonnes).
 

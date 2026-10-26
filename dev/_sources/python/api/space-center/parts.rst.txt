@@ -63,7 +63,7 @@ Parts
 
       A list of parts whose :attr:`Part.name` is *name*.
 
-      :param str name:
+      :param str name: The name of the part.
       :rtype: list(:class:`Part`)
    
 
@@ -71,7 +71,7 @@ Parts
 
       A list of all parts whose :attr:`Part.title` is *title*.
 
-      :param str title:
+      :param str title: The title of the part.
       :rtype: list(:class:`Part`)
    
 
@@ -79,7 +79,7 @@ Parts
 
       A list of all parts whose :attr:`Part.tag` is *tag*.
 
-      :param str tag:
+      :param str tag: The name tag of the part.
       :rtype: list(:class:`Part`)
    
 
@@ -88,7 +88,7 @@ Parts
       A list of all parts that contain a :class:`Module` whose
       :attr:`Module.name` is *module_name*.
 
-      :param str module_name:
+      :param str module_name: The name of the module.
       :rtype: list(:class:`Part`)
    
 
@@ -97,7 +97,7 @@ Parts
       A list of modules (combined across all parts in the vessel) whose
       :attr:`Module.name` is *module_name*.
 
-      :param str module_name:
+      :param str module_name: The name of the module.
       :rtype: list(:class:`Module`)
    
 
@@ -2022,7 +2022,7 @@ Antenna
       .. note::
 
          Fixed antennas are always deployed.
-         Returns an error if you try to deploy a fixed antenna.
+         Throws :class:`KRPC.InvalidOperationException` if set on a fixed antenna.
 
    .. attribute:: can_transmit
 
@@ -3555,7 +3555,7 @@ Leg
       .. note::
 
          Fixed landing legs are always deployed.
-         Returns an error if you try to deploy fixed landing gear.
+         Throws :class:`KRPC.InvalidOperationException` if set on a fixed landing leg.
 
    .. attribute:: is_grounded
 

@@ -1207,7 +1207,7 @@ equivalent to “Control From Here” in game.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>)</p></li>
+<li><p><strong>name</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The name of the part.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1220,7 +1220,7 @@ equivalent to “Control From Here” in game.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>title</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>)</p></li>
+<li><p><strong>title</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The title of the part.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1233,7 +1233,7 @@ equivalent to “Control From Here” in game.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tag</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>)</p></li>
+<li><p><strong>tag</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The name tag of the part.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1247,7 +1247,7 @@ equivalent to “Control From Here” in game.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>moduleName</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>)</p></li>
+<li><p><strong>moduleName</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The name of the module.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1261,7 +1261,7 @@ equivalent to “Control From Here” in game.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>moduleName</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>)</p></li>
+<li><p><strong>moduleName</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The name of the module.</p></li>
 </ul>
 </dd>
 </dl>
@@ -3381,7 +3381,7 @@ This class is only for stock KSP antennas.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Fixed antennas are always deployed.
-Returns an error if you try to deploy a fixed antenna.</p>
+Throws <a class="reference internal" href="../krpc/krpc.html#krpc.client.services.KRPC.InvalidOperationException" title="krpc.client.services.KRPC.InvalidOperationException"><code class="xref java java-type docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if set on a fixed antenna.</p>
 </div>
 </dd></dl>
 
@@ -5520,7 +5520,7 @@ Supports both stock fairings, and those from the ProceduralFairings mod.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Fixed landing legs are always deployed.
-Returns an error if you try to deploy fixed landing gear.</p>
+Throws <a class="reference internal" href="../krpc/krpc.html#krpc.client.services.KRPC.InvalidOperationException" title="krpc.client.services.KRPC.InvalidOperationException"><code class="xref java java-type docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if set on a fixed landing leg.</p>
 </div>
 </dd></dl>
 

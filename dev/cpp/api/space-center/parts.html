@@ -1206,7 +1206,10 @@ equivalent to “Control From Here” in game.</p>
 <dd><p>A list of parts whose <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part4nameEv" title="krpc::services::SpaceCenter::Part::name"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::name()</span></code></a> is <em>name</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – The name of the part.</p></li>
+</ul>
+</dd>
 </dl>
 </dd></dl>
 
@@ -1216,7 +1219,10 @@ equivalent to “Control From Here” in game.</p>
 <dd><p>A list of all parts whose <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part5titleEv" title="krpc::services::SpaceCenter::Part::title"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::title()</span></code></a> is <em>title</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> – The title of the part.</p></li>
+</ul>
+</dd>
 </dl>
 </dd></dl>
 
@@ -1226,7 +1232,10 @@ equivalent to “Control From Here” in game.</p>
 <dd><p>A list of all parts whose <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part3tagEv" title="krpc::services::SpaceCenter::Part::tag"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::tag()</span></code></a> is <em>tag</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tag</strong> – The name tag of the part.</p></li>
+</ul>
+</dd>
 </dl>
 </dd></dl>
 
@@ -1237,7 +1246,10 @@ equivalent to “Control From Here” in game.</p>
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Module4nameEv" title="krpc::services::SpaceCenter::Module::name"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Module::name()</span></code></a> is <em>module_name</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module_name</strong> – The name of the module.</p></li>
+</ul>
+</dd>
 </dl>
 </dd></dl>
 
@@ -1248,7 +1260,10 @@ equivalent to “Control From Here” in game.</p>
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Module4nameEv" title="krpc::services::SpaceCenter::Module::name"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Module::name()</span></code></a> is <em>module_name</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module_name</strong> – The name of the module.</p></li>
+</ul>
+</dd>
 </dl>
 </dd></dl>
 
@@ -3366,7 +3381,7 @@ This class is only for stock KSP antennas.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Fixed antennas are always deployed.
-Returns an error if you try to deploy a fixed antenna.</p>
+Throws <a class="reference internal" href="../krpc/krpc.html#_CPPv4N4krpc8services4KRPC25InvalidOperationExceptionE" title="krpc::services::KRPC::InvalidOperationException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">KRPC::InvalidOperationException</span></code></a> if set on a fixed antenna.</p>
 </div>
 </dd></dl>
 
@@ -5493,7 +5508,7 @@ Supports both stock fairings, and those from the ProceduralFairings mod.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Fixed landing legs are always deployed.
-Returns an error if you try to deploy fixed landing gear.</p>
+Throws <a class="reference internal" href="../krpc/krpc.html#_CPPv4N4krpc8services4KRPC25InvalidOperationExceptionE" title="krpc::services::KRPC::InvalidOperationException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">KRPC::InvalidOperationException</span></code></a> if set on a fixed landing leg.</p>
 </div>
 </dd></dl>
 

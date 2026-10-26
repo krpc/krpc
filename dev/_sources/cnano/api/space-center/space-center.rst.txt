@@ -514,7 +514,6 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
     * **maxRailsRate** -- The maximum warp rate in regular "on-rails" time warp.
     * **maxPhysicsRate** -- The maximum warp rate in physical time warp.
 
-   :returns: When the time warp is complete.
    :Game Scenes: Space Center, Flight, Tracking Station
 
 

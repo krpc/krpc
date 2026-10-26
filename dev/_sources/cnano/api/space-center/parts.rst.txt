@@ -60,7 +60,7 @@ Parts
 
       :Parameters:
 
-
+       * **name** -- The name of the part.
 
    
 
@@ -70,7 +70,7 @@ Parts
 
       :Parameters:
 
-
+       * **title** -- The title of the part.
 
    
 
@@ -80,7 +80,7 @@ Parts
 
       :Parameters:
 
-
+       * **tag** -- The name tag of the part.
 
    
 
@@ -91,7 +91,7 @@ Parts
 
       :Parameters:
 
-
+       * **moduleName** -- The name of the module.
 
    
 
@@ -102,7 +102,7 @@ Parts
 
       :Parameters:
 
-
+       * **moduleName** -- The name of the module.
 
    
 
@@ -1772,7 +1772,7 @@ Antenna
       .. note::
 
          Fixed antennas are always deployed.
-         Returns an error if you try to deploy a fixed antenna.
+         Throws ``KRPC.InvalidOperationException`` if set on a fixed antenna.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_CanTransmit(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Antenna_t instance)
 
@@ -3091,7 +3091,7 @@ Leg
       .. note::
 
          Fixed landing legs are always deployed.
-         Returns an error if you try to deploy fixed landing gear.
+         Throws ``KRPC.InvalidOperationException`` if set on a fixed landing leg.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Leg_IsGrounded(krpc_connection_t connection, bool * returnValue, krpc_SpaceCenter_Leg_t instance)
 

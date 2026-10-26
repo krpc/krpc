@@ -1146,7 +1146,7 @@ Can be used by client libraries to automatically create functionality such as st
 <p class="admonition-title">Note</p>
 <p>Each call adds a new stream, with values of the type given by
 <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_Expression_ReturnType()</span></code>. Any exception from the function ends the
-stream, including one for an object that is not loaded. A procedure that pauses
+stream, including <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectNotLoadedException</span></code>. A procedure that pauses
 execution to resume on a later tick produces an error on the stream.</p>
 </div>
 </dd></dl>
@@ -1404,9 +1404,18 @@ meet the parameter specification of the method.</p>
 <p>The game object that a service object refers to no longer exists,
 so the object cannot be used. For example, the part it represents
 was destroyed, or the vessel it belongs to was recovered.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectNotLoadedException</span></code> for a game object that exists but is not
+loaded.</p>
+</div>
 <p>Exception class ObjectNotLoadedException</p>
 <p>The game object that a service object refers to exists, but is not loaded.
 For example, the game is loading, or the vessel carrying the part is unloaded.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code> for a game object that no longer exists.</p>
+</div>
 <p>Exception class UnsupportedSceneException</p>
 <p>The procedure is not available in the current game scene.</p>
 <p>Exception class StreamRemovedException</p>

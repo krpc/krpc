@@ -760,7 +760,9 @@ assembled and run.
       .. note::
 
          The client receives the exception as an error from the function, or from the stream
-         or event evaluating it. Throws an exception if the service does not declare it.
+         or event evaluating it. For example, the service ``KRPC`` and the name
+         ``Error`` raise :type:`Error`. Throws an exception if the service does not
+         declare it.
 
    .. function:: static Expression TryCatch(IConnection connection, Expression body, string service, string name, Expression message, Expression handler)
 

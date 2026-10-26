@@ -61,21 +61,21 @@ Parts
 
       A list of parts whose :meth:`Part.getName()` is *name*.
 
-      :param String name:
+      :param String name: The name of the part.
    
 
    .. method:: java.util.List<Part> withTitle(String title)
 
       A list of all parts whose :meth:`Part.getTitle()` is *title*.
 
-      :param String title:
+      :param String title: The title of the part.
    
 
    .. method:: java.util.List<Part> withTag(String tag)
 
       A list of all parts whose :meth:`Part.getTag()` is *tag*.
 
-      :param String tag:
+      :param String tag: The name tag of the part.
    
 
    .. method:: java.util.List<Part> withModule(String moduleName)
@@ -83,7 +83,7 @@ Parts
       A list of all parts that contain a :type:`Module` whose
       :meth:`Module.getName()` is *moduleName*.
 
-      :param String moduleName:
+      :param String moduleName: The name of the module.
    
 
    .. method:: java.util.List<Module> modulesWithName(String moduleName)
@@ -91,7 +91,7 @@ Parts
       A list of modules (combined across all parts in the vessel) whose
       :meth:`Module.getName()` is *moduleName*.
 
-      :param String moduleName:
+      :param String moduleName: The name of the module.
    
 
    .. method:: java.util.List<Antenna> getAntennas()
@@ -1851,7 +1851,7 @@ Antenna
       .. note::
 
          Fixed antennas are always deployed.
-         Returns an error if you try to deploy a fixed antenna.
+         Throws :type:`KRPC.InvalidOperationException` if set on a fixed antenna.
 
    .. method:: boolean getCanTransmit()
 
@@ -3269,7 +3269,7 @@ Leg
       .. note::
 
          Fixed landing legs are always deployed.
-         Returns an error if you try to deploy fixed landing gear.
+         Throws :type:`KRPC.InvalidOperationException` if set on a fixed landing leg.
 
    .. method:: boolean getIsGrounded()
 

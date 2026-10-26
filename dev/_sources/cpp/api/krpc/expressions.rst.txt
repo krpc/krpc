@@ -737,7 +737,9 @@ assembled and run.
       .. note::
 
          The client receives the exception as an error from the function, or from the stream
-         or event evaluating it. Throws an exception if the service does not declare it.
+         or event evaluating it. For example, the service ``KRPC`` and the name
+         ``Error`` raise :class:`Error`. Throws an exception if the service does not
+         declare it.
 
    .. function:: static Expression try_catch(Client& connection, Expression body, std::string service, std::string name, std::optional<Expression> message, Expression handler)
 

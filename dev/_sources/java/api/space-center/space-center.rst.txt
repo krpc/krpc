@@ -384,7 +384,6 @@ SpaceCenter
       :param double ut: The universal time to warp to, in seconds.
       :param float maxRailsRate: The maximum warp rate in regular "on-rails" time warp.
       :param float maxPhysicsRate: The maximum warp rate in physical time warp.
-      :returns: When the time warp is complete.
       :Game Scenes: Space Center, Flight, Tracking Station
 
 

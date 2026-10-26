@@ -397,7 +397,6 @@ SpaceCenter
        * **max_rails_rate** -- The maximum warp rate in regular "on-rails" time warp.
        * **max_physics_rate** -- The maximum warp rate in physical time warp.
 
-      :returns: When the time warp is complete.
       :Game Scenes: Space Center, Flight, Tracking Station
 
 

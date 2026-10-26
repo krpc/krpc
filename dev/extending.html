@@ -1644,6 +1644,25 @@ store drop the object once the game destroys the part.</p>
 <p>Documentation can be added using <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>. For dynamic clients, such
 as the Python and Lua clients, the documentation will be automatically exported to clients when they
 connect.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">&lt;see</span> <span class="pre">cref='...'/&gt;</span></code> links to another member of a service, or to an exception:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">/// &lt;summary&gt;</span>
+<span class="c1">/// Whether the lights are on. Throws &lt;see cref="InvalidOperationException"/&gt; if set</span>
+<span class="c1">/// while &lt;see cref="Broken"/&gt; is true.</span>
+<span class="c1">/// &lt;/summary&gt;</span>
+<span class="na">[KRPCProperty]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">Active</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">get</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">NotImplementedException</span><span class="w"> </span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">set</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">NotImplementedException</span><span class="w"> </span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The reference can name a service, procedure, property, class, method, enumeration, structure or
+exception. A .NET exception that kRPC maps, such as <code class="docutils literal notranslate"><span class="pre">System.InvalidOperationException</span></code>, links to
+the kRPC exception of the same name. The API reference and the generated client code link to the
+same member.</p>
+<p><code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span></code> needs the definitions of every service the documentation links to, and warns
+about a reference to a service it was not given.</p>
 <p>Units and formulas are marked up with <code class="docutils literal notranslate"><span class="pre">&lt;unit&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;math&gt;</span></code> tags:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="c1">/// &lt;summary&gt;</span>
 <span class="c1">/// The dynamic pressure, in pascals. It is equal to &lt;math&gt;\frac{1}{2} \rho v^2&lt;/math&gt;,</span>

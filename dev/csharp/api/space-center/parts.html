@@ -1211,7 +1211,10 @@ equivalent to “Control From Here” in game.</p>
 <dd><p>A list of parts whose <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.Name" title="property: KRPC.Client.Services.SpaceCenter.Part.Name"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.Name</span></code></a> is <em>name</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – The name of the part.</p></li>
+</ul>
+</dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>All</p>
 </dd>
@@ -1224,7 +1227,10 @@ equivalent to “Control From Here” in game.</p>
 <dd><p>A list of all parts whose <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.Title" title="property: KRPC.Client.Services.SpaceCenter.Part.Title"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.Title</span></code></a> is <em>title</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> – The title of the part.</p></li>
+</ul>
+</dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>All</p>
 </dd>
@@ -1237,7 +1243,10 @@ equivalent to “Control From Here” in game.</p>
 <dd><p>A list of all parts whose <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.Tag" title="property: KRPC.Client.Services.SpaceCenter.Part.Tag"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Part.Tag</span></code></a> is <em>tag</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tag</strong> – The name tag of the part.</p></li>
+</ul>
+</dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>All</p>
 </dd>
@@ -1251,7 +1260,10 @@ equivalent to “Control From Here” in game.</p>
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Module.Name" title="property: KRPC.Client.Services.SpaceCenter.Module.Name"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Module.Name</span></code></a> is <em>moduleName</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>moduleName</strong> – The name of the module.</p></li>
+</ul>
+</dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>All</p>
 </dd>
@@ -1265,7 +1277,10 @@ equivalent to “Control From Here” in game.</p>
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Module.Name" title="property: KRPC.Client.Services.SpaceCenter.Module.Name"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Module.Name</span></code></a> is <em>moduleName</em>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>moduleName</strong> – The name of the module.</p></li>
+</ul>
+</dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>All</p>
 </dd>
@@ -3904,7 +3919,7 @@ This class is only for stock KSP antennas.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Fixed antennas are always deployed.
-Returns an error if you try to deploy a fixed antenna.</p>
+Throws <a class="reference internal" href="../krpc/krpc.html#class-KRPC.Client.Services.KRPC.InvalidOperationException" title="class: KRPC.Client.Services.KRPC.InvalidOperationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if set on a fixed antenna.</p>
 </div>
 </dd></dl>
 
@@ -5908,7 +5923,7 @@ Supports both stock fairings, and those from the ProceduralFairings mod.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Fixed landing legs are always deployed.
-Returns an error if you try to deploy fixed landing gear.</p>
+Throws <a class="reference internal" href="../krpc/krpc.html#class-KRPC.Client.Services.KRPC.InvalidOperationException" title="class: KRPC.Client.Services.KRPC.InvalidOperationException"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">KRPC.InvalidOperationException</span></code></a> if set on a fixed landing leg.</p>
 </div>
 </dd></dl>
 

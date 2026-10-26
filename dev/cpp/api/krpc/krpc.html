@@ -1155,7 +1155,7 @@ Can be used by client libraries to automatically create functionality such as st
 <p class="admonition-title">Note</p>
 <p>Each call adds a new stream, with values of the type given by
 <a class="reference internal" href="expressions.html#_CPPv4N4krpc8services4KRPC10Expression11return_typeEv" title="krpc::services::KRPC::Expression::return_type"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Expression::return_type()</span></code></a>. Any exception from the function ends the
-stream, including one for an object that is not loaded. A procedure that pauses
+stream, including <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC24ObjectNotLoadedExceptionE" title="krpc::services::KRPC::ObjectNotLoadedException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ObjectNotLoadedException</span></code></a>. A procedure that pauses
 execution to resume on a later tick produces an error on the stream.</p>
 </div>
 </dd></dl>
@@ -1461,6 +1461,11 @@ meet the parameter specification of the method.</p>
 <dd><p>The game object that a service object refers to no longer exists,
 so the object cannot be used. For example, the part it represents
 was destroyed, or the vessel it belongs to was recovered.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC24ObjectNotLoadedExceptionE" title="krpc::services::KRPC::ObjectNotLoadedException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ObjectNotLoadedException</span></code></a> for a game object that exists but is not
+loaded.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp class">
@@ -1468,6 +1473,10 @@ was destroyed, or the vessel it belongs to was recovered.</p>
 <span id="_CPPv3N4krpc8services4KRPC24ObjectNotLoadedExceptionE"></span><span id="_CPPv2N4krpc8services4KRPC24ObjectNotLoadedExceptionE"></span><span id="krpc::services::KRPC::ObjectNotLoadedException"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ObjectNotLoadedException</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC24ObjectNotLoadedExceptionE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The game object that a service object refers to exists, but is not loaded.
 For example, the game is loading, or the vessel carrying the part is unloaded.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC24ObjectDestroyedExceptionE" title="krpc::services::KRPC::ObjectDestroyedException"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">ObjectDestroyedException</span></code></a> for a game object that no longer exists.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp class">
