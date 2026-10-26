@@ -19,6 +19,7 @@ namespace KRPC.KSA.UI
         internal const string ProtobufOverWebSocketsText = "Protobuf over WebSockets";
         internal const string ProtobufOverSerialIOText = "Protobuf over SerialIO";
         internal const string ProtobufOverLocalSocketText = "Protobuf over local socket";
+        internal const string GrpcText = "gRPC";
         const string UnknownClientNameText = "<unknown>";
         const string MicrosecondsUnitText = "us";
         // Milliseconds a client stays marked active after it sends or receives
@@ -67,7 +68,7 @@ namespace KRPC.KSA.UI
                 var server = new Configuration.Server ();
                 config.Configuration.Servers.Add (server);
                 config.Save ();
-                core.Add (server.Create ());
+                core.Add (addon.CreateServer (server));
                 expandServers.Add (server.Id);
             }
             if (Errors.Count > 0) {
@@ -148,10 +149,14 @@ namespace KRPC.KSA.UI
                 if (edit != null) {
                     var newServer = edit.Save (Errors);
                     if (newServer != null) {
-                        editServers.Remove (server.Id);
-                        config.Configuration.ReplaceServer (newServer);
-                        config.Save ();
-                        core.Replace (newServer.Create ());
+                        try {
+                            core.Replace (addon.CreateServer (newServer));
+                            editServers.Remove (server.Id);
+                            config.Configuration.ReplaceServer (newServer);
+                            config.Save ();
+                        } catch (Exception e) {
+                            Errors.Add (e.Message);
+                        }
                     }
                 } else {
                     Errors.Clear ();
@@ -189,7 +194,7 @@ namespace KRPC.KSA.UI
             case Protocol.ProtocolBuffersOverLocalSocket:
                 return ProtobufOverLocalSocketText;
             case ConfigurationFile.GrpcProtocol:
-                return "gRPC";
+                return GrpcText;
             default:
                 return ProtobufOverSerialIOText;
             }

@@ -69,14 +69,10 @@ namespace KRPC.KSA
             config = new ConfigurationFile (Path.Combine (modDirectory, "settings.toml"));
             config.Load ();
             foreach (var server in config.Configuration.Servers) {
-                if (server.Protocol != ConfigurationFile.GrpcProtocol) {
-                    core.Add (server.Create ());
-                    continue;
-                }
                 try {
-                    core.Add (CreateGrpcServer (server));
+                    core.Add (CreateServer (server));
                 } catch (Exception e) {
-                    Logger.WriteLine ("Failed to create gRPC server '" + server.Name + "': " + e, Logger.Severity.Error);
+                    Logger.WriteLine ("Failed to create server '" + server.Name + "': " + e, Logger.Severity.Error);
                 }
             }
             core.OnClientRequestingConnection += OnClientRequestingConnection;
@@ -511,8 +507,16 @@ namespace KRPC.KSA
         }
 
         /// <summary>
-        /// Create a gRPC server, from the grpc folder of the mod. Throws an exception if the
-        /// platform has no ASP.NET Core build in the folder.
+        /// Create a server from its settings. Throws an exception if the server is a gRPC
+        /// server and the platform has no ASP.NET Core build in the mod.
+        /// </summary>
+        internal KRPC.Server.Server CreateServer (Configuration.Server config)
+        {
+            return config.Protocol == ConfigurationFile.GrpcProtocol ? CreateGrpcServer (config) : config.Create ();
+        }
+
+        /// <summary>
+        /// Create a gRPC server, from the grpc folder of the mod.
         /// </summary>
         KRPC.Server.Server CreateGrpcServer (Configuration.Server config)
         {
@@ -522,7 +526,8 @@ namespace KRPC.KSA
             var address = IPAddress.Parse (config.Settings.GetValueOrDefault ("address", IPAddress.Loopback.ToString ()));
             var port = ushort.Parse (config.Settings.GetValueOrDefault ("port", "50002"), CultureInfo.InvariantCulture);
             return (KRPC.Server.Server)type.GetMethod ("Create").Invoke (
-                null, new object [] { config.Id, config.Protocol, config.Name, address, port });
+                null, BindingFlags.DoNotWrapExceptions, null,
+                new object [] { config.Id, config.Protocol, config.Name, address, port }, CultureInfo.InvariantCulture);
         }
 
         /// <summary>
