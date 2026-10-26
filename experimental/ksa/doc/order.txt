@@ -131,6 +131,13 @@ KSA.Flight.AngleOfAttack
 KSA.Flight.SideslipAngle
 KSA.Control.Throttle
 KSA.Control.EngineOn
+KSA.Control.Pitch
+KSA.Control.Yaw
+KSA.Control.Roll
+KSA.Control.Forward
+KSA.Control.Right
+KSA.Control.Up
+KSA.Control.Pulse
 KSA.Control.Stabilization
 KSA.Control.RCS
 KSA.Control.ActiveSequence
