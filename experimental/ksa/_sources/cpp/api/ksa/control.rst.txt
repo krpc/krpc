@@ -1,0 +1,71 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Control
+=======
+
+
+.. class:: Control
+
+   The controls of a vehicle: engines, stabilization and sequences.
+   Obtained from :func:`Vehicle::control`.
+
+   .. function:: float throttle()
+   .. function:: void set_throttle(float value)
+
+      The manual throttle. A value between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises a value below the vehicle's minimum throttle to the minimum.
+         The engines fire only while :func:`Control::engine_on` is set.
+
+   .. function:: bool engine_on()
+   .. function:: void set_engine_on(bool value)
+
+      Whether the engines are ignited.
+
+      :Game Scenes: Flight
+
+   .. function:: bool stabilization()
+   .. function:: void set_stabilization(bool value)
+
+      Whether the flight computer is controlling the vehicle's attitude.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it to ``true`` holds the current attitude.
+
+   .. function:: bool rcs()
+   .. function:: void set_rcs(bool value)
+
+      Whether the flight computer may use the reaction control thrusters for attitude
+      control.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t active_sequence()
+
+      The number of the most recently activated sequence.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<Vehicle> activate_next_sequence()
+
+      Activates the next sequence, as the staging key does.
+
+
+      :returns: The vehicles that separated from this one.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vehicle is not the :func:`active_vehicle`.

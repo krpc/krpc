@@ -1,0 +1,225 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Auto-Pilot
+==========
+
+
+.. type:: public class AutoPilot
+
+   The vehicle's flight computer, which steers the vehicle with its reaction control
+   thrusters and engine gimbals. Obtained from :meth:`Vehicle.getAutoPilot()`.
+
+   .. note::
+
+      The auto-pilot points the vehicle in the direction set by :meth:`AutoPilot.getMode()`, once
+      engaged. It is the game's own flight computer, so the game's flight computer
+      controls change the same settings.
+
+   .. method:: void engage()
+
+      Engage the auto-pilot.
+
+      :Game Scenes: Flight
+
+   .. method:: void disengage()
+
+      Disengage the auto-pilot.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getEngaged()
+
+
+      Whether the auto-pilot is engaged.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :meth:`Control.getStabilization()`.
+
+   .. method:: AutoPilotMode getMode()
+
+   .. method:: void setMode(AutoPilotMode value)
+
+      The direction the auto-pilot points the vehicle in.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting :meth:`AutoPilotMode.ATTITUDE` targets the vehicle's current pitch,
+         heading and roll. Setting :meth:`AutoPilotMode.OTHER` throws an exception.
+
+   .. method:: double getTargetPitch()
+
+   .. method:: void setTargetPitch(double value)
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it sets :meth:`AutoPilot.getMode()` to :meth:`AutoPilotMode.ATTITUDE`.
+         Returns NaN in any other mode.
+
+   .. method:: double getTargetHeading()
+
+   .. method:: void setTargetHeading(double value)
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it sets :meth:`AutoPilot.getMode()` to :meth:`AutoPilotMode.ATTITUDE`.
+         Returns NaN in any other mode.
+
+   .. method:: double getTargetRoll()
+
+   .. method:: void setTargetRoll(double value)
+
+      The target roll, in degrees. NaN when the auto-pilot does not control roll.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting a number sets :meth:`AutoPilot.getMode()` to :meth:`AutoPilotMode.ATTITUDE`.
+         Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
+         :meth:`AutoPilotMode.ATTITUDE`.
+
+   .. method:: void targetPitchAndHeading(double pitch, double heading)
+
+      Set the target pitch and heading, and the mode to
+      :meth:`AutoPilotMode.ATTITUDE`.
+
+      :param double pitch: Target pitch, in degrees, between -90° and +90°.
+      :param double heading: Target heading, in degrees, between 0° and 360°.
+      :Game Scenes: Flight
+
+   .. method:: void targetDirection(org.javatuples.Triplet<Double,Double,Double> direction, ReferenceFrame referenceFrame)
+
+      Point the vehicle in a direction, and set the mode to
+      :meth:`AutoPilotMode.ATTITUDE`. Sets :meth:`AutoPilot.getTargetPitch()` and
+      :meth:`AutoPilot.getTargetHeading()` to the direction at the time of the call, so the target
+      stays fixed relative to the surface.
+
+      :param org.javatuples.Triplet<Double,Double,Double> direction: The direction to point in.
+      :param ReferenceFrame referenceFrame: The reference frame of the direction.
+      :Game Scenes: Flight
+
+   .. method:: double getError()
+
+
+      The angle between the direction the vehicle points in and the target direction,
+      in degrees. NaN when the auto-pilot is not engaged.
+
+      :Game Scenes: Flight
+
+   .. method:: double getRollError()
+
+
+      The angle between the vehicle's roll and the target roll, in degrees.
+      NaN when the auto-pilot is not engaged.
+
+      :Game Scenes: Flight
+
+   .. method:: void wait_()
+
+      Wait until the vehicle points in the target direction, and has the target roll
+      if it has one. Returns when the errors are within twice the flight computer's
+      angle deadband, which defaults to 1°.
+      Throws an exception if the auto-pilot is not engaged.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAutoBurn()
+
+   .. method:: void setAutoBurn(boolean value)
+
+      Whether the flight computer executes the next burn in
+      :meth:`Vehicle.getBurns()`. It points the vehicle along the burn, fires the
+      engines at :meth:`Burn.getIgnitionTime()`, and stops once the burn is complete.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The flight computer clears it when the burn completes, and removes the burn if
+         another follows it. The engines fire only at normal speed, so warp to shortly before
+         the burn with :meth:`warpTo(double)`. Setting it with no burn planned throws an
+         exception.
+
+
+
+.. type:: public enum AutoPilotMode
+
+   The direction the auto-pilot points the vehicle in.
+   See :meth:`AutoPilot.getMode()`.
+
+
+   .. field:: public AutoPilotMode ATTITUDE
+
+      The pitch, heading and roll set by :meth:`AutoPilot.getTargetPitch()`,
+      :meth:`AutoPilot.getTargetHeading()` and :meth:`AutoPilot.getTargetRoll()`.
+
+
+   .. field:: public AutoPilotMode HOLD
+
+      Holds the vehicle's rotation at zero, relative to the stars.
+
+
+   .. field:: public AutoPilotMode PROGRADE
+
+      The direction of the vehicle's orbital velocity.
+
+
+   .. field:: public AutoPilotMode RETROGRADE
+
+      The opposite of :meth:`AutoPilotMode.PROGRADE`.
+
+
+   .. field:: public AutoPilotMode NORMAL
+
+      Normal to the orbital plane, along the orbit's angular momentum.
+
+
+   .. field:: public AutoPilotMode ANTI_NORMAL
+
+      The opposite of :meth:`AutoPilotMode.NORMAL`.
+
+
+   .. field:: public AutoPilotMode RADIAL_OUT
+
+      Away from the center of the body being orbited.
+
+
+   .. field:: public AutoPilotMode RADIAL_IN
+
+      Toward the center of the body being orbited.
+
+
+   .. field:: public AutoPilotMode SURFACE_PROGRADE
+
+      The direction of the vehicle's velocity relative to the surface.
+
+
+   .. field:: public AutoPilotMode SURFACE_RETROGRADE
+
+      The opposite of :meth:`AutoPilotMode.SURFACE_PROGRADE`.
+
+
+   .. field:: public AutoPilotMode OTHER
+
+      A target set in the game, which the API does not cover.

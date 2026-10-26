@@ -1,0 +1,256 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KSA
+
+Orbit
+=====
+
+
+.. class:: Orbit
+
+   An orbit. Obtained from :attr:`KSA.Vehicle.orbit`, :attr:`KSA.Body.orbit`,
+   :attr:`KSA.Burn.orbit` or :attr:`KSA.Orbit.next_orbit`.
+
+   .. note::
+
+      A vehicle's orbit follows the vehicle as its trajectory changes. A predicted orbit, from
+      :attr:`KSA.Orbit.next_orbit` or :attr:`KSA.Burn.orbit`, is the prediction at the time it
+      was obtained.
+
+   .. attribute:: body: KSA.Body
+
+      The body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Body`
+
+   .. attribute:: apoapsis: number
+
+      The apoapsis of the orbit, in meters, from the center of the body being orbited.
+      Not a number for a parabolic or hyperbolic orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: periapsis: number
+
+      The periapsis of the orbit, in meters, from the center of the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: apoapsis_altitude: number
+
+      The apoapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: periapsis_altitude: number
+
+      The periapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: semi_major_axis: number
+
+      The semi-major axis of the orbit, in meters. Negative for a hyperbolic orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: speed: number
+
+      The current orbital speed, in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: radius: number
+
+      The current distance from the center of the body being orbited, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: period: number
+
+      The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: time_to_apoapsis: number
+
+      The time until the next apoapsis, in seconds. Not a number for a parabolic or
+      hyperbolic orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: time_to_periapsis: number
+
+      The time until the next periapsis, in seconds. Negative once a parabolic or
+      hyperbolic orbit has passed it.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: eccentricity: number
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: inclination: number
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit, in radians, against the equator of the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: longitude_of_ascending_node: number
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: argument_of_periapsis: number
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: true_anomaly: number
+
+      The current `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_,
+      in radians.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: mean_anomaly: number
+
+      The current `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_,
+      in radians.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. method:: true_anomaly_at_ut(ut)
+
+      The true anomaly at the given time, in radians.
+
+      :param number ut: Universal time, in seconds.
+      :rtype: number
+
+   .. method:: ut_at_true_anomaly(true_anomaly)
+
+      The next universal time, from now, at which the orbit reaches the given true
+      anomaly, in seconds. Not a number if it never does, such as beyond the asymptote of
+      a hyperbolic orbit.
+
+      :param number true_anomaly: True anomaly, in radians.
+      :rtype: number
+
+   .. method:: radius_at(ut)
+
+      The distance from the center of the body being orbited at the given time, in
+      meters.
+
+      :param number ut: Universal time, in seconds.
+      :rtype: number
+
+   .. method:: position_at(ut, reference_frame)
+
+      The position on the orbit at the given time, in meters, relative to where the body
+      being orbited is now.
+
+      :param number ut: Universal time, in seconds.
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: Tuple
+
+   .. method:: velocity_at(ut, reference_frame)
+
+      The orbital velocity at the given time, in meters per second, relative to the body
+      being orbited and along the axes of the given frame.
+
+      :param number ut: Universal time, in seconds.
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
+      :rtype: Tuple
+
+   .. attribute:: start_ut: number
+
+      The universal time at which this orbit starts, in seconds. Not a number for the
+      orbit of a body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: end_ut: number
+
+      The universal time at which this orbit ends, in seconds. Infinite for an orbit that
+      does not end, such as the orbit of a body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: end_transition: KSA.OrbitTransition
+
+      How the orbit ends.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.OrbitTransition`
+
+   .. attribute:: time_to_soi_change: number
+
+      The time until the orbit enters or leaves a sphere of influence, in seconds. Not a
+      number if it does neither.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: next_orbit: KSA.Orbit
+
+      The orbit that follows this one after it enters or leaves a sphere of influence, or
+      ``nil`` if there is none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Orbit` or ``Types.none``
+
+
+
+.. class:: OrbitTransition
+
+   How an orbit ends. See :attr:`KSA.Orbit.end_transition`.
+
+
+   .. data:: none
+
+      The orbit does not end.
+
+
+   .. data:: encounter
+
+      The orbit enters the sphere of influence of another body.
+
+
+   .. data:: escape
+
+      The orbit leaves the sphere of influence of the body being orbited.
+
+
+   .. data:: impact
+
+      The orbit hits the surface of the body being orbited.
+
+
+   .. data:: burn
+
+      The orbit ends at a planned burn.

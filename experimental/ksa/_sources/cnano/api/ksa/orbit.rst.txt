@@ -1,0 +1,249 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Orbit
+=====
+
+
+.. type:: krpc_KSA_Orbit_t
+
+   An orbit. Obtained from :func:`krpc_KSA_Vehicle_Orbit`, :func:`krpc_KSA_Body_Orbit`,
+   :func:`krpc_KSA_Burn_Orbit` or :func:`krpc_KSA_Orbit_NextOrbit`.
+
+   .. note::
+
+      A vehicle's orbit follows the vehicle as its trajectory changes. A predicted orbit, from
+      :func:`krpc_KSA_Orbit_NextOrbit` or :func:`krpc_KSA_Burn_Orbit`, is the prediction at the time it
+      was obtained.
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_Body(krpc_connection_t connection, krpc_KSA_Body_t * returnValue, krpc_KSA_Orbit_t instance)
+
+      The body being orbited.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_Apoapsis(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The apoapsis of the orbit, in meters, from the center of the body being orbited.
+      Not a number for a parabolic or hyperbolic orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_Periapsis(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The periapsis of the orbit, in meters, from the center of the body being orbited.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_ApoapsisAltitude(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The apoapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_PeriapsisAltitude(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The periapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_SemiMajorAxis(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The semi-major axis of the orbit, in meters. Negative for a hyperbolic orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_Speed(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The current orbital speed, in meters per second.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_Radius(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The current distance from the center of the body being orbited, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_Period(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_TimeToApoapsis(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The time until the next apoapsis, in seconds. Not a number for a parabolic or
+      hyperbolic orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_TimeToPeriapsis(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The time until the next periapsis, in seconds. Negative once a parabolic or
+      hyperbolic orbit has passed it.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_Eccentricity(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_Inclination(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit, in radians, against the equator of the body being orbited.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_LongitudeOfAscendingNode(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_ArgumentOfPeriapsis(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_TrueAnomaly(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The current `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_,
+      in radians.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_MeanAnomaly(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The current `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_,
+      in radians.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_TrueAnomalyAtUT(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance, double ut)
+
+      The true anomaly at the given time, in radians.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_UTAtTrueAnomaly(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance, double trueAnomaly)
+
+      The next universal time, from now, at which the orbit reaches the given true
+      anomaly, in seconds. Not a number if it never does, such as beyond the asymptote of
+      a hyperbolic orbit.
+
+      :Parameters:
+
+       * **trueAnomaly** -- True anomaly, in radians.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_RadiusAt(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance, double ut)
+
+      The distance from the center of the body being orbited at the given time, in
+      meters.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_PositionAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Orbit_t instance, double ut, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The position on the orbit at the given time, in meters, relative to where the body
+      being orbited is now.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+       * **referenceFrame** -- The reference frame of the position.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_VelocityAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Orbit_t instance, double ut, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The orbital velocity at the given time, in meters per second, relative to the body
+      being orbited and along the axes of the given frame.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+       * **referenceFrame** -- The reference frame of the velocity.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_StartUT(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The universal time at which this orbit starts, in seconds. Not a number for the
+      orbit of a body.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_EndUT(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The universal time at which this orbit ends, in seconds. Infinite for an orbit that
+      does not end, such as the orbit of a body.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_EndTransition(krpc_connection_t connection, krpc_KSA_OrbitTransition_t * returnValue, krpc_KSA_Orbit_t instance)
+
+      How the orbit ends.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_TimeToSOIChange(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The time until the orbit enters or leaves a sphere of influence, in seconds. Not a
+      number if it does neither.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_NextOrbit(krpc_connection_t connection, krpc_KSA_Orbit_t * returnValue, krpc_KSA_Orbit_t instance)
+
+      The orbit that follows this one after it enters or leaves a sphere of influence, or
+      ``nullptr`` if there is none.
+
+   
+
+
+
+.. type:: krpc_KSA_OrbitTransition_t
+
+   How an orbit ends. See :func:`krpc_KSA_Orbit_EndTransition`.
+
+
+   .. macro:: KRPC_KSA_ORBITTRANSITION_NONE
+
+      The orbit does not end.
+
+
+   .. macro:: KRPC_KSA_ORBITTRANSITION_ENCOUNTER
+
+      The orbit enters the sphere of influence of another body.
+
+
+   .. macro:: KRPC_KSA_ORBITTRANSITION_ESCAPE
+
+      The orbit leaves the sphere of influence of the body being orbited.
+
+
+   .. macro:: KRPC_KSA_ORBITTRANSITION_IMPACT
+
+      The orbit hits the surface of the body being orbited.
+
+
+   .. macro:: KRPC_KSA_ORBITTRANSITION_BURN
+
+      The orbit ends at a planned burn.

@@ -1,0 +1,28 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Resources
+=========
+
+
+.. type:: krpc_KSA_Resource_t
+
+   A substance held in tanks, such as a propellant, in a part or across a whole vehicle.
+   Obtained from :func:`krpc_KSA_Part_Resources` or :func:`krpc_KSA_Vehicle_Resources`.
+
+   .. function:: krpc_error_t krpc_KSA_Resource_Name(krpc_connection_t connection, char * * returnValue, krpc_KSA_Resource_t instance)
+
+      The name of the substance.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Resource_Amount(krpc_connection_t connection, double * returnValue, krpc_KSA_Resource_t instance)
+
+      The mass of the substance held, in kilograms.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Resource_Max(krpc_connection_t connection, double * returnValue, krpc_KSA_Resource_t instance)
+
+      The mass of the substance the tanks can hold, in kilograms.

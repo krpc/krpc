@@ -1,0 +1,227 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Auto-Pilot
+==========
+
+
+.. class:: AutoPilot
+
+   The vehicle's flight computer, which steers the vehicle with its reaction control
+   thrusters and engine gimbals. Obtained from :func:`Vehicle::auto_pilot`.
+
+   .. note::
+
+      The auto-pilot points the vehicle in the direction set by :func:`AutoPilot::mode`, once
+      engaged. It is the game's own flight computer, so the game's flight computer
+      controls change the same settings.
+
+   .. function:: void engage()
+
+      Engage the auto-pilot.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void disengage()
+
+      Disengage the auto-pilot.
+
+
+      :Game Scenes: Flight
+
+   .. function:: bool engaged()
+
+      Whether the auto-pilot is engaged.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :func:`Control::stabilization`.
+
+   .. function:: AutoPilotMode mode()
+   .. function:: void set_mode(AutoPilotMode value)
+
+      The direction the auto-pilot points the vehicle in.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting :enumerator:`AutoPilotMode::attitude` targets the vehicle's current pitch,
+         heading and roll. Setting :enumerator:`AutoPilotMode::other` throws an exception.
+
+   .. function:: double target_pitch()
+   .. function:: void set_target_pitch(double value)
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it sets :func:`AutoPilot::mode` to :enumerator:`AutoPilotMode::attitude`.
+         Returns NaN in any other mode.
+
+   .. function:: double target_heading()
+   .. function:: void set_target_heading(double value)
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it sets :func:`AutoPilot::mode` to :enumerator:`AutoPilotMode::attitude`.
+         Returns NaN in any other mode.
+
+   .. function:: double target_roll()
+   .. function:: void set_target_roll(double value)
+
+      The target roll, in degrees. NaN when the auto-pilot does not control roll.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting a number sets :func:`AutoPilot::mode` to :enumerator:`AutoPilotMode::attitude`.
+         Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
+         :enumerator:`AutoPilotMode::attitude`.
+
+   .. function:: void target_pitch_and_heading(double pitch, double heading)
+
+      Set the target pitch and heading, and the mode to
+      :enumerator:`AutoPilotMode::attitude`.
+
+      :Parameters:
+
+       * **pitch** -- Target pitch, in degrees, between -90° and +90°.
+       * **heading** -- Target heading, in degrees, between 0° and 360°.
+
+      :Game Scenes: Flight
+
+   .. function:: void target_direction(std::tuple<double, double, double> direction, ReferenceFrame reference_frame)
+
+      Point the vehicle in a direction, and set the mode to
+      :enumerator:`AutoPilotMode::attitude`. Sets :func:`AutoPilot::target_pitch` and
+      :func:`AutoPilot::target_heading` to the direction at the time of the call, so the target
+      stays fixed relative to the surface.
+
+      :Parameters:
+
+       * **direction** -- The direction to point in.
+       * **reference_frame** -- The reference frame of the direction.
+
+      :Game Scenes: Flight
+
+   .. function:: double error()
+
+      The angle between the direction the vehicle points in and the target direction,
+      in degrees. NaN when the auto-pilot is not engaged.
+
+      :Game Scenes: Flight
+
+   .. function:: double roll_error()
+
+      The angle between the vehicle's roll and the target roll, in degrees.
+      NaN when the auto-pilot is not engaged.
+
+      :Game Scenes: Flight
+
+   .. function:: void wait()
+
+      Wait until the vehicle points in the target direction, and has the target roll
+      if it has one. Returns when the errors are within twice the flight computer's
+      angle deadband, which defaults to 1°.
+      Throws an exception if the auto-pilot is not engaged.
+
+
+      :Game Scenes: Flight
+
+   .. function:: bool auto_burn()
+   .. function:: void set_auto_burn(bool value)
+
+      Whether the flight computer executes the next burn in
+      :func:`Vehicle::burns`. It points the vehicle along the burn, fires the
+      engines at :func:`Burn::ignition_time`, and stops once the burn is complete.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The flight computer clears it when the burn completes, and removes the burn if
+         another follows it. The engines fire only at normal speed, so warp to shortly before
+         the burn with :func:`warp_to`. Setting it with no burn planned throws an
+         exception.
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: AutoPilotMode
+
+   The direction the auto-pilot points the vehicle in.
+   See :func:`AutoPilot::mode`.
+
+
+   .. enumerator:: attitude
+
+      The pitch, heading and roll set by :func:`AutoPilot::target_pitch`,
+      :func:`AutoPilot::target_heading` and :func:`AutoPilot::target_roll`.
+
+
+   .. enumerator:: hold
+
+      Holds the vehicle's rotation at zero, relative to the stars.
+
+
+   .. enumerator:: prograde
+
+      The direction of the vehicle's orbital velocity.
+
+
+   .. enumerator:: retrograde
+
+      The opposite of :enumerator:`AutoPilotMode::prograde`.
+
+
+   .. enumerator:: normal
+
+      Normal to the orbital plane, along the orbit's angular momentum.
+
+
+   .. enumerator:: anti_normal
+
+      The opposite of :enumerator:`AutoPilotMode::normal`.
+
+
+   .. enumerator:: radial_out
+
+      Away from the center of the body being orbited.
+
+
+   .. enumerator:: radial_in
+
+      Toward the center of the body being orbited.
+
+
+   .. enumerator:: surface_prograde
+
+      The direction of the vehicle's velocity relative to the surface.
+
+
+   .. enumerator:: surface_retrograde
+
+      The opposite of :enumerator:`AutoPilotMode::surface_prograde`.
+
+
+   .. enumerator:: other
+
+      A target set in the game, which the API does not cover.

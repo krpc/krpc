@@ -1,0 +1,185 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KSA
+
+Body
+====
+
+
+.. class:: Body
+
+   A planet, moon or star. See :attr:`KSA.bodies <KSA.KSA.bodies>`.
+
+   .. attribute:: name: string
+
+      The name of the body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string
+
+   .. attribute:: mass: number
+
+      The mass of the body, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: gravitational_parameter: number
+
+      The standard gravitational parameter of the body, in cubic meters per second squared.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: radius: number
+
+      The radius of the body, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: atmosphere_radius: number
+
+      The radius of the top of the atmosphere, in meters. Zero for a body with no
+      atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: surface_gravity: number
+
+      The acceleration due to gravity at the body's mean radius, in meters per second
+      squared.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: rotational_speed: number
+
+      The rate at which the body rotates about its axis, in radians per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: rotational_period: number
+
+      The time the body takes to rotate once about its axis, relative to the stars, in
+      seconds. Infinite for a body that does not rotate.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: sphere_of_influence: number
+
+      The radius of the body's sphere of influence, in meters. Not a number for a body
+      that orbits nothing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: parent: KSA.Body
+
+      The body this body orbits, or ``nil`` if it orbits nothing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Body` or ``Types.none``
+
+   .. attribute:: satellites: List
+
+      The bodies that orbit this body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: orbit: KSA.Orbit
+
+      The orbit of the body, or ``nil`` if it orbits nothing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Orbit` or ``Types.none``
+
+   .. method:: surface_height(latitude, longitude)
+
+      The height of the terrain or the sea surface, whichever is higher, at a point on
+      the body, in meters above the body's mean radius.
+
+      :param number latitude: Latitude, in degrees.
+      :param number longitude: Longitude, in degrees.
+      :rtype: number
+
+   .. method:: bedrock_height(latitude, longitude)
+
+      The height of the terrain at a point on the body, in meters above the body's mean
+      radius. Below the sea, this is the height of the sea floor.
+
+      :param number latitude: Latitude, in degrees.
+      :param number longitude: Longitude, in degrees.
+      :rtype: number
+
+      .. note::
+
+         Zero for a body with no terrain, such as a gas giant.
+
+   .. attribute:: launch_sites: List
+
+      The names of the launch sites on the body. See :meth:`KSA.launch_vehicle`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: reference_frame: KSA.ReferenceFrame
+
+      The reference frame fixed to the body, with its origin at the body's center. The
+      z axis points to the north pole, the x axis to latitude and longitude zero, and the
+      y axis to latitude zero and longitude 90 degrees east. The frame rotates with the
+      body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.ReferenceFrame`
+
+   .. attribute:: non_rotating_reference_frame: KSA.ReferenceFrame
+
+      The reference frame with its origin at the body's center that does not rotate. The
+      z axis points to the north pole, and the x and y axes are fixed relative to the
+      stars.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.ReferenceFrame`
+
+   .. method:: position(reference_frame)
+
+      The position of the center of the body, in meters.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: Tuple
+
+   .. method:: velocity(reference_frame)
+
+      The velocity of the body, in meters per second.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
+      :rtype: Tuple
+
+   .. method:: rotation(reference_frame)
+
+      The rotation of :attr:`KSA.Body.reference_frame` relative to the given frame.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the rotation.
+      :rtype: Tuple
+
+   .. method:: angular_velocity(reference_frame)
+
+      The angular velocity of the body, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the angular velocity.
+      :rtype: Tuple
+
+   .. method:: surface_position(latitude, longitude, reference_frame)
+
+      The position of a point on the surface, at the body's mean radius, in meters.
+
+      :param number latitude: Latitude, in degrees.
+      :param number longitude: Longitude, in degrees.
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: Tuple

@@ -1,0 +1,47 @@
+Python Client
+=============
+
+This page covers using the kRPC Python client with the ``KSA`` service.
+
+Installing
+----------
+
+Install the kRPC Python client from `PyPI <https://pypi.org/project/krpc/>`_:
+
+.. code-block:: bash
+
+   pip install krpc==0.7.0
+
+Using the KSA Service
+---------------------
+
+The client builds the ``KSA`` service from the definitions the server sends when it connects,
+so the service is ``conn.ksa``:
+
+.. code-block:: python
+
+   import krpc
+   conn = krpc.connect(name="Example")
+   vehicle = conn.ksa.active_vehicle
+   print(vehicle.name, vehicle.flight.mean_altitude)
+
+The client has no type stubs for the service, so a type checker reports ``conn.ksa`` as an
+unknown attribute. The examples in these docs turn off Pyright's ``reportAttributeAccessIssue``
+check in a ``pyrightconfig.json``:
+
+.. code-block:: json
+
+   {
+     "reportAttributeAccessIssue": "none"
+   }
+
+Streams and events work as with any other service. A stream of a property takes the object and
+the property name:
+
+.. code-block:: python
+
+   altitude = conn.add_stream(getattr, vehicle.flight, "mean_altitude")
+   print(altitude())
+
+The `kRPC Python client guide <https://krpc.github.io/krpc/0.7.0/python/client.html>`_ covers connecting, streams, events
+and the client's other features.

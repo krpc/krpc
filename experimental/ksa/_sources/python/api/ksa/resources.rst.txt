@@ -1,0 +1,35 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KSA
+
+Resources
+=========
+
+
+.. class:: Resource
+
+   A substance held in tanks, such as a propellant, in a part or across a whole vehicle.
+   Obtained from :attr:`Part.resources` or :attr:`Vehicle.resources`.
+
+   .. attribute:: name
+
+      The name of the substance.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: amount
+
+      The mass of the substance held, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: max
+
+      The mass of the substance the tanks can hold, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float

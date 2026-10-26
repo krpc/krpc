@@ -1,0 +1,184 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Body
+====
+
+
+.. type:: public class Body
+
+   A planet, moon or star. See :meth:`getBodies()`.
+
+   .. method:: String getName()
+
+
+      The name of the body.
+
+   
+
+   .. method:: double getMass()
+
+
+      The mass of the body, in kilograms.
+
+   
+
+   .. method:: double getGravitationalParameter()
+
+
+      The standard gravitational parameter of the body, in cubic meters per second squared.
+
+   
+
+   .. method:: double getRadius()
+
+
+      The radius of the body, in meters.
+
+   
+
+   .. method:: double getAtmosphereRadius()
+
+
+      The radius of the top of the atmosphere, in meters. Zero for a body with no
+      atmosphere.
+
+   
+
+   .. method:: double getSurfaceGravity()
+
+
+      The acceleration due to gravity at the body's mean radius, in meters per second
+      squared.
+
+   
+
+   .. method:: double getRotationalSpeed()
+
+
+      The rate at which the body rotates about its axis, in radians per second.
+
+   
+
+   .. method:: double getRotationalPeriod()
+
+
+      The time the body takes to rotate once about its axis, relative to the stars, in
+      seconds. Infinite for a body that does not rotate.
+
+   
+
+   .. method:: double getSphereOfInfluence()
+
+
+      The radius of the body's sphere of influence, in meters. Not a number for a body
+      that orbits nothing.
+
+   
+
+   .. method:: Body getParent()
+
+
+      The body this body orbits, or ``null`` if it orbits nothing.
+
+   
+
+   .. method:: java.util.List<Body> getSatellites()
+
+
+      The bodies that orbit this body.
+
+   
+
+   .. method:: Orbit getOrbit()
+
+
+      The orbit of the body, or ``null`` if it orbits nothing.
+
+   
+
+   .. method:: double surfaceHeight(double latitude, double longitude)
+
+      The height of the terrain or the sea surface, whichever is higher, at a point on
+      the body, in meters above the body's mean radius.
+
+      :param double latitude: Latitude, in degrees.
+      :param double longitude: Longitude, in degrees.
+   
+
+   .. method:: double bedrockHeight(double latitude, double longitude)
+
+      The height of the terrain at a point on the body, in meters above the body's mean
+      radius. Below the sea, this is the height of the sea floor.
+
+      :param double latitude: Latitude, in degrees.
+      :param double longitude: Longitude, in degrees.
+   
+
+      .. note::
+
+         Zero for a body with no terrain, such as a gas giant.
+
+   .. method:: java.util.List<String> getLaunchSites()
+
+
+      The names of the launch sites on the body. See :meth:`launchVehicle(String, String)`.
+
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+
+      The reference frame fixed to the body, with its origin at the body's center. The
+      z axis points to the north pole, the x axis to latitude and longitude zero, and the
+      y axis to latitude zero and longitude 90 degrees east. The frame rotates with the
+      body.
+
+   
+
+   .. method:: ReferenceFrame getNonRotatingReferenceFrame()
+
+
+      The reference frame with its origin at the body's center that does not rotate. The
+      z axis points to the north pole, and the x and y axes are fixed relative to the
+      stars.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
+
+      The position of the center of the body, in meters.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the position.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> velocity(ReferenceFrame referenceFrame)
+
+      The velocity of the body, in meters per second.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the velocity.
+   
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
+
+      The rotation of :meth:`Body.getReferenceFrame()` relative to the given frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the rotation.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> angularVelocity(ReferenceFrame referenceFrame)
+
+      The angular velocity of the body, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the angular velocity.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> surfacePosition(double latitude, double longitude, ReferenceFrame referenceFrame)
+
+      The position of a point on the surface, at the body's mean radius, in meters.
+
+      :param double latitude: Latitude, in degrees.
+      :param double longitude: Longitude, in degrees.
+      :param ReferenceFrame referenceFrame: The reference frame of the position.

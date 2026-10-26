@@ -1,0 +1,221 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Auto-Pilot
+==========
+
+
+.. class:: AutoPilot
+
+   The vehicle's flight computer, which steers the vehicle with its reaction control
+   thrusters and engine gimbals. Obtained from :prop:`Vehicle.AutoPilot`.
+
+   .. note::
+
+      The auto-pilot points the vehicle in the direction set by :prop:`AutoPilot.Mode`, once
+      engaged. It is the game's own flight computer, so the game's flight computer
+      controls change the same settings.
+
+   .. function:: void Engage()
+
+      Engage the auto-pilot.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void Disengage()
+
+      Disengage the auto-pilot.
+
+
+      :Game Scenes: Flight
+
+   .. property:: bool Engaged { get; }
+
+      Whether the auto-pilot is engaged.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :prop:`Control.Stabilization`.
+
+   .. property:: AutoPilotMode Mode { get; set; }
+
+      The direction the auto-pilot points the vehicle in.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting :value:`AutoPilotMode.Attitude` targets the vehicle's current pitch,
+         heading and roll. Setting :value:`AutoPilotMode.Other` throws an exception.
+
+   .. property:: double TargetPitch { get; set; }
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it sets :prop:`AutoPilot.Mode` to :value:`AutoPilotMode.Attitude`.
+         Returns NaN in any other mode.
+
+   .. property:: double TargetHeading { get; set; }
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it sets :prop:`AutoPilot.Mode` to :value:`AutoPilotMode.Attitude`.
+         Returns NaN in any other mode.
+
+   .. property:: double TargetRoll { get; set; }
+
+      The target roll, in degrees. NaN when the auto-pilot does not control roll.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting a number sets :prop:`AutoPilot.Mode` to :value:`AutoPilotMode.Attitude`.
+         Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
+         :value:`AutoPilotMode.Attitude`.
+
+   .. function:: void TargetPitchAndHeading(double pitch, double heading)
+
+      Set the target pitch and heading, and the mode to
+      :value:`AutoPilotMode.Attitude`.
+
+      :parameters:
+
+       * **pitch** -- Target pitch, in degrees, between -90° and +90°.
+       * **heading** -- Target heading, in degrees, between 0° and 360°.
+
+      :Game Scenes: Flight
+
+   .. function:: void TargetDirection(System.Tuple<double,double,double> direction, ReferenceFrame referenceFrame)
+
+      Point the vehicle in a direction, and set the mode to
+      :value:`AutoPilotMode.Attitude`. Sets :prop:`AutoPilot.TargetPitch` and
+      :prop:`AutoPilot.TargetHeading` to the direction at the time of the call, so the target
+      stays fixed relative to the surface.
+
+      :parameters:
+
+       * **direction** -- The direction to point in.
+       * **referenceFrame** -- The reference frame of the direction.
+
+      :Game Scenes: Flight
+
+   .. property:: double Error { get; }
+
+      The angle between the direction the vehicle points in and the target direction,
+      in degrees. NaN when the auto-pilot is not engaged.
+
+      :Game Scenes: Flight
+
+   .. property:: double RollError { get; }
+
+      The angle between the vehicle's roll and the target roll, in degrees.
+      NaN when the auto-pilot is not engaged.
+
+      :Game Scenes: Flight
+
+   .. function:: void Wait()
+
+      Wait until the vehicle points in the target direction, and has the target roll
+      if it has one. Returns when the errors are within twice the flight computer's
+      angle deadband, which defaults to 1°.
+      Throws an exception if the auto-pilot is not engaged.
+
+
+      :Game Scenes: Flight
+
+   .. property:: bool AutoBurn { get; set; }
+
+      Whether the flight computer executes the next burn in
+      :prop:`Vehicle.Burns`. It points the vehicle along the burn, fires the
+      engines at :prop:`Burn.IgnitionTime`, and stops once the burn is complete.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The flight computer clears it when the burn completes, and removes the burn if
+         another follows it. The engines fire only at normal speed, so warp to shortly before
+         the burn with :meth:`KSA.WarpTo <KSA.KSA.WarpTo>`. Setting it with no burn planned throws an
+         exception.
+
+
+
+.. enum:: AutoPilotMode
+
+   The direction the auto-pilot points the vehicle in.
+   See :prop:`AutoPilot.Mode`.
+
+
+   .. enumerator:: Attitude
+
+      The pitch, heading and roll set by :prop:`AutoPilot.TargetPitch`,
+      :prop:`AutoPilot.TargetHeading` and :prop:`AutoPilot.TargetRoll`.
+
+
+   .. enumerator:: Hold
+
+      Holds the vehicle's rotation at zero, relative to the stars.
+
+
+   .. enumerator:: Prograde
+
+      The direction of the vehicle's orbital velocity.
+
+
+   .. enumerator:: Retrograde
+
+      The opposite of :value:`AutoPilotMode.Prograde`.
+
+
+   .. enumerator:: Normal
+
+      Normal to the orbital plane, along the orbit's angular momentum.
+
+
+   .. enumerator:: AntiNormal
+
+      The opposite of :value:`AutoPilotMode.Normal`.
+
+
+   .. enumerator:: RadialOut
+
+      Away from the center of the body being orbited.
+
+
+   .. enumerator:: RadialIn
+
+      Toward the center of the body being orbited.
+
+
+   .. enumerator:: SurfacePrograde
+
+      The direction of the vehicle's velocity relative to the surface.
+
+
+   .. enumerator:: SurfaceRetrograde
+
+      The opposite of :value:`AutoPilotMode.SurfacePrograde`.
+
+
+   .. enumerator:: Other
+
+      A target set in the game, which the API does not cover.

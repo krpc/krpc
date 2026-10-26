@@ -1,0 +1,143 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Flight
+======
+
+
+.. class:: Flight
+
+   Flight telemetry for a vehicle, relative to the surface of the body it orbits.
+   Obtained from :prop:`Vehicle.Flight`.
+
+   .. property:: double MeanAltitude { get; }
+
+      The altitude above the mean radius of the body, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: double SurfaceAltitude { get; }
+
+      The altitude above the terrain or the ocean surface, whichever is higher, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: double BedrockAltitude { get; }
+
+      The altitude above the terrain, in meters. Over the sea, this is the altitude above
+      the sea floor.
+
+      :Game Scenes: Flight
+
+   .. property:: double Elevation { get; }
+
+      The height of the terrain below the vehicle, in meters above the mean radius of the
+      body. Below the sea, this is the height of the sea floor.
+
+      :Game Scenes: Flight
+
+   .. property:: double TimeToImpact { get; }
+
+      The time until the vehicle hits the surface on its current trajectory, in seconds.
+      Not a number if its trajectory does not hit the surface.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game predicts the trajectory on a worker thread, so a change to it shows here
+         shortly after.
+
+   .. property:: double Latitude { get; }
+
+      The latitude of the vehicle, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: double Longitude { get; }
+
+      The longitude of the vehicle, in degrees.
+
+      :Game Scenes: Flight
+
+   .. property:: double Speed { get; }
+
+      The speed of the vehicle relative to the surface, in meters per second.
+
+      :Game Scenes: Flight
+
+   .. property:: double HorizontalSpeed { get; }
+
+      The horizontal speed of the vehicle relative to the surface, in meters per second.
+
+      :Game Scenes: Flight
+
+   .. property:: double VerticalSpeed { get; }
+
+      The vertical speed of the vehicle relative to the surface, in meters per second.
+
+      :Game Scenes: Flight
+
+   .. property:: float Pitch { get; }
+
+      The pitch of the vehicle relative to the horizon, in degrees.
+      A value between -90° and +90°.
+
+      :Game Scenes: Flight
+
+   .. property:: float Heading { get; }
+
+      The heading of the vehicle (its angle relative to north), in degrees.
+      A value between 0° and 360°.
+
+      :Game Scenes: Flight
+
+   .. property:: float Roll { get; }
+
+      The roll of the vehicle relative to the horizon, in degrees.
+      A value between -180° and +180°.
+
+      :Game Scenes: Flight
+
+   .. property:: double StaticPressure { get; }
+
+      The static atmospheric pressure at the vehicle, in pascals.
+
+      :Game Scenes: Flight
+
+   .. property:: double AtmosphereDensity { get; }
+
+      The density of the atmosphere at the vehicle, in kilograms per cubic meter.
+
+      :Game Scenes: Flight
+
+   .. property:: double DynamicPressure { get; }
+
+      The dynamic pressure acting on the vehicle, in pascals.
+
+      :Game Scenes: Flight
+
+   .. property:: double GForce { get; }
+
+      The acceleration of the vehicle, excluding gravity, in multiples of standard
+      gravity.
+
+      :Game Scenes: Flight
+
+   .. property:: double AngleOfAttack { get; }
+
+      The angle between the direction the vehicle points in and its velocity relative to
+      the surface, in the vehicle's pitch plane, in degrees. Positive when the nose is
+      above the velocity.
+
+      :Game Scenes: Flight
+
+   .. property:: double SideslipAngle { get; }
+
+      The angle between the direction the vehicle points in and its velocity relative to
+      the surface, in the vehicle's yaw plane, in degrees. Positive when the nose is to
+      the right of the velocity.
+
+      :Game Scenes: Flight

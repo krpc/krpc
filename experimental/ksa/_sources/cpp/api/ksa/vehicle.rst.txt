@@ -1,0 +1,300 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Vehicle
+=======
+
+
+.. class:: Vehicle
+
+   A vehicle in the current system. Obtained from :func:`active_vehicle`
+   or :func:`vehicles`.
+
+   .. note::
+
+      Docking and undocking replace the vehicles involved, so an object for one of them
+      throws an exception afterwards.
+
+   .. function:: std::string name()
+   .. function:: void set_name(std::string value)
+
+      The name of the vehicle, which is unique in the system.
+
+   
+
+   .. function:: Situation situation()
+
+      The situation of the vehicle.
+
+   
+
+   .. function:: bool has_launched()
+
+      Whether the vehicle has launched.
+
+   
+
+   .. function:: double launch_time()
+
+      The universal time the vehicle was created, in seconds.
+
+   
+
+   .. function:: float mass()
+
+      The total mass of the vehicle, including propellant, in kilograms.
+
+   
+
+   .. function:: float propellant_mass()
+
+      The mass of the propellant in the vehicle, in kilograms.
+
+   
+
+   .. function:: double thrust()
+
+      The thrust of the engines at their current throttle and the current atmospheric
+      pressure, in Newtons.
+
+   
+
+   .. function:: float available_thrust()
+
+      The thrust of the active engines that have propellant, at full throttle and the
+      current atmospheric pressure, in Newtons.
+
+   
+
+   .. function:: double specific_impulse()
+
+      The combined specific impulse of the active engines that have propellant, at the
+      current atmospheric pressure, in seconds. Zero when no engine is active.
+
+   
+
+   .. function:: std::vector<Part> parts()
+
+      The vehicle's parts.
+
+   
+
+   .. function:: Part root_part()
+
+      The vehicle's root part, which the other parts are attached to.
+
+   
+
+   .. function:: std::vector<Resource> resources()
+
+      The resources the vehicle holds, one for each substance, totaled over its parts.
+
+   
+
+   .. function:: float delta_v()
+
+      The change in velocity of all the vehicle's sequences, in meters per second.
+
+   
+
+   .. function:: std::vector<Sequence> sequences()
+
+      The vehicle's sequences, in activation order.
+
+   
+
+   .. function:: std::optional<Vehicle> target_vehicle()
+   .. function:: void set_target_vehicle(std::optional<Vehicle> value)
+
+      The vehicle targeted by this vehicle, or ``NULL``. Setting it replaces the
+      target, and ``NULL`` clears it.
+
+   
+
+   .. function:: std::optional<Body> target_body()
+   .. function:: void set_target_body(std::optional<Body> value)
+
+      The body targeted by this vehicle, or ``NULL``. Setting it replaces the target,
+      and ``NULL`` clears it.
+
+   
+
+      .. note::
+
+         Setting a body that orbits nothing, such as the star, throws an exception.
+
+   .. function:: std::vector<Burn> burns()
+
+      The vehicle's planned burns, in time order.
+
+   
+
+   .. function:: Burn add_burn(double ut, double prograde = 0.0, double normal = 0.0, double radial = 0.0)
+
+      Plan a burn, and add it to the vehicle's burn plan.
+
+      :Parameters:
+
+       * **ut** -- Universal time of the burn, in seconds.
+       * **prograde** -- Change in velocity in the prograde direction, in meters per second.
+       * **normal** -- Change in velocity along the orbit normal, in meters per second.
+       * **radial** -- Change in velocity radially outward, in meters per second.
+
+      :returns: The burn.
+   
+
+      .. note::
+
+         Returns once the flight computer has timed the burn, if it is the next one. Throws
+         an exception if the time is in the past, or beyond the vehicle's predicted
+         trajectory.
+
+   .. function:: Orbit orbit()
+
+      The current orbit of the vehicle.
+
+   
+
+   .. function:: Flight flight()
+
+      Flight telemetry for the vehicle, relative to the surface of the body it orbits.
+
+      :Game Scenes: Flight
+
+   .. function:: Control control()
+
+      The controls of the vehicle.
+
+      :Game Scenes: Flight
+
+   .. function:: AutoPilot auto_pilot()
+
+      The auto-pilot of the vehicle.
+
+      :Game Scenes: Flight
+
+   .. function:: ReferenceFrame reference_frame()
+
+      The reference frame fixed to the vehicle, with its origin at the vehicle's position.
+      The x axis points forward, the y axis to the right and the z axis down, relative to
+      the vehicle's control point.
+
+   
+
+   .. function:: ReferenceFrame surface_reference_frame()
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      the surface below it. The x axis points east, the y axis north and the z axis up.
+      The frame rotates with the body.
+
+   
+
+   .. function:: ReferenceFrame orbital_reference_frame()
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      its orbit. The x axis points prograde, the y axis along the orbit normal and the z
+      axis radially outward, perpendicular to the x axis.
+
+   
+
+   .. function:: std::tuple<double, double, double> position(ReferenceFrame reference_frame)
+
+      The position of the vehicle, in meters.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the position.
+
+   
+
+   .. function:: std::tuple<double, double, double> velocity(ReferenceFrame reference_frame)
+
+      The velocity of the vehicle, in meters per second.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the velocity.
+
+   
+
+   .. function:: std::tuple<double, double, double> direction(ReferenceFrame reference_frame)
+
+      The unit vector in which the vehicle points, the x axis of
+      :func:`Vehicle::reference_frame`.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the direction.
+
+   
+
+   .. function:: std::tuple<double, double, double, double> rotation(ReferenceFrame reference_frame)
+
+      The rotation of :func:`Vehicle::reference_frame` relative to the given frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the rotation.
+
+   
+
+   .. function:: std::tuple<double, double, double> angular_velocity(ReferenceFrame reference_frame)
+
+      The angular velocity of the vehicle, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the angular velocity.
+
+   
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: Situation
+
+   The situation of a vehicle: its contact with the surface, and whether the game is
+   simulating it with physics or propagating it along its orbit.
+   See :func:`Vehicle::situation`.
+
+
+   .. enumerator:: maneuvering
+
+      No surface contact, simulated with physics.
+
+
+   .. enumerator:: freefall
+
+      No surface contact, on rails.
+
+
+   .. enumerator:: rolling
+
+      On terrain, simulated with physics.
+
+
+   .. enumerator:: landed
+
+      At rest on terrain.
+
+
+   .. enumerator:: sailing
+
+      In the ocean, simulated with physics.
+
+
+   .. enumerator:: floating
+
+      At rest in the ocean.
+
+
+   .. enumerator:: dragging
+
+      On terrain and in the ocean, simulated with physics.
+
+
+   .. enumerator:: bottomed
+
+      At rest on terrain and in the ocean.

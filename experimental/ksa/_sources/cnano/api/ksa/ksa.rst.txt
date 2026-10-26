@@ -1,0 +1,162 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+KSA
+===
+
+
+Provides functionality to interact with Kitten Space Agency.
+
+
+.. function:: krpc_error_t krpc_KSA_ActiveVehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t * returnValue)
+.. function:: krpc_error_t krpc_KSA_set_ActiveVehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t value)
+
+   The vehicle under the player's control.
+
+   
+
+   .. note::
+
+      Setting it moves the camera to the vehicle, as the switch vehicle key does.
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_Vehicles(krpc_connection_t connection, krpc_list_object_t * returnValue)
+
+   The vehicles in the current system, excluding kittens on EVA.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_Bodies(krpc_connection_t connection, krpc_dictionary_string_object_t * returnValue)
+
+   The planets, moons and stars in the current system, keyed by name.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_UT(krpc_connection_t connection, double * returnValue)
+
+   The universal time, in seconds.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_SimulationSpeed(krpc_connection_t connection, double * returnValue)
+.. function:: krpc_error_t krpc_KSA_set_SimulationSpeed(krpc_connection_t connection, double value)
+
+   The simulation speed, as a multiple of real time. Zero when paused.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_WarpTo(krpc_connection_t connection, double ut)
+
+   Warp to the given universal time, and return once the warp has finished.
+   The game slows the warp down to normal speed toward the end.
+
+   :Parameters:
+
+    * **ut** -- The universal time to warp to, in seconds.
+
+   
+
+   .. note::
+
+      Does nothing when the time is in the past. Returns early if the game stops the
+      warp, for example when its menu pauses the game.
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_LaunchVehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t * returnValue, const char * name, const char * site)
+
+   Launch a vehicle from a launch site, and make it the active vehicle. Returns once
+   the vehicle is on the launch site.
+
+   :Parameters:
+
+    * **name** -- The name of the vehicle, one of the game's default vehicles or a vehicle saved by the player.
+    * **site** -- The name of the launch site. See :func:`krpc_KSA_Body_LaunchSites`.
+
+   :returns: The vehicle. Its name is the vehicle's name, with a number appended if another vehicle has that name.
+   
+
+   .. note::
+
+      Throws an exception if there is no such vehicle or launch site.
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_TransformPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * position, krpc_KSA_ReferenceFrame_t from, krpc_KSA_ReferenceFrame_t to)
+
+   Convert a position from one reference frame to another.
+
+   :Parameters:
+
+    * **position** -- Position, in meters, in the frame *from*.
+    * **from** -- The reference frame the position is in.
+    * **to** -- The reference frame to convert the position to.
+
+   :returns: The position in the frame *to*.
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_TransformDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * direction, krpc_KSA_ReferenceFrame_t from, krpc_KSA_ReferenceFrame_t to)
+
+   Convert a direction from one reference frame to another.
+
+   :Parameters:
+
+    * **direction** -- Direction in the frame *from*.
+    * **from** -- The reference frame the direction is in.
+    * **to** -- The reference frame to convert the direction to.
+
+   :returns: The direction in the frame *to*.
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_TransformRotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, const krpc_tuple_double_double_double_double_t * rotation, krpc_KSA_ReferenceFrame_t from, krpc_KSA_ReferenceFrame_t to)
+
+   Convert a rotation from one reference frame to another.
+
+   :Parameters:
+
+    * **rotation** -- Rotation in the frame *from*.
+    * **from** -- The reference frame the rotation is in.
+    * **to** -- The reference frame to convert the rotation to.
+
+   :returns: The rotation in the frame *to*.
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_TransformVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_t * velocity, krpc_KSA_ReferenceFrame_t from, krpc_KSA_ReferenceFrame_t to)
+
+   Convert a velocity from one reference frame to another. The velocity of a point
+   depends on its position in a rotating frame, so the position is also needed.
+
+   :Parameters:
+
+    * **position** -- Position, in meters, in the frame *from*.
+    * **velocity** -- Velocity, in meters per second, in the frame *from*.
+    * **from** -- The reference frame the position and velocity are in.
+    * **to** -- The reference frame to convert the velocity to.
+
+   :returns: The velocity in the frame *to*.

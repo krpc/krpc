@@ -1,0 +1,143 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Flight
+======
+
+
+.. type:: krpc_KSA_Flight_t
+
+   Flight telemetry for a vehicle, relative to the surface of the body it orbits.
+   Obtained from :func:`krpc_KSA_Vehicle_Flight`.
+
+   .. function:: krpc_error_t krpc_KSA_Flight_MeanAltitude(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The altitude above the mean radius of the body, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_SurfaceAltitude(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The altitude above the terrain or the ocean surface, whichever is higher, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_BedrockAltitude(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The altitude above the terrain, in meters. Over the sea, this is the altitude above
+      the sea floor.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_Elevation(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The height of the terrain below the vehicle, in meters above the mean radius of the
+      body. Below the sea, this is the height of the sea floor.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_TimeToImpact(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The time until the vehicle hits the surface on its current trajectory, in seconds.
+      Not a number if its trajectory does not hit the surface.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game predicts the trajectory on a worker thread, so a change to it shows here
+         shortly after.
+
+   .. function:: krpc_error_t krpc_KSA_Flight_Latitude(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The latitude of the vehicle, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_Longitude(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The longitude of the vehicle, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_Speed(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The speed of the vehicle relative to the surface, in meters per second.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_HorizontalSpeed(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The horizontal speed of the vehicle relative to the surface, in meters per second.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_VerticalSpeed(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The vertical speed of the vehicle relative to the surface, in meters per second.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_Pitch(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The pitch of the vehicle relative to the horizon, in degrees.
+      A value between -90° and +90°.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_Heading(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The heading of the vehicle (its angle relative to north), in degrees.
+      A value between 0° and 360°.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_Roll(krpc_connection_t connection, float * returnValue, krpc_KSA_Flight_t instance)
+
+      The roll of the vehicle relative to the horizon, in degrees.
+      A value between -180° and +180°.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_StaticPressure(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The static atmospheric pressure at the vehicle, in pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_AtmosphereDensity(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The density of the atmosphere at the vehicle, in kilograms per cubic meter.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_DynamicPressure(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The dynamic pressure acting on the vehicle, in pascals.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_GForce(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The acceleration of the vehicle, excluding gravity, in multiples of standard
+      gravity.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_AngleOfAttack(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The angle between the direction the vehicle points in and its velocity relative to
+      the surface, in the vehicle's pitch plane, in degrees. Positive when the nose is
+      above the velocity.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Flight_SideslipAngle(krpc_connection_t connection, double * returnValue, krpc_KSA_Flight_t instance)
+
+      The angle between the direction the vehicle points in and its velocity relative to
+      the surface, in the vehicle's yaw plane, in degrees. Positive when the nose is to
+      the right of the velocity.
+
+      :Game Scenes: Flight

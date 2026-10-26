@@ -1,0 +1,28 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Resources
+=========
+
+
+.. class:: Resource
+
+   A substance held in tanks, such as a propellant, in a part or across a whole vehicle.
+   Obtained from :func:`Part::resources` or :func:`Vehicle::resources`.
+
+   .. function:: std::string name()
+
+      The name of the substance.
+
+   
+
+   .. function:: double amount()
+
+      The mass of the substance held, in kilograms.
+
+   
+
+   .. function:: double max()
+
+      The mass of the substance the tanks can hold, in kilograms.

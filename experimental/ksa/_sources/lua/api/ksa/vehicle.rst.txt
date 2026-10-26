@@ -1,0 +1,302 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KSA
+
+Vehicle
+=======
+
+
+.. class:: Vehicle
+
+   A vehicle in the current system. Obtained from :attr:`KSA.active_vehicle <KSA.KSA.active_vehicle>`
+   or :attr:`KSA.vehicles <KSA.KSA.vehicles>`.
+
+   .. note::
+
+      Docking and undocking replace the vehicles involved, so an object for one of them
+      throws an exception afterwards.
+
+   .. attribute:: name: string
+
+      The name of the vehicle, which is unique in the system.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: situation: KSA.Situation
+
+      The situation of the vehicle.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Situation`
+
+   .. attribute:: has_launched: boolean
+
+      Whether the vehicle has launched.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: launch_time: number
+
+      The universal time the vehicle was created, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: mass: number
+
+      The total mass of the vehicle, including propellant, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: propellant_mass: number
+
+      The mass of the propellant in the vehicle, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: thrust: number
+
+      The thrust of the engines at their current throttle and the current atmospheric
+      pressure, in Newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: available_thrust: number
+
+      The thrust of the active engines that have propellant, at full throttle and the
+      current atmospheric pressure, in Newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: specific_impulse: number
+
+      The combined specific impulse of the active engines that have propellant, at the
+      current atmospheric pressure, in seconds. Zero when no engine is active.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: parts: List
+
+      The vehicle's parts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: root_part: KSA.Part
+
+      The vehicle's root part, which the other parts are attached to.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: resources: List
+
+      The resources the vehicle holds, one for each substance, totaled over its parts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: delta_v: number
+
+      The change in velocity of all the vehicle's sequences, in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: sequences: List
+
+      The vehicle's sequences, in activation order.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: target_vehicle: KSA.Vehicle
+
+      The vehicle targeted by this vehicle, or ``nil``. Setting it replaces the
+      target, and ``nil`` clears it.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`KSA.Vehicle` or ``Types.none``
+
+   .. attribute:: target_body: KSA.Body
+
+      The body targeted by this vehicle, or ``nil``. Setting it replaces the target,
+      and ``nil`` clears it.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`KSA.Body` or ``Types.none``
+
+      .. note::
+
+         Setting a body that orbits nothing, such as the star, throws an exception.
+
+   .. attribute:: burns: List
+
+      The vehicle's planned burns, in time order.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. method:: add_burn(ut, [prograde = 0.0], [normal = 0.0], [radial = 0.0])
+
+      Plan a burn, and add it to the vehicle's burn plan.
+
+      :param number ut: Universal time of the burn, in seconds.
+      :param number prograde: Change in velocity in the prograde direction, in meters per second.
+      :param number normal: Change in velocity along the orbit normal, in meters per second.
+      :param number radial: Change in velocity radially outward, in meters per second.
+      :returns: The burn.
+      :rtype: :class:`KSA.Burn`
+
+      .. note::
+
+         Returns once the flight computer has timed the burn, if it is the next one. Throws
+         an exception if the time is in the past, or beyond the vehicle's predicted
+         trajectory.
+
+   .. attribute:: orbit: KSA.Orbit
+
+      The current orbit of the vehicle.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Orbit`
+
+   .. attribute:: flight: KSA.Flight
+
+      Flight telemetry for the vehicle, relative to the surface of the body it orbits.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Flight`
+
+   .. attribute:: control: KSA.Control
+
+      The controls of the vehicle.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Control`
+
+   .. attribute:: auto_pilot: KSA.AutoPilot
+
+      The auto-pilot of the vehicle.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.AutoPilot`
+
+   .. attribute:: reference_frame: KSA.ReferenceFrame
+
+      The reference frame fixed to the vehicle, with its origin at the vehicle's position.
+      The x axis points forward, the y axis to the right and the z axis down, relative to
+      the vehicle's control point.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.ReferenceFrame`
+
+   .. attribute:: surface_reference_frame: KSA.ReferenceFrame
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      the surface below it. The x axis points east, the y axis north and the z axis up.
+      The frame rotates with the body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.ReferenceFrame`
+
+   .. attribute:: orbital_reference_frame: KSA.ReferenceFrame
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      its orbit. The x axis points prograde, the y axis along the orbit normal and the z
+      axis radially outward, perpendicular to the x axis.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.ReferenceFrame`
+
+   .. method:: position(reference_frame)
+
+      The position of the vehicle, in meters.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: Tuple
+
+   .. method:: velocity(reference_frame)
+
+      The velocity of the vehicle, in meters per second.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
+      :rtype: Tuple
+
+   .. method:: direction(reference_frame)
+
+      The unit vector in which the vehicle points, the x axis of
+      :attr:`KSA.Vehicle.reference_frame`.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the direction.
+      :rtype: Tuple
+
+   .. method:: rotation(reference_frame)
+
+      The rotation of :attr:`KSA.Vehicle.reference_frame` relative to the given frame.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the rotation.
+      :rtype: Tuple
+
+   .. method:: angular_velocity(reference_frame)
+
+      The angular velocity of the vehicle, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the angular velocity.
+      :rtype: Tuple
+
+
+
+.. class:: Situation
+
+   The situation of a vehicle: its contact with the surface, and whether the game is
+   simulating it with physics or propagating it along its orbit.
+   See :attr:`KSA.Vehicle.situation`.
+
+
+   .. data:: maneuvering
+
+      No surface contact, simulated with physics.
+
+
+   .. data:: freefall
+
+      No surface contact, on rails.
+
+
+   .. data:: rolling
+
+      On terrain, simulated with physics.
+
+
+   .. data:: landed
+
+      At rest on terrain.
+
+
+   .. data:: sailing
+
+      In the ocean, simulated with physics.
+
+
+   .. data:: floating
+
+      At rest in the ocean.
+
+
+   .. data:: dragging
+
+      On terrain and in the ocean, simulated with physics.
+
+
+   .. data:: bottomed
+
+      At rest on terrain and in the ocean.

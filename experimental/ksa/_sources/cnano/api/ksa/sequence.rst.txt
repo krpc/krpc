@@ -1,0 +1,71 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Sequence
+========
+
+
+.. type:: krpc_KSA_Sequence_t
+
+   A sequence of a vehicle, the group of parts activated together, and its predicted
+   performance. Obtained from :func:`krpc_KSA_Vehicle_Sequences`.
+
+   .. note::
+
+      The performance is the game's prediction at the current atmospheric pressure. It
+      assumes the sequences activate in order, each once the one before has burned its
+      propellant.
+
+   .. function:: krpc_error_t krpc_KSA_Sequence_Number(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Sequence_t instance)
+
+      The number of the sequence, as shown in the game.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sequence_Activated(krpc_connection_t connection, bool * returnValue, krpc_KSA_Sequence_t instance)
+
+      Whether the sequence has been activated.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sequence_DeltaV(krpc_connection_t connection, float * returnValue, krpc_KSA_Sequence_t instance)
+
+      The change in velocity the sequence provides, in meters per second.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sequence_Thrust(krpc_connection_t connection, float * returnValue, krpc_KSA_Sequence_t instance)
+
+      The thrust of the sequence's engines at full throttle, in Newtons.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sequence_SpecificImpulse(krpc_connection_t connection, float * returnValue, krpc_KSA_Sequence_t instance)
+
+      The combined specific impulse of the sequence's engines, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sequence_BurnTime(krpc_connection_t connection, float * returnValue, krpc_KSA_Sequence_t instance)
+
+      The time the sequence's engines take to burn its propellant at full throttle,
+      in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sequence_StartMass(krpc_connection_t connection, float * returnValue, krpc_KSA_Sequence_t instance)
+
+      The mass of the vehicle when the sequence starts to burn, in kilograms.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sequence_EndMass(krpc_connection_t connection, float * returnValue, krpc_KSA_Sequence_t instance)
+
+      The mass of the vehicle once the sequence has burned its propellant, in kilograms.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sequence_PropellantMass(krpc_connection_t connection, float * returnValue, krpc_KSA_Sequence_t instance)
+
+      The mass of propellant the sequence burns, in kilograms.

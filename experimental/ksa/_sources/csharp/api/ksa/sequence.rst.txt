@@ -1,0 +1,73 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Sequence
+========
+
+
+.. class:: Sequence
+
+   A sequence of a vehicle, the group of parts activated together, and its predicted
+   performance. Obtained from :prop:`Vehicle.Sequences`.
+
+   .. note::
+
+      The performance is the game's prediction at the current atmospheric pressure. It
+      assumes the sequences activate in order, each once the one before has burned its
+      propellant.
+
+   .. property:: int Number { get; }
+
+      The number of the sequence, as shown in the game.
+
+      :Game Scenes: All
+
+   .. property:: bool Activated { get; }
+
+      Whether the sequence has been activated.
+
+      :Game Scenes: All
+
+   .. property:: float DeltaV { get; }
+
+      The change in velocity the sequence provides, in meters per second.
+
+      :Game Scenes: All
+
+   .. property:: float Thrust { get; }
+
+      The thrust of the sequence's engines at full throttle, in Newtons.
+
+      :Game Scenes: All
+
+   .. property:: float SpecificImpulse { get; }
+
+      The combined specific impulse of the sequence's engines, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float BurnTime { get; }
+
+      The time the sequence's engines take to burn its propellant at full throttle,
+      in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float StartMass { get; }
+
+      The mass of the vehicle when the sequence starts to burn, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: float EndMass { get; }
+
+      The mass of the vehicle once the sequence has burned its propellant, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: float PropellantMass { get; }
+
+      The mass of propellant the sequence burns, in kilograms.
+
+      :Game Scenes: All

@@ -1,0 +1,19 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Reference Frame
+===============
+
+
+.. class:: ReferenceFrame
+
+   A reference frame, in which positions, directions, rotations and velocities are given.
+   Obtained from the reference frame properties of :class:`Vehicle` and
+   :class:`Body`.
+
+   .. note::
+
+      Every reference frame is right-handed. Positions are in meters, velocities in meters
+      per second, and angular velocities in radians per second. A rotation is a quaternion
+      ``(x, y, z, w)``.

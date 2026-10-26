@@ -1,0 +1,30 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Resources
+=========
+
+
+.. class:: Resource
+
+   A substance held in tanks, such as a propellant, in a part or across a whole vehicle.
+   Obtained from :prop:`Part.Resources` or :prop:`Vehicle.Resources`.
+
+   .. property:: string Name { get; }
+
+      The name of the substance.
+
+      :Game Scenes: All
+
+   .. property:: double Amount { get; }
+
+      The mass of the substance held, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: double Max { get; }
+
+      The mass of the substance the tanks can hold, in kilograms.
+
+      :Game Scenes: All

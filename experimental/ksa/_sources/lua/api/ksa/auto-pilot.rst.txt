@@ -1,0 +1,206 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KSA
+
+Auto-Pilot
+==========
+
+
+.. class:: AutoPilot
+
+   The vehicle's flight computer, which steers the vehicle with its reaction control
+   thrusters and engine gimbals. Obtained from :attr:`KSA.Vehicle.auto_pilot`.
+
+   .. note::
+
+      The auto-pilot points the vehicle in the direction set by :attr:`KSA.AutoPilot.mode`, once
+      engaged. It is the game's own flight computer, so the game's flight computer
+      controls change the same settings.
+
+   .. method:: engage()
+
+      Engage the auto-pilot.
+
+   .. method:: disengage()
+
+      Disengage the auto-pilot.
+
+   .. attribute:: engaged: boolean
+
+      Whether the auto-pilot is engaged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+      .. note::
+
+         The same setting as :attr:`KSA.Control.stabilization`.
+
+   .. attribute:: mode: KSA.AutoPilotMode
+
+      The direction the auto-pilot points the vehicle in.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`KSA.AutoPilotMode`
+
+      .. note::
+
+         Setting :attr:`KSA.AutoPilotMode.attitude` targets the vehicle's current pitch,
+         heading and roll. Setting :attr:`KSA.AutoPilotMode.other` throws an exception.
+
+   .. attribute:: target_pitch: number
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         Setting it sets :attr:`KSA.AutoPilot.mode` to :attr:`KSA.AutoPilotMode.attitude`.
+         Returns NaN in any other mode.
+
+   .. attribute:: target_heading: number
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         Setting it sets :attr:`KSA.AutoPilot.mode` to :attr:`KSA.AutoPilotMode.attitude`.
+         Returns NaN in any other mode.
+
+   .. attribute:: target_roll: number
+
+      The target roll, in degrees. NaN when the auto-pilot does not control roll.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         Setting a number sets :attr:`KSA.AutoPilot.mode` to :attr:`KSA.AutoPilotMode.attitude`.
+         Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
+         :attr:`KSA.AutoPilotMode.attitude`.
+
+   .. method:: target_pitch_and_heading(pitch, heading)
+
+      Set the target pitch and heading, and the mode to
+      :attr:`KSA.AutoPilotMode.attitude`.
+
+      :param number pitch: Target pitch, in degrees, between -90° and +90°.
+      :param number heading: Target heading, in degrees, between 0° and 360°.
+
+   .. method:: target_direction(direction, reference_frame)
+
+      Point the vehicle in a direction, and set the mode to
+      :attr:`KSA.AutoPilotMode.attitude`. Sets :attr:`KSA.AutoPilot.target_pitch` and
+      :attr:`KSA.AutoPilot.target_heading` to the direction at the time of the call, so the target
+      stays fixed relative to the surface.
+
+      :param Tuple direction: The direction to point in.
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the direction.
+
+   .. attribute:: error: number
+
+      The angle between the direction the vehicle points in and the target direction,
+      in degrees. NaN when the auto-pilot is not engaged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: roll_error: number
+
+      The angle between the vehicle's roll and the target roll, in degrees.
+      NaN when the auto-pilot is not engaged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. method:: wait()
+
+      Wait until the vehicle points in the target direction, and has the target roll
+      if it has one. Returns when the errors are within twice the flight computer's
+      angle deadband, which defaults to 1°.
+      Throws an exception if the auto-pilot is not engaged.
+
+   .. attribute:: auto_burn: boolean
+
+      Whether the flight computer executes the next burn in
+      :attr:`KSA.Vehicle.burns`. It points the vehicle along the burn, fires the
+      engines at :attr:`KSA.Burn.ignition_time`, and stops once the burn is complete.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+      .. note::
+
+         The flight computer clears it when the burn completes, and removes the burn if
+         another follows it. The engines fire only at normal speed, so warp to shortly before
+         the burn with :meth:`KSA.warp_to`. Setting it with no burn planned throws an
+         exception.
+
+
+
+.. class:: AutoPilotMode
+
+   The direction the auto-pilot points the vehicle in.
+   See :attr:`KSA.AutoPilot.mode`.
+
+
+   .. data:: attitude
+
+      The pitch, heading and roll set by :attr:`KSA.AutoPilot.target_pitch`,
+      :attr:`KSA.AutoPilot.target_heading` and :attr:`KSA.AutoPilot.target_roll`.
+
+
+   .. data:: hold
+
+      Holds the vehicle's rotation at zero, relative to the stars.
+
+
+   .. data:: prograde
+
+      The direction of the vehicle's orbital velocity.
+
+
+   .. data:: retrograde
+
+      The opposite of :attr:`KSA.AutoPilotMode.prograde`.
+
+
+   .. data:: normal
+
+      Normal to the orbital plane, along the orbit's angular momentum.
+
+
+   .. data:: anti_normal
+
+      The opposite of :attr:`KSA.AutoPilotMode.normal`.
+
+
+   .. data:: radial_out
+
+      Away from the center of the body being orbited.
+
+
+   .. data:: radial_in
+
+      Toward the center of the body being orbited.
+
+
+   .. data:: surface_prograde
+
+      The direction of the vehicle's velocity relative to the surface.
+
+
+   .. data:: surface_retrograde
+
+      The opposite of :attr:`KSA.AutoPilotMode.surface_prograde`.
+
+
+   .. data:: other
+
+      A target set in the game, which the API does not cover.

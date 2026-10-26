@@ -1,0 +1,250 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Orbit
+=====
+
+
+.. class:: Orbit
+
+   An orbit. Obtained from :func:`Vehicle::orbit`, :func:`Body::orbit`,
+   :func:`Burn::orbit` or :func:`Orbit::next_orbit`.
+
+   .. note::
+
+      A vehicle's orbit follows the vehicle as its trajectory changes. A predicted orbit, from
+      :func:`Orbit::next_orbit` or :func:`Burn::orbit`, is the prediction at the time it
+      was obtained.
+
+   .. function:: Body body()
+
+      The body being orbited.
+
+   
+
+   .. function:: double apoapsis()
+
+      The apoapsis of the orbit, in meters, from the center of the body being orbited.
+      Not a number for a parabolic or hyperbolic orbit.
+
+   
+
+   .. function:: double periapsis()
+
+      The periapsis of the orbit, in meters, from the center of the body being orbited.
+
+   
+
+   .. function:: double apoapsis_altitude()
+
+      The apoapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+   
+
+   .. function:: double periapsis_altitude()
+
+      The periapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+   
+
+   .. function:: double semi_major_axis()
+
+      The semi-major axis of the orbit, in meters. Negative for a hyperbolic orbit.
+
+   
+
+   .. function:: double speed()
+
+      The current orbital speed, in meters per second.
+
+   
+
+   .. function:: double radius()
+
+      The current distance from the center of the body being orbited, in meters.
+
+   
+
+   .. function:: double period()
+
+      The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+   
+
+   .. function:: double time_to_apoapsis()
+
+      The time until the next apoapsis, in seconds. Not a number for a parabolic or
+      hyperbolic orbit.
+
+   
+
+   .. function:: double time_to_periapsis()
+
+      The time until the next periapsis, in seconds. Negative once a parabolic or
+      hyperbolic orbit has passed it.
+
+   
+
+   .. function:: double eccentricity()
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+   
+
+   .. function:: double inclination()
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit, in radians, against the equator of the body being orbited.
+
+   
+
+   .. function:: double longitude_of_ascending_node()
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+   
+
+   .. function:: double argument_of_periapsis()
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+   
+
+   .. function:: double true_anomaly()
+
+      The current `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_,
+      in radians.
+
+   
+
+   .. function:: double mean_anomaly()
+
+      The current `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_,
+      in radians.
+
+   
+
+   .. function:: double true_anomaly_at_ut(double ut)
+
+      The true anomaly at the given time, in radians.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+   
+
+   .. function:: double ut_at_true_anomaly(double true_anomaly)
+
+      The next universal time, from now, at which the orbit reaches the given true
+      anomaly, in seconds. Not a number if it never does, such as beyond the asymptote of
+      a hyperbolic orbit.
+
+      :Parameters:
+
+       * **true_anomaly** -- True anomaly, in radians.
+
+   
+
+   .. function:: double radius_at(double ut)
+
+      The distance from the center of the body being orbited at the given time, in
+      meters.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+   
+
+   .. function:: std::tuple<double, double, double> position_at(double ut, ReferenceFrame reference_frame)
+
+      The position on the orbit at the given time, in meters, relative to where the body
+      being orbited is now.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+       * **reference_frame** -- The reference frame of the position.
+
+   
+
+   .. function:: std::tuple<double, double, double> velocity_at(double ut, ReferenceFrame reference_frame)
+
+      The orbital velocity at the given time, in meters per second, relative to the body
+      being orbited and along the axes of the given frame.
+
+      :Parameters:
+
+       * **ut** -- Universal time, in seconds.
+       * **reference_frame** -- The reference frame of the velocity.
+
+   
+
+   .. function:: double start_ut()
+
+      The universal time at which this orbit starts, in seconds. Not a number for the
+      orbit of a body.
+
+   
+
+   .. function:: double end_ut()
+
+      The universal time at which this orbit ends, in seconds. Infinite for an orbit that
+      does not end, such as the orbit of a body.
+
+   
+
+   .. function:: OrbitTransition end_transition()
+
+      How the orbit ends.
+
+   
+
+   .. function:: double time_to_soi_change()
+
+      The time until the orbit enters or leaves a sphere of influence, in seconds. Not a
+      number if it does neither.
+
+   
+
+   .. function:: std::optional<Orbit> next_orbit()
+
+      The orbit that follows this one after it enters or leaves a sphere of influence, or
+      ``NULL`` if there is none.
+
+   
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: OrbitTransition
+
+   How an orbit ends. See :func:`Orbit::end_transition`.
+
+
+   .. enumerator:: none
+
+      The orbit does not end.
+
+
+   .. enumerator:: encounter
+
+      The orbit enters the sphere of influence of another body.
+
+
+   .. enumerator:: escape
+
+      The orbit leaves the sphere of influence of the body being orbited.
+
+
+   .. enumerator:: impact
+
+      The orbit hits the surface of the body being orbited.
+
+
+   .. enumerator:: burn
+
+      The orbit ends at a planned burn.

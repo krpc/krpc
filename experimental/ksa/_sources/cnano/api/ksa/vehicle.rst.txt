@@ -1,0 +1,299 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Vehicle
+=======
+
+
+.. type:: krpc_KSA_Vehicle_t
+
+   A vehicle in the current system. Obtained from :func:`krpc_KSA_ActiveVehicle`
+   or :func:`krpc_KSA_Vehicles`.
+
+   .. note::
+
+      Docking and undocking replace the vehicles involved, so an object for one of them
+      throws an exception afterwards.
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Name(krpc_connection_t connection, char * * returnValue, krpc_KSA_Vehicle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Vehicle_set_Name(krpc_connection_t connection, krpc_KSA_Vehicle_t instance, const char * value)
+
+      The name of the vehicle, which is unique in the system.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Situation(krpc_connection_t connection, krpc_KSA_Situation_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The situation of the vehicle.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_HasLaunched(krpc_connection_t connection, bool * returnValue, krpc_KSA_Vehicle_t instance)
+
+      Whether the vehicle has launched.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_LaunchTime(krpc_connection_t connection, double * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The universal time the vehicle was created, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Mass(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The total mass of the vehicle, including propellant, in kilograms.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_PropellantMass(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The mass of the propellant in the vehicle, in kilograms.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Thrust(krpc_connection_t connection, double * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The thrust of the engines at their current throttle and the current atmospheric
+      pressure, in Newtons.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_AvailableThrust(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The thrust of the active engines that have propellant, at full throttle and the
+      current atmospheric pressure, in Newtons.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_SpecificImpulse(krpc_connection_t connection, double * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The combined specific impulse of the active engines that have propellant, at the
+      current atmospheric pressure, in seconds. Zero when no engine is active.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Parts(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's parts.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_RootPart(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's root part, which the other parts are attached to.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Resources(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The resources the vehicle holds, one for each substance, totaled over its parts.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_DeltaV(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The change in velocity of all the vehicle's sequences, in meters per second.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Sequences(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's sequences, in activation order.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_TargetVehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t * returnValue, krpc_KSA_Vehicle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Vehicle_set_TargetVehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t instance, krpc_KSA_Vehicle_t value)
+
+      The vehicle targeted by this vehicle, or ``nullptr``. Setting it replaces the
+      target, and ``nullptr`` clears it.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_TargetBody(krpc_connection_t connection, krpc_KSA_Body_t * returnValue, krpc_KSA_Vehicle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Vehicle_set_TargetBody(krpc_connection_t connection, krpc_KSA_Vehicle_t instance, krpc_KSA_Body_t value)
+
+      The body targeted by this vehicle, or ``nullptr``. Setting it replaces the target,
+      and ``nullptr`` clears it.
+
+   
+
+      .. note::
+
+         Setting a body that orbits nothing, such as the star, throws an exception.
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Burns(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's planned burns, in time order.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_AddBurn(krpc_connection_t connection, krpc_KSA_Burn_t * returnValue, krpc_KSA_Vehicle_t instance, double ut, double prograde, double normal, double radial)
+
+      Plan a burn, and add it to the vehicle's burn plan.
+
+      :Parameters:
+
+       * **ut** -- Universal time of the burn, in seconds.
+       * **prograde** -- Change in velocity in the prograde direction, in meters per second.
+       * **normal** -- Change in velocity along the orbit normal, in meters per second.
+       * **radial** -- Change in velocity radially outward, in meters per second.
+
+      :returns: The burn.
+   
+
+      .. note::
+
+         Returns once the flight computer has timed the burn, if it is the next one. Throws
+         an exception if the time is in the past, or beyond the vehicle's predicted
+         trajectory.
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Orbit(krpc_connection_t connection, krpc_KSA_Orbit_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The current orbit of the vehicle.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Flight(krpc_connection_t connection, krpc_KSA_Flight_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      Flight telemetry for the vehicle, relative to the surface of the body it orbits.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Control(krpc_connection_t connection, krpc_KSA_Control_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The controls of the vehicle.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_AutoPilot(krpc_connection_t connection, krpc_KSA_AutoPilot_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The auto-pilot of the vehicle.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_ReferenceFrame(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The reference frame fixed to the vehicle, with its origin at the vehicle's position.
+      The x axis points forward, the y axis to the right and the z axis down, relative to
+      the vehicle's control point.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_SurfaceReferenceFrame(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      the surface below it. The x axis points east, the y axis north and the z axis up.
+      The frame rotates with the body.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_OrbitalReferenceFrame(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      its orbit. The x axis points prograde, the y axis along the orbit normal and the z
+      axis radially outward, perpendicular to the x axis.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Vehicle_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The position of the vehicle, in meters.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the position.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Vehicle_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The velocity of the vehicle, in meters per second.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the velocity.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Vehicle_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The unit vector in which the vehicle points, the x axis of
+      :func:`krpc_KSA_Vehicle_ReferenceFrame`.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the direction.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_KSA_Vehicle_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The rotation of :func:`krpc_KSA_Vehicle_ReferenceFrame` relative to the given frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the rotation.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_AngularVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Vehicle_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The angular velocity of the vehicle, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the angular velocity.
+
+   
+
+
+
+.. type:: krpc_KSA_Situation_t
+
+   The situation of a vehicle: its contact with the surface, and whether the game is
+   simulating it with physics or propagating it along its orbit.
+   See :func:`krpc_KSA_Vehicle_Situation`.
+
+
+   .. macro:: KRPC_KSA_SITUATION_MANEUVERING
+
+      No surface contact, simulated with physics.
+
+
+   .. macro:: KRPC_KSA_SITUATION_FREEFALL
+
+      No surface contact, on rails.
+
+
+   .. macro:: KRPC_KSA_SITUATION_ROLLING
+
+      On terrain, simulated with physics.
+
+
+   .. macro:: KRPC_KSA_SITUATION_LANDED
+
+      At rest on terrain.
+
+
+   .. macro:: KRPC_KSA_SITUATION_SAILING
+
+      In the ocean, simulated with physics.
+
+
+   .. macro:: KRPC_KSA_SITUATION_FLOATING
+
+      At rest in the ocean.
+
+
+   .. macro:: KRPC_KSA_SITUATION_DRAGGING
+
+      On terrain and in the ocean, simulated with physics.
+
+
+   .. macro:: KRPC_KSA_SITUATION_BOTTOMED
+
+      At rest on terrain and in the ocean.

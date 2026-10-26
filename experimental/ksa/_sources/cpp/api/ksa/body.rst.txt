@@ -1,0 +1,189 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Body
+====
+
+
+.. class:: Body
+
+   A planet, moon or star. See :func:`bodies`.
+
+   .. function:: std::string name()
+
+      The name of the body.
+
+   
+
+   .. function:: double mass()
+
+      The mass of the body, in kilograms.
+
+   
+
+   .. function:: double gravitational_parameter()
+
+      The standard gravitational parameter of the body, in cubic meters per second squared.
+
+   
+
+   .. function:: double radius()
+
+      The radius of the body, in meters.
+
+   
+
+   .. function:: double atmosphere_radius()
+
+      The radius of the top of the atmosphere, in meters. Zero for a body with no
+      atmosphere.
+
+   
+
+   .. function:: double surface_gravity()
+
+      The acceleration due to gravity at the body's mean radius, in meters per second
+      squared.
+
+   
+
+   .. function:: double rotational_speed()
+
+      The rate at which the body rotates about its axis, in radians per second.
+
+   
+
+   .. function:: double rotational_period()
+
+      The time the body takes to rotate once about its axis, relative to the stars, in
+      seconds. Infinite for a body that does not rotate.
+
+   
+
+   .. function:: double sphere_of_influence()
+
+      The radius of the body's sphere of influence, in meters. Not a number for a body
+      that orbits nothing.
+
+   
+
+   .. function:: std::optional<Body> parent()
+
+      The body this body orbits, or ``NULL`` if it orbits nothing.
+
+   
+
+   .. function:: std::vector<Body> satellites()
+
+      The bodies that orbit this body.
+
+   
+
+   .. function:: std::optional<Orbit> orbit()
+
+      The orbit of the body, or ``NULL`` if it orbits nothing.
+
+   
+
+   .. function:: double surface_height(double latitude, double longitude)
+
+      The height of the terrain or the sea surface, whichever is higher, at a point on
+      the body, in meters above the body's mean radius.
+
+      :Parameters:
+
+       * **latitude** -- Latitude, in degrees.
+       * **longitude** -- Longitude, in degrees.
+
+   
+
+   .. function:: double bedrock_height(double latitude, double longitude)
+
+      The height of the terrain at a point on the body, in meters above the body's mean
+      radius. Below the sea, this is the height of the sea floor.
+
+      :Parameters:
+
+       * **latitude** -- Latitude, in degrees.
+       * **longitude** -- Longitude, in degrees.
+
+   
+
+      .. note::
+
+         Zero for a body with no terrain, such as a gas giant.
+
+   .. function:: std::vector<std::string> launch_sites()
+
+      The names of the launch sites on the body. See :func:`launch_vehicle`.
+
+   
+
+   .. function:: ReferenceFrame reference_frame()
+
+      The reference frame fixed to the body, with its origin at the body's center. The
+      z axis points to the north pole, the x axis to latitude and longitude zero, and the
+      y axis to latitude zero and longitude 90 degrees east. The frame rotates with the
+      body.
+
+   
+
+   .. function:: ReferenceFrame non_rotating_reference_frame()
+
+      The reference frame with its origin at the body's center that does not rotate. The
+      z axis points to the north pole, and the x and y axes are fixed relative to the
+      stars.
+
+   
+
+   .. function:: std::tuple<double, double, double> position(ReferenceFrame reference_frame)
+
+      The position of the center of the body, in meters.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the position.
+
+   
+
+   .. function:: std::tuple<double, double, double> velocity(ReferenceFrame reference_frame)
+
+      The velocity of the body, in meters per second.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the velocity.
+
+   
+
+   .. function:: std::tuple<double, double, double, double> rotation(ReferenceFrame reference_frame)
+
+      The rotation of :func:`Body::reference_frame` relative to the given frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the rotation.
+
+   
+
+   .. function:: std::tuple<double, double, double> angular_velocity(ReferenceFrame reference_frame)
+
+      The angular velocity of the body, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the angular velocity.
+
+   
+
+   .. function:: std::tuple<double, double, double> surface_position(double latitude, double longitude, ReferenceFrame reference_frame)
+
+      The position of a point on the surface, at the body's mean radius, in meters.
+
+      :Parameters:
+
+       * **latitude** -- Latitude, in degrees.
+       * **longitude** -- Longitude, in degrees.
+       * **reference_frame** -- The reference frame of the position.

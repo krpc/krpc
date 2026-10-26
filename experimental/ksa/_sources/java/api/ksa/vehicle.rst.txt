@@ -1,0 +1,305 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Vehicle
+=======
+
+
+.. type:: public class Vehicle
+
+   A vehicle in the current system. Obtained from :meth:`getActiveVehicle()`
+   or :meth:`getVehicles()`.
+
+   .. note::
+
+      Docking and undocking replace the vehicles involved, so an object for one of them
+      throws an exception afterwards.
+
+   .. method:: String getName()
+
+   .. method:: void setName(String value)
+
+      The name of the vehicle, which is unique in the system.
+
+   
+
+   .. method:: Situation getSituation()
+
+
+      The situation of the vehicle.
+
+   
+
+   .. method:: boolean getHasLaunched()
+
+
+      Whether the vehicle has launched.
+
+   
+
+   .. method:: double getLaunchTime()
+
+
+      The universal time the vehicle was created, in seconds.
+
+   
+
+   .. method:: float getMass()
+
+
+      The total mass of the vehicle, including propellant, in kilograms.
+
+   
+
+   .. method:: float getPropellantMass()
+
+
+      The mass of the propellant in the vehicle, in kilograms.
+
+   
+
+   .. method:: double getThrust()
+
+
+      The thrust of the engines at their current throttle and the current atmospheric
+      pressure, in Newtons.
+
+   
+
+   .. method:: float getAvailableThrust()
+
+
+      The thrust of the active engines that have propellant, at full throttle and the
+      current atmospheric pressure, in Newtons.
+
+   
+
+   .. method:: double getSpecificImpulse()
+
+
+      The combined specific impulse of the active engines that have propellant, at the
+      current atmospheric pressure, in seconds. Zero when no engine is active.
+
+   
+
+   .. method:: java.util.List<Part> getParts()
+
+
+      The vehicle's parts.
+
+   
+
+   .. method:: Part getRootPart()
+
+
+      The vehicle's root part, which the other parts are attached to.
+
+   
+
+   .. method:: java.util.List<Resource> getResources()
+
+
+      The resources the vehicle holds, one for each substance, totaled over its parts.
+
+   
+
+   .. method:: float getDeltaV()
+
+
+      The change in velocity of all the vehicle's sequences, in meters per second.
+
+   
+
+   .. method:: java.util.List<Sequence> getSequences()
+
+
+      The vehicle's sequences, in activation order.
+
+   
+
+   .. method:: Vehicle getTargetVehicle()
+
+   .. method:: void setTargetVehicle(Vehicle value)
+
+      The vehicle targeted by this vehicle, or ``null``. Setting it replaces the
+      target, and ``null`` clears it.
+
+   
+
+   .. method:: Body getTargetBody()
+
+   .. method:: void setTargetBody(Body value)
+
+      The body targeted by this vehicle, or ``null``. Setting it replaces the target,
+      and ``null`` clears it.
+
+   
+
+      .. note::
+
+         Setting a body that orbits nothing, such as the star, throws an exception.
+
+   .. method:: java.util.List<Burn> getBurns()
+
+
+      The vehicle's planned burns, in time order.
+
+   
+
+   .. method:: Burn addBurn(double ut, double prograde, double normal, double radial)
+
+      Plan a burn, and add it to the vehicle's burn plan.
+
+      :param double ut: Universal time of the burn, in seconds.
+      :param double prograde: Change in velocity in the prograde direction, in meters per second.
+      :param double normal: Change in velocity along the orbit normal, in meters per second.
+      :param double radial: Change in velocity radially outward, in meters per second.
+      :returns: The burn.
+   
+
+      .. note::
+
+         Returns once the flight computer has timed the burn, if it is the next one. Throws
+         an exception if the time is in the past, or beyond the vehicle's predicted
+         trajectory.
+
+   .. method:: Orbit getOrbit()
+
+
+      The current orbit of the vehicle.
+
+   
+
+   .. method:: Flight getFlight()
+
+
+      Flight telemetry for the vehicle, relative to the surface of the body it orbits.
+
+      :Game Scenes: Flight
+
+   .. method:: Control getControl()
+
+
+      The controls of the vehicle.
+
+      :Game Scenes: Flight
+
+   .. method:: AutoPilot getAutoPilot()
+
+
+      The auto-pilot of the vehicle.
+
+      :Game Scenes: Flight
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+
+      The reference frame fixed to the vehicle, with its origin at the vehicle's position.
+      The x axis points forward, the y axis to the right and the z axis down, relative to
+      the vehicle's control point.
+
+   
+
+   .. method:: ReferenceFrame getSurfaceReferenceFrame()
+
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      the surface below it. The x axis points east, the y axis north and the z axis up.
+      The frame rotates with the body.
+
+   
+
+   .. method:: ReferenceFrame getOrbitalReferenceFrame()
+
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      its orbit. The x axis points prograde, the y axis along the orbit normal and the z
+      axis radially outward, perpendicular to the x axis.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
+
+      The position of the vehicle, in meters.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the position.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> velocity(ReferenceFrame referenceFrame)
+
+      The velocity of the vehicle, in meters per second.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the velocity.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> direction(ReferenceFrame referenceFrame)
+
+      The unit vector in which the vehicle points, the x axis of
+      :meth:`Vehicle.getReferenceFrame()`.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the direction.
+   
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
+
+      The rotation of :meth:`Vehicle.getReferenceFrame()` relative to the given frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the rotation.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> angularVelocity(ReferenceFrame referenceFrame)
+
+      The angular velocity of the vehicle, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the angular velocity.
+   
+
+
+
+.. type:: public enum Situation
+
+   The situation of a vehicle: its contact with the surface, and whether the game is
+   simulating it with physics or propagating it along its orbit.
+   See :meth:`Vehicle.getSituation()`.
+
+
+   .. field:: public Situation MANEUVERING
+
+      No surface contact, simulated with physics.
+
+
+   .. field:: public Situation FREEFALL
+
+      No surface contact, on rails.
+
+
+   .. field:: public Situation ROLLING
+
+      On terrain, simulated with physics.
+
+
+   .. field:: public Situation LANDED
+
+      At rest on terrain.
+
+
+   .. field:: public Situation SAILING
+
+      In the ocean, simulated with physics.
+
+
+   .. field:: public Situation FLOATING
+
+      At rest in the ocean.
+
+
+   .. field:: public Situation DRAGGING
+
+      On terrain and in the ocean, simulated with physics.
+
+
+   .. field:: public Situation BOTTOMED
+
+      At rest on terrain and in the ocean.

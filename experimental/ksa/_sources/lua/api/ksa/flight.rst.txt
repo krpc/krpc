@@ -1,0 +1,161 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KSA
+
+Flight
+======
+
+
+.. class:: Flight
+
+   Flight telemetry for a vehicle, relative to the surface of the body it orbits.
+   Obtained from :attr:`KSA.Vehicle.flight`.
+
+   .. attribute:: mean_altitude: number
+
+      The altitude above the mean radius of the body, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: surface_altitude: number
+
+      The altitude above the terrain or the ocean surface, whichever is higher, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: bedrock_altitude: number
+
+      The altitude above the terrain, in meters. Over the sea, this is the altitude above
+      the sea floor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: elevation: number
+
+      The height of the terrain below the vehicle, in meters above the mean radius of the
+      body. Below the sea, this is the height of the sea floor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: time_to_impact: number
+
+      The time until the vehicle hits the surface on its current trajectory, in seconds.
+      Not a number if its trajectory does not hit the surface.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note::
+
+         The game predicts the trajectory on a worker thread, so a change to it shows here
+         shortly after.
+
+   .. attribute:: latitude: number
+
+      The latitude of the vehicle, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: longitude: number
+
+      The longitude of the vehicle, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: speed: number
+
+      The speed of the vehicle relative to the surface, in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: horizontal_speed: number
+
+      The horizontal speed of the vehicle relative to the surface, in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: vertical_speed: number
+
+      The vertical speed of the vehicle relative to the surface, in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: pitch: number
+
+      The pitch of the vehicle relative to the horizon, in degrees.
+      A value between -90° and +90°.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: heading: number
+
+      The heading of the vehicle (its angle relative to north), in degrees.
+      A value between 0° and 360°.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: roll: number
+
+      The roll of the vehicle relative to the horizon, in degrees.
+      A value between -180° and +180°.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: static_pressure: number
+
+      The static atmospheric pressure at the vehicle, in pascals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: atmosphere_density: number
+
+      The density of the atmosphere at the vehicle, in kilograms per cubic meter.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: dynamic_pressure: number
+
+      The dynamic pressure acting on the vehicle, in pascals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: g_force: number
+
+      The acceleration of the vehicle, excluding gravity, in multiples of standard
+      gravity.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: angle_of_attack: number
+
+      The angle between the direction the vehicle points in and its velocity relative to
+      the surface, in the vehicle's pitch plane, in degrees. Positive when the nose is
+      above the velocity.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: sideslip_angle: number
+
+      The angle between the direction the vehicle points in and its velocity relative to
+      the surface, in the vehicle's yaw plane, in degrees. Positive when the nose is to
+      the right of the velocity.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number

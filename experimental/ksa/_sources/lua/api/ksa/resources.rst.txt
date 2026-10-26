@@ -1,0 +1,33 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KSA
+
+Resources
+=========
+
+
+.. class:: Resource
+
+   A substance held in tanks, such as a propellant, in a part or across a whole vehicle.
+   Obtained from :attr:`KSA.Part.resources` or :attr:`KSA.Vehicle.resources`.
+
+   .. attribute:: name: string
+
+      The name of the substance.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string
+
+   .. attribute:: amount: number
+
+      The mass of the substance held, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: max: number
+
+      The mass of the substance the tanks can hold, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number

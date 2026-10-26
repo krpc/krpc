@@ -1,0 +1,226 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Auto-Pilot
+==========
+
+
+.. type:: krpc_KSA_AutoPilot_t
+
+   The vehicle's flight computer, which steers the vehicle with its reaction control
+   thrusters and engine gimbals. Obtained from :func:`krpc_KSA_Vehicle_AutoPilot`.
+
+   .. note::
+
+      The auto-pilot points the vehicle in the direction set by :func:`krpc_KSA_AutoPilot_Mode`, once
+      engaged. It is the game's own flight computer, so the game's flight computer
+      controls change the same settings.
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_Engage(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance)
+
+      Engage the auto-pilot.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_Disengage(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance)
+
+      Disengage the auto-pilot.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_Engaged(krpc_connection_t connection, bool * returnValue, krpc_KSA_AutoPilot_t instance)
+
+      Whether the auto-pilot is engaged.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The same setting as :func:`krpc_KSA_Control_Stabilization`.
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_Mode(krpc_connection_t connection, krpc_KSA_AutoPilotMode_t * returnValue, krpc_KSA_AutoPilot_t instance)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_set_Mode(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, krpc_KSA_AutoPilotMode_t value)
+
+      The direction the auto-pilot points the vehicle in.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting :macro:`KRPC_KSA_AUTOPILOTMODE_ATTITUDE` targets the vehicle's current pitch,
+         heading and roll. Setting :macro:`KRPC_KSA_AUTOPILOTMODE_OTHER` throws an exception.
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetPitch(krpc_connection_t connection, double * returnValue, krpc_KSA_AutoPilot_t instance)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_set_TargetPitch(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, double value)
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it sets :func:`krpc_KSA_AutoPilot_Mode` to :macro:`KRPC_KSA_AUTOPILOTMODE_ATTITUDE`.
+         Returns NaN in any other mode.
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetHeading(krpc_connection_t connection, double * returnValue, krpc_KSA_AutoPilot_t instance)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_set_TargetHeading(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, double value)
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it sets :func:`krpc_KSA_AutoPilot_Mode` to :macro:`KRPC_KSA_AUTOPILOTMODE_ATTITUDE`.
+         Returns NaN in any other mode.
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetRoll(krpc_connection_t connection, double * returnValue, krpc_KSA_AutoPilot_t instance)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_set_TargetRoll(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, double value)
+
+      The target roll, in degrees. NaN when the auto-pilot does not control roll.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting a number sets :func:`krpc_KSA_AutoPilot_Mode` to :macro:`KRPC_KSA_AUTOPILOTMODE_ATTITUDE`.
+         Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
+         :macro:`KRPC_KSA_AUTOPILOTMODE_ATTITUDE`.
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetPitchAndHeading(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, double pitch, double heading)
+
+      Set the target pitch and heading, and the mode to
+      :macro:`KRPC_KSA_AUTOPILOTMODE_ATTITUDE`.
+
+      :Parameters:
+
+       * **pitch** -- Target pitch, in degrees, between -90° and +90°.
+       * **heading** -- Target heading, in degrees, between 0° and 360°.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetDirection(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, const krpc_tuple_double_double_double_t * direction, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      Point the vehicle in a direction, and set the mode to
+      :macro:`KRPC_KSA_AUTOPILOTMODE_ATTITUDE`. Sets :func:`krpc_KSA_AutoPilot_TargetPitch` and
+      :func:`krpc_KSA_AutoPilot_TargetHeading` to the direction at the time of the call, so the target
+      stays fixed relative to the surface.
+
+      :Parameters:
+
+       * **direction** -- The direction to point in.
+       * **referenceFrame** -- The reference frame of the direction.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_Error(krpc_connection_t connection, double * returnValue, krpc_KSA_AutoPilot_t instance)
+
+      The angle between the direction the vehicle points in and the target direction,
+      in degrees. NaN when the auto-pilot is not engaged.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_RollError(krpc_connection_t connection, double * returnValue, krpc_KSA_AutoPilot_t instance)
+
+      The angle between the vehicle's roll and the target roll, in degrees.
+      NaN when the auto-pilot is not engaged.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_Wait(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance)
+
+      Wait until the vehicle points in the target direction, and has the target roll
+      if it has one. Returns when the errors are within twice the flight computer's
+      angle deadband, which defaults to 1°.
+      Throws an exception if the auto-pilot is not engaged.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_AutoBurn(krpc_connection_t connection, bool * returnValue, krpc_KSA_AutoPilot_t instance)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_set_AutoBurn(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, bool value)
+
+      Whether the flight computer executes the next burn in
+      :func:`krpc_KSA_Vehicle_Burns`. It points the vehicle along the burn, fires the
+      engines at :func:`krpc_KSA_Burn_IgnitionTime`, and stops once the burn is complete.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The flight computer clears it when the burn completes, and removes the burn if
+         another follows it. The engines fire only at normal speed, so warp to shortly before
+         the burn with :func:`krpc_KSA_WarpTo`. Setting it with no burn planned throws an
+         exception.
+
+
+
+.. type:: krpc_KSA_AutoPilotMode_t
+
+   The direction the auto-pilot points the vehicle in.
+   See :func:`krpc_KSA_AutoPilot_Mode`.
+
+
+   .. macro:: KRPC_KSA_AUTOPILOTMODE_ATTITUDE
+
+      The pitch, heading and roll set by :func:`krpc_KSA_AutoPilot_TargetPitch`,
+      :func:`krpc_KSA_AutoPilot_TargetHeading` and :func:`krpc_KSA_AutoPilot_TargetRoll`.
+
+
+   .. macro:: KRPC_KSA_AUTOPILOTMODE_HOLD
+
+      Holds the vehicle's rotation at zero, relative to the stars.
+
+
+   .. macro:: KRPC_KSA_AUTOPILOTMODE_PROGRADE
+
+      The direction of the vehicle's orbital velocity.
+
+
+   .. macro:: KRPC_KSA_AUTOPILOTMODE_RETROGRADE
+
+      The opposite of :macro:`KRPC_KSA_AUTOPILOTMODE_PROGRADE`.
+
+
+   .. macro:: KRPC_KSA_AUTOPILOTMODE_NORMAL
+
+      Normal to the orbital plane, along the orbit's angular momentum.
+
+
+   .. macro:: KRPC_KSA_AUTOPILOTMODE_ANTINORMAL
+
+      The opposite of :macro:`KRPC_KSA_AUTOPILOTMODE_NORMAL`.
+
+
+   .. macro:: KRPC_KSA_AUTOPILOTMODE_RADIALOUT
+
+      Away from the center of the body being orbited.
+
+
+   .. macro:: KRPC_KSA_AUTOPILOTMODE_RADIALIN
+
+      Toward the center of the body being orbited.
+
+
+   .. macro:: KRPC_KSA_AUTOPILOTMODE_SURFACEPROGRADE
+
+      The direction of the vehicle's velocity relative to the surface.
+
+
+   .. macro:: KRPC_KSA_AUTOPILOTMODE_SURFACERETROGRADE
+
+      The opposite of :macro:`KRPC_KSA_AUTOPILOTMODE_SURFACEPROGRADE`.
+
+
+   .. macro:: KRPC_KSA_AUTOPILOTMODE_OTHER
+
+      A target set in the game, which the API does not cover.

@@ -1,0 +1,298 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Vehicle
+=======
+
+
+.. class:: Vehicle
+
+   A vehicle in the current system. Obtained from :prop:`KSA.ActiveVehicle <KSA.KSA.ActiveVehicle>`
+   or :prop:`KSA.Vehicles <KSA.KSA.Vehicles>`.
+
+   .. note::
+
+      Docking and undocking replace the vehicles involved, so an object for one of them
+      throws an exception afterwards.
+
+   .. property:: string Name { get; set; }
+
+      The name of the vehicle, which is unique in the system.
+
+      :Game Scenes: All
+
+   .. property:: Situation Situation { get; }
+
+      The situation of the vehicle.
+
+      :Game Scenes: All
+
+   .. property:: bool HasLaunched { get; }
+
+      Whether the vehicle has launched.
+
+      :Game Scenes: All
+
+   .. property:: double LaunchTime { get; }
+
+      The universal time the vehicle was created, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float Mass { get; }
+
+      The total mass of the vehicle, including propellant, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: float PropellantMass { get; }
+
+      The mass of the propellant in the vehicle, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: double Thrust { get; }
+
+      The thrust of the engines at their current throttle and the current atmospheric
+      pressure, in Newtons.
+
+      :Game Scenes: All
+
+   .. property:: float AvailableThrust { get; }
+
+      The thrust of the active engines that have propellant, at full throttle and the
+      current atmospheric pressure, in Newtons.
+
+      :Game Scenes: All
+
+   .. property:: double SpecificImpulse { get; }
+
+      The combined specific impulse of the active engines that have propellant, at the
+      current atmospheric pressure, in seconds. Zero when no engine is active.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Part> Parts { get; }
+
+      The vehicle's parts.
+
+      :Game Scenes: All
+
+   .. property:: Part RootPart { get; }
+
+      The vehicle's root part, which the other parts are attached to.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Resource> Resources { get; }
+
+      The resources the vehicle holds, one for each substance, totaled over its parts.
+
+      :Game Scenes: All
+
+   .. property:: float DeltaV { get; }
+
+      The change in velocity of all the vehicle's sequences, in meters per second.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Sequence> Sequences { get; }
+
+      The vehicle's sequences, in activation order.
+
+      :Game Scenes: All
+
+   .. property:: Vehicle TargetVehicle { get; set; }
+
+      The vehicle targeted by this vehicle, or ``null``. Setting it replaces the
+      target, and ``null`` clears it.
+
+      :Game Scenes: All
+
+   .. property:: Body TargetBody { get; set; }
+
+      The body targeted by this vehicle, or ``null``. Setting it replaces the target,
+      and ``null`` clears it.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Setting a body that orbits nothing, such as the star, throws an exception.
+
+   .. property:: System.Collections.Generic.IList<Burn> Burns { get; }
+
+      The vehicle's planned burns, in time order.
+
+      :Game Scenes: All
+
+   .. function:: Burn AddBurn(double ut, double prograde = 0.0, double normal = 0.0, double radial = 0.0)
+
+      Plan a burn, and add it to the vehicle's burn plan.
+
+      :parameters:
+
+       * **ut** -- Universal time of the burn, in seconds.
+       * **prograde** -- Change in velocity in the prograde direction, in meters per second.
+       * **normal** -- Change in velocity along the orbit normal, in meters per second.
+       * **radial** -- Change in velocity radially outward, in meters per second.
+
+      :returns: The burn.
+      :Game Scenes: All
+
+
+      .. note::
+
+         Returns once the flight computer has timed the burn, if it is the next one. Throws
+         an exception if the time is in the past, or beyond the vehicle's predicted
+         trajectory.
+
+   .. property:: Orbit Orbit { get; }
+
+      The current orbit of the vehicle.
+
+      :Game Scenes: All
+
+   .. property:: Flight Flight { get; }
+
+      Flight telemetry for the vehicle, relative to the surface of the body it orbits.
+
+      :Game Scenes: Flight
+
+   .. property:: Control Control { get; }
+
+      The controls of the vehicle.
+
+      :Game Scenes: Flight
+
+   .. property:: AutoPilot AutoPilot { get; }
+
+      The auto-pilot of the vehicle.
+
+      :Game Scenes: Flight
+
+   .. property:: ReferenceFrame ReferenceFrame { get; }
+
+      The reference frame fixed to the vehicle, with its origin at the vehicle's position.
+      The x axis points forward, the y axis to the right and the z axis down, relative to
+      the vehicle's control point.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame SurfaceReferenceFrame { get; }
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      the surface below it. The x axis points east, the y axis north and the z axis up.
+      The frame rotates with the body.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame OrbitalReferenceFrame { get; }
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      its orbit. The x axis points prograde, the y axis along the orbit normal and the z
+      axis radially outward, perpendicular to the x axis.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+
+      The position of the vehicle, in meters.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the position.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+
+      The velocity of the vehicle, in meters per second.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the velocity.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
+
+      The unit vector in which the vehicle points, the x axis of
+      :prop:`Vehicle.ReferenceFrame`.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the direction.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+
+      The rotation of :prop:`Vehicle.ReferenceFrame` relative to the given frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the rotation.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> AngularVelocity(ReferenceFrame referenceFrame)
+
+      The angular velocity of the vehicle, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the angular velocity.
+
+      :Game Scenes: All
+
+
+
+.. enum:: Situation
+
+   The situation of a vehicle: its contact with the surface, and whether the game is
+   simulating it with physics or propagating it along its orbit.
+   See :prop:`Vehicle.Situation`.
+
+
+   .. enumerator:: Maneuvering
+
+      No surface contact, simulated with physics.
+
+
+   .. enumerator:: Freefall
+
+      No surface contact, on rails.
+
+
+   .. enumerator:: Rolling
+
+      On terrain, simulated with physics.
+
+
+   .. enumerator:: Landed
+
+      At rest on terrain.
+
+
+   .. enumerator:: Sailing
+
+      In the ocean, simulated with physics.
+
+
+   .. enumerator:: Floating
+
+      At rest in the ocean.
+
+
+   .. enumerator:: Dragging
+
+      On terrain and in the ocean, simulated with physics.
+
+
+   .. enumerator:: Bottomed
+
+      At rest on terrain and in the ocean.

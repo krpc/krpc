@@ -1,0 +1,67 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Control
+=======
+
+
+.. class:: Control
+
+   The controls of a vehicle: engines, stabilization and sequences.
+   Obtained from :prop:`Vehicle.Control`.
+
+   .. property:: float Throttle { get; set; }
+
+      The manual throttle. A value between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises a value below the vehicle's minimum throttle to the minimum.
+         The engines fire only while :prop:`Control.EngineOn` is set.
+
+   .. property:: bool EngineOn { get; set; }
+
+      Whether the engines are ignited.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Stabilization { get; set; }
+
+      Whether the flight computer is controlling the vehicle's attitude.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it to ``true`` holds the current attitude.
+
+   .. property:: bool RCS { get; set; }
+
+      Whether the flight computer may use the reaction control thrusters for attitude
+      control.
+
+      :Game Scenes: Flight
+
+   .. property:: int ActiveSequence { get; }
+
+      The number of the most recently activated sequence.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Collections.Generic.IList<Vehicle> ActivateNextSequence()
+
+      Activates the next sequence, as the staging key does.
+
+
+      :returns: The vehicles that separated from this one.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vehicle is not the :prop:`KSA.ActiveVehicle <KSA.KSA.ActiveVehicle>`.

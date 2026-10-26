@@ -1,0 +1,135 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+KSA
+===
+
+
+.. class:: KSA
+
+   Provides functionality to interact with Kitten Space Agency.
+
+   .. property:: Vehicle ActiveVehicle { get; set; }
+
+      The vehicle under the player's control.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Setting it moves the camera to the vehicle, as the switch vehicle key does.
+
+   .. property:: System.Collections.Generic.IList<Vehicle> Vehicles { get; }
+
+      The vehicles in the current system, excluding kittens on EVA.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IDictionary<string,Body> Bodies { get; }
+
+      The planets, moons and stars in the current system, keyed by name.
+
+      :Game Scenes: All
+
+   .. property:: double UT { get; }
+
+      The universal time, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double SimulationSpeed { get; set; }
+
+      The simulation speed, as a multiple of real time. Zero when paused.
+
+      :Game Scenes: All
+
+   .. function:: void WarpTo(double ut)
+
+      Warp to the given universal time, and return once the warp has finished.
+      The game slows the warp down to normal speed toward the end.
+
+      :parameters:
+
+       * **ut** -- The universal time to warp to, in seconds.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Does nothing when the time is in the past. Returns early if the game stops the
+         warp, for example when its menu pauses the game.
+
+   .. function:: Vehicle LaunchVehicle(string name, string site)
+
+      Launch a vehicle from a launch site, and make it the active vehicle. Returns once
+      the vehicle is on the launch site.
+
+      :parameters:
+
+       * **name** -- The name of the vehicle, one of the game's default vehicles or a vehicle saved by the player.
+       * **site** -- The name of the launch site. See :prop:`Body.LaunchSites`.
+
+      :returns: The vehicle. Its name is the vehicle's name, with a number appended if another vehicle has that name.
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if there is no such vehicle or launch site.
+
+   .. function:: System.Tuple<double,double,double> TransformPosition(System.Tuple<double,double,double> position, ReferenceFrame from, ReferenceFrame to)
+
+      Convert a position from one reference frame to another.
+
+      :parameters:
+
+       * **position** -- Position, in meters, in the frame *from*.
+       * **from** -- The reference frame the position is in.
+       * **to** -- The reference frame to convert the position to.
+
+      :returns: The position in the frame *to*.
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> TransformDirection(System.Tuple<double,double,double> direction, ReferenceFrame from, ReferenceFrame to)
+
+      Convert a direction from one reference frame to another.
+
+      :parameters:
+
+       * **direction** -- Direction in the frame *from*.
+       * **from** -- The reference frame the direction is in.
+       * **to** -- The reference frame to convert the direction to.
+
+      :returns: The direction in the frame *to*.
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double,double> TransformRotation(System.Tuple<double,double,double,double> rotation, ReferenceFrame from, ReferenceFrame to)
+
+      Convert a rotation from one reference frame to another.
+
+      :parameters:
+
+       * **rotation** -- Rotation in the frame *from*.
+       * **from** -- The reference frame the rotation is in.
+       * **to** -- The reference frame to convert the rotation to.
+
+      :returns: The rotation in the frame *to*.
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> TransformVelocity(System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, ReferenceFrame from, ReferenceFrame to)
+
+      Convert a velocity from one reference frame to another. The velocity of a point
+      depends on its position in a rotating frame, so the position is also needed.
+
+      :parameters:
+
+       * **position** -- Position, in meters, in the frame *from*.
+       * **velocity** -- Velocity, in meters per second, in the frame *from*.
+       * **from** -- The reference frame the position and velocity are in.
+       * **to** -- The reference frame to convert the velocity to.
+
+      :returns: The velocity in the frame *to*.
+      :Game Scenes: All

@@ -1,0 +1,365 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Parts
+=====
+
+
+.. class:: Part
+
+   A part of a vehicle. Obtained from :prop:`Vehicle.Parts`.
+
+   .. note::
+
+      A part keeps its object when the vehicle it belongs to changes, for example when a
+      decoupler separates it. Throws an exception once the part no longer exists.
+
+   .. property:: string Name { get; }
+
+      The id of the part's template.
+
+      :Game Scenes: All
+
+   .. property:: string Title { get; }
+
+      The name of the part, as shown in the game.
+
+      :Game Scenes: All
+
+   .. property:: Vehicle Vehicle { get; }
+
+      The vehicle the part belongs to.
+
+      :Game Scenes: All
+
+   .. property:: Part Parent { get; }
+
+      The part this part is attached to, or ``null`` for the root part.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Part> Children { get; }
+
+      The parts attached to this part.
+
+      :Game Scenes: All
+
+   .. property:: int Sequence { get; }
+
+      The number of the sequence that activates the part, or -1 if no sequence does.
+
+      :Game Scenes: All
+
+   .. property:: double Mass { get; }
+
+      The mass of the part, including its propellant, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: double DryMass { get; }
+
+      The mass of the part without its propellant, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Resource> Resources { get; }
+
+      The resources the part holds, one for each substance.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+
+      The position of the part's origin, in meters.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the position.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+
+      The rotation of the part's axes, relative to the given frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the rotation.
+
+      :Game Scenes: All
+
+   .. property:: Engine Engine { get; }
+
+      The part's engine, or ``null`` if it has none.
+
+      :Game Scenes: All
+
+   .. property:: RCS RCS { get; }
+
+      The part's RCS thrusters, or ``null`` if it has none.
+
+      :Game Scenes: All
+
+   .. property:: Decoupler Decoupler { get; }
+
+      The part's decoupler, or ``null`` if it has none.
+
+      :Game Scenes: All
+
+   .. property:: Parachute Parachute { get; }
+
+      The part's parachute, or ``null`` if it has none.
+
+      :Game Scenes: All
+
+   .. property:: DockingPort DockingPort { get; }
+
+      The part's docking port, or ``null`` if it has none.
+
+      :Game Scenes: All
+
+
+
+.. class:: Engine
+
+   An engine. Obtained from :prop:`Part.Engine`.
+
+   .. note::
+
+      An active engine fires when the vehicle's engines are on, at the vehicle's throttle.
+      See :prop:`Control.EngineOn` and :prop:`Control.Throttle`.
+
+   .. property:: Part Part { get; }
+
+      The part the engine is in.
+
+      :Game Scenes: All
+
+   .. property:: bool Active { get; set; }
+
+      Whether the engine is active, as when its sequence is activated. Setting it returns
+      once the change has applied.
+
+      :Game Scenes: All
+
+   .. property:: bool HasPropellant { get; }
+
+      Whether the engine has propellant to burn.
+
+      :Game Scenes: All
+
+   .. property:: double Thrust { get; }
+
+      The thrust of the engine at its current throttle and the current atmospheric
+      pressure, in Newtons. Zero when it is not firing.
+
+      :Game Scenes: All
+
+   .. property:: double AvailableThrust { get; }
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+      :Game Scenes: All
+
+   .. property:: double SpecificImpulse { get; }
+
+      The specific impulse of the engine at the current atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+      :Game Scenes: All
+
+
+
+.. class:: RCS
+
+   The RCS thrusters of a part. Obtained from :prop:`Part.RCS`.
+
+   .. note::
+
+      Active thrusters fire when the vehicle's RCS is on. See :prop:`Control.RCS`.
+
+   .. property:: Part Part { get; }
+
+      The part the thrusters are in.
+
+      :Game Scenes: All
+
+   .. property:: bool Active { get; set; }
+
+      Whether the thrusters are active. Setting it returns once the change has applied.
+
+      :Game Scenes: All
+
+
+
+.. class:: Decoupler
+
+   A decoupler. Obtained from :prop:`Part.Decoupler`.
+
+   .. property:: Part Part { get; }
+
+      The part the decoupler is in.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; }
+
+      Whether the decoupler can fire.
+
+      :Game Scenes: All
+
+   .. property:: bool Decoupled { get; }
+
+      Whether the decoupler has fired, or is attached to nothing.
+
+      :Game Scenes: All
+
+   .. function:: void Decouple()
+
+      Fire the decoupler, separating the vehicle into two. Returns once it has fired.
+      Throws an exception if the decoupler is disabled or :prop:`Decoupler.Decoupled`.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Parachute
+
+   A parachute. Obtained from :prop:`Part.Parachute`.
+
+   .. property:: Part Part { get; }
+
+      The part the parachute is in.
+
+      :Game Scenes: All
+
+   .. property:: ParachuteState State { get; }
+
+      The state of the parachute.
+
+      :Game Scenes: All
+
+   .. property:: float Fill { get; }
+
+      How far the canopy is open, from 0 to 1.
+
+      :Game Scenes: All
+
+   .. property:: float DeployAltitude { get; }
+
+      The height above the terrain at which an armed parachute deploys, in meters.
+
+      :Game Scenes: All
+
+   .. property:: bool CanCut { get; }
+
+      Whether the parachute can be cut away. Main parachutes cannot.
+
+      :Game Scenes: All
+
+   .. function:: void Deploy()
+
+      Arm the parachute, so that it deploys at :prop:`Parachute.DeployAltitude`. Returns once
+      it is armed. Throws an exception if it is not stowed.
+
+
+      :Game Scenes: All
+
+   .. function:: void Cut()
+
+      Cut the parachute away. Returns once it is cut. Throws an exception if it cannot
+      be cut. See :prop:`Parachute.CanCut`.
+
+
+      :Game Scenes: All
+
+
+
+.. enum:: ParachuteState
+
+   The state of a parachute. See :prop:`Parachute.State`.
+
+
+   .. enumerator:: Stowed
+
+      Packed away.
+
+
+   .. enumerator:: Armed
+
+      Waiting to deploy at :prop:`Parachute.DeployAltitude`.
+
+
+   .. enumerator:: LineStretch
+
+      Leaving the pack.
+
+
+   .. enumerator:: Reefed
+
+      Partly open, to limit the opening load.
+
+
+   .. enumerator:: Disreefing
+
+      Opening from reefed to full.
+
+
+   .. enumerator:: Full
+
+      Fully open.
+
+
+   .. enumerator:: Cut
+
+      Cut away.
+
+
+   .. enumerator:: Ripped
+
+      Torn by too much dynamic pressure.
+
+
+   .. enumerator:: SeveredLines
+
+      Lost after its lines broke under too much load.
+
+
+
+.. class:: DockingPort
+
+   A docking port. Obtained from :prop:`Part.DockingPort`.
+
+   .. property:: Part Part { get; }
+
+      The part the docking port is in.
+
+      :Game Scenes: All
+
+   .. property:: bool Docked { get; }
+
+      Whether the port is docked.
+
+      :Game Scenes: All
+
+   .. property:: Part DockedPart { get; }
+
+      The part the port is docked to, or ``null`` if it is not docked.
+
+      :Game Scenes: All
+
+   .. function:: void Undock()
+
+      Undock the port, separating the vehicle into two. Returns once it has undocked.
+      Throws an exception if the port is not docked.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Docking and undocking replace the vehicles involved. See :type:`Vehicle`.

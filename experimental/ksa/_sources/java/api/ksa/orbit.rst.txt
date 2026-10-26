@@ -1,0 +1,256 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Orbit
+=====
+
+
+.. type:: public class Orbit
+
+   An orbit. Obtained from :meth:`Vehicle.getOrbit()`, :meth:`Body.getOrbit()`,
+   :meth:`Burn.getOrbit()` or :meth:`Orbit.getNextOrbit()`.
+
+   .. note::
+
+      A vehicle's orbit follows the vehicle as its trajectory changes. A predicted orbit, from
+      :meth:`Orbit.getNextOrbit()` or :meth:`Burn.getOrbit()`, is the prediction at the time it
+      was obtained.
+
+   .. method:: Body getBody()
+
+
+      The body being orbited.
+
+   
+
+   .. method:: double getApoapsis()
+
+
+      The apoapsis of the orbit, in meters, from the center of the body being orbited.
+      Not a number for a parabolic or hyperbolic orbit.
+
+   
+
+   .. method:: double getPeriapsis()
+
+
+      The periapsis of the orbit, in meters, from the center of the body being orbited.
+
+   
+
+   .. method:: double getApoapsisAltitude()
+
+
+      The apoapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+   
+
+   .. method:: double getPeriapsisAltitude()
+
+
+      The periapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+   
+
+   .. method:: double getSemiMajorAxis()
+
+
+      The semi-major axis of the orbit, in meters. Negative for a hyperbolic orbit.
+
+   
+
+   .. method:: double getSpeed()
+
+
+      The current orbital speed, in meters per second.
+
+   
+
+   .. method:: double getRadius()
+
+
+      The current distance from the center of the body being orbited, in meters.
+
+   
+
+   .. method:: double getPeriod()
+
+
+      The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+   
+
+   .. method:: double getTimeToApoapsis()
+
+
+      The time until the next apoapsis, in seconds. Not a number for a parabolic or
+      hyperbolic orbit.
+
+   
+
+   .. method:: double getTimeToPeriapsis()
+
+
+      The time until the next periapsis, in seconds. Negative once a parabolic or
+      hyperbolic orbit has passed it.
+
+   
+
+   .. method:: double getEccentricity()
+
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+   
+
+   .. method:: double getInclination()
+
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit, in radians, against the equator of the body being orbited.
+
+   
+
+   .. method:: double getLongitudeOfAscendingNode()
+
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+   
+
+   .. method:: double getArgumentOfPeriapsis()
+
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+   
+
+   .. method:: double getTrueAnomaly()
+
+
+      The current `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_,
+      in radians.
+
+   
+
+   .. method:: double getMeanAnomaly()
+
+
+      The current `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_,
+      in radians.
+
+   
+
+   .. method:: double trueAnomalyAtUT(double ut)
+
+      The true anomaly at the given time, in radians.
+
+      :param double ut: Universal time, in seconds.
+   
+
+   .. method:: double uTAtTrueAnomaly(double trueAnomaly)
+
+      The next universal time, from now, at which the orbit reaches the given true
+      anomaly, in seconds. Not a number if it never does, such as beyond the asymptote of
+      a hyperbolic orbit.
+
+      :param double trueAnomaly: True anomaly, in radians.
+   
+
+   .. method:: double radiusAt(double ut)
+
+      The distance from the center of the body being orbited at the given time, in
+      meters.
+
+      :param double ut: Universal time, in seconds.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> positionAt(double ut, ReferenceFrame referenceFrame)
+
+      The position on the orbit at the given time, in meters, relative to where the body
+      being orbited is now.
+
+      :param double ut: Universal time, in seconds.
+      :param ReferenceFrame referenceFrame: The reference frame of the position.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> velocityAt(double ut, ReferenceFrame referenceFrame)
+
+      The orbital velocity at the given time, in meters per second, relative to the body
+      being orbited and along the axes of the given frame.
+
+      :param double ut: Universal time, in seconds.
+      :param ReferenceFrame referenceFrame: The reference frame of the velocity.
+   
+
+   .. method:: double getStartUT()
+
+
+      The universal time at which this orbit starts, in seconds. Not a number for the
+      orbit of a body.
+
+   
+
+   .. method:: double getEndUT()
+
+
+      The universal time at which this orbit ends, in seconds. Infinite for an orbit that
+      does not end, such as the orbit of a body.
+
+   
+
+   .. method:: OrbitTransition getEndTransition()
+
+
+      How the orbit ends.
+
+   
+
+   .. method:: double getTimeToSOIChange()
+
+
+      The time until the orbit enters or leaves a sphere of influence, in seconds. Not a
+      number if it does neither.
+
+   
+
+   .. method:: Orbit getNextOrbit()
+
+
+      The orbit that follows this one after it enters or leaves a sphere of influence, or
+      ``null`` if there is none.
+
+   
+
+
+
+.. type:: public enum OrbitTransition
+
+   How an orbit ends. See :meth:`Orbit.getEndTransition()`.
+
+
+   .. field:: public OrbitTransition NONE
+
+      The orbit does not end.
+
+
+   .. field:: public OrbitTransition ENCOUNTER
+
+      The orbit enters the sphere of influence of another body.
+
+
+   .. field:: public OrbitTransition ESCAPE
+
+      The orbit leaves the sphere of influence of the body being orbited.
+
+
+   .. field:: public OrbitTransition IMPACT
+
+      The orbit hits the surface of the body being orbited.
+
+
+   .. field:: public OrbitTransition BURN
+
+      The orbit ends at a planned burn.

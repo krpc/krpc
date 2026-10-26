@@ -1,0 +1,138 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+KSA
+===
+
+
+.. namespace:: krpc::services
+.. class:: KSA : public krpc::Service
+
+   Provides functionality to interact with Kitten Space Agency.
+
+   .. function:: KSA(krpc::Client* client)
+
+      Construct an instance of this service.
+
+   .. function:: std::optional<Vehicle> active_vehicle()
+   .. function:: void set_active_vehicle(std::optional<Vehicle> value)
+
+      The vehicle under the player's control.
+
+   
+
+      .. note::
+
+         Setting it moves the camera to the vehicle, as the switch vehicle key does.
+
+   .. function:: std::vector<Vehicle> vehicles()
+
+      The vehicles in the current system, excluding kittens on EVA.
+
+   
+
+   .. function:: std::map<std::string, Body> bodies()
+
+      The planets, moons and stars in the current system, keyed by name.
+
+   
+
+   .. function:: double ut()
+
+      The universal time, in seconds.
+
+   
+
+   .. function:: double simulation_speed()
+   .. function:: void set_simulation_speed(double value)
+
+      The simulation speed, as a multiple of real time. Zero when paused.
+
+   
+
+   .. function:: void warp_to(double ut)
+
+      Warp to the given universal time, and return once the warp has finished.
+      The game slows the warp down to normal speed toward the end.
+
+      :Parameters:
+
+       * **ut** -- The universal time to warp to, in seconds.
+
+   
+
+      .. note::
+
+         Does nothing when the time is in the past. Returns early if the game stops the
+         warp, for example when its menu pauses the game.
+
+   .. function:: Vehicle launch_vehicle(std::string name, std::string site)
+
+      Launch a vehicle from a launch site, and make it the active vehicle. Returns once
+      the vehicle is on the launch site.
+
+      :Parameters:
+
+       * **name** -- The name of the vehicle, one of the game's default vehicles or a vehicle saved by the player.
+       * **site** -- The name of the launch site. See :func:`Body::launch_sites`.
+
+      :returns: The vehicle. Its name is the vehicle's name, with a number appended if another vehicle has that name.
+   
+
+      .. note::
+
+         Throws an exception if there is no such vehicle or launch site.
+
+   .. function:: std::tuple<double, double, double> transform_position(std::tuple<double, double, double> position, ReferenceFrame from, ReferenceFrame to)
+
+      Convert a position from one reference frame to another.
+
+      :Parameters:
+
+       * **position** -- Position, in meters, in the frame *from*.
+       * **from** -- The reference frame the position is in.
+       * **to** -- The reference frame to convert the position to.
+
+      :returns: The position in the frame *to*.
+   
+
+   .. function:: std::tuple<double, double, double> transform_direction(std::tuple<double, double, double> direction, ReferenceFrame from, ReferenceFrame to)
+
+      Convert a direction from one reference frame to another.
+
+      :Parameters:
+
+       * **direction** -- Direction in the frame *from*.
+       * **from** -- The reference frame the direction is in.
+       * **to** -- The reference frame to convert the direction to.
+
+      :returns: The direction in the frame *to*.
+   
+
+   .. function:: std::tuple<double, double, double, double> transform_rotation(std::tuple<double, double, double, double> rotation, ReferenceFrame from, ReferenceFrame to)
+
+      Convert a rotation from one reference frame to another.
+
+      :Parameters:
+
+       * **rotation** -- Rotation in the frame *from*.
+       * **from** -- The reference frame the rotation is in.
+       * **to** -- The reference frame to convert the rotation to.
+
+      :returns: The rotation in the frame *to*.
+   
+
+   .. function:: std::tuple<double, double, double> transform_velocity(std::tuple<double, double, double> position, std::tuple<double, double, double> velocity, ReferenceFrame from, ReferenceFrame to)
+
+      Convert a velocity from one reference frame to another. The velocity of a point
+      depends on its position in a rotating frame, so the position is also needed.
+
+      :Parameters:
+
+       * **position** -- Position, in meters, in the frame *from*.
+       * **velocity** -- Velocity, in meters per second, in the frame *from*.
+       * **from** -- The reference frame the position and velocity are in.
+       * **to** -- The reference frame to convert the velocity to.
+
+      :returns: The velocity in the frame *to*.

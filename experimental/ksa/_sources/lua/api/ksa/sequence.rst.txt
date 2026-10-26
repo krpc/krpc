@@ -1,0 +1,82 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KSA
+
+Sequence
+========
+
+
+.. class:: Sequence
+
+   A sequence of a vehicle, the group of parts activated together, and its predicted
+   performance. Obtained from :attr:`KSA.Vehicle.sequences`.
+
+   .. note::
+
+      The performance is the game's prediction at the current atmospheric pressure. It
+      assumes the sequences activate in order, each once the one before has burned its
+      propellant.
+
+   .. attribute:: number: number
+
+      The number of the sequence, as shown in the game.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: activated: boolean
+
+      Whether the sequence has been activated.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: delta_v: number
+
+      The change in velocity the sequence provides, in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: thrust: number
+
+      The thrust of the sequence's engines at full throttle, in Newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: specific_impulse: number
+
+      The combined specific impulse of the sequence's engines, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: burn_time: number
+
+      The time the sequence's engines take to burn its propellant at full throttle,
+      in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: start_mass: number
+
+      The mass of the vehicle when the sequence starts to burn, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: end_mass: number
+
+      The mass of the vehicle once the sequence has burned its propellant, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: propellant_mass: number
+
+      The mass of propellant the sequence burns, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number

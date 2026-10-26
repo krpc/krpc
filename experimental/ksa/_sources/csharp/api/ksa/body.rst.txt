@@ -1,0 +1,192 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Body
+====
+
+
+.. class:: Body
+
+   A planet, moon or star. See :prop:`KSA.Bodies <KSA.KSA.Bodies>`.
+
+   .. property:: string Name { get; }
+
+      The name of the body.
+
+      :Game Scenes: All
+
+   .. property:: double Mass { get; }
+
+      The mass of the body, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: double GravitationalParameter { get; }
+
+      The standard gravitational parameter of the body, in cubic meters per second squared.
+
+      :Game Scenes: All
+
+   .. property:: double Radius { get; }
+
+      The radius of the body, in meters.
+
+      :Game Scenes: All
+
+   .. property:: double AtmosphereRadius { get; }
+
+      The radius of the top of the atmosphere, in meters. Zero for a body with no
+      atmosphere.
+
+      :Game Scenes: All
+
+   .. property:: double SurfaceGravity { get; }
+
+      The acceleration due to gravity at the body's mean radius, in meters per second
+      squared.
+
+      :Game Scenes: All
+
+   .. property:: double RotationalSpeed { get; }
+
+      The rate at which the body rotates about its axis, in radians per second.
+
+      :Game Scenes: All
+
+   .. property:: double RotationalPeriod { get; }
+
+      The time the body takes to rotate once about its axis, relative to the stars, in
+      seconds. Infinite for a body that does not rotate.
+
+      :Game Scenes: All
+
+   .. property:: double SphereOfInfluence { get; }
+
+      The radius of the body's sphere of influence, in meters. Not a number for a body
+      that orbits nothing.
+
+      :Game Scenes: All
+
+   .. property:: Body Parent { get; }
+
+      The body this body orbits, or ``null`` if it orbits nothing.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Body> Satellites { get; }
+
+      The bodies that orbit this body.
+
+      :Game Scenes: All
+
+   .. property:: Orbit Orbit { get; }
+
+      The orbit of the body, or ``null`` if it orbits nothing.
+
+      :Game Scenes: All
+
+   .. function:: double SurfaceHeight(double latitude, double longitude)
+
+      The height of the terrain or the sea surface, whichever is higher, at a point on
+      the body, in meters above the body's mean radius.
+
+      :parameters:
+
+       * **latitude** -- Latitude, in degrees.
+       * **longitude** -- Longitude, in degrees.
+
+      :Game Scenes: All
+
+   .. function:: double BedrockHeight(double latitude, double longitude)
+
+      The height of the terrain at a point on the body, in meters above the body's mean
+      radius. Below the sea, this is the height of the sea floor.
+
+      :parameters:
+
+       * **latitude** -- Latitude, in degrees.
+       * **longitude** -- Longitude, in degrees.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Zero for a body with no terrain, such as a gas giant.
+
+   .. property:: System.Collections.Generic.IList<string> LaunchSites { get; }
+
+      The names of the launch sites on the body. See :meth:`KSA.LaunchVehicle <KSA.KSA.LaunchVehicle>`.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; }
+
+      The reference frame fixed to the body, with its origin at the body's center. The
+      z axis points to the north pole, the x axis to latitude and longitude zero, and the
+      y axis to latitude zero and longitude 90 degrees east. The frame rotates with the
+      body.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame NonRotatingReferenceFrame { get; }
+
+      The reference frame with its origin at the body's center that does not rotate. The
+      z axis points to the north pole, and the x and y axes are fixed relative to the
+      stars.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+
+      The position of the center of the body, in meters.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the position.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+
+      The velocity of the body, in meters per second.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the velocity.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+
+      The rotation of :prop:`Body.ReferenceFrame` relative to the given frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the rotation.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> AngularVelocity(ReferenceFrame referenceFrame)
+
+      The angular velocity of the body, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the angular velocity.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> SurfacePosition(double latitude, double longitude, ReferenceFrame referenceFrame)
+
+      The position of a point on the surface, at the body's mean radius, in meters.
+
+      :parameters:
+
+       * **latitude** -- Latitude, in degrees.
+       * **longitude** -- Longitude, in degrees.
+       * **referenceFrame** -- The reference frame of the position.
+
+      :Game Scenes: All

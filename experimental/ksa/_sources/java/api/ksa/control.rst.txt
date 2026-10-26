@@ -1,0 +1,75 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Control
+=======
+
+
+.. type:: public class Control
+
+   The controls of a vehicle: engines, stabilization and sequences.
+   Obtained from :meth:`Vehicle.getControl()`.
+
+   .. method:: float getThrottle()
+
+   .. method:: void setThrottle(float value)
+
+      The manual throttle. A value between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises a value below the vehicle's minimum throttle to the minimum.
+         The engines fire only while :meth:`Control.getEngineOn()` is set.
+
+   .. method:: boolean getEngineOn()
+
+   .. method:: void setEngineOn(boolean value)
+
+      Whether the engines are ignited.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getStabilization()
+
+   .. method:: void setStabilization(boolean value)
+
+      Whether the flight computer is controlling the vehicle's attitude.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it to ``true`` holds the current attitude.
+
+   .. method:: boolean getRCS()
+
+   .. method:: void setRCS(boolean value)
+
+      Whether the flight computer may use the reaction control thrusters for attitude
+      control.
+
+      :Game Scenes: Flight
+
+   .. method:: int getActiveSequence()
+
+
+      The number of the most recently activated sequence.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<Vehicle> activateNextSequence()
+
+      Activates the next sequence, as the staging key does.
+
+      :returns: The vehicles that separated from this one.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vehicle is not the :meth:`getActiveVehicle()`.

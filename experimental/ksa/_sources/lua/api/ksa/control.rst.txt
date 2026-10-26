@@ -1,0 +1,68 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KSA
+
+Control
+=======
+
+
+.. class:: Control
+
+   The controls of a vehicle: engines, stabilization and sequences.
+   Obtained from :attr:`KSA.Vehicle.control`.
+
+   .. attribute:: throttle: number
+
+      The manual throttle. A value between 0 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         The game raises a value below the vehicle's minimum throttle to the minimum.
+         The engines fire only while :attr:`KSA.Control.engine_on` is set.
+
+   .. attribute:: engine_on: boolean
+
+      Whether the engines are ignited.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: stabilization: boolean
+
+      Whether the flight computer is controlling the vehicle's attitude.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+      .. note::
+
+         Setting it to ``True`` holds the current attitude.
+
+   .. attribute:: rcs: boolean
+
+      Whether the flight computer may use the reaction control thrusters for attitude
+      control.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: active_sequence: number
+
+      The number of the most recently activated sequence.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. method:: activate_next_sequence()
+
+      Activates the next sequence, as the staging key does.
+
+      :returns: The vehicles that separated from this one.
+      :rtype: List
+
+      .. note::
+
+         Throws an exception if the vehicle is not the :attr:`KSA.active_vehicle <KSA.KSA.active_vehicle>`.

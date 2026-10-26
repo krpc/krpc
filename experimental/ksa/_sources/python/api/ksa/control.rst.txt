@@ -1,0 +1,77 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KSA
+
+Control
+=======
+
+
+.. class:: Control
+
+   The controls of a vehicle: engines, stabilization and sequences.
+   Obtained from :attr:`Vehicle.control`.
+
+   .. attribute:: throttle
+
+      The manual throttle. A value between 0 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises a value below the vehicle's minimum throttle to the minimum.
+         The engines fire only while :attr:`Control.engine_on` is set.
+
+   .. attribute:: engine_on
+
+      Whether the engines are ignited.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: stabilization
+
+      Whether the flight computer is controlling the vehicle's attitude.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it to ``True`` holds the current attitude.
+
+   .. attribute:: rcs
+
+      Whether the flight computer may use the reaction control thrusters for attitude
+      control.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: active_sequence
+
+      The number of the most recently activated sequence.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. method:: activate_next_sequence()
+
+      Activates the next sequence, as the staging key does.
+
+      :returns: The vehicles that separated from this one.
+      :rtype: list(:class:`Vehicle`)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vehicle is not the :attr:`active_vehicle`.

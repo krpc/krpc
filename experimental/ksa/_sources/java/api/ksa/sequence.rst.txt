@@ -1,0 +1,80 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Sequence
+========
+
+
+.. type:: public class Sequence
+
+   A sequence of a vehicle, the group of parts activated together, and its predicted
+   performance. Obtained from :meth:`Vehicle.getSequences()`.
+
+   .. note::
+
+      The performance is the game's prediction at the current atmospheric pressure. It
+      assumes the sequences activate in order, each once the one before has burned its
+      propellant.
+
+   .. method:: int getNumber()
+
+
+      The number of the sequence, as shown in the game.
+
+   
+
+   .. method:: boolean getActivated()
+
+
+      Whether the sequence has been activated.
+
+   
+
+   .. method:: float getDeltaV()
+
+
+      The change in velocity the sequence provides, in meters per second.
+
+   
+
+   .. method:: float getThrust()
+
+
+      The thrust of the sequence's engines at full throttle, in Newtons.
+
+   
+
+   .. method:: float getSpecificImpulse()
+
+
+      The combined specific impulse of the sequence's engines, in seconds.
+
+   
+
+   .. method:: float getBurnTime()
+
+
+      The time the sequence's engines take to burn its propellant at full throttle,
+      in seconds.
+
+   
+
+   .. method:: float getStartMass()
+
+
+      The mass of the vehicle when the sequence starts to burn, in kilograms.
+
+   
+
+   .. method:: float getEndMass()
+
+
+      The mass of the vehicle once the sequence has burned its propellant, in kilograms.
+
+   
+
+   .. method:: float getPropellantMass()
+
+
+      The mass of propellant the sequence burns, in kilograms.

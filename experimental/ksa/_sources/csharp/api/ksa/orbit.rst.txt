@@ -1,0 +1,249 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Orbit
+=====
+
+
+.. class:: Orbit
+
+   An orbit. Obtained from :prop:`Vehicle.Orbit`, :prop:`Body.Orbit`,
+   :prop:`Burn.Orbit` or :prop:`Orbit.NextOrbit`.
+
+   .. note::
+
+      A vehicle's orbit follows the vehicle as its trajectory changes. A predicted orbit, from
+      :prop:`Orbit.NextOrbit` or :prop:`Burn.Orbit`, is the prediction at the time it
+      was obtained.
+
+   .. property:: Body Body { get; }
+
+      The body being orbited.
+
+      :Game Scenes: All
+
+   .. property:: double Apoapsis { get; }
+
+      The apoapsis of the orbit, in meters, from the center of the body being orbited.
+      Not a number for a parabolic or hyperbolic orbit.
+
+      :Game Scenes: All
+
+   .. property:: double Periapsis { get; }
+
+      The periapsis of the orbit, in meters, from the center of the body being orbited.
+
+      :Game Scenes: All
+
+   .. property:: double ApoapsisAltitude { get; }
+
+      The apoapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+      :Game Scenes: All
+
+   .. property:: double PeriapsisAltitude { get; }
+
+      The periapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+      :Game Scenes: All
+
+   .. property:: double SemiMajorAxis { get; }
+
+      The semi-major axis of the orbit, in meters. Negative for a hyperbolic orbit.
+
+      :Game Scenes: All
+
+   .. property:: double Speed { get; }
+
+      The current orbital speed, in meters per second.
+
+      :Game Scenes: All
+
+   .. property:: double Radius { get; }
+
+      The current distance from the center of the body being orbited, in meters.
+
+      :Game Scenes: All
+
+   .. property:: double Period { get; }
+
+      The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+      :Game Scenes: All
+
+   .. property:: double TimeToApoapsis { get; }
+
+      The time until the next apoapsis, in seconds. Not a number for a parabolic or
+      hyperbolic orbit.
+
+      :Game Scenes: All
+
+   .. property:: double TimeToPeriapsis { get; }
+
+      The time until the next periapsis, in seconds. Negative once a parabolic or
+      hyperbolic orbit has passed it.
+
+      :Game Scenes: All
+
+   .. property:: double Eccentricity { get; }
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+      :Game Scenes: All
+
+   .. property:: double Inclination { get; }
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit, in radians, against the equator of the body being orbited.
+
+      :Game Scenes: All
+
+   .. property:: double LongitudeOfAscendingNode { get; }
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+      :Game Scenes: All
+
+   .. property:: double ArgumentOfPeriapsis { get; }
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+      :Game Scenes: All
+
+   .. property:: double TrueAnomaly { get; }
+
+      The current `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_,
+      in radians.
+
+      :Game Scenes: All
+
+   .. property:: double MeanAnomaly { get; }
+
+      The current `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_,
+      in radians.
+
+      :Game Scenes: All
+
+   .. function:: double TrueAnomalyAtUT(double ut)
+
+      The true anomaly at the given time, in radians.
+
+      :parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+      :Game Scenes: All
+
+   .. function:: double UTAtTrueAnomaly(double trueAnomaly)
+
+      The next universal time, from now, at which the orbit reaches the given true
+      anomaly, in seconds. Not a number if it never does, such as beyond the asymptote of
+      a hyperbolic orbit.
+
+      :parameters:
+
+       * **trueAnomaly** -- True anomaly, in radians.
+
+      :Game Scenes: All
+
+   .. function:: double RadiusAt(double ut)
+
+      The distance from the center of the body being orbited at the given time, in
+      meters.
+
+      :parameters:
+
+       * **ut** -- Universal time, in seconds.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> PositionAt(double ut, ReferenceFrame referenceFrame)
+
+      The position on the orbit at the given time, in meters, relative to where the body
+      being orbited is now.
+
+      :parameters:
+
+       * **ut** -- Universal time, in seconds.
+       * **referenceFrame** -- The reference frame of the position.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> VelocityAt(double ut, ReferenceFrame referenceFrame)
+
+      The orbital velocity at the given time, in meters per second, relative to the body
+      being orbited and along the axes of the given frame.
+
+      :parameters:
+
+       * **ut** -- Universal time, in seconds.
+       * **referenceFrame** -- The reference frame of the velocity.
+
+      :Game Scenes: All
+
+   .. property:: double StartUT { get; }
+
+      The universal time at which this orbit starts, in seconds. Not a number for the
+      orbit of a body.
+
+      :Game Scenes: All
+
+   .. property:: double EndUT { get; }
+
+      The universal time at which this orbit ends, in seconds. Infinite for an orbit that
+      does not end, such as the orbit of a body.
+
+      :Game Scenes: All
+
+   .. property:: OrbitTransition EndTransition { get; }
+
+      How the orbit ends.
+
+      :Game Scenes: All
+
+   .. property:: double TimeToSOIChange { get; }
+
+      The time until the orbit enters or leaves a sphere of influence, in seconds. Not a
+      number if it does neither.
+
+      :Game Scenes: All
+
+   .. property:: Orbit NextOrbit { get; }
+
+      The orbit that follows this one after it enters or leaves a sphere of influence, or
+      ``null`` if there is none.
+
+      :Game Scenes: All
+
+
+
+.. enum:: OrbitTransition
+
+   How an orbit ends. See :prop:`Orbit.EndTransition`.
+
+
+   .. enumerator:: None
+
+      The orbit does not end.
+
+
+   .. enumerator:: Encounter
+
+      The orbit enters the sphere of influence of another body.
+
+
+   .. enumerator:: Escape
+
+      The orbit leaves the sphere of influence of the body being orbited.
+
+
+   .. enumerator:: Impact
+
+      The orbit hits the surface of the body being orbited.
+
+
+   .. enumerator:: Burn
+
+      The orbit ends at a planned burn.

@@ -1,0 +1,367 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Parts
+=====
+
+
+.. class:: Part
+
+   A part of a vehicle. Obtained from :func:`Vehicle::parts`.
+
+   .. note::
+
+      A part keeps its object when the vehicle it belongs to changes, for example when a
+      decoupler separates it. Throws an exception once the part no longer exists.
+
+   .. function:: std::string name()
+
+      The id of the part's template.
+
+   
+
+   .. function:: std::string title()
+
+      The name of the part, as shown in the game.
+
+   
+
+   .. function:: Vehicle vehicle()
+
+      The vehicle the part belongs to.
+
+   
+
+   .. function:: std::optional<Part> parent()
+
+      The part this part is attached to, or ``NULL`` for the root part.
+
+   
+
+   .. function:: std::vector<Part> children()
+
+      The parts attached to this part.
+
+   
+
+   .. function:: int32_t sequence()
+
+      The number of the sequence that activates the part, or -1 if no sequence does.
+
+   
+
+   .. function:: double mass()
+
+      The mass of the part, including its propellant, in kilograms.
+
+   
+
+   .. function:: double dry_mass()
+
+      The mass of the part without its propellant, in kilograms.
+
+   
+
+   .. function:: std::vector<Resource> resources()
+
+      The resources the part holds, one for each substance.
+
+   
+
+   .. function:: std::tuple<double, double, double> position(ReferenceFrame reference_frame)
+
+      The position of the part's origin, in meters.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the position.
+
+   
+
+   .. function:: std::tuple<double, double, double, double> rotation(ReferenceFrame reference_frame)
+
+      The rotation of the part's axes, relative to the given frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the rotation.
+
+   
+
+   .. function:: std::optional<Engine> engine()
+
+      The part's engine, or ``NULL`` if it has none.
+
+   
+
+   .. function:: std::optional<RCS> rcs()
+
+      The part's RCS thrusters, or ``NULL`` if it has none.
+
+   
+
+   .. function:: std::optional<Decoupler> decoupler()
+
+      The part's decoupler, or ``NULL`` if it has none.
+
+   
+
+   .. function:: std::optional<Parachute> parachute()
+
+      The part's parachute, or ``NULL`` if it has none.
+
+   
+
+   .. function:: std::optional<DockingPort> docking_port()
+
+      The part's docking port, or ``NULL`` if it has none.
+
+   
+
+
+
+.. class:: Engine
+
+   An engine. Obtained from :func:`Part::engine`.
+
+   .. note::
+
+      An active engine fires when the vehicle's engines are on, at the vehicle's throttle.
+      See :func:`Control::engine_on` and :func:`Control::throttle`.
+
+   .. function:: Part part()
+
+      The part the engine is in.
+
+   
+
+   .. function:: bool active()
+   .. function:: void set_active(bool value)
+
+      Whether the engine is active, as when its sequence is activated. Setting it returns
+      once the change has applied.
+
+   
+
+   .. function:: bool has_propellant()
+
+      Whether the engine has propellant to burn.
+
+   
+
+   .. function:: double thrust()
+
+      The thrust of the engine at its current throttle and the current atmospheric
+      pressure, in Newtons. Zero when it is not firing.
+
+   
+
+   .. function:: double available_thrust()
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+   
+
+   .. function:: double specific_impulse()
+
+      The specific impulse of the engine at the current atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+   
+
+
+
+.. class:: RCS
+
+   The RCS thrusters of a part. Obtained from :func:`Part::rcs`.
+
+   .. note::
+
+      Active thrusters fire when the vehicle's RCS is on. See :func:`Control::rcs`.
+
+   .. function:: Part part()
+
+      The part the thrusters are in.
+
+   
+
+   .. function:: bool active()
+   .. function:: void set_active(bool value)
+
+      Whether the thrusters are active. Setting it returns once the change has applied.
+
+   
+
+
+
+.. class:: Decoupler
+
+   A decoupler. Obtained from :func:`Part::decoupler`.
+
+   .. function:: Part part()
+
+      The part the decoupler is in.
+
+   
+
+   .. function:: bool enabled()
+
+      Whether the decoupler can fire.
+
+   
+
+   .. function:: bool decoupled()
+
+      Whether the decoupler has fired, or is attached to nothing.
+
+   
+
+   .. function:: void decouple()
+
+      Fire the decoupler, separating the vehicle into two. Returns once it has fired.
+      Throws an exception if the decoupler is disabled or :func:`Decoupler::decoupled`.
+
+
+   
+
+
+
+.. class:: Parachute
+
+   A parachute. Obtained from :func:`Part::parachute`.
+
+   .. function:: Part part()
+
+      The part the parachute is in.
+
+   
+
+   .. function:: ParachuteState state()
+
+      The state of the parachute.
+
+   
+
+   .. function:: float fill()
+
+      How far the canopy is open, from 0 to 1.
+
+   
+
+   .. function:: float deploy_altitude()
+
+      The height above the terrain at which an armed parachute deploys, in meters.
+
+   
+
+   .. function:: bool can_cut()
+
+      Whether the parachute can be cut away. Main parachutes cannot.
+
+   
+
+   .. function:: void deploy()
+
+      Arm the parachute, so that it deploys at :func:`Parachute::deploy_altitude`. Returns once
+      it is armed. Throws an exception if it is not stowed.
+
+
+   
+
+   .. function:: void cut()
+
+      Cut the parachute away. Returns once it is cut. Throws an exception if it cannot
+      be cut. See :func:`Parachute::can_cut`.
+
+
+   
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: ParachuteState
+
+   The state of a parachute. See :func:`Parachute::state`.
+
+
+   .. enumerator:: stowed
+
+      Packed away.
+
+
+   .. enumerator:: armed
+
+      Waiting to deploy at :func:`Parachute::deploy_altitude`.
+
+
+   .. enumerator:: line_stretch
+
+      Leaving the pack.
+
+
+   .. enumerator:: reefed
+
+      Partly open, to limit the opening load.
+
+
+   .. enumerator:: disreefing
+
+      Opening from reefed to full.
+
+
+   .. enumerator:: full
+
+      Fully open.
+
+
+   .. enumerator:: cut
+
+      Cut away.
+
+
+   .. enumerator:: ripped
+
+      Torn by too much dynamic pressure.
+
+
+   .. enumerator:: severed_lines
+
+      Lost after its lines broke under too much load.
+
+
+
+.. class:: DockingPort
+
+   A docking port. Obtained from :func:`Part::docking_port`.
+
+   .. function:: Part part()
+
+      The part the docking port is in.
+
+   
+
+   .. function:: bool docked()
+
+      Whether the port is docked.
+
+   
+
+   .. function:: std::optional<Part> docked_part()
+
+      The part the port is docked to, or ``NULL`` if it is not docked.
+
+   
+
+   .. function:: void undock()
+
+      Undock the port, separating the vehicle into two. Returns once it has undocked.
+      Throws an exception if the port is not docked.
+
+
+   
+
+      .. note::
+
+         Docking and undocking replace the vehicles involved. See :class:`Vehicle`.

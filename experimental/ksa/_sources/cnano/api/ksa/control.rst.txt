@@ -1,0 +1,71 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Control
+=======
+
+
+.. type:: krpc_KSA_Control_t
+
+   The controls of a vehicle: engines, stabilization and sequences.
+   Obtained from :func:`krpc_KSA_Vehicle_Control`.
+
+   .. function:: krpc_error_t krpc_KSA_Control_Throttle(krpc_connection_t connection, float * returnValue, krpc_KSA_Control_t instance)
+   .. function:: krpc_error_t krpc_KSA_Control_set_Throttle(krpc_connection_t connection, krpc_KSA_Control_t instance, float value)
+
+      The manual throttle. A value between 0 and 1.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The game raises a value below the vehicle's minimum throttle to the minimum.
+         The engines fire only while :func:`krpc_KSA_Control_EngineOn` is set.
+
+   .. function:: krpc_error_t krpc_KSA_Control_EngineOn(krpc_connection_t connection, bool * returnValue, krpc_KSA_Control_t instance)
+   .. function:: krpc_error_t krpc_KSA_Control_set_EngineOn(krpc_connection_t connection, krpc_KSA_Control_t instance, bool value)
+
+      Whether the engines are ignited.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Control_Stabilization(krpc_connection_t connection, bool * returnValue, krpc_KSA_Control_t instance)
+   .. function:: krpc_error_t krpc_KSA_Control_set_Stabilization(krpc_connection_t connection, krpc_KSA_Control_t instance, bool value)
+
+      Whether the flight computer is controlling the vehicle's attitude.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting it to ``true`` holds the current attitude.
+
+   .. function:: krpc_error_t krpc_KSA_Control_RCS(krpc_connection_t connection, bool * returnValue, krpc_KSA_Control_t instance)
+   .. function:: krpc_error_t krpc_KSA_Control_set_RCS(krpc_connection_t connection, krpc_KSA_Control_t instance, bool value)
+
+      Whether the flight computer may use the reaction control thrusters for attitude
+      control.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Control_ActiveSequence(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Control_t instance)
+
+      The number of the most recently activated sequence.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Control_ActivateNextSequence(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Control_t instance)
+
+      Activates the next sequence, as the staging key does.
+
+
+      :returns: The vehicles that separated from this one.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vehicle is not the :func:`krpc_KSA_ActiveVehicle`.

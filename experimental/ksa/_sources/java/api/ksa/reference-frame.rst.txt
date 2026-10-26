@@ -1,0 +1,19 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Reference Frame
+===============
+
+
+.. type:: public class ReferenceFrame
+
+   A reference frame, in which positions, directions, rotations and velocities are given.
+   Obtained from the reference frame properties of :type:`Vehicle` and
+   :type:`Body`.
+
+   .. note::
+
+      Every reference frame is right-handed. Positions are in meters, velocities in meters
+      per second, and angular velocities in radians per second. A rotation is a quaternion
+      ``(x, y, z, w)``.

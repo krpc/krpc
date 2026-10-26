@@ -1,0 +1,283 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KSA
+
+Orbit
+=====
+
+
+.. class:: Orbit
+
+   An orbit. Obtained from :attr:`Vehicle.orbit`, :attr:`Body.orbit`,
+   :attr:`Burn.orbit` or :attr:`Orbit.next_orbit`.
+
+   .. note::
+
+      A vehicle's orbit follows the vehicle as its trajectory changes. A predicted orbit, from
+      :attr:`Orbit.next_orbit` or :attr:`Burn.orbit`, is the prediction at the time it
+      was obtained.
+
+   .. attribute:: body
+
+      The body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Body`
+   
+
+   .. attribute:: apoapsis
+
+      The apoapsis of the orbit, in meters, from the center of the body being orbited.
+      Not a number for a parabolic or hyperbolic orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: periapsis
+
+      The periapsis of the orbit, in meters, from the center of the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: apoapsis_altitude
+
+      The apoapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: periapsis_altitude
+
+      The periapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: semi_major_axis
+
+      The semi-major axis of the orbit, in meters. Negative for a hyperbolic orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: speed
+
+      The current orbital speed, in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: radius
+
+      The current distance from the center of the body being orbited, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: period
+
+      The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: time_to_apoapsis
+
+      The time until the next apoapsis, in seconds. Not a number for a parabolic or
+      hyperbolic orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: time_to_periapsis
+
+      The time until the next periapsis, in seconds. Negative once a parabolic or
+      hyperbolic orbit has passed it.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: eccentricity
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: inclination
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit, in radians, against the equator of the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: longitude_of_ascending_node
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: argument_of_periapsis
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: true_anomaly
+
+      The current `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_,
+      in radians.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: mean_anomaly
+
+      The current `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_,
+      in radians.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. method:: true_anomaly_at_ut(ut)
+
+      The true anomaly at the given time, in radians.
+
+      :param float ut: Universal time, in seconds.
+      :rtype: float
+   
+
+   .. method:: ut_at_true_anomaly(true_anomaly)
+
+      The next universal time, from now, at which the orbit reaches the given true
+      anomaly, in seconds. Not a number if it never does, such as beyond the asymptote of
+      a hyperbolic orbit.
+
+      :param float true_anomaly: True anomaly, in radians.
+      :rtype: float
+   
+
+   .. method:: radius_at(ut)
+
+      The distance from the center of the body being orbited at the given time, in
+      meters.
+
+      :param float ut: Universal time, in seconds.
+      :rtype: float
+   
+
+   .. method:: position_at(ut, reference_frame)
+
+      The position on the orbit at the given time, in meters, relative to where the body
+      being orbited is now.
+
+      :param float ut: Universal time, in seconds.
+      :param ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: velocity_at(ut, reference_frame)
+
+      The orbital velocity at the given time, in meters per second, relative to the body
+      being orbited and along the axes of the given frame.
+
+      :param float ut: Universal time, in seconds.
+      :param ReferenceFrame reference_frame: The reference frame of the velocity.
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: start_ut
+
+      The universal time at which this orbit starts, in seconds. Not a number for the
+      orbit of a body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: end_ut
+
+      The universal time at which this orbit ends, in seconds. Infinite for an orbit that
+      does not end, such as the orbit of a body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: end_transition
+
+      How the orbit ends.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`OrbitTransition`
+   
+
+   .. attribute:: time_to_soi_change
+
+      The time until the orbit enters or leaves a sphere of influence, in seconds. Not a
+      number if it does neither.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: next_orbit
+
+      The orbit that follows this one after it enters or leaves a sphere of influence, or
+      ``None`` if there is none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Orbit` or None
+   
+
+
+
+.. class:: OrbitTransition
+
+   How an orbit ends. See :attr:`Orbit.end_transition`.
+
+
+   .. data:: none
+
+      The orbit does not end.
+
+
+   .. data:: encounter
+
+      The orbit enters the sphere of influence of another body.
+
+
+   .. data:: escape
+
+      The orbit leaves the sphere of influence of the body being orbited.
+
+
+   .. data:: impact
+
+      The orbit hits the surface of the body being orbited.
+
+
+   .. data:: burn
+
+      The orbit ends at a planned burn.

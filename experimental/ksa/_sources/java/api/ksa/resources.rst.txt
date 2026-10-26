@@ -1,0 +1,31 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Resources
+=========
+
+
+.. type:: public class Resource
+
+   A substance held in tanks, such as a propellant, in a part or across a whole vehicle.
+   Obtained from :meth:`Part.getResources()` or :meth:`Vehicle.getResources()`.
+
+   .. method:: String getName()
+
+
+      The name of the substance.
+
+   
+
+   .. method:: double getAmount()
+
+
+      The mass of the substance held, in kilograms.
+
+   
+
+   .. method:: double getMax()
+
+
+      The mass of the substance the tanks can hold, in kilograms.

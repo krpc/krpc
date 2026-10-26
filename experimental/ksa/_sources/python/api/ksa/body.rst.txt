@@ -1,0 +1,206 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KSA
+
+Body
+====
+
+
+.. class:: Body
+
+   A planet, moon or star. See :attr:`bodies`.
+
+   .. attribute:: name
+
+      The name of the body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: mass
+
+      The mass of the body, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: gravitational_parameter
+
+      The standard gravitational parameter of the body, in cubic meters per second squared.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: radius
+
+      The radius of the body, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: atmosphere_radius
+
+      The radius of the top of the atmosphere, in meters. Zero for a body with no
+      atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: surface_gravity
+
+      The acceleration due to gravity at the body's mean radius, in meters per second
+      squared.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: rotational_speed
+
+      The rate at which the body rotates about its axis, in radians per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: rotational_period
+
+      The time the body takes to rotate once about its axis, relative to the stars, in
+      seconds. Infinite for a body that does not rotate.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: sphere_of_influence
+
+      The radius of the body's sphere of influence, in meters. Not a number for a body
+      that orbits nothing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: parent
+
+      The body this body orbits, or ``None`` if it orbits nothing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Body` or None
+   
+
+   .. attribute:: satellites
+
+      The bodies that orbit this body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Body`)
+   
+
+   .. attribute:: orbit
+
+      The orbit of the body, or ``None`` if it orbits nothing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Orbit` or None
+   
+
+   .. method:: surface_height(latitude, longitude)
+
+      The height of the terrain or the sea surface, whichever is higher, at a point on
+      the body, in meters above the body's mean radius.
+
+      :param float latitude: Latitude, in degrees.
+      :param float longitude: Longitude, in degrees.
+      :rtype: float
+   
+
+   .. method:: bedrock_height(latitude, longitude)
+
+      The height of the terrain at a point on the body, in meters above the body's mean
+      radius. Below the sea, this is the height of the sea floor.
+
+      :param float latitude: Latitude, in degrees.
+      :param float longitude: Longitude, in degrees.
+      :rtype: float
+   
+
+      .. note::
+
+         Zero for a body with no terrain, such as a gas giant.
+
+   .. attribute:: launch_sites
+
+      The names of the launch sites on the body. See :meth:`launch_vehicle`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+   
+
+   .. attribute:: reference_frame
+
+      The reference frame fixed to the body, with its origin at the body's center. The
+      z axis points to the north pole, the x axis to latitude and longitude zero, and the
+      y axis to latitude zero and longitude 90 degrees east. The frame rotates with the
+      body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ReferenceFrame`
+   
+
+   .. attribute:: non_rotating_reference_frame
+
+      The reference frame with its origin at the body's center that does not rotate. The
+      z axis points to the north pole, and the x and y axes are fixed relative to the
+      stars.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ReferenceFrame`
+   
+
+   .. method:: position(reference_frame)
+
+      The position of the center of the body, in meters.
+
+      :param ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: velocity(reference_frame)
+
+      The velocity of the body, in meters per second.
+
+      :param ReferenceFrame reference_frame: The reference frame of the velocity.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: rotation(reference_frame)
+
+      The rotation of :attr:`Body.reference_frame` relative to the given frame.
+
+      :param ReferenceFrame reference_frame: The reference frame of the rotation.
+      :rtype: tuple(float, float, float, float)
+   
+
+   .. method:: angular_velocity(reference_frame)
+
+      The angular velocity of the body, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :param ReferenceFrame reference_frame: The reference frame of the angular velocity.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: surface_position(latitude, longitude, reference_frame)
+
+      The position of a point on the surface, at the body's mean radius, in meters.
+
+      :param float latitude: Latitude, in degrees.
+      :param float longitude: Longitude, in degrees.
+      :param ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: tuple(float, float, float)

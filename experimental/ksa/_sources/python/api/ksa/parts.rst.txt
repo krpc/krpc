@@ -1,0 +1,422 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KSA
+
+Parts
+=====
+
+
+.. class:: Part
+
+   A part of a vehicle. Obtained from :attr:`Vehicle.parts`.
+
+   .. note::
+
+      A part keeps its object when the vehicle it belongs to changes, for example when a
+      decoupler separates it. Throws an exception once the part no longer exists.
+
+   .. attribute:: name
+
+      The id of the part's template.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: title
+
+      The name of the part, as shown in the game.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: vehicle
+
+      The vehicle the part belongs to.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Vehicle`
+   
+
+   .. attribute:: parent
+
+      The part this part is attached to, or ``None`` for the root part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part` or None
+   
+
+   .. attribute:: children
+
+      The parts attached to this part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Part`)
+   
+
+   .. attribute:: sequence
+
+      The number of the sequence that activates the part, or -1 if no sequence does.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: mass
+
+      The mass of the part, including its propellant, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: dry_mass
+
+      The mass of the part without its propellant, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: resources
+
+      The resources the part holds, one for each substance.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Resource`)
+   
+
+   .. method:: position(reference_frame)
+
+      The position of the part's origin, in meters.
+
+      :param ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: rotation(reference_frame)
+
+      The rotation of the part's axes, relative to the given frame.
+
+      :param ReferenceFrame reference_frame: The reference frame of the rotation.
+      :rtype: tuple(float, float, float, float)
+   
+
+   .. attribute:: engine
+
+      The part's engine, or ``None`` if it has none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Engine` or None
+   
+
+   .. attribute:: rcs
+
+      The part's RCS thrusters, or ``None`` if it has none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`RCS` or None
+   
+
+   .. attribute:: decoupler
+
+      The part's decoupler, or ``None`` if it has none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Decoupler` or None
+   
+
+   .. attribute:: parachute
+
+      The part's parachute, or ``None`` if it has none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Parachute` or None
+   
+
+   .. attribute:: docking_port
+
+      The part's docking port, or ``None`` if it has none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`DockingPort` or None
+   
+
+
+
+.. class:: Engine
+
+   An engine. Obtained from :attr:`Part.engine`.
+
+   .. note::
+
+      An active engine fires when the vehicle's engines are on, at the vehicle's throttle.
+      See :attr:`Control.engine_on` and :attr:`Control.throttle`.
+
+   .. attribute:: part
+
+      The part the engine is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: active
+
+      Whether the engine is active, as when its sequence is activated. Setting it returns
+      once the change has applied.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: has_propellant
+
+      Whether the engine has propellant to burn.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: thrust
+
+      The thrust of the engine at its current throttle and the current atmospheric
+      pressure, in Newtons. Zero when it is not firing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: available_thrust
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: specific_impulse
+
+      The specific impulse of the engine at the current atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: RCS
+
+   The RCS thrusters of a part. Obtained from :attr:`Part.rcs`.
+
+   .. note::
+
+      Active thrusters fire when the vehicle's RCS is on. See :attr:`Control.rcs`.
+
+   .. attribute:: part
+
+      The part the thrusters are in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: active
+
+      Whether the thrusters are active. Setting it returns once the change has applied.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+
+
+.. class:: Decoupler
+
+   A decoupler. Obtained from :attr:`Part.decoupler`.
+
+   .. attribute:: part
+
+      The part the decoupler is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: enabled
+
+      Whether the decoupler can fire.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: decoupled
+
+      Whether the decoupler has fired, or is attached to nothing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. method:: decouple()
+
+      Fire the decoupler, separating the vehicle into two. Returns once it has fired.
+      Throws an exception if the decoupler is disabled or :attr:`Decoupler.decoupled`.
+
+   
+
+
+
+.. class:: Parachute
+
+   A parachute. Obtained from :attr:`Part.parachute`.
+
+   .. attribute:: part
+
+      The part the parachute is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: state
+
+      The state of the parachute.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ParachuteState`
+   
+
+   .. attribute:: fill
+
+      How far the canopy is open, from 0 to 1.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: deploy_altitude
+
+      The height above the terrain at which an armed parachute deploys, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: can_cut
+
+      Whether the parachute can be cut away. Main parachutes cannot.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. method:: deploy()
+
+      Arm the parachute, so that it deploys at :attr:`Parachute.deploy_altitude`. Returns once
+      it is armed. Throws an exception if it is not stowed.
+
+   
+
+   .. method:: cut()
+
+      Cut the parachute away. Returns once it is cut. Throws an exception if it cannot
+      be cut. See :attr:`Parachute.can_cut`.
+
+   
+
+
+
+.. class:: ParachuteState
+
+   The state of a parachute. See :attr:`Parachute.state`.
+
+
+   .. data:: stowed
+
+      Packed away.
+
+
+   .. data:: armed
+
+      Waiting to deploy at :attr:`Parachute.deploy_altitude`.
+
+
+   .. data:: line_stretch
+
+      Leaving the pack.
+
+
+   .. data:: reefed
+
+      Partly open, to limit the opening load.
+
+
+   .. data:: disreefing
+
+      Opening from reefed to full.
+
+
+   .. data:: full
+
+      Fully open.
+
+
+   .. data:: cut
+
+      Cut away.
+
+
+   .. data:: ripped
+
+      Torn by too much dynamic pressure.
+
+
+   .. data:: severed_lines
+
+      Lost after its lines broke under too much load.
+
+
+
+.. class:: DockingPort
+
+   A docking port. Obtained from :attr:`Part.docking_port`.
+
+   .. attribute:: part
+
+      The part the docking port is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: docked
+
+      Whether the port is docked.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: docked_part
+
+      The part the port is docked to, or ``None`` if it is not docked.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part` or None
+   
+
+   .. method:: undock()
+
+      Undock the port, separating the vehicle into two. Returns once it has undocked.
+      Throws an exception if the port is not docked.
+
+   
+
+      .. note::
+
+         Docking and undocking replace the vehicles involved. See :class:`Vehicle`.

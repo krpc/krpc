@@ -1,0 +1,366 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Parts
+=====
+
+
+.. type:: krpc_KSA_Part_t
+
+   A part of a vehicle. Obtained from :func:`krpc_KSA_Vehicle_Parts`.
+
+   .. note::
+
+      A part keeps its object when the vehicle it belongs to changes, for example when a
+      decoupler separates it. Throws an exception once the part no longer exists.
+
+   .. function:: krpc_error_t krpc_KSA_Part_Name(krpc_connection_t connection, char * * returnValue, krpc_KSA_Part_t instance)
+
+      The id of the part's template.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Title(krpc_connection_t connection, char * * returnValue, krpc_KSA_Part_t instance)
+
+      The name of the part, as shown in the game.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Vehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t * returnValue, krpc_KSA_Part_t instance)
+
+      The vehicle the part belongs to.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Parent(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part this part is attached to, or ``nullptr`` for the root part.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Children(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The parts attached to this part.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Sequence(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Part_t instance)
+
+      The number of the sequence that activates the part, or -1 if no sequence does.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Mass(krpc_connection_t connection, double * returnValue, krpc_KSA_Part_t instance)
+
+      The mass of the part, including its propellant, in kilograms.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_DryMass(krpc_connection_t connection, double * returnValue, krpc_KSA_Part_t instance)
+
+      The mass of the part without its propellant, in kilograms.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Resources(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The resources the part holds, one for each substance.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Part_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The position of the part's origin, in meters.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the position.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_KSA_Part_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The rotation of the part's axes, relative to the given frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the rotation.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Engine(krpc_connection_t connection, krpc_KSA_Engine_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's engine, or ``nullptr`` if it has none.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_RCS(krpc_connection_t connection, krpc_KSA_RCS_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's RCS thrusters, or ``nullptr`` if it has none.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Decoupler(krpc_connection_t connection, krpc_KSA_Decoupler_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's decoupler, or ``nullptr`` if it has none.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Parachute(krpc_connection_t connection, krpc_KSA_Parachute_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's parachute, or ``nullptr`` if it has none.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_DockingPort(krpc_connection_t connection, krpc_KSA_DockingPort_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's docking port, or ``nullptr`` if it has none.
+
+   
+
+
+
+.. type:: krpc_KSA_Engine_t
+
+   An engine. Obtained from :func:`krpc_KSA_Part_Engine`.
+
+   .. note::
+
+      An active engine fires when the vehicle's engines are on, at the vehicle's throttle.
+      See :func:`krpc_KSA_Control_EngineOn` and :func:`krpc_KSA_Control_Throttle`.
+
+   .. function:: krpc_error_t krpc_KSA_Engine_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Engine_t instance)
+
+      The part the engine is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_Active(krpc_connection_t connection, bool * returnValue, krpc_KSA_Engine_t instance)
+   .. function:: krpc_error_t krpc_KSA_Engine_set_Active(krpc_connection_t connection, krpc_KSA_Engine_t instance, bool value)
+
+      Whether the engine is active, as when its sequence is activated. Setting it returns
+      once the change has applied.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_HasPropellant(krpc_connection_t connection, bool * returnValue, krpc_KSA_Engine_t instance)
+
+      Whether the engine has propellant to burn.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_Thrust(krpc_connection_t connection, double * returnValue, krpc_KSA_Engine_t instance)
+
+      The thrust of the engine at its current throttle and the current atmospheric
+      pressure, in Newtons. Zero when it is not firing.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_AvailableThrust(krpc_connection_t connection, double * returnValue, krpc_KSA_Engine_t instance)
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_SpecificImpulse(krpc_connection_t connection, double * returnValue, krpc_KSA_Engine_t instance)
+
+      The specific impulse of the engine at the current atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+   
+
+
+
+.. type:: krpc_KSA_RCS_t
+
+   The RCS thrusters of a part. Obtained from :func:`krpc_KSA_Part_RCS`.
+
+   .. note::
+
+      Active thrusters fire when the vehicle's RCS is on. See :func:`krpc_KSA_Control_RCS`.
+
+   .. function:: krpc_error_t krpc_KSA_RCS_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_RCS_t instance)
+
+      The part the thrusters are in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_RCS_Active(krpc_connection_t connection, bool * returnValue, krpc_KSA_RCS_t instance)
+   .. function:: krpc_error_t krpc_KSA_RCS_set_Active(krpc_connection_t connection, krpc_KSA_RCS_t instance, bool value)
+
+      Whether the thrusters are active. Setting it returns once the change has applied.
+
+   
+
+
+
+.. type:: krpc_KSA_Decoupler_t
+
+   A decoupler. Obtained from :func:`krpc_KSA_Part_Decoupler`.
+
+   .. function:: krpc_error_t krpc_KSA_Decoupler_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Decoupler_t instance)
+
+      The part the decoupler is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Decoupler_Enabled(krpc_connection_t connection, bool * returnValue, krpc_KSA_Decoupler_t instance)
+
+      Whether the decoupler can fire.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Decoupler_Decoupled(krpc_connection_t connection, bool * returnValue, krpc_KSA_Decoupler_t instance)
+
+      Whether the decoupler has fired, or is attached to nothing.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Decoupler_Decouple(krpc_connection_t connection, krpc_KSA_Decoupler_t instance)
+
+      Fire the decoupler, separating the vehicle into two. Returns once it has fired.
+      Throws an exception if the decoupler is disabled or :func:`krpc_KSA_Decoupler_Decoupled`.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Parachute_t
+
+   A parachute. Obtained from :func:`krpc_KSA_Part_Parachute`.
+
+   .. function:: krpc_error_t krpc_KSA_Parachute_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Parachute_t instance)
+
+      The part the parachute is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Parachute_State(krpc_connection_t connection, krpc_KSA_ParachuteState_t * returnValue, krpc_KSA_Parachute_t instance)
+
+      The state of the parachute.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Parachute_Fill(krpc_connection_t connection, float * returnValue, krpc_KSA_Parachute_t instance)
+
+      How far the canopy is open, from 0 to 1.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Parachute_DeployAltitude(krpc_connection_t connection, float * returnValue, krpc_KSA_Parachute_t instance)
+
+      The height above the terrain at which an armed parachute deploys, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Parachute_CanCut(krpc_connection_t connection, bool * returnValue, krpc_KSA_Parachute_t instance)
+
+      Whether the parachute can be cut away. Main parachutes cannot.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Parachute_Deploy(krpc_connection_t connection, krpc_KSA_Parachute_t instance)
+
+      Arm the parachute, so that it deploys at :func:`krpc_KSA_Parachute_DeployAltitude`. Returns once
+      it is armed. Throws an exception if it is not stowed.
+
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Parachute_Cut(krpc_connection_t connection, krpc_KSA_Parachute_t instance)
+
+      Cut the parachute away. Returns once it is cut. Throws an exception if it cannot
+      be cut. See :func:`krpc_KSA_Parachute_CanCut`.
+
+
+   
+
+
+
+.. type:: krpc_KSA_ParachuteState_t
+
+   The state of a parachute. See :func:`krpc_KSA_Parachute_State`.
+
+
+   .. macro:: KRPC_KSA_PARACHUTESTATE_STOWED
+
+      Packed away.
+
+
+   .. macro:: KRPC_KSA_PARACHUTESTATE_ARMED
+
+      Waiting to deploy at :func:`krpc_KSA_Parachute_DeployAltitude`.
+
+
+   .. macro:: KRPC_KSA_PARACHUTESTATE_LINESTRETCH
+
+      Leaving the pack.
+
+
+   .. macro:: KRPC_KSA_PARACHUTESTATE_REEFED
+
+      Partly open, to limit the opening load.
+
+
+   .. macro:: KRPC_KSA_PARACHUTESTATE_DISREEFING
+
+      Opening from reefed to full.
+
+
+   .. macro:: KRPC_KSA_PARACHUTESTATE_FULL
+
+      Fully open.
+
+
+   .. macro:: KRPC_KSA_PARACHUTESTATE_CUT
+
+      Cut away.
+
+
+   .. macro:: KRPC_KSA_PARACHUTESTATE_RIPPED
+
+      Torn by too much dynamic pressure.
+
+
+   .. macro:: KRPC_KSA_PARACHUTESTATE_SEVEREDLINES
+
+      Lost after its lines broke under too much load.
+
+
+
+.. type:: krpc_KSA_DockingPort_t
+
+   A docking port. Obtained from :func:`krpc_KSA_Part_DockingPort`.
+
+   .. function:: krpc_error_t krpc_KSA_DockingPort_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_DockingPort_t instance)
+
+      The part the docking port is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_DockingPort_Docked(krpc_connection_t connection, bool * returnValue, krpc_KSA_DockingPort_t instance)
+
+      Whether the port is docked.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_DockingPort_DockedPart(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_DockingPort_t instance)
+
+      The part the port is docked to, or ``nullptr`` if it is not docked.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_DockingPort_Undock(krpc_connection_t connection, krpc_KSA_DockingPort_t instance)
+
+      Undock the port, separating the vehicle into two. Returns once it has undocked.
+      Throws an exception if the port is not docked.
+
+
+   
+
+      .. note::
+
+         Docking and undocking replace the vehicles involved. See :type:`krpc_KSA_Vehicle_t`.

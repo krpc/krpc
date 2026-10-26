@@ -1,0 +1,389 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Parts
+=====
+
+
+.. type:: public class Part
+
+   A part of a vehicle. Obtained from :meth:`Vehicle.getParts()`.
+
+   .. note::
+
+      A part keeps its object when the vehicle it belongs to changes, for example when a
+      decoupler separates it. Throws an exception once the part no longer exists.
+
+   .. method:: String getName()
+
+
+      The id of the part's template.
+
+   
+
+   .. method:: String getTitle()
+
+
+      The name of the part, as shown in the game.
+
+   
+
+   .. method:: Vehicle getVehicle()
+
+
+      The vehicle the part belongs to.
+
+   
+
+   .. method:: Part getParent()
+
+
+      The part this part is attached to, or ``null`` for the root part.
+
+   
+
+   .. method:: java.util.List<Part> getChildren()
+
+
+      The parts attached to this part.
+
+   
+
+   .. method:: int getSequence()
+
+
+      The number of the sequence that activates the part, or -1 if no sequence does.
+
+   
+
+   .. method:: double getMass()
+
+
+      The mass of the part, including its propellant, in kilograms.
+
+   
+
+   .. method:: double getDryMass()
+
+
+      The mass of the part without its propellant, in kilograms.
+
+   
+
+   .. method:: java.util.List<Resource> getResources()
+
+
+      The resources the part holds, one for each substance.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
+
+      The position of the part's origin, in meters.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the position.
+   
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
+
+      The rotation of the part's axes, relative to the given frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the rotation.
+   
+
+   .. method:: Engine getEngine()
+
+
+      The part's engine, or ``null`` if it has none.
+
+   
+
+   .. method:: RCS getRCS()
+
+
+      The part's RCS thrusters, or ``null`` if it has none.
+
+   
+
+   .. method:: Decoupler getDecoupler()
+
+
+      The part's decoupler, or ``null`` if it has none.
+
+   
+
+   .. method:: Parachute getParachute()
+
+
+      The part's parachute, or ``null`` if it has none.
+
+   
+
+   .. method:: DockingPort getDockingPort()
+
+
+      The part's docking port, or ``null`` if it has none.
+
+   
+
+
+
+.. type:: public class Engine
+
+   An engine. Obtained from :meth:`Part.getEngine()`.
+
+   .. note::
+
+      An active engine fires when the vehicle's engines are on, at the vehicle's throttle.
+      See :meth:`Control.getEngineOn()` and :meth:`Control.getThrottle()`.
+
+   .. method:: Part getPart()
+
+
+      The part the engine is in.
+
+   
+
+   .. method:: boolean getActive()
+
+   .. method:: void setActive(boolean value)
+
+      Whether the engine is active, as when its sequence is activated. Setting it returns
+      once the change has applied.
+
+   
+
+   .. method:: boolean getHasPropellant()
+
+
+      Whether the engine has propellant to burn.
+
+   
+
+   .. method:: double getThrust()
+
+
+      The thrust of the engine at its current throttle and the current atmospheric
+      pressure, in Newtons. Zero when it is not firing.
+
+   
+
+   .. method:: double getAvailableThrust()
+
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+   
+
+   .. method:: double getSpecificImpulse()
+
+
+      The specific impulse of the engine at the current atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+   
+
+
+
+.. type:: public class RCS
+
+   The RCS thrusters of a part. Obtained from :meth:`Part.getRCS()`.
+
+   .. note::
+
+      Active thrusters fire when the vehicle's RCS is on. See :meth:`Control.getRCS()`.
+
+   .. method:: Part getPart()
+
+
+      The part the thrusters are in.
+
+   
+
+   .. method:: boolean getActive()
+
+   .. method:: void setActive(boolean value)
+
+      Whether the thrusters are active. Setting it returns once the change has applied.
+
+   
+
+
+
+.. type:: public class Decoupler
+
+   A decoupler. Obtained from :meth:`Part.getDecoupler()`.
+
+   .. method:: Part getPart()
+
+
+      The part the decoupler is in.
+
+   
+
+   .. method:: boolean getEnabled()
+
+
+      Whether the decoupler can fire.
+
+   
+
+   .. method:: boolean getDecoupled()
+
+
+      Whether the decoupler has fired, or is attached to nothing.
+
+   
+
+   .. method:: void decouple()
+
+      Fire the decoupler, separating the vehicle into two. Returns once it has fired.
+      Throws an exception if the decoupler is disabled or :meth:`Decoupler.getDecoupled()`.
+
+   
+
+
+
+.. type:: public class Parachute
+
+   A parachute. Obtained from :meth:`Part.getParachute()`.
+
+   .. method:: Part getPart()
+
+
+      The part the parachute is in.
+
+   
+
+   .. method:: ParachuteState getState()
+
+
+      The state of the parachute.
+
+   
+
+   .. method:: float getFill()
+
+
+      How far the canopy is open, from 0 to 1.
+
+   
+
+   .. method:: float getDeployAltitude()
+
+
+      The height above the terrain at which an armed parachute deploys, in meters.
+
+   
+
+   .. method:: boolean getCanCut()
+
+
+      Whether the parachute can be cut away. Main parachutes cannot.
+
+   
+
+   .. method:: void deploy()
+
+      Arm the parachute, so that it deploys at :meth:`Parachute.getDeployAltitude()`. Returns once
+      it is armed. Throws an exception if it is not stowed.
+
+   
+
+   .. method:: void cut()
+
+      Cut the parachute away. Returns once it is cut. Throws an exception if it cannot
+      be cut. See :meth:`Parachute.getCanCut()`.
+
+   
+
+
+
+.. type:: public enum ParachuteState
+
+   The state of a parachute. See :meth:`Parachute.getState()`.
+
+
+   .. field:: public ParachuteState STOWED
+
+      Packed away.
+
+
+   .. field:: public ParachuteState ARMED
+
+      Waiting to deploy at :meth:`Parachute.getDeployAltitude()`.
+
+
+   .. field:: public ParachuteState LINE_STRETCH
+
+      Leaving the pack.
+
+
+   .. field:: public ParachuteState REEFED
+
+      Partly open, to limit the opening load.
+
+
+   .. field:: public ParachuteState DISREEFING
+
+      Opening from reefed to full.
+
+
+   .. field:: public ParachuteState FULL
+
+      Fully open.
+
+
+   .. field:: public ParachuteState CUT
+
+      Cut away.
+
+
+   .. field:: public ParachuteState RIPPED
+
+      Torn by too much dynamic pressure.
+
+
+   .. field:: public ParachuteState SEVERED_LINES
+
+      Lost after its lines broke under too much load.
+
+
+
+.. type:: public class DockingPort
+
+   A docking port. Obtained from :meth:`Part.getDockingPort()`.
+
+   .. method:: Part getPart()
+
+
+      The part the docking port is in.
+
+   
+
+   .. method:: boolean getDocked()
+
+
+      Whether the port is docked.
+
+   
+
+   .. method:: Part getDockedPart()
+
+
+      The part the port is docked to, or ``null`` if it is not docked.
+
+   
+
+   .. method:: void undock()
+
+      Undock the port, separating the vehicle into two. Returns once it has undocked.
+      Throws an exception if the port is not docked.
+
+   
+
+      .. note::
+
+         Docking and undocking replace the vehicles involved. See :type:`Vehicle`.
