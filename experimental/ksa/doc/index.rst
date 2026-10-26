@@ -57,8 +57,8 @@ reaches an altitude of 10 km:
       :link: user-guide
       :link-type: doc
 
-      How the server and the game behave: reference frames, object lifetime, the auto-pilot
-      and timing.
+      How the server and the game behave: reference frames, object lifetime, the auto-pilot,
+      server side functions and timing.
 
    .. grid-item-card:: :fas:`graduation-cap` Tutorials
       :link: tutorials

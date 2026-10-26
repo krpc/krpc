@@ -57,6 +57,15 @@ sequences, the decoupler that drops the spent stage and the engine of the next o
 Circularizing
 -------------
 
+An event waits for the rocket to leave the atmosphere. The client computes the atmosphere's
+altitude once, and the server compares the rocket's altitude with it every frame:
+
+.. literalinclude:: /scripts/launch_into_orbit.py
+   :language: python
+   :start-at: atmosphere_altitude =
+   :end-at: above_atmosphere.wait()
+
+:doc:`/user-guide/server-side-functions` covers events, and the other server side functions.
 Once the rocket is out of the atmosphere, we plan a burn at the apoapsis that makes the
 orbit circular, as in :doc:`circularize`, and warp to it:
 
@@ -65,8 +74,9 @@ orbit circular, as in :doc:`circularize`, and warp to it:
    :start-at: mu = body.gravitational_parameter
    :end-at: ksa.warp_to
 
-The first stage can run dry during the burn. The flight computer then stops, and we stage
-and continue the burn:
+The flight computer turns the auto-burn off when the burn is complete, or when the engines run
+out of propellant. An event waits for either. The first stage can run dry during the burn, so
+we then stage and continue the burn:
 
 .. literalinclude:: /scripts/launch_into_orbit.py
    :language: python

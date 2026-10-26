@@ -25,7 +25,8 @@ Raising the Apoapsis
 --------------------
 
 We light the engines at full throttle, and wait for the apoapsis to reach the target. The
-event is a server side function, which the server evaluates each frame:
+event is a :doc:`server side function </user-guide/server-side-functions>`, which the server
+evaluates each frame:
 
 .. literalinclude:: /scripts/raise_orbit.py
    :language: python

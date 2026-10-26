@@ -26,7 +26,8 @@ Executing the Burn
 
 We warp to 30 seconds before ignition, and turn on the auto-burn. The flight computer points
 the vehicle along the burn, fires the engines at the ignition time and stops once the burn is
-complete. A stream of the auto-burn switch tells us when it is done:
+complete, and then turns the auto-burn off. An event, a :doc:`server side function
+</user-guide/server-side-functions>`, waits for that:
 
 .. literalinclude:: /scripts/circularize.py
    :language: python

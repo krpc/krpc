@@ -26,10 +26,9 @@ ksa.warp_to(burn.ignition_time - 30)
 
 print("Executing the burn")
 auto_pilot.auto_burn = True
-auto_burn = conn.add_stream(getattr, auto_pilot, "auto_burn")
-with auto_burn.condition:
-    while auto_burn():
-        auto_burn.wait()
+finished = conn.add_event(lambda: not auto_pilot.auto_burn)
+with finished.condition:
+    finished.wait()
 burn.remove()
 
 print(

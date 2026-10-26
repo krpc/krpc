@@ -80,5 +80,7 @@ Next Steps
 
 * The :doc:`tutorials` walk through complete scripts, from :doc:`tutorials/launch-into-orbit`
   to planning and executing burns.
-* The :doc:`user-guide` describe how the server and the game behave.
+* The :doc:`user-guide` describe how the server and the game behave. :doc:`Server side
+  functions </user-guide/server-side-functions>` run your code inside the game, for events and
+  streams computed there.
 * The :doc:`clients` pages cover each client language, and the API reference.

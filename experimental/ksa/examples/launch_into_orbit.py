@@ -42,12 +42,10 @@ def execute_burn(burn):
     """Execute a burn with the flight computer, staging when a stage runs dry."""
     while True:
         auto_pilot.auto_burn = True
-        # A stream added after the change starts from the new value
-        auto_burn = conn.add_stream(getattr, auto_pilot, "auto_burn")
-        with auto_burn.condition:
-            while auto_burn():
-                auto_burn.wait()
-        auto_burn.remove()
+        finished = conn.add_event(lambda: not auto_pilot.auto_burn)
+        with finished.condition:
+            finished.wait()
+        finished.remove()
         # The flight computer stops the burn when the engines run out of propellant
         if burn.remaining_delta_v < 1:
             break
@@ -80,8 +78,9 @@ control.engine_on = False
 
 print("Coasting out of the atmosphere")
 atmosphere_altitude = body.atmosphere_radius - body.radius
-while altitude() < atmosphere_altitude:
-    time.sleep(1)
+above_atmosphere = conn.add_event(lambda: flight.mean_altitude > atmosphere_altitude)
+with above_atmosphere.condition:
+    above_atmosphere.wait()
 
 print("Circularizing")
 mu = body.gravitational_parameter
