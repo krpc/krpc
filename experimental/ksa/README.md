@@ -252,7 +252,8 @@ experimental/ksa/test.sh --no-launch            # against a game started with ru
  * `test_examples.py` flies `examples/launch_into_orbit.py` to orbit, which takes about eight
    minutes. It is marked `slow`, so `-m "not slow"` skips it.
 
-All the tests pass on Linux, with KSA 2026.10.19.5638. On Windows, `test_parachute.py` is unrun.
+All the tests pass on Linux and Windows, with KSA 2026.10.19.5638, and the release archive built
+on Linux installs and runs on Windows.
 
 ## Open Questions
 
