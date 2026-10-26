@@ -9,7 +9,7 @@ Built against kRPC 0.7.0, KSA 2026.10.25.5707 and StarMap 0.4.8, set in `version
 ## Layout
 
  * `server/` - the StarMap entry point (`Addon.cs`), settings and `mod.toml`. All StarMap and
-   game lifecycle code is in `Addon.cs`.
+   game lifecycle code is in `Addon.cs`. `src/UI` holds the server windows and the kRPC menu.
  * `service/` - the `KSA` service.
  * `testing/` - the `TestingTools` service, installed only for the tests, and test vehicles.
  * `test/` - integration tests, and their harness `ksatest.py`.
@@ -123,9 +123,9 @@ The StarMap release targets Windows. `run-ksa.sh` runs it with `dotnet`, with th
 The game opens a configuration window before loading. Untick "Always Show" in it for the tests
 to run unattended.
 
-The server starts when the game has loaded its mods. Server settings are in
-`kRPC/settings.toml`. By default it listens on `127.0.0.1`, ports 50000 and 50001, and
-accepts every connection.
+The server starts when the game has loaded its mods. By default it listens on `127.0.0.1`, ports
+50000 and 50001, and accepts every connection. The kRPC menu in the game's menu bar opens the
+server window, which edits the settings and saves them to `kRPC/settings.toml`.
 
 ## Clients
 
