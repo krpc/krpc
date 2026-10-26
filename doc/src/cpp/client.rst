@@ -311,7 +311,7 @@ Client API Reference
 
 .. namespace:: krpc
 
-.. function:: Client connect(const std::string& name = "", const std::string& address = "127.0.0.1", unsigned int port = 50000, std::chrono::milliseconds timeout = std::chrono::milliseconds::zero(), std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5))
+.. function:: Client connect(const std::string& name = "", const std::string& address = "127.0.0.1", unsigned int port = 50000, std::chrono::milliseconds timeout = std::chrono::milliseconds::zero(), std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5), std::chrono::milliseconds stall_timeout = std::chrono::seconds(30))
 
    This function creates a connection to a kRPC server. It returns a :class:`krpc::Client` object,
    through which the server can be communicated with.
@@ -330,12 +330,15 @@ Client API Reference
       * **handshake_timeout** (*std::chrono::milliseconds*) -- How long to wait for the server
         to accept the connection before giving up. Defaults to 5 seconds. Zero waits
         indefinitely, such as for a server that asks the player to approve each connection.
+      * **stall_timeout** (*std::chrono::milliseconds*) -- How long a message from the server
+        can go without a new byte, once it has started to arrive, before the connection fails.
+        Defaults to 30 seconds. Zero waits indefinitely.
 
    Throws ``krpc::ConnectionError`` if the server refuses the connection. Its ``status()``
    names the status the server gave, such as ``"DENIED"``. An error thrown when the server ends
    the connection names the reason in its ``reason()``, such as ``"SERVER_STOPPED"``.
 
-.. function:: Client connect_local(const std::string& name = "", const std::string& path = "", std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5))
+.. function:: Client connect_local(const std::string& name = "", const std::string& path = "", std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5), std::chrono::milliseconds stall_timeout = std::chrono::seconds(30))
 
    This function creates a connection to a kRPC server running on the same machine, over a unix
    domain socket rather than TCP/IP. It returns a :class:`krpc::Client` object, just as
@@ -352,6 +355,7 @@ Client API Reference
         should match the socket path shown in the in-game server window. Leave empty for the path
         the server uses unless it was configured with another.
       * **handshake_timeout** (*std::chrono::milliseconds*) -- As for :func:`krpc::connect`.
+      * **stall_timeout** (*std::chrono::milliseconds*) -- As for :func:`krpc::connect`.
 
 .. function:: template <typename T> Stream<T> add_stream(const services::KRPC::Expression& function)
 

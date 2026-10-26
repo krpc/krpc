@@ -136,13 +136,16 @@ class InterruptingLock:
 
 
 def connect(
-    server: ScriptedServer, handshake_timeout: float | None = 5.0
+    server: ScriptedServer,
+    handshake_timeout: float | None = 5.0,
+    stall_timeout: float | None = 30.0,
 ) -> krpc.Client:
     return krpc.connect(
         name="session_test",
         port=server.port,
         use_pregenerated_stubs=False,
         handshake_timeout=handshake_timeout,
+        stall_timeout=stall_timeout,
     )
 
 
@@ -235,14 +238,14 @@ class TestSession(unittest.TestCase):
         self.assertEqual("99", context.exception.reason)
         self.assertIn("A newer reason", str(context.exception))
 
-    def test_infinite_handshake_timeout(self) -> None:
+    def test_infinite_stall_timeout(self) -> None:
         def script(server: ScriptedServer) -> None:
             server.accept_handshake()
             server.answer_get_services()
             server.wait_for_close()
 
         server = ScriptedServer(script)
-        conn = connect(server, handshake_timeout=math.inf)
+        conn = connect(server, handshake_timeout=math.inf, stall_timeout=math.inf)
         conn.close()
         server.join()
 
@@ -270,6 +273,27 @@ class TestSession(unittest.TestCase):
         self.assertLess(time.monotonic() - start, 5)
         release.set()
         server.join()
+
+    def test_stall_timeout(self) -> None:
+        def script(server: ScriptedServer) -> None:
+            server.accept_handshake()
+            server.answer_get_services()
+            server.receive()
+            # A response cut short
+            server.send_bytes(b"\x0a\x12")
+            server.wait_for_close()
+
+        server = ScriptedServer(script)
+        conn = connect(server, stall_timeout=0.2)
+        start = time.monotonic()
+        with self.assertRaisesRegex(ConnectionError, "stalled") as context:
+            status_request(conn)
+        self.assertLess(time.monotonic() - start, 5)
+        self.assertIsNone(context.exception.reason)
+        conn.close()
+        server.join()
+        last = server.received[-1]
+        self.assertEqual(KRPC.Disconnect.TIMEOUT, last.disconnect.reason)
 
     def test_close_sends_a_disconnect(self) -> None:
         def script(server: ScriptedServer) -> None:

@@ -470,7 +470,7 @@ makes no remote procedure call and uses no state variable, as its value is the s
 Client API Reference
 --------------------
 
-.. function:: krpc.connect([name=None], [address='127.0.0.1'], [port=50000], [use_pregenerated_stubs=True], [timeout=None], [handshake_timeout=5])
+.. function:: krpc.connect([name=None], [address='127.0.0.1'], [port=50000], [use_pregenerated_stubs=True], [timeout=None], [handshake_timeout=5], [stall_timeout=30])
 
    This function creates a connection to a kRPC server. It returns a :class:`krpc.client.Client`
    object, through which the server can be communicated with.
@@ -491,13 +491,16 @@ Client API Reference
    :param float handshake_timeout: How many seconds to wait for the server to accept the
                            connection before giving up. Defaults to 5. ``None`` waits indefinitely,
                            such as for a server that asks the player to approve each connection.
+   :param float stall_timeout: How many seconds a message from the server can go without a new
+                           byte, once it has started to arrive, before the connection fails.
+                           Defaults to 30. ``None`` waits indefinitely.
 
    Raises ``krpc.error.ConnectionError`` if the server refuses the connection. Its ``status``
    attribute names the status the server gave, such as ``"DENIED"``. An error raised when the
    server ends the connection names the reason in its ``reason`` attribute, such as
    ``"SERVER_STOPPED"``.
 
-.. function:: krpc.connect_local([name=None], [path], [use_pregenerated_stubs=True], [handshake_timeout=5])
+.. function:: krpc.connect_local([name=None], [path], [use_pregenerated_stubs=True], [handshake_timeout=5], [stall_timeout=30])
 
    This function creates a connection to a kRPC server running on the same machine, over a unix
    domain socket rather than TCP/IP. It returns a :class:`krpc.client.Client` object, just as
@@ -519,6 +522,7 @@ Client API Reference
                     server uses unless it was configured with another.
    :param bool use_pregenerated_stubs: As for :func:`krpc.connect`.
    :param float handshake_timeout: As for :func:`krpc.connect`.
+   :param float stall_timeout: As for :func:`krpc.connect`.
 
 .. function:: krpc.get_object_id(obj)
 

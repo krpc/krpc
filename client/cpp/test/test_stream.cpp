@@ -270,7 +270,8 @@ TEST_F(test_stream, test_callback_added_after_the_first_value) {
 class idle_stream_manager {
  public:
   explicit idle_stream_manager(krpc::Client* client)
-      : manager(krpc::StreamManager::create(client, nullptr)) {}
+      : manager(
+            krpc::StreamManager::create(client, nullptr, krpc::Session::default_stall_timeout)) {}
   std::shared_ptr<krpc::StreamManager> manager;
 };
 

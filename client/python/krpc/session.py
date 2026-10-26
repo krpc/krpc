@@ -15,8 +15,8 @@ from krpc.error import ConnectionError
 if TYPE_CHECKING:
     from krpc.streammanager import StreamManager
 
-# Seconds a message that has started to arrive may go without a new byte
-STALL_TIMEOUT = 30.0
+# Seconds a message that has started to arrive may go without a new byte, by default
+DEFAULT_STALL_TIMEOUT = 30.0
 # Seconds to wait for the server to close its side once ours is closed
 CLOSE_TIMEOUT = 1.0
 
@@ -90,9 +90,12 @@ class Session:
         self,
         connection: Connection,
         remove_stream_request: Callable[[int], KRPC.Request],
+        stall_timeout: float | None = DEFAULT_STALL_TIMEOUT,
     ) -> None:
         self._connection = connection
         self._remove_stream_request = remove_stream_request
+        # None waits forever
+        self._stall_timeout = stall_timeout
         self._manager: StreamManager | None = None
         self._streams: Mapping[int, object] = {}
         # Held for the whole of a write
@@ -219,7 +222,7 @@ class Session:
         try:
             while not slot.done:
                 try:
-                    data = connection.receive_message_data(None, STALL_TIMEOUT)
+                    data = connection.receive_message_data(None, self._stall_timeout)
                 except (OSError, MalformedSize) as exn:
                     self._receive_failed(exn)
                 try:
@@ -443,9 +446,9 @@ class Session:
             # Wait for data without being the reader, so a call can take over. The wait is
             # bounded by the stall clock, so a partial message left in the buffer is timed.
             connection = self._connection
-            timeout = None
-            if connection.has_buffered():
-                timeout = connection.stall_remaining(STALL_TIMEOUT)
+            timeout = self._stall_timeout
+            if timeout is not None and connection.has_buffered():
+                timeout = connection.stall_remaining(timeout)
             self._wait_readable(timeout)
             with self._lock:
                 if self._ended:
@@ -483,7 +486,7 @@ class Session:
         """Read the bytes of one message. Raises _Ended once the connection has
         ended."""
         try:
-            return self._connection.receive_message_data(None, STALL_TIMEOUT)
+            return self._connection.receive_message_data(None, self._stall_timeout)
         except (OSError, MalformedSize) as exn:
             self._receive_failed(exn)
 
@@ -495,8 +498,8 @@ class Session:
         elif isinstance(exn, ReadTimeout):
             cause = self._protocol_error(
                 KRPC.Disconnect.TIMEOUT,
-                "A message from the server stalled for more than %d seconds"
-                % STALL_TIMEOUT,
+                "A message from the server stalled for more than %g seconds"
+                % self._stall_timeout,
             )
         else:
             cause = self._failure(exn)

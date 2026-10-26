@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.channels.ServerSocketChannel;
+import java.time.Duration;
 import krpc.schema.KRPC;
 import org.junit.After;
 import org.junit.Before;
@@ -36,6 +37,16 @@ public abstract class ConnectionTestCase {
    * @return A connection to the server.
    */
   protected abstract Connection connect(String name) throws IOException;
+
+  /**
+   * Connect to the running server over the transport under test, with the given stall timeout.
+   *
+   * @param name The name of the client.
+   * @param stallTimeout The stall timeout.
+   *
+   * @return A connection to the server.
+   */
+  protected abstract Connection connect(String name, Duration stallTimeout) throws IOException;
 
   /**
    * The running server, for a test that needs to know where it is listening.
@@ -126,6 +137,19 @@ public abstract class ConnectionTestCase {
       ConnectionException cause = (ConnectionException) exn.getCause();
       assertEquals(KRPC.Disconnect.Reason.REMOVED, cause.getReason());
       assertEquals("The server ended the connection (REMOVED): Bye", cause.getMessage());
+    }
+  }
+
+  @Test
+  @SuppressWarnings("checkstyle:missingjavadocmethod")
+  public void testStallTimeout() throws IOException {
+    server.stallResponses();
+    try (Connection connection = connect("JavaConnectionTestStall", Duration.ofMillis(200))) {
+      long start = System.nanoTime();
+      RPCException exn = assertThrows(
+          RPCException.class, () -> connection.invoke("TestService", "TestProcedure"));
+      assertTrue(System.nanoTime() - start < 5_000_000_000L);
+      assertTrue(exn.getCause().getMessage().contains("stalled"));
     }
   }
 }

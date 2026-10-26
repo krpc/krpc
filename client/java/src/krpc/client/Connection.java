@@ -58,6 +58,7 @@ public class Connection implements AutoCloseable {
   private static final int DEFAULT_PORT = 50000;
   private static Duration DEFAULT_TIMEOUT = Duration.ZERO;
   private static Duration DEFAULT_HANDSHAKE_TIMEOUT = Duration.ofSeconds(5);
+  private static Duration DEFAULT_STALL_TIMEOUT = Duration.ofSeconds(30);
 
   /**
    * Connect to a kRPC server using a blank client name, on the loopback
@@ -160,8 +161,38 @@ public class Connection implements AutoCloseable {
       String name, InetAddress address, int port, Duration timeout,
       Duration handshakeTimeout)
       throws IOException {
-    checkTimeout(handshakeTimeout);
-    return new Connection(name, open(address, port, timeout), handshakeTimeout);
+    return newInstance(name, address, port, timeout, handshakeTimeout, DEFAULT_STALL_TIMEOUT);
+  }
+
+  /**
+   * Connect to a kRPC server using the given client name, on the given
+   * address and port number, waiting no longer than the given timeouts.
+   *
+   * @param name
+   *            The name of the client.
+   * @param address
+   *            The server address to connect to.
+   * @param port
+   *            The port to connect to.
+   * @param timeout
+   *            How long to wait for a connection. Zero waits indefinitely.
+   * @param handshakeTimeout
+   *            How long to wait for the server to accept the connection. Zero
+   *            waits indefinitely, such as for a server that asks the player to
+   *            approve each connection.
+   * @param stallTimeout
+   *            How long a message from the server may go without a new byte once
+   *            it has started to arrive, before the connection fails. Zero waits
+   *            indefinitely.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newInstance(
+      String name, InetAddress address, int port, Duration timeout,
+      Duration handshakeTimeout, Duration stallTimeout)
+      throws IOException {
+    checkTimeouts(handshakeTimeout, stallTimeout);
+    return new Connection(name, open(address, port, timeout), handshakeTimeout, stallTimeout);
   }
 
   /**
@@ -250,6 +281,37 @@ public class Connection implements AutoCloseable {
   }
 
   /**
+   * Connect to a kRPC server using the given client name, on the given
+   * address and port number, waiting no longer than the given timeouts.
+   * See {@link #newInstance(String, InetAddress, int, Duration, Duration, Duration)}.
+   *
+   * @param name
+   *            The name of the client.
+   * @param address
+   *            The server address to connect to. Can be either the name of
+   *            the host or a textual representation of its IP address.
+   * @param port
+   *            The port to connect to.
+   * @param timeout
+   *            How long to wait for a connection. Zero waits indefinitely.
+   * @param handshakeTimeout
+   *            How long to wait for the server to accept the connection. Zero
+   *            waits indefinitely.
+   * @param stallTimeout
+   *            How long a message from the server may go without a new byte once
+   *            it has started to arrive. Zero waits indefinitely.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newInstance(
+      String name, String address, int port, Duration timeout, Duration handshakeTimeout,
+      Duration stallTimeout)
+      throws IOException {
+    return newInstance(
+        name, resolve(address), port, timeout, handshakeTimeout, stallTimeout);
+  }
+
+  /**
    * Connect to a kRPC server on the same machine, over a unix domain socket rather than
    * TCP/IP, using a blank client name and the default socket path.
    *
@@ -305,8 +367,31 @@ public class Connection implements AutoCloseable {
    */
   public static Connection newLocalInstance(
       String name, String path, Duration handshakeTimeout) throws IOException {
-    checkTimeout(handshakeTimeout);
-    return new Connection(name, openLocal(path), handshakeTimeout);
+    return newLocalInstance(name, path, handshakeTimeout, DEFAULT_STALL_TIMEOUT);
+  }
+
+  /**
+   * Connect to a kRPC server on the same machine, over the unix domain socket named by
+   * the given path, waiting no longer than the given timeouts.
+   *
+   * @param name
+   *            The name of the client.
+   * @param path
+   *            The path of the socket the server is listening on.
+   * @param handshakeTimeout
+   *            How long to wait for the server to accept the connection. Zero
+   *            waits indefinitely.
+   * @param stallTimeout
+   *            How long a message from the server may go without a new byte once
+   *            it has started to arrive. Zero waits indefinitely.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newLocalInstance(
+      String name, String path, Duration handshakeTimeout, Duration stallTimeout)
+      throws IOException {
+    checkTimeouts(handshakeTimeout, stallTimeout);
+    return new Connection(name, openLocal(path), handshakeTimeout, stallTimeout);
   }
 
   /** The address of a host name or a textual IP address. */
@@ -318,10 +403,13 @@ public class Connection implements AutoCloseable {
     }
   }
 
-  /** Throws IllegalArgumentException for a negative handshake timeout. */
-  private static void checkTimeout(Duration handshakeTimeout) {
+  /** Throws IllegalArgumentException for a negative handshake or stall timeout. */
+  private static void checkTimeouts(Duration handshakeTimeout, Duration stallTimeout) {
     if (handshakeTimeout.isNegative()) {
       throw new IllegalArgumentException("The handshake timeout must not be negative");
+    }
+    if (stallTimeout.isNegative()) {
+      throw new IllegalArgumentException("The stall timeout must not be negative");
     }
   }
 
@@ -380,7 +468,8 @@ public class Connection implements AutoCloseable {
    * Perform the connection handshake over an already opened socket. The handshake is the same
    * whatever carries it.
    */
-  private Connection(String name, SocketChannel channel, Duration handshakeTimeout)
+  private Connection(
+      String name, SocketChannel channel, Duration handshakeTimeout, Duration stallTimeout)
       throws IOException {
     MessageReader reader = new MessageReader(channel);
     try {
@@ -389,7 +478,7 @@ public class Connection implements AutoCloseable {
       channel.close();
       throw exn;
     }
-    session = new Session(channel, reader, this::removeStreamRequest);
+    session = new Session(channel, reader, this::removeStreamRequest, stallTimeout);
     streamManager = new StreamManager(this, session);
     session.start(streamManager);
   }

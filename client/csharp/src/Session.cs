@@ -21,8 +21,8 @@ namespace KRPC.Client
     /// </summary>
     sealed class Session
     {
-        // A message that has started to arrive may go this long without a new byte
-        internal static readonly TimeSpan StallTimeout = TimeSpan.FromSeconds (30);
+        // A message that has started to arrive may go this long without a new byte, by default
+        internal static readonly TimeSpan DefaultStallTimeout = TimeSpan.FromSeconds (30);
         // The wait for the server to close its side once ours is closed
         static readonly TimeSpan CloseTimeout = TimeSpan.FromSeconds (1);
 
@@ -68,6 +68,8 @@ namespace KRPC.Client
         readonly ManualResetEvent halfClosed = new ManualResetEvent (false);
         readonly Queue<Action> queue = new Queue<Action> ();
         bool queueStopped;
+        // Timeout.InfiniteTimeSpan waits forever
+        readonly TimeSpan stallTimeout;
         readonly Thread readerThread;
         readonly Thread dispatcherThread;
         // Whether Enter caught an interrupt on this thread, to raise once the call returns
@@ -75,8 +77,9 @@ namespace KRPC.Client
         static bool deferredInterrupt;
 
         public Session (Socket connectedSocket, NetworkStream stream, MessageReader messageReader,
-                        Func<ulong, Request> removeStream)
+                        Func<ulong, Request> removeStream, TimeSpan stall)
         {
+            stallTimeout = stall;
             socket = connectedSocket;
             networkStream = stream;
             output = new CodedOutputStream (networkStream, true);
@@ -609,9 +612,9 @@ namespace KRPC.Client
                 // holds at most part of a message, as the reader handles the whole ones before
                 // it stops reading. The wait is bounded by the stall clock, so that part is
                 // timed.
-                var wait = Timeout.InfiniteTimeSpan;
-                if (reader.HasBuffered)
-                    wait = reader.StallRemaining (StallTimeout);
+                var wait = stallTimeout;
+                if (wait != Timeout.InfiniteTimeSpan && reader.HasBuffered)
+                    wait = reader.StallRemaining (wait);
                 var readable = Readable (wait);
                 lock (stateLock) {
                     if (ended)
@@ -670,13 +673,13 @@ namespace KRPC.Client
         {
             System.Exception cause;
             try {
-                reader.Read (Timeout.InfiniteTimeSpan, StallTimeout);
+                reader.Read (Timeout.InfiniteTimeSpan, stallTimeout);
                 return;
             } catch (TimeoutException) {
                 cause = ProtocolError (
                     Disconnect.Types.Reason.Timeout,
                     "A message from the server stalled for more than " +
-                    StallTimeout.TotalSeconds.ToString (CultureInfo.InvariantCulture) + " seconds", null);
+                    stallTimeout.TotalSeconds.ToString (CultureInfo.InvariantCulture) + " seconds", null);
             } catch (InvalidDataException exn) {
                 cause = ProtocolError (Disconnect.Types.Reason.MalformedMessage, exn.Message, exn);
             } catch (System.Exception exn) when (exn is IOException || exn is SocketException || exn is ObjectDisposedException) {

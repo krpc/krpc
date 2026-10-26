@@ -8,6 +8,7 @@ import java.net.UnixDomainSocketAddress;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 import org.junit.After;
 import org.junit.Test;
 
@@ -53,6 +54,12 @@ public class LocalSocketConnectionTest extends ConnectionTestCase {
   @Override
   protected Connection connect(String name) throws IOException {
     return Connection.newLocalInstance(name, path.toString());
+  }
+
+  @Override
+  protected Connection connect(String name, Duration stallTimeout) throws IOException {
+    return Connection.newLocalInstance(
+        name, path.toString(), Duration.ofSeconds(5), stallTimeout);
   }
 
   @After

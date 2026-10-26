@@ -15,7 +15,7 @@ from krpc.schema.KRPC_pb2 import (
     ConnectionResponse,
     Message,
 )
-from krpc.session import disconnect_reason_name
+from krpc.session import DEFAULT_STALL_TIMEOUT, disconnect_reason_name
 from krpc.types import ClassBase
 from krpc.version import __version__
 
@@ -48,20 +48,24 @@ def connect(
     use_pregenerated_stubs: bool = True,
     timeout: float | None = None,
     handshake_timeout: float | None = DEFAULT_HANDSHAKE_TIMEOUT,
+    stall_timeout: float | None = DEFAULT_STALL_TIMEOUT,
 ) -> Client:
     """
     Connect to a kRPC server on the specified IP address and port number.
     Optionally give the kRPC server the supplied name to identify the client.
     If timeout is given, gives up after that many seconds of waiting for a
-    connection, rather than waiting indefinitely. Gives up after handshake_timeout
-    seconds of waiting for the server to accept the connection, or waits
-    indefinitely if it is None, such as for a server that asks the player to
-    approve each connection.
+    connection. Gives up after handshake_timeout seconds of waiting for the server
+    to accept the connection, or waits indefinitely if it is None, such as for a
+    server that asks the player to approve each connection. Fails the connection when a message from the server
+    receives no new byte for stall_timeout seconds once it has started to arrive,
+    or never if it is None.
     """
 
-    _check_timeout(handshake_timeout)
+    _check_timeouts(handshake_timeout, stall_timeout)
     connection = Connection(address, port, timeout)
-    return _connect(name, connection, use_pregenerated_stubs, handshake_timeout)
+    return _connect(
+        name, connection, use_pregenerated_stubs, handshake_timeout, stall_timeout
+    )
 
 
 def connect_local(
@@ -69,18 +73,22 @@ def connect_local(
     path: str = DEFAULT_PATH,
     use_pregenerated_stubs: bool = True,
     handshake_timeout: float | None = DEFAULT_HANDSHAKE_TIMEOUT,
+    stall_timeout: float | None = DEFAULT_STALL_TIMEOUT,
 ) -> Client:
     """
     Connect to a kRPC server on the same machine, over a unix domain socket named by
     the given path; an empty path stands for the one the server uses by default.
     Optionally give the kRPC server the supplied name to identify the client. Gives
     up after handshake_timeout seconds of waiting for the server to accept the
-    connection, or waits indefinitely if it is None.
+    connection, or waits indefinitely if it is None. See connect for the stall
+    timeout.
     """
 
-    _check_timeout(handshake_timeout)
+    _check_timeouts(handshake_timeout, stall_timeout)
     connection = LocalConnection(path or _default_path())
-    return _connect(name, connection, use_pregenerated_stubs, handshake_timeout)
+    return _connect(
+        name, connection, use_pregenerated_stubs, handshake_timeout, stall_timeout
+    )
 
 
 def get_object_id(obj: ClassBase) -> int:
@@ -93,12 +101,16 @@ def get_object_id(obj: ClassBase) -> int:
     return obj._object_id
 
 
-def _check_timeout(handshake_timeout: float | None) -> None:
-    """Raise ValueError for a handshake timeout that is not positive, including NaN."""
-    if handshake_timeout is not None and not handshake_timeout > 0:
-        raise ValueError(
-            "handshake_timeout must be positive, or None, not %r" % handshake_timeout
-        )
+def _check_timeouts(
+    handshake_timeout: float | None, stall_timeout: float | None
+) -> None:
+    """Raise ValueError for a timeout that is not positive, including NaN."""
+    for name, timeout in (
+        ("handshake_timeout", handshake_timeout),
+        ("stall_timeout", stall_timeout),
+    ):
+        if timeout is not None and not timeout > 0:
+            raise ValueError("%s must be positive, or None, not %r" % (name, timeout))
 
 
 def _connect(
@@ -106,6 +118,7 @@ def _connect(
     connection: Connection,
     use_pregenerated_stubs: bool,
     handshake_timeout: float | None,
+    stall_timeout: float | None,
 ) -> Client:
     """Perform the connection handshake over an already built connection. The
     handshake is the same whatever carries it."""
@@ -135,14 +148,16 @@ def _connect(
             "client from the same kRPC release as the server."
         )
     try:
-        return Client(connection, use_pregenerated_stubs)
+        return Client(connection, use_pregenerated_stubs, stall_timeout)
     except BaseException:
         connection.close()
         raise
 
 
 def _handshake(
-    name: str | None, connection: Connection, timeout: float | None
+    name: str | None,
+    connection: Connection,
+    timeout: float | None,
 ) -> ConnectionResponse:
     """Send the connection request, and read the server's response to it."""
     request = ConnectionRequest()

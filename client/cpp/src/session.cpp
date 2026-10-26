@@ -29,11 +29,14 @@ std::exception_ptr connection_error(const std::string& text, const std::string& 
 
 }  // namespace
 
-constexpr std::chrono::milliseconds Session::stall_timeout;
+constexpr std::chrono::milliseconds Session::default_stall_timeout;
 
 Session::Session(std::shared_ptr<Connection> connection,
-                 std::function<schema::Request(uint64_t)> remove_stream_request)
-    : connection(std::move(connection)), remove_stream_request(std::move(remove_stream_request)) {}
+                 std::function<schema::Request(uint64_t)> remove_stream_request,
+                 std::chrono::milliseconds stall_timeout)
+    : connection(std::move(connection)),
+      remove_stream_request(std::move(remove_stream_request)),
+      stall_timeout(stall_timeout) {}
 
 Session::~Session() {
   {
@@ -477,7 +480,7 @@ std::pair<const char*, size_t> Session::receive_data() {
   } catch (const TimeoutError&) {
     cause = protocol_error(schema::Disconnect::TIMEOUT,
                            "A message from the server stalled for more than " +
-                               std::to_string(stall_timeout.count() / 1000) + " seconds");
+                               std::to_string(stall_timeout.count()) + " milliseconds");
   } catch (const EncodingError& exn) {
     cause = protocol_error(schema::Disconnect::MALFORMED_MESSAGE,
                            std::string("Failed to parse a message from the server: ") + exn.what());

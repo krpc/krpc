@@ -45,6 +45,11 @@ namespace KRPC.Client.Test
         public Disconnect.Types.Reason? DisconnectReason { get; set; }
 
         /// <summary>
+        /// Whether a request is answered with the start of a message that never finishes.
+        /// </summary>
+        public bool StallResponses { get; set; }
+
+        /// <summary>
         /// Whether a request is answered only once the client's disconnect arrives, after which
         /// the connection is closed.
         /// </summary>
@@ -148,6 +153,11 @@ namespace KRPC.Client.Test
                                 Disconnect = new Disconnect { Reason = DisconnectReason.Value, Message = "Bye" }
                             });
                             return;
+                        }
+                        if (StallResponses) {
+                            // A length prefix of 10, and 2 of the bytes it promises
+                            stream.Write (new byte [] { 0x0a, 0x12, 0x00 }, 0, 3);
+                            continue;
                         }
                         var reply = new Response { Id = message.Request.Id };
                         reply.Results.Add (new ProcedureResult ());

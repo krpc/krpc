@@ -79,7 +79,7 @@ class MessageReader {
   /**
    * Read the next message from a channel in non-blocking mode, waiting for data with a selector
    * the channel is registered with for reading. Throws a SocketTimeoutException if a message that
-   * has started to arrive receives no new byte within the stall timeout, and an
+   * has started to arrive receives no new byte within the stall timeout, unless it is zero, and an
    * InterruptedIOException if the thread is interrupted while waiting.
    */
   byte[] read(Selector selector, Duration stallTimeout) throws IOException {
@@ -91,7 +91,8 @@ class MessageReader {
       }
       // Waiting first, as a read straight after a request finds nothing
       long timeout = MAXIMUM_WAIT_MILLISECONDS;
-      if (partial) {
+      // A stall timeout of zero waits indefinitely
+      if (partial && stall > 0) {
         long remaining = stall - (System.nanoTime() - lastProgress);
         // Bytes already waiting are no stall, such as after a long pause of this thread
         if (remaining <= 0 && fill() == 0) {

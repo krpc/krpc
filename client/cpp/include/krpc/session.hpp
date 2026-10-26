@@ -35,15 +35,17 @@ class StreamManager;
     needs, in the order the reader queues them. */
 class Session {
  public:
-  /** A message that has started to arrive may go this long without a new byte. */
-  static constexpr std::chrono::milliseconds stall_timeout = std::chrono::seconds(30);
+  /** A message that has started to arrive may go this long without a new byte, by default. */
+  static constexpr std::chrono::milliseconds default_stall_timeout = std::chrono::seconds(30);
 
   /** What each call of a request returns: a new stream, a new event, or another value. The
       reader registers the stream a call adds. */
   enum class Adds : uint8_t { nothing, stream, event };
 
+  /** A stall timeout of zero waits indefinitely. */
   Session(std::shared_ptr<Connection> connection,
-          std::function<schema::Request(uint64_t)> remove_stream_request);
+          std::function<schema::Request(uint64_t)> remove_stream_request,
+          std::chrono::milliseconds stall_timeout = default_stall_timeout);
   ~Session();
   Session(const Session&) = delete;
   Session& operator=(const Session&) = delete;
@@ -113,6 +115,7 @@ class Session {
 
   std::shared_ptr<Connection> connection;
   std::function<schema::Request(uint64_t)> remove_stream_request;
+  std::chrono::milliseconds stall_timeout;
   StreamManager* manager = nullptr;
   // Held for the whole of a write
   std::timed_mutex write_lock;

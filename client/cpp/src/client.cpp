@@ -87,14 +87,18 @@ Client::Client()
       function_types_lock(new std::mutex) {}
 
 Client::Client(const std::string& name, const std::string& address, unsigned int port,
-               std::chrono::milliseconds timeout, std::chrono::milliseconds handshake_timeout)
-    : Client(name, std::make_shared<Connection>(address, port, timeout), handshake_timeout) {}
+               std::chrono::milliseconds timeout, std::chrono::milliseconds handshake_timeout,
+               std::chrono::milliseconds stall_timeout)
+    : Client(name, std::make_shared<Connection>(address, port, timeout), handshake_timeout,
+             stall_timeout) {}
 
 Client::Client(const std::string& name, const std::shared_ptr<Connection>& connection,
-               std::chrono::milliseconds handshake_timeout)
+               std::chrono::milliseconds handshake_timeout, std::chrono::milliseconds stall_timeout)
     : Client() {
   if (handshake_timeout.count() < 0)
     throw std::invalid_argument("The handshake timeout must not be negative");
+  if (stall_timeout.count() < 0)
+    throw std::invalid_argument("The stall timeout must not be negative");
   try {
     connection->connect();
   } catch (const ConnectionError&) {
@@ -109,7 +113,7 @@ Client::Client(const std::string& name, const std::shared_ptr<Connection>& conne
     connection->close();
     throw;
   }
-  stream_manager = StreamManager::create(this, connection);
+  stream_manager = StreamManager::create(this, connection, stall_timeout);
 }
 
 schema::ProcedureResult Client::invoke(const schema::Request& request) {

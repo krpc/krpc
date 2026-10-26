@@ -32,7 +32,8 @@ class StreamManager {
       Releasing its last copy closes the connection. Uses a copy of the client, so that the
       manager outlives the client it is built by. */
   static std::shared_ptr<StreamManager> create(Client* client,
-                                               const std::shared_ptr<Connection>& connection);
+                                               const std::shared_ptr<Connection>& connection,
+                                               std::chrono::milliseconds stall_timeout);
   ~StreamManager();
   StreamManager(const StreamManager&) = delete;
   StreamManager& operator=(const StreamManager&) = delete;
@@ -84,7 +85,8 @@ class StreamManager {
   void notify_closed(const std::exception_ptr& cause = nullptr);
 
  private:
-  StreamManager(Client* client, const std::shared_ptr<Connection>& connection);
+  StreamManager(Client* client, const std::shared_ptr<Connection>& connection,
+                std::chrono::milliseconds stall_timeout);
   /** Close the connection and end every stream, on the thread releasing the last client. */
   void close();
   /** A change for the dispatcher to apply to a stream: a new value, or an ending. */

@@ -251,6 +251,8 @@ Client API Reference
    .. method:: static Connection newInstance(String name, java.net.InetAddress address, int port, java.time.Duration timeout)
    .. method:: static Connection newInstance(String name, String address, int port, java.time.Duration timeout, java.time.Duration handshakeTimeout)
    .. method:: static Connection newInstance(String name, java.net.InetAddress address, int port, java.time.Duration timeout, java.time.Duration handshakeTimeout)
+   .. method:: static Connection newInstance(String name, String address, int port, java.time.Duration timeout, java.time.Duration handshakeTimeout, java.time.Duration stallTimeout)
+   .. method:: static Connection newInstance(String name, java.net.InetAddress address, int port, java.time.Duration timeout, java.time.Duration handshakeTimeout, java.time.Duration stallTimeout)
 
       Create a connection to the server, using the given connection details.
 
@@ -270,6 +272,10 @@ Client API Reference
                                                   seconds. Zero waits indefinitely, such as for a
                                                   server that asks the player to approve each
                                                   connection.
+      :param java.time.Duration stallTimeout: How long a message from the server can go without a
+                                              new byte, once it has started to arrive, before the
+                                              connection fails. Defaults to 30 seconds. Zero
+                                              waits indefinitely.
 
       Throws a ``ConnectionException`` if the server refuses the connection. Its ``getStatus``
       method returns the status the server gave, such as ``DENIED``. An exception thrown when the
@@ -280,6 +286,7 @@ Client API Reference
    .. method:: static Connection newLocalInstance(String name)
    .. method:: static Connection newLocalInstance(String name, String path)
    .. method:: static Connection newLocalInstance(String name, String path, java.time.Duration handshakeTimeout)
+   .. method:: static Connection newLocalInstance(String name, String path, java.time.Duration handshakeTimeout, java.time.Duration stallTimeout)
 
       Create a connection to a server running on the same machine, over a unix domain socket rather
       than TCP/IP. The connection behaves identically once established.
@@ -292,6 +299,7 @@ Client API Reference
       :param String path: The path of the socket the server is listening on. This should match
                           the socket path shown in the in-game server window.
       :param java.time.Duration handshakeTimeout: As for ``newInstance``.
+      :param java.time.Duration stallTimeout: As for ``newInstance``.
 
    .. method:: Stream<T> addStream(Class<?> clazz, String method, Object... args)
 

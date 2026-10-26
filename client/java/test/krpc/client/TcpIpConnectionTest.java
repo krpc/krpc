@@ -3,6 +3,7 @@ package krpc.client;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
+import java.time.Duration;
 
 /**
  * The connection carried over TCP/IP, against a server the test listens on itself rather
@@ -20,5 +21,12 @@ public class TcpIpConnectionTest extends ConnectionTestCase {
   protected Connection connect(String name) throws IOException {
     int port = ((InetSocketAddress) getServer().getAddress()).getPort();
     return Connection.newInstance(name, "localhost", port);
+  }
+
+  @Override
+  protected Connection connect(String name, Duration stallTimeout) throws IOException {
+    int port = ((InetSocketAddress) getServer().getAddress()).getPort();
+    return Connection.newInstance(
+        name, "localhost", port, Duration.ZERO, Duration.ofSeconds(5), stallTimeout);
   }
 }

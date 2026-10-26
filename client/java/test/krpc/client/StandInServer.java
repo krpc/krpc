@@ -26,6 +26,7 @@ class StandInServer implements AutoCloseable {
   private volatile KRPC.ConnectionResponse.Status status = KRPC.ConnectionResponse.Status.OK;
   private volatile String message = "";
   private volatile KRPC.Disconnect.Reason disconnectReason = null;
+  private volatile boolean stallResponses = false;
   private final CountDownLatch disconnected = new CountDownLatch(1);
 
   StandInServer(ServerSocketChannel listeningChannel) {
@@ -52,6 +53,11 @@ class StandInServer implements AutoCloseable {
   /** Answer a request by ending the connection, with the given reason. */
   public void disconnectWith(KRPC.Disconnect.Reason reason) {
     disconnectReason = reason;
+  }
+
+  /** Answer a request with the start of a message that never finishes. */
+  public void stallResponses() {
+    stallResponses = true;
   }
 
   /** Whether a client sends a disconnect within the given number of milliseconds. */
@@ -117,6 +123,12 @@ class StandInServer implements AutoCloseable {
         if (received.hasDisconnect()) {
           disconnected.countDown();
           return;
+        }
+        if (stallResponses) {
+          // A length prefix of 10, and 2 of the bytes it promises
+          output.write(new byte[] {0x0a, 0x12, 0x00});
+          output.flush();
+          continue;
         }
         if (disconnectReason != null) {
           KRPC.Message.newBuilder()

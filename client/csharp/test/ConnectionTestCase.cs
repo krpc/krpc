@@ -23,9 +23,10 @@ namespace KRPC.Client.Test
         protected abstract Socket Listen ();
 
         /// <summary>
-        /// Connect to the running server over the transport under test.
+        /// Connect to the running server over the transport under test, with the default stall
+        /// timeout when none is given.
         /// </summary>
-        protected abstract Connection Connect (string name);
+        protected abstract Connection Connect (string name, TimeSpan? stallTimeout = null);
 
         /// <summary>
         /// Where the running server is listening, for a test that opens its own socket.
@@ -118,6 +119,19 @@ namespace KRPC.Client.Test
             var exn = Assert.Throws<ConnectionException> (
                           () => Connect ("CSharpConnectionTestMalformed"));
             Assert.IsInstanceOf<System.IO.InvalidDataException> (exn.InnerException);
+        }
+
+        [Test]
+        public void StallTimeout ()
+        {
+            server.StallResponses = true;
+            using (var connection = Connect ("CSharpConnectionTestStall", TimeSpan.FromMilliseconds (200))) {
+                var stopwatch = System.Diagnostics.Stopwatch.StartNew ();
+                var exn = Assert.Throws<ConnectionException> (
+                              () => connection.Invoke ("TestService", "TestProcedure"));
+                Assert.Less (stopwatch.ElapsedMilliseconds, 5000);
+                StringAssert.Contains ("stalled", exn.Message);
+            }
         }
 
         [Test]

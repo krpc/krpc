@@ -38,8 +38,8 @@ import krpc.schema.KRPC;
  * selector, the reader thread with another, and a write that fills the send buffer with a third.
  */
 class Session {
-  // A message that has started to arrive may go this long without a new byte
-  static final Duration STALL_TIMEOUT = Duration.ofSeconds(30);
+  // A partial message's limit without a new byte, none if zero
+  private final Duration stallTimeout;
   // The wait for the server to close its side once ours is closed
   private static final long CLOSE_TIMEOUT_MILLISECONDS = 1000;
 
@@ -97,7 +97,8 @@ class Session {
   private final Thread dispatcherThread;
 
   Session(SocketChannel channel, MessageReader reader,
-          LongFunction<KRPC.Request> removeStreamRequest) {
+          LongFunction<KRPC.Request> removeStreamRequest, Duration stallTimeout) {
+    this.stallTimeout = stallTimeout;
     this.channel = channel;
     this.reader = reader;
     this.removeStreamRequest = removeStreamRequest;
@@ -628,7 +629,7 @@ class Session {
       }
       try {
         // A wait that finds no data reads only to time a partial message
-        if (!readable && !reader.hasBuffered()) {
+        if (!readable && (stallTimeout.isZero() || !reader.hasBuffered())) {
           stopReading();
           continue;
         }
@@ -703,13 +704,13 @@ class Session {
   private byte[] receiveData() throws Ended, InterruptedIOException {
     ConnectionException cause;
     try {
-      return reader.read(readSelector, STALL_TIMEOUT);
+      return reader.read(readSelector, stallTimeout);
     } catch (InterruptedIOException exn) {
       if (exn instanceof SocketTimeoutException) {
         cause = protocolError(
             KRPC.Disconnect.Reason.TIMEOUT,
             "A message from the server stalled for more than "
-            + STALL_TIMEOUT.getSeconds() + " seconds", null);
+            + stallTimeout.toMillis() / 1000.0 + " seconds", null);
       } else {
         throw exn;
       }

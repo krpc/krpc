@@ -49,7 +49,8 @@ std::exception_ptr closed_error(const std::exception_ptr& cause) {
 
 }  // namespace
 
-StreamManager::StreamManager(Client* client, const std::shared_ptr<Connection>& connection)
+StreamManager::StreamManager(Client* client, const std::shared_ptr<Connection>& connection,
+                             std::chrono::milliseconds stall_timeout)
     : client(std::make_unique<Client>(*client)),
       update_lock(new std::recursive_mutex),
       condition(condition_mutex),
@@ -60,14 +61,18 @@ StreamManager::StreamManager(Client* client, const std::shared_ptr<Connection>& 
   this->client->stream_manager =
       std::shared_ptr<StreamManager>(std::shared_ptr<StreamManager>(), this);
   auto* manager_client = this->client.get();
-  session = std::make_unique<Session>(connection, [manager_client](uint64_t id) {
-    return manager_client->build_request("KRPC", "RemoveStream", {encoder::encode(id)});
-  });
+  session = std::make_unique<Session>(
+      connection,
+      [manager_client](uint64_t id) {
+        return manager_client->build_request("KRPC", "RemoveStream", {encoder::encode(id)});
+      },
+      stall_timeout);
 }
 
-std::shared_ptr<StreamManager> StreamManager::create(
-    Client* client, const std::shared_ptr<Connection>& connection) {
-  std::shared_ptr<StreamManager> manager(new StreamManager(client, connection));
+std::shared_ptr<StreamManager> StreamManager::create(Client* client,
+                                                     const std::shared_ptr<Connection>& connection,
+                                                     std::chrono::milliseconds stall_timeout) {
+  std::shared_ptr<StreamManager> manager(new StreamManager(client, connection, stall_timeout));
   manager->self = manager;
   manager->session->start(manager.get(), manager);
   // The clients' pointer, whose last copy closes the manager

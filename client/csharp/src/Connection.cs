@@ -50,18 +50,24 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Connect to a kRPC server on the specified IP address and port number.
-        /// Passes an optional name to the server to identify the client (up to 32 bytes of UTF-8 encoded text).
-        /// If timeout is non-zero, gives up after waiting that long for a connection, rather
-        /// than waiting indefinitely. Gives up after handshakeTimeout of waiting for the server
-        /// to accept the connection, 5 seconds if it is null, or waits indefinitely if it is
-        /// <see cref="Timeout.InfiniteTimeSpan"/>, such as for a server that asks the player to
-        /// approve each connection.
+        /// Connect to a kRPC server over TCP/IP.
         /// </summary>
+        /// <param name="name">A name for the client, up to 32 bytes of UTF-8 encoded text.</param>
+        /// <param name="address">The address of the server, the loopback address if null.</param>
+        /// <param name="port">The port of the server.</param>
+        /// <param name="timeout">How long to wait for a connection, or indefinitely if zero.</param>
+        /// <param name="handshakeTimeout">How long to wait for the server to accept the
+        /// connection, 5 seconds if null, or indefinitely if
+        /// <see cref="Timeout.InfiniteTimeSpan"/>, such as for a server that asks the player to
+        /// approve each connection.</param>
+        /// <param name="stallTimeout">How long a message from the server may go without a new byte
+        /// once it has started to arrive, 30 seconds if null, or indefinitely if
+        /// <see cref="Timeout.InfiniteTimeSpan"/>.</param>
         public Connection (string name = "", IPAddress address = null, int port = 50000,
-                           TimeSpan timeout = default (TimeSpan), TimeSpan? handshakeTimeout = null)
-            : this (name, Connect (address ?? IPAddress.Loopback, port, timeout, handshakeTimeout, null),
-                    handshakeTimeout)
+                           TimeSpan timeout = default (TimeSpan), TimeSpan? handshakeTimeout = null,
+                           TimeSpan? stallTimeout = null)
+            : this (name, Connect (address ?? IPAddress.Loopback, port, timeout, handshakeTimeout, stallTimeout),
+                    handshakeTimeout, stallTimeout)
         {
         }
 
@@ -70,12 +76,13 @@ namespace KRPC.Client
         /// given path rather than over TCP. An empty path stands for the one the server uses
         /// unless it was configured with another. The connection behaves identically once
         /// established. Unix domain sockets are available on Linux, macOS, and Windows 10 1803
-        /// and later. See the constructor for the handshake timeout.
+        /// and later. See the constructor for the handshake and stall timeouts.
         /// </summary>
-        public static Connection ConnectLocal (string name = "", string path = "", TimeSpan? handshakeTimeout = null)
+        public static Connection ConnectLocal (string name = "", string path = "", TimeSpan? handshakeTimeout = null,
+                                               TimeSpan? stallTimeout = null)
         {
-            CheckTimeouts (handshakeTimeout, null);
-            return new Connection (name, ConnectToPath (PathOrDefault (path)), handshakeTimeout);
+            CheckTimeouts (handshakeTimeout, stallTimeout);
+            return new Connection (name, ConnectToPath (PathOrDefault (path)), handshakeTimeout, stallTimeout);
         }
 
         /// <summary>
@@ -166,17 +173,18 @@ namespace KRPC.Client
         /// Perform the connection handshake over an already opened socket. The handshake is the
         /// same whatever carries it.
         /// </summary>
-        Connection (string name, Socket socket, TimeSpan? handshakeTimeout)
+        Connection (string name, Socket socket, TimeSpan? handshakeTimeout, TimeSpan? stallTimeout)
         {
             var stream = new NetworkStream (socket);
             var reader = new MessageReader (stream, socket);
+            var stall = stallTimeout ?? Session.DefaultStallTimeout;
             try {
                 Handshake (name, stream, reader, handshakeTimeout ?? DefaultHandshakeTimeout);
             } catch (System.Exception) {
                 socket.Close ();
                 throw;
             }
-            session = new Session (socket, stream, reader, RemoveStreamRequest);
+            session = new Session (socket, stream, reader, RemoveStreamRequest, stall);
             StreamManager = new StreamManager (this, session.Dispatch);
             session.Start (StreamManager);
             Services.KRPC.Service.AddExceptionTypes (this);

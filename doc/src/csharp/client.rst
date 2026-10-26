@@ -393,7 +393,7 @@ Client API Reference
    A connection to the kRPC server. All interaction with kRPC is performed via an instance of this
    class.
 
-   .. function:: Connection(string name = "", System.Net.IPAddress address = null, int port = 50000, System.TimeSpan timeout = default, System.TimeSpan? handshakeTimeout = null)
+   .. function:: Connection(string name = "", System.Net.IPAddress address = null, int port = 50000, System.TimeSpan timeout = default, System.TimeSpan? handshakeTimeout = null, System.TimeSpan? stallTimeout = null)
 
       Connect to a kRPC server.
 
@@ -410,13 +410,16 @@ Client API Reference
        * **handshakeTimeout** -- How long to wait for the server to accept the connection before
          giving up. Defaults to 5 seconds. ``Timeout.InfiniteTimeSpan`` waits indefinitely, such
          as for a server that asks the player to approve each connection.
+       * **stallTimeout** -- How long a message from the server can go without a new byte, once it
+         has started to arrive, before the connection fails. Defaults to 30 seconds.
+         ``Timeout.InfiniteTimeSpan`` waits indefinitely.
 
       Throws a ``ConnectionException`` if the server refuses the connection. Its ``Status``
       property holds the status the server gave, such as ``Denied``. An exception thrown when the
       server ends the connection holds the reason in its ``Reason`` property, such as
       ``ServerStopped``.
 
-   .. function:: static Connection ConnectLocal(string name = "", string path = "", System.TimeSpan? handshakeTimeout = null)
+   .. function:: static Connection ConnectLocal(string name = "", string path = "", System.TimeSpan? handshakeTimeout = null, System.TimeSpan? stallTimeout = null)
 
       Connect to a kRPC server running on the same machine, over a unix domain socket rather than
       TCP/IP. The connection behaves identically once established. Unix domain sockets are
@@ -430,6 +433,7 @@ Client API Reference
          socket path shown in the in-game server window. Leave empty for the path the server uses
          unless it was configured with another.
        * **handshakeTimeout** -- As for the constructor.
+       * **stallTimeout** -- As for the constructor.
 
    .. function:: Stream<ReturnType> AddStream<ReturnType>(LambdaExpression expression)
 

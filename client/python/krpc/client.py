@@ -29,7 +29,7 @@ from krpc.service import (
     merge_service,
     service_definitions,
 )
-from krpc.session import Session
+from krpc.session import DEFAULT_STALL_TIMEOUT, Session
 from krpc.stream import Stream
 from krpc.streammanager import StreamManager
 from krpc.types import DefaultArgument, TypeBase, Types
@@ -206,11 +206,12 @@ class Client(krpc.services.Client):
         self,
         connection: Connection,
         use_pregenerated_stubs: bool = True,
+        stall_timeout: float | None = DEFAULT_STALL_TIMEOUT,
     ) -> None:
         super().__init__()
         self._types = Types()
         self._connection = connection
-        self._session = Session(connection, self._remove_stream_request)
+        self._session = Session(connection, self._remove_stream_request, stall_timeout)
         self._stream_manager = StreamManager(self, self._session.dispatch)
         self._session.start(self._stream_manager)
         # The type a server side function returns, and the types of its

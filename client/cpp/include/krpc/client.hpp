@@ -29,13 +29,16 @@ class Client {
   Client();
   Client(const std::string& name, const std::string& address, unsigned int port = 50000,
          std::chrono::milliseconds timeout = std::chrono::milliseconds::zero(),
-         std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5));
+         std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5),
+         std::chrono::milliseconds stall_timeout = std::chrono::seconds(30));
   /** Perform the connection handshake over the given connection, which has been built but not
       yet opened. The handshake is the same whatever carries it. Gives up after
       handshake_timeout of waiting for the server to accept the connection, or waits
-      indefinitely if it is zero. */
+      indefinitely if it is zero. Fails the connection when a message from the server receives
+      no new byte for stall_timeout once it has started to arrive, or never if it is zero. */
   Client(const std::string& name, const std::shared_ptr<Connection>& connection,
-         std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5));
+         std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5),
+         std::chrono::milliseconds stall_timeout = std::chrono::seconds(30));
 
   /** Invoke the calls of a request, and return the result of the first. The first call fetches
       the server's list of services, to find the procedures that return a new stream or event.

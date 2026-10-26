@@ -45,9 +45,9 @@ namespace KRPC.Client.Test
             return socket;
         }
 
-        protected override Connection Connect (string name)
+        protected override Connection Connect (string name, TimeSpan? stallTimeout = null)
         {
-            return Connection.ConnectLocal (name, path);
+            return Connection.ConnectLocal (name, path, stallTimeout: stallTimeout);
         }
 
         [TearDown]

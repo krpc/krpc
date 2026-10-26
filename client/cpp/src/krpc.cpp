@@ -16,8 +16,9 @@
 namespace krpc {
 
 Client connect(const std::string& name, const std::string& address, unsigned int port,
-               std::chrono::milliseconds timeout, std::chrono::milliseconds handshake_timeout) {
-  return Client(name, address, port, timeout, handshake_timeout);
+               std::chrono::milliseconds timeout, std::chrono::milliseconds handshake_timeout,
+               std::chrono::milliseconds stall_timeout) {
+  return Client(name, address, port, timeout, handshake_timeout, stall_timeout);
 }
 
 namespace {
@@ -70,9 +71,10 @@ std::string default_path() {
 }  // namespace
 
 Client connect_local(const std::string& name, const std::string& path,
-                     std::chrono::milliseconds handshake_timeout) {
+                     std::chrono::milliseconds handshake_timeout,
+                     std::chrono::milliseconds stall_timeout) {
   return Client(name, std::make_shared<LocalConnection>(path.empty() ? default_path() : path),
-                handshake_timeout);
+                handshake_timeout, stall_timeout);
 }
 
 }  // namespace krpc
