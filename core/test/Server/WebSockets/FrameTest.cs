@@ -57,6 +57,13 @@ namespace KRPC.Test.Server.WebSockets
         }
 
         [Test]
+        public void FromBytesLengthOutOfRange ()
+        {
+            var e = Assert.Throws<FramingException> (() => FrameFromString ("82ff7fffffffffffffff01020304"));
+            Assert.AreEqual (1009, e.Status);
+        }
+
+        [Test]
         public void FromBytesTruncatedPayloadEmpty ()
         {
             var frame = FrameFromString ("888412345678");

@@ -66,6 +66,9 @@ namespace KRPC.Server.WebSockets
             var headerLength = frame.Header.HeaderLength;
             index += headerLength;
             count -= headerLength;
+            // A frame must fit in one buffer along with its header
+            if (frame.Header.Length > (ulong)(int.MaxValue - headerLength))
+                throw new FramingException (1009, "Frame is too large");
             if (frame.Header.Length == 0)
                 frame.Payload = new byte[0];
             else {
