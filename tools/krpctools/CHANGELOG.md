@@ -10,6 +10,10 @@
 - Allow a `<see cref>` to a service in `krpc-docgen` (#1185)
 - Fix the `krpc-docgen` link to a C-nano property that has only a setter (#1185)
 - Fix bytes default arguments in generated C# and C++ code and in the Lua documentation (#1194)
+- Add `krpc-conformance`, which runs the client conformance tests against a client library
+  (#1220)
+- **Breaking:** Set the port of the `TestServer` websockets server with `--websockets-port`, in
+  place of `--tcpip-port` (#1220)
 
 ## [v0.7.0]
 - **Breaking:** Require `--include` in `krpc-clientgen` for each service whose types a C++ or C
