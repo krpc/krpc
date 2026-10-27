@@ -234,7 +234,9 @@ namespace KRPC.Service.KRPC
         /// Add a streaming request and return its identifier.
         /// </summary>
         /// <remarks>
-        /// The stream starts sending results from the next update.
+        /// Client libraries call this procedure to implement streams. Use the streams of your
+        /// client library instead. Calling this directly while using a client library has
+        /// undefined behavior.
         /// </remarks>
         [KRPCProcedure]
         public static Messages.Stream AddStream (ProcedureCall call)
@@ -247,8 +249,9 @@ namespace KRPC.Service.KRPC
         /// Set the update rate for a stream in Hz.
         /// </summary>
         /// <remarks>
-        /// Does nothing for a stream that has ended. Throws an exception if the id has never
-        /// been issued.
+        /// Client libraries call this procedure to implement streams. Use the streams of your
+        /// client library instead. Calling this directly while using a client library has
+        /// undefined behavior.
         /// </remarks>
         [KRPCProcedure]
         public static void SetStreamRate (ulong id, float rate)
@@ -260,8 +263,9 @@ namespace KRPC.Service.KRPC
         /// Remove a streaming request.
         /// </summary>
         /// <remarks>
-        /// Does nothing for a stream that has ended. Throws an exception if the id has never
-        /// been issued.
+        /// Client libraries call this procedure to implement streams. Use the streams of your
+        /// client library instead. Calling this directly while using a client library has
+        /// undefined behavior.
         /// </remarks>
         [KRPCProcedure]
         // FIXME: should be a Stream not a ulong
@@ -274,10 +278,9 @@ namespace KRPC.Service.KRPC
         /// Add a stream of the value a server side function computes on each update.
         /// </summary>
         /// <remarks>
-        /// Each call adds a new stream, with values of the type given by
-        /// <see cref="Expression.ReturnType"/>. Any exception from the function ends the
-        /// stream, including <see cref="ObjectNotLoadedException"/>. A procedure that pauses
-        /// execution to resume on a later tick produces an error on the stream.
+        /// Client libraries call this procedure to implement server side functions. Use the
+        /// server side functions of your client library instead. Calling this directly while
+        /// using a client library has undefined behavior.
         /// </remarks>
         [KRPCProcedure]
         public static Messages.Stream AddFunctionStream (Expression function)
@@ -293,8 +296,9 @@ namespace KRPC.Service.KRPC
         /// event does not compile it.
         /// </summary>
         /// <remarks>
-        /// Compiling a large function takes time on the game's main thread. Compiling it
-        /// in advance keeps that time out of its first run.
+        /// Client libraries call this procedure to implement server side functions. Use the
+        /// server side functions of your client library instead. Calling this directly while
+        /// using a client library has undefined behavior.
         /// </remarks>
         [KRPCProcedure]
         public static void CompileFunction (Expression function)
@@ -310,9 +314,9 @@ namespace KRPC.Service.KRPC
         /// the value it produces.
         /// </summary>
         /// <remarks>
-        /// The arguments are encoded at the types given by <see cref="Expression.ParameterTypes"/>.
-        /// Throws an exception if a procedure the function calls pauses execution, and the
-        /// effects up to the pause remain.
+        /// Client libraries call this procedure to implement server side functions. Use the
+        /// server side functions of your client library instead. Calling this directly while
+        /// using a client library has undefined behavior.
         /// </remarks>
         /// <returns>The encoded value of the function, or no bytes for a function with no
         /// value.</returns>
@@ -353,10 +357,9 @@ namespace KRPC.Service.KRPC
         /// Create an event from a server side function that evaluates to a boolean value.
         /// </summary>
         /// <remarks>
-        /// The function is evaluated on each update, and each call adds a new event. Any
-        /// exception from the function ends the event, including
-        /// <see cref="ObjectNotLoadedException"/>. A procedure that pauses execution to resume
-        /// on a later tick produces an error on the event's stream.
+        /// Client libraries call this procedure to implement events. Use the events of your
+        /// client library instead. Calling this directly while using a client library has
+        /// undefined behavior.
         /// </remarks>
         [KRPCProcedure]
         public static Messages.Event AddEvent(Expression function)

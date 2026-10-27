@@ -140,22 +140,11 @@ javadoc_url_map = {
 
 add_module_names = False
 
-# The git ref this documentation was built from: the vX.Y.Z tag for a release,
-# main for a dev build. Links into the source tree on GitHub use it so each
-# version's docs point at their own source.
-github_ref = '%GITHUB_REF%'
-
 # Clickable (#NNN) issue/PR references on the changelog page. GitHub redirects
 # /issues/N to /pull/N (and vice versa), so `issue` resolves either kind.
-# `github-tree`/`github-blob` link to a directory/file in the source tree at
-# github_ref, e.g. :github-blob:`text <protobuf/krpc.proto>`.
 extlinks = {
     'issue': ('https://github.com/krpc/krpc/issues/%s', '#%s'),
     'pr': ('https://github.com/krpc/krpc/pull/%s', '#%s'),
-    'github-tree': ('https://github.com/krpc/krpc/tree/' + github_ref + '/%s',
-                    None),
-    'github-blob': ('https://github.com/krpc/krpc/blob/' + github_ref + '/%s',
-                    None),
 }
 
 sphinx_tabs_disable_tab_closing = True
@@ -187,6 +176,7 @@ nitpick_ignore = [
     ('c:identifier', 'krpc_connection_t'),
     ('c:identifier', 'krpc_connection_config_t'),
     ('c:identifier', 'krpc_error_t'),
+    ('c:identifier', 'krpc_schema_Event'),
     ('c:identifier', 'krpc_schema_ProcedureCall'),
     ('c:identifier', 'krpc_schema_Status'),
     ('c:identifier', 'krpc_schema_Services'),
@@ -242,7 +232,6 @@ nitpick_ignore = [
     ('cpp:identifier', 'std::unique_lock'),
     ('cpp:identifier', 'krpc'),
     ('cpp:identifier', 'krpc::schema'),
-    ('cpp:identifier', 'krpc::schema::Event'),
     ('cpp:identifier', 'krpc::schema::ProcedureCall'),
     ('cpp:identifier', 'krpc::schema::Services'),
     ('cpp:identifier', 'krpc::schema::Status'),
@@ -354,14 +343,3 @@ def setup(app):
                 block[:] = [nodes.Text(text)]
 
     app.connect('doctree-read', trim_blank_lines)
-
-    # The link checker follows source-tree links on main, as the release tag
-    # does not exist until the release is made
-    def check_source_links_on_main(app, uri):
-        for kind in ('tree', 'blob'):
-            tagged = f'https://github.com/krpc/krpc/{kind}/{github_ref}/'
-            if uri.startswith(tagged):
-                return f'https://github.com/krpc/krpc/{kind}/main/' + uri[len(tagged):]
-        return None
-
-    app.connect('linkcheck-process-uri', check_source_links_on_main)

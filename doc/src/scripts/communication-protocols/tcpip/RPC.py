@@ -53,7 +53,7 @@ conn.connect(("127.0.0.1", 50000))
 # Send a connection request
 message = KRPC.Message()
 message.connection_request.protocol_version = 2
-message.connection_request.client_name = "Jeb"
+message.connection_request.client_name = "Example"
 send_message(conn, message)
 
 # Receive the connection response
@@ -99,7 +99,7 @@ disconnect = KRPC.Disconnect(reason=KRPC.Disconnect.CLOSED)
 send_message(conn, KRPC.Message(disconnect=disconnect))
 conn.shutdown(socket.SHUT_WR)
 
-# Discard anything still arriving until the server closes its side, for up to a second
+# Discard anything still arriving until the server closes its side, or a second passes with nothing
 conn.settimeout(1)
 try:
     while conn.recv(4096):

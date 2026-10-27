@@ -322,27 +322,27 @@ typedef enum {
 /**
  * Create an event from a server side function that evaluates to a boolean value.
  *
- * The function is evaluated on each update, and each call adds a new event. Any
- * exception from the function ends the event, including
- * KRPC.ObjectNotLoadedException. A procedure that pauses execution to resume
- * on a later tick produces an error on the event's stream.
+ * Client libraries call this procedure to implement events. Use the events of your
+ * client library instead. Calling this directly while using a client library has
+ * undefined behavior.
  */
 static inline krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, krpc_schema_Event * returnValue, krpc_KRPC_Expression_t function);
 
 /**
  * Add a stream of the value a server side function computes on each update.
  *
- * Each call adds a new stream, with values of the type given by
- * krpc_KRPC_Expression_ReturnType(). Any exception from the function ends the
- * stream, including KRPC.ObjectNotLoadedException. A procedure that pauses
- * execution to resume on a later tick produces an error on the stream.
+ * Client libraries call this procedure to implement server side functions. Use the
+ * server side functions of your client library instead. Calling this directly while
+ * using a client library has undefined behavior.
  */
 static inline krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, krpc_KRPC_Expression_t function);
 
 /**
  * Add a streaming request and return its identifier.
  *
- * The stream starts sending results from the next update.
+ * Client libraries call this procedure to implement streams. Use the streams of your
+ * client library instead. Calling this directly while using a client library has
+ * undefined behavior.
  */
 static inline krpc_error_t krpc_KRPC_AddStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, const krpc_schema_ProcedureCall * call);
 
@@ -350,8 +350,9 @@ static inline krpc_error_t krpc_KRPC_AddStream(krpc_connection_t connection, krp
  * Compile a server side function, so that running, streaming or adding it as an
  * event does not compile it.
  *
- * Compiling a large function takes time on the game's main thread. Compiling it
- * in advance keeps that time out of its first run.
+ * Client libraries call this procedure to implement server side functions. Use the
+ * server side functions of your client library instead. Calling this directly while
+ * using a client library has undefined behavior.
  */
 static inline krpc_error_t krpc_KRPC_CompileFunction(krpc_connection_t connection, krpc_KRPC_Expression_t function);
 
@@ -423,8 +424,9 @@ static inline krpc_error_t krpc_KRPC_ReleaseTick(krpc_connection_t connection);
 /**
  * Remove a streaming request.
  *
- * Does nothing for a stream that has ended. Throws an exception if the id has never
- * been issued.
+ * Client libraries call this procedure to implement streams. Use the streams of your
+ * client library instead. Calling this directly while using a client library has
+ * undefined behavior.
  */
 static inline krpc_error_t krpc_KRPC_RemoveStream(krpc_connection_t connection, uint64_t id);
 
@@ -432,9 +434,9 @@ static inline krpc_error_t krpc_KRPC_RemoveStream(krpc_connection_t connection, 
  * Run a server side function once, within a single physics tick, and return
  * the value it produces.
  *
- * The arguments are encoded at the types given by krpc_KRPC_Expression_ParameterTypes().
- * Throws an exception if a procedure the function calls pauses execution, and the
- * effects up to the pause remain.
+ * Client libraries call this procedure to implement server side functions. Use the
+ * server side functions of your client library instead. Calling this directly while
+ * using a client library has undefined behavior.
  * @param connection A connection object.
  * @param returnValue The encoded value of the function, or no bytes for a function with no
  * value.
@@ -447,8 +449,9 @@ static inline krpc_error_t krpc_KRPC_RunFunction(krpc_connection_t connection, k
 /**
  * Set the update rate for a stream in Hz.
  *
- * Does nothing for a stream that has ended. Throws an exception if the id has never
- * been issued.
+ * Client libraries call this procedure to implement streams. Use the streams of your
+ * client library instead. Calling this directly while using a client library has
+ * undefined behavior.
  */
 static inline krpc_error_t krpc_KRPC_SetStreamRate(krpc_connection_t connection, uint64_t id, float rate);
 

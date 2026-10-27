@@ -1,5 +1,6 @@
 .. default-domain:: cs
 .. highlight:: csharp
+.. namespace:: KRPC.Client
 
 C# Client
 =========

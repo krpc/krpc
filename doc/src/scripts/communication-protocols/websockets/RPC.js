@@ -1,35 +1,56 @@
-var websocket = require('ws');
-var protobufjs = require('protobufjs')
-var proto = protobufjs.loadProtoFile('krpc.proto').build();
-var schema = proto.krpc.schema;
+'use strict';
 
-console.log('Connecting to the server')
-let conn = new websocket('ws://127.0.0.1:50000')
-conn.binaryType = 'arraybuffer'
+const WebSocket = require('ws');
+const protobuf = require('protobufjs');
 
-conn.onopen = (e) => {
-  // The handshake is the first binary message
-  let request = new schema.ConnectionRequest({client_name: 'Jeb', protocol_version: 2});
-  conn.send(new schema.Message({connection_request: request}).toArrayBuffer());
-  conn.onmessage = (e) => {
-    let response = schema.Message.decode(e.data).connection_response;
-    if (response.status !== schema.ConnectionResponse.Status.OK)
+const root = protobuf.loadSync('krpc.proto');
+const Message = root.lookupType('krpc.schema.Message');
+const Status = root.lookupType('krpc.schema.Status');
+
+function send(conn, message) {
+  conn.send(Message.encode(Message.fromObject(message)).finish());
+}
+
+function receive(event) {
+  const message = Message.decode(new Uint8Array(event.data));
+  return Message.toObject(message, {enums: String, longs: Number, defaults: true});
+}
+
+// Open a websockets connection to the server
+const conn = new WebSocket('ws://127.0.0.1:50000/');
+conn.binaryType = 'arraybuffer';
+
+conn.onopen = () => {
+  // Send a connection request
+  send(conn, {connectionRequest: {clientName: 'Example', protocolVersion: 2}});
+};
+
+conn.onmessage = (event) => {
+  const message = receive(event);
+  if (message.connectionResponse) {
+    // Check the connection was successful
+    const response = message.connectionResponse;
+    if (response.status !== 'OK')
       throw new Error('Connection failed: ' + response.message);
-    console.log('Successfully connected');
+    if (response.protocolVersion !== 2)
+      throw new Error('The server does not support protocol version 2');
+    console.log('Connected to the server');
 
     // Invoke the KRPC.GetStatus RPC, in a request with the id 1
-    let call = new schema.ProcedureCall('KRPC', 'GetStatus');
-    conn.send(new schema.Message({request: new schema.Request({id: 1, calls: [call]})}).toArrayBuffer());
-    conn.onmessage = (e) => {
-      let response = schema.Message.decode(e.data).response;
-      let status = schema.Status.decode(response.results[0].value);
-      console.log(status);
+    send(conn, {request: {id: 1, calls: [{service: 'KRPC', procedure: 'GetStatus'}]}});
+  } else if (message.response) {
+    // Check for an error in the response, and in the results
+    const response = message.response;
+    if (response.error)
+      throw new Error('ERROR: ' + response.error.description);
+    if (response.results[0].error)
+      throw new Error('ERROR: ' + response.results[0].error.description);
 
-      // End the connection with a disconnect, then a close frame
-      let disconnect = new schema.Disconnect({reason: schema.Disconnect.Reason.CLOSED});
-      conn.send(new schema.Message({disconnect: disconnect}).toArrayBuffer());
-      conn.close();
-    };
-    conn.onclose = (e) => process.exit(0);
-  };
+    // Decode the return value as a Status message, and print it out
+    console.log(Status.toObject(Status.decode(response.results[0].value), {longs: Number}));
+
+    // End the connection with a disconnect, then a close frame
+    send(conn, {disconnect: {reason: 'CLOSED'}});
+    conn.close();
+  }
 };

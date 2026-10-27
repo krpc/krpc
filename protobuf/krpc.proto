@@ -117,11 +117,11 @@ message Service {
   repeated Procedure procedures = 2;
   repeated Class classes = 3;
   repeated Enumeration enumerations = 4;
+  repeated Struct structs = 9;
   repeated Exception exceptions = 5;
   string documentation = 6;
   bool deprecated = 7;
   string deprecated_reason = 8;
-  repeated Struct structs = 9;
 }
 
 message Procedure {

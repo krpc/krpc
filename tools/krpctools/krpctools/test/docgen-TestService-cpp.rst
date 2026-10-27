@@ -698,7 +698,7 @@
       :returns: The object, or ``NULL``.
    
 
-   .. function:: ::krpc::Event on_timer(uint32_t milliseconds, uint32_t repeats = 1)
+   .. function:: krpc::Event on_timer(uint32_t milliseconds, uint32_t repeats = 1)
 
 
 
@@ -722,7 +722,7 @@
 
    
 
-   .. function:: ::krpc::Event remove_event_after(uint32_t milliseconds)
+   .. function:: krpc::Event remove_event_after(uint32_t milliseconds)
 
 
 

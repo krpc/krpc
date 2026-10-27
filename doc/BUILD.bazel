@@ -62,9 +62,10 @@ stage_files(
         # The protocol pages include their message definitions from the schema
         "protobuf/krpc.proto": "communication-protocols/krpc.proto",
         # The specification's requirement lists are generated from the conformance tests
-        "client/conformance/requirements/": "communication-protocols/client-spec/requirements/",
-        "client/conformance/testee.proto": "communication-protocols/client-spec/testee.proto",
-        "client/conformance/coverage.txt": "communication-protocols/client-spec/requirements/coverage.txt",
+        "client/conformance/requirements/": "client-spec/requirements/",
+        "client/conformance/coverage.txt": "client-spec/requirements/coverage.txt",
+        # The conformance page offers the testee protocol for download
+        "client/conformance/testee.proto": "client-spec/testee.proto",
     },
 )
 
@@ -154,21 +155,16 @@ py_binary(
 # string keeps the docs in step with the version everything else builds with.
 docs_version = "dev" if "-" in version else version
 
-# The git ref this build's source-tree links point at, so each version's docs
-# link to their own source: the vX.Y.Z tag for a release, main for a dev build.
-github_ref = "main" if "-" in version else "v" + version
-
 genrule(
     name = "conf",
     srcs = ["conf.py.tmpl"],
     outs = ["src/conf.py"],
-    # %VERSION%/%SUBPATH% get the channel ('dev' or the release number) and
-    # %GITHUB_REF% the source ref (main or vX.Y.Z). %FULL_VERSION% gets the
-    # untruncated config.bzl version (the client artifacts' version), for
-    # examples that name a built jar. The commit sha is deliberately not
+    # %VERSION%/%SUBPATH% get the channel ('dev' or the release number).
+    # %FULL_VERSION% gets the untruncated config.bzl version (the client
+    # artifacts' version), for examples that name a built jar. The commit sha is deliberately not
     # substituted in: it reaches a dev build's footer at page-load time via
     # build-info.json, keeping the HTML identical from one commit to the next.
-    cmd = "sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version + "/g' -e 's/%FULL_VERSION%/" + version + "/g' -e 's/%GITHUB_REF%/" + github_ref + "/g' \"$<\" > \"$@\"",
+    cmd = "sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version + "/g' -e 's/%FULL_VERSION%/" + version + "/g' \"$<\" > \"$@\"",
 )
 
 sphinx_build(

@@ -44,7 +44,7 @@ connects to a server and calls a procedure:
    < {"reply":{"id":"2","value":{"string":"42"},"thread":"140213"}}
 
 Each line is a message in the proto3 JSON mapping: a ``Command`` from the driver, and an
-``Output`` from the testee. :download:`testee.proto </communication-protocols/client-spec/testee.proto>` defines the
+``Output`` from the testee. :download:`testee.proto </client-spec/testee.proto>` defines the
 messages, and is the contract between the driver and a testee. Its comments state what the testee
 does for each command. The file also ships in the ``krpctools`` package, as
 ``krpctools/conformance/testee.proto``.
