@@ -45,6 +45,8 @@ test_objects.py::test_unknown_object_id[zero-argument]  # As test_errors.py::tes
 test_objects.py::test_unknown_object_id[zero-target]  # As test_errors.py::test_service_exceptions[krpc]
 test_objects.py::test_unknown_object_id[never-issued-argument]  # As test_errors.py::test_service_exceptions[krpc]
 test_objects.py::test_unknown_object_id[never-issued-target]  # As test_errors.py::test_service_exceptions[krpc]
+test_streams.py::test_members[extension-member]  # The testee dispatch covers KRPC and TestService only
+test_streams.py::test_undecodable_value  # A stream value is decoded when it is read, so a read after a value that fails to decode raises
 test_connection.py::test_close_twice  # As test_call_after_end[close]
 test_connection.py::test_handshake_timeout_values[zero]  # A zero timeout waits indefinitely
 test_connection.py::test_stall_timeout_values[zero]  # As test_handshake_timeout_values[zero]
@@ -55,7 +57,16 @@ test_values.py::test_null_in_non_nullable_slot[object-element]  # As test_null_f
 test_values.py::test_null_result_for_non_nullable  # A null result decodes as the default value
 test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
+test_streams.py::test_scoped_removal  # A stream has no scope idiom
+test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a procedure that returns an event
 test_codec.py::test_object  # An object with the id 0 is the null object
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
 test_objects.py::test_object_id_range[zero]  # As test_codec.py::test_object
+test_functions.py::test_null_for_non_nullable_type[double]  # Raises std::runtime_error, not the encoding error
+test_functions.py::test_stream_null_for_non_nullable_type[double]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_stream_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[TestClass]
+test_events.py::test_server_end  # An event the server ends raises an unnamed RPC error, not KRPC.StreamRemovedException or the stream error
+test_events.py::test_ended_without_firing  # As test_server_end
+test_events.py::test_end_callback[server]  # As test_server_end

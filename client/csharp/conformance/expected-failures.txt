@@ -1,6 +1,7 @@
 # The conformance tests the C# client fails, one per line, with the reason as a comment
 test_connection.py::test_call_after_end[close]  # A call after close raises ObjectDisposedException
 test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
+test_streams.py::test_members[extension-member]  # The testee dispatch covers KRPC and TestService only
 test_codec.py::test_malformed_data[bytes]  # A decoding error is a plain ArgumentException, IOException or InvalidProtocolBufferException, as the client has no encoding error type
 test_codec.py::test_malformed_data[double]  # As test_malformed_data[bytes]
 test_codec.py::test_malformed_data[float]  # As test_malformed_data[bytes]
@@ -25,8 +26,37 @@ test_values.py::test_null_for_non_nullable[string]  # As test_null_for_non_nulla
 test_values.py::test_null_for_non_nullable[struct]  # As test_null_for_non_nullable[bytes]
 test_values.py::test_null_for_non_nullable[tuple]  # As test_null_for_non_nullable[bytes]
 test_values.py::test_null_result_for_non_nullable  # A null result for a string fails to parse, as an RPC error
+test_streams.py::test_scoped_removal  # A stream has no scope idiom
+test_streams.py::test_update_callback  # A connection has no stream update callback
 test_codec.py::test_malformed_data[dictionary(string,sint32)]  # As test_malformed_data[bytes]
 test_codec.py::test_empty_data  # As test_malformed_data[bytes]
+test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a procedure that returns an event
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
+test_streams.py::test_first_call_superseded  # The client has no race points
+test_streams.py::test_callback_after_remove  # The client has no race points
+test_streams.py::test_callback_removed_during_update  # The client has no race points
+test_events.py::test_callback_added_during_replay  # The client has no race points
+test_events.py::test_callback_removed_during_add  # The client has no race points
+test_events.py::test_callback_removed_during_update  # The client has no race points
+test_functions.py::test_mismatched_type[string-for-sint32]  # Throws InvalidOperationException for a type parameter that cannot hold the value, not the argument error
+test_functions.py::test_stream_mismatched_type[string-for-sint32]  # As test_mismatched_type[string-for-sint32]
+test_functions.py::test_mismatched_type[list-for-sint32]  # As test_mismatched_type[string-for-sint32]
+test_functions.py::test_stream_mismatched_type[list-for-sint32]  # As test_mismatched_type[list-for-sint32]
+test_functions.py::test_mismatched_type[short-tuple]  # As test_mismatched_type[string-for-sint32]
+test_functions.py::test_stream_mismatched_type[short-tuple]  # As test_mismatched_type[short-tuple]
+test_functions.py::test_mismatched_type[list-for-set]  # As test_mismatched_type[string-for-sint32]
+test_functions.py::test_stream_mismatched_type[list-for-set]  # As test_mismatched_type[list-for-set]
+test_functions.py::test_mismatched_type[dictionary-value-type]  # As test_mismatched_type[string-for-sint32]
+test_functions.py::test_stream_mismatched_type[dictionary-value-type]  # As test_mismatched_type[dictionary-value-type]
+test_functions.py::test_mismatched_type[sint32-for-enum]  # As test_mismatched_type[string-for-sint32]
+test_functions.py::test_stream_mismatched_type[sint32-for-enum]  # As test_mismatched_type[sint32-for-enum]
+test_functions.py::test_mismatched_type[list-for-list-of-nullable]  # As test_mismatched_type[string-for-sint32]
+test_functions.py::test_stream_mismatched_type[list-for-list-of-nullable]  # As test_mismatched_type[list-for-list-of-nullable]
+test_streams.py::test_drop_last_handle  # Dropping the last handle leaves the stream on the server
+test_events.py::test_drop_last_handle  # As test_streams.py::test_drop_last_handle
+test_streams.py::test_remove_during_server_ending  # The client has no race points
 test_objects.py::test_sorting  # A remote object has no ordering
+test_streams.py::test_value_as_first_call_ends  # The client has no race points
 test_codec.py::test_invalid_utf8  # As test_malformed_data[bytes]
+test_functions.py::test_null_for_non_nullable_type[double]  # Raises InvalidOperationException, as the client has no encoding error type
+test_functions.py::test_stream_null_for_non_nullable_type[double]  # As test_null_for_non_nullable_type[double]

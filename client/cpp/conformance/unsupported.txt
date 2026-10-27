@@ -25,5 +25,12 @@ test_values.py::test_null_in_non_nullable_slot[set-element]  # The client's type
 test_values.py::test_null_in_non_nullable_slot[string-element]  # The client's type cannot hold null
 test_values.py::test_null_in_non_nullable_slot[struct-field]  # The client's type cannot hold null
 test_values.py::test_null_in_non_nullable_slot[tuple-item]  # The client's type cannot hold null
+test_streams.py::test_hash  # A stream object has no std::hash
+test_events.py::test_hash  # An event object has no std::hash
+test_streams.py::test_callback_fatal_error  # C++ has no kind of error apart from its ordinary exceptions
+test_streams.py::test_first_call_fatal_error  # As test_streams.py::test_callback_fatal_error
+test_streams.py::test_end_callback_fatal_error_on_remove  # As test_streams.py::test_callback_fatal_error
+test_streams.py::test_end_callback_fatal_error_on_close  # As test_streams.py::test_callback_fatal_error
+test_streams.py::test_late_end_callback_fatal_error  # As test_streams.py::test_callback_fatal_error
 test_connection.py::test_close_interrupted  # As test_calls.py::test_abandoned_id
 test_objects.py::test_static_method_through_an_object_connection  # A static method is called through its class

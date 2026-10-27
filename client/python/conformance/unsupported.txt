@@ -1,3 +1,9 @@
 # The conformance tests the Python client's language has no way to carry out, one per line, with the reason as a comment
 test_calls.py::test_abandoned_id  # A Python thread cannot be interrupted
+test_functions.py::test_null_for_non_nullable_type[double]  # A Python value can be None
+test_functions.py::test_stream_null_for_non_nullable_type[double]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_null_in_callback[double]  # A Python value can be None
+test_functions.py::test_null_for_non_nullable_type[TestClass]  # A Python value can be None
+test_functions.py::test_stream_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[TestClass]
+test_functions.py::test_null_in_callback[TestClass]  # A Python value can be None
 test_connection.py::test_close_interrupted  # As test_calls.py::test_abandoned_id

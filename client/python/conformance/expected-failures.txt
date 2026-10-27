@@ -44,6 +44,8 @@ test_codec.py::test_out_of_range[sint32]  # As test_values.py::test_out_of_range
 test_codec.py::test_out_of_range[sint64]  # As test_values.py::test_out_of_range[sint32-above]
 test_codec.py::test_out_of_range[uint32]  # As test_values.py::test_out_of_range[sint32-above]
 test_codec.py::test_empty_data  # As test_malformed_data[double]
+test_streams.py::test_procedure_returning_an_event  # Raises the server's InvalidOperationException, not the stream error
+test_streams.py::test_procedure_without_a_value  # As test_procedure_returning_an_event
 test_calls.py::test_unknown_type  # A structure holding a left-out structure is exposed
 test_calls.py::test_undefined_type[class]  # A member whose type names an undefined class or enumeration is exposed
 test_calls.py::test_undefined_type[enumeration]  # As above
@@ -51,6 +53,16 @@ test_calls.py::test_undefined_type[wrong-kind]  # As above
 test_calls.py::test_undefined_type[enumeration-default]  # Building the services raises an error
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
 test_values.py::test_null_in_non_nullable_slot[string-element]  # A null string in a collection raises AttributeError
+test_streams.py::test_first_call_superseded  # The client has no race points
+test_streams.py::test_callback_after_remove  # The client has no race points
+test_streams.py::test_callback_removed_during_update  # The client has no race points
+test_events.py::test_callback_added_during_replay  # The client has no race points
+test_events.py::test_callback_removed_during_add  # The client has no race points
+test_events.py::test_callback_removed_during_update  # The client has no race points
+test_streams.py::test_drop_last_handle  # Dropping the last handle leaves the stream on the server
+test_events.py::test_drop_last_handle  # As test_streams.py::test_drop_last_handle
+test_streams.py::test_remove_during_server_ending  # The client has no race points
+test_streams.py::test_value_as_first_call_ends  # The client has no race points
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 raises UnicodeDecodeError, not the encoding error
 test_values.py::test_undeclared_enum_result  # An undeclared enum value raises ValueError, not the encoding error
 test_connection.py::test_handshake_failed_write  # The write's OSError escapes the handshake unwrapped
