@@ -53,3 +53,4 @@ test_values.py::test_null_result_with_a_value  # A result with is_null set reads
 test_values.py::test_null_in_non_nullable_slot[string-element]  # A null string in a collection raises AttributeError
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 raises UnicodeDecodeError, not the encoding error
 test_values.py::test_undeclared_enum_result  # An undeclared enum value raises ValueError, not the encoding error
+test_connection.py::test_handshake_failed_write  # The write's OSError escapes the handshake unwrapped

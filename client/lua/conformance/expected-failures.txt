@@ -1,4 +1,8 @@
 # The conformance tests the Lua client fails, one per line, with the reason as a comment
+test_connection.py::test_handshake_refused[DENIED]  # The status is reported only in the message
+test_connection.py::test_handshake_refused[MALFORMED_MESSAGE]  # As above
+test_connection.py::test_handshake_refused[TIMEOUT]  # As above
+test_connection.py::test_handshake_refused[WRONG_PROTOCOL_VERSION]  # As above
 test_errors.py::test_message_prefix[ArgumentException]  # An RPC error message starts with the client's source position
 test_errors.py::test_message_prefix[ArgumentNullException]  # As above
 test_errors.py::test_message_prefix[ArgumentOutOfRangeException]  # As above
@@ -61,6 +65,15 @@ test_codec.py::test_too_few_items[tuple]  # A short wire tuple decodes short
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool with no value, a presence bool other than 0 or 1, or data after a null, decodes
 test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
+test_connection.py::test_handshake_disconnect[known]  # The disconnect reason is only in the message
+test_connection.py::test_lost[disconnect]  # As test_handshake_disconnect
+test_connection.py::test_stall  # No stall timeout
+test_connection.py::test_handshake_timeout_values[zero]  # A zero, negative or NaN timeout raises no argument error
+test_connection.py::test_handshake_timeout_values[negative]  # As test_handshake_timeout_values[zero]
+test_connection.py::test_handshake_timeout_values[nan]  # As test_handshake_timeout_values[zero]
+test_connection.py::test_stall_timeout_values[zero]  # No stall timeout
+test_connection.py::test_stall_timeout_values[negative]  # As test_stall_timeout_values[zero]
+test_connection.py::test_stall_timeout_values[nan]  # As test_stall_timeout_values[zero]
 test_values.py::test_integer_to_float[double-uint64]  # As test_default_values[uint64-extremes]
 test_values.py::test_integer_to_float[float-uint64]  # As test_default_values[uint64-extremes]
 test_values.py::test_null_for_non_nullable[bool]  # A null argument is sent

@@ -69,3 +69,5 @@ test_codec.py::test_dictionary_value_left_out  # No decode command
 test_codec.py::test_empty_data  # No decode command
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
 test_values.py::test_null_flag[object]  # No values of type ClassType
+test_connection.py::test_failed_write  # No fail_write command
+test_connection.py::test_handshake_failed_write  # No fail_write command

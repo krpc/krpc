@@ -1,4 +1,6 @@
 # The conformance tests the C++ client's language has no way to carry out, one per line, with the reason as a comment
+test_connection.py::test_handshake_timeout_values[nan]  # A std::chrono::milliseconds cannot hold NaN
+test_connection.py::test_stall_timeout_values[nan]  # As test_handshake_timeout_values[nan]
 test_calls.py::test_abandoned_id  # A C++ thread cannot be interrupted
 test_values.py::test_null_for_non_nullable[bool]  # The client's type cannot hold null
 test_values.py::test_null_for_non_nullable[bytes]  # The client's type cannot hold null
@@ -23,4 +25,5 @@ test_values.py::test_null_in_non_nullable_slot[set-element]  # The client's type
 test_values.py::test_null_in_non_nullable_slot[string-element]  # The client's type cannot hold null
 test_values.py::test_null_in_non_nullable_slot[struct-field]  # The client's type cannot hold null
 test_values.py::test_null_in_non_nullable_slot[tuple-item]  # The client's type cannot hold null
+test_connection.py::test_close_interrupted  # As test_calls.py::test_abandoned_id
 test_objects.py::test_static_method_through_an_object_connection  # A static method is called through its class

@@ -1,4 +1,6 @@
 # The conformance tests the C# client's language has no way to carry out, one per line, with the reason as a comment
+test_connection.py::test_handshake_timeout_values[nan]  # A TimeSpan cannot hold NaN
+test_connection.py::test_stall_timeout_values[nan]  # As test_handshake_timeout_values[nan]
 test_values.py::test_null_for_non_nullable[bool]  # The client's type cannot hold null
 test_values.py::test_null_for_non_nullable[double]  # The client's type cannot hold null
 test_values.py::test_null_for_non_nullable[enum]  # The client's type cannot hold null

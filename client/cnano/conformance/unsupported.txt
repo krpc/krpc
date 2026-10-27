@@ -20,5 +20,7 @@ test_values.py::test_null_in_non_nullable_slot[nested-element]  # The C type can
 test_values.py::test_null_in_non_nullable_slot[set-element]  # The C type cannot hold null
 test_values.py::test_null_in_non_nullable_slot[struct-field]  # The C type cannot hold null
 test_values.py::test_null_in_non_nullable_slot[tuple-item]  # The C type cannot hold null
+test_connection.py::test_localsocket_default_path  # The client has no default path
+test_connection.py::test_localsocket_fallback_path  # As test_localsocket_default_path
 test_values.py::test_structure_equality  # C has no equality of structures
 test_values.py::test_structure_hash  # The language has no hash of a value

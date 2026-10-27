@@ -1,5 +1,15 @@
 # The conformance tests the Java client fails, one per line, with the reason as a comment
+test_connection.py::test_call_after_end[close]  # A call after close raises RPCException, with the connection error as its cause
 test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
+test_connection.py::test_lost_pending_calls  # As test_call_after_end[close]
+test_connection.py::test_wrong_direction  # As test_call_after_end[close]
+test_connection.py::test_malformed_message  # As test_call_after_end[close]
+test_connection.py::test_stall  # As test_call_after_end[close]
+test_connection.py::test_lost[disconnect]  # As test_call_after_end[close]
+test_connection.py::test_lost[no-disconnect]  # As test_call_after_end[close]
+test_connection.py::test_call_after_end[disconnect]  # As test_call_after_end[close]
+test_connection.py::test_handshake_timeout_values[zero]  # A zero timeout waits indefinitely, as a Java socket timeout does
+test_connection.py::test_stall_timeout_values[zero]  # As test_handshake_timeout_values[zero]
 test_values.py::test_undeclared_enum_result  # An enum result holds any number
 test_values.py::test_null_for_non_nullable[bytes]  # A null argument is sent
 test_values.py::test_null_for_non_nullable[dictionary]  # As test_null_for_non_nullable[bytes]
@@ -16,5 +26,11 @@ test_codec.py::test_too_few_items[tuple]  # A short tuple raises ClassCastExcept
 test_calls.py::test_unknown_id  # The call raises RPCException, not the connection error
 test_objects.py::test_get_object_id  # A null raises NullPointerException, from Objects.requireNonNull
 test_objects.py::test_sorting  # compareTo compares ids as signed longs, so an id past 63 bits orders first
+test_connection.py::test_malformed_size  # Raises an RPC error, not the connection error
+test_connection.py::test_lost[partway]  # As test_malformed_size
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
+test_connection.py::test_failed_write  # As test_call_after_end[close]
+test_connection.py::test_handshake_lost  # The EOFException of the closed socket escapes the handshake unwrapped
+test_connection.py::test_handshake_failed_write  # The write's IOException escapes the handshake unwrapped
+test_connection.py::test_size_over_32_bits  # As test_malformed_size
