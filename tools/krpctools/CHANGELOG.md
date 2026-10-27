@@ -9,6 +9,7 @@
   about one `krpc-clientgen` cannot resolve (#1185)
 - Allow a `<see cref>` to a service in `krpc-docgen` (#1185)
 - Fix the `krpc-docgen` link to a C-nano property that has only a setter (#1185)
+- Fix bytes default arguments in generated C# and C++ code and in the Lua documentation (#1194)
 
 ## [v0.7.0]
 - **Breaking:** Require `--include` in `krpc-clientgen` for each service whose types a C++ or C
