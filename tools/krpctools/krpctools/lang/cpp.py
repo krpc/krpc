@@ -206,6 +206,10 @@ class CppLanguage(Language):
             return '"%s"' % value
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
             return "true" if value else "false"
+        # Bytes are a std::string, given its length as they may hold a zero byte
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BYTES:
+            escapes = "".join("\\x%02x" % x for x in value)
+            return 'std::string("%s", %d)' % (escapes, len(value))
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
             return float32_literal(value) + "f"
         # A default of null is the default constructed value, which for a nullable position

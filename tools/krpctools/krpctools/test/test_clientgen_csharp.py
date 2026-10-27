@@ -1,7 +1,7 @@
 import unittest
 
 from krpctools.clientgen.csharp import CsharpGenerator
-from krpctools.test.clientgentest import ClientGenTestCase
+from krpctools.test.clientgentest import ClientGenTestCase, bytes_default
 
 
 def nullable_class(name):
@@ -45,6 +45,12 @@ def service_with_a_parameter(typ):
 class TestClientGenCsharp(ClientGenTestCase, unittest.TestCase):
     language = "csharp"
     generator = CsharpGenerator
+
+    def test_bytes_default(self):
+        # A byte array is not a compile-time constant, so it defaults to null
+        content = self.generate("ServiceA", bytes_default())
+        self.assertIn("public void Frob (byte[] value = null)", content)
+        self.assertIn("value ?? new byte[] { 0xca, 0xfe }", content)
 
     # A nullable reference-typed position is invisible in the C# type, so the generated stub
     # names it with a spec. Every collection has to reach the positions inside it for that,
