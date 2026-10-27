@@ -14,5 +14,7 @@ test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to deco
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
 test_codec.py::test_too_few_items[tuple]  # A short tuple raises ClassCastException
 test_calls.py::test_unknown_id  # The call raises RPCException, not the connection error
+test_objects.py::test_get_object_id  # A null raises NullPointerException, from Objects.requireNonNull
+test_objects.py::test_sorting  # compareTo compares ids as signed longs, so an id past 63 bits orders first
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value

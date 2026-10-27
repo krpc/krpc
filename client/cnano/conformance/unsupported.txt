@@ -1,4 +1,5 @@
 # The conformance tests the C nano client's language has no way to carry out, one per line, with the reason as a comment
+test_objects.py::test_hash  # The language has no hash of an object
 test_values.py::test_null_for_non_nullable[bool]  # The C type cannot hold null
 test_values.py::test_null_for_non_nullable[bytes]  # The C type cannot hold null
 test_values.py::test_null_for_non_nullable[dictionary]  # A collection cannot be null

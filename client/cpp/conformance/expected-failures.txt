@@ -1,5 +1,49 @@
 # The conformance tests the C++ client fails, one per line, with the reason as a comment
+test_errors.py::test_mapped_exceptions[ArgumentException]  # KRPC exception types are registered only by a KRPC service object
+test_errors.py::test_mapped_exceptions[ArgumentNullException]  # As above
+test_errors.py::test_mapped_exceptions[ArgumentOutOfRangeException]  # As above
+test_errors.py::test_mapped_exceptions[DivideByZeroException]  # As above
+test_errors.py::test_mapped_exceptions[IndexOutOfRangeException]  # As above
+test_errors.py::test_mapped_exceptions[InvalidOperationException]  # As above
+test_errors.py::test_mapped_exceptions[KeyNotFoundException]  # As above
+test_errors.py::test_mapped_exceptions[NotSupportedException]  # As above
+test_errors.py::test_mapped_exceptions[NullReferenceException]  # As above
+test_errors.py::test_mapped_exceptions[OverflowException]  # As above
+test_errors.py::test_mapped_exceptions[TimeoutException]  # As above
+test_errors.py::test_service_exceptions[krpc]  # As test_mapped_exceptions
+test_errors.py::test_setter_error  # As test_mapped_exceptions
+test_errors.py::test_message[ArgumentException]  # As test_mapped_exceptions, so the message has the prefix for an unknown type
+test_errors.py::test_message[ArgumentNullException]  # As above
+test_errors.py::test_message[ArgumentOutOfRangeException]  # As above
+test_errors.py::test_message[DivideByZeroException]  # As above
+test_errors.py::test_message[IndexOutOfRangeException]  # As above
+test_errors.py::test_message[InvalidOperationException]  # As above
+test_errors.py::test_message[KeyNotFoundException]  # As above
+test_errors.py::test_message[NotSupportedException]  # As above
+test_errors.py::test_message[NullReferenceException]  # As above
+test_errors.py::test_message[OverflowException]  # As above
+test_errors.py::test_message[TimeoutException]  # As above
+test_errors.py::test_whole_message[ArgumentException]  # As test_message
+test_errors.py::test_whole_message[ArgumentNullException]  # As above
+test_errors.py::test_whole_message[ArgumentOutOfRangeException]  # As above
+test_errors.py::test_whole_message[DivideByZeroException]  # As above
+test_errors.py::test_whole_message[IndexOutOfRangeException]  # As above
+test_errors.py::test_whole_message[InvalidOperationException]  # As above
+test_errors.py::test_whole_message[KeyNotFoundException]  # As above
+test_errors.py::test_whole_message[NotSupportedException]  # As above
+test_errors.py::test_whole_message[NullReferenceException]  # As above
+test_errors.py::test_whole_message[OverflowException]  # As above
+test_errors.py::test_whole_message[TimeoutException]  # As above
+test_errors.py::test_description[astral]  # As test_message
+test_errors.py::test_description[empty]  # As above
+test_errors.py::test_description[long]  # As above
+test_errors.py::test_description[multi-line]  # As above
+test_errors.py::test_description[non-ascii]  # As above
 test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
+test_objects.py::test_unknown_object_id[zero-argument]  # As test_errors.py::test_service_exceptions[krpc]
+test_objects.py::test_unknown_object_id[zero-target]  # As test_errors.py::test_service_exceptions[krpc]
+test_objects.py::test_unknown_object_id[never-issued-argument]  # As test_errors.py::test_service_exceptions[krpc]
+test_objects.py::test_unknown_object_id[never-issued-target]  # As test_errors.py::test_service_exceptions[krpc]
 test_values.py::test_undeclared_enum_result  # An enum result holds any number
 test_values.py::test_null_for_non_nullable[object]  # A null object is sent as the id 0
 test_values.py::test_null_in_non_nullable_slot[object-element]  # As test_null_for_non_nullable[object]
@@ -9,3 +53,4 @@ test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
 test_codec.py::test_object  # An object with the id 0 is the null object
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
+test_objects.py::test_object_id_range[zero]  # As test_codec.py::test_object

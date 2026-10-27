@@ -62,5 +62,7 @@ A requirement belongs to the ``core`` profile unless its page or its text names 
    client-spec/calls
    client-spec/values
    client-spec/codec
+   client-spec/errors
+   client-spec/objects
    client-spec/coverage
    client-spec/conformance

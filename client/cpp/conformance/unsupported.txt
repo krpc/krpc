@@ -23,3 +23,4 @@ test_values.py::test_null_in_non_nullable_slot[set-element]  # The client's type
 test_values.py::test_null_in_non_nullable_slot[string-element]  # The client's type cannot hold null
 test_values.py::test_null_in_non_nullable_slot[struct-field]  # The client's type cannot hold null
 test_values.py::test_null_in_non_nullable_slot[tuple-item]  # The client's type cannot hold null
+test_objects.py::test_static_method_through_an_object_connection  # A static method is called through its class

@@ -7,3 +7,4 @@ test_values.py::test_null_for_non_nullable[sint64]  # A primitive type cannot ho
 test_values.py::test_null_for_non_nullable[uint32]  # A primitive type cannot hold null
 test_values.py::test_null_for_non_nullable[uint64]  # A primitive type cannot hold null
 test_values.py::test_null_in_non_nullable_slot[struct-field]  # A primitive type cannot hold null
+test_objects.py::test_static_method_through_an_object_connection  # A static method is called through its class

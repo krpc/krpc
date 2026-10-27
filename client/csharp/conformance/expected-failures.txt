@@ -25,4 +25,5 @@ test_values.py::test_null_result_for_non_nullable  # A null result for a string 
 test_codec.py::test_malformed_data[dictionary(string,sint32)]  # As test_malformed_data[bytes]
 test_codec.py::test_empty_data  # As test_malformed_data[bytes]
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
+test_objects.py::test_sorting  # A remote object has no ordering
 test_codec.py::test_invalid_utf8  # As test_malformed_data[bytes]

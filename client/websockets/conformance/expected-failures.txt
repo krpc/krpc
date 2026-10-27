@@ -14,6 +14,12 @@ test_codec.py::test_string[nul]  # No encode command
 test_codec.py::test_string[very-long]  # No encode command
 test_codec.py::test_structures  # No encode command
 test_codec.py::test_too_few_items  # No decode command
+test_errors.py::test_setter_error  # No values of type ClassType
+test_objects.py::test_equality  # No values of type ClassType
+test_objects.py::test_get_object_id  # No values of type ClassType
+test_objects.py::test_hash  # No values of type ClassType
+test_objects.py::test_object_id_range  # No object_id command
+test_objects.py::test_unknown_object_id  # No values of type ClassType
 test_codec.py::test_bool  # No encode command
 test_codec.py::test_bytes[all-values]  # No encode command
 test_codec.py::test_bytes[empty]  # No encode command

@@ -1,5 +1,20 @@
 # The conformance tests the C nano client fails, one per line, with the reason as a comment
+test_errors.py::test_exception_name  # RPC errors carry only a message
+test_errors.py::test_description[empty]  # An empty description drops the colon after the name
+test_errors.py::test_whole_message[ArgumentException]  # The message is cut to KRPC_ERROR_MESSAGE_LENGTH
+test_errors.py::test_whole_message[ArgumentNullException]  # As above
+test_errors.py::test_whole_message[ArgumentOutOfRangeException]  # As above
+test_errors.py::test_whole_message[CustomException]  # As above
+test_errors.py::test_whole_message[DivideByZeroException]  # As above
+test_errors.py::test_whole_message[IndexOutOfRangeException]  # As above
+test_errors.py::test_whole_message[InvalidOperationException]  # As above
+test_errors.py::test_whole_message[KeyNotFoundException]  # As above
+test_errors.py::test_whole_message[NotSupportedException]  # As above
+test_errors.py::test_whole_message[NullReferenceException]  # As above
+test_errors.py::test_whole_message[OverflowException]  # As above
+test_errors.py::test_whole_message[TimeoutException]  # As above
 test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
+test_objects.py::test_get_object_id  # An object is its id, with no helper to raise on null
 test_codec.py::test_too_few_items[tuple]  # A short wire tuple decodes short
 test_codec.py::test_string[nul]  # As test_values.py::test_string[nul]
 test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode

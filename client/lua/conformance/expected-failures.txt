@@ -1,12 +1,61 @@
 # The conformance tests the Lua client fails, one per line, with the reason as a comment
+test_errors.py::test_message_prefix[ArgumentException]  # An RPC error message starts with the client's source position
+test_errors.py::test_message_prefix[ArgumentNullException]  # As above
+test_errors.py::test_message_prefix[ArgumentOutOfRangeException]  # As above
+test_errors.py::test_message_prefix[CustomException]  # As above
+test_errors.py::test_message_prefix[DivideByZeroException]  # As above
+test_errors.py::test_message_prefix[IndexOutOfRangeException]  # As above
+test_errors.py::test_message_prefix[InvalidOperationException]  # As above
+test_errors.py::test_message_prefix[KeyNotFoundException]  # As above
+test_errors.py::test_message_prefix[NotSupportedException]  # As above
+test_errors.py::test_message_prefix[NullReferenceException]  # As above
+test_errors.py::test_message_prefix[OverflowException]  # As above
+test_errors.py::test_message_prefix[TimeoutException]  # As above
+test_errors.py::test_message[ArgumentException]  # As test_message_prefix
+test_errors.py::test_message[ArgumentNullException]  # As above
+test_errors.py::test_message[ArgumentOutOfRangeException]  # As above
+test_errors.py::test_message[CustomException]  # As above
+test_errors.py::test_message[DivideByZeroException]  # As above
+test_errors.py::test_message[IndexOutOfRangeException]  # As above
+test_errors.py::test_message[InvalidOperationException]  # As above
+test_errors.py::test_message[KeyNotFoundException]  # As above
+test_errors.py::test_message[NotSupportedException]  # As above
+test_errors.py::test_message[NullReferenceException]  # As above
+test_errors.py::test_message[OverflowException]  # As above
+test_errors.py::test_message[TimeoutException]  # As above
+test_errors.py::test_whole_message[ArgumentException]  # As test_message_prefix
+test_errors.py::test_whole_message[ArgumentNullException]  # As above
+test_errors.py::test_whole_message[ArgumentOutOfRangeException]  # As above
+test_errors.py::test_whole_message[CustomException]  # As above
+test_errors.py::test_whole_message[DivideByZeroException]  # As above
+test_errors.py::test_whole_message[IndexOutOfRangeException]  # As above
+test_errors.py::test_whole_message[InvalidOperationException]  # As above
+test_errors.py::test_whole_message[KeyNotFoundException]  # As above
+test_errors.py::test_whole_message[NotSupportedException]  # As above
+test_errors.py::test_whole_message[NullReferenceException]  # As above
+test_errors.py::test_whole_message[OverflowException]  # As above
+test_errors.py::test_whole_message[TimeoutException]  # As above
+test_errors.py::test_description[astral]  # As test_message_prefix
+test_errors.py::test_description[empty]  # As above
+test_errors.py::test_description[long]  # As above
+test_errors.py::test_description[multi-line]  # As above
+test_errors.py::test_description[non-ascii]  # As above
+test_errors.py::test_setter_error  # As test_message_prefix
+test_errors.py::test_request_error  # As test_message_prefix
+test_errors.py::test_exception_name  # RPC errors carry only a message
 test_calls.py::test_default_values[uint64-extremes]  # A uint64 above the sint64 range reads as negative
 test_values.py::test_integers[uint64]  # As test_default_values[uint64-extremes]
+test_objects.py::test_sorting  # An object has no order
 test_values.py::test_enum_equality  # == compares enumeration values by identity
 test_values.py::test_structure_equality  # As test_enum_equality
 test_values.py::test_undeclared_enum_value  # An enum type takes any number
 test_values.py::test_undeclared_enum_result  # As test_undeclared_enum_value
 test_calls.py::test_too_many_arguments[procedure]  # Arguments past the last parameter are dropped
 test_calls.py::test_too_many_arguments[method]  # As test_too_many_arguments[procedure]
+test_objects.py::test_unknown_object_id[zero-argument]  # As test_errors.py::test_message_prefix
+test_objects.py::test_unknown_object_id[zero-target]  # As test_errors.py::test_message_prefix
+test_objects.py::test_unknown_object_id[never-issued-argument]  # As test_errors.py::test_message_prefix
+test_objects.py::test_unknown_object_id[never-issued-target]  # As test_errors.py::test_message_prefix
 test_codec.py::test_integers[uint64]  # As test_default_values[uint64-extremes]
 test_codec.py::test_too_few_items[tuple]  # A short wire tuple decodes short
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool with no value, a presence bool other than 0 or 1, or data after a null, decodes
