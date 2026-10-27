@@ -13,8 +13,9 @@ def _impl(ctx):
     args = ctx.actions.args()
     args.add("--protoc", ctx.file._protoc.path)
     args.add("--mkdir", protoc_output)
-    args.add("--copy", protoc_output + "/protobuf/*.py=" + output.path)
-    args.add("--copy", protoc_output + "/protobuf/*.pyi=" + output_pyi.path)
+    generated = protoc_output + "/" + ctx.file.src.dirname
+    args.add("--copy", generated + "/*.py=" + output.path)
+    args.add("--copy", generated + "/*.pyi=" + output_pyi.path)
     args.add("--")
     args.add("--python_out=" + protoc_output)
     args.add("--pyi_out=" + protoc_output)

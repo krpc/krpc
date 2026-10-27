@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Reflection;
@@ -46,6 +48,7 @@ namespace TestServer
             string type = "protobuf";
             string bind = "127.0.0.1";
             ushort tcpipPort = 0;
+            ushort websocketsPort = 0;
             string serialioPort = string.Empty;
             string localsocketPath = string.Empty;
             uint baudRate = 9600;
@@ -60,14 +63,17 @@ namespace TestServer
                     "v|version", "show program's version number and exit",
                     v => showVersion = v != null
                 }, {
-                    "type=", "Type of server to run. Either protobuf, websockets, websockets-echo, or serialio.",
+                    "type=", "Type of server to run. Either protobuf, websockets, websockets-echo, serialio or localsocket, or several separated by commas, each of a different transport.",
                     v => type = v
                 }, {
                     "bind=", "For TCP based protocols, the address to bind the server to. If unspecified, the loopback address is used (127.0.0.1).",
                     v => bind = v
                 }, {
-                    "tcpip-port=", "For TCP based protocols, the port number to use. If unspecified, use an ephemeral port.",
+                    "tcpip-port=", "For the protobuf protocol, the port number to use. If unspecified, use an ephemeral port.",
                     (ushort v) => tcpipPort = v
+                }, {
+                    "websockets-port=", "For the websockets protocols, the port number to use. If unspecified, use an ephemeral port.",
+                    (ushort v) => websocketsPort = v
                 }, {
                     "localsocket-path=", "For local socket protocols, the path of the socket to use.",
                     v => localsocketPath = v
@@ -148,47 +154,53 @@ namespace TestServer
                 return;
             }
 
+            var types = type.Split (',');
             TCPServer tcpServer = null;
+            TCPServer websocketsServer = null;
             KRPC.Server.SerialIO.ByteServer serialServer = null;
             KRPC.Server.LocalSocket.LocalSocketServer socketServer = null;
-            if (type == "protobuf" || type == "websockets" || type == "websockets-echo")
-                tcpServer = new TCPServer (bindAddress, tcpipPort);
-            if (type == "serialio")
-                serialServer = new KRPC.Server.SerialIO.ByteServer (
-                    serialioPort, baudRate, dataBits, parity, stopBits);
-            if (type == "localsocket")
-                socketServer = new KRPC.Server.LocalSocket.LocalSocketServer (localsocketPath);
-
-            Server server;
-            if (type == "protobuf") {
-                var messageServer = new KRPC.Server.ProtocolBuffers.Server (tcpServer);
-                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverTCP, "TestServer", messageServer);
-            } else if (type == "websockets") {
-                var messageServer = new KRPC.Server.WebSockets.Server (tcpServer);
-                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
-            } else if (type == "websockets-echo") {
-                var messageServer = new KRPC.Server.WebSockets.Server (tcpServer, true);
-                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
-            } else if (type == "serialio") {
-                var messageServer = new KRPC.Server.SerialIO.Server (serialServer);
-                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverSerialIO, "TestServer", messageServer);
-            } else if (type == "localsocket") {
-                var messageServer = new KRPC.Server.ProtocolBuffers.Server (socketServer);
-                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverLocalSocket, "TestServer", messageServer);
-            } else {
-                Logger.WriteLine ("Server type '" + type + "' not supported", Logger.Severity.Error);
-                return;
+            var servers = new List<Server> ();
+            foreach (var serverType in types) {
+                Server server;
+                if (serverType == "protobuf") {
+                    tcpServer = new TCPServer (bindAddress, tcpipPort);
+                    var messageServer = new KRPC.Server.ProtocolBuffers.Server (tcpServer);
+                    server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverTCP, "TestServer", messageServer);
+                } else if (serverType == "websockets") {
+                    websocketsServer = new TCPServer (bindAddress, websocketsPort);
+                    var messageServer = new KRPC.Server.WebSockets.Server (websocketsServer);
+                    server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
+                } else if (serverType == "websockets-echo") {
+                    websocketsServer = new TCPServer (bindAddress, websocketsPort);
+                    var messageServer = new KRPC.Server.WebSockets.Server (websocketsServer, true);
+                    server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
+                } else if (serverType == "serialio") {
+                    serialServer = new KRPC.Server.SerialIO.ByteServer (
+                        serialioPort, baudRate, dataBits, parity, stopBits);
+                    var messageServer = new KRPC.Server.SerialIO.Server (serialServer);
+                    server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverSerialIO, "TestServer", messageServer);
+                } else if (serverType == "localsocket") {
+                    socketServer = new KRPC.Server.LocalSocket.LocalSocketServer (localsocketPath);
+                    var messageServer = new KRPC.Server.ProtocolBuffers.Server (socketServer);
+                    server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverLocalSocket, "TestServer", messageServer);
+                } else {
+                    Logger.WriteLine ("Server type '" + serverType + "' not supported", Logger.Severity.Error);
+                    return;
+                }
+                core.Add (server);
+                servers.Add (server);
             }
-            core.Add (server);
 
             Logger.WriteLine ("Starting server...");
             core.StartAll ();
             Logger.WriteLine ("type = " + type);
             Logger.WriteLine ("frame pacing = " + (framePacing ? "60 updates/s" : "off"));
-            if (tcpServer != null) {
+            if (tcpServer != null || websocketsServer != null)
                 Logger.WriteLine ("bind = " + bindAddress);
+            if (tcpServer != null)
                 Logger.WriteLine ("tcpip_port = " + tcpServer.ActualPort);
-            }
+            if (websocketsServer != null)
+                Logger.WriteLine ("websockets_port = " + websocketsServer.ActualPort);
             if (serialServer != null) {
                 Logger.WriteLine ("serialio_port = " + serialServer.Address);
             }
@@ -200,7 +212,7 @@ namespace TestServer
             long update = 0;
             long ticksPerUpdate = Stopwatch.Frequency / targetFPS;
             var timer = new Stopwatch ();
-            while (server.Running) {
+            while (servers.Any (x => x.Running)) {
                 timer.Reset ();
                 timer.Start ();
 

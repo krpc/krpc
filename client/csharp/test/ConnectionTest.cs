@@ -106,8 +106,8 @@ namespace KRPC.Client.Test
         [Test]
         public void ClassStaticMethods ()
         {
-            Assert.AreEqual ("jeb", TestClass.StaticMethod (Connection));
-            Assert.AreEqual ("jebbobbill", TestClass.StaticMethod (Connection, "bob", "bill"));
+            Assert.AreEqual ("static", TestClass.StaticMethod (Connection));
+            Assert.AreEqual ("staticbobbill", TestClass.StaticMethod (Connection, "bob", "bill"));
         }
 
         [Test]
@@ -457,9 +457,9 @@ namespace KRPC.Client.Test
         {
             var result = Connection.TestService ().StructDefault ();
             Assert.AreEqual (
-                new TestStruct (42, "jeb", TestEnum.ValueB, new List<int> { 1, 2, 3 }), result);
+                new TestStruct (42, "alpha", TestEnum.ValueB, new List<int> { 1, 2, 3 }), result);
             Assert.AreEqual (42, result.IntField);
-            Assert.AreEqual ("jeb", result.StringField);
+            Assert.AreEqual ("alpha", result.StringField);
             Assert.AreEqual (TestEnum.ValueB, result.EnumField);
             CollectionAssert.AreEqual (new List<int> { 1, 2, 3 }, result.ListField);
         }

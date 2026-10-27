@@ -84,3 +84,38 @@ html[data-theme="light"] .changelog-marker.deprecated {
     border-color: var(--pst-color-border);
     background: var(--pst-color-on-background);
 }
+
+/* Client coverage tables: one centered, colored symbol per client. */
+table.coverage td,
+table.coverage thead th {
+    text-align: center;
+}
+
+.coverage-pass,
+.coverage-fail,
+.coverage-partial,
+.coverage-untested {
+    font-weight: 700;
+}
+
+.coverage-pass {
+    color: var(--pst-color-success);
+}
+
+.coverage-fail {
+    color: var(--pst-color-danger);
+}
+
+.coverage-partial {
+    color: var(--pst-color-warning);
+}
+
+/* The theme's light mode warning color is too pale on white, as for the
+   deprecated label above */
+html[data-theme="light"] .coverage-partial {
+    color: #b45309;
+}
+
+.coverage-untested {
+    color: var(--pst-color-text-muted);
+}

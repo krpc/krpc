@@ -25,7 +25,29 @@
 
    
 
+   .. function:: std::map<std::string, TestClass> add_to_object_dictionary(std::map<std::string, TestClass> d, std::string key)
+
+
+
+      :Parameters:
+
+
+
+
+   
+
    .. function:: std::vector<TestClass> add_to_object_list(std::vector<TestClass> l, std::string value)
+
+
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: std::set<TestClass> add_to_object_set(std::set<TestClass> h, std::string value)
 
 
 
@@ -48,6 +70,16 @@
    
 
    .. function:: std::string bool_to_string(bool value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::string bytes_default(std::string x = std::string("\xca\xfe", 2))
 
 
 
@@ -226,6 +258,66 @@
 
    
 
+   .. function:: std::optional<bool> echo_nullable_bool(std::optional<bool> value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<std::string> echo_nullable_bytes(std::optional<std::string> value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<std::map<std::string, int32_t>> echo_nullable_dictionary(std::optional<std::map<std::string, int32_t>> d)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<double> echo_nullable_double(std::optional<double> value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<TestEnum> echo_nullable_enum(std::optional<TestEnum> x)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<float> echo_nullable_float(std::optional<float> value)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: std::optional<int32_t> echo_nullable_int(std::optional<int32_t> value)
 
       Returns the given value.
@@ -247,7 +339,67 @@
 
    
 
+   .. function:: std::optional<int64_t> echo_nullable_long(std::optional<int64_t> value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<std::set<int32_t>> echo_nullable_set(std::optional<std::set<int32_t>> h)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: std::optional<std::string> echo_nullable_string(std::optional<std::string> value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<std::tuple<int32_t, int64_t>> echo_nullable_tuple(std::optional<std::tuple<int32_t, int64_t>> t)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<uint32_t> echo_nullable_u_int(std::optional<uint32_t> value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::optional<uint64_t> echo_nullable_u_long(std::optional<uint64_t> value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::set<std::string> echo_string_set(std::set<std::string> h)
 
 
 
@@ -324,6 +476,16 @@
 
    
 
+   .. function:: std::string enum_to_string(TestEnum x)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: std::vector<float> float_special_defaults(float nan = std::numeric_limits<float>::quiet_NaN(), float infinity = std::numeric_limits<float>::infinity(), float negative_infinity = -std::numeric_limits<float>::infinity(), float maximum = (std::numeric_limits<float>::max)(), float lowest = std::numeric_limits<float>::lowest(), float fraction = 0.1f)
 
       Procedure whose defaults are the special values of float, plus a finite fraction
@@ -343,6 +505,16 @@
    .. function:: std::string float_to_string(float value)
 
       Procedure documentation string.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::string hex_string_to_bytes(std::string value)
+
+
 
       :Parameters:
 
@@ -455,7 +627,7 @@
    .. function:: std::string join_with_at_sign(std::string first_value, std::string from)
 
       Returns *first_value* and *from* joined by an at
-      sign, e.g. ``jeb@kerbin``. The parameter names are:
+      sign, e.g. ``name@host``. The parameter names are:
 
       * a name in camel case, and
       * a name that is a keyword in some languages.
@@ -489,6 +661,16 @@
    
 
    .. function:: TestClass not_nullable_object(TestClass value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::string null_default(std::optional<TestClass> obj = std::optional<TestClass>())
 
 
 
@@ -567,6 +749,16 @@
 
    
 
+   .. function:: void remove_test_object(TestClass value)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: void reset_custom_exception_later()
 
 
@@ -588,7 +780,27 @@
 
    
 
+   .. function:: int32_t scalar_default(int32_t x = 42)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: std::set<int32_t> set_default(std::set<int32_t> x = std::set<int32_t>{1, 2, 3})
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::string string_default(std::string x = "foo")
 
 
 
@@ -617,6 +829,46 @@
 
    
 
+   .. function:: bool string_to_bool(std::string value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: double string_to_double(std::string value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: TestEnum string_to_enum(std::string value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: float string_to_float(std::string value)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: int32_t string_to_int32(std::string value)
 
 
@@ -627,7 +879,37 @@
 
    
 
-   .. function:: TestStruct struct_default(TestStruct x = TestStruct{42, "jeb", TestEnum::value_b, std::vector<int32_t>{1, 2, 3}})
+   .. function:: int64_t string_to_int64(std::string value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: uint32_t string_to_u_int32(std::string value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: uint64_t string_to_u_int64(std::string value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: TestStruct struct_default(TestStruct x = TestStruct{42, "alpha", TestEnum::value_b, std::vector<int32_t>{1, 2, 3}})
 
 
 
@@ -648,6 +930,16 @@
    
 
    .. function:: std::optional<TestStruct> struct_echo_nullable(std::optional<TestStruct> x)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::tuple<TestClass, TestClass> swap_object_tuple(std::tuple<TestClass, TestClass> t)
 
 
 
@@ -722,7 +1014,38 @@
 
    
 
+   .. function:: int32_t throw_mapped_exception(std::string name)
+
+      Throws the system exception of the given name, which the server maps to the KRPC
+      exception of that name.
+
+      :Parameters:
+
+
+
+   
+
    .. function:: std::tuple<int32_t, bool> tuple_default(std::tuple<int32_t, bool> x = std::tuple<int32_t, bool>{1, false})
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::string u_int32_to_string(uint32_t value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::string u_int64_to_string(uint64_t value)
 
 
 
@@ -825,7 +1148,7 @@
 
    .. function:: static std::string static_method(Client& connection, std::string a = "", std::string b = "")
 
-      Returns jeb followed by *a* and *b*.
+      Returns static followed by *a* and *b*.
 
       :Parameters:
 
@@ -840,6 +1163,19 @@
 
 
       :Parameters:
+
+
+
+   
+
+   .. function:: static std::string static_optional_arguments(Client& connection, std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestClass> obj = std::optional<TestClass>())
+
+
+
+      :Parameters:
+
+
+
 
 
 

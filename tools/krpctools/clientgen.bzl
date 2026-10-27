@@ -1,7 +1,7 @@
 " clientgen tool "
 
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
-load(":services.bzl", "SERVICES")
+load(":services.bzl", "CONFORMANCE_SERVICES", "SERVICES")
 
 ClientgenInfo = provider(
     doc = "The generated code of a service, the path it is included by, and the " +
@@ -166,6 +166,54 @@ def clientgen_services(language, outs = {}):
             deps = [_target(dep) for dep in service.deps],
         )
     return [_target(service.name) for service in SERVICES if not service.test]
+
+# The services a conformance testee calls through the generated stubs
+_DISPATCH_SERVICES = ["KRPC", "TestService", "ConformanceService"]
+
+# buildifier: disable=unnamed-macro
+def clientgen_dispatch(language, out, services_out = None):
+    """Declares a conformance-dispatch-<name> target per service a conformance testee calls.
+
+    Each generates the service's dispatch. The services-<name> targets of SERVICES must be
+    declared too. Those of CONFORMANCE_SERVICES are declared here.
+
+    Args:
+        language: the language to generate.
+        out: the output path of a service's dispatch, formatted with the service's name.
+        services_out: the output path of a conformance service's code, formatted the same way,
+            where it is not the language's default.
+
+    Returns:
+        The targets, including the code of the conformance services.
+    """
+    targets = []
+    for service in CONFORMANCE_SERVICES:
+        _CLIENTGEN[language](
+            name = _target(service.name)[1:],
+            service = service.name,
+            defs = service.defs,
+            out = services_out.format(
+                service = service.name,
+                snake_service = _snake_case(service.name),
+            ) if services_out else None,
+            deps = [_target(dep) for dep in service.deps],
+        )
+        targets.append(_target(service.name))
+    for service in SERVICES + CONFORMANCE_SERVICES:
+        if service.name not in _DISPATCH_SERVICES:
+            continue
+        target = "conformance-dispatch-%s" % service.name.lower()
+        clientgen(
+            name = target,
+            service = service.name,
+            defs = service.defs,
+            out = out.format(service = service.name, snake_service = _snake_case(service.name)),
+            deps = [_target(dep) for dep in service.deps],
+            language = language + "-dispatch",
+            testonly = True,
+        )
+        targets.append(":" + target)
+    return targets
 
 def clientgen_python_init(name, template, out):
     """Expands the template of the Python services module, which declares every service.

@@ -1,0 +1,15 @@
+{
+  "native_types": {
+    "System.InvalidOperationException": "java.lang.IllegalStateException",
+    "System.ArgumentException": "java.lang.IllegalArgumentException",
+    "System.ArgumentNullException": "java.lang.IllegalArgumentException",
+    "System.ArgumentOutOfRangeException": "java.lang.IllegalArgumentException",
+    "System.NullReferenceException": "java.lang.NullPointerException",
+    "System.Collections.Generic.KeyNotFoundException": "java.util.NoSuchElementException",
+    "System.IndexOutOfRangeException": "java.lang.IndexOutOfBoundsException",
+    "System.DivideByZeroException": "java.lang.ArithmeticException",
+    "System.NotSupportedException": "java.lang.UnsupportedOperationException",
+    "System.OverflowException": "java.lang.ArithmeticException",
+    "System.TimeoutException": null
+  }
+}

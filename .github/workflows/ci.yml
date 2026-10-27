@@ -80,7 +80,7 @@ jobs:
           - name: test-client-websockets
             test: //client/websockets:test
           - name: test-tools
-            test: //tools/benchmarks:test //tools/krpctest:test //tools/krpctools:test
+            test: //client/conformance:test //tools/benchmarks:test //tools/krpctest:test //tools/krpctools:test
           # The Python lock file is resolved on Linux, so only Linux checks it
           - name: test-build-scripts
             test: >-
@@ -156,7 +156,7 @@ jobs:
           - name: test-client-websockets
             test: //client/websockets:test
           - name: test-tools
-            test: //tools/benchmarks:test //tools/krpctest:test //tools/krpctools:test
+            test: //client/conformance:test //tools/benchmarks:test //tools/krpctest:test //tools/krpctools:test
           - name: test-build-scripts
             test: >-
               //:buildifier

@@ -397,6 +397,7 @@ namespace KRPC.Client
         {
             try {
                 lock (writeLock) {
+                    WriteFault.Reach ();
                     // The Message is written around the request, which saves building one
                     var size = request.CalculateSize ();
                     output.WriteLength (1 + CodedOutputStream.ComputeLengthSize (size) + size);
@@ -412,6 +413,7 @@ namespace KRPC.Client
 
         void Write (Message message)
         {
+            WriteFault.Reach ();
             output.WriteLength (message.CalculateSize ());
             message.WriteTo (output);
             output.Flush ();

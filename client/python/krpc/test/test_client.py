@@ -273,15 +273,16 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual("bobbill", obj.object_to_string(obj2))
 
     def test_class_static_methods(self) -> None:
-        self.assertEqual("jeb", self.conn.test_service.TestClass.static_method())
+        self.assertEqual("static", self.conn.test_service.TestClass.static_method())
         self.assertEqual(
-            "jebbobbill", self.conn.test_service.TestClass.static_method("bob", "bill")
+            "staticbobbill",
+            self.conn.test_service.TestClass.static_method("bob", "bill"),
         )
 
     def test_class_static_methods_via_instance(self) -> None:
         obj = self.conn.test_service.create_test_object("jeb")
-        self.assertEqual("jeb", obj.static_method())
-        self.assertEqual("jebbobbill", obj.static_method("bob", "bill"))
+        self.assertEqual("static", obj.static_method())
+        self.assertEqual("staticbobbill", obj.static_method("bob", "bill"))
 
     def test_class_properties(self) -> None:
         obj = self.conn.test_service.create_test_object("jeb")
@@ -579,7 +580,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual(
             service.TestStruct(
                 int_field=42,
-                string_field="jeb",
+                string_field="alpha",
                 enum_field=service.TestEnum.value_b,
                 list_field=[1, 2, 3],
             ),
@@ -746,6 +747,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     # pre-generated stubs, so this is also the client building a service
                     # from the definitions the server hands over.
                     "benchmark",
+                    # The server state the conformance tests control
+                    "conformance_service",
                     "stream",
                     "add_stream",
                     "add_event",
@@ -829,6 +832,32 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "int64_to_string",
                     "bool_to_string",
                     "string_to_int32",
+                    "string_default",
+                    "hex_string_to_bytes",
+                    "string_to_double",
+                    "add_to_object_set",
+                    "string_to_int64",
+                    "string_to_float",
+                    "string_to_enum",
+                    "echo_nullable_set",
+                    "bytes_default",
+                    "swap_object_tuple",
+                    "echo_nullable_enum",
+                    "string_to_u_int64",
+                    "scalar_default",
+                    "u_int32_to_string",
+                    "echo_nullable_float",
+                    "null_default",
+                    "enum_to_string",
+                    "add_to_object_dictionary",
+                    "string_to_u_int32",
+                    "u_int64_to_string",
+                    "echo_nullable_dictionary",
+                    "echo_nullable_tuple",
+                    "throw_mapped_exception",
+                    "remove_test_object",
+                    "echo_nullable_bool",
+                    "string_to_bool",
                     "bytes_to_hex_string",
                     "add_multiple_values",
                     "string_property",
@@ -842,6 +871,12 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "echo_nullable_string",
                     "echo_nullable_list",
                     "echo_nullable_int",
+                    "echo_nullable_bytes",
+                    "echo_nullable_double",
+                    "echo_nullable_long",
+                    "echo_nullable_u_int",
+                    "echo_nullable_u_long",
+                    "echo_string_set",
                     "nullable_object",
                     "empty_list_default",
                     "TestClass",
@@ -926,6 +961,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "string_property_private_get",
                     "string_property_private_set",
                     "optional_arguments",
+                    "static_optional_arguments",
                     "static_method",
                     "static_nullable_object",
                     # Added by extension members, which the client picks up from the

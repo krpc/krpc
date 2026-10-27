@@ -88,7 +88,7 @@ TEST_F(test_stream, test_class_method) {
 TEST_F(test_stream, test_class_static_method) {
   auto x = krpc::services::TestService::TestClass::static_method_stream(conn, "foo");
   for (int i = 0; i < 5; i++) {
-    ASSERT_EQ("jebfoo", x());
+    ASSERT_EQ("staticfoo", x());
     wait();
   }
 }

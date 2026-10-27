@@ -288,6 +288,7 @@ class StreamManager {
     for (Change change : changes) {
       StreamImpl stream = change.stream;
       if (change.ending != null) {
+        RacePoint.reach(RacePoint.STREAM_ENDING, -1);
         stream.wakeAnnouncingEnding();
         if (change.endCallbacks != null
             && !stream.deferEnding(change.endCallbacks, change.ending)) {
@@ -295,7 +296,9 @@ class StreamManager {
         }
         continue;
       }
+      RacePoint.reach(RacePoint.STREAM_VALUE, -1);
       stream.announce(change.value, change.version);
+      RacePoint.reach(RacePoint.STREAM_CALLBACKS, -1);
       for (StreamImpl.Callback callback : change.callbacks) {
         stream.call(callback, callback.event ? change.fired : change.version, change.value);
       }

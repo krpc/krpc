@@ -1,10 +1,16 @@
-load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("//:config.bzl", "python_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
+load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build:python.bzl", "py_autodoc_test", "py_pyright_test", "py_ruff_test", "py_sdist", "py_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_python_init", "clientgen_services")
 
-exports_files(["CHANGELOG.md"])
+exports_files([
+    "CHANGELOG.md",
+    "conformance/conventions.json",
+    "conformance/expected-failures.txt",
+    "conformance/unsupported.txt",
+])
 
 services = clientgen_services("python")
 
@@ -154,7 +160,6 @@ client_tests = [
     "krpc/test/test_functioncompiler.py",
     "krpc/test/test_objects.py",
     "krpc/test/test_stream.py",
-    "krpc/test/test_threading.py",
 ]
 
 test_suite(
@@ -166,6 +171,8 @@ test_suite(
         ":client-tcpip",
         ":communication-localsocket",
         ":communication-tcpip",
+        ":conformance",
+        ":conformance-base",
         ":lint",
         ":unit",
     ],
@@ -270,6 +277,86 @@ py_autodoc_test(
     deps = [":krpc_lib"],
 )
 
+# The conformance tests, driving the client through its testee
+py_binary(
+    name = "conformance-testee",
+    srcs = ["conformance/testee.py"],
+    main = "conformance/testee.py",
+    visibility = ["//tools/krpctools:__pkg__"],
+    deps = [
+        ":krpc_lib",
+        "//client/conformance:testee_py",
+    ],
+)
+
+conformance_test(
+    name = "conformance",
+    size = "medium",
+    conventions = "conformance/conventions.json",
+    expected_failures = "conformance/expected-failures.txt",
+    profiles = [
+        "core",
+        "error-types",
+        "dynamic",
+        "defaults",
+        "named-arguments",
+        "streams",
+        "events",
+        "functions",
+        "connections",
+        "threads",
+        "callbacks",
+        "conditions",
+        "ordering",
+        "races",
+    ],
+    protocols = [
+        "tcpip",
+        "localsocket",
+    ],
+    tags = ["requires-network"],
+    testee = ":conformance-testee",
+    unsupported = "conformance/unsupported.txt",
+)
+
+# And again without the generated service modules, so the services are built from the
+# server's definitions at run time
+py_binary(
+    name = "conformance-testee-base",
+    srcs = ["conformance/testee.py"],
+    main = "conformance/testee.py",
+    deps = [
+        ":krpc_base_lib",
+        "//client/conformance:testee_py",
+    ],
+)
+
+conformance_test(
+    name = "conformance-base",
+    size = "medium",
+    conventions = "conformance/conventions.json",
+    expected_failures = "conformance/expected-failures.txt",
+    profiles = [
+        "core",
+        "error-types",
+        "dynamic",
+        "defaults",
+        "named-arguments",
+        "streams",
+        "events",
+        "functions",
+        "connections",
+        "threads",
+        "callbacks",
+        "conditions",
+        "ordering",
+        "races",
+    ],
+    tags = ["requires-network"],
+    testee = ":conformance-testee-base",
+    unsupported = "conformance/unsupported.txt",
+)
+
 test_suite(
     name = "lint",
     tests = [
@@ -281,12 +368,21 @@ test_suite(
 py_ruff_test(
     name = "ruff",
     size = "small",
-    srcs = glob(["krpc/**/*.py"]) + [":services-init"],
+    srcs = glob([
+        "conformance/*.py",
+        "krpc/**/*.py",
+    ]) + [":services-init"],
 )
 
 py_pyright_test(
     name = "pyright",
     size = "medium",
-    srcs = glob(["krpc/**/*.py"]) + [":services-init"],
-    deps = [":krpc_lib"],
+    srcs = glob([
+        "conformance/*.py",
+        "krpc/**/*.py",
+    ]) + [":services-init"],
+    deps = [
+        ":krpc_lib",
+        "//client/conformance:testee_py",
+    ],
 )

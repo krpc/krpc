@@ -199,8 +199,8 @@ TEST_F(test_client, test_class_methods) {
 }
 
 TEST_F(test_client, test_class_static_methods) {
-  ASSERT_EQ("jeb", krpc::services::TestService::TestClass::static_method(conn));
-  ASSERT_EQ("jebbobbill",
+  ASSERT_EQ("static", krpc::services::TestService::TestClass::static_method(conn));
+  ASSERT_EQ("staticbobbill",
             krpc::services::TestService::TestClass::static_method(conn, "bob", "bill"));
 }
 
@@ -432,7 +432,7 @@ TEST_F(test_client, test_nullable_nested_list_elements) {
 
 TEST_F(test_client, test_struct_default_value) {
   krpc::services::TestService::TestStruct value(
-      42, "jeb", krpc::services::TestService::TestEnum::value_b, {1, 2, 3});
+      42, "alpha", krpc::services::TestService::TestEnum::value_b, {1, 2, 3});
   ASSERT_EQ(value, test_service.struct_default());
 }
 

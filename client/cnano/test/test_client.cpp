@@ -230,9 +230,9 @@ TEST_F(test_client, test_class_methods) {
 TEST_F(test_client, test_class_static_methods) {
   auto string = new char[32];
   ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_StaticMethod(conn, &string, "", ""));
-  ASSERT_STREQ("jeb", string);
+  ASSERT_STREQ("static", string);
   ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_StaticMethod(conn, &string, "bob", "bill"));
-  ASSERT_STREQ("jebbobbill", string);
+  ASSERT_STREQ("staticbobbill", string);
   delete[] string;
 }
 

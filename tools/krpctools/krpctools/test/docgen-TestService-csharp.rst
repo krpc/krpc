@@ -20,7 +20,29 @@
 
       :Game Scenes: All
 
+   .. function:: System.Collections.Generic.IDictionary<string,TestClass> AddToObjectDictionary(System.Collections.Generic.IDictionary<string,TestClass> d, string key)
+
+
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
    .. function:: System.Collections.Generic.IList<TestClass> AddToObjectList(System.Collections.Generic.IList<TestClass> l, string value)
+
+
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. function:: System.Collections.Generic.ISet<TestClass> AddToObjectSet(System.Collections.Generic.ISet<TestClass> h, string value)
 
 
 
@@ -49,6 +71,16 @@
       :parameters:
 
 
+
+      :Game Scenes: All
+
+   .. function:: byte[] BytesDefault(byte[] x = null)
+
+
+
+      :parameters:
+
+       * **x** -- If null, defaults to ``new byte[] { 0xca, 0xfe }``.
 
       :Game Scenes: All
 
@@ -220,6 +252,66 @@
 
       :Game Scenes: All
 
+   .. function:: bool? EchoNullableBool(bool? value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: byte[] EchoNullableBytes(byte[] value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: System.Collections.Generic.IDictionary<string,int> EchoNullableDictionary(System.Collections.Generic.IDictionary<string,int> d)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: double? EchoNullableDouble(double? value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: TestEnum? EchoNullableEnum(TestEnum? x)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: float? EchoNullableFloat(float? value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. function:: int? EchoNullableInt(int? value)
 
       Returns the given value.
@@ -241,7 +333,67 @@
 
       :Game Scenes: All
 
+   .. function:: long? EchoNullableLong(long? value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: System.Collections.Generic.ISet<int> EchoNullableSet(System.Collections.Generic.ISet<int> h)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. function:: string EchoNullableString(string value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<int,long> EchoNullableTuple(System.Tuple<int,long> t)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: uint? EchoNullableUInt(uint? value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: ulong? EchoNullableULong(ulong? value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: System.Collections.Generic.ISet<string> EchoStringSet(System.Collections.Generic.ISet<string> h)
 
 
 
@@ -318,6 +470,16 @@
 
       :Game Scenes: All
 
+   .. function:: string EnumToString(TestEnum x)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. function:: System.Collections.Generic.IList<float> FloatSpecialDefaults(float nan = float.NaN, float infinity = float.PositiveInfinity, float negativeInfinity = float.NegativeInfinity, float maximum = float.MaxValue, float lowest = float.MinValue, float fraction = 0.1f)
 
       Procedure whose defaults are the special values of float, plus a finite fraction
@@ -337,6 +499,16 @@
    .. function:: string FloatToString(float value)
 
       Procedure documentation string.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: byte[] HexStringToBytes(string value)
+
+
 
       :parameters:
 
@@ -449,7 +621,7 @@
    .. function:: string JoinWithAtSign(string firstValue, string from)
 
       Returns *firstValue* and *from* joined by an at
-      sign, e.g. ``jeb@kerbin``. The parameter names are:
+      sign, e.g. ``name@host``. The parameter names are:
 
       * a name in camel case, and
       * a name that is a keyword in some languages.
@@ -483,6 +655,16 @@
       :Game Scenes: All
 
    .. function:: TestClass NotNullableObject(TestClass value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: string NullDefault(TestClass obj = null)
 
 
 
@@ -559,6 +741,16 @@
 
       :Game Scenes: All
 
+   .. function:: void RemoveTestObject(TestClass value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. function:: void ResetCustomExceptionLater()
 
 
@@ -580,6 +772,16 @@
 
       :Game Scenes: All
 
+   .. function:: int ScalarDefault(int x = 42)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. function:: System.Collections.Generic.ISet<int> SetDefault(System.Collections.Generic.ISet<int> x = null)
 
 
@@ -587,6 +789,16 @@
       :parameters:
 
        * **x** -- If null, defaults to ``new System.Collections.Generic.HashSet<int> { 1, 2, 3 }``.
+
+      :Game Scenes: All
+
+   .. function:: string StringDefault(string x = "foo")
+
+
+
+      :parameters:
+
+
 
       :Game Scenes: All
 
@@ -608,7 +820,77 @@
 
       :Game Scenes: All
 
+   .. function:: bool StringToBool(string value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: double StringToDouble(string value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: TestEnum StringToEnum(string value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: float StringToFloat(string value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. function:: int StringToInt32(string value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: long StringToInt64(string value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: uint StringToUInt32(string value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: ulong StringToUInt64(string value)
 
 
 
@@ -624,7 +906,7 @@
 
       :parameters:
 
-       * **x** -- If null, defaults to ``new TestStruct(42, "jeb", TestEnum.ValueB, new System.Collections.Generic.List<int> { 1, 2, 3 })``.
+       * **x** -- If null, defaults to ``new TestStruct(42, "alpha", TestEnum.ValueB, new System.Collections.Generic.List<int> { 1, 2, 3 })``.
 
       :Game Scenes: All
 
@@ -639,6 +921,16 @@
       :Game Scenes: All
 
    .. function:: TestStruct? StructEchoNullable(TestStruct? x)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<TestClass,TestClass> SwapObjectTuple(System.Tuple<TestClass,TestClass> t)
 
 
 
@@ -714,6 +1006,17 @@
 
       :Game Scenes: All
 
+   .. function:: int ThrowMappedException(string name)
+
+      Throws the system exception of the given name, which the server maps to the KRPC
+      exception of that name.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. function:: System.Tuple<int,bool> TupleDefault(System.Tuple<int,bool> x = null)
 
 
@@ -721,6 +1024,26 @@
       :parameters:
 
        * **x** -- If null, defaults to ``new System.Tuple<int,bool>(1, false)``.
+
+      :Game Scenes: All
+
+   .. function:: string UInt32ToString(uint value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: string UInt64ToString(ulong value)
+
+
+
+      :parameters:
+
+
 
       :Game Scenes: All
 
@@ -815,7 +1138,7 @@
 
    .. function:: static string StaticMethod(IConnection connection, string a = "", string b = "")
 
-      Returns jeb followed by *a* and *b*.
+      Returns static followed by *a* and *b*.
 
       :parameters:
 
@@ -830,6 +1153,19 @@
 
 
       :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. function:: static string StaticOptionalArguments(IConnection connection, string x, string y = "foo", string z = "bar", TestClass obj = null)
+
+
+
+      :parameters:
+
+
+
 
 
 

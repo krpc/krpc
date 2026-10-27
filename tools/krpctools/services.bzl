@@ -17,3 +17,8 @@ SERVICES = [
     struct(name = "DockingCamera", defs = "//service/DockingCamera:ServiceDefinitions", deps = ["SpaceCenter"], test = False),
     struct(name = "Debug", defs = "//service/Debug:ServiceDefinitions", deps = ["SpaceCenter"], test = False),
 ]
+
+# The services only the conformance testees use, declared by clientgen_dispatch
+CONFORMANCE_SERVICES = [
+    struct(name = "ConformanceService", defs = "//tools/TestServer:ConformanceServiceDefinitions", deps = ["KRPC"], test = True),
+]

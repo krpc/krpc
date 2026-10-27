@@ -2,12 +2,17 @@ load("@rules_python//python:defs.bzl", "py_test")
 load("//:config.bzl", "assembly_version", "author", "nuget_version")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:client_test.bzl", "client_test")
+load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build:csharp.bzl", "csharp_binary", "csharp_library", "csharp_nunit_test")
 load("//tools/build:nuget.bzl", "nuget_package")
-load("//tools/krpctools:clientgen.bzl", "clientgen_services")
+load("//tools/krpctools:clientgen.bzl", "clientgen_dispatch", "clientgen_services")
 load("//tools/krpctools:services.bzl", "SERVICES")
 
-exports_files(["CHANGELOG.md"])
+exports_files([
+    "CHANGELOG.md",
+    "conformance/expected-failures.txt",
+    "conformance/unsupported.txt",
+])
 
 services = clientgen_services("csharp")
 
@@ -114,6 +119,7 @@ test_suite(
         ":client-tcpip",
         ":communication-localsocket",
         ":communication-tcpip",
+        ":conformance",
         ":csproj-services",
         ":unit",
     ],
@@ -281,6 +287,62 @@ csharp_binary(
         ":KRPC.Client.net10",
         "//tools/build/dotnet:Google.Protobuf",
     ],
+)
+
+# The conformance tests, driving the client through its testee
+csharp_binary(
+    name = "conformance-testee",
+    testonly = True,
+    srcs = glob(["conformance/*.cs"]) + clientgen_dispatch(
+        out = "conformance/{service}Dispatch.cs",
+        language = "csharp",
+    ) + [
+        ":TestAssemblyInfo",
+        ":services-testservice",
+        "//client/conformance:testee-csharp",
+    ],
+    nowarn = [
+        "CS1591",
+        "CS1573",
+        "CS1701",
+    ],
+    target_frameworks = ["net10.0"],
+    deps = [
+        ":KRPC.Client.net10",
+        "//tools/build/dotnet:Google.Protobuf",
+    ],
+)
+
+conformance_test(
+    name = "conformance",
+    size = "medium",
+    conventions = "conformance/conventions.json",
+    expected_failures = "conformance/expected-failures.txt",
+    profiles = [
+        "core",
+        "error-types",
+        "defaults",
+        "streams",
+        "events",
+        "functions",
+        "function-types",
+        "connections",
+        "threads",
+        "callbacks",
+        "conditions",
+        "ordering",
+        "races",
+    ],
+    protocols = [
+        "tcpip",
+        "localsocket",
+    ],
+    tags = [
+        "local",
+        "requires-network",
+    ],
+    testee = ":conformance-testee",
+    unsupported = "conformance/unsupported.txt",
 )
 
 # Sources for //:csproj-test, which checks them against the .csproj file lists.

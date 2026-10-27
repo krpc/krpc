@@ -6,6 +6,7 @@ Kerbal Space Program. Installs the command line tools for working with kRPC serv
  * `krpc-clientgen` — generate client stub code for a service
  * `krpc-docgen` — generate service documentation
  * `krpc-servicedefs` — generate service definition JSON files
+ * `krpc-conformance` — run the conformance tests against a client library
 
 ## Documentation
 

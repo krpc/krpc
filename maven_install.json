@@ -7,6 +7,7 @@
     "com.google.guava:guava": 1943808618,
     "com.google.j2objc:j2objc-annotations": 2003271689,
     "com.google.protobuf:protobuf-java": 130636446,
+    "com.google.protobuf:protobuf-java-util": 892947361,
     "com.puppycrawl.tools:checkstyle": -1716498070,
     "junit:junit": -744267592,
     "org.hamcrest:hamcrest": 1547523135,
@@ -22,6 +23,7 @@
     "com.google.guava:listenablefuture": 1079558157,
     "com.google.j2objc:j2objc-annotations": -1008747351,
     "com.google.protobuf:protobuf-java": -1812001120,
+    "com.google.protobuf:protobuf-java-util": -2010159683,
     "com.puppycrawl.tools:checkstyle": -1773896522,
     "commons-beanutils:commons-beanutils": 852036681,
     "commons-collections:commons-collections": 7509648,
@@ -92,6 +94,12 @@
     "com.google.protobuf:protobuf-java": {
       "shasums": {
         "jar": "0773e72eaf375e1285df330575bfec5bda5da674d544d0e142a17f89c8f754da"
+      },
+      "version": "4.36.2"
+    },
+    "com.google.protobuf:protobuf-java-util": {
+      "shasums": {
+        "jar": "b67a109066cf06f60bb447a6cbcc6709b94d1a5a41ced84330d68e8023e8e0c5"
       },
       "version": "4.36.2"
     },
@@ -207,6 +215,12 @@
       "com.google.j2objc:j2objc-annotations",
       "org.jspecify:jspecify"
     ],
+    "com.google.protobuf:protobuf-java-util": [
+      "com.google.code.findbugs:jsr305",
+      "com.google.code.gson:gson",
+      "com.google.errorprone:error_prone_annotations",
+      "com.google.protobuf:protobuf-java"
+    ],
     "com.puppycrawl.tools:checkstyle": [
       "com.google.guava:guava",
       "commons-beanutils:commons-beanutils",
@@ -287,6 +301,9 @@
     "com.google.protobuf:protobuf-java": [
       "com.google.protobuf",
       "com.google.protobuf.compiler"
+    ],
+    "com.google.protobuf:protobuf-java-util": [
+      "com.google.protobuf.util"
     ],
     "com.puppycrawl.tools:checkstyle": [
       "com.puppycrawl.tools.checkstyle",
@@ -538,6 +555,7 @@
       "com.google.guava:listenablefuture",
       "com.google.j2objc:j2objc-annotations",
       "com.google.protobuf:protobuf-java",
+      "com.google.protobuf:protobuf-java-util",
       "com.puppycrawl.tools:checkstyle",
       "commons-beanutils:commons-beanutils",
       "commons-collections:commons-collections",

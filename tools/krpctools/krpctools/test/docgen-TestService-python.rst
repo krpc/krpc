@@ -22,6 +22,18 @@ Service documentation string.
 
 
 
+.. staticmethod:: add_to_object_dictionary(d, key)
+
+
+
+   :param dict d:
+   :param str key:
+   :rtype: dict(str, :class:`TestClass`)
+   
+
+
+
+
 .. staticmethod:: add_to_object_list(l, value)
 
 
@@ -29,6 +41,18 @@ Service documentation string.
    :param list l:
    :param str value:
    :rtype: list(:class:`TestClass`)
+   
+
+
+
+
+.. staticmethod:: add_to_object_set(h, value)
+
+
+
+   :param set h:
+   :param str value:
+   :rtype: set(:class:`TestClass`)
    
 
 
@@ -52,6 +76,17 @@ Service documentation string.
 
    :param bool value:
    :rtype: str
+   
+
+
+
+
+.. staticmethod:: bytes_default([x = b'\xca\xfe'])
+
+
+
+   :param bytes x:
+   :rtype: bytes
    
 
 
@@ -245,6 +280,72 @@ Service documentation string.
 
 
 
+.. staticmethod:: echo_nullable_bool(value)
+
+
+
+   :param bool or None value:
+   :rtype: bool or None
+   
+
+
+
+
+.. staticmethod:: echo_nullable_bytes(value)
+
+
+
+   :param bytes or None value:
+   :rtype: bytes or None
+   
+
+
+
+
+.. staticmethod:: echo_nullable_dictionary(d)
+
+
+
+   :param dict or None d:
+   :rtype: dict(str, int) or None
+   
+
+
+
+
+.. staticmethod:: echo_nullable_double(value)
+
+
+
+   :param float or None value:
+   :rtype: float or None
+   
+
+
+
+
+.. staticmethod:: echo_nullable_enum(x)
+
+
+
+   :param TestEnum or None x:
+   :rtype: :class:`TestEnum` or None
+   
+
+
+
+
+.. staticmethod:: echo_nullable_float(value)
+
+
+
+   :param float or None value:
+   :rtype: float or None
+   
+
+
+
+
 .. staticmethod:: echo_nullable_int(value)
 
    Returns the given value.
@@ -268,12 +369,78 @@ Service documentation string.
 
 
 
+.. staticmethod:: echo_nullable_long(value)
+
+
+
+   :param int or None value:
+   :rtype: int or None
+   
+
+
+
+
+.. staticmethod:: echo_nullable_set(h)
+
+
+
+   :param set or None h:
+   :rtype: set(int) or None
+   
+
+
+
+
 .. staticmethod:: echo_nullable_string(value)
 
 
 
    :param str or None value:
    :rtype: str or None
+   
+
+
+
+
+.. staticmethod:: echo_nullable_tuple(t)
+
+
+
+   :param tuple or None t:
+   :rtype: tuple(int, int) or None
+   
+
+
+
+
+.. staticmethod:: echo_nullable_u_int(value)
+
+
+
+   :param int or None value:
+   :rtype: int or None
+   
+
+
+
+
+.. staticmethod:: echo_nullable_u_long(value)
+
+
+
+   :param int or None value:
+   :rtype: int or None
+   
+
+
+
+
+.. staticmethod:: echo_string_set(h)
+
+
+
+   :param set h:
+   :rtype: set(str)
    
 
 
@@ -355,6 +522,17 @@ Service documentation string.
 
 
 
+.. staticmethod:: enum_to_string(x)
+
+
+
+   :param TestEnum x:
+   :rtype: str
+   
+
+
+
+
 .. staticmethod:: float_special_defaults([nan = float("nan")], [infinity = float("inf")], [negative_infinity = -float("inf")], [maximum = krpc.limits.FLOAT_MAX], [lowest = krpc.limits.FLOAT_LOWEST], [fraction = 0.1])
 
    Procedure whose defaults are the special values of float, plus a finite fraction
@@ -378,6 +556,17 @@ Service documentation string.
 
    :param float value:
    :rtype: str
+   
+
+
+
+
+.. staticmethod:: hex_string_to_bytes(value)
+
+
+
+   :param str value:
+   :rtype: bytes
    
 
 
@@ -498,7 +687,7 @@ Service documentation string.
 .. staticmethod:: join_with_at_sign(first_value, from)
 
    Returns *first_value* and *from* joined by an at
-   sign, e.g. ``jeb@kerbin``. The parameter names are:
+   sign, e.g. ``name@host``. The parameter names are:
 
    * a name in camel case, and
    * a name that is a keyword in some languages.
@@ -540,6 +729,17 @@ Service documentation string.
 
    :param TestClass value:
    :rtype: :class:`TestClass`
+   
+
+
+
+
+.. staticmethod:: null_default([obj = None])
+
+
+
+   :param TestClass or None obj:
+   :rtype: str
    
 
 
@@ -627,6 +827,16 @@ Service documentation string.
 
 
 
+.. staticmethod:: remove_test_object(value)
+
+
+
+   :param TestClass value:
+   
+
+
+
+
 .. staticmethod:: reset_custom_exception_later()
 
 
@@ -655,12 +865,34 @@ Service documentation string.
 
 
 
+.. staticmethod:: scalar_default([x = 42])
+
+
+
+   :param int x:
+   :rtype: int
+   
+
+
+
+
 .. staticmethod:: set_default([x = {1, 2, 3}])
 
 
 
    :param set x:
    :rtype: set(int)
+   
+
+
+
+
+.. staticmethod:: string_default([x = 'foo'])
+
+
+
+   :param str x:
+   :rtype: str
    
 
 
@@ -699,6 +931,50 @@ Service documentation string.
 
 
 
+.. staticmethod:: string_to_bool(value)
+
+
+
+   :param str value:
+   :rtype: bool
+   
+
+
+
+
+.. staticmethod:: string_to_double(value)
+
+
+
+   :param str value:
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: string_to_enum(value)
+
+
+
+   :param str value:
+   :rtype: :class:`TestEnum`
+   
+
+
+
+
+.. staticmethod:: string_to_float(value)
+
+
+
+   :param str value:
+   :rtype: float
+   
+
+
+
+
 .. staticmethod:: string_to_int32(value)
 
 
@@ -710,7 +986,40 @@ Service documentation string.
 
 
 
-.. staticmethod:: struct_default([x = TestStruct(42, 'jeb', TestEnum.value_b, [1, 2, 3])])
+.. staticmethod:: string_to_int64(value)
+
+
+
+   :param str value:
+   :rtype: int
+   
+
+
+
+
+.. staticmethod:: string_to_u_int32(value)
+
+
+
+   :param str value:
+   :rtype: int
+   
+
+
+
+
+.. staticmethod:: string_to_u_int64(value)
+
+
+
+   :param str value:
+   :rtype: int
+   
+
+
+
+
+.. staticmethod:: struct_default([x = TestStruct(42, 'alpha', TestEnum.value_b, [1, 2, 3])])
 
 
 
@@ -738,6 +1047,17 @@ Service documentation string.
 
    :param TestStruct or None x:
    :rtype: :class:`TestStruct` or None
+   
+
+
+
+
+.. staticmethod:: swap_object_tuple(t)
+
+
+
+   :param tuple t:
+   :rtype: tuple(:class:`TestClass`, :class:`TestClass`)
    
 
 
@@ -825,12 +1145,46 @@ Service documentation string.
 
 
 
+.. staticmethod:: throw_mapped_exception(name)
+
+   Throws the system exception of the given name, which the server maps to the KRPC
+   exception of that name.
+
+   :param str name:
+   :rtype: int
+   
+
+
+
+
 .. staticmethod:: tuple_default([x = (1, False)])
 
 
 
    :param tuple x:
    :rtype: tuple(int, bool)
+   
+
+
+
+
+.. staticmethod:: u_int32_to_string(value)
+
+
+
+   :param int value:
+   :rtype: str
+   
+
+
+
+
+.. staticmethod:: u_int64_to_string(value)
+
+
+
+   :param int value:
+   :rtype: str
    
 
 
@@ -924,7 +1278,7 @@ Service documentation string.
 
    .. staticmethod:: static_method([a = ''], [b = ''])
 
-      Returns jeb followed by *a* and *b*.
+      Returns static followed by *a* and *b*.
 
       :param str a: The first string.
       :param str b: The second string.
@@ -938,6 +1292,17 @@ Service documentation string.
 
       :param TestClass or None value:
       :rtype: :class:`TestClass` or None
+   
+
+   .. staticmethod:: static_optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = None])
+
+
+
+      :param str x:
+      :param str y:
+      :param str z:
+      :param TestClass or None obj:
+      :rtype: str
    
 
    .. attribute:: string_property_private_get

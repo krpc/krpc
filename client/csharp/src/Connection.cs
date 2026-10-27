@@ -199,6 +199,7 @@ namespace KRPC.Client
             var request = new Message {
                 ConnectionRequest = new ConnectionRequest { ClientName = name ?? string.Empty, ProtocolVersion = PROTOCOL_VERSION }
             };
+            WriteFault.Reach ();
             output.WriteLength (request.CalculateSize ());
             request.WriteTo (output);
             output.Flush ();

@@ -335,6 +335,7 @@ class StreamImpl {
       if (!callback.lock.tryLock()) {
         return;
       }
+      RacePoint.reach(RacePoint.FIRST_CALL_STARTED, callback.tag);
     } else if (!enterOnDispatcherThread(callback, version, value)) {
       return;
     }
@@ -351,6 +352,7 @@ class StreamImpl {
         StreamManager.invokeCallback(() -> callback.function.accept(value));
         if (added) {
           callMissed(callback);
+          RacePoint.reach(RacePoint.FIRST_CALL_ENDED, callback.tag);
         }
       } catch (Error exn) {
         if (added) {
@@ -503,6 +505,7 @@ class StreamImpl {
     }
     // Called with the value the stream already has, which no update will pass to it
     if (hasValue) {
+      RacePoint.reach(RacePoint.FIRST_CALL, callback.tag);
       call(callback, current, currentValue, true);
     }
     return callback.tag;
@@ -524,6 +527,7 @@ class StreamImpl {
       firing = reserveReplay(seen);
     }
     if (firing > 0) {
+      RacePoint.reach(RacePoint.REPLAY, callback.tag);
       replay(callback, firing);
     }
     return callback.tag;

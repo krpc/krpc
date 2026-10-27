@@ -110,7 +110,7 @@ public class StreamTest {
     Stream<String> stream = connection.addStream(
         TestClass.class, "staticMethod", connection, "foo", "");
     for (int i = 0; i < 5; i++) {
-      assertEquals("jebfoo", stream.get());
+      assertEquals("staticfoo", stream.get());
       pause();
     }
   }

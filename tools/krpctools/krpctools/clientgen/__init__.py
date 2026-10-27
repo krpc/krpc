@@ -13,6 +13,12 @@ from ..version import __version__
 from .cnano import CnanoGenerator
 from .cpp import CppGenerator
 from .csharp import CsharpGenerator
+from .dispatch import (
+    CnanoDispatchGenerator,
+    CppDispatchGenerator,
+    CsharpDispatchGenerator,
+    JavaDispatchGenerator,
+)
 from .docparser import DocumentationMarkupWarning
 from .java import JavaGenerator
 from .python import PythonGenerator
@@ -33,12 +39,18 @@ GENERATORS = {
     "java": JavaGenerator,
     "cnano": CnanoGenerator,
     "python": PythonGenerator,
+    # The dispatch of a conformance testee
+    "csharp-dispatch": CsharpDispatchGenerator,
+    "cpp-dispatch": CppDispatchGenerator,
+    "java-dispatch": JavaDispatchGenerator,
+    "cnano-dispatch": CnanoDispatchGenerator,
 }
 
 
 def main():
     prog = "krpc-clientgen"
-    languages = ", ".join(sorted(GENERATORS.keys()))
+    # The dispatch generators are for the conformance testees in the kRPC repository
+    languages = ", ".join(sorted(x for x in GENERATORS if not x.endswith("-dispatch")))
     parser = argparse.ArgumentParser(
         prog=prog, description="Generate client source code for kRPC services."
     )

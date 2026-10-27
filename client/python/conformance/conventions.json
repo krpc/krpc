@@ -1,0 +1,20 @@
+{
+  "native_types": {
+    "System.InvalidOperationException": "RuntimeError",
+    "System.ArgumentException": "ValueError",
+    "System.ArgumentNullException": "ValueError",
+    "System.ArgumentOutOfRangeException": "ValueError",
+    "System.NullReferenceException": "TypeError",
+    "System.Collections.Generic.KeyNotFoundException": "KeyError",
+    "System.IndexOutOfRangeException": "IndexError",
+    "System.DivideByZeroException": "ZeroDivisionError",
+    "System.NotSupportedException": "NotImplementedError",
+    "System.TimeoutException": "TimeoutError",
+    "System.OverflowException": "OverflowError"
+  },
+  "naming": {
+    "case": "snake",
+    "accessors": false,
+    "exceptions": true
+  }
+}

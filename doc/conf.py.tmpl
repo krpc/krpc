@@ -36,6 +36,13 @@ extensions = [
 # The home page card icons are left out of the PDF
 suppress_warnings = ['design.fa-build']
 
+# The coverage table's check and cross marks, which pdflatex has no glyph for
+latex_elements = {
+    'preamble': r'\usepackage{pifont}'
+    r'\DeclareUnicodeCharacter{2713}{\ding{51}}'
+    r'\DeclareUnicodeCharacter{2717}{\ding{55}}',
+}
+
 # The spellchecker loads a native library through pyenchant, and only the
 # spelling builder has any use for it, so it is added when that builder asks
 # for it (sphinx-build -t spelling) rather than by every build.

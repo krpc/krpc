@@ -57,7 +57,7 @@ class TestStream(ServerTestCase, unittest.TestCase):
             self.conn.test_service.TestClass.static_method, "foo"
         ) as x:
             for _ in range(5):
-                self.assertEqual("jebfoo", x())
+                self.assertEqual("staticfoo", x())
                 self.wait()
 
     def test_class_property(self) -> None:

@@ -1,4 +1,4 @@
-load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library", native_py_test = "py_test")
 load("//:config.bzl", "python_version", "version")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_sdist", "py_test")
 
@@ -51,11 +51,12 @@ py_sdist(
         "//:COPYING",
         "//:python_version",
         "//:version",
+        "//client/conformance:dist",
         "//core:KRPC.Core.net10-xmldoc",
         "//core:ServiceDefinitions",
         "//tools/ServiceDefinitions:publish",
         "//tools/TestServer:ServiceDefinitions",
-        "//tools/TestServer:archive",
+        "//tools/TestServer:publish",
     ] + glob([
         "krpctools/**/*.py",
         "krpctools/**/*.tmpl",
@@ -66,11 +67,13 @@ py_sdist(
     path_map = {
         "version.py": "krpctools/version.py",
         "core/KRPC.Core.json": "krpctools/test/KRPC.json",
+        "client/conformance/": "krpctools/conformance/",
         "core/xmldoc-net10/": "krpctools/bin/",
         "tools/krpctools/": "",
         "tools/ServiceDefinitions/publish/publish/linux-x64/": "krpctools/bin/",
         "tools/TestServer/TestService.json": "krpctools/test/TestService.json",
-        "tools/TestServer/": "krpctools/bin/",
+        "tools/TestServer/publish/publish/linux-x64/": "krpctools/bin/TestServer/",
+        "tools/build/serverprocess.py": "krpctools/conformance/serverprocess.py",
     },
 )
 
@@ -113,6 +116,7 @@ py_binary(
 test_suite(
     name = "test",
     tests = [
+        ":conformance-test",
         ":krpctoolstest",
         ":lint",
     ],
@@ -129,7 +133,41 @@ py_test(
     size = "medium",
     src = ":krpctools",
     pkg = "krpctools-" + python_version,
+    tests = ["krpctools/test"],
     deps = deps,
+)
+
+# The conformance driver as the package ships it, with its bundled TestServer
+native_py_test(
+    name = "conformance-test",
+    size = "medium",
+    srcs = ["conformance_test.py"],
+    args = [
+        "$(rootpath :krpctools)",
+        "krpctools-" + python_version,
+        "$(DOTNET_BIN)",
+        "$(rootpath //client/python:conformance-testee)",
+        "$(rootpath //client/python:conformance/expected-failures.txt)",
+        "$(rootpath //client/python:conformance/unsupported.txt)",
+        "$(rootpath //client/python:conformance/conventions.json)",
+    ],
+    data = [
+        ":krpctools",
+        "//client/python:conformance-testee",
+        "//client/python:conformance/conventions.json",
+        "//client/python:conformance/expected-failures.txt",
+        "//client/python:conformance/unsupported.txt",
+        "@rules_dotnet//dotnet:resolved_toolchain",
+    ],
+    main = "conformance_test.py",
+    # The bundled TestServer is built for linux-x64
+    target_compatible_with = ["@platforms//os:linux"],
+    toolchains = ["@rules_dotnet//dotnet:resolved_toolchain"],
+    deps = [
+        "//client/python:krpc_lib",
+        "@krpc_pypi//protobuf",
+        "@krpc_pypi//pytest",
+    ],
 )
 
 test_suite(

@@ -487,6 +487,7 @@ public class Connection implements AutoCloseable {
   private static void handshake(
       String name, SocketChannel channel, MessageReader reader, Duration timeout)
       throws IOException {
+    WriteFault.reach();
     CodedOutputStream output = CodedOutputStream.newInstance(Channels.newOutputStream(channel));
     output.writeMessageNoTag(KRPC.Message.newBuilder()
         .setConnectionRequest(KRPC.ConnectionRequest.newBuilder()

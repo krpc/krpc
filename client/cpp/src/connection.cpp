@@ -28,6 +28,7 @@
 
 #include "krpc/decoder.hpp"
 #include "krpc/error.hpp"
+#include "krpc/write_fault.hpp"
 
 #ifndef _WIN32
 #include <poll.h>
@@ -151,10 +152,14 @@ void Connection::shutdown_both() {
 }
 
 void Connection::send(const char* data, size_t length) {
+  detail::reach_write_fault();
   asio::write(socket, asio::buffer(data, length));
 }
 
-void Connection::send(const std::string& data) { asio::write(socket, asio::buffer(data)); }
+void Connection::send(const std::string& data) {
+  detail::reach_write_fault();
+  asio::write(socket, asio::buffer(data));
+}
 
 std::string Connection::receive_message() {
   auto [data, size] = this->buffered_message();

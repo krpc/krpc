@@ -188,8 +188,8 @@ function TestClient:test_class_methods()
 end
 
 function TestClient:test_class_static_methods()
-  luaunit.assertEquals('jeb', self.conn.test_service.TestClass.static_method())
-  luaunit.assertEquals('jebbobbill', self.conn.test_service.TestClass.static_method('bob', 'bill'))
+  luaunit.assertEquals('static', self.conn.test_service.TestClass.static_method())
+  luaunit.assertEquals('staticbobbill', self.conn.test_service.TestClass.static_method('bob', 'bill'))
 end
 
 function TestClient:test_class_properties()
@@ -241,8 +241,9 @@ end
 function TestClient:test_client_members()
   -- benchmark is the server-side benchmarks the test server exposes
   -- test_service2 owns the class that an extension member of test_service returns
+  -- conformance_service is the server state the conformance tests control
   luaunit.assertEquals(
-    Set{'krpc', 'std_lib', 'test_service', 'test_service2', 'benchmark'},
+    Set{'krpc', 'std_lib', 'test_service', 'test_service2', 'benchmark', 'conformance_service'},
     Set(filter_private(tablex.keys(self.conn)))
   )
 end
@@ -416,7 +417,7 @@ end
 function TestClient:test_struct_default_value()
   local service = self.conn.test_service
   luaunit.assertEquals(
-    service.TestStruct(42, 'jeb', service.TestEnum.value_b, List{1, 2, 3}),
+    service.TestStruct(42, 'alpha', service.TestEnum.value_b, List{1, 2, 3}),
     service.struct_default())
 end
 
@@ -554,9 +555,12 @@ function TestClient:test_test_service_service_members()
      'TestNullableStruct',
      'TestStruct',
      'add_multiple_values',
+     'add_to_object_dictionary',
      'add_to_object_list',
+     'add_to_object_set',
      'blocking_procedure',
      'bool_to_string',
+     'bytes_default',
      'bytes_to_hex_string',
      'counter',
      'counter_struct',
@@ -572,9 +576,21 @@ function TestClient:test_test_service_service_members()
      'echo_list_of_nullable_objects',
      'echo_nested_list_of_nullable_objects',
      'echo_nested_nullable_struct',
+     'echo_nullable_bool',
+     'echo_nullable_bytes',
+     'echo_nullable_dictionary',
+     'echo_nullable_double',
+     'echo_nullable_enum',
+     'echo_nullable_float',
      'echo_nullable_int',
      'echo_nullable_list',
+     'echo_nullable_long',
+     'echo_nullable_set',
      'echo_nullable_string',
+     'echo_nullable_tuple',
+     'echo_nullable_u_int',
+     'echo_nullable_u_long',
+     'echo_string_set',
      'echo_test_object',
      'echo_tuple_with_a_nullable_object',
      'empty_list_default',
@@ -582,6 +598,7 @@ function TestClient:test_test_service_service_members()
      'enum_echo',
      'enum_list_default',
      'enum_return',
+     'enum_to_string',
      'float_special_defaults',
      'float_to_string',
      'get_deprecated_property',
@@ -589,6 +606,7 @@ function TestClient:test_test_service_service_members()
      'get_object_property',
      'get_string_property',
      'get_string_property_private_set',
+     'hex_string_to_bytes',
      'increment_dictionary',
      'increment_list',
      'increment_list_of_structs',
@@ -603,24 +621,36 @@ function TestClient:test_test_service_service_members()
      'list_default',
      'nested_struct_echo',
      'not_nullable_object',
+     'null_default',
      'nullable_struct_echo',
      'on_timer',
      'on_timer_using_lambda',
      'optional_arguments',
      'remove_event_after',
+     'remove_test_object',
      'reset_custom_exception_later',
      'reset_invalid_operation_exception_later',
      'return_null_when_not_allowed',
+     'scalar_default',
      'set_default',
      'set_deprecated_property',
      'set_nullable_object',
      'set_object_property',
      'set_string_property',
      'set_string_property_private_get',
+     'string_default',
+     'string_to_bool',
+     'string_to_double',
+     'string_to_enum',
+     'string_to_float',
      'string_to_int32',
+     'string_to_int64',
+     'string_to_u_int32',
+     'string_to_u_int64',
      'struct_default',
      'struct_echo',
      'struct_echo_nullable',
+     'swap_object_tuple',
      'throw_argument_exception',
      'throw_argument_null_exception',
      'throw_argument_out_of_range_exception',
@@ -628,7 +658,10 @@ function TestClient:test_test_service_service_members()
      'throw_custom_exception_later',
      'throw_invalid_operation_exception',
      'throw_invalid_operation_exception_later',
+     'throw_mapped_exception',
      'tuple_default',
+     'u_int32_to_string',
+     'u_int64_to_string',
      'uint32_special_defaults',
      'uint64_special_defaults'})
 end
@@ -655,7 +688,8 @@ function TestClient:test_test_service_test_class_members()
      'set_object_property',
      'set_string_property_private_get',
      'static_method',
-     'static_nullable_object'})
+     'static_nullable_object',
+     'static_optional_arguments'})
 end
 
 function TestClient:test_test_service_enum_members()

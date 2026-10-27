@@ -150,8 +150,9 @@ public class ConnectionTest {
   @Test
   public void testClassStaticMethods() throws RPCException {
     // Note: default arguments not supported, so have to pass "", ""
-    assertEquals("jeb", TestService.TestClass.staticMethod(this.connection, "", ""));
-    assertEquals("jebbobbill", TestService.TestClass.staticMethod(this.connection, "bob", "bill"));
+    assertEquals("static", TestService.TestClass.staticMethod(this.connection, "", ""));
+    assertEquals("staticbobbill",
+        TestService.TestClass.staticMethod(this.connection, "bob", "bill"));
   }
 
   @Test

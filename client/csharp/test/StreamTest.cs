@@ -56,7 +56,7 @@ namespace KRPC.Client.Test
             // Note: have to specify optional parameter "" in expression trees
             var x = Connection.AddStream (() => TestClass.StaticMethod (Connection, "foo", string.Empty));
             for (int i = 0; i < 5; i++) {
-                Assert.AreEqual ("jebfoo", x.Get ());
+                Assert.AreEqual ("staticfoo", x.Get ());
                 Wait ();
             }
         }
