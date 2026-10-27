@@ -258,19 +258,13 @@ namespace KRPC.Client
             var decode = DecoderFor (spec);
             if (!spec.Nullable)
                 return decode;
-            var type = spec.Type;
-            var decodeValue = decode;
-            // An enumeration decodes to its integer value, which unboxes to the enumeration
-            // itself but not to a Nullable of it
-            if (type.IsEnum)
-                decodeValue = (data, client) => Enum.ToObject (type, decode (data, client));
             return (data, client) => {
                 if (data.Length == 0)
                     throw new ArgumentException ("A nullable value carries no presence bool");
                 // The presence bool is one byte, as a bool value always is
                 if (data [0] == 0)
                     return null;
-                return decodeValue (ByteString.CopyFrom (data.Span.Slice (1)), client);
+                return decode (ByteString.CopyFrom (data.Span.Slice (1)), client);
             };
         }
 
@@ -285,8 +279,10 @@ namespace KRPC.Client
         static Func<ByteString, IConnection, object> BuildDecoder (TypeSpec spec)
         {
             var type = spec.Type;
+            // An enumeration decodes to a value of the enumeration, so it unboxes to a Nullable
+            // of it as well
             if (type.IsEnum)
-                return (value, client) => DecodeZigZag32 (ReadVarint (value));
+                return (value, client) => Enum.ToObject (type, DecodeZigZag32 (ReadVarint (value)));
             switch (Type.GetTypeCode (type)) {
             case TypeCode.Double:
                 return (value, client) => BitConverter.Int64BitsToDouble ((long)ReadFixed64 (value));

@@ -312,6 +312,15 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void EnumDecodesToTheEnumeration ()
+        {
+            var spec = TypeSpec.For (typeof(Services.TestService.TestEnum?));
+            var value = Encoder.Decode ("02".ToByteString (), spec, null);
+            Assert.AreEqual (typeof(Services.TestService.TestEnum), value.GetType ());
+            Assert.AreEqual (Services.TestService.TestEnum.ValueB, (Services.TestService.TestEnum?)value);
+        }
+
+        [Test]
         public void NullableListElements ()
         {
             var spec = TypeSpec.For (typeof(IList<uint?>));
