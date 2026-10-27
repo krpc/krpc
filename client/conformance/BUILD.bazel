@@ -107,8 +107,8 @@ COVERAGE_CLIENTS = {
     "lua": "Lua",
 }
 
-# The areas in the specification's page order, of those with tests
-COVERAGE_TESTS = [x for x in ["tests/test_%s.py" % y for y in [
+# The areas in the specification's page order
+COVERAGE_ORDER = ["tests/test_%s.py" % x for x in [
     "connection",
     "calls",
     "values",
@@ -119,7 +119,14 @@ COVERAGE_TESTS = [x for x in ["tests/test_%s.py" % y for y in [
     "events",
     "threading",
     "functions",
-]] if x in glob(["tests/test_*.py"])]
+]]
+
+# Every area, with any the page order lacks at the end
+COVERAGE_TESTS = COVERAGE_ORDER + [
+    x
+    for x in glob(["tests/test_*.py"])
+    if x not in COVERAGE_ORDER
+]
 
 # A table of each requirement against each client, for the docs
 genrule(
