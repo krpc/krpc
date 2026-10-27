@@ -210,8 +210,8 @@ class TestFunctionCompiler(ServerTestCase, unittest.TestCase):
     def test_static_method(self) -> None:
         obj = self.conn.test_service.create_test_object("static")
         cls = type(obj)
-        expected = cls.static_method("bob")
-        self.assertEqual(expected, self.evaluate(lambda: cls.static_method("bob")))
+        expected = cls.static_method("beta")
+        self.assertEqual(expected, self.evaluate(lambda: cls.static_method("beta")))
 
     def test_static_method_of_a_class_accessed_through_a_service(self) -> None:
         obj = self.conn.test_service.create_test_object("staticservice")

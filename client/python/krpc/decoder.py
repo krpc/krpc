@@ -14,7 +14,6 @@ from google.protobuf.internal import wire_format as protobuf_wire_format
 import krpc.platform
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.error import EncodingError
-from krpc.platform import hexlify
 from krpc.types import (
     ClassType,
     DictionaryType,
@@ -78,22 +77,7 @@ class Decoder:
     """Routines for decoding messages and values from
     the protocol buffer serialization format"""
 
-    GUID_LENGTH = 16
-
     _types = Types()
-
-    @classmethod
-    def guid(cls, data: bytes) -> str:
-        """Decode a 16-byte GUID into a string"""
-        return "-".join(
-            (
-                hexlify(data[3::-1]),
-                hexlify(data[5:3:-1]),
-                hexlify(data[7:5:-1]),
-                hexlify(data[8:10]),
-                hexlify(data[10:16]),
-            )
-        )
 
     @classmethod
     def decode(cls, client: Client | None, data: bytes, typ: TypeBase) -> object:
@@ -149,10 +133,6 @@ class Decoder:
                 *cls._decode_items(client, msg.items, typ.field_types)
             )
         raise EncodingError("Cannot decode type %s" % str(typ))
-
-    @classmethod
-    def decode_message_size(cls, data: bytes) -> int:
-        return _decode_varint(data)[0]
 
     @classmethod
     def decode_size_prefix(cls, data: bytes | bytearray) -> tuple[int, int]:

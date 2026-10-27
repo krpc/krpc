@@ -39,7 +39,7 @@ DEFAULTS = {
     "set": ("SetDefault", {1, 2, 3}),
     "dictionary": ("DictionaryDefault", {1: False, 2: True}),
     "tuple": ("TupleDefault", (1, False)),
-    "enum": ("EnumDefaultArg", values.Enum(2)),
+    "enum": ("EnumDefault", values.Enum(2)),
     "enum-list": ("EnumListDefault", [values.Enum(1), values.Enum(2)]),
     "empty-list": ("EmptyListDefault", []),
     "null": ("NullDefault", "null"),

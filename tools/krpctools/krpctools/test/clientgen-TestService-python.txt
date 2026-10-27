@@ -1598,22 +1598,22 @@ class TestService(_TestServiceDefinitions):
             self._client._types.list_type(self._client._types.string_type)
         )
 
-    def enum_default_arg(self, x: TestEnum = TestEnum.value_c) -> TestEnum:
+    def enum_default(self, x: TestEnum = TestEnum.value_c) -> TestEnum:
         return self._client._invoke(
             "TestService",
-            "EnumDefaultArg",
+            "EnumDefault",
             [x],
             [self._client._types.enumeration_type("TestService", "TestEnum")],
             self._client._types.enumeration_type("TestService", "TestEnum")
         )
 
-    def _return_type_enum_default_arg(self) -> TypeBase:
+    def _return_type_enum_default(self) -> TypeBase:
         return self._client._types.enumeration_type("TestService", "TestEnum")
 
-    def _build_call_enum_default_arg(self, x: TestEnum = TestEnum.value_c) -> KRPC_pb2.ProcedureCall:
+    def _build_call_enum_default(self, x: TestEnum = TestEnum.value_c) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
-            "EnumDefaultArg",
+            "EnumDefault",
             [x],
             [self._client._types.enumeration_type("TestService", "TestEnum")],
             self._client._types.enumeration_type("TestService", "TestEnum")
@@ -1659,27 +1659,6 @@ class TestService(_TestServiceDefinitions):
             [x],
             [self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))],
             self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))
-        )
-
-    def enum_return(self) -> TestEnum:
-        return self._client._invoke(
-            "TestService",
-            "EnumReturn",
-            [],
-            [],
-            self._client._types.enumeration_type("TestService", "TestEnum")
-        )
-
-    def _return_type_enum_return(self) -> TypeBase:
-        return self._client._types.enumeration_type("TestService", "TestEnum")
-
-    def _build_call_enum_return(self) -> KRPC_pb2.ProcedureCall:
-        return self._client._build_call(
-            "TestService",
-            "EnumReturn",
-            [],
-            [],
-            self._client._types.enumeration_type("TestService", "TestEnum")
         )
 
     def enum_to_string(self, x: TestEnum) -> str:
@@ -2146,27 +2125,6 @@ class TestService(_TestServiceDefinitions):
             "OnTimer",
             [milliseconds, repeats],
             [self._client._types.uint32_type, self._client._types.uint32_type],
-            self._client._types.event_type
-        )
-
-    def on_timer_using_lambda(self, milliseconds: int) -> Event:
-        return self._client._invoke(
-            "TestService",
-            "OnTimerUsingLambda",
-            [milliseconds],
-            [self._client._types.uint32_type],
-            self._client._types.event_type
-        )
-
-    def _return_type_on_timer_using_lambda(self) -> TypeBase:
-        return self._client._types.event_type
-
-    def _build_call_on_timer_using_lambda(self, milliseconds: int) -> KRPC_pb2.ProcedureCall:
-        return self._client._build_call(
-            "TestService",
-            "OnTimerUsingLambda",
-            [milliseconds],
-            [self._client._types.uint32_type],
             self._client._types.event_type
         )
 

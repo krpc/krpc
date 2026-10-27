@@ -77,10 +77,7 @@ pkg_zip(
 test_suite(
     name = "test",
     tests = [
-        ":client-localsocket",
         ":client-tcpip",
-        ":communication-localsocket",
-        ":communication-tcpip",
         ":conformance",
         ":lint",
         ":unit",
@@ -97,37 +94,13 @@ lua_test(
     deps = lua_deps,
 )
 
-# The transport, one test each. Both run against a server the test listens on itself, so
-# neither needs a kRPC server.
-lua_test(
-    name = "communication-tcpip",
-    size = "small",
-    main = "krpc/test/connection_tcpip.lua",
-    tags = ["requires-network"],
-    deps = lua_deps,
-)
-
-lua_test(
-    name = "communication-localsocket",
-    size = "small",
-    main = "krpc/test/connection_localsocket.lua",
-    deps = lua_deps,
-)
-
-# The client end to end against a TestServer, once per transport it can reach one over.
+# The client's own API against a TestServer. The conformance tests cover each transport, so
+# this runs over one.
 client_test(
     name = "client-tcpip",
     size = "small",
     server_executable = "//tools/TestServer",
     tags = ["requires-network"],
-    test_executable = ":luatest",
-)
-
-client_test(
-    name = "client-localsocket",
-    size = "small",
-    server_executable = "//tools/TestServer",
-    server_type = "localsocket",
     test_executable = ":luatest",
 )
 
@@ -143,7 +116,7 @@ lua_binary(
 lua_test(
     name = "luatest",
     size = "small",
-    main = "krpc/test/client.lua",
+    main = "krpc/test/test_client.lua",
     tags = ["requires-network"],
     deps = lua_deps,
 )

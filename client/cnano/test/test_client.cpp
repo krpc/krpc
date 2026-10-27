@@ -1,687 +1,87 @@
-#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/krpc.h>
+#include <krpc_cnano/utils.h>
 
-#include <cstdio>
+#include <cstdint>
 #include <cstdlib>
-#include <map>
-#include <string>
-#include <vector>
+#include <iostream>
 
-#include "server_test.hpp"
-#include "services/test_service.h"
+// The port the test harness passes in, or the server's default when the binary is run directly
+static krpc_connection_config_t server_address() {
+  const char* port = std::getenv("KRPC_TEST_TCPIP_PORT");
+  krpc_connection_config_t config;
+  config.address = "127.0.0.1";
+  config.port = port == nullptr ? 50000 : static_cast<uint16_t>(std::atoi(port));
+  return config;
+}
 
-class test_client : public server_test {};
-
-// The version is three dot separated runs of digits, checked by hand. gtest falls back to
-// a regular expression syntax of its own where it cannot use POSIX ones, and the two have
-// no spelling of a digit in common: [0-9] is only understood by the former, \d only by the
-// latter.
-static bool is_version(const char* value) {
-  int parts = 1;
-  int digits = 0;
-  for (; *value != '\0'; value++) {
-    if (*value == '.') {
-      if (digits == 0) return false;
-      digits = 0;
-      parts++;
-    } else if (*value >= '0' && *value <= '9') {
-      digits++;
-    } else {
-      return false;
-    }
+class test_client : public ::testing::Test {
+ public:
+  test_client() {
+    krpc_connection_config_t config = server_address();
+    if (KRPC_OK != krpc_open(&conn, &config)) exit(1);
+    if (KRPC_OK != krpc_connect(conn, "TestClientCNano")) exit(1);
   }
-  return parts == 3 && digits > 0;
-}
 
-TEST_F(test_client, test_version) {
-  krpc_schema_Status status = krpc_schema_Status_init_default;
-  ASSERT_EQ(KRPC_OK, krpc_KRPC_GetStatus(conn, &status));
-  ASSERT_TRUE(is_version(status.version)) << status.version;
-}
+  ~test_client() override {
+    if (KRPC_OK != krpc_disconnect(conn)) exit(1);
+  }
+
+  krpc_connection_t conn;
+};
 
 TEST_F(test_client, test_optional_return_value) {
   ASSERT_EQ(KRPC_OK, krpc_KRPC_GetStatus(conn, nullptr));
 }
 
-TEST_F(test_client, test_value_parameters) {
-  auto string = new char[32];
-  int32_t value = 0;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_FloatToString(conn, &string, 3.14159));
-  ASSERT_STREQ("3.14159", string);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_DoubleToString(conn, &string, 3.14159));
-  ASSERT_STREQ("3.14159", string);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_Int32ToString(conn, &string, 42));
-  ASSERT_STREQ("42", string);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_Int64ToString(conn, &string, 123456789000L));
-  ASSERT_STREQ("123456789000", string);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_BoolToString(conn, &string, true));
-  ASSERT_STREQ("True", string);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_BoolToString(conn, &string, false));
-  ASSERT_STREQ("False", string);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_StringToInt32(conn, &value, "12345"));
-  ASSERT_EQ(12345, value);
-  KRPC_BYTES(bytes, 4);
-  bytes.data[0] = '\xde';
-  bytes.data[1] = '\xad';
-  bytes.data[2] = '\xbe';
-  bytes.data[3] = '\xef';
-  ASSERT_EQ(KRPC_OK, krpc_TestService_BytesToHexString(conn, &string, bytes));
-  ASSERT_STREQ("deadbeef", string);
-  delete[] string;
+// The float conversions the AVR build encodes and decodes with
+static void test_float32_to_float64(uint32_t float32, uint64_t float64) {
+  uint64_t result;
+  krpc_float32_to_float64(&float32, &result);
+  ASSERT_EQ(result, float64);
 }
 
-TEST_F(test_client, test_string_malloc_and_free) {
-  char* string = nullptr;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_FloatToString(conn, &string, 3.14159));
-  ASSERT_STREQ("3.14159", string);
-  krpc_free(string);
+static void test_float64_to_float32(uint64_t float64, uint32_t float32) {
+  uint32_t result;
+  krpc_float64_to_float32(&float64, &result);
+  if (result != float32) std::cout << std::hex << result << std::endl;
+  ASSERT_EQ(result, float32);
 }
 
-TEST_F(test_client, test_multiple_value_parameters) {
-  auto value = new char[32];
-  ASSERT_EQ(KRPC_OK, krpc_TestService_AddMultipleValues(conn, &value, 0.14159, 1, 2));
-  ASSERT_STREQ("3.14159", value);
-  delete[] value;
+TEST(test_float_conversion, test_float32_to_float64) {
+  test_float32_to_float64(0x3f800000, 0x3ff0000000000000);  // 1
+  test_float32_to_float64(0x40000000, 0x4000000000000000);  // 2
+  test_float32_to_float64(0xc0000000, 0xc000000000000000);  // -2
+  test_float32_to_float64(0x40490fdb, 0x400921fb60000000);  // pi
+  test_float32_to_float64(0x3eaaaaab, 0x3fd5555560000000);  // 1/3
+  test_float32_to_float64(0x7f7fffff, 0x47efffffe0000000);  // max value
+  test_float32_to_float64(0x00800000, 0x3810000000000000);  // min value
+  test_float32_to_float64(0x80800000, 0xb810000000000000);  // -min value
+  test_float32_to_float64(0xff7fffff, 0xc7efffffe0000000);  // -max value
+  test_float32_to_float64(0x00000000, 0x0000000000000000);  // 0
+  test_float32_to_float64(0x80000000, 0x8000000000000000);  // -0
+  test_float32_to_float64(0x7f800000, 0x7ff0000000000000);  // +infinity
+  test_float32_to_float64(0xff800000, 0xfff0000000000000);  // -infinity
+  test_float32_to_float64(0x7fc00000, 0x7ff8000000000000);  // quiet NaN
+  test_float32_to_float64(0x7fa00000, 0x7ff4000000000000);  // signalling NaN
 }
 
-TEST_F(test_client, test_properties) {
-  auto string = new char[32];
-  ASSERT_EQ(KRPC_OK, krpc_TestService_set_StringProperty(conn, "foo"));
-  ASSERT_EQ(KRPC_OK, krpc_TestService_StringProperty(conn, &string));
-  ASSERT_STREQ("foo", string);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_StringPropertyPrivateSet(conn, &string));
-  ASSERT_STREQ("foo", string);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_set_StringPropertyPrivateGet(conn, "foo"));
-  delete[] string;
-
-  krpc_TestService_TestClass_t object;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &object, "bar"));
-  ASSERT_EQ(KRPC_OK, krpc_TestService_set_ObjectProperty(conn, object));
-  krpc_TestService_TestClass_t object2;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_ObjectProperty(conn, &object2));
-  ASSERT_EQ(object2, object);
-}
-
-TEST_F(test_client, test_class_as_return_value) {
-  krpc_TestService_TestClass_t object;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &object, "jeb"));
-  auto string = new char[32];
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_GetValue(conn, &string, object));
-  ASSERT_STREQ("value=jeb", string);
-  delete[] string;
-}
-
-TEST_F(test_client, test_class_none_value) {
-  krpc_TestService_TestClass_t none = KRPC_NULL;
-  krpc_TestService_TestClass_t result;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoTestObject(conn, &result, none));
-  ASSERT_EQ(none, result);
-  krpc_TestService_TestClass_t object;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &object, "bob"));
-  auto string = new char[32];
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_ObjectToString(conn, &string, object, none));
-  ASSERT_STREQ("bobnull", string);
-  delete[] string;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_set_ObjectProperty(conn, none));
-  ASSERT_EQ(KRPC_OK, krpc_TestService_ObjectProperty(conn, &object));
-  ASSERT_EQ(none, object);
-}
-
-TEST_F(test_client, test_nullable_non_class_values) {
-  // Nullable value-type, string and collection parameters and return values. Each nullable
-  // non-class argument is a pointer where NULL means null, and each such return has an extra
-  // returnValueIsNull out-parameter.
-  int32_t int_result = 0;
-  bool int_null = false;
-  int32_t int_value = 42;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoNullableInt(conn, &int_result, &int_null, &int_value));
-  ASSERT_FALSE(int_null);
-  ASSERT_EQ(42, int_result);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoNullableInt(conn, &int_result, &int_null, NULL));
-  ASSERT_TRUE(int_null);
-
-  char* string_result = nullptr;
-  bool string_null = false;
-  ASSERT_EQ(KRPC_OK,
-            krpc_TestService_EchoNullableString(conn, &string_result, &string_null, "foo"));
-  ASSERT_FALSE(string_null);
-  ASSERT_STREQ("foo", string_result);
-  krpc_free(string_result);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoNullableString(conn, &string_result, &string_null, NULL));
-  ASSERT_TRUE(string_null);
-
-  krpc_list_int32_t list = KRPC_NULL_LIST;
-  list.size = 3;
-  list.items = new int32_t[3];
-  list.items[0] = 1;
-  list.items[1] = 2;
-  list.items[2] = 3;
-  krpc_list_int32_t list_result = KRPC_NULL_LIST;
-  bool list_null = false;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoNullableList(conn, &list_result, &list_null, &list));
-  ASSERT_FALSE(list_null);
-  ASSERT_EQ(3u, list_result.size);
-  delete[] list.items;
-  KRPC_FREE_LIST(list_result);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoNullableList(conn, &list_result, &list_null, NULL));
-  ASSERT_TRUE(list_null);
-}
-
-TEST_F(test_client, test_non_nullable_parameter_rejects_null) {
-  // A null argument to a parameter that is not nullable is rejected by the server
-  krpc_TestService_TestClass_t result;
-  ASSERT_EQ(KRPC_ERROR_RPC_FAILED, krpc_TestService_NotNullableObject(conn, &result, KRPC_NULL));
-}
-
-TEST_F(test_client, test_nullable_class_method) {
-  krpc_TestService_TestClass_t obj;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "jeb"));
-  krpc_TestService_TestClass_t obj2;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj2, "bob"));
-  krpc_TestService_TestClass_t result;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_EchoNullableObject(conn, &result, obj, obj2));
-  ASSERT_EQ(obj2, result);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_EchoNullableObject(conn, &result, obj, KRPC_NULL));
-  ASSERT_EQ(KRPC_NULL, result);
-}
-
-TEST_F(test_client, test_nullable_class_static_method) {
-  krpc_TestService_TestClass_t obj;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "jeb"));
-  krpc_TestService_TestClass_t result;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_StaticNullableObject(conn, &result, obj));
-  ASSERT_EQ(obj, result);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_StaticNullableObject(conn, &result, KRPC_NULL));
-  ASSERT_EQ(KRPC_NULL, result);
-}
-
-TEST_F(test_client, test_nullable_property) {
-  krpc_TestService_TestClass_t obj;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "jeb"));
-  krpc_TestService_TestClass_t result;
-  // ObjectProperty is nullable and its setter accepts null
-  ASSERT_EQ(KRPC_OK, krpc_TestService_set_ObjectProperty(conn, KRPC_NULL));
-  ASSERT_EQ(KRPC_OK, krpc_TestService_ObjectProperty(conn, &result));
-  ASSERT_EQ(KRPC_NULL, result);
-  // NullableObject is nullable for reads, but its setter guards against null
-  ASSERT_EQ(KRPC_OK, krpc_TestService_set_NullableObject(conn, obj));
-  ASSERT_EQ(KRPC_OK, krpc_TestService_NullableObject(conn, &result));
-  ASSERT_EQ(obj, result);
-  ASSERT_EQ(KRPC_ERROR_RPC_FAILED, krpc_TestService_set_NullableObject(conn, KRPC_NULL));
-}
-
-TEST_F(test_client, test_class_methods) {
-  krpc_TestService_TestClass_t object;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &object, "bob"));
-  auto string = new char[32];
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_GetValue(conn, &string, object));
-  ASSERT_STREQ("value=bob", string);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_FloatToString(conn, &string, object, 3.14159));
-  ASSERT_STREQ("bob3.14159", string);
-  krpc_TestService_TestClass_t object2;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &object2, "bill"));
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_ObjectToString(conn, &string, object, object2));
-  ASSERT_STREQ("bobbill", string);
-  delete[] string;
-}
-
-TEST_F(test_client, test_class_static_methods) {
-  auto string = new char[32];
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_StaticMethod(conn, &string, "", ""));
-  ASSERT_STREQ("static", string);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_StaticMethod(conn, &string, "bob", "bill"));
-  ASSERT_STREQ("staticbobbill", string);
-  delete[] string;
-}
-
-TEST_F(test_client, test_class_properties) {
-  krpc_TestService_TestClass_t object;
-  int32_t value;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &object, "jeb"));
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_set_IntProperty(conn, object, 0));
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_IntProperty(conn, &value, object));
-  ASSERT_EQ(0, value);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_set_IntProperty(conn, object, 42));
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_IntProperty(conn, &value, object));
-  ASSERT_EQ(42, value);
-  krpc_TestService_TestClass_t object2;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &object2, "kermin"));
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_set_ObjectProperty(conn, object, object2));
-  krpc_TestService_TestClass_t object3;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_ObjectProperty(conn, &object3, object));
-  ASSERT_EQ(object2, object3);
-  krpc_TestService_TestClass_set_StringPropertyPrivateGet(conn, object, "bob");
-  auto string = new char[32];
-  krpc_TestService_TestClass_StringPropertyPrivateSet(conn, &string, object);
-  ASSERT_STREQ("bob", string);
-  delete[] string;
-}
-
-TEST_F(test_client, test_blocking_procedure) {
-  int32_t value;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_BlockingProcedure(conn, &value, 0, 0));
-  ASSERT_EQ(value, 0);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_BlockingProcedure(conn, &value, 1, 0));
-  ASSERT_EQ(value, 1);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_BlockingProcedure(conn, &value, 2, 0));
-  ASSERT_EQ(value, 1 + 2);
-  int expected = 0;
-  for (int i = 1; i <= 42; i++) expected += i;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_BlockingProcedure(conn, &value, 42, 0));
-  ASSERT_EQ(value, expected);
-}
-
-TEST_F(test_client, test_enums) {
-  krpc_TestService_TestEnum_t value;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EnumReturn(conn, &value));
-  ASSERT_EQ(value, KRPC_TESTSERVICE_TESTENUM_VALUEB);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EnumEcho(conn, &value, KRPC_TESTSERVICE_TESTENUM_VALUEA));
-  ASSERT_EQ(value, KRPC_TESTSERVICE_TESTENUM_VALUEA);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EnumEcho(conn, &value, KRPC_TESTSERVICE_TESTENUM_VALUEB));
-  ASSERT_EQ(value, KRPC_TESTSERVICE_TESTENUM_VALUEB);
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EnumEcho(conn, &value, KRPC_TESTSERVICE_TESTENUM_VALUEC));
-  ASSERT_EQ(value, KRPC_TESTSERVICE_TESTENUM_VALUEC);
-
-  krpc_list_enum_t list = KRPC_NULL_LIST;
-  list.size = 2;
-  list.items = new krpc_enum_t[2];
-  list.items[0] = KRPC_TESTSERVICE_TESTENUM_VALUEA;
-  list.items[1] = KRPC_TESTSERVICE_TESTENUM_VALUEB;
-  krpc_list_enum_t result = KRPC_NULL_LIST;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EnumListDefault(conn, &result, &list));
-  ASSERT_EQ(2u, result.size);
-  ASSERT_EQ(KRPC_TESTSERVICE_TESTENUM_VALUEA, result.items[0]);
-  ASSERT_EQ(KRPC_TESTSERVICE_TESTENUM_VALUEB, result.items[1]);
-  delete[] list.items;
-  KRPC_FREE_LIST(result);
-}
-
-TEST_F(test_client, test_test_service_enum_members) {
-  ASSERT_EQ(0, KRPC_TESTSERVICE_TESTENUM_VALUEA);
-  ASSERT_EQ(1, KRPC_TESTSERVICE_TESTENUM_VALUEB);
-  ASSERT_EQ(2, KRPC_TESTSERVICE_TESTENUM_VALUEC);
-}
-
-TEST_F(test_client, test_collections) {
-  {
-    krpc_list_int32_t list = KRPC_NULL_LIST;
-    krpc_list_int32_t result = KRPC_NULL_LIST;
-    ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementList(conn, &result, &list));
-    ASSERT_EQ(result.size, 0u);
-    // ASSERT_EQ(result.items, NULL);
-    KRPC_FREE_LIST(result);
-  }
-  {
-    krpc_list_int32_t list = KRPC_NULL_LIST;
-    list.size = 3;
-    list.items = new int32_t[3];
-    list.items[0] = 0;
-    list.items[1] = 1;
-    list.items[2] = 2;
-
-    krpc_list_int32_t result = KRPC_NULL_LIST;
-    ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementList(conn, &result, &list));
-    ASSERT_EQ(result.size, 3u);
-    for (size_t i = 0; i < result.size; i++) ASSERT_EQ(result.items[i], list.items[i] + 1);
-    delete[] list.items;
-    KRPC_FREE_LIST(result);
-  }
-  {
-    krpc_dictionary_string_int32_t dictionary = KRPC_NULL_DICTIONARY;
-    krpc_dictionary_string_int32_t result = KRPC_NULL_DICTIONARY;
-    ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementDictionary(conn, &result, &dictionary));
-    ASSERT_EQ(result.size, 0u);
-    // ASSERT_EQ(result.items, NULL);
-    KRPC_FREE_DICTIONARY(result);
-  }
-  {
-    krpc_dictionary_string_int32_t dictionary = KRPC_NULL_DICTIONARY;
-    dictionary.size = 3;
-    dictionary.entries = new krpc_dictionary_entry_string_int32_t[3];
-    dictionary.entries[0].key = (char*)"a";
-    dictionary.entries[0].value = 0;
-    dictionary.entries[1].key = (char*)"b";
-    dictionary.entries[1].value = 1;
-    dictionary.entries[2].key = (char*)"c";
-    dictionary.entries[2].value = 2;
-    krpc_dictionary_string_int32_t result = KRPC_NULL_DICTIONARY;
-    ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementDictionary(conn, &result, &dictionary));
-    ASSERT_EQ(result.size, 3u);
-    for (size_t i = 0; i < result.size; i++) {
-      auto& entry = result.entries[i];
-      if (!strcmp("a", entry.key))
-        ASSERT_EQ(entry.value, 1);
-      else if (!strcmp("b", entry.key))
-        ASSERT_EQ(entry.value, 2);
-      else if (!strcmp("c", entry.key))
-        ASSERT_EQ(entry.value, 3);
-      else
-        FAIL();
-    }
-    delete[] dictionary.entries;
-    for (size_t i = 0; i < result.size; i++) krpc_free(result.entries[i].key);
-    KRPC_FREE_DICTIONARY(result);
-  }
-  {
-    krpc_set_int32_t set = KRPC_NULL_SET;
-    krpc_set_int32_t result = KRPC_NULL_SET;
-    ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementSet(conn, &result, &set));
-    ASSERT_EQ(result.size, 0u);
-    // ASSERT_EQ(result.items, NULL);
-    KRPC_FREE_SET(result);
-  }
-  {
-    krpc_set_int32_t set = KRPC_NULL_SET;
-    set.size = 3;
-    set.items = new int32_t[3];
-    set.items[0] = 0;
-    set.items[1] = 1;
-    set.items[2] = 2;
-    krpc_set_int32_t result = KRPC_NULL_SET;
-    ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementSet(conn, &result, &set));
-    ASSERT_EQ(result.size, 3u);
-    uint8_t found = 0;
-    for (size_t i = 0; i < result.size; i++) {
-      auto& item = result.items[i];
-      switch (item) {
-        case 1:
-          found |= 0x1;
-          break;
-        case 2:
-          found |= 0x2;
-          break;
-        case 3:
-          found |= 0x4;
-          break;
-        default:
-          FAIL();
-      }
-    }
-    ASSERT_EQ(found, 0x1 | 0x2 | 0x4);
-    delete[] set.items;
-    KRPC_FREE_SET(result);
-  }
-  {
-    krpc_tuple_int32_int64_t tuple = {1, 2};
-    krpc_tuple_int32_int64_t result = {0, 0};
-    ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementTuple(conn, &result, &tuple));
-    ASSERT_EQ(result.e0, 2);
-    ASSERT_EQ(result.e1, 3);
-  }
-}
-
-TEST_F(test_client, test_structs) {
-  krpc_TestService_TestStruct_t value = {0, NULL, 0, KRPC_NULL_LIST};
-  value.int_field = 42;
-  value.string_field = (char*)"jeb";
-  value.enum_field = KRPC_TESTSERVICE_TESTENUM_VALUEB;
-  value.list_field.size = 3;
-  value.list_field.items = new int32_t[3]{1, 2, 3};
-
-  krpc_TestService_TestStruct_t result = {0, NULL, 0, KRPC_NULL_LIST};
-  ASSERT_EQ(KRPC_OK, krpc_TestService_StructEcho(conn, &result, &value));
-  ASSERT_EQ(42, result.int_field);
-  ASSERT_STREQ("jeb", result.string_field);
-  ASSERT_EQ(KRPC_TESTSERVICE_TESTENUM_VALUEB, result.enum_field);
-  ASSERT_EQ(3u, result.list_field.size);
-  ASSERT_EQ(1, result.list_field.items[0]);
-  ASSERT_EQ(3, result.list_field.items[2]);
-
-  delete[] value.list_field.items;
-  krpc_free(result.string_field);
-  KRPC_FREE_LIST(result.list_field);
-}
-
-TEST_F(test_client, test_nullable_struct_fields) {
-  krpc_TestService_TestClass_t obj = KRPC_NULL;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "jeb"));
-
-  krpc_TestService_TestNullableStruct_t value = {
-      0, {0, false}, {0, false}, {NULL, false}, {KRPC_NULL, false}};
-  value.int_field = 1;
-  value.nullable_int_field.value = 2;
-  value.nullable_int_field.has_value = true;
-  value.nullable_enum_field.value = KRPC_TESTSERVICE_TESTENUM_VALUEB;
-  value.nullable_enum_field.has_value = true;
-  value.nullable_string_field.value = (char*)"jeb";
-  value.nullable_string_field.has_value = true;
-  value.nullable_object_field.value = obj;
-  value.nullable_object_field.has_value = true;
-
-  krpc_TestService_TestNullableStruct_t result = {
-      0, {0, false}, {0, false}, {NULL, false}, {KRPC_NULL, false}};
-  ASSERT_EQ(KRPC_OK, krpc_TestService_NullableStructEcho(conn, &result, &value));
-  ASSERT_EQ(1, result.int_field);
-  ASSERT_TRUE(result.nullable_int_field.has_value);
-  ASSERT_EQ(2, result.nullable_int_field.value);
-  ASSERT_TRUE(result.nullable_enum_field.has_value);
-  ASSERT_EQ(KRPC_TESTSERVICE_TESTENUM_VALUEB, result.nullable_enum_field.value);
-  ASSERT_TRUE(result.nullable_string_field.has_value);
-  ASSERT_STREQ("jeb", result.nullable_string_field.value);
-  ASSERT_TRUE(result.nullable_object_field.has_value);
-  ASSERT_EQ(obj, result.nullable_object_field.value);
-
-  krpc_free(result.nullable_string_field.value);
-}
-
-TEST_F(test_client, test_null_struct_fields) {
-  krpc_TestService_TestNullableStruct_t value = {
-      0, {0, false}, {0, false}, {NULL, false}, {KRPC_NULL, false}};
-  value.int_field = 1;
-
-  krpc_TestService_TestNullableStruct_t result = {
-      0, {0, false}, {0, false}, {NULL, false}, {KRPC_NULL, false}};
-  ASSERT_EQ(KRPC_OK, krpc_TestService_NullableStructEcho(conn, &result, &value));
-  ASSERT_EQ(1, result.int_field);
-  ASSERT_FALSE(result.nullable_int_field.has_value);
-  ASSERT_FALSE(result.nullable_enum_field.has_value);
-  ASSERT_FALSE(result.nullable_string_field.has_value);
-  ASSERT_FALSE(result.nullable_object_field.has_value);
-}
-
-TEST_F(test_client, test_nullable_list_elements) {
-  krpc_nullable_int32_t items[3] = {{1, true}, {0, false}, {3, true}};
-  krpc_list_nullable_int32_t list = KRPC_NULL_LIST;
-  list.size = 3;
-  list.items = items;
-
-  krpc_list_nullable_int32_t result = KRPC_NULL_LIST;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoListOfNullableInts(conn, &result, &list));
-  ASSERT_EQ(3u, result.size);
-  ASSERT_TRUE(result.items[0].has_value);
-  ASSERT_EQ(1, result.items[0].value);
-  ASSERT_FALSE(result.items[1].has_value);
-  ASSERT_TRUE(result.items[2].has_value);
-  ASSERT_EQ(3, result.items[2].value);
-
-  KRPC_FREE_LIST(result);
-}
-
-TEST_F(test_client, test_nullable_list_of_objects) {
-  krpc_TestService_TestClass_t obj = KRPC_NULL;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "jeb"));
-
-  krpc_nullable_object_t items[2] = {{obj, true}, {KRPC_NULL, false}};
-  krpc_list_nullable_object_t list = KRPC_NULL_LIST;
-  list.size = 2;
-  list.items = items;
-
-  krpc_list_nullable_object_t result = KRPC_NULL_LIST;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoListOfNullableObjects(conn, &result, &list));
-  ASSERT_EQ(2u, result.size);
-  ASSERT_TRUE(result.items[0].has_value);
-  ASSERT_EQ(obj, result.items[0].value);
-  ASSERT_FALSE(result.items[1].has_value);
-
-  KRPC_FREE_LIST(result);
-}
-
-TEST_F(test_client, test_nested_structs) {
-  krpc_TestService_TestClass_t obj = KRPC_NULL;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "bob"));
-
-  krpc_TestService_TestNestedStruct_t value = {{0, NULL, 0, KRPC_NULL_LIST}, KRPC_NULL, NULL};
-  value.struct_field.int_field = 1;
-  value.struct_field.string_field = (char*)"jeb";
-  value.object_field = obj;
-  value.string_field = (char*)"bill";
-
-  krpc_TestService_TestNestedStruct_t result = {{0, NULL, 0, KRPC_NULL_LIST}, KRPC_NULL, NULL};
-  ASSERT_EQ(KRPC_OK, krpc_TestService_NestedStructEcho(conn, &result, &value));
-  ASSERT_EQ(1, result.struct_field.int_field);
-  ASSERT_STREQ("jeb", result.struct_field.string_field);
-  ASSERT_EQ(obj, result.object_field);
-  ASSERT_STREQ("bill", result.string_field);
-
-  krpc_free(result.struct_field.string_field);
-  KRPC_FREE_LIST(result.struct_field.list_field);
-  krpc_free(result.string_field);
-}
-
-TEST_F(test_client, test_collections_of_structs) {
-  krpc_TestService_TestStruct_t items[2] = {{0, NULL, 0, KRPC_NULL_LIST},
-                                            {0, NULL, 0, KRPC_NULL_LIST}};
-  items[0].int_field = 0;
-  items[0].string_field = (char*)"jeb";
-  items[1].int_field = 1;
-  items[1].string_field = (char*)"bob";
-  krpc_list_TestService_TestStruct_t list = KRPC_NULL_LIST;
-  list.size = 2;
-  list.items = items;
-
-  krpc_list_TestService_TestStruct_t result = KRPC_NULL_LIST;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementListOfStructs(conn, &result, &list));
-  ASSERT_EQ(2u, result.size);
-  ASSERT_EQ(1, result.items[0].int_field);
-  ASSERT_EQ(2, result.items[1].int_field);
-
-  for (size_t i = 0; i < result.size; i++) {
-    krpc_free(result.items[i].string_field);
-    KRPC_FREE_LIST(result.items[i].list_field);
-  }
-  KRPC_FREE_LIST(result);
-}
-
-TEST_F(test_client, test_nested_collections) {
-  {
-    krpc_dictionary_string_list_int32_t dictionary = KRPC_NULL_DICTIONARY;
-    krpc_dictionary_string_list_int32_t result = KRPC_NULL_DICTIONARY;
-    ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementNestedCollection(conn, &result, &dictionary));
-    ASSERT_EQ(result.size, 0u);
-    // ASSERT_EQ(NULL, result.entries);
-    KRPC_FREE_DICTIONARY(result);
-  }
-  {
-    krpc_dictionary_string_list_int32_t dictionary = KRPC_NULL_DICTIONARY;
-    dictionary.size = 3;
-    dictionary.entries = new krpc_dictionary_entry_string_list_int32_t[3];
-    dictionary.entries[0].key = (char*)"a";
-    dictionary.entries[0].value = KRPC_NULL_LIST;
-    dictionary.entries[0].value.size = 2;
-    dictionary.entries[0].value.items = new int32_t[2];
-    dictionary.entries[0].value.items[0] = 0;
-    dictionary.entries[0].value.items[1] = 1;
-    dictionary.entries[1].key = (char*)"b";
-    dictionary.entries[1].value = KRPC_NULL_LIST;
-    dictionary.entries[2].key = (char*)"c";
-    dictionary.entries[2].value = KRPC_NULL_LIST;
-    dictionary.entries[2].value.size = 1;
-    dictionary.entries[2].value.items = new int32_t[1];
-    dictionary.entries[2].value.items[0] = 2;
-
-    krpc_dictionary_string_list_int32_t result = KRPC_NULL_DICTIONARY;
-    ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementNestedCollection(conn, &result, &dictionary));
-
-    std::map<std::string, std::vector<int32_t>> actual;
-    ASSERT_EQ(result.size, 3u);
-    for (size_t i = 0; i < result.size; i++) {
-      std::string key(result.entries[i].key);
-      actual[key] = std::vector<int32_t>();
-      for (size_t j = 0; j < result.entries[i].value.size; j++)
-        actual[key].push_back(result.entries[i].value.items[j]);
-    }
-    std::map<std::string, std::vector<int32_t>> expected;
-    expected["a"] = std::vector<int>();
-    expected["a"].push_back(1);
-    expected["a"].push_back(2);
-    expected["b"] = std::vector<int>();
-    expected["c"] = std::vector<int>();
-    expected["c"].push_back(3);
-    ASSERT_EQ(expected, actual);
-
-    delete[] dictionary.entries[0].value.items;
-    delete[] dictionary.entries[2].value.items;
-    delete[] dictionary.entries;
-    for (size_t i = 0; i < result.size; i++) {
-      krpc_free(result.entries[i].key);
-      KRPC_FREE_LIST(result.entries[i].value);
-    }
-    KRPC_FREE_DICTIONARY(result);
-  }
-}
-
-TEST_F(test_client, test_collections_of_objects) {
-  krpc_list_object_t l1 = KRPC_NULL_LIST;
-  krpc_list_object_t l2 = KRPC_NULL_LIST;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_AddToObjectList(conn, &l2, &l1, "jeb"));
-  ASSERT_EQ(1u, l2.size);
-  {
-    auto value = new char[32];
-    krpc_object_t obj = l2.items[0];
-    krpc_TestService_TestClass_GetValue(conn, &value, obj);
-    ASSERT_EQ("value=jeb", std::string(value));
-    delete[] value;
-  }
-  krpc_list_object_t l3 = KRPC_NULL_LIST;
-  ASSERT_EQ(KRPC_OK, krpc_TestService_AddToObjectList(conn, &l3, &l2, "bob"));
-  ASSERT_EQ(2u, l3.size);
-  {
-    auto value = new char[32];
-    krpc_object_t obj = l3.items[0];
-    krpc_TestService_TestClass_GetValue(conn, &value, obj);
-    ASSERT_EQ("value=jeb", std::string(value));
-    delete[] value;
-  }
-  {
-    auto value = new char[32];
-    krpc_object_t obj = l3.items[1];
-    krpc_TestService_TestClass_GetValue(conn, &value, obj);
-    ASSERT_EQ("value=bob", std::string(value));
-    delete[] value;
-  }
-  KRPC_FREE_LIST(l2);
-  KRPC_FREE_LIST(l3);
-}
-
-TEST_F(test_client, test_invalid_operation_exception) {
-  int32_t value;
-  ASSERT_EQ(KRPC_ERROR_RPC_FAILED, krpc_TestService_ThrowInvalidOperationException(conn, &value));
-  ASSERT_ERROR_MESSAGE("KRPC.InvalidOperationException: Invalid operation");
-}
-
-TEST_F(test_client, test_argument_exception) {
-  int32_t value;
-  ASSERT_EQ(KRPC_ERROR_RPC_FAILED, krpc_TestService_ThrowArgumentException(conn, &value));
-  ASSERT_ERROR_MESSAGE("KRPC.ArgumentException: Invalid argument");
-}
-
-TEST_F(test_client, test_argument_null_exception) {
-  int32_t value;
-  ASSERT_EQ(KRPC_ERROR_RPC_FAILED, krpc_TestService_ThrowArgumentNullException(conn, &value, ""));
-  ASSERT_ERROR_MESSAGE("KRPC.ArgumentNullException: ");
-}
-
-TEST_F(test_client, test_argument_out_of_range_exception) {
-  int32_t value;
-  ASSERT_EQ(KRPC_ERROR_RPC_FAILED,
-            krpc_TestService_ThrowArgumentOutOfRangeException(conn, &value, 0));
-  ASSERT_ERROR_MESSAGE("KRPC.ArgumentOutOfRangeException: ");
-}
-
-TEST_F(test_client, test_custom_exception) {
-  int32_t value;
-  ASSERT_EQ(KRPC_ERROR_RPC_FAILED, krpc_TestService_ThrowCustomException(conn, &value));
-  ASSERT_ERROR_MESSAGE("TestService.CustomException: A custom kRPC exception");
+TEST(test_float_conversion, test_float64_to_float32) {
+  test_float64_to_float32(0x3ff0000000000000, 0x3f800000);  // 1
+  test_float64_to_float32(0x3ff0000000000001, 0x3f800000);  // smallest number > 1 -> 1
+  test_float64_to_float32(0x4000000000000000, 0x40000000);  // 2
+  test_float64_to_float32(0xc000000000000000, 0xc0000000);  // -2
+  test_float64_to_float32(0x400921fb54442d18, 0x40490fda);  // pi
+  test_float64_to_float32(0x3fd5555555555555, 0x3eaaaaaa);  // 1/3
+  test_float64_to_float32(0x7fefffffffffffff, 0x7f800000);  // max value -> inf
+  test_float64_to_float32(0x0010000000000000, 0x00000000);  // min value -> 0
+  test_float64_to_float32(0x8010000000000000, 0x80000000);  // -min value -> -0
+  test_float64_to_float32(0xffefffffffffffff, 0xff800000);  // -max value -> -inf
+  test_float64_to_float32(0x0000000000000000, 0x00000000);  // 0
+  test_float64_to_float32(0x8000000000000000, 0x80000000);  // -0
+  test_float64_to_float32(0x7ff0000000000000, 0x7f800000);  // +infinity
+  test_float64_to_float32(0xfff0000000000000, 0xff800000);  // -infinity
+  test_float64_to_float32(0x7ff8000000000000, 0x7fc00000);  // quiet NaN
+  test_float64_to_float32(0x7ff4000000000000, 0x7fa00000);  // signalling NaN
 }

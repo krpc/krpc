@@ -75,8 +75,6 @@ jobs:
             test: //client/lua:test
             artifact: client-lua
             path: bazel-bin/client/lua/krpc-lua-*.zip
-          - name: test-client-serialio
-            test: //client/serialio:test
           - name: test-client-websockets
             test: //client/websockets:test
           - name: test-tools

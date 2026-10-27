@@ -211,7 +211,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
 
         [TestCase ("", "00")]
         [TestCase ("testing", "0774657374696e67")]
-        [TestCase ("One small step for Kerbal-kind!", "1f4f6e6520736d616c6c207374657020666f72204b657262616c2d6b696e6421")]
+        [TestCase ("The quick brown fox jumps over!", "1f54686520717569636b2062726f776e20666f78206a756d7073206f76657221")]
         [TestCase ("\u2122", "03e284a2")]
         [TestCase ("Mystery Goo\u2122 Containment Unit", "1f4d79737465727920476f6fe284a220436f6e7461696e6d656e7420556e6974")]
         public void StringValue (string value, string data)
@@ -317,8 +317,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void TupleCollection2 ()
         {
-            var value = new Tuple<uint,string,bool> (1, "jeb", false);
-            const string data = "0a01010a04036a65620a0100";
+            var value = new Tuple<uint,string,bool> (1, "abc", false);
+            const string data = "0a01010a04036162630a0100";
             var encodeResult = Encode (value);
             Assert.AreEqual (data, encodeResult.ToHexString ());
             var decodeResult = (Tuple<uint,string,bool>)Encoder.Decode (data.ToByteString (), TypeSpec.Create (value.GetType ()));
@@ -333,7 +333,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             var obj = new TestService.TestClass ("foo");
             var value = new TestService.TestStruct {
                 IntField = 42,
-                StringField = "jeb",
+                StringField = "abc",
                 EnumField = TestService.TestEnum.Z,
                 ObjectField = obj,
                 ListField = new List<string> { "a", "b" }
@@ -354,7 +354,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             var value = new TestService.TestNestedStruct {
                 StructField = new TestService.TestStruct {
                     IntField = 1,
-                    StringField = "jeb",
+                    StringField = "abc",
                     EnumField = TestService.TestEnum.X,
                     ObjectField = new TestService.TestClass ("foo"),
                     ListField = new List<string> ()
@@ -371,7 +371,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             var value = new TestService.TestNestedStruct {
                 StructField = new TestService.TestStruct {
                     IntField = 1,
-                    StringField = "jeb",
+                    StringField = "abc",
                     EnumField = TestService.TestEnum.Y,
                     ObjectField = new TestService.TestClass ("foo"),
                     ListField = new List<string> { "a" }
@@ -382,7 +382,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             var decodeResult = (TestService.TestNestedStruct)Encoder.Decode (
                 data.ToByteString (), TypeSpec.Create (typeof(TestService.TestNestedStruct)));
             Assert.AreEqual (1, decodeResult.StructField.IntField);
-            Assert.AreEqual ("jeb", decodeResult.StructField.StringField);
+            Assert.AreEqual ("abc", decodeResult.StructField.StringField);
             Assert.AreEqual (2, decodeResult.IntField);
         }
 
@@ -486,7 +486,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
                 IntField = 42,
                 NullableIntField = 3,
                 NullableEnumField = TestService.TestEnum.Y,
-                NullableStringField = "jeb",
+                NullableStringField = "abc",
                 NullableObjectField = obj
             };
             var data = Encode (value).ToHexString ();
@@ -495,7 +495,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (42, decodeResult.IntField);
             Assert.AreEqual (3, decodeResult.NullableIntField);
             Assert.AreEqual (TestService.TestEnum.Y, decodeResult.NullableEnumField);
-            Assert.AreEqual ("jeb", decodeResult.NullableStringField);
+            Assert.AreEqual ("abc", decodeResult.NullableStringField);
             Assert.AreSame (obj, decodeResult.NullableObjectField);
         }
 
@@ -543,7 +543,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         public void EncodeNullListElementThatIsNotNullable ()
         {
             var spec = TypeSpec.Create (typeof(IList<string>));
-            var value = new List<string> { "jeb", null };
+            var value = new List<string> { "abc", null };
             var exn = Assert.Throws<ServiceException> (() => Encoder.Encode (value, spec));
             StringAssert.Contains ("An element", exn.Message);
             StringAssert.Contains ("the element is not nullable", exn.Message);
@@ -552,7 +552,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void EncodeNullSetElement ()
         {
-            var value = new HashSet<string> { "jeb", null };
+            var value = new HashSet<string> { "abc", null };
             var exn = Assert.Throws<ServiceException> (() => Encode (value));
             StringAssert.Contains ("a set element cannot be null", exn.Message);
         }
@@ -602,7 +602,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         [Test]
         public void DecodeStructWithMissingFields ()
         {
-            var data = Encode (Tuple.Create (42, "jeb")).ToHexString ();
+            var data = Encode (Tuple.Create (42, "abc")).ToHexString ();
             Assert.Throws<ArgumentException> (
                 () => Encoder.Decode (data.ToByteString (), TypeSpec.Create (typeof(TestService.TestStruct))));
         }
@@ -611,7 +611,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
         public void DecodeStructWithAnObjectFieldOfIdZero ()
         {
             var data = Encode (Tuple.Create (
-                42, "jeb", TestService.TestEnum.Z, (ulong)0, new List<string> ())).ToHexString ();
+                42, "abc", TestService.TestEnum.Z, (ulong)0, new List<string> ())).ToHexString ();
             var exn = Assert.Throws<ArgumentException> (
                 () => Encoder.Decode (data.ToByteString (), TypeSpec.Create (typeof(TestService.TestStruct))));
             StringAssert.Contains ("0 is not an object identifier", exn.Message);
@@ -624,7 +624,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
             // fields that were appended to it, which are ignored
             var value = new TestService.TestStruct {
                 IntField = 42,
-                StringField = "jeb",
+                StringField = "abc",
                 EnumField = TestService.TestEnum.Z,
                 ObjectField = new TestService.TestClass ("foo"),
                 ListField = new List<string> { "a" }

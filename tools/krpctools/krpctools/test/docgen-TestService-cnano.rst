@@ -556,7 +556,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EnumDefaultArg(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x)
+.. function:: krpc_error_t krpc_TestService_EnumDefault(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x)
 
 
 
@@ -587,16 +587,6 @@ Service documentation string.
 
 
    :Parameters:
-
-
-
-   
-
-
-
-
-.. function:: krpc_error_t krpc_TestService_EnumReturn(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue)
-
 
 
 
@@ -906,19 +896,6 @@ Service documentation string.
 
    :Parameters:
 
-
-
-
-   
-
-
-
-
-.. function:: krpc_error_t krpc_TestService_OnTimerUsingLambda(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds)
-
-
-
-   :Parameters:
 
 
 

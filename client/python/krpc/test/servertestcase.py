@@ -1,5 +1,4 @@
 import os
-import socket
 from collections.abc import Callable
 from typing import Any
 
@@ -46,11 +45,6 @@ def _checked_compile_function_with_type(
 class ServerTestCase:
     conn: Client = None  # pyright: ignore[reportAssignmentType]
 
-    # The wait for a connection to a port nothing is listening on. It is normally refused
-    # at once, and where the system drops the attempt instead, this bounds the wait so that
-    # the test does not hang.
-    CONNECT_TIMEOUT = 10
-
     @classmethod
     def setUpClass(cls) -> None:
         if cls.conn is None:
@@ -59,36 +53,12 @@ class ServerTestCase:
         krpc.client.compile_function_with_type = _checked_compile_function_with_type
 
     @staticmethod
-    def connect(
-        name: str = "python_client_test",
-        use_pregenerated_stubs: bool = True,
-    ) -> Client:
-        """Connect over whichever transport the harness started the server with, which
-        it tells us about by port or by socket path."""
-        path = os.getenv("KRPC_TEST_LOCALSOCKET_PATH")
-        if path:
-            return krpc.connect_local(
-                name=name,
-                path=path,
-                use_pregenerated_stubs=use_pregenerated_stubs,
-            )
+    def connect() -> Client:
         return krpc.connect(
-            name=name,
+            name="python_client_test",
             address="localhost",
             port=ServerTestCase.tcpip_port(),
-            use_pregenerated_stubs=use_pregenerated_stubs,
         )
-
-    @staticmethod
-    def unused_port() -> int:
-        """A port nothing is listening on, for the tests that connect to the wrong one.
-        Binding a port and giving it straight back leaves one that a connection is refused
-        on, and leaves it in the range the system hands out. A port derived from the
-        server's own can land anywhere, including on a low one, and a connection to those
-        is dropped rather than refused on Windows, which leaves the client waiting."""
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-            sock.bind(("localhost", 0))
-            return int(sock.getsockname()[1])
 
     @staticmethod
     def tcpip_port() -> int:

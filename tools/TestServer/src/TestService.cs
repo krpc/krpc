@@ -428,19 +428,13 @@ namespace TestServer
         }
 
         [KRPCProcedure]
-        public static TestEnum EnumReturn ()
-        {
-            return TestEnum.ValueB;
-        }
-
-        [KRPCProcedure]
         public static TestEnum EnumEcho (TestEnum x)
         {
             return x;
         }
 
         [KRPCProcedure]
-        public static TestEnum EnumDefaultArg (TestEnum x = TestEnum.ValueC)
+        public static TestEnum EnumDefault (TestEnum x = TestEnum.ValueC)
         {
             return x;
         }
@@ -1047,25 +1041,6 @@ namespace TestServer
                     return true;
                 });
             timer.Start();
-            return evnt.Message;
-        }
-
-        [KRPCProcedure]
-        public static KRPC.Service.Messages.Event OnTimerUsingLambda (uint milliseconds) {
-            int triggered = 0;
-            var timer = new System.Timers.Timer (milliseconds);
-            timer.Elapsed += (s, e) => {
-                Volatile.Write (ref triggered, 1);
-                timer.Enabled = false;
-            };
-            timer.Start();
-            var evnt = new KRPC.Service.Event (
-                (KRPC.Service.Event e) => {
-                    var fire = Volatile.Read (ref triggered) == 1;
-                    if (fire)
-                        e.Remove();
-                    return fire;
-                });
             return evnt.Message;
         }
 

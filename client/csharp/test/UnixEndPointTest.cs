@@ -40,13 +40,6 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        public void SerializeRejectsAPathTooLongToFit ()
-        {
-            var endPoint = new UnixEndPoint (new string ('x', UnixEndPoint.PathLength));
-            Assert.Throws<ArgumentException> (() => endPoint.Serialize ());
-        }
-
-        [Test]
         public void RoundTrip ()
         {
             var endPoint = new UnixEndPoint ("/tmp/krpc/stream");

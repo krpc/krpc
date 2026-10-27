@@ -106,16 +106,6 @@ namespace KRPC.Client
             }
         }
 
-        /// <summary>
-        /// Whether a stream is registered for the id.
-        /// </summary>
-        internal bool Registered (ulong id)
-        {
-            lock (updateLock) {
-                return streams.ContainsKey (id);
-            }
-        }
-
         public StreamImpl GetStream (TypeSpec returnType, ulong id)
         {
             var added = false;

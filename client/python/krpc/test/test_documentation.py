@@ -6,10 +6,6 @@ from krpc.test.servertestcase import ServerTestCase
 
 
 class TestDocumentation(ServerTestCase, unittest.TestCase):
-    @classmethod
-    def setUpClass(cls) -> None:
-        super().setUpClass()
-
     def check_doc(self, expected: str, obj: object) -> None:
         # Normalize with cleandoc, as pre-generated stubs indent multi-line docstrings
         # where dynamically-created services do not.
@@ -26,7 +22,7 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
             type(self.conn.test_service).string_property,
         )
         self.check_doc("Class documentation string.", self.conn.test_service.TestClass)
-        obj = self.conn.test_service.create_test_object("Jeb")
+        obj = self.conn.test_service.create_test_object("Alpha")
         self.check_doc("Method documentation string.", obj.get_value)
         self.check_doc(
             "Property documentation string.",

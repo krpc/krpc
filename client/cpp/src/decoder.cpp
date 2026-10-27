@@ -11,7 +11,6 @@
 
 #include "krpc/error.hpp"
 #include "krpc/event.hpp"
-#include "krpc/platform.hpp"
 
 namespace krpc {
 namespace decoder {
@@ -55,15 +54,6 @@ size_t read_varint(const std::string& data, uint64_t* value, const char* what) {
 }
 
 }  // namespace
-
-std::string guid(const std::string& data) {
-  if (data.size() != 16) throw EncodingError("GUID is not 16 characters");
-  return platform::hexlify(std::string(data.rbegin() + 12, data.rend())) + "-" +
-         platform::hexlify(std::string(data.rbegin() + 10, data.rbegin() + 12)) + "-" +
-         platform::hexlify(std::string(data.rbegin() + 8, data.rbegin() + 10)) + "-" +
-         platform::hexlify(std::string(data.begin() + 8, data.begin() + 10)) + "-" +
-         platform::hexlify(std::string(data.begin() + 10, data.end()));
-}
 
 void decode(double& value, const std::string& data, Client* client) {
   if (data.size() < LITTLE_ENDIAN_64_LENGTH) throw EncodingError("Failed to decode double");

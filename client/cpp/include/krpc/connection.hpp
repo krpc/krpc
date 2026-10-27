@@ -66,12 +66,6 @@ class Connection {
   bool wait_readable(std::chrono::milliseconds timeout);
   /** Whether data has arrived, or the connection has closed, without waiting. */
   bool readable() { return poll(0); }
-  /** Receive data from the connection. Blocks until length bytes have been received. */
-  std::string receive(size_t length);
-  /** Receive up to length bytes of data from the connection, or none if the timeout passes
-      first. Throws if the connection has closed or failed. */
-  std::string partial_receive(size_t length,
-                              std::chrono::milliseconds timeout = std::chrono::milliseconds(10));
 
  protected:
   asio::io_context io_context;
@@ -93,8 +87,6 @@ class Connection {
   /** Read a block from the socket into the buffer, waiting no longer than the timeout.
       Returns false if nothing arrived in time. */
   bool fill(std::chrono::milliseconds timeout);
-  /** Take length bytes of what has been read but not consumed yet. */
-  void take(char* data, size_t length);
   /** How much has been read but not consumed yet. */
   size_t available() const { return filled - consumed; }
   /** Poll the socket for data, for up to the given milliseconds, or indefinitely if -1. */

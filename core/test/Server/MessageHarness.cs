@@ -162,7 +162,7 @@ namespace KRPC.Test.Server
         /// <summary>
         /// Complete the handshake, and return the client of the session it starts.
         /// </summary>
-        public IClient<Request,Response> Handshake (string name = "Jebediah Kerman")
+        public IClient<Request,Response> Handshake (string name = "Test Client")
         {
             Send (ConnectionRequest (2, name));
             Server.Update ();
@@ -180,7 +180,7 @@ namespace KRPC.Test.Server
             ByteServer.Raise (m => m.OnClientDisconnected += null, new ClientDisconnectedEventArgs<byte,byte> (Client));
         }
 
-        public static SchemaMessage ConnectionRequest (uint protocolVersion, string name = "Jebediah Kerman")
+        public static SchemaMessage ConnectionRequest (uint protocolVersion, string name = "Test Client")
         {
             var request = new Schema.KRPC.ConnectionRequest ();
             request.ClientName = name;

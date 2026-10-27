@@ -8,7 +8,8 @@ Current version: `tools/krpc-version.sh`. Full setup: `Development-Guide.md`.
 
  * `server/` — server plugin; `core/` — shared C# library; `protobuf/` — wire protocol.
  * `service/` — service DLLs (SpaceCenter, Drawing, UI, InfernalRobotics, RemoteTech, …).
- * `client/` — one dir per language; `serialio`/`websockets` are protocol test harnesses.
+ * `client/` — one dir per language; `websockets` is a minimal testee for the websockets protocol.
+ * `client/conformance/` — client conformance tests; the client spec (`doc/src/client-spec/`) is generated from them.
  * `tools/krpctools/` — `clientgen` (stubs), `docgen` (API docs), `servicedefs`.
  * `tools/krpctest/` — in-game test framework; `tools/TestServer/` — game-less server.
  * `tools/build/` — Bazel rules/toolchains. KSP assemblies come from `@ksp` in `MODULE.bazel`; no `lib/`.
@@ -45,6 +46,25 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
    Do not re-run the suite just to see how it ended.
  * Run **one bazel command at a time**. A second blocks on the server lock, printing
    `Another command … is running. Waiting for it to complete`, and also looks hung.
+
+### Client conformance tests
+
+`client/conformance/tests/` checks every client against the client spec, through a testee per
+client (`client/*/conformance/`). `client/conformance/specgen.py` generates the spec pages from
+the tests: a test's docstring is the requirement's text, its markers the level and profiles.
+
+ * **A client change, or a client or server feature clients use, comes with conformance tests**,
+   and so a spec change. Check whether a requirement already covers it, and add or update one if not.
+ * **Test shared client behavior once, in `client/conformance/`**, never in one client's native tests.
+   Native tests (`client/*/test`) are for the minority the suite should not express: a client's own
+   API and idioms, and its internals.
+ * A new testee command goes in `client/conformance/testee.proto` and every testee.
+ * A failing client lists the test in `client/<client>/conformance/expected-failures.txt`, with
+   the reason. A test its language cannot carry out goes in
+   `client/<client>/conformance/unsupported.txt`. A stale line in either fails the run.
+ * A client's profiles are listed in its `conformance_test` target.
+ * Run every client in one command: `bazel test //client/{cnano,cpp,csharp,java,lua,python}:conformance
+   //client/python:conformance-base //client/websockets:conformance //client/conformance:test`.
 
 ### C# sources
 
@@ -187,7 +207,7 @@ comments* below.
  * A single named unit is a word ("in meters", "in degrees"). A compound unit or a unit symbol is
    `<unit>`: `<unit>m/s^2</unit>`, `<unit>N.m</unit>`, `<unit>kg</unit>`. `.` joins two factors.
  * Formulas and symbols are `<math>`: `<math>\frac{1}{2} \rho v^2</math>`, `<math>2\pi</math>`.
-   Define each symbol in words. The LaTeX subset is listed in `doc/src/extending.rst`.
+   Define each symbol in words. The LaTeX subset is listed in `doc/src/extending/documentation.rst`.
  * A relation between members stays prose with `<see cref>` ("`Thrust` divided by `Mass`"), as
    `<math>` cannot hold a reference.
  * Tuples, component orders and literal values are `<c>`: `<c>(x, y, z, w)</c>`, `<c>null</c>`.

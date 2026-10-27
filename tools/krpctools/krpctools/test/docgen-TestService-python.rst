@@ -479,7 +479,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: enum_default_arg([x = TestEnum.value_c])
+.. staticmethod:: enum_default([x = TestEnum.value_c])
 
 
 
@@ -507,16 +507,6 @@ Service documentation string.
 
    :param list x:
    :rtype: list(:class:`TestEnum`)
-   
-
-
-
-
-.. staticmethod:: enum_return()
-
-
-
-   :rtype: :class:`TestEnum`
    
 
 
@@ -785,17 +775,6 @@ Service documentation string.
 
    :param int milliseconds:
    :param int repeats:
-   :rtype: :class:`krpc.event.Event`
-   
-
-
-
-
-.. staticmethod:: on_timer_using_lambda(milliseconds)
-
-
-
-   :param int milliseconds:
    :rtype: :class:`krpc.event.Event`
    
 

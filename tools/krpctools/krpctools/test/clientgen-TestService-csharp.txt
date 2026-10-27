@@ -595,13 +595,13 @@ namespace KRPC.Client.Services.TestService
             return (global::System.Collections.Generic.IList<string>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec30, connection);
         }
 
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumDefaultArg", typeof(TypeSpecs))]
-        public global::KRPC.Client.Services.TestService.TestEnum EnumDefaultArg (global::KRPC.Client.Services.TestService.TestEnum x = global::KRPC.Client.Services.TestService.TestEnum.ValueC)
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumDefault", typeof(TypeSpecs))]
+        public global::KRPC.Client.Services.TestService.TestEnum EnumDefault (global::KRPC.Client.Services.TestService.TestEnum x = global::KRPC.Client.Services.TestService.TestEnum.ValueC)
         {
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (x, TypeSpecs.Spec14)
             };
-            var _result = connection.Invoke ("TestService", "EnumDefaultArg", _args);
+            var _result = connection.Invoke ("TestService", "EnumDefault", _args);
             return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec14, connection);
         }
 
@@ -623,13 +623,6 @@ namespace KRPC.Client.Services.TestService
             };
             var _result = connection.Invoke ("TestService", "EnumListDefault", _args);
             return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum>)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec29, connection);
-        }
-
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumReturn", typeof(TypeSpecs))]
-        public global::KRPC.Client.Services.TestService.TestEnum EnumReturn ()
-        {
-            var _result = connection.Invoke ("TestService", "EnumReturn");
-            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec14, connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumToString", typeof(TypeSpecs))]
@@ -868,16 +861,6 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (repeats, TypeSpecs.Spec4)
             };
             var _result = connection.Invoke ("TestService", "OnTimer", _args, typeof (global::KRPC.Client.Event));
-            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec40, connection);
-        }
-
-        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OnTimerUsingLambda", typeof(TypeSpecs))]
-        public global::KRPC.Client.Event OnTimerUsingLambda (uint milliseconds)
-        {
-            var _args = new ByteString[] {
-                global::KRPC.Client.Encoder.Encode (milliseconds, TypeSpecs.Spec4)
-            };
-            var _result = connection.Invoke ("TestService", "OnTimerUsingLambda", _args, typeof (global::KRPC.Client.Event));
             return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec40, connection);
         }
 

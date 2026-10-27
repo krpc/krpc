@@ -196,13 +196,11 @@ class TestService : public Service {
 
   std::vector<std::string> empty_list_default(std::vector<std::string> x);
 
-  TestService::TestEnum enum_default_arg(TestService::TestEnum x);
+  TestService::TestEnum enum_default(TestService::TestEnum x);
 
   TestService::TestEnum enum_echo(TestService::TestEnum x);
 
   std::vector<TestService::TestEnum> enum_list_default(std::vector<TestService::TestEnum> x);
-
-  TestService::TestEnum enum_return();
 
   std::string enum_to_string(TestService::TestEnum x);
 
@@ -268,8 +266,6 @@ class TestService : public Service {
   TestService::TestNullableStruct nullable_struct_echo(TestService::TestNullableStruct x);
 
   ::krpc::Event on_timer(uint32_t milliseconds, uint32_t repeats);
-
-  ::krpc::Event on_timer_using_lambda(uint32_t milliseconds);
 
   std::string optional_arguments(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
@@ -485,13 +481,11 @@ class TestService : public Service {
 
   ::krpc::Stream<std::vector<std::string>> empty_list_default_stream(std::vector<std::string> x);
 
-  ::krpc::Stream<TestService::TestEnum> enum_default_arg_stream(TestService::TestEnum x);
+  ::krpc::Stream<TestService::TestEnum> enum_default_stream(TestService::TestEnum x);
 
   ::krpc::Stream<TestService::TestEnum> enum_echo_stream(TestService::TestEnum x);
 
   ::krpc::Stream<std::vector<TestService::TestEnum>> enum_list_default_stream(std::vector<TestService::TestEnum> x);
-
-  ::krpc::Stream<TestService::TestEnum> enum_return_stream();
 
   ::krpc::Stream<std::string> enum_to_string_stream(TestService::TestEnum x);
 
@@ -534,8 +528,6 @@ class TestService : public Service {
   ::krpc::Stream<TestService::TestNullableStruct> nullable_struct_echo_stream(TestService::TestNullableStruct x);
 
   ::krpc::Stream<::krpc::Event> on_timer_stream(uint32_t milliseconds, uint32_t repeats);
-
-  ::krpc::Stream<::krpc::Event> on_timer_using_lambda_stream(uint32_t milliseconds);
 
   ::krpc::Stream<std::string> optional_arguments_stream(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
@@ -689,13 +681,11 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall empty_list_default_call(std::vector<std::string> x);
 
-  ::krpc::schema::ProcedureCall enum_default_arg_call(TestService::TestEnum x);
+  ::krpc::schema::ProcedureCall enum_default_call(TestService::TestEnum x);
 
   ::krpc::schema::ProcedureCall enum_echo_call(TestService::TestEnum x);
 
   ::krpc::schema::ProcedureCall enum_list_default_call(std::vector<TestService::TestEnum> x);
-
-  ::krpc::schema::ProcedureCall enum_return_call();
 
   ::krpc::schema::ProcedureCall enum_to_string_call(TestService::TestEnum x);
 
@@ -738,8 +728,6 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall nullable_struct_echo_call(TestService::TestNullableStruct x);
 
   ::krpc::schema::ProcedureCall on_timer_call(uint32_t milliseconds, uint32_t repeats);
-
-  ::krpc::schema::ProcedureCall on_timer_using_lambda_call(uint32_t milliseconds);
 
   ::krpc::schema::ProcedureCall optional_arguments_call(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
@@ -1933,11 +1921,11 @@ inline std::vector<std::string> TestService::empty_list_default(std::vector<std:
   return _result;
 }
 
-inline TestService::TestEnum TestService::enum_default_arg(TestService::TestEnum x = TestService::TestEnum::value_c) {
+inline TestService::TestEnum TestService::enum_default(TestService::TestEnum x = TestService::TestEnum::value_c) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "EnumDefaultArg", _args, ::krpc::Client::Returns::value);
+  auto _data = this->_client->invoke("TestService", "EnumDefault", _args, ::krpc::Client::Returns::value);
   TestService::TestEnum _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1961,14 +1949,6 @@ inline std::vector<TestService::TestEnum> TestService::enum_list_default(std::ve
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_client->invoke("TestService", "EnumListDefault", _args, ::krpc::Client::Returns::value);
   std::vector<TestService::TestEnum> _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
-  return _result;
-}
-
-inline TestService::TestEnum TestService::enum_return() {
-  auto _data = this->_client->invoke("TestService", "EnumReturn", {}, ::krpc::Client::Returns::value);
-  TestService::TestEnum _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
@@ -2208,17 +2188,6 @@ inline ::krpc::Event TestService::on_timer(uint32_t milliseconds, uint32_t repea
   _args.push_back(encoder::encode_arg(milliseconds));
   _args.push_back(encoder::encode_arg(repeats));
   auto _data = this->_client->invoke("TestService", "OnTimer", _args, ::krpc::Client::Returns::event);
-  ::krpc::Event _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
-  return _result;
-}
-
-inline ::krpc::Event TestService::on_timer_using_lambda(uint32_t milliseconds) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(milliseconds));
-  auto _data = this->_client->invoke("TestService", "OnTimerUsingLambda", _args, ::krpc::Client::Returns::event);
   ::krpc::Event _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -2932,11 +2901,11 @@ inline ::krpc::Stream<std::vector<std::string>> TestService::empty_list_default_
   return ::krpc::Stream<std::vector<std::string>>(this->_client, this->_client->build_call("TestService", "EmptyListDefault", _args));
 }
 
-inline ::krpc::Stream<TestService::TestEnum> TestService::enum_default_arg_stream(TestService::TestEnum x = TestService::TestEnum::value_c) {
+inline ::krpc::Stream<TestService::TestEnum> TestService::enum_default_stream(TestService::TestEnum x = TestService::TestEnum::value_c) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumDefaultArg", _args));
+  return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumDefault", _args));
 }
 
 inline ::krpc::Stream<TestService::TestEnum> TestService::enum_echo_stream(TestService::TestEnum x) {
@@ -2951,10 +2920,6 @@ inline ::krpc::Stream<std::vector<TestService::TestEnum>> TestService::enum_list
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
   return ::krpc::Stream<std::vector<TestService::TestEnum>>(this->_client, this->_client->build_call("TestService", "EnumListDefault", _args));
-}
-
-inline ::krpc::Stream<TestService::TestEnum> TestService::enum_return_stream() {
-  return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumReturn"));
 }
 
 inline ::krpc::Stream<std::string> TestService::enum_to_string_stream(TestService::TestEnum x) {
@@ -3111,13 +3076,6 @@ inline ::krpc::Stream<::krpc::Event> TestService::on_timer_stream(uint32_t milli
   _args.push_back(encoder::encode_arg(milliseconds));
   _args.push_back(encoder::encode_arg(repeats));
   return ::krpc::Stream<::krpc::Event>(this->_client, this->_client->build_call("TestService", "OnTimer", _args));
-}
-
-inline ::krpc::Stream<::krpc::Event> TestService::on_timer_using_lambda_stream(uint32_t milliseconds) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(milliseconds));
-  return ::krpc::Stream<::krpc::Event>(this->_client, this->_client->build_call("TestService", "OnTimerUsingLambda", _args));
 }
 
 inline ::krpc::Stream<std::string> TestService::optional_arguments_stream(std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestService::TestClass> obj = std::optional<TestService::TestClass>()) {
@@ -3633,11 +3591,11 @@ inline ::krpc::schema::ProcedureCall TestService::empty_list_default_call(std::v
   return this->_client->build_call("TestService", "EmptyListDefault", _args);
 }
 
-inline ::krpc::schema::ProcedureCall TestService::enum_default_arg_call(TestService::TestEnum x = TestService::TestEnum::value_c) {
+inline ::krpc::schema::ProcedureCall TestService::enum_default_call(TestService::TestEnum x = TestService::TestEnum::value_c) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  return this->_client->build_call("TestService", "EnumDefaultArg", _args);
+  return this->_client->build_call("TestService", "EnumDefault", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::enum_echo_call(TestService::TestEnum x) {
@@ -3652,10 +3610,6 @@ inline ::krpc::schema::ProcedureCall TestService::enum_list_default_call(std::ve
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
   return this->_client->build_call("TestService", "EnumListDefault", _args);
-}
-
-inline ::krpc::schema::ProcedureCall TestService::enum_return_call() {
-  return this->_client->build_call("TestService", "EnumReturn");
 }
 
 inline ::krpc::schema::ProcedureCall TestService::enum_to_string_call(TestService::TestEnum x) {
@@ -3812,13 +3766,6 @@ inline ::krpc::schema::ProcedureCall TestService::on_timer_call(uint32_t millise
   _args.push_back(encoder::encode_arg(milliseconds));
   _args.push_back(encoder::encode_arg(repeats));
   return this->_client->build_call("TestService", "OnTimer", _args);
-}
-
-inline ::krpc::schema::ProcedureCall TestService::on_timer_using_lambda_call(uint32_t milliseconds) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(milliseconds));
-  return this->_client->build_call("TestService", "OnTimerUsingLambda", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::optional_arguments_call(std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestService::TestClass> obj = std::optional<TestService::TestClass>()) {

@@ -315,7 +315,7 @@
       :param java.util.List<String> x:
    
 
-   .. method:: TestEnum enumDefaultArg(TestEnum x)
+   .. method:: TestEnum enumDefault(TestEnum x)
 
 
 
@@ -334,12 +334,6 @@
 
 
       :param java.util.List<TestEnum> x:
-   
-
-   .. method:: TestEnum enumReturn()
-
-
-
    
 
    .. method:: String enumToString(TestEnum x)
@@ -519,13 +513,6 @@
 
       :param int milliseconds:
       :param int repeats:
-   
-
-   .. method:: krpc.client.Event onTimerUsingLambda(int milliseconds)
-
-
-
-      :param int milliseconds:
    
 
    .. method:: String optionalArguments(String x, String y, String z, TestClass obj)

@@ -439,7 +439,7 @@
 
    
 
-   .. function:: TestEnum enum_default_arg(TestEnum x = TestEnum::value_c)
+   .. function:: TestEnum enum_default(TestEnum x = TestEnum::value_c)
 
 
 
@@ -464,13 +464,6 @@
 
 
       :Parameters:
-
-
-
-   
-
-   .. function:: TestEnum enum_return()
-
 
 
 
@@ -711,16 +704,6 @@
 
       :Parameters:
 
-
-
-
-   
-
-   .. function:: ::krpc::Event on_timer_using_lambda(uint32_t milliseconds)
-
-
-
-      :Parameters:
 
 
 

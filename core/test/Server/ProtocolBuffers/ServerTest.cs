@@ -48,9 +48,9 @@ namespace KRPC.Test.Server.ProtocolBuffers
         public void Handshake ()
         {
             var harness = Harness ();
-            var client = harness.Handshake ("Jebediah Kerman!!!");
+            var client = harness.Handshake ("Test Client!!!");
             Assert.AreEqual (1, harness.Server.Clients.Count ());
-            Assert.AreEqual ("Jebediah Kerman!!!", client.Name);
+            Assert.AreEqual ("Test Client!!!", client.Name);
             Assert.IsTrue (client.Connected);
             Assert.IsFalse (harness.Stream.HalfClosed);
         }
@@ -467,14 +467,14 @@ namespace KRPC.Test.Server.ProtocolBuffers
         {
             var harness = Harness ();
             var client = harness.Handshake ();
-            harness.Send (MessageHarness.ConnectionRequest (2, "Bill"));
+            harness.Send (MessageHarness.ConnectionRequest (2, "Gamma"));
             Assert.IsFalse (client.Stream.DataAvailable);
             Assert.IsFalse (client.Connected);
             harness.Server.Update ();
             CollectionAssert.AreEqual (new [] { client }, harness.Disconnected);
             Assert.AreEqual (2, harness.Connected.Count);
             var newClient = harness.Connected [1];
-            Assert.AreEqual ("Bill", newClient.Name);
+            Assert.AreEqual ("Gamma", newClient.Name);
             Assert.AreNotEqual (client.Guid, newClient.Guid);
             var response = harness.ReceiveOne ().ConnectionResponse;
             Assert.AreEqual (Status.Ok, response.Status);
@@ -522,11 +522,11 @@ namespace KRPC.Test.Server.ProtocolBuffers
             var events = new List<string> ();
             harness.Server.OnClientConnected += (s, e) => events.Add ("connected " + e.Client.Name);
             harness.Server.OnClientDisconnected += (s, e) => events.Add ("disconnected " + e.Client.Name);
-            var client = harness.Handshake ("Jeb");
-            harness.Send (MessageHarness.ConnectionRequest (2, "Bill"));
+            var client = harness.Handshake ("Alpha");
+            harness.Send (MessageHarness.ConnectionRequest (2, "Gamma"));
             Assert.IsFalse (client.Stream.DataAvailable);
             harness.Server.Update ();
-            CollectionAssert.AreEqual (new [] { "connected Jeb", "disconnected Jeb", "connected Bill" }, events);
+            CollectionAssert.AreEqual (new [] { "connected Alpha", "disconnected Alpha", "connected Gamma" }, events);
         }
 
         [Test]

@@ -544,12 +544,12 @@ public class TestService {
     }
 
     @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "TestService", procedure = "EnumDefaultArg", types = _Types.class)
-    public krpc.client.services.TestService.TestEnum enumDefaultArg(krpc.client.services.TestService.TestEnum x) throws RPCException {
+    @RPCInfo(service = "TestService", procedure = "EnumDefault", types = _Types.class)
+    public krpc.client.services.TestService.TestEnum enumDefault(krpc.client.services.TestService.TestEnum x) throws RPCException {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestEnum"))
         };
-        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EnumDefaultArg", _args);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EnumDefault", _args);
         return (krpc.client.services.TestService.TestEnum) Encoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("TestService", "TestEnum"), this.connection);
     }
 
@@ -571,13 +571,6 @@ public class TestService {
         };
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EnumListDefault", _args);
         return (java.util.List<krpc.client.services.TestService.TestEnum>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")), this.connection);
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "TestService", procedure = "EnumReturn", types = _Types.class)
-    public krpc.client.services.TestService.TestEnum enumReturn() throws RPCException {
-        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EnumReturn");
-        return (krpc.client.services.TestService.TestEnum) Encoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("TestService", "TestEnum"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -820,16 +813,6 @@ public class TestService {
             Encoder.encode(repeats, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
         };
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "OnTimer", _args);
-        return (krpc.client.Event) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT), this.connection);
-    }
-
-    @SuppressWarnings({ "unchecked" })
-    @RPCInfo(service = "TestService", procedure = "OnTimerUsingLambda", types = _Types.class)
-    public krpc.client.Event onTimerUsingLambda(int milliseconds) throws RPCException {
-        ByteString[] _args = new ByteString[] {
-            Encoder.encode(milliseconds, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
-        };
-        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "OnTimerUsingLambda", _args);
         return (krpc.client.Event) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT), this.connection);
     }
 
@@ -2205,14 +2188,12 @@ public class TestService {
             PARAMETER_TYPES.put("EchoTupleWithANullableObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.nullable(krpc.client.Types.createClass("TestService", "TestClass"))) });
             RETURN_TYPES.put("EmptyListDefault", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)));
             PARAMETER_TYPES.put("EmptyListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)) });
-            RETURN_TYPES.put("EnumDefaultArg", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
-            PARAMETER_TYPES.put("EnumDefaultArg", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
+            RETURN_TYPES.put("EnumDefault", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
+            PARAMETER_TYPES.put("EnumDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
             RETURN_TYPES.put("EnumEcho", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
             PARAMETER_TYPES.put("EnumEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
             RETURN_TYPES.put("EnumListDefault", krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")));
             PARAMETER_TYPES.put("EnumListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")) });
-            RETURN_TYPES.put("EnumReturn", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
-            PARAMETER_TYPES.put("EnumReturn", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("EnumToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("EnumToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
             RETURN_TYPES.put("FloatSpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)));
@@ -2225,11 +2206,11 @@ public class TestService {
             PARAMETER_TYPES.put("IncrementDictionary", new krpc.schema.KRPC.Type[] { krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
             RETURN_TYPES.put("IncrementList", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
             PARAMETER_TYPES.put("IncrementList", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
+            RETURN_TYPES.put("IncrementListOfStructs", krpc.client.Types.createList(krpc.client.Types.createStruct("TestService", "TestStruct")));
+            PARAMETER_TYPES.put("IncrementListOfStructs", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createStruct("TestService", "TestStruct")) });
         }
 
         private static void initTypes1() {
-            RETURN_TYPES.put("IncrementListOfStructs", krpc.client.Types.createList(krpc.client.Types.createStruct("TestService", "TestStruct")));
-            PARAMETER_TYPES.put("IncrementListOfStructs", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createStruct("TestService", "TestStruct")) });
             RETURN_TYPES.put("IncrementNestedCollection", krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))));
             PARAMETER_TYPES.put("IncrementNestedCollection", new krpc.schema.KRPC.Type[] { krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))) });
             RETURN_TYPES.put("IncrementSet", krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
@@ -2258,8 +2239,6 @@ public class TestService {
             PARAMETER_TYPES.put("NullableStructEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestNullableStruct") });
             RETURN_TYPES.put("OnTimer", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT));
             PARAMETER_TYPES.put("OnTimer", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
-            RETURN_TYPES.put("OnTimerUsingLambda", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT));
-            PARAMETER_TYPES.put("OnTimerUsingLambda", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
             RETURN_TYPES.put("OptionalArguments", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("OptionalArguments", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("RemoveEventAfter", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT));
@@ -2328,13 +2307,13 @@ public class TestService {
             PARAMETER_TYPES.put("Uint32SpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
             RETURN_TYPES.put("Uint64SpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64)));
             PARAMETER_TYPES.put("Uint64SpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64) });
-        }
-
-        private static void initTypes2() {
             RETURN_TYPES.put("get_DeprecatedProperty", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("get_DeprecatedProperty", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_DeprecatedProperty", null);
             PARAMETER_TYPES.put("set_DeprecatedProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+        }
+
+        private static void initTypes2() {
             RETURN_TYPES.put("get_NullableObject", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("get_NullableObject", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_NullableObject", null);

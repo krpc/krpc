@@ -84,8 +84,8 @@ namespace KRPC.Client.Test
         [Test]
         public void TestStaticMethod ()
         {
-            var expected = TestClass.StaticMethod (Connection, "bob", "");
-            Assert.AreEqual (expected, Evaluate (() => TestClass.StaticMethod (Connection, "bob", "")));
+            var expected = TestClass.StaticMethod (Connection, "beta", "");
+            Assert.AreEqual (expected, Evaluate (() => TestClass.StaticMethod (Connection, "beta", "")));
         }
 
         [Test]

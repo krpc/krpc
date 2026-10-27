@@ -89,10 +89,7 @@ cc_library(
 test_suite(
     name = "test",
     tests = [
-        ":client-localsocket",
         ":client-tcpip",
-        ":communication-localsocket",
-        ":communication-tcpip",
         ":conformance",
         ":doxygen",
         ":lint",
@@ -108,17 +105,13 @@ test_suite(
     ],
 )
 
-# What the client does regardless of the transport it talks over: encoding and decoding
-# values and messages, and the locks streams use. It needs no server, so it runs on its own,
-# outside the harness that starts one.
+# What the client does without a server: the locks streams use, and hashing. It needs no
+# server, so it runs on its own, outside the harness that starts one.
 cc_test(
     name = "unit",
     size = "small",
     srcs = [
         "test/test_condition.cpp",
-        "test/test_decoder.cpp",
-        "test/test_encode_decode.cpp",
-        "test/test_encoder.cpp",
         "test/test_hash.cpp",
         ":services-testservice",
     ],
@@ -130,39 +123,8 @@ cc_test(
     ],
 )
 
-# The transport, one test each. Both run against a server the test listens on itself, so
-# neither needs a kRPC server. The bodies are shared and instantiated once per transport,
-# as only opening the connection differs between them.
-cc_test(
-    name = "communication-tcpip",
-    size = "small",
-    srcs = [
-        "test/connection_test.hpp",
-        "test/test_connection_tcpip.cpp",
-    ],
-    includes = ["test"],
-    tags = ["requires-network"],
-    deps = [
-        ":krpc",
-        "@cpp_googletest//:gtest",
-    ],
-)
-
-cc_test(
-    name = "communication-localsocket",
-    size = "small",
-    srcs = [
-        "test/connection_test.hpp",
-        "test/test_connection_localsocket.cpp",
-    ],
-    includes = ["test"],
-    deps = [
-        ":krpc",
-        "@cpp_googletest//:gtest",
-    ],
-)
-
-# The client end to end against a TestServer, once per transport it can reach one over.
+# The client's own API against a TestServer. The conformance tests cover each transport, so
+# this runs over one.
 client_test(
     name = "client-tcpip",
     size = "medium",
@@ -171,20 +133,10 @@ client_test(
     test_executable = ":cpptest",
 )
 
-client_test(
-    name = "client-localsocket",
-    size = "medium",
-    server_executable = "//tools/TestServer",
-    server_type = "localsocket",
-    test_executable = ":cpptest",
-)
-
 test_srcs = [
     "test/test_client.cpp",
     "test/test_event.cpp",
     "test/test_function_stream.cpp",
-    "test/test_object.cpp",
-    "test/test_services.cpp",
     "test/test_stream.cpp",
     ":services-testservice",
     "test/server_test.hpp",

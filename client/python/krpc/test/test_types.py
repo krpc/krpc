@@ -1,20 +1,11 @@
 import unittest
-from enum import Enum
 
-from krpc.schema.KRPC_pb2 import ProcedureCall, Services, Status, Stream, Type
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ClassBase,
-    ClassType,
-    DictionaryType,
-    EnumerationType,
-    ListType,
-    MessageType,
-    SetType,
     StaticMethod,
     StructType,
-    TupleType,
     Types,
-    ValueType,
     WrappedClass,
 )
 
@@ -33,72 +24,6 @@ class TestTypes(unittest.TestCase):
         self.assertEqual(name, protobuf_type.name)
         self.assertEqual(numtypes, len(protobuf_type.types))
 
-    def test_none_type(self) -> None:
-        types = Types()
-        none_type = Type()
-        none_type.code = Type.NONE
-        self.assertRaises(ValueError, types.as_type, none_type)
-
-    def test_value_types(self) -> None:
-        types = Types()
-        cases = [
-            (types.double_type, Type.DOUBLE, float),
-            (types.float_type, Type.FLOAT, float),
-            (types.sint32_type, Type.SINT32, int),
-            (types.sint64_type, Type.SINT64, int),
-            (types.uint32_type, Type.UINT32, int),
-            (types.uint64_type, Type.UINT64, int),
-            (types.bool_type, Type.BOOL, bool),
-            (types.string_type, Type.STRING, str),
-            (types.bytes_type, Type.BYTES, bytes),
-        ]
-        for typ, protobuf_code, python_type in cases:
-            self.assertTrue(isinstance(typ, ValueType))
-            self.check_protobuf_type(protobuf_code, "", "", 0, typ.protobuf_type)
-            self.assertEqual(python_type, typ.python_type)
-
-    def test_class_types(self) -> None:
-        types = Types()
-        typ = types.class_type("ServiceName", "ClassName", "class documentation")
-        self.assertTrue(isinstance(typ, ClassType))
-        self.assertTrue(issubclass(typ.python_type, ClassBase))
-        self.assertEqual("class documentation", typ.python_type.__doc__)
-        self.check_protobuf_type(
-            Type.CLASS, "ServiceName", "ClassName", 0, typ.protobuf_type
-        )
-        instance = typ.python_type(None, 42)
-        self.assertEqual(42, instance._object_id)
-        self.assertEqual("ServiceName", instance._service_name)
-        self.assertEqual("ClassName", instance._class_name)
-        typ2 = types.as_type(typ.protobuf_type)
-        self.assertEqual(typ, typ2)
-
-    def test_enumeration_types(self) -> None:
-        types = Types()
-        typ = types.enumeration_type("ServiceName", "EnumName", "enum documentation")
-        self.assertTrue(isinstance(typ, EnumerationType))
-        self.assertIsNone(typ.python_type)
-        self.check_protobuf_type(
-            Type.ENUMERATION, "ServiceName", "EnumName", 0, typ.protobuf_type
-        )
-        typ.set_values(
-            {
-                "a": {"value": 0, "doc": "doca"},
-                "b": {"value": 42, "doc": "docb"},
-                "c": {"value": 100, "doc": "docc"},
-            }
-        )
-        self.assertTrue(issubclass(typ.python_type, Enum))
-        self.assertEqual("enum documentation", typ.python_type.__doc__)
-        self.assertEqual(0, typ.python_type.a.value)  # pyright: ignore[reportAttributeAccessIssue]
-        self.assertEqual(42, typ.python_type.b.value)  # pyright: ignore[reportAttributeAccessIssue]
-        self.assertEqual(100, typ.python_type.c.value)  # pyright: ignore[reportAttributeAccessIssue]
-        self.assertEqual("doca", typ.python_type.a.__doc__)  # pyright: ignore[reportAttributeAccessIssue]
-        self.assertEqual("docb", typ.python_type.b.__doc__)  # pyright: ignore[reportAttributeAccessIssue]
-        self.assertEqual("docc", typ.python_type.c.__doc__)  # pyright: ignore[reportAttributeAccessIssue]
-        typ2 = types.as_type(typ.protobuf_type)
-        self.assertEqual(typ, typ2)
-
     def test_struct_types(self) -> None:
         types = Types()
         typ = types.struct_type("ServiceName", "StructName", "struct documentation")
@@ -113,133 +38,12 @@ class TestTypes(unittest.TestCase):
         self.assertEqual(["count", "name"], typ.field_names)
         self.assertEqual([types.uint32_type, types.string_type], list(typ.field_types))
         self.assertEqual("struct documentation", typ.python_type.__doc__)
-        value = typ.python_type(count=42, name="jeb")
+        value = typ.python_type(count=42, name="alpha")
         self.assertEqual(42, value.count)
-        self.assertEqual("jeb", value.name)
-        self.assertEqual((42, "jeb"), tuple(value))
+        self.assertEqual("alpha", value.name)
+        self.assertEqual((42, "alpha"), tuple(value))
         typ2 = types.as_type(typ.protobuf_type)
         self.assertEqual(typ, typ2)
-
-    def test_message_types(self) -> None:
-        types = Types()
-        cases = [
-            (types.procedure_call_type, Type.PROCEDURE_CALL, ProcedureCall),
-            (types.stream_type, Type.STREAM, Stream),
-            (types.status_type, Type.STATUS, Status),
-            (types.services_type, Type.SERVICES, Services),
-        ]
-        for typ, protobuf_code, python_type in cases:
-            self.assertTrue(isinstance(typ, MessageType))
-            self.assertEqual(python_type, typ.python_type)
-            self.check_protobuf_type(protobuf_code, "", "", 0, typ.protobuf_type)
-
-    def test_tuple_1_types(self) -> None:
-        types = Types()
-        typ = types.tuple_type(types.bool_type)
-        self.assertTrue(isinstance(typ, TupleType))
-        self.assertEqual(typ.python_type, tuple)
-        self.check_protobuf_type(Type.TUPLE, "", "", 1, typ.protobuf_type)
-        self.check_protobuf_type(Type.BOOL, "", "", 0, typ.protobuf_type.types[0])
-        self.assertEqual(1, len(typ.value_types))
-        self.assertTrue(isinstance(typ.value_types[0], ValueType))
-        self.assertEqual(bool, typ.value_types[0].python_type)
-        self.check_protobuf_type(Type.BOOL, "", "", 0, typ.value_types[0].protobuf_type)
-
-    def test_tuple_2_types(self) -> None:
-        types = Types()
-        typ = types.tuple_type(types.uint32_type, types.string_type)
-        self.assertTrue(isinstance(typ, TupleType))
-        self.assertEqual(typ.python_type, tuple)
-        self.check_protobuf_type(Type.TUPLE, "", "", 2, typ.protobuf_type)
-        self.check_protobuf_type(Type.UINT32, "", "", 0, typ.protobuf_type.types[0])
-        self.check_protobuf_type(Type.STRING, "", "", 0, typ.protobuf_type.types[1])
-        self.assertEqual(2, len(typ.value_types))
-        self.assertTrue(isinstance(typ.value_types[0], ValueType))
-        self.assertTrue(isinstance(typ.value_types[1], ValueType))
-        self.assertEqual(int, typ.value_types[0].python_type)
-        self.assertEqual(str, typ.value_types[1].python_type)
-        self.check_protobuf_type(
-            Type.UINT32, "", "", 0, typ.value_types[0].protobuf_type
-        )
-        self.check_protobuf_type(
-            Type.STRING, "", "", 0, typ.value_types[1].protobuf_type
-        )
-
-    def test_tuple_3_types(self) -> None:
-        types = Types()
-        typ = types.tuple_type(types.float_type, types.uint64_type, types.string_type)
-        self.assertTrue(isinstance(typ, TupleType))
-        self.assertEqual(typ.python_type, tuple)
-        self.check_protobuf_type(Type.TUPLE, "", "", 3, typ.protobuf_type)
-        self.check_protobuf_type(Type.FLOAT, "", "", 0, typ.protobuf_type.types[0])
-        self.check_protobuf_type(Type.UINT64, "", "", 0, typ.protobuf_type.types[1])
-        self.check_protobuf_type(Type.STRING, "", "", 0, typ.protobuf_type.types[2])
-        self.assertEqual(3, len(typ.value_types))
-        self.assertTrue(isinstance(typ.value_types[0], ValueType))
-        self.assertTrue(isinstance(typ.value_types[1], ValueType))
-        self.assertTrue(isinstance(typ.value_types[2], ValueType))
-        self.assertEqual(float, typ.value_types[0].python_type)
-        self.assertEqual(int, typ.value_types[1].python_type)
-        self.assertEqual(str, typ.value_types[2].python_type)
-        self.check_protobuf_type(
-            Type.FLOAT, "", "", 0, typ.value_types[0].protobuf_type
-        )
-        self.check_protobuf_type(
-            Type.UINT64, "", "", 0, typ.value_types[1].protobuf_type
-        )
-        self.check_protobuf_type(
-            Type.STRING, "", "", 0, typ.value_types[2].protobuf_type
-        )
-
-    def test_list_types(self) -> None:
-        types = Types()
-        typ = types.list_type(types.uint32_type)
-        self.assertTrue(isinstance(typ, ListType))
-        self.assertEqual(typ.python_type, list)
-        self.check_protobuf_type(Type.LIST, "", "", 1, typ.protobuf_type)
-        self.check_protobuf_type(Type.UINT32, "", "", 0, typ.protobuf_type.types[0])
-        self.assertTrue(isinstance(typ.value_type, ValueType))
-        self.assertEqual(int, typ.value_type.python_type)
-        self.check_protobuf_type(Type.UINT32, "", "", 0, typ.value_type.protobuf_type)
-
-    def test_set_types(self) -> None:
-        types = Types()
-        typ = types.set_type(types.string_type)
-        self.assertTrue(isinstance(typ, SetType))
-        self.assertEqual(typ.python_type, set)
-        self.check_protobuf_type(Type.SET, "", "", 1, typ.protobuf_type)
-        self.check_protobuf_type(Type.STRING, "", "", 0, typ.protobuf_type.types[0])
-        self.assertTrue(isinstance(typ.value_type, ValueType))
-        self.assertEqual(str, typ.value_type.python_type)
-        self.check_protobuf_type(Type.STRING, "", "", 0, typ.value_type.protobuf_type)
-
-    def test_dictionary_types(self) -> None:
-        types = Types()
-        typ = types.dictionary_type(types.string_type, types.uint32_type)
-        self.assertTrue(isinstance(typ, DictionaryType))
-        self.assertEqual(typ.python_type, dict)
-        self.check_protobuf_type(Type.DICTIONARY, "", "", 2, typ.protobuf_type)
-        self.check_protobuf_type(Type.STRING, "", "", 0, typ.protobuf_type.types[0])
-        self.check_protobuf_type(Type.UINT32, "", "", 0, typ.protobuf_type.types[1])
-        self.assertTrue(isinstance(typ.key_type, ValueType))
-        self.assertEqual(str, typ.key_type.python_type)
-        self.check_protobuf_type(Type.STRING, "", "", 0, typ.key_type.protobuf_type)
-        self.assertTrue(isinstance(typ.value_type, ValueType))
-        self.assertEqual(int, typ.value_type.python_type)
-        self.check_protobuf_type(Type.UINT32, "", "", 0, typ.value_type.protobuf_type)
-
-    def test_nullable_types(self) -> None:
-        types = Types()
-        typ = types.nullable(types.uint32_type)
-        self.assertTrue(isinstance(typ, ValueType))
-        self.assertTrue(typ.nullable)
-        self.assertFalse(types.uint32_type.nullable)
-        self.assertTrue(typ.protobuf_type.nullable)
-        self.assertEqual("<type: uint32?>", str(typ))
-        # The nullable form of a type is the same type in every position that names it
-        self.assertIs(typ, types.nullable(typ))
-        self.assertIs(typ, types.nullable(types.uint32_type))
-        self.assertIs(typ, types.as_type(typ.protobuf_type))
 
     def test_nullable_type_shares_its_python_type(self) -> None:
         types = Types()
@@ -258,102 +62,36 @@ class TestTypes(unittest.TestCase):
         self.assertIs(struct.python_type, nullable_struct.python_type)
         self.assertEqual(struct.field_types, nullable_struct.field_types)
 
-    def test_nullable_list_types(self) -> None:
-        types = Types()
-        typ = types.list_type(types.nullable(types.uint32_type))
-        self.assertTrue(isinstance(typ, ListType))
-        self.assertTrue(typ.value_type.nullable)
-        self.check_protobuf_type(Type.LIST, "", "", 1, typ.protobuf_type)
-        self.assertTrue(typ.protobuf_type.types[0].nullable)
-        self.assertEqual("<type: List(uint32?)>", str(typ))
-        # A nullable element makes a list type of its own
-        self.assertIsNot(types.list_type(types.uint32_type), typ)
-
-    def test_nullable_dictionary_types(self) -> None:
-        types = Types()
-        typ = types.dictionary_type(
-            types.string_type, types.nullable(types.uint32_type)
-        )
-        self.assertTrue(isinstance(typ, DictionaryType))
-        self.assertFalse(typ.key_type.nullable)
-        self.assertTrue(typ.value_type.nullable)
-        self.check_protobuf_type(Type.DICTIONARY, "", "", 2, typ.protobuf_type)
-        self.assertFalse(typ.protobuf_type.types[0].nullable)
-        self.assertTrue(typ.protobuf_type.types[1].nullable)
-        self.assertEqual("<type: Dict(string,uint32?)>", str(typ))
-        self.assertIsNot(
-            types.dictionary_type(types.string_type, types.uint32_type), typ
-        )
-
-    def test_nullable_tuple_types(self) -> None:
-        types = Types()
-        typ = types.tuple_type(types.sint32_type, types.nullable(types.string_type))
-        self.assertTrue(isinstance(typ, TupleType))
-        self.assertEqual([False, True], [t.nullable for t in typ.value_types])
-        self.check_protobuf_type(Type.TUPLE, "", "", 2, typ.protobuf_type)
-        self.assertFalse(typ.protobuf_type.types[0].nullable)
-        self.assertTrue(typ.protobuf_type.types[1].nullable)
-        self.assertEqual("<type: Tuple(sint32,string?)>", str(typ))
-        self.assertIsNot(types.tuple_type(types.sint32_type, types.string_type), typ)
-
-    def test_nullable_set_types(self) -> None:
-        types = Types()
-        typ = types.set_type(types.nullable(types.uint32_type))
-        self.assertTrue(typ.value_type.nullable)
-        self.assertEqual("<type: Set(uint32?)>", str(typ))
-
-    def test_struct_with_nullable_fields(self) -> None:
-        types = Types()
-        typ = types.struct_type("ServiceName", "NullableStructName")
-        typ.set_fields(
-            [("count", types.uint32_type), ("name", types.nullable(types.string_type))]
-        )
-        self.assertEqual([False, True], [t.nullable for t in typ.field_types])
-        value = typ.python_type(count=42, name=None)
-        self.assertEqual(42, value.count)
-        self.assertIsNone(value.name)
-
     def test_struct_comparison(self) -> None:
         types = Types()
         typ = types.struct_type("ServiceName", "ComparableStruct")
         typ.set_fields([("count", types.uint32_type), ("name", types.string_type)])
-        one = typ.python_type(1, "jeb")
-        same = typ.python_type(1, "jeb")
-        two = typ.python_type(2, "jeb")
+        one = typ.python_type(1, "alpha")
+        same = typ.python_type(1, "alpha")
+        two = typ.python_type(2, "alpha")
         self.assertEqual(one, same)
         self.assertNotEqual(one, two)
         # A structure is ordered and hashed as the tuple of its field values is, and equals
         # that tuple
-        self.assertEqual((1, "jeb"), one)
+        self.assertEqual((1, "alpha"), one)
         self.assertLess(one, two)
         self.assertGreater(two, one)
         self.assertEqual([one, two], sorted([two, one]))
         self.assertEqual(hash(one), hash(same))
         self.assertEqual({one, two}, {one, same, two})
 
-    def test_struct_holding_an_unhashable_value(self) -> None:
-        types = Types()
-        typ = types.struct_type("ServiceName", "UnhashableStruct")
-        typ.set_fields([("items", types.list_type(types.sint32_type))])
-        value = typ.python_type([1, 2])
-        self.assertEqual(typ.python_type([1, 2]), value)
-        # A list cannot be hashed, so neither can a structure holding one, exactly as a
-        # tuple holding one cannot
-        self.assertRaises(TypeError, hash, value)
-        self.assertRaises(TypeError, hash, ([1, 2],))
-
     def test_coerce_to_struct(self) -> None:
         types = Types()
         typ = types.struct_type("ServiceName", "StructName")
         typ.set_fields([("count", types.uint32_type), ("name", types.string_type)])
-        expected = typ.python_type(count=42, name="jeb")
-        for value in ((42, "jeb"), [42, "jeb"]):
+        expected = typ.python_type(count=42, name="alpha")
+        for value in ((42, "alpha"), [42, "alpha"]):
             coerced_value = types.coerce_to(value, typ)
             self.assertEqual(expected, coerced_value)
             self.assertEqual(typ.python_type, type(coerced_value))
         # A value with the wrong number of fields is not a value of the structure
         self.assertRaises(ValueError, types.coerce_to, (42,), typ)
-        self.assertRaises(ValueError, types.coerce_to, (42, "jeb", 1), typ)
+        self.assertRaises(ValueError, types.coerce_to, (42, "alpha", 1), typ)
 
     def test_coerce_to_struct_with_a_nullable_field(self) -> None:
         types = Types()
@@ -365,7 +103,7 @@ class TestTypes(unittest.TestCase):
         for value in ((42, None), [42, None]):
             self.assertEqual(expected, types.coerce_to(value, typ))
         # A null in a field that cannot hold one is not a value of the structure
-        self.assertRaises(ValueError, types.coerce_to, (None, "jeb"), typ)
+        self.assertRaises(ValueError, types.coerce_to, (None, "alpha"), typ)
 
     def test_coerce_to_collection_holding_a_null(self) -> None:
         types = Types()
@@ -422,7 +160,6 @@ class TestTypes(unittest.TestCase):
 
         self.assertRaises(ValueError, types.coerce_to, None, types.float_type)
         self.assertRaises(ValueError, types.coerce_to, "", types.float_type)
-        self.assertRaises(ValueError, types.coerce_to, True, types.float_type)
 
         self.assertRaises(
             ValueError, types.coerce_to, [], types.tuple_type(types.uint32_type)
@@ -451,22 +188,6 @@ class TestStaticMethod(unittest.TestCase):
         instance._client = client_fn  # pyright: ignore[reportAttributeAccessIssue]
         instance._object_id = 1
         return instance
-
-    def test_call_via_class_with_client_set(self) -> None:
-        _MyClass._client = lambda x: x * 2  # pyright: ignore[reportAttributeAccessIssue]
-        self.assertEqual(6, _MyClass.my_static(3))
-
-    def test_call_via_instance_without_class_client(self) -> None:
-        instance = self._make_instance(lambda x: x + 10)
-        self.assertEqual(15, instance.my_static(5))
-
-    def test_instance_client_injected_onto_class(self) -> None:
-        def identity(x):
-            return x
-
-        instance = self._make_instance(identity)
-        instance.my_static(0)
-        self.assertIs(identity, _MyClass._client)  # pyright: ignore[reportAttributeAccessIssue]
 
     def test_bound_has_dunder_self_and_name(self) -> None:
         _MyClass._client = lambda x: x  # pyright: ignore[reportAttributeAccessIssue]

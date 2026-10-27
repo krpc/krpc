@@ -433,7 +433,7 @@
 
       :Game Scenes: All
 
-   .. function:: TestEnum EnumDefaultArg(TestEnum x = TestEnum.ValueC)
+   .. function:: TestEnum EnumDefault(TestEnum x = TestEnum.ValueC)
 
 
 
@@ -460,13 +460,6 @@
       :parameters:
 
        * **x** -- If null, defaults to ``new System.Collections.Generic.List<TestEnum> { TestEnum.ValueB, TestEnum.ValueC }``.
-
-      :Game Scenes: All
-
-   .. function:: TestEnum EnumReturn()
-
-
-
 
       :Game Scenes: All
 
@@ -703,16 +696,6 @@
 
       :parameters:
 
-
-
-
-      :Game Scenes: All
-
-   .. function:: KRPC.Client.Event OnTimerUsingLambda(uint milliseconds)
-
-
-
-      :parameters:
 
 
 

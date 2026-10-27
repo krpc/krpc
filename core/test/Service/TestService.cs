@@ -228,7 +228,7 @@ namespace KRPC.Test.Service
             [KRPCMethod]
             public static string StaticMethod (string a = "")
             {
-                return "jeb" + a;
+                return "static" + a;
             }
 
             [KRPCMethod (Nullable = true)]
@@ -269,7 +269,7 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProcedure]
-        public static void ProcedureThreeOptionalArgsNoReturn (float x, string y = "jeb", int z = 42)
+        public static void ProcedureThreeOptionalArgsNoReturn (float x, string y = "alpha", int z = 42)
         {
             Service.ProcedureThreeOptionalArgsNoReturn (x, y, z);
         }
@@ -514,9 +514,9 @@ namespace KRPC.Test.Service
             {
                 return new TestStruct {
                     IntField = 42,
-                    StringField = "jeb",
+                    StringField = "alpha",
                     EnumField = TestEnum.Y,
-                    ObjectField = new TestClass ("kerbin"),
+                    ObjectField = new TestClass ("home"),
                     ListField = new List<string> { "a", "b" }
                 };
             }

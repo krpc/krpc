@@ -194,39 +194,6 @@ class Connection:
         self._fill(timeout)
         self._buffer.clear()
 
-    def receive(self, length: int) -> bytes:
-        """Receive data from the connection.
-        Blocks until length bytes have been received."""
-        if length == 0:
-            return b""
-        assert length > 0
-        buffer = self._buffer
-        while len(buffer) < length:
-            self._fill()
-        data = bytes(buffer[:length])
-        del buffer[:length]
-        return data
-
-    def partial_receive(self, length: int, timeout: float = 0.01) -> bytes:
-        """Receive up to length bytes of data from the connection.
-        Returns no data if none arrived within the timeout."""
-        assert length > 0
-        buffer = self._buffer
-        if buffer:
-            length = min(length, len(buffer))
-            data = bytes(buffer[:length])
-            del buffer[:length]
-            return data
-        if _readable(self._socket, timeout):
-            data = self._socket.recv(length)
-            # A readable socket that yields nothing has reached end of file. Reporting it
-            # as no data would be indistinguishable from nothing having arrived yet, and
-            # callers retry that immediately and forever.
-            if not data:
-                raise OSError("Connection closed")
-            return data
-        return b""
-
 
 class LocalConnection(Connection):
     """A connection to a server on the same machine, over a unix domain socket."""

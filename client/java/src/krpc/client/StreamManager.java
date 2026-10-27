@@ -9,8 +9,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import krpc.client.services.KRPC;
@@ -261,22 +259,6 @@ class StreamManager {
     }
     if (!changes.isEmpty()) {
       session.dispatch(() -> apply(changes));
-    }
-  }
-
-  /**
-   * Stores one result and waits for the dispatcher thread to apply it. For the tests, which stand
-   * in for the reader.
-   */
-  void update(long id, ProcedureResult result) {
-    update(Collections.singletonList(
-        StreamResult.newBuilder().setId(id).setResult(result).build()));
-    CountDownLatch applied = new CountDownLatch(1);
-    session.dispatch(applied::countDown);
-    try {
-      applied.await(10, TimeUnit.SECONDS);
-    } catch (InterruptedException exn) {
-      Thread.currentThread().interrupt();
     }
   }
 

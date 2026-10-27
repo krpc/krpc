@@ -4,7 +4,7 @@
 
 static const uint8_t data[] = {1, 2, 3, 4, 5, 6, 7, 8};
 
-TEST(test_communication_arduino, test_read) {
+TEST(test_arduino, test_read) {
   const size_t chunks[] = {8};
   HardwareSerial serial(data, sizeof(data), chunks, 1);
 
@@ -15,7 +15,7 @@ TEST(test_communication_arduino, test_read) {
 
 // A read that returns fewer bytes than requested must resume at the point the previous one
 // finished, and not restart at the beginning of the buffer.
-TEST(test_communication_arduino, test_read_partial) {
+TEST(test_arduino, test_read_partial) {
   const size_t chunks[] = {3, 5};
   HardwareSerial serial(data, sizeof(data), chunks, 2);
 
@@ -27,7 +27,7 @@ TEST(test_communication_arduino, test_read_partial) {
 // A read that returns nothing means the serial timeout elapsed without a single byte
 // arriving, which is as close to a disconnect as a serial link gets. It must fail, and not
 // retry forever.
-TEST(test_communication_arduino, test_read_timeout) {
+TEST(test_arduino, test_read_timeout) {
   const size_t chunks[] = {2, 0};
   HardwareSerial serial(data, sizeof(data), chunks, 2);
 
@@ -35,7 +35,7 @@ TEST(test_communication_arduino, test_read_timeout) {
   ASSERT_EQ(KRPC_ERROR_EOF, krpc_read(&serial, buf, sizeof(buf)));
 }
 
-TEST(test_communication_arduino, test_write) {
+TEST(test_arduino, test_write) {
   HardwareSerial serial(data, sizeof(data), NULL, 0);
 
   ASSERT_EQ(KRPC_OK, krpc_write(&serial, data, sizeof(data)));

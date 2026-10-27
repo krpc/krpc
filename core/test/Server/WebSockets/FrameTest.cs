@@ -142,10 +142,10 @@ namespace KRPC.Test.Server.WebSockets
         [Test]
         public void CloseFrameWithStatusAndMessage ()
         {
-            var frame = Frame.Close (4660, "jeb");
-            Assert.AreEqual ("880512346a6562", frame.ToBytes ().ToHexString ());
+            var frame = Frame.Close (4660, "abc");
+            Assert.AreEqual ("88051234616263", frame.ToBytes ().ToHexString ());
             Assert.AreEqual ("8805", frame.Header.ToBytes ().ToHexString ());
-            Assert.AreEqual ("12346a6562", frame.Payload.ToHexString ());
+            Assert.AreEqual ("1234616263", frame.Payload.ToHexString ());
             Assert.AreEqual (7, frame.Length);
             Assert.IsFalse (frame.IsPartial);
         }

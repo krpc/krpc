@@ -19,8 +19,8 @@ namespace KRPC.Test.Server.HTTP
         {
             var response = new Response (404, "Not Found");
             response.AddHeaderField ("Foo", "Bar");
-            response.AddHeaderField ("Baz", "Jeb");
-            Assert.AreEqual ("HTTP/1.1 404 Not Found\r\nFoo: Bar\r\nBaz: Jeb\r\n\r\n", response.ToString ());
+            response.AddHeaderField ("Baz", "Alpha");
+            Assert.AreEqual ("HTTP/1.1 404 Not Found\r\nFoo: Bar\r\nBaz: Alpha\r\n\r\n", response.ToString ());
         }
 
         [Test]

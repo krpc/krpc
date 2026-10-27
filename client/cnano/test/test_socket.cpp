@@ -25,48 +25,10 @@ void count_alarm(int) { alarms++; }
 
 }  // namespace
 
-// A read that returns fewer bytes than requested must resume at the point the previous one
-// finished, and not restart at the beginning of the buffer. A large response arrives in as
-// many segments as the network chose to split it into, so this is the usual case.
-TEST(test_communication, test_socket_read_partial) {
-  int fds[2];
-  ASSERT_EQ(0, socketpair(AF_UNIX, SOCK_STREAM, 0, fds));
-
-  const uint8_t data[] = {1, 2, 3, 4, 5, 6, 7, 8};
-  ASSERT_EQ(3, send(fds[1], data, 3, 0));
-
-  // Supply the remainder only once the reader is blocked, so that the first read is short
-  std::thread writer([&fds, &data]() {
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
-    EXPECT_EQ(5, send(fds[1], data + 3, 5, 0));
-  });
-
-  uint8_t buf[8] = {0};
-  krpc_error_t error = krpc_read(fds[0], buf, sizeof(buf));
-  writer.join();
-  close(fds[0]);
-  close(fds[1]);
-
-  ASSERT_EQ(KRPC_OK, error);
-  for (size_t i = 0; i < sizeof(buf); i++) ASSERT_EQ(data[i], buf[i]);
-}
-
-TEST(test_communication, test_socket_read_eof) {
-  int fds[2];
-  ASSERT_EQ(0, socketpair(AF_UNIX, SOCK_STREAM, 0, fds));
-  close(fds[1]);
-
-  uint8_t buf[4] = {0};
-  krpc_error_t error = krpc_read(fds[0], buf, sizeof(buf));
-  close(fds[0]);
-
-  ASSERT_EQ(KRPC_ERROR_EOF, error);
-}
-
 // Writing to a socket whose peer has gone must report the failure. Left to itself it raises
 // SIGPIPE, whose default action ends the program before the caller is told anything, so
 // this test crashes when the signal is not suppressed.
-TEST(test_communication, test_socket_write_peer_closed) {
+TEST(test_socket, test_write_peer_closed) {
   int fds[2];
   ASSERT_EQ(0, socketpair(AF_UNIX, SOCK_STREAM, 0, fds));
   ASSERT_EQ(0, close(fds[1]));
@@ -81,7 +43,7 @@ TEST(test_communication, test_socket_write_peer_closed) {
 // A signal delivered while a read is blocked interrupts it, and the read has to carry on from
 // where it stopped: reporting a failure would leave the rest of the message on the socket for
 // the next call to read as its own.
-TEST(test_communication, test_socket_read_interrupted) {
+TEST(test_socket, test_read_interrupted) {
   int fds[2];
   ASSERT_EQ(0, socketpair(AF_UNIX, SOCK_STREAM, 0, fds));
 

@@ -6,7 +6,6 @@ import com.google.protobuf.CodedOutputStream;
 import com.google.protobuf.Message;
 import com.google.protobuf.UnsafeByteOperations;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -38,30 +37,6 @@ public class Encoder {
   // bool value is
   private static final ByteString ABSENT = ByteString.copyFrom(new byte[] { 0 });
   private static final ByteString PRESENT = ByteString.copyFrom(new byte[] { 1 });
-
-  static String guidToString(byte[] guid) {
-    StringBuilder builder = new StringBuilder();
-    for (int i = 3; i >= 0; i--) {
-      builder.append(String.format("%02x", guid[i]));
-    }
-    builder.append("-");
-    for (int i = 5; i >= 4; i--) {
-      builder.append(String.format("%02x", guid[i]));
-    }
-    builder.append("-");
-    for (int i = 7; i >= 6; i--) {
-      builder.append(String.format("%02x", guid[i]));
-    }
-    builder.append("-");
-    for (int i = 8; i <= 9; i++) {
-      builder.append(String.format("%02x", guid[i]));
-    }
-    builder.append("-");
-    for (int i = 10; i <= 15; i++) {
-      builder.append(String.format("%02x", guid[i]));
-    }
-    return builder.toString();
-  }
 
   /** Encode an object. */
   public static ByteString encode(Object value, KRPC.Type type) {

@@ -135,30 +135,21 @@ py_sdist(
 # The tests that need no server, and those that run against one. Splitting them keeps the
 # ones that are the same whatever carries a call from being run once per transport.
 unit_tests = [
-    "krpc/test/test_attributes.py",
-    "krpc/test/test_decoder.py",
     "krpc/test/test_definitions.py",
     "krpc/test/test_docmath.py",
-    "krpc/test/test_encodedecode.py",
-    "krpc/test/test_encoder.py",
     "krpc/test/test_expressionutils.py",
-    "krpc/test/test_framing.py",
     "krpc/test/test_limits.py",
-    "krpc/test/test_platform.py",
     "krpc/test/test_service_definitions.py",
     "krpc/test/test_session.py",
-    "krpc/test/test_snake_case.py",
     "krpc/test/test_types.py",
 ]
 
 client_tests = [
     "krpc/test/test_client.py",
     "krpc/test/test_documentation.py",
-    "krpc/test/test_event.py",
     "krpc/test/test_expressiontree.py",
     "krpc/test/test_function.py",
     "krpc/test/test_functioncompiler.py",
-    "krpc/test/test_objects.py",
     "krpc/test/test_stream.py",
 ]
 
@@ -167,10 +158,7 @@ test_suite(
     tests = [
         ":autodoc",
         ":client-base",
-        ":client-localsocket",
         ":client-tcpip",
-        ":communication-localsocket",
-        ":communication-tcpip",
         ":conformance",
         ":conformance-base",
         ":lint",
@@ -180,10 +168,8 @@ test_suite(
 
 deps = ["@krpc_pypi//protobuf"]
 
-# What the client does regardless of the transport it talks over: encoding and decoding
-# values, the types they are carried as, and reassembling a message out of the blocks a
-# socket hands over. It needs no server, so it runs on its own rather than under the
-# harness that starts one.
+# What the client does without a server: the types values are carried as, building services
+# from their definitions, and reassembling a message out of the blocks a socket hands over.
 py_test(
     name = "unit",
     size = "small",
@@ -193,48 +179,13 @@ py_test(
     deps = deps,
 )
 
-# The transport, one test each. Both run against a server the test listens on itself, so
-# neither needs a kRPC server.
-py_test(
-    name = "communication-tcpip",
-    size = "small",
-    src = ":python",
-    pkg = "krpc-" + python_version,
-    tags = ["requires-network"],
-    tests = ["krpc/test/test_connection_tcpip.py"],
-    deps = deps,
-)
-
-# This one listens on a unix domain socket itself, which python can only do where the socket
-# module has the address family; the end to end test below runs everywhere, as there the server
-# is a TestServer and only the client end of the socket is python's to open.
-py_test(
-    name = "communication-localsocket",
-    size = "small",
-    src = ":python",
-    pkg = "krpc-" + python_version,
-    target_compatible_with = select({
-        "@platforms//os:windows": ["@platforms//:incompatible"],
-        "//conditions:default": [],
-    }),
-    tests = ["krpc/test/test_connection_localsocket.py"],
-    deps = deps,
-)
-
-# The client end to end against a TestServer, once per transport it can reach one over.
+# The client's own API against a TestServer. The conformance tests cover each transport, so
+# this runs over one.
 client_test(
     name = "client-tcpip",
     size = "medium",
     server_executable = "//tools/TestServer",
     tags = ["requires-network"],
-    test_executable = ":clienttest",
-)
-
-client_test(
-    name = "client-localsocket",
-    size = "medium",
-    server_executable = "//tools/TestServer",
-    server_type = "localsocket",
     test_executable = ":clienttest",
 )
 

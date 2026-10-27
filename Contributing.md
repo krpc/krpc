@@ -145,6 +145,8 @@ Some general guidelines on using git and the structure of the repository:
    should be added that verifies that the feature works as expected or that the bug is fixed. This
    can then be included in the automated testing for all Pull Requests in future. How these tests
    are implemented is of course dependent on the component that is being modified.
+    * A change to a client library, or a feature that clients use, needs conformance tests. These
+      also update the client specification. See Development-Guide.md.
     * Note: this advice does not apply to services, as these need to be tested while running the
       game, which is hard to automate. In this case, manual testing is sufficient.
 
