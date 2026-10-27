@@ -28,9 +28,13 @@ test_values.py::test_null_for_non_nullable[tuple]  # As test_null_for_non_nullab
 test_values.py::test_null_result_for_non_nullable  # A null result for a string fails to parse, as an RPC error
 test_streams.py::test_scoped_removal  # A stream has no scope idiom
 test_streams.py::test_update_callback  # A connection has no stream update callback
+test_threading.py::test_wait_for_update  # A connection has no stream update condition
 test_codec.py::test_malformed_data[dictionary(string,sint32)]  # As test_malformed_data[bytes]
 test_codec.py::test_empty_data  # As test_malformed_data[bytes]
 test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a procedure that returns an event
+test_threading.py::test_close_while_holding[updates]  # As test_wait_for_update
+test_threading.py::test_wake_update_waiter[close]  # As test_wait_for_update
+test_threading.py::test_wake_update_waiter[connection-failure]  # As test_wait_for_update
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
 test_streams.py::test_first_call_superseded  # The client has no race points
 test_streams.py::test_callback_after_remove  # The client has no race points
@@ -38,6 +42,8 @@ test_streams.py::test_callback_removed_during_update  # The client has no race p
 test_events.py::test_callback_added_during_replay  # The client has no race points
 test_events.py::test_callback_removed_during_add  # The client has no race points
 test_events.py::test_callback_removed_during_update  # The client has no race points
+test_threading.py::test_close_during_first_call  # The client has no race points
+test_threading.py::test_update_callback_after_close  # The client has no race points
 test_functions.py::test_mismatched_type[string-for-sint32]  # Throws InvalidOperationException for a type parameter that cannot hold the value, not the argument error
 test_functions.py::test_stream_mismatched_type[string-for-sint32]  # As test_mismatched_type[string-for-sint32]
 test_functions.py::test_mismatched_type[list-for-sint32]  # As test_mismatched_type[string-for-sint32]
@@ -56,7 +62,11 @@ test_streams.py::test_drop_last_handle  # Dropping the last handle leaves the st
 test_events.py::test_drop_last_handle  # As test_streams.py::test_drop_last_handle
 test_streams.py::test_remove_during_server_ending  # The client has no race points
 test_objects.py::test_sorting  # A remote object has no ordering
+test_threading.py::test_value_read_before_wake  # The client has no race points
 test_streams.py::test_value_as_first_call_ends  # The client has no race points
 test_codec.py::test_invalid_utf8  # As test_malformed_data[bytes]
 test_functions.py::test_null_for_non_nullable_type[double]  # Raises InvalidOperationException, as the client has no encoding error type
 test_functions.py::test_stream_null_for_non_nullable_type[double]  # As test_null_for_non_nullable_type[double]
+test_threading.py::test_close_from_an_end_callback[remove] @flaky  # As test_connection.py::test_call_after_end[close], for a remove that loses the race with the close
+test_threading.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
+test_threading.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free

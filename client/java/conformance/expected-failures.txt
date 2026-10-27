@@ -4,6 +4,7 @@ test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC a
 test_streams.py::test_members[extension-member]  # The testee dispatch covers KRPC and TestService only
 test_events.py::test_end_callback[connection-failure]  # The end callback is passed a StreamException, not the connection error with its reason
 test_connection.py::test_lost_pending_calls  # As test_call_after_end[close]
+test_threading.py::test_close_with_a_call_in_flight  # As test_connection.py::test_call_after_end[close]
 test_streams.py::test_wake_waiter[close]  # The waiter raises a StreamException, not the connection error
 test_streams.py::test_wake_waiter[connection-failure]  # As test_streams.py::test_wake_waiter[close]
 test_events.py::test_wake_waiter[close]  # As test_streams.py::test_wake_waiter[close]
@@ -36,15 +37,24 @@ test_objects.py::test_get_object_id  # A null raises NullPointerException, from 
 test_events.py::test_wait_after_close  # As test_streams.py::test_wake_waiter[close]
 test_streams.py::test_scoped_removal  # A stream has no scope idiom
 test_streams.py::test_update_callback  # A connection has no stream update callback
+test_threading.py::test_wait_for_update  # A connection has no stream update condition
 test_streams.py::test_end_callback[close]  # As test_events.py::test_end_callback[connection-failure]
 test_streams.py::test_end_callback[connection-failure]  # As test_events.py::test_end_callback[connection-failure]
 test_events.py::test_end_callback[close]  # As test_events.py::test_end_callback[connection-failure]
+test_threading.py::test_close_while_holding[stream]  # As test_streams.py::test_wake_waiter[close]
+test_threading.py::test_close_while_holding[updates]  # As test_wait_for_update
 test_objects.py::test_sorting  # compareTo compares ids as signed longs, so an id past 63 bits orders first
 test_connection.py::test_malformed_size  # Raises an RPC error, not the connection error
 test_connection.py::test_lost[partway]  # As test_malformed_size
 test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a procedure that returns an event
+test_threading.py::test_wake_waiter_holding_another[close]  # As test_streams.py::test_wake_waiter[close]
+test_threading.py::test_wake_waiter_holding_another[connection-failure]  # As test_streams.py::test_wake_waiter[close]
+test_threading.py::test_wake_update_waiter[close]  # As test_wait_for_update
+test_threading.py::test_wake_update_waiter[connection-failure]  # As test_wait_for_update
+test_threading.py::test_response_after_close  # As test_connection.py::test_call_after_end[close]
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
+test_threading.py::test_update_callback_after_close  # As test_streams.py::test_update_callback
 test_streams.py::test_drop_last_handle  # Dropping the last handle leaves the stream on the server
 test_events.py::test_drop_last_handle  # As test_streams.py::test_drop_last_handle
 test_streams.py::test_connection_failure_cause[lost]  # As test_streams.py::test_wake_waiter[close]
@@ -52,5 +62,8 @@ test_streams.py::test_connection_failure_cause[malformed-message]  # As test_str
 test_connection.py::test_failed_write  # As test_call_after_end[close]
 test_connection.py::test_handshake_lost  # The EOFException of the closed socket escapes the handshake unwrapped
 test_connection.py::test_handshake_failed_write  # The write's IOException escapes the handshake unwrapped
-test_connection.py::test_size_over_32_bits  # As test_malformed_size
+test_threading.py::test_close_from_an_end_callback[remove] @flaky  # As test_connection.py::test_call_after_end[close], for a remove that loses the race with the close
 test_streams.py::test_close_after_failure  # As test_streams.py::test_wake_waiter[close]
+test_connection.py::test_size_over_32_bits  # As test_malformed_size
+test_threading.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
+test_threading.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free

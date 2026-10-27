@@ -59,10 +59,15 @@ test_streams.py::test_callback_removed_during_update  # The client has no race p
 test_events.py::test_callback_added_during_replay  # The client has no race points
 test_events.py::test_callback_removed_during_add  # The client has no race points
 test_events.py::test_callback_removed_during_update  # The client has no race points
+test_threading.py::test_close_during_first_call  # The client has no race points
+test_threading.py::test_update_callback_after_close  # The client has no race points
 test_streams.py::test_drop_last_handle  # Dropping the last handle leaves the stream on the server
 test_events.py::test_drop_last_handle  # As test_streams.py::test_drop_last_handle
 test_streams.py::test_remove_during_server_ending  # The client has no race points
+test_threading.py::test_value_read_before_wake  # The client has no race points
 test_streams.py::test_value_as_first_call_ends  # The client has no race points
 test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 raises UnicodeDecodeError, not the encoding error
 test_values.py::test_undeclared_enum_result  # An undeclared enum value raises ValueError, not the encoding error
 test_connection.py::test_handshake_failed_write  # The write's OSError escapes the handshake unwrapped
+test_threading.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
+test_threading.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free

@@ -60,6 +60,8 @@ test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
 test_streams.py::test_scoped_removal  # A stream has no scope idiom
 test_streams.py::test_procedure_returning_an_event  # The testee cannot stream a procedure that returns an event
 test_codec.py::test_object  # An object with the id 0 is the null object
+test_threading.py::test_close_while_holding[updates]  # No close: a Client closes when its last copy is destroyed, and the thread waiting for an update holds one
+test_threading.py::test_wake_update_waiter[close]  # As test_close_while_holding[updates]
 test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
 test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
 test_objects.py::test_object_id_range[zero]  # As test_codec.py::test_object
@@ -70,3 +72,7 @@ test_functions.py::test_stream_null_for_non_nullable_type[TestClass]  # As test_
 test_events.py::test_server_end  # An event the server ends raises an unnamed RPC error, not KRPC.StreamRemovedException or the stream error
 test_events.py::test_ended_without_firing  # As test_server_end
 test_events.py::test_end_callback[server]  # As test_server_end
+test_threading.py::test_close_with_a_call_in_flight  # No close: a Client closes when its last copy is destroyed, and the calling thread holds one
+test_threading.py::test_response_after_close  # As test_threading.py::test_close_with_a_call_in_flight
+test_threading.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
+test_threading.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free
