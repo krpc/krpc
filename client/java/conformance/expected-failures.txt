@@ -1,1 +1,18 @@
 # The conformance tests the Java client fails, one per line, with the reason as a comment
+test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
+test_values.py::test_undeclared_enum_result  # An enum result holds any number
+test_values.py::test_null_for_non_nullable[bytes]  # A null argument is sent
+test_values.py::test_null_for_non_nullable[dictionary]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[enum]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[list]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[object]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[set]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[string]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[struct]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[tuple]  # As test_null_for_non_nullable[bytes]
+test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode
+test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
+test_codec.py::test_too_few_items[tuple]  # A short tuple raises ClassCastException
+test_calls.py::test_unknown_id  # The call raises RPCException, not the connection error
+test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
+test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value

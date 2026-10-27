@@ -1,1 +1,23 @@
 # The conformance tests the C nano client's language has no way to carry out, one per line, with the reason as a comment
+test_values.py::test_null_for_non_nullable[bool]  # The C type cannot hold null
+test_values.py::test_null_for_non_nullable[bytes]  # The C type cannot hold null
+test_values.py::test_null_for_non_nullable[dictionary]  # A collection cannot be null
+test_values.py::test_null_for_non_nullable[double]  # The C type cannot hold null
+test_values.py::test_null_for_non_nullable[enum]  # The C type cannot hold null
+test_values.py::test_null_for_non_nullable[float]  # The C type cannot hold null
+test_values.py::test_null_for_non_nullable[list]  # A collection cannot be null
+test_values.py::test_null_for_non_nullable[set]  # A collection cannot be null
+test_values.py::test_null_for_non_nullable[sint32]  # The C type cannot hold null
+test_values.py::test_null_for_non_nullable[sint64]  # The C type cannot hold null
+test_values.py::test_null_for_non_nullable[struct]  # The C type cannot hold null
+test_values.py::test_null_for_non_nullable[tuple]  # The C type cannot hold null
+test_values.py::test_null_for_non_nullable[uint32]  # The C type cannot hold null
+test_values.py::test_null_for_non_nullable[uint64]  # The C type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[dictionary-value]  # The C type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[list-element]  # The C type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[nested-element]  # The C type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[set-element]  # The C type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[struct-field]  # The C type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[tuple-item]  # The C type cannot hold null
+test_values.py::test_structure_equality  # C has no equality of structures
+test_values.py::test_structure_hash  # The language has no hash of a value

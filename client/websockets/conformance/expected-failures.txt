@@ -1,1 +1,65 @@
 # The conformance tests the websockets testee fails, one per line, with the reason as a comment
+test_calls.py::test_class_property  # No values of type ClassType
+test_calls.py::test_class_extension_members  # No values of type ClassType
+test_calls.py::test_class_method  # No values of type ClassType
+test_codec.py::test_bytes[invalid-utf8]  # No encode command
+test_codec.py::test_collections  # No encode command
+test_codec.py::test_extra_items  # No decode command
+test_codec.py::test_invalid_utf8  # No decode command
+test_codec.py::test_malformed_data  # No decode command
+test_codec.py::test_nullable  # No encode command
+test_codec.py::test_object  # No encode command
+test_codec.py::test_string[non-ascii]  # No encode command
+test_codec.py::test_string[nul]  # No encode command
+test_codec.py::test_string[very-long]  # No encode command
+test_codec.py::test_structures  # No encode command
+test_codec.py::test_too_few_items  # No decode command
+test_codec.py::test_bool  # No encode command
+test_codec.py::test_bytes[all-values]  # No encode command
+test_codec.py::test_bytes[empty]  # No encode command
+test_codec.py::test_bytes[nul]  # No encode command
+test_codec.py::test_bytes[very-long]  # No encode command
+test_values.py::test_collections[dictionary]  # No values of type DictionaryType
+test_values.py::test_collections[list]  # No values of type ListType
+test_values.py::test_collections[nested]  # No values of type DictionaryType
+test_values.py::test_collections[set]  # No values of type SetType
+test_values.py::test_collections[tuple]  # No values of type TupleType
+test_values.py::test_collections_of_objects  # No values of type ClassType
+test_values.py::test_enum  # No values of type EnumerationType
+test_codec.py::test_floating_point  # No encode command
+test_codec.py::test_integers  # No encode command
+test_values.py::test_null_in_non_nullable_slot[dictionary-key]  # No values of type DictionaryType
+test_values.py::test_null_in_non_nullable_slot[dictionary-value]  # No values of type DictionaryType
+test_values.py::test_null_in_non_nullable_slot[list-element]  # No values of type ListType
+test_values.py::test_null_in_non_nullable_slot[nested-element]  # No values of type DictionaryType
+test_values.py::test_null_in_non_nullable_slot[object-element]  # No values of type ListType
+test_values.py::test_null_in_non_nullable_slot[set-element]  # No values of type SetType
+test_values.py::test_null_in_non_nullable_slot[string-element]  # No values of type ListType
+test_values.py::test_null_in_non_nullable_slot[struct-field]  # No values of type StructType
+test_values.py::test_null_in_non_nullable_slot[tuple-item]  # No values of type TupleType
+test_values.py::test_nullable[dictionary]  # No values of type DictionaryType
+test_values.py::test_nullable[enum]  # No values of type EnumerationType
+test_values.py::test_nullable[list]  # No values of type ListType
+test_values.py::test_nullable[set]  # No values of type SetType
+test_values.py::test_nullable[struct]  # No values of type StructType
+test_values.py::test_nullable[tuple]  # No values of type TupleType
+test_values.py::test_nullable_elements  # No values of type ClassType
+test_values.py::test_nullable_fields  # No values of type ClassType
+test_values.py::test_nullable_object  # No values of type ClassType
+test_codec.py::test_string[ascii]  # No encode command
+test_codec.py::test_string[astral]  # No encode command
+test_codec.py::test_string[empty]  # No encode command
+test_codec.py::test_string[long]  # No encode command
+test_codec.py::test_enum  # No encode command
+test_values.py::test_enum_equality  # No compare command
+test_values.py::test_structure_equality  # As test_enum_equality
+test_values.py::test_structure_hash  # No hash command
+test_values.py::test_structures[list]  # No values of type ListType
+test_values.py::test_structures[nested]  # No values of type ClassType
+test_values.py::test_structures[struct]  # No values of type StructType
+test_values.py::test_undeclared_enum_result  # No values of type EnumerationType
+test_values.py::test_message_result  # No values of type MessageType
+test_codec.py::test_dictionary_value_left_out  # No decode command
+test_codec.py::test_empty_data  # No decode command
+test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
+test_values.py::test_null_flag[object]  # No values of type ClassType

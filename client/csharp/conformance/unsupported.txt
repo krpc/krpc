@@ -1,1 +1,15 @@
 # The conformance tests the C# client's language has no way to carry out, one per line, with the reason as a comment
+test_values.py::test_null_for_non_nullable[bool]  # The client's type cannot hold null
+test_values.py::test_null_for_non_nullable[double]  # The client's type cannot hold null
+test_values.py::test_null_for_non_nullable[enum]  # The client's type cannot hold null
+test_values.py::test_null_for_non_nullable[float]  # The client's type cannot hold null
+test_values.py::test_null_for_non_nullable[sint32]  # The client's type cannot hold null
+test_values.py::test_null_for_non_nullable[sint64]  # The client's type cannot hold null
+test_values.py::test_null_for_non_nullable[uint32]  # The client's type cannot hold null
+test_values.py::test_null_for_non_nullable[uint64]  # The client's type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[dictionary-value]  # The client's type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[list-element]  # The client's type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[nested-element]  # The client's type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[set-element]  # The client's type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[struct-field]  # The client's type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[tuple-item]  # The client's type cannot hold null

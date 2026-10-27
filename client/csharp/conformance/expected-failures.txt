@@ -1,1 +1,28 @@
 # The conformance tests the C# client fails, one per line, with the reason as a comment
+test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
+test_codec.py::test_malformed_data[bytes]  # A decoding error is a plain ArgumentException, IOException or InvalidProtocolBufferException, as the client has no encoding error type
+test_codec.py::test_malformed_data[double]  # As test_malformed_data[bytes]
+test_codec.py::test_malformed_data[float]  # As test_malformed_data[bytes]
+test_codec.py::test_malformed_data[sint32]  # As test_malformed_data[bytes]
+test_codec.py::test_malformed_data[uint32]  # As test_malformed_data[bytes]
+test_codec.py::test_malformed_data[uint64]  # As test_malformed_data[bytes]
+test_codec.py::test_malformed_data[string]  # As test_malformed_data[bytes]
+test_codec.py::test_malformed_data[list(sint32)]  # As test_malformed_data[bytes]
+test_codec.py::test_malformed_data[list(nullable sint32)]  # As test_malformed_data[bytes], and a presence bool other than 0 or 1, or data after a null, decodes
+test_codec.py::test_too_few_items[struct]  # As test_malformed_data[bytes]
+test_codec.py::test_too_few_items[tuple]  # As test_malformed_data[bytes]
+test_calls.py::test_abandoned_id  # An interrupt does not reach a call that is reading the socket for its own response
+test_values.py::test_undeclared_enum_result  # An enum result holds any number
+test_values.py::test_null_for_non_nullable[bytes]  # A null argument is sent
+test_values.py::test_null_for_non_nullable[dictionary]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[list]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[object]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[set]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[string]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[struct]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_for_non_nullable[tuple]  # As test_null_for_non_nullable[bytes]
+test_values.py::test_null_result_for_non_nullable  # A null result for a string fails to parse, as an RPC error
+test_codec.py::test_malformed_data[dictionary(string,sint32)]  # As test_malformed_data[bytes]
+test_codec.py::test_empty_data  # As test_malformed_data[bytes]
+test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
+test_codec.py::test_invalid_utf8  # As test_malformed_data[bytes]

@@ -1,1 +1,55 @@
 # The conformance tests the Python client fails, one per line, with the reason as a comment
+test_calls.py::test_exposed_members[services]  # The pre-generated stubs of every service are attached, whether or not the server has the service
+test_codec.py::test_too_few_items[tuple]  # A short wire tuple decodes short
+test_codec.py::test_malformed_data[bytes]  # A length past the end of the data decodes short
+test_codec.py::test_malformed_data[string]  # A length past the end of the data decodes short
+test_codec.py::test_malformed_data[double]  # A malformed value raises IndexError, struct.error or a protobuf DecodeError, not the encoding error
+test_codec.py::test_malformed_data[float]  # As test_malformed_data[double]
+test_codec.py::test_malformed_data[sint32]  # As test_malformed_data[double]
+test_codec.py::test_malformed_data[uint32]  # As test_malformed_data[double]
+test_codec.py::test_malformed_data[uint64]  # As test_malformed_data[double]
+test_codec.py::test_malformed_data[list(sint32)]  # As test_malformed_data[double]
+test_codec.py::test_malformed_data[list(nullable sint32)]  # As test_malformed_data[double], and a presence bool other than 0 or 1, or data after a null, decodes
+test_values.py::test_null_for_non_nullable[bool]  # A null argument is sent
+test_values.py::test_null_for_non_nullable[bytes]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[dictionary]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[double]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[enum]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[float]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[list]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[object]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[set]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[sint32]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[sint64]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[string]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[struct]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[tuple]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[uint32]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_for_non_nullable[uint64]  # As test_null_for_non_nullable[bool]
+test_values.py::test_null_in_non_nullable_slot[dictionary-key]  # A null key raises AttributeError
+test_values.py::test_null_in_non_nullable_slot[object-element]  # A null object in a collection raises AttributeError
+test_values.py::test_null_result_for_non_nullable  # A null result decodes as None
+test_values.py::test_out_of_range[float-above]  # A double beyond the largest float raises OverflowError
+test_values.py::test_out_of_range[float-below]  # As test_out_of_range[float-above]
+test_values.py::test_out_of_range[sint32-above]  # Calls check only for negatives, so the value wraps
+test_values.py::test_out_of_range[sint32-below]  # As test_out_of_range[sint32-above]
+test_values.py::test_out_of_range[sint64-above]  # As test_out_of_range[sint32-above]
+test_values.py::test_out_of_range[uint32-above]  # As test_out_of_range[sint32-above]
+test_values.py::test_structure_hash  # A structure holding a list cannot be hashed
+test_values.py::test_wrong_collection[string-for-list]  # Any iterable coerces to a list
+test_values.py::test_wrong_collection[bytes-for-list]  # As test_wrong_collection[string-for-list]
+test_values.py::test_wrong_collection[dictionary-for-list]  # As test_wrong_collection[string-for-list]
+test_codec.py::test_malformed_data[dictionary(string,sint32)]  # As test_malformed_data[double]
+test_codec.py::test_out_of_range[sint32]  # As test_values.py::test_out_of_range[sint32-above]
+test_codec.py::test_out_of_range[sint64]  # As test_values.py::test_out_of_range[sint32-above]
+test_codec.py::test_out_of_range[uint32]  # As test_values.py::test_out_of_range[sint32-above]
+test_codec.py::test_empty_data  # As test_malformed_data[double]
+test_calls.py::test_unknown_type  # A structure holding a left-out structure is exposed
+test_calls.py::test_undefined_type[class]  # A member whose type names an undefined class or enumeration is exposed
+test_calls.py::test_undefined_type[enumeration]  # As above
+test_calls.py::test_undefined_type[wrong-kind]  # As above
+test_calls.py::test_undefined_type[enumeration-default]  # Building the services raises an error
+test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
+test_values.py::test_null_in_non_nullable_slot[string-element]  # A null string in a collection raises AttributeError
+test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 raises UnicodeDecodeError, not the encoding error
+test_values.py::test_undeclared_enum_result  # An undeclared enum value raises ValueError, not the encoding error

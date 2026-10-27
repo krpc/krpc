@@ -1,1 +1,2 @@
 # The conformance tests the Python client's language has no way to carry out, one per line, with the reason as a comment
+test_calls.py::test_abandoned_id  # A Python thread cannot be interrupted

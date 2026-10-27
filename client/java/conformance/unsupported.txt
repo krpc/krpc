@@ -1,1 +1,9 @@
 # The conformance tests the Java client's language has no way to carry out, one per line, with the reason as a comment
+test_values.py::test_null_for_non_nullable[bool]  # A primitive type cannot hold null
+test_values.py::test_null_for_non_nullable[double]  # A primitive type cannot hold null
+test_values.py::test_null_for_non_nullable[float]  # A primitive type cannot hold null
+test_values.py::test_null_for_non_nullable[sint32]  # A primitive type cannot hold null
+test_values.py::test_null_for_non_nullable[sint64]  # A primitive type cannot hold null
+test_values.py::test_null_for_non_nullable[uint32]  # A primitive type cannot hold null
+test_values.py::test_null_for_non_nullable[uint64]  # A primitive type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[struct-field]  # A primitive type cannot hold null

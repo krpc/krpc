@@ -1,1 +1,11 @@
 # The conformance tests the C++ client fails, one per line, with the reason as a comment
+test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
+test_values.py::test_undeclared_enum_result  # An enum result holds any number
+test_values.py::test_null_for_non_nullable[object]  # A null object is sent as the id 0
+test_values.py::test_null_in_non_nullable_slot[object-element]  # As test_null_for_non_nullable[object]
+test_values.py::test_null_result_for_non_nullable  # A null result decodes as the default value
+test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode
+test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
+test_codec.py::test_object  # An object with the id 0 is the null object
+test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
+test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
