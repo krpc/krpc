@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using Google.Protobuf;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 
@@ -31,17 +32,26 @@ namespace KRPC.Service
                 if (ReferenceEquals(value, null))
                     throw new ArgumentNullException ("Result");
                 if (value.HasValue) {
-                    if (!StreamResult.Result.HasValue)
-                        Changed = true;
-                    else if (!ReferenceEquals(value.Value, null))
-                        Changed |= !ValueUtils.Equal(value.Value, StreamResult.Result.Value);
-                    else
-                        Changed |= (ReferenceEquals(value.Value, null) ^ ReferenceEquals(StreamResult.Result.Value, null));
+                    var encoded = Encode (value);
+                    Changed |= !StreamResult.Result.HasValue || !Equals (encoded, StreamResult.Result.EncodedValue);
                 } else {
                     Changed |= value.HasError;
                 }
                 StreamResult.Result = value;
             }
+        }
+
+        /// <summary>
+        /// Encode the value of a result, and store the encoding on it. Null for a null value.
+        /// A stream compares encodings to find a change, as a collection changed in place is
+        /// the same object, and 0.0 and -0.0 are equal values with different encodings.
+        /// </summary>
+        internal static ByteString Encode (ProcedureResult result)
+        {
+            if (ReferenceEquals (result.Value, null))
+                return null;
+            result.EncodedValue = Server.ProtocolBuffers.Encoder.Encode (result.Value, result.Spec);
+            return result.EncodedValue;
         }
 
         /// <summary>
