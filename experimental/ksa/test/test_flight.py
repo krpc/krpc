@@ -57,3 +57,32 @@ class TestFlight(ksatest.TestCase):
     def test_g_force(self):
         # Coasting in orbit is free fall
         self.assertLess(self.flight.g_force, 0.01)
+
+    def test_surface_directions(self):
+        vehicle = self.find_vehicle("Gemini7")
+        frame = vehicle.orbit.body.reference_frame
+        prograde = self.flight.prograde(frame)
+        normal = self.flight.normal(frame)
+        radial = self.flight.radial(frame)
+        velocity = vehicle.velocity(frame)
+        position = vehicle.position(frame)
+        speed = math.sqrt(dot(velocity, velocity))
+        for axis in (prograde, normal, radial):
+            self.assertAlmostEqual(1, dot(axis, axis), places=6)
+        self.assertAlmostEqual(1, dot(prograde, velocity) / speed, places=3)
+        self.assertAlmostEqual(0, dot(prograde, normal), places=6)
+        self.assertAlmostEqual(0, dot(normal, position) / norm(position), places=3)
+        self.assertAlmostEqual(0, dot(radial, prograde), places=6)
+        self.assertGreater(dot(radial, position), 0)
+
+    def test_biome(self):
+        biomes = self.find_vehicle("Gemini7").orbit.body.biomes
+        self.assertIn(self.flight.biome, biomes)
+
+
+def dot(a, b):
+    return sum(x * y for x, y in zip(a, b))
+
+
+def norm(a):
+    return math.sqrt(dot(a, a))

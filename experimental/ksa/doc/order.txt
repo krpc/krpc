@@ -141,6 +141,7 @@ KSA.Flight.Elevation
 KSA.Flight.TimeToImpact
 KSA.Flight.Latitude
 KSA.Flight.Longitude
+KSA.Flight.Biome
 KSA.Flight.Speed
 KSA.Flight.HorizontalSpeed
 KSA.Flight.VerticalSpeed
@@ -153,6 +154,9 @@ KSA.Flight.DynamicPressure
 KSA.Flight.GForce
 KSA.Flight.AngleOfAttack
 KSA.Flight.SideslipAngle
+KSA.Flight.Prograde
+KSA.Flight.Normal
+KSA.Flight.Radial
 KSA.Control.Throttle
 KSA.Control.EngineOn
 KSA.Control.Pitch
