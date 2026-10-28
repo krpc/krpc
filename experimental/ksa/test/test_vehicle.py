@@ -68,8 +68,41 @@ class TestVehicle(ksatest.TestCase):
             self.vehicle.target_body = None
         self.assertIsNone(self.vehicle.target_body)
 
+    def test_target_part(self):
+        rocket = self.find_vehicle("Rocket")
+        part = self.vehicle.root_part
+        try:
+            rocket.target_part = part
+            self.assertEqual(part, rocket.target_part)
+            self.assertEqual(self.vehicle, rocket.target_vehicle)
+        finally:
+            rocket.target_part = None
+        self.assertIsNone(rocket.target_part)
+        self.assertIsNone(rocket.target_vehicle)
+
+    def test_target_vehicle_has_no_part(self):
+        rocket = self.find_vehicle("Rocket")
+        try:
+            rocket.target_vehicle = self.vehicle
+            self.assertIsNone(rocket.target_part)
+        finally:
+            rocket.target_vehicle = None
+
+    def test_debris(self):
+        self.assertFalse(self.vehicle.is_debris)
+
+    def test_structural_load(self):
+        # The game computes no loads on rails. test_control checks them under thrust
+        self.assertTrue(self.vehicle.on_rails)
+        self.assertEqual(0, self.vehicle.peak_g_load)
+        self.assertEqual(0, self.vehicle.max_g_load)
+        self.assertEqual(0, self.vehicle.peak_dynamic_pressure)
+        self.assertEqual(0, self.vehicle.max_dynamic_pressure)
+
     def test_invalid_targets(self):
         with self.assertRaises(ValueError):
             self.vehicle.target_vehicle = self.vehicle
         with self.assertRaises(ValueError):
             self.vehicle.target_body = self.ksa.bodies["Sol"]
+        with self.assertRaises(ValueError):
+            self.vehicle.target_part = self.vehicle.root_part

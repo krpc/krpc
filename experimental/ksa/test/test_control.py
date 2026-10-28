@@ -67,6 +67,14 @@ class TestControl(ksatest.TestCase):
             self.assertAlmostEqual(
                 g_force, self.vehicle.flight.g_force, delta=g_force * 0.05
             )
+            # The peak g-load is smoothed, so settles on the steady acceleration
+            ksatest.wait_until(
+                lambda: abs(self.vehicle.peak_g_load - g_force) < g_force * 0.05,
+                timeout=5,
+            )
+            self.assertFalse(self.vehicle.on_rails)
+            self.assertLess(self.vehicle.peak_g_load, self.vehicle.max_g_load)
+            self.assertEqual(200000, self.vehicle.max_dynamic_pressure)
         finally:
             self.control.engine_on = False
             self.control.throttle = throttle

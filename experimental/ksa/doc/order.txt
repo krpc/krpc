@@ -14,6 +14,8 @@ KSA.TransformRotation
 KSA.TransformVelocity
 KSA.Vehicle.Name
 KSA.Vehicle.Situation
+KSA.Vehicle.OnRails
+KSA.Vehicle.IsDebris
 KSA.Vehicle.HasLaunched
 KSA.Vehicle.LaunchTime
 KSA.Vehicle.Mass
@@ -21,6 +23,10 @@ KSA.Vehicle.PropellantMass
 KSA.Vehicle.Thrust
 KSA.Vehicle.AvailableThrust
 KSA.Vehicle.SpecificImpulse
+KSA.Vehicle.PeakGLoad
+KSA.Vehicle.MaxGLoad
+KSA.Vehicle.PeakDynamicPressure
+KSA.Vehicle.MaxDynamicPressure
 KSA.Vehicle.Parts
 KSA.Vehicle.RootPart
 KSA.Vehicle.Resources
@@ -28,6 +34,7 @@ KSA.Vehicle.DeltaV
 KSA.Vehicle.Sequences
 KSA.Vehicle.TargetVehicle
 KSA.Vehicle.TargetBody
+KSA.Vehicle.TargetPart
 KSA.Vehicle.Burns
 KSA.Vehicle.AddBurn
 KSA.Vehicle.Orbit
