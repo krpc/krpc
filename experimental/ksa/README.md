@@ -98,7 +98,7 @@ The archive holds the readme and licenses, and three folders:
 The documentation is published online rather than in the archive, see `publish-docs.sh`.
 
 The mod is under the LGPL v3, as `KRPC.Core` is. The archive includes the licenses of the bundled
-`Google.Protobuf` and `System.IO.Ports` binaries.
+`Google.Protobuf`, `System.IO.Ports`, ASP.NET Core and gRPC for .NET binaries.
 
 ## Install and Run
 
