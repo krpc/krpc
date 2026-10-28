@@ -482,6 +482,7 @@
 <h3>Core<a class="headerlink" href="#core" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><span class="changelog-marker breaking">Breaking</span> Refuse a service whose parameter defaults to a value its enumeration does not declare (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1192">#1192</a>)</p></li>
+<li><p>Close a WebSockets connection whose frame is too large to buffer, which threw <code class="docutils literal notranslate"><span class="pre">OverflowException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1193">#1193</a>)</p></li>
 <li><p>Exceptions</p>
 <ul>
 <li><p>Report the .NET exception each kRPC exception stands for, as <code class="docutils literal notranslate"><span class="pre">mapped_type</span></code> in <code class="docutils literal notranslate"><span class="pre">KRPC.Exception</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1172">#1172</a>)</p></li>
