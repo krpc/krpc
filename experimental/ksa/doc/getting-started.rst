@@ -26,6 +26,9 @@ The server is a code mod, which runs in the game through StarMap, the KSA code m
 
 4. Launch the game through StarMap.
 
+The `Borea <https://github.com/KSAModding/Borea>`_ mod manager can do all four steps: it
+installs StarMap and the mod, and launches the game through StarMap.
+
 The server starts once the game has loaded its mods. It listens on ``127.0.0.1``, with RPC
 port 50000 and stream port 50001, and accepts every connection.
 

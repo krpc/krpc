@@ -54,5 +54,6 @@ Releasing
 ---------
 
 ``release.sh`` builds the release archive into ``bin/release``, with its checksum. The archive
-holds one folder, with a readme and the licenses, the ``kRPC.KSA`` mod folder, the client stubs
-and the example scripts.
+holds the ``kRPC.KSA`` mod folder, the client stubs, the example scripts, a readme and the
+licenses. The mod folder sits at the top, with its own copy of the licenses, so that the Borea
+mod manager installs it.

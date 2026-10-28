@@ -31,6 +31,9 @@ INSTALL
 
 4. Launch the game through StarMap.
 
+The Borea mod manager can do all four steps: it installs StarMap and the mod, and
+launches the game through StarMap.
+
 The server starts when the game has loaded its mods. By default it listens on 127.0.0.1,
 ports 50000 and 50001, and accepts every connection. The settings are in
 kRPC.KSA/settings.toml.

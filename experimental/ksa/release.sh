@@ -1,8 +1,8 @@
 #!/bin/bash
 # Build the kRPC for KSA release archive into experimental/ksa/bin/release:
 #
-#   kRPC-KSA-<version>.zip   one kRPC-KSA-<version> folder, holding the kRPC.KSA mod folder,
-#                            the client stubs, the example scripts, the licenses and a readme
+#   kRPC-KSA-<version>.zip   the kRPC.KSA mod folder, the client stubs, the example scripts,
+#                            the licenses and a readme
 #   SHA256SUMS
 set -euo pipefail
 
@@ -16,20 +16,23 @@ release="$here/bin/release"
 
 rm -rf "$release"
 staging="$release/staging"
-top="$staging/kRPC-KSA-$mod_version"
-mkdir -p "$top"
+mkdir -p "$staging"
 
-cp -r "$here/bin/kRPC.KSA" "$top/kRPC.KSA"
-cp -r "$here/bin/stubs" "$top/stubs"
-mkdir -p "$top/examples"
-cp "$here"/examples/*.py "$top/examples/"
-cp "$here/release/LICENSE" "$here/release/LICENSE.System.IO.Ports" \
-  "$repo/COPYING" "$repo/COPYING.LESSER" "$top/"
-cp "$repo/tools/build/protobuf/LICENSE" "$top/LICENSE.Google.Protobuf"
+# The mod folder sits at the top of the archive, where Borea finds the one folder holding a
+# mod.toml. Borea installs only that folder, so it carries the licenses too
+cp -r "$here/bin/kRPC.KSA" "$staging/kRPC.KSA"
+cp -r "$here/bin/stubs" "$staging/stubs"
+mkdir -p "$staging/examples"
+cp "$here"/examples/*.py "$staging/examples/"
+for dir in "$staging" "$staging/kRPC.KSA"; do
+  cp "$here/release/LICENSE" "$here/release/LICENSE.System.IO.Ports" \
+    "$repo/COPYING" "$repo/COPYING.LESSER" "$dir/"
+  cp "$repo/tools/build/protobuf/LICENSE" "$dir/LICENSE.Google.Protobuf"
+done
 sed -e "s/@VERSION@/$mod_version/g" -e "s/@KRPC_VERSION@/$krpc_version/g" \
   -e "s/@STARMAP_VERSION@/$starmap_version/g" -e "s/@KSA_VERSION@/$ksa_version/g" \
-  "$here/release/README.txt" > "$top/README.txt"
-(cd "$staging" && zip -qr "$release/kRPC-KSA-$mod_version.zip" "kRPC-KSA-$mod_version")
+  "$here/release/README.txt" > "$staging/README.txt"
+(cd "$staging" && zip -qr "$release/kRPC-KSA-$mod_version.zip" .)
 
 rm -rf "$staging"
 (cd "$release" && sha256sum ./*.zip > SHA256SUMS)

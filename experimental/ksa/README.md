@@ -83,10 +83,11 @@ Build the release archive, `bin/release/kRPC-KSA-0.1.0.zip`, and its `SHA256SUMS
 experimental/ksa/release.sh
 ```
 
-The archive holds one folder, `kRPC-KSA-0.1.0`, with the readme and licenses at the top, as the
-featured mods on SpaceDock lay out theirs:
+The archive holds the readme and licenses, and three folders:
 
  * `kRPC.KSA/` - the mod folder, without `TestingTools`, which players copy into the KSA mods folder.
+   It sits at the top of the archive, with its own copy of the licenses, as the Borea mod manager
+   installs only the folder holding `mod.toml`.
  * `stubs/` - the client stubs and service definitions.
  * `examples/` - the example scripts.
 
