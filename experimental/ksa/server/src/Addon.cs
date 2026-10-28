@@ -25,7 +25,7 @@ namespace KRPC.KSA
         static Addon instance;
         static readonly Queue<Action> afterFrame = new Queue<Action> ();
 
-        readonly Harmony harmony = new Harmony ("kRPC.KSA");
+        readonly Harmony harmony = new Harmony ("kRPC");
         readonly string modDirectory;
         Core core;
         ConfigurationFile config;

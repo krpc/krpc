@@ -28,7 +28,7 @@ Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `version
 
 ## Build
 
-Build the mod into `bin/kRPC.KSA`:
+Build the mod into `bin/kRPC`:
 
 ```bash
 experimental/ksa/build.sh
@@ -85,7 +85,7 @@ experimental/ksa/release.sh
 
 The archive holds the readme and licenses, and three folders:
 
- * `kRPC.KSA/` - the mod folder, without `TestingTools`, which players copy into the KSA mods folder.
+ * `kRPC/` - the mod folder, without `TestingTools`, which players copy into the KSA mods folder.
    It sits at the top of the archive, with its own copy of the licenses, as the Borea mod manager
    installs only the folder holding `mod.toml`.
  * `stubs/` - the client stubs and service definitions.
@@ -124,7 +124,7 @@ The game opens a configuration window before loading. Untick "Always Show" in it
 to run unattended.
 
 The server starts when the game has loaded its mods. Server settings are in
-`kRPC.KSA/settings.toml`. By default it listens on `127.0.0.1`, ports 50000 and 50001, and
+`kRPC/settings.toml`. By default it listens on `127.0.0.1`, ports 50000 and 50001, and
 accepts every connection.
 
 ## Clients

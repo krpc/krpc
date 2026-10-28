@@ -1,7 +1,7 @@
 #!/bin/bash
 # Build the kRPC for KSA release archive into experimental/ksa/bin/release:
 #
-#   kRPC-KSA-<version>.zip   the kRPC.KSA mod folder, the client stubs, the example scripts,
+#   kRPC-KSA-<version>.zip   the kRPC mod folder, the client stubs, the example scripts,
 #                            the licenses and a readme
 #   SHA256SUMS
 set -euo pipefail
@@ -20,11 +20,11 @@ mkdir -p "$staging"
 
 # The mod folder sits at the top of the archive, where Borea finds the one folder holding a
 # mod.toml. Borea installs only that folder, so it carries the licenses too
-cp -r "$here/bin/kRPC.KSA" "$staging/kRPC.KSA"
+cp -r "$here/bin/kRPC" "$staging/kRPC"
 cp -r "$here/bin/stubs" "$staging/stubs"
 mkdir -p "$staging/examples"
 cp "$here"/examples/*.py "$staging/examples/"
-for dir in "$staging" "$staging/kRPC.KSA"; do
+for dir in "$staging" "$staging/kRPC"; do
   cp "$here/release/LICENSE" "$here/release/LICENSE.System.IO.Ports" \
     "$repo/COPYING" "$repo/COPYING.LESSER" "$dir/"
   cp "$repo/tools/build/protobuf/LICENSE" "$dir/LICENSE.Google.Protobuf"

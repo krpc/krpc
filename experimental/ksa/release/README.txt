@@ -9,7 +9,7 @@ between releases.
 Requires Kitten Space Agency @KSA_VERSION@ and the StarMap @STARMAP_VERSION@ code mod
 loader.
 
-    kRPC.KSA/   the mod
+    kRPC/   the mod
     stubs/      client stubs for C#, C++, C and Java, and the service definitions
     examples/   example Python scripts
 
@@ -20,13 +20,13 @@ INSTALL
 1. Install StarMap @STARMAP_VERSION@:
    https://github.com/StarMapLoader/StarMap/releases
 
-2. Copy the kRPC.KSA folder into the KSA mods folder, so that you have
-       <Documents>/My Games/Kitten Space Agency/mods/kRPC.KSA/KRPC.KSA.dll
+2. Copy the kRPC folder into the KSA mods folder, so that you have
+       <Documents>/My Games/Kitten Space Agency/mods/kRPC/KRPC.KSA.dll
 
 3. Enable the mod in <Documents>/My Games/Kitten Space Agency/manifest.toml:
 
        [[mods]]
-       id = "kRPC.KSA"
+       id = "kRPC"
        enabled = true
 
 4. Launch the game through StarMap.
@@ -34,9 +34,12 @@ INSTALL
 The Borea mod manager can do all four steps: it installs StarMap and the mod, and
 launches the game through StarMap.
 
+Upgrading from 0.1.0, where the mod was named kRPC.KSA: delete the mods/kRPC.KSA folder,
+and change its manifest.toml entry to id = "kRPC".
+
 The server starts when the game has loaded its mods. By default it listens on 127.0.0.1,
 ports 50000 and 50001, and accepts every connection. The settings are in
-kRPC.KSA/settings.toml.
+kRPC/settings.toml.
 
 
 CONNECT

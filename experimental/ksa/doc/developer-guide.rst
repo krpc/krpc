@@ -14,7 +14,7 @@ Build the mod and the client stubs:
 
 .. code-block:: bash
 
-   experimental/ksa/build.sh            # build into bin/kRPC.KSA
+   experimental/ksa/build.sh            # build into bin/kRPC
    experimental/ksa/build.sh --install  # also install it into the KSA mods folder
 
 The build uses the kRPC @KRPC_VERSION@ release from PyPI. Its ``krpctools`` package provides
@@ -54,6 +54,6 @@ Releasing
 ---------
 
 ``release.sh`` builds the release archive into ``bin/release``, with its checksum. The archive
-holds the ``kRPC.KSA`` mod folder, the client stubs, the example scripts, a readme and the
+holds the ``kRPC`` mod folder, the client stubs, the example scripts, a readme and the
 licenses. The mod folder sits at the top, with its own copy of the licenses, so that the Borea
 mod manager installs it.
