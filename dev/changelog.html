@@ -517,6 +517,7 @@
 <h3>C# client<a class="headerlink" href="#c-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix the links in service documentation, which named no type or member (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
+<li><p>Fix a nullable enum return value, which threw <code class="docutils literal notranslate"><span class="pre">InvalidCastException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1194">#1194</a>)</p></li>
 <li><p>Exceptions</p>
 <ul>
 <li><p><span class="changelog-marker breaking">Breaking</span> Remove the trailing space after <code class="docutils literal notranslate"><span class="pre">Server</span> <span class="pre">stack</span> <span class="pre">trace:</span></code> in an exception’s message, and separate its lines with <code class="docutils literal notranslate"><span class="pre">\n</span></code> on every platform (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1172">#1172</a>)</p></li>
@@ -528,6 +529,7 @@
 <h3>C++ client<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix the documentation of the services that Doxygen warns about, such as parameter names that do not match (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
+<li><p>Throw <code class="docutils literal notranslate"><span class="pre">EncodingError</span></code> when decoding a tuple of the wrong length, which crashed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1194">#1194</a>)</p></li>
 <li><p>Exceptions</p>
 <ul>
 <li><p><span class="changelog-marker breaking">Breaking</span> Derive the <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> exceptions with a standard equivalent from it, e.g. <code class="docutils literal notranslate"><span class="pre">ArgumentException</span></code> from <code class="docutils literal notranslate"><span class="pre">std::invalid_argument</span></code>, in place of <code class="docutils literal notranslate"><span class="pre">RPCError</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1172">#1172</a>)</p></li>
@@ -572,6 +574,7 @@
 <li><p>Link each <code class="docutils literal notranslate"><span class="pre">&lt;see</span> <span class="pre">cref&gt;</span></code> in generated client documentation to the member it names, and warn about one <code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span></code> cannot resolve (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
 <li><p>Allow a <code class="docutils literal notranslate"><span class="pre">&lt;see</span> <span class="pre">cref&gt;</span></code> to a service in <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
 <li><p>Fix the <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> link to a C-nano property that has only a setter (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
+<li><p>Fix bytes default arguments in generated C# and C++ code and in the Lua documentation (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1194">#1194</a>)</p></li>
 </ul>
 </section>
 </section>

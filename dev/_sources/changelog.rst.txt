@@ -50,6 +50,7 @@ C# client
 ^^^^^^^^^
 
 * Fix the links in service documentation, which named no type or member (:issue:`1185`)
+* Fix a nullable enum return value, which threw ``InvalidCastException`` (:issue:`1194`)
 * Exceptions
 
   * :breaking:`Breaking` Remove the trailing space after ``Server stack trace:`` in an exception's message, and separate its lines with ``\n`` on every platform (:issue:`1172`)
@@ -60,6 +61,7 @@ C++ client
 ^^^^^^^^^^
 
 * Fix the documentation of the services that Doxygen warns about, such as parameter names that do not match (:issue:`1185`)
+* Throw ``EncodingError`` when decoding a tuple of the wrong length, which crashed (:issue:`1194`)
 * Exceptions
 
   * :breaking:`Breaking` Derive the ``KRPC`` exceptions with a standard equivalent from it, e.g. ``ArgumentException`` from ``std::invalid_argument``, in place of ``RPCError`` (:issue:`1172`)
@@ -101,6 +103,7 @@ krpctools
 * Link each ``<see cref>`` in generated client documentation to the member it names, and warn about one ``krpc-clientgen`` cannot resolve (:issue:`1185`)
 * Allow a ``<see cref>`` to a service in ``krpc-docgen`` (:issue:`1185`)
 * Fix the ``krpc-docgen`` link to a C-nano property that has only a setter (:issue:`1185`)
+* Fix bytes default arguments in generated C# and C++ code and in the Lua documentation (:issue:`1194`)
 
 
 v0.7.0
