@@ -194,14 +194,7 @@ namespace KRPC.KSA.Services
                 throw new InvalidOperationException ("The vehicle is not the active vehicle");
             var preVehicles = new HashSet<global::KSA.Vehicle> (Vehicles.All);
             v.Parts.SequenceList.ActivateNextSequence (v);
-            return CollectSeparated (preVehicles, SequenceSettleUpdates);
-        }
-
-        static IList<Vehicle> CollectSeparated (HashSet<global::KSA.Vehicle> preVehicles, int updates)
-        {
-            if (updates > 0)
-                throw new YieldException<Func<IList<Vehicle>>> (() => CollectSeparated (preVehicles, updates - 1));
-            return Vehicles.All.Where (x => !preVehicles.Contains (x)).Select (x => new Vehicle (x)).ToList ();
+            return Vehicles.Separated (preVehicles, SequenceSettleUpdates);
         }
 
         // Opposing inputs cancel in the game, so both held reads as 0

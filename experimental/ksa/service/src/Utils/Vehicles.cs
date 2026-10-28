@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using KRPC.Service;
 using KSA;
 
 namespace KRPC.KSA.Utils
@@ -28,6 +30,29 @@ namespace KRPC.KSA.Utils
                 }
                 return result;
             }
+        }
+
+        /// <summary>
+        /// Return the vehicles that are not in <paramref name="before"/>, once the given
+        /// number of server updates have passed.
+        /// </summary>
+        public static IList<Services.Vehicle> Separated (HashSet<Vehicle> before, int updates)
+        {
+            if (updates > 0)
+                throw new YieldException<Func<IList<Services.Vehicle>>> (() => Separated (before, updates - 1));
+            return All.Where (x => !before.Contains (x)).Select (x => new Services.Vehicle (x)).ToList ();
+        }
+
+        /// <summary>
+        /// Return the vehicles that are not in <paramref name="before"/>, once the condition
+        /// holds and a new vehicle exists, or after the given number of server updates.
+        /// </summary>
+        public static IList<Services.Vehicle> SeparatedWhen (Func<bool> condition, HashSet<Vehicle> before, int updates = 10)
+        {
+            var separated = All.Where (x => !before.Contains (x)).Select (x => new Services.Vehicle (x)).ToList ();
+            if (updates > 0 && (!condition () || separated.Count == 0))
+                throw new YieldException<Func<IList<Services.Vehicle>>> (() => SeparatedWhen (condition, before, updates - 1));
+            return separated;
         }
 
         /// <summary>
