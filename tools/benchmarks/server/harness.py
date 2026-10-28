@@ -42,6 +42,9 @@ RESULTS = []
 
 SUITE = "server, in-game"
 
+# The number of elements in each collection a stream case returns
+STREAM_SIZE = 100
+
 
 class BenchmarkTestCase(krpctest.TestCase):
     """A krpctest.TestCase that can measure server-side cases.
@@ -69,6 +72,30 @@ class BenchmarkTestCase(krpctest.TestCase):
         return self._measure(
             None, lambda case, count: benchmark.call(call, count), name
         )
+
+    def measure_stream(self, name, call):
+        """Measure what the server pays to update a stream of a remote procedure call whose
+        value holds between updates. ``call`` is built as for ``measure_call``."""
+        benchmark = self.connect().benchmark  # pyright: ignore[reportAttributeAccessIssue]
+        return self._measure(
+            None, lambda case, count: benchmark.stream_update(call, count), name
+        )
+
+    def measure_streams(self, part, parts):
+        """Measure a stream update of a part getter, of a vessel's part list, and of the
+        Benchmark service's collections. The set and dictionary are new on each call and
+        alternate the order they are built in, so only their contents hold."""
+        conn = self.connect()
+        benchmark = conn.benchmark  # pyright: ignore[reportAttributeAccessIssue]
+        self.measure_stream("stream of part.mass", conn.get_call(getattr, part, "mass"))
+        self.measure_stream(
+            "stream of vessel.parts.all", conn.get_call(getattr, parts, "all")
+        )
+        for name in ("list", "set", "dictionary"):
+            self.measure_stream(
+                "stream of a %s of %d" % (name, STREAM_SIZE),
+                conn.get_call(getattr(benchmark, "new_" + name), STREAM_SIZE),
+            )
 
     def measure_part(self, part, case):
         """Measure a case from the part registry against the given part."""
