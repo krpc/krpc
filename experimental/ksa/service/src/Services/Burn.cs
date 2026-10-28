@@ -86,6 +86,14 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The time until <see cref="UT"/>, in seconds. Negative once that time has passed.
+        /// </summary>
+        [KRPCProperty]
+        public double TimeTo {
+            get { return (InternalBurn.Time - Universe.GetElapsedTime ()).Seconds (); }
+        }
+
+        /// <summary>
         /// The change in velocity in the prograde direction, in meters per second.
         /// </summary>
         [KRPCProperty]
@@ -173,19 +181,61 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The reference frame with its origin at the position of the burn, and axes along
+        /// the orbit at the time of the burn. The x axis points prograde, the y axis along the
+        /// orbit normal and the z axis radially outward, perpendicular to the x axis. The
+        /// frame does not move or rotate relative to the body being orbited.
+        /// </summary>
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame {
+            get { return new ReferenceFrame (this); }
+        }
+
+        /// <summary>
+        /// The position of the burn, in meters, relative to where the body being orbited is
+        /// now.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the position.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> Position (ReferenceFrame referenceFrame)
+        {
+            return Vectors.ToTuple (referenceFrame.PositionFromEcl (PositionEcl));
+        }
+
+        /// <summary>
         /// The direction of the change in velocity at the time of the burn, as a unit vector.
         /// </summary>
         /// <param name="referenceFrame">The reference frame of the direction.</param>
         [KRPCMethod]
         public Tuple<double, double, double> Direction (ReferenceFrame referenceFrame)
         {
-            var b = InternalBurn;
-            var orbit = b.Patch.Orbit;
-            var state = orbit.GetStateVectorsAt (b.Time);
-            var vlf2Cci = VehicleReferenceFrameEx.GetVlf2Cci (state.PositionCci, state.VelocityCci)
-                ?? throw new InvalidOperationException ("The burn has no orbital direction");
-            var directionCci = b.DeltaVVlf.NormalizeOrZero ().Transform (vlf2Cci);
-            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (directionCci.Transform (orbit.Parent.GetCci2Cce ())));
+            var directionVlf = InternalBurn.DeltaVVlf.NormalizeOrZero ();
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (directionVlf.Transform (Vlf2Ecl)));
+        }
+
+        internal IParentBody Body {
+            get { return InternalBurn.Patch.Orbit.Parent; }
+        }
+
+        internal double3 PositionEcl {
+            get {
+                var b = InternalBurn;
+                var orbit = b.Patch.Orbit;
+                var positionCci = orbit.GetStateVectorsAt (b.Time).PositionCci;
+                return orbit.Parent.GetPositionEcl () + positionCci.Transform (orbit.Parent.GetCci2Cce ());
+            }
+        }
+
+        // The prograde, normal and radial axes of the orbit at the time of the burn
+        internal doubleQuat Vlf2Ecl {
+            get {
+                var b = InternalBurn;
+                var orbit = b.Patch.Orbit;
+                var state = orbit.GetStateVectorsAt (b.Time);
+                var vlf2Cci = VehicleReferenceFrameEx.GetVlf2Cci (state.PositionCci, state.VelocityCci)
+                    ?? throw new InvalidOperationException ("The burn has no orbital direction");
+                return doubleQuat.Concatenate (vlf2Cci, orbit.Parent.GetCci2Cce ());
+            }
         }
 
         /// <summary>

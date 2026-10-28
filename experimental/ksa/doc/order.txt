@@ -206,6 +206,7 @@ KSA.AutoPilotMode.SurfacePrograde
 KSA.AutoPilotMode.SurfaceRetrograde
 KSA.AutoPilotMode.Other
 KSA.Burn.UT
+KSA.Burn.TimeTo
 KSA.Burn.Prograde
 KSA.Burn.Normal
 KSA.Burn.Radial
@@ -214,6 +215,8 @@ KSA.Burn.RemainingDeltaV
 KSA.Burn.IgnitionTime
 KSA.Burn.BurnTime
 KSA.Burn.Orbit
+KSA.Burn.ReferenceFrame
+KSA.Burn.Position
 KSA.Burn.Direction
 KSA.Burn.Remove
 KSA.Part.Name

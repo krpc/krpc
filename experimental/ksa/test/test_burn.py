@@ -64,6 +64,43 @@ class TestBurn(ksatest.TestCase):
         burn.prograde = 10
         self.assertAlmostEqual(0, burn.direction(frame)[1], delta=1e-6)
 
+    def test_time_to(self):
+        burn = self.vehicle.add_burn(self.ksa.ut + 900, prograde=10)
+        self.assertAlmostEqual(burn.ut - self.ksa.ut, burn.time_to, delta=1)
+
+    def test_position(self):
+        ut = self.ksa.ut + 900
+        burn = self.vehicle.add_burn(ut, prograde=10)
+        frame = self.ksa.bodies["Earth"].non_rotating_reference_frame
+        self.assertVectorAlmostEqual(
+            self.vehicle.orbit.position_at(ut, frame), burn.position(frame), 1
+        )
+        self.assertVectorAlmostEqual(
+            (0, 0, 0), burn.position(burn.reference_frame), 1e-3
+        )
+
+    def test_reference_frame(self):
+        burn = self.vehicle.add_burn(
+            self.ksa.ut + 900, prograde=10, normal=20, radial=-5
+        )
+        direction = burn.direction(burn.reference_frame)
+        self.assertVectorAlmostEqual(
+            tuple(x / burn.delta_v for x in (10, 20, -5)), direction, 1e-6
+        )
+        # The frame is fixed relative to the body
+        velocity = self.ksa.transform_velocity(
+            (0, 0, 0),
+            (0, 0, 0),
+            burn.reference_frame,
+            self.ksa.bodies["Earth"].non_rotating_reference_frame,
+        )
+        self.assertVectorAlmostEqual((0, 0, 0), velocity, 1e-6)
+
+    def assertVectorAlmostEqual(self, expected, actual, delta):
+        self.assertEqual(len(expected), len(actual))
+        for x, y in zip(expected, actual):
+            self.assertAlmostEqual(x, y, delta=delta)
+
     def test_invalid_burns(self):
         with self.assertRaises(ValueError):
             self.vehicle.add_burn(self.ksa.ut - 10, prograde=10)

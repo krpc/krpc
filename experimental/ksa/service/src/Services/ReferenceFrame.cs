@@ -28,6 +28,7 @@ namespace KRPC.KSA.Services
             Vehicle,
             VehicleSurface,
             VehicleOrbital,
+            Burn,
             Relative,
             Hybrid
         }
@@ -35,6 +36,7 @@ namespace KRPC.KSA.Services
         readonly Kind kind;
         readonly IParentBody body;
         readonly global::KSA.Vehicle vehicle;
+        readonly Burn burn;
         // A relative frame's parent and offsets, in the parent frame
         readonly ReferenceFrame parent;
         readonly double3 position;
@@ -57,6 +59,12 @@ namespace KRPC.KSA.Services
         {
             this.kind = kind;
             this.vehicle = vehicle;
+        }
+
+        internal ReferenceFrame (Burn burn)
+        {
+            kind = Kind.Burn;
+            this.burn = burn;
         }
 
         ReferenceFrame (ReferenceFrame parent, double3 position, doubleQuat rotation, double3 velocity, double3 angularVelocity)
@@ -149,6 +157,7 @@ namespace KRPC.KSA.Services
         {
             return !ReferenceEquals (other, null) && kind == other.kind &&
                 ReferenceEquals (body, other.body) && ReferenceEquals (vehicle, other.vehicle) &&
+                Equals (burn, other.burn) &&
                 Equals (parent, other.parent) && position == other.position &&
                 rotation == other.rotation && velocity == other.velocity &&
                 angularVelocity == other.angularVelocity &&
@@ -166,6 +175,7 @@ namespace KRPC.KSA.Services
             hash.Add (kind);
             hash.Add (body);
             hash.Add (vehicle);
+            hash.Add (burn);
             hash.Add (parent);
             hash.Add (position);
             hash.Add (rotation);
@@ -192,6 +202,8 @@ namespace KRPC.KSA.Services
                     return parent.PositionToEcl (position);
                 case Kind.Hybrid:
                     return positionFrame.OriginEcl;
+                case Kind.Burn:
+                    return burn.PositionEcl;
                 default:
                     return body != null ? body.GetPositionEcl () : LiveVehicle.GetPositionEcl ();
                 }
@@ -205,6 +217,8 @@ namespace KRPC.KSA.Services
                     return parent.VelocityToEcl (parent.PositionToEcl (position), velocity);
                 case Kind.Hybrid:
                     return velocityFrame.VelocityEcl;
+                case Kind.Burn:
+                    return burn.Body.GetVelocityEcl ();
                 default:
                     return body != null ? body.GetVelocityEcl () : LiveVehicle.GetVelocityEcl ();
                 }
@@ -218,6 +232,8 @@ namespace KRPC.KSA.Services
                     return parent.RotationToEcl (rotation);
                 case Kind.Hybrid:
                     return rotationFrame.Rotation2Ecl;
+                case Kind.Burn:
+                    return burn.Vlf2Ecl;
                 case Kind.Body:
                     return body.GetCcf2Cce ();
                 case Kind.BodyNonRotating:
@@ -247,6 +263,8 @@ namespace KRPC.KSA.Services
                     return parent.AngularVelocityEcl + parent.DirectionToEcl (angularVelocity);
                 case Kind.Hybrid:
                     return angularVelocityFrame.AngularVelocityEcl;
+                case Kind.Burn:
+                    return double3.Zero;
                 case Kind.Body:
                     return body.GetAngularVelocityCce ();
                 case Kind.BodyNonRotating:
