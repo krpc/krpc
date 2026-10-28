@@ -31,6 +31,12 @@ KSA.Vehicle.PeakDynamicPressure
 KSA.Vehicle.MaxDynamicPressure
 KSA.Vehicle.Parts
 KSA.Vehicle.RootPart
+KSA.Vehicle.PartsWithName
+KSA.Vehicle.Engines
+KSA.Vehicle.RCS
+KSA.Vehicle.Decouplers
+KSA.Vehicle.Parachutes
+KSA.Vehicle.DockingPorts
 KSA.Vehicle.Resources
 KSA.Vehicle.DeltaV
 KSA.Vehicle.Sequences
@@ -229,6 +235,7 @@ KSA.Part.Mass
 KSA.Part.DryMass
 KSA.Part.Resources
 KSA.Part.Position
+KSA.Part.Velocity
 KSA.Part.Rotation
 KSA.Part.Engine
 KSA.Part.RCS

@@ -137,7 +137,7 @@ namespace KRPC.KSA.Services
         /// </summary>
         [KRPCProperty]
         public double Thrust {
-            get { return Engines.Performance (InternalVehicle, fullThrottle: false).thrust; }
+            get { return Utils.Engines.Performance (InternalVehicle, fullThrottle: false).thrust; }
         }
 
         /// <summary>
@@ -147,8 +147,8 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public double SpecificImpulse {
             get {
-                var (thrust, massFlowRate) = Engines.Performance (InternalVehicle, fullThrottle: true);
-                return massFlowRate > 0 ? thrust / (massFlowRate * Engines.G0) : 0;
+                var (thrust, massFlowRate) = Utils.Engines.Performance (InternalVehicle, fullThrottle: true);
+                return massFlowRate > 0 ? thrust / (massFlowRate * Utils.Engines.G0) : 0;
             }
         }
 
@@ -158,6 +158,56 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public IList<Part> Parts {
             get { return InternalVehicle.Parts.Parts.ToArray ().Select (part => new Part (part)).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's parts with the given template id. See <see cref="Part.Name"/>.
+        /// </summary>
+        /// <param name="name">The template id.</param>
+        [KRPCMethod]
+        public IList<Part> PartsWithName (string name)
+        {
+            return Parts.Where (part => part.Name == name).ToList ();
+        }
+
+        /// <summary>
+        /// The vehicle's engines.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Engine> Engines {
+            get { return Parts.Select (part => part.Engine).Where (engine => engine != null).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's RCS thrusters.
+        /// </summary>
+        [KRPCProperty]
+        public IList<RCS> RCS {
+            get { return Parts.Select (part => part.RCS).Where (rcs => rcs != null).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's decouplers.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Decoupler> Decouplers {
+            get { return Parts.Select (part => part.Decoupler).Where (decoupler => decoupler != null).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's parachutes.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Parachute> Parachutes {
+            get { return Parts.Select (part => part.Parachute).Where (parachute => parachute != null).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's docking ports.
+        /// </summary>
+        [KRPCProperty]
+        public IList<DockingPort> DockingPorts {
+            get { return Parts.Select (part => part.DockingPort).Where (port => port != null).ToList (); }
         }
 
         /// <summary>
