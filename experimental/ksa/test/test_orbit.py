@@ -135,6 +135,86 @@ class TestOrbit(ksatest.TestCase):
         self.assertAlmostEqual(365.25, earth.period / 86400, delta=1)
         self.assertIsNone(self.ksa.bodies["Sol"].orbit)
 
+    def test_shape(self):
+        a = self.orbit.semi_major_axis
+        e = self.orbit.eccentricity
+        self.assertAlmostEqual(
+            a * math.sqrt(1 - e * e), self.orbit.semi_minor_axis, delta=1
+        )
+        self.assertAlmostEqual(
+            2 * math.pi, self.orbit.mean_motion * self.orbit.period, places=6
+        )
+
+    def test_specific_energy(self):
+        # Kinetic plus potential energy per unit mass
+        vehicle = self.find_vehicle("Gemini7")
+        frame = self.earth.non_rotating_reference_frame
+        r = math.sqrt(sum(x * x for x in vehicle.position(frame)))
+        v = math.sqrt(sum(x * x for x in vehicle.velocity(frame)))
+        mu = self.earth.gravitational_parameter
+        energy = v * v / 2 - mu / r
+        self.assertAlmostEqual(
+            energy, self.orbit.specific_energy, delta=abs(energy) * 1e-5
+        )
+        self.assertLess(self.orbit.specific_energy, 0)
+
+    def test_eccentric_anomaly(self):
+        e = self.orbit.eccentricity
+        eccentric = self.orbit.eccentric_anomaly
+        # Kepler's equation
+        self.assertAlmostEqual(
+            0,
+            (eccentric - e * math.sin(eccentric) - self.orbit.mean_anomaly + math.pi)
+            % (2 * math.pi)
+            - math.pi,
+            places=4,
+        )
+
+    def test_relative_inclination(self):
+        luna = self.ksa.bodies["Luna"].orbit
+        self.assertAlmostEqual(0, self.orbit.relative_inclination(self.orbit), places=6)
+        inclination = self.orbit.relative_inclination(luna)
+        self.assertGreater(inclination, 0)
+        self.assertLess(inclination, math.pi)
+        self.assertAlmostEqual(
+            inclination, luna.relative_inclination(self.orbit), places=6
+        )
+
+    def test_nodes(self):
+        luna = self.ksa.bodies["Luna"].orbit
+        ascending = self.orbit.true_anomaly_at_an(luna)
+        descending = self.orbit.true_anomaly_at_dn(luna)
+        self.assertAlmostEqual(
+            math.pi,
+            (descending - ascending) % (2 * math.pi),
+            delta=self.orbit.eccentricity * 4,
+        )
+        with self.assertRaises(ValueError):
+            self.orbit.true_anomaly_at_an(self.ksa.bodies["Earth"].orbit)
+
+    def test_closest_approach(self):
+        vehicle = self.find_vehicle("Gemini7")
+        self.assertTrue(math.isnan(self.orbit.time_of_closest_approach))
+        self.assertTrue(math.isnan(self.orbit.distance_at_closest_approach))
+        rocket = self.find_vehicle("Rocket")
+        try:
+            vehicle.target_vehicle = rocket
+            ksatest.wait_until(
+                lambda: not math.isnan(self.orbit.time_of_closest_approach), timeout=5
+            )
+            ut = self.orbit.time_of_closest_approach
+            distance = self.orbit.distance_at_closest_approach
+            self.assertGreater(ut, self.ksa.ut)
+            self.assertLess(ut, self.ksa.ut + 2 * self.orbit.period)
+            self.assertGreater(distance, self.orbit.periapsis_altitude - 20e3)
+            # The positions at that time are that far apart
+            frame = self.earth.non_rotating_reference_frame
+            a = self.orbit.position_at(ut, frame)
+            b = rocket.orbit.position_at(ut, frame)
+            self.assertAlmostEqual(distance, math.dist(a, b), delta=distance * 0.01)
+        finally:
+            vehicle.target_vehicle = None
+
 
 class TestPredictedOrbit(ksatest.TestCase):
     @classmethod
@@ -158,6 +238,8 @@ class TestPredictedOrbit(ksatest.TestCase):
         self.assertGreater(orbit.eccentricity, 1)
         self.assertLess(orbit.semi_major_axis, 0)
         self.assertTrue(math.isnan(orbit.period))
+        self.assertTrue(math.isnan(orbit.semi_minor_axis))
+        self.assertGreater(orbit.specific_energy, 0)
         self.assertAlmostEqual(burn.ut, orbit.start_ut, delta=burn.burn_time)
         self.assertGreater(orbit.time_to_soi_change, 0)
         self.assertAlmostEqual(
