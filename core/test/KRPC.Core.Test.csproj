@@ -103,6 +103,7 @@
     <Compile Include="Service\MessageAssert.cs" />
     <Compile Include="Service\MortalObject.cs" />
     <Compile Include="Service\ObjectStoreTest.cs" />
+    <Compile Include="Service\ParameterSignatureTest.cs" />
     <Compile Include="Service\ProcedureHandlerTest.cs" />
     <Compile Include="Service\ProcedureParameterTest.cs" />
     <Compile Include="Service\ScannerTest.cs" />

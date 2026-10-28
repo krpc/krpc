@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace KRPC.Service.Scanner
@@ -43,9 +45,44 @@ namespace KRPC.Service.Scanner
             HasDefaultValue = parameter.HasDefaultValue;
             if (HasDefaultValue)
                 DefaultValue = parameter.DefaultValue;
+            var location = "parameter " + Name + " of " + fullProcedureName;
             Spec = TypeSpec.Create (
-                parameter.Type, parameter.Nullable, parameter.NullablePaths,
-                "parameter " + Name + " of " + fullProcedureName);
+                parameter.Type, parameter.Nullable, parameter.NullablePaths, location);
+            if (HasDefaultValue)
+                CheckEnumerationValues (DefaultValue, Spec, location);
+        }
+
+        // A default value holds only values its enumerations declare, as a client has no
+        // value of an enumeration for any other number
+        static void CheckEnumerationValues (object value, TypeSpec spec, string location)
+        {
+            if (value == null)
+                return;
+            switch (spec.Kind) {
+            case TypeKind.Enum:
+                if (!Enum.IsDefined (spec.Type, Enum.ToObject (spec.Type, value)))
+                    throw new ServiceException (
+                        "The default value of " + location + " holds " +
+                        Convert.ToInt64 (value, CultureInfo.InvariantCulture).ToString (CultureInfo.InvariantCulture) +
+                        ", which is not a value of the enumeration " + spec.Type.Name);
+                break;
+            case TypeKind.List:
+            case TypeKind.Set:
+                foreach (var item in (IEnumerable)value)
+                    CheckEnumerationValues (item, spec.Types [0], location);
+                break;
+            case TypeKind.Dictionary:
+                foreach (DictionaryEntry entry in (IDictionary)value) {
+                    CheckEnumerationValues (entry.Key, spec.Types [0], location);
+                    CheckEnumerationValues (entry.Value, spec.Types [1], location);
+                }
+                break;
+            case TypeKind.Tuple:
+                for (int i = 0; i < spec.Types.Count; i++)
+                    CheckEnumerationValues (value.GetType ().GetProperty ("Item" + (i + 1)).GetValue (value, null),
+                        spec.Types [i], location);
+                break;
+            }
         }
 
         /// <summary>

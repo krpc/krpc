@@ -1,5 +1,7 @@
 ## [v0.8.0] - unreleased
 
+- **Breaking:** Refuse a service whose parameter defaults to a value its enumeration does not
+  declare (#1192)
 - Exceptions
   - Report the .NET exception each kRPC exception stands for, as `mapped_type` in
     `KRPC.Exception` (#1172)
