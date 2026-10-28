@@ -247,7 +247,7 @@ namespace KRPC.Test.Server.ProtocolBuffers
 
         [TestCase (new string[] { }, new uint[]{ }, "")]
         [TestCase (new [] { "" }, new uint[]{ 0 }, "0a060a0100120100")]
-        [TestCase (new [] { "foo", "bar", "baz" }, new []{ 42u, 365u, 3u }, "0a090a0403666f6f12012a0a0a0a04036261721202ed020a090a040362617a120103")]
+        [TestCase (new [] { "foo", "bar", "baz" }, new []{ 42u, 365u, 3u }, "0a0a0a04036261721202ed020a090a040362617a1201030a090a0403666f6f12012a")]
         public void DictionaryCollection (IList<string> keys, IList<uint> values, string data)
         {
             IDictionary<string,uint> value = new Dictionary<string,uint> ();
@@ -256,7 +256,16 @@ namespace KRPC.Test.Server.ProtocolBuffers
             var encodeResult = Encode (value);
             Assert.AreEqual (data, encodeResult.ToHexString ());
             var decodeResult = (IDictionary<string,uint>)Encoder.Decode (data.ToByteString (), TypeSpec.Create (typeof(IDictionary<string,uint>)));
-            CollectionAssert.AreEqual (value, decodeResult);
+            CollectionAssert.AreEquivalent (value, decodeResult);
+        }
+
+        [Test]
+        public void DictionariesWithTheSameEntriesEncodeTheSame ()
+        {
+            var x = new Dictionary<string,uint> { { "a", 1 }, { "b", 2 }, { "c", 3 } };
+            var y = new Dictionary<string,uint> { { "c", 3 }, { "a", 1 }, { "b", 2 } };
+            CollectionAssert.AreNotEqual (new List<string> (x.Keys), new List<string> (y.Keys));
+            Assert.AreEqual (Encode (x), Encode (y));
         }
 
         [TestCase (new uint[] { }, "")]
@@ -269,6 +278,29 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (data, encodeResult.ToHexString ());
             var decodeResult = (ISet<uint>)Encoder.Decode (data.ToByteString (), TypeSpec.Create (typeof(HashSet<uint>)));
             CollectionAssert.AreEqual (value, decodeResult);
+        }
+
+        [Test]
+        public void SetsWithTheSameElementsEncodeTheSame ()
+        {
+            var x = new HashSet<string> { "a", "b", "c" };
+            var y = new HashSet<string> { "c", "a", "b" };
+            CollectionAssert.AreNotEqual (x, y);
+            Assert.AreEqual (Encode (x), Encode (y));
+        }
+
+        [Test]
+        public void NestedSetsWithTheSameElementsEncodeTheSame ()
+        {
+            var x = new Dictionary<string,HashSet<int>> {
+                { "a", new HashSet<int> { 1, 2 } },
+                { "b", new HashSet<int> { 3, 4 } }
+            };
+            var y = new Dictionary<string,HashSet<int>> {
+                { "b", new HashSet<int> { 4, 3 } },
+                { "a", new HashSet<int> { 2, 1 } }
+            };
+            Assert.AreEqual (Encode (x), Encode (y));
         }
 
         [Test]
