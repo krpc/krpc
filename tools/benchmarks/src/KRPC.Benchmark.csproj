@@ -33,6 +33,7 @@
     </Compile>
     <Compile Include="Benchmark.cs" />
     <Compile Include="Dispatch.cs" />
+    <Compile Include="StreamUpdates.cs" />
     <Compile Include="Timer.cs" />
   </ItemGroup>
 </Project>

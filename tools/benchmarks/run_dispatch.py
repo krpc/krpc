@@ -1,8 +1,8 @@
 """Server dispatch benchmarks, game-less: `bazel run //tools/benchmarks:testserver`.
 
 What the server pays per remote procedure call - argument decode, dispatch, the procedure
-itself, result encode - measured against TestServer, which starts in a second and needs no
-game. This is the same measurement the in-game suite takes through TestingTools, so a change
+itself, result encode - and per stream update, measured against TestServer, which starts in a
+second and needs no game. This is the same measurement the in-game suite takes through TestingTools, so a change
 to the server can be prototyped here and confirmed there.
 
 The procedures measured are TestService's, chosen to isolate one part of the call path each,
@@ -28,6 +28,10 @@ def main():
         testserver.warm_up(conn)
         environment = testserver.environment(conn)
         results = [measure(conn, name, call, note) for name, call, note in cases(conn)]
+        results += [
+            measure_stream(conn, name, call, note)
+            for name, call, note in stream_cases(conn)
+        ]
     runner.report(results, SUITE, environment, args.json)
     return 0
 
@@ -66,6 +70,49 @@ def cases(conn):
             "the store on both sides of the call: one lookup in, one dedup out",
         ),
     ]
+
+
+def stream_cases(conn):
+    """The streams to measure, each with a value that holds between updates. The collections
+    are new on each call, and the set and dictionary alternate the order they are built in."""
+    benchmark = conn.benchmark
+    return [
+        (
+            "stream of a string",
+            conn.get_call(conn.test_service.float_to_string, 3.14159),
+            "the floor: one value, unchanged",
+        ),
+        (
+            "stream of a list",
+            conn.get_call(benchmark.new_list, STREAM_SIZE),
+            "%d strings" % STREAM_SIZE,
+        ),
+        (
+            "stream of a set",
+            conn.get_call(benchmark.new_set, STREAM_SIZE),
+            "%d integers, in alternating order" % STREAM_SIZE,
+        ),
+        (
+            "stream of a dictionary",
+            conn.get_call(benchmark.new_dictionary, STREAM_SIZE),
+            "%d entries, in alternating order" % STREAM_SIZE,
+        ),
+    ]
+
+
+# The number of elements in each collection a stream case returns
+STREAM_SIZE = 100
+
+
+def measure_stream(conn, name, call, note=""):
+    """Update a stream of one call in a loop server side and record what an update cost."""
+    return chunking.result(
+        SUITE,
+        None,
+        name,
+        chunking.chunks(lambda count: conn.benchmark.stream_update(call, count)),
+        note=note,
+    )
 
 
 def measure(conn, name, call, note=""):

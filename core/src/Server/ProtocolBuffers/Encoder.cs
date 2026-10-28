@@ -202,15 +202,18 @@ namespace KRPC.Server.ProtocolBuffers
             var set = (IEnumerable)value;
             var type = spec.Type;
             var itemSpec = spec.Types [0];
+            var items = new System.Collections.Generic.List<ByteString> ();
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
                 foreach (var item in set) {
                     if (item == null)
                         throw NullAt ("An element", type, "a set element cannot be null");
-                    encodedSet.Items.Add (
-                        EncodeObject (item, itemSpec, internalBuffer, internalStream));
+                    items.Add (EncodeObject (item, itemSpec, internalBuffer, internalStream));
                 }
             }
+            // Sorted, so sets with the same elements encode the same
+            items.Sort (EncodingOrder.Instance);
+            encodedSet.Items.Add (items);
             encodedSet.WriteTo (stream);
         }
 
@@ -221,6 +224,7 @@ namespace KRPC.Server.ProtocolBuffers
             var keySpec = spec.Types [0];
             var valueSpec = spec.Types [1];
             var nullable = valueSpec.Nullable;
+            var entries = new System.Collections.Generic.List<Schema.KRPC.DictionaryEntry> ();
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
                 foreach (DictionaryEntry entry in (IDictionary) value) {
@@ -231,10 +235,35 @@ namespace KRPC.Server.ProtocolBuffers
                     var encodedEntry = new Schema.KRPC.DictionaryEntry ();
                     encodedEntry.Key = EncodeObject (entry.Key, keySpec, internalBuffer, internalStream);
                     encodedEntry.Value = EncodeItem (entry.Value, valueSpec, internalBuffer, internalStream);
-                    encodedDictionary.Entries.Add (encodedEntry);
+                    entries.Add (encodedEntry);
                 }
             }
+            // Sorted by key, so dictionaries with the same entries encode the same
+            entries.Sort (CompareKeys);
+            encodedDictionary.Entries.Add (entries);
             encodedDictionary.WriteTo (stream);
+        }
+
+        static readonly Comparison<Schema.KRPC.DictionaryEntry> CompareKeys =
+            (x, y) => EncodingOrder.Instance.Compare (x.Key, y.Key);
+
+        /// <summary>
+        /// Orders encodings by their bytes as unsigned values, with an encoding that is a prefix
+        /// of another first.
+        /// </summary>
+        sealed class EncodingOrder : System.Collections.Generic.IComparer<ByteString>
+        {
+            internal static readonly EncodingOrder Instance = new EncodingOrder ();
+
+            public int Compare (ByteString x, ByteString y)
+            {
+                var length = Math.Min (x.Length, y.Length);
+                for (int i = 0; i < length; i++) {
+                    if (x [i] != y [i])
+                        return x [i].CompareTo (y [i]);
+                }
+                return x.Length.CompareTo (y.Length);
+            }
         }
 
         static void WriteMessage (object value, CodedOutputStream stream)

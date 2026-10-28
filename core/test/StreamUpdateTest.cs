@@ -200,6 +200,77 @@ namespace KRPC.Test
         }
 
         [Test]
+        public void AChangeToNegativeZeroIsSent ()
+        {
+            double? value = 0.0;
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoNullableDouble (It.IsAny<double?> ())).Returns (() => value);
+            TestService.Service = mock.Object;
+            var call = new ProcedureCall ("TestService", "EchoNullableDouble");
+            call.Arguments.Add (new Argument (0, 0.0));
+            var id = Add (new ProcedureCallStream (call));
+
+            Assert.AreEqual (0.0, ResultFor (Update (), id).Value);
+            value = -0.0;
+            var sent = (double)ResultFor (Update (), id).Value;
+            Assert.Less (BitConverter.DoubleToInt64Bits (sent), 0);
+            Assert.AreEqual (0, Update ().Count);
+        }
+
+        [Test]
+        public void AListChangedInPlaceIsSent ()
+        {
+            var list = new List<string> { "a" };
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoList (It.IsAny<IList<string>> ())).Returns (list);
+            TestService.Service = mock.Object;
+            var call = new ProcedureCall ("TestService", "EchoList");
+            call.Arguments.Add (new Argument (0, new List<string> ()));
+            var id = Add (new ProcedureCallStream (call));
+
+            Assert.AreEqual (new List<string> { "a" }, ResultFor (Update (), id).Value);
+            Assert.AreEqual (0, Update ().Count);
+            list.Add ("b");
+            Assert.AreEqual (new List<string> { "a", "b" }, ResultFor (Update (), id).Value);
+        }
+
+        [Test]
+        public void AReorderedSetIsNotSent ()
+        {
+            var calls = 0;
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoSet (It.IsAny<HashSet<int>> ()))
+                .Returns (() => ++calls % 2 == 1 ? new HashSet<int> { 1, 2, 3 } : new HashSet<int> { 3, 1, 2 });
+            TestService.Service = mock.Object;
+            var call = new ProcedureCall ("TestService", "EchoSet");
+            call.Arguments.Add (new Argument (0, new HashSet<int> ()));
+            var id = Add (new ProcedureCallStream (call));
+
+            CollectionAssert.AreEquivalent (new [] { 1, 2, 3 }, (HashSet<int>)ResultFor (Update (), id).Value);
+            Assert.AreEqual (0, Update ().Count);
+            Assert.AreEqual (2, calls);
+        }
+
+        [Test]
+        public void AReorderedDictionaryIsNotSent ()
+        {
+            var calls = 0;
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoDictionary (It.IsAny<IDictionary<int,string>> ()))
+                .Returns (() => ++calls % 2 == 1 ?
+                    new Dictionary<int,string> { { 1, "a" }, { 2, "b" } } :
+                    new Dictionary<int,string> { { 2, "b" }, { 1, "a" } });
+            TestService.Service = mock.Object;
+            var call = new ProcedureCall ("TestService", "EchoDictionary");
+            call.Arguments.Add (new Argument (0, new Dictionary<int,string> ()));
+            var id = Add (new ProcedureCallStream (call));
+
+            Assert.AreEqual (2, ((IDictionary<int,string>)ResultFor (Update (), id).Value).Count);
+            Assert.AreEqual (0, Update ().Count);
+            Assert.AreEqual (2, calls);
+        }
+
+        [Test]
         public void ARateSetBeforeTheFirstUpdateDoesNotDelayIt ()
         {
             var id = Add (new ConstantStream (42));

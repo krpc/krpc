@@ -117,7 +117,6 @@
     <Compile Include="Service\TestTopLevelClass.cs" />
     <Compile Include="Service\TypeSpecTest.cs" />
     <Compile Include="Service\TypeUtilsTest.cs" />
-    <Compile Include="Service\ValueUtilsTest.cs" />
     <Compile Include="TestingTools.cs" />
     <Compile Include="Utils\DocumentationExtensionsTest.cs" />
     <Compile Include="Utils\DynamicBufferTest.cs" />

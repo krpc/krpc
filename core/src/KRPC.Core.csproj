@@ -207,7 +207,6 @@
     <Compile Include="Service\TypeKind.cs" />
     <Compile Include="Service\TypeSpec.cs" />
     <Compile Include="Service\TypeUtils.cs" />
-    <Compile Include="Service\ValueUtils.cs" />
     <Compile Include="Service\YieldException.cs" />
     <Compile Include="Utils\DictionaryExtensions.cs" />
     <Compile Include="Utils\DocumentationExtensions.cs" />

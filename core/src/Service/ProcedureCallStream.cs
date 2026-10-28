@@ -1,4 +1,5 @@
 using System;
+using Google.Protobuf;
 using KRPC.Service.Messages;
 using KRPC.Service.Scanner;
 
@@ -71,29 +72,23 @@ namespace KRPC.Service
                 return;
             }
 
-            if (result.HasValue) {
-                if (!wasSet)
-                    Changed = true;
-                else if (!ReferenceEquals (result.Value, null))
-                    Changed |= !ValueUtils.Equal (result.Value, oldValue);
-                else
-                    Changed |= !ReferenceEquals (oldValue, null);
-            } else {
+            if (!result.HasValue) {
                 Changed |= result.HasError;
+                return;
             }
-
             // An encoding error, such as a null element in a list of objects, fails only this
             // stream. The update sends this encoding.
-            if (Changed && result.HasValue && !ReferenceEquals (result.Value, null)) {
-                try {
-                    result.EncodedValue = Server.ProtocolBuffers.Encoder.Encode (result.Value, result.Spec);
-                } catch (ServiceException e) {
-                    SetError (e);
-                }
+            ByteString encoded;
+            try {
+                encoded = Encode (result);
+            } catch (ServiceException e) {
+                SetError (e);
+                return;
             }
+            Changed |= !wasSet || !Equals (encoded, oldEncodedValue);
         }
 
-        void Restore (bool wasSet, object value, TypeSpec spec, Google.Protobuf.ByteString encodedValue)
+        void Restore (bool wasSet, object value, TypeSpec spec, ByteString encodedValue)
         {
             var result = StreamResult.Result;
             result.Reset ();

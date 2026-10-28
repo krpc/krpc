@@ -66,3 +66,6 @@ class TestStreams(Station):
 
     def test_stream_update(self):
         self.measure_stream_update(self.parts.all)
+
+    def test_stream_update_cost(self):
+        self.measure_streams(self.part, self.parts)
