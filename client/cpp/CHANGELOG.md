@@ -2,6 +2,7 @@
 
 - Fix the documentation of the services that Doxygen warns about, such as parameter names
   that do not match (#1185)
+- Throw `EncodingError` when decoding a tuple of the wrong length, which crashed (#1194)
 - Exceptions
   - **Breaking:** Derive the `KRPC` exceptions with a standard equivalent from it, e.g.
     `ArgumentException` from `std::invalid_argument`, in place of `RPCError` (#1172)

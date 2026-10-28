@@ -242,6 +242,13 @@ TEST(test_encode_decode, test_tuple) {
   test_tuple3(std::tuple<uint32_t, std::string, bool>(1, "jeb", false), "0a01010a04036a65620a0100");
 }
 
+TEST(test_encode_decode, test_tuple_of_the_wrong_length) {
+  std::tuple<uint32_t, std::string, bool> value;
+  EXPECT_THROW(krpc::decoder::decode(value, krpc::platform::unhexlify("0a0101")),
+               krpc::EncodingError);
+  EXPECT_THROW(krpc::decoder::decode(value, std::string()), krpc::EncodingError);
+}
+
 TEST(test_encode_decode, test_list_of_objects) {
   test_list(std::vector<krpc::services::TestService::TestClass>(), "");
   {

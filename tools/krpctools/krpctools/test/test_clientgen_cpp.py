@@ -1,12 +1,16 @@
 import unittest
 
 from krpctools.clientgen.cpp import CppGenerator
-from krpctools.test.clientgentest import ClientGenTestCase
+from krpctools.test.clientgentest import ClientGenTestCase, bytes_default
 
 
 class TestClientGenCpp(ClientGenTestCase, unittest.TestCase):
     language = "cpp"
     generator = CppGenerator
+
+    def test_bytes_default(self):
+        content = self.generate("ServiceA", bytes_default())
+        self.assertIn('std::string value = std::string("\\xca\\xfe", 2)', content)
 
     def test_invoke_returns(self):
         # A nullable stream or event is invoked with the same Returns kind as a non-nullable one

@@ -202,7 +202,9 @@ class CsharpLanguage(Language):
     def default_is_null(typ):
         """Whether a parameter of the type defaults to null, and is given its default value
         when the call is encoded. C# requires a default value to be a compile-time constant,
-        which a structure or collection is not."""
+        which a structure, collection or byte array is not."""
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BYTES:
+            return True
         return isinstance(
             typ, (StructType, TupleType, ListType, SetType, DictionaryType)
         )
@@ -215,6 +217,8 @@ class CsharpLanguage(Language):
             return '"%s"' % value
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
             return "true" if value else "false"
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BYTES:
+            return "new byte[] { %s }" % ", ".join("0x%02x" % x for x in value)
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
             return float32_literal(value) + "f"
         if isinstance(typ, ClassType) and value is None:

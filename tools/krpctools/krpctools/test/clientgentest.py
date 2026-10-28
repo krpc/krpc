@@ -48,6 +48,33 @@ def documented_enumeration(summary):
     }
 
 
+def bytes_default():
+    """A service holding one procedure, whose bytes parameter defaults to 0xca 0xfe"""
+    return {
+        "ServiceA": {
+            "id": 1,
+            "documentation": "",
+            "procedures": {
+                "Frob": {
+                    "id": 1,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": {"code": "BYTES"},
+                            "default_value": "Asr+",
+                        }
+                    ],
+                    "documentation": "",
+                }
+            },
+            "classes": {},
+            "enumerations": {},
+            "exceptions": {},
+            "structs": {},
+        }
+    }
+
+
 class ClientGenTestCase(_Base):
     language: str
     generator: type[Generator]

@@ -83,6 +83,8 @@ class LuaLanguage(Language):
             return "'%s'" % value
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
             return "true" if value else "false"
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BYTES:
+            return "'%s'" % "".join("\\%d" % x for x in value)
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
             return float32_literal(value)
         if isinstance(typ, EnumerationType):
