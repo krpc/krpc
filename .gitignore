@@ -11,3 +11,4 @@ obj
 packages
 assets
 /release-credentials.toml
+/media/build/
