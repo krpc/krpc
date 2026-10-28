@@ -12,6 +12,8 @@ KSA.TransformPosition
 KSA.TransformDirection
 KSA.TransformRotation
 KSA.TransformVelocity
+KSA.ReferenceFrame.CreateRelative
+KSA.ReferenceFrame.CreateHybrid
 KSA.Vehicle.Name
 KSA.Vehicle.Situation
 KSA.Vehicle.OnRails

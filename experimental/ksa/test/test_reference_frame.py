@@ -1,4 +1,6 @@
+import contextlib
 import math
+import time
 
 import ksatest
 
@@ -116,34 +118,27 @@ class TestReferenceFrame(ksatest.TestCase):
         )
 
     def test_transform_position(self):
-        self.assertVectorAlmostEqual(
-            self.vehicle.position(self.inertial),
-            self.ksa.transform_position(
+        with self.paused():
+            expected = self.vehicle.position(self.inertial)
+            actual = self.ksa.transform_position(
                 (0, 0, 0), self.vehicle.reference_frame, self.inertial
-            ),
-            1e-3,
-        )
-        position = (1e6, 2e6, 3e6)
-        round_trip = self.ksa.transform_position(
-            self.ksa.transform_position(position, self.rotating, self.inertial),
-            self.inertial,
-            self.rotating,
-        )
+            )
+            position = (1e6, 2e6, 3e6)
+            round_trip = self.ksa.transform_position(
+                self.ksa.transform_position(position, self.rotating, self.inertial),
+                self.inertial,
+                self.rotating,
+            )
+        self.assertVectorAlmostEqual(expected, actual, 1e-3)
         self.assertVectorAlmostEqual(position, round_trip, 1e-3)
 
     def test_transform_velocity(self):
-        # Paused, so both calls see the same game time
-        self.ksa.simulation_speed = 0
-        try:
-            self.assertVectorAlmostEqual(
-                self.vehicle.velocity(self.inertial),
-                self.ksa.transform_velocity(
-                    (0, 0, 0), (0, 0, 0), self.vehicle.reference_frame, self.inertial
-                ),
-                1e-6,
+        with self.paused():
+            expected = self.vehicle.velocity(self.inertial)
+            actual = self.ksa.transform_velocity(
+                (0, 0, 0), (0, 0, 0), self.vehicle.reference_frame, self.inertial
             )
-        finally:
-            self.ksa.simulation_speed = 1
+        self.assertVectorAlmostEqual(expected, actual, 1e-6)
         # A point fixed to the surface moves with the body's rotation
         position = (self.earth.radius, 0, 0)
         velocity = self.ksa.transform_velocity(
@@ -154,13 +149,116 @@ class TestReferenceFrame(ksatest.TestCase):
         )
 
     def test_transform_rotation(self):
-        rotation = self.vehicle.rotation(self.inertial)
-        self.assertVectorAlmostEqual(
-            self.vehicle.rotation(self.rotating),
-            self.ksa.transform_rotation(rotation, self.inertial, self.rotating),
-            1e-9,
-        )
+        with self.paused():
+            rotation = self.vehicle.rotation(self.inertial)
+            expected = self.vehicle.rotation(self.rotating)
+            actual = self.ksa.transform_rotation(rotation, self.inertial, self.rotating)
+        self.assertVectorAlmostEqual(expected, actual, 1e-9)
 
     def test_equality(self):
         self.assertEqual(self.rotating, self.earth.reference_frame)
         self.assertNotEqual(self.rotating, self.inertial)
+
+    @contextlib.contextmanager
+    def paused(self):
+        """Pause the game, so that calls see the same game time."""
+        self.ksa.simulation_speed = 0
+        try:
+            # The game stops at the end of the step in progress, and calls in the same
+            # server update see the same time whether it has stopped or not
+            def stopped():
+                ut = self.ksa.ut
+                time.sleep(0.1)
+                return self.ksa.ut == ut
+
+            ksatest.wait_until(stopped)
+            yield
+        finally:
+            self.ksa.simulation_speed = 1
+
+    def test_relative_position(self):
+        frame = self.ksa.ReferenceFrame.create_relative(
+            self.rotating, position=(0, 0, 1000)
+        )
+        with self.paused():
+            expected = self.vehicle.position(self.rotating)
+            actual = self.vehicle.position(frame)
+        self.assertVectorAlmostEqual(
+            (expected[0], expected[1], expected[2] - 1000), actual, 1e-3
+        )
+
+    def test_relative_rotation(self):
+        # A quarter turn about z takes the frame's x axis to the parent's y axis
+        half = math.sqrt(0.5)
+        frame = self.ksa.ReferenceFrame.create_relative(
+            self.rotating, rotation=(0, 0, half, half)
+        )
+        with self.paused():
+            x, y, z = self.vehicle.position(self.rotating)
+            actual = self.vehicle.position(frame)
+        self.assertVectorAlmostEqual((y, -x, z), actual, 1e-3)
+        self.assertVectorAlmostEqual(
+            (0, 1, 0),
+            self.ksa.transform_direction((1, 0, 0), frame, self.rotating),
+            1e-9,
+        )
+
+    def test_relative_velocity(self):
+        frame = self.ksa.ReferenceFrame.create_relative(
+            self.inertial, velocity=(10, 0, 0)
+        )
+        with self.paused():
+            expected = self.vehicle.velocity(self.inertial)
+            actual = self.vehicle.velocity(frame)
+        self.assertVectorAlmostEqual(
+            (expected[0] - 10, expected[1], expected[2]), actual, 1e-6
+        )
+
+    def test_relative_angular_velocity(self):
+        # The inertial frame spun up to the body's rotation is the rotating frame, at the
+        # instant their axes line up
+        spin = self.earth.angular_velocity(self.inertial)
+        with self.paused():
+            rotation = self.ksa.transform_rotation(
+                (0, 0, 0, 1), self.rotating, self.inertial
+            )
+            frame = self.ksa.ReferenceFrame.create_relative(
+                self.inertial, rotation=rotation, angular_velocity=spin
+            )
+            expected = self.vehicle.velocity(self.rotating)
+            actual = self.vehicle.velocity(frame)
+        self.assertVectorAlmostEqual(expected, actual, 1e-3)
+
+    def test_hybrid_surface_velocity(self):
+        # The body's rotating frame, with the axes of the vehicle's surface frame
+        frame = self.ksa.ReferenceFrame.create_hybrid(
+            self.rotating, rotation=self.vehicle.surface_reference_frame
+        )
+        with self.paused():
+            velocity = self.vehicle.velocity(frame)
+            expected = self.ksa.transform_direction(
+                self.vehicle.velocity(self.rotating),
+                self.rotating,
+                self.vehicle.surface_reference_frame,
+            )
+            position = self.vehicle.position(frame)
+            up = self.vehicle.position(self.rotating)
+        self.assertVectorAlmostEqual(expected, velocity, 1e-3)
+        self.assertAlmostEqual(self.flight.speed, norm(velocity), delta=0.1)
+        self.assertAlmostEqual(norm(up), position[2], delta=1)
+
+    def test_custom_frame_equality(self):
+        create = self.ksa.ReferenceFrame.create_relative
+        self.assertEqual(
+            create(self.rotating, position=(1, 2, 3)),
+            create(self.rotating, position=(1, 2, 3)),
+        )
+        self.assertNotEqual(
+            create(self.rotating, position=(1, 2, 3)),
+            create(self.inertial, position=(1, 2, 3)),
+        )
+        self.assertNotEqual(create(self.rotating, position=(1, 2, 3)), self.rotating)
+        hybrid = self.ksa.ReferenceFrame.create_hybrid
+        self.assertEqual(
+            hybrid(self.rotating, self.inertial), hybrid(self.rotating, self.inertial)
+        )
