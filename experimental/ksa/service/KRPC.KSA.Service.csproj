@@ -25,6 +25,7 @@
     <Compile Include="src/Services/Sequence.cs" />
     <Compile Include="src/Services/Situation.cs" />
     <Compile Include="src/Services/Vehicle.cs" />
+    <Compile Include="src/Utils/AfterFrame.cs" />
     <Compile Include="src/Utils/Engines.cs" />
     <Compile Include="src/Utils/Sequences.cs" />
     <Compile Include="src/Utils/Vectors.cs" />

@@ -5,6 +5,9 @@ KSA.UT
 KSA.SimulationSpeed
 KSA.WarpTo
 KSA.LaunchVehicle
+KSA.SaveExists
+KSA.Save
+KSA.Load
 KSA.TransformPosition
 KSA.TransformDirection
 KSA.TransformRotation

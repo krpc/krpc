@@ -26,7 +26,6 @@ namespace KRPC.KSA
         static readonly LogCategory log = LogCategory.Make ("kRPC");
 
         static Addon instance;
-        static readonly Queue<Action> afterFrame = new Queue<Action> ();
 
         readonly Harmony harmony = new Harmony ("kRPC");
         readonly string modDirectory;
@@ -264,22 +263,7 @@ namespace KRPC.KSA
             if (!updatedThisFrame)
                 Update ();
             updatedThisFrame = false;
-            while (afterFrame.Count > 0) {
-                try {
-                    afterFrame.Dequeue () ();
-                } catch (Exception e) {
-                    Logger.WriteLine ("After frame action failed: " + e, Logger.Severity.Error);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Run an action on the main thread at the end of the current frame. The game's menus
-        /// load saves at that point, after the vehicle solver step has been queued.
-        /// </summary>
-        public static void RunAfterFrame (Action action)
-        {
-            afterFrame.Enqueue (action);
+            Utils.AfterFrame.RunAll ();
         }
 
         /// <summary>

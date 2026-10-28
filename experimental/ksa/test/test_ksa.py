@@ -61,3 +61,22 @@ class TestKSA(ksatest.TestCase):
         ut = self.ksa.ut
         self.ksa.warp_to(ut - 10)
         self.assertLess(self.ksa.ut, ut + 1)
+
+    def test_save_and_load(self):
+        vehicle = self.ksa.active_vehicle
+        name = vehicle.name
+        try:
+            self.ksa.save("krpctest-save")
+            self.assertTrue(self.ksa.save_exists("krpctest-save"))
+            vehicle.name = "Renamed"
+            self.ksa.load("krpctest-save")
+            names = [v.name for v in self.ksa.vehicles]
+            self.assertIn(name, names)
+            self.assertNotIn("Renamed", names)
+        finally:
+            self.load_save()
+
+    def test_load_missing_save(self):
+        self.assertFalse(self.ksa.save_exists("krpctest-missing"))
+        with self.assertRaises(ValueError):
+            self.ksa.load("krpctest-missing")
