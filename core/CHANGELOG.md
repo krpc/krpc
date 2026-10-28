@@ -4,6 +4,8 @@
   declare (#1192)
 - Close a WebSockets connection whose frame is too large to buffer, which threw
   `OverflowException` (#1193)
+- Update a stream when its value changes between 0.0 and -0.0, or a collection it returns
+  changes in place (#1199)
 - Exceptions
   - Report the .NET exception each kRPC exception stands for, as `mapped_type` in
     `KRPC.Exception` (#1172)
