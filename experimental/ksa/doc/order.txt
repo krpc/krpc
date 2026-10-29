@@ -416,3 +416,16 @@ KSA.CameraMode.Free
 KSA.CameraMode.Map
 KSA.CameraMode.IVA
 KSA.CameraMode.Fixed
+KSA.Debug.SetCircularOrbit
+KSA.Debug.SetOrbit
+KSA.Debug.SetLanded
+KSA.Debug.SetPosition
+KSA.Debug.SetVelocity
+KSA.Debug.SetRotation
+KSA.Debug.SetAngularVelocity
+KSA.Debug.FillResources
+KSA.Debug.EmptyResources
+KSA.Debug.DuplicateVehicle
+KSA.Debug.ExplodeVehicle
+KSA.Debug.ShowVelocityArrows
+KSA.Debug.RunCommand
