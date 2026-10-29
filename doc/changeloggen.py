@@ -221,7 +221,9 @@ def render(components, unreleased=()):
             items = versions.get(version, [])
             if not items:
                 continue
-            out.append("\n" + heading(name, "^"))
+            # A page of one component needs no component headings
+            if len(components) > 1:
+                out.append("\n" + heading(name, "^"))
             for item in items:
                 out.append(render_item(item))
             out.append("")

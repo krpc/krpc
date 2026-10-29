@@ -18,6 +18,7 @@ Built against kRPC 0.7.0, KSA 2026.10.25.5707 and StarMap 0.4.8, set in `version
  * `doc/` - the documentation sources, and the template for the generated API pages.
  * `stubs/` - the readme for the client stubs archive.
  * `release/` - the licenses and install readme for the mod archive.
+ * `CHANGELOG.md` - the changes in each release, also on the changelog page of the docs.
  * `build.sh` - builds the mod folder and the client stubs.
  * `docs.sh` - builds the documentation.
  * `release.sh` - builds the release archive.

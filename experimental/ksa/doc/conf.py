@@ -11,6 +11,7 @@ release = version
 html_title = f"kRPC v{release} documentation"
 
 extensions = [
+    "sphinx.ext.extlinks",
     "sphinx_design",
     "sphinx_tabs.tabs",
     "sphinxcontrib.luadomain",
@@ -18,6 +19,8 @@ extensions = [
     "javasphinx",
 ]
 suppress_warnings = ["design.fa-build"]
+
+extlinks = {"issue": ("https://github.com/krpc/krpc/issues/%s", "#%s")}
 
 exclude_patterns = ["api", "order.txt"]
 
