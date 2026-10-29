@@ -251,6 +251,7 @@ KSA.Resource.Amount
 KSA.Resource.Max
 KSA.Tank.Part
 KSA.Tank.Volume
+KSA.Tank.RatedPressure
 KSA.Tank.FilledFraction
 KSA.Tank.PropellantUseEnabled
 KSA.Tank.TransferMode

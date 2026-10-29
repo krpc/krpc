@@ -171,6 +171,7 @@ class TestPart(ksatest.TestCase):
         self.assertTrue(tanks)
         for tank in tanks:
             self.assertGreater(tank.volume, 0)
+            self.assertGreaterEqual(tank.rated_pressure, 0)
             self.assertGreaterEqual(tank.filled_fraction, 0)
             self.assertLessEqual(tank.filled_fraction, 1)
             held = sum(resource.amount for resource in tank.part.resources)

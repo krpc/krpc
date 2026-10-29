@@ -67,6 +67,14 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The pressure the tank stores gas at, in pascals. Zero if the tank cannot store gas.
+        /// </summary>
+        [KRPCProperty]
+        public double RatedPressure {
+            get { return InternalTank.RatedPressure; }
+        }
+
+        /// <summary>
         /// The fraction of the tank's volume that is filled, between 0 and 1.
         /// </summary>
         [KRPCProperty]
