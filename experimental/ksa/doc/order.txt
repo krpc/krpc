@@ -260,6 +260,8 @@ KSA.Engine.Part
 KSA.Engine.Gimbals
 KSA.Engine.Active
 KSA.Engine.HasPropellant
+KSA.Engine.MinimumThrottle
+KSA.Engine.Propellants
 KSA.Engine.Thrust
 KSA.Engine.AvailableThrust
 KSA.Engine.SpecificImpulse

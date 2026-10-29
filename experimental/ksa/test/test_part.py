@@ -214,6 +214,16 @@ class TestPart(ksatest.TestCase):
             control.throttle = throttle
         ksatest.wait_until(lambda: self.vehicle.thrust == 0, timeout=5)
 
+    def test_engine_propellants(self):
+        names = {resource.name for resource in self.vehicle.resources}
+        for engine in self.vehicle.engines:
+            self.assertGreaterEqual(engine.minimum_throttle, 0)
+            self.assertLess(engine.minimum_throttle, 1)
+            self.assertTrue(engine.propellants)
+            self.assertEqual(len(engine.propellants), len(set(engine.propellants)))
+            for name in engine.propellants:
+                self.assertIn(name, names)
+
     def test_engine_active(self):
         engine = next(
             part.engine

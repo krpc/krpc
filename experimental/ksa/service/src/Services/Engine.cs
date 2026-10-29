@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using KRPC.KSA.Utils;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -77,6 +79,29 @@ namespace KRPC.KSA.Services
             set {
                 engine.SetIsActive (Part.InternalVehicle, value);
                 Waits.Until (() => engine.IsActive == value);
+            }
+        }
+
+        /// <summary>
+        /// The lowest throttle the engine runs at, between 0 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float MinimumThrottle {
+            get {
+                _ = Part.InternalPart;
+                return engine.MinimumThrottle;
+            }
+        }
+
+        /// <summary>
+        /// The names of the substances the engine burns. See <see cref="Resource.Name"/>.
+        /// </summary>
+        [KRPCProperty]
+        public IList<string> Propellants {
+            get {
+                _ = Part.InternalPart;
+                return engine.Cores.SelectMany (core => core.Reaction.ReactantPhases)
+                    .Select (phase => phase.Name).Distinct ().ToList ();
             }
         }
 
