@@ -11,6 +11,8 @@ KSA.LaunchVehicle
 KSA.SaveExists
 KSA.Save
 KSA.Load
+KSA.TakeScreenshot
+KSA.ShowMessage
 KSA.TransformPosition
 KSA.TransformDirection
 KSA.TransformRotation

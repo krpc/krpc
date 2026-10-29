@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using Brutal.Numerics;
@@ -288,6 +290,93 @@ namespace KRPC.KSA.Services
                 throw new YieldException<Action> (() => WaitForLoad (loaded, error));
             if (error () != null)
                 throw new InvalidOperationException ("Failed to load save: " + error ().Message);
+        }
+
+        /// <summary>
+        /// Show a message in the middle of the screen.
+        /// </summary>
+        /// <param name="text">The message.</param>
+        /// <param name="duration">How long to show the message for, in seconds. The game
+        /// shows a message for at least 2 seconds.</param>
+        /// <param name="warning">Whether to show the message in the warning color.</param>
+        [KRPCProcedure]
+        public static void ShowMessage (string text, double duration = 5, bool warning = false)
+        {
+            if (text == null)
+                throw new ArgumentNullException (nameof (text));
+            if (warning)
+                TimedAlert.CreateWarning (text, duration);
+            else
+                TimedAlert.Create (text, Color.White.AsByte4, duration);
+        }
+
+        // The game's screenshot capture and folder, with no public accessors
+        static readonly FieldInfo screenshotCapture = typeof (Program).GetField (
+            "_screenshotCapture", BindingFlags.NonPublic | BindingFlags.Instance);
+        static readonly PropertyInfo screenshotsFolder = typeof (ScreenshotCapture).GetProperty (
+            "ScreenshotsFolderPath", BindingFlags.NonPublic | BindingFlags.Static);
+
+        // The last chunk of a PNG file, written once the file is complete
+        static readonly byte [] pngEnd = { 0, 0, 0, 0, 0x49, 0x45, 0x4E, 0x44, 0xAE, 0x42, 0x60, 0x82 };
+
+        /// <summary>
+        /// Save a screenshot, as the screenshot key does, and return once the file is written.
+        /// </summary>
+        /// <param name="scale">The size of the image, as a multiple of the window size,
+        /// from 1 to 8. The game reduces it to fit the graphics memory.</param>
+        /// <param name="ui">Whether to include the game's windows. The image is then the size
+        /// of the window.</param>
+        /// <returns>The path of the PNG file, in the game's screenshots folder.</returns>
+        /// <remarks>
+        /// Throws an exception in the vehicle editor, or if a screenshot is already being taken.
+        /// </remarks>
+        [KRPCProcedure]
+        public static string TakeScreenshot (int scale = 1, bool ui = false)
+        {
+            if (!(scale >= 1 && scale <= 8))
+                throw new ArgumentOutOfRangeException (nameof (scale));
+            var capture = (ScreenshotCapture)screenshotCapture.GetValue (Program.Instance)
+                ?? throw new InvalidOperationException ("The game is not ready to take a screenshot");
+            if (capture.IsActive)
+                throw new InvalidOperationException ("A screenshot is already being taken");
+            if (Program.EditorFlag)
+                throw new InvalidOperationException ("Screenshots are not available in the vehicle editor");
+            var folder = (string)screenshotsFolder.GetValue (null);
+            // The file name has the time to the second, so a second screenshot within the
+            // second replaces the first
+            var start = DateTime.Now.AddSeconds (-1);
+            capture.Request (scale, ui ? "ui" : string.Empty);
+            var timer = Stopwatch.StartNew ();
+            return WaitForScreenshot (capture, folder, start, timer);
+        }
+
+        static string WaitForScreenshot (ScreenshotCapture capture, string folder, DateTime start, Stopwatch timer)
+        {
+            // The game writes the file on a worker thread once the capture is done
+            if (!capture.IsActive && Directory.Exists (folder)) {
+                foreach (var path in Directory.EnumerateFiles (folder, "ksa_*.png")) {
+                    if (File.GetLastWriteTime (path) >= start && IsCompletePng (path))
+                        return path;
+                }
+            }
+            if (timer.Elapsed.TotalSeconds > 60)
+                throw new InvalidOperationException ("The screenshot was not saved");
+            throw new YieldException<Func<string>> (() => WaitForScreenshot (capture, folder, start, timer));
+        }
+
+        static bool IsCompletePng (string path)
+        {
+            try {
+                using (var file = File.OpenRead (path)) {
+                    if (file.Length < pngEnd.Length)
+                        return false;
+                    file.Seek (-pngEnd.Length, SeekOrigin.End);
+                    var end = new byte [pngEnd.Length];
+                    return file.Read (end, 0, end.Length) == end.Length && end.SequenceEqual (pngEnd);
+                }
+            } catch (IOException) {
+                return false;
+            }
         }
 
         /// <summary>
