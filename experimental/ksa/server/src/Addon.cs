@@ -76,37 +76,26 @@ namespace KRPC.KSA
             // The server runs on the main thread between the frame's vehicle solver results
             // being applied and the next solver step being queued. Vehicle state is settled
             // there, and control inputs written there feed the next step
-            var tick = typeof (Universe).GetMethod (
-                nameof (Universe.ExecuteNextVehicleSolvers), BindingFlags.Public | BindingFlags.Static);
-            if (tick == null)
-                Logger.WriteLine ("Universe.ExecuteNextVehicleSolvers not found, updating after each frame instead", Logger.Severity.Error);
-            else
-                harmony.Patch (tick, prefix: new HarmonyMethod (
-                    typeof (Addon).GetMethod (nameof (BeforeVehicleSolvers), BindingFlags.NonPublic | BindingFlags.Static)));
+            TryPatch ("Universe.ExecuteNextVehicleSolvers", "the server updates after each frame instead", () =>
+                harmony.Patch (Required (typeof (Universe), nameof (Universe.ExecuteNextVehicleSolvers)),
+                    prefix: Hook (nameof (BeforeVehicleSolvers))));
 
             // On .NET, closing a TcpClient sets its socket to null, so KRPC.Core's connected check
             // throws for a client that disconnected during a call that yields. We treat it as
             // disconnected, as the check does for a disposed socket on Mono
-            var connected = AccessTools.PropertyGetter (AccessTools.TypeByName ("KRPC.Server.TCP.TCPClient"), "Connected");
-            if (connected == null)
-                Logger.WriteLine ("TCPClient.Connected not found, a client that disconnects during a call may stop the server", Logger.Severity.Error);
-            else
-                harmony.Patch (connected, finalizer: new HarmonyMethod (
-                    typeof (Addon).GetMethod (nameof (TCPClientConnectedFinalizer), BindingFlags.NonPublic | BindingFlags.Static)));
+            TryPatch ("TCPClient.Connected", "a client that disconnects during a call may stop the server", () =>
+                harmony.Patch (Required (AccessTools.TypeByName ("KRPC.Server.TCP.TCPClient"), "get_Connected"),
+                    finalizer: Hook (nameof (TCPClientConnectedFinalizer))));
 
             // A save load replaces every vehicle, which the core counts as a new game state
-            var deserialize = typeof (Universe).GetMethod (
-                nameof (Universe.DeserializeSave), BindingFlags.Public | BindingFlags.Static);
-            if (deserialize == null)
-                Logger.WriteLine ("Universe.DeserializeSave not found, save loads are not counted", Logger.Severity.Error);
-            else
-                harmony.Patch (deserialize, postfix: new HarmonyMethod (
-                    typeof (Addon).GetMethod (nameof (AfterSaveLoaded), BindingFlags.NonPublic | BindingFlags.Static)));
+            TryPatch ("Universe.DeserializeSave", new [] { "KRPC.GameStateLoads" }, () =>
+                harmony.Patch (Required (typeof (Universe), nameof (Universe.DeserializeSave)),
+                    postfix: Hook (nameof (AfterSaveLoaded))));
 
-            PatchTankTransfers ();
+            TryPatch ("the tank transfer window checks", new [] { "KSA.Tank.TransferMode" }, PatchTankTransfers);
 
-            MenuBar.Patch (harmony, this);
-            ConsoleWindow.Patch (harmony);
+            TryPatch ("Program.DrawMenuBar", "the kRPC menu is not shown", () => MenuBar.Patch (harmony, this));
+            TryPatch ("ImGuiWindow.OnDrawUiConsole", "kRPC windows open at the game's size", () => ConsoleWindow.Patch (harmony));
 
             if (config.Configuration.AutoStartServers) {
                 Logger.WriteLine ("Auto-starting server");
@@ -293,32 +282,69 @@ namespace KRPC.KSA
         }
 
         /// <summary>
+        /// Apply a game patch that no RPC needs. A patch that does not fit the running game is
+        /// logged, with what the player loses.
+        /// </summary>
+        static void TryPatch (string patch, string loss, Action apply)
+        {
+            try {
+                apply ();
+            } catch (Exception e) {
+                Logger.WriteLine ("Failed to patch " + patch + ", so " + loss + ": " + e.Message, Logger.Severity.Error);
+            }
+        }
+
+        /// <summary>
+        /// Apply a game patch that RPCs need. A patch that does not fit the running game reports
+        /// the RPCs broken, in the game version pop-up.
+        /// </summary>
+        /// <remarks>
+        /// The patch is applied in a method of its own, the delegate, so that a game member
+        /// missing from the running game fails when that method is compiled, inside the try.
+        /// </remarks>
+        static void TryPatch (string patch, string [] rpcs, Action apply)
+        {
+            try {
+                apply ();
+            } catch (Exception e) {
+                GameCompatibility.PatchFailed (patch, e.Message, rpcs);
+            }
+        }
+
+        /// <summary>
+        /// A game method that a patch needs, or throws if the running game lacks it.
+        /// </summary>
+        internal static MethodInfo Required (Type type, string name)
+        {
+            if (type == null)
+                throw new TypeLoadException ("Type not found for " + name);
+            return AccessTools.Method (type, name) ?? throw new MissingMethodException (type.FullName, name);
+        }
+
+        static HarmonyMethod Hook (string name)
+        {
+            return new HarmonyMethod (typeof (Addon).GetMethod (name, BindingFlags.NonPublic | BindingFlags.Static));
+        }
+
+        /// <summary>
         /// The game runs a tank transfer only while the part window is open, and resets the
         /// transfer mode otherwise. We patch its window checks so that the modes clients set
-        /// pass them. On a game the patch does not fit, the transfer mode is reported broken.
+        /// pass them.
         /// </summary>
-        // In a method of its own, so that game members missing from the running game fail only here
-        [MethodImpl (MethodImplOptions.NoInlining)]
+        /// <remarks>
+        /// A method patched before a failure keeps its patch, which only widens a check for
+        /// tanks whose mode a client set.
+        /// </remarks>
         void PatchTankTransfers ()
         {
-            const string patch = "the tank transfer window checks";
-            try {
-                var transpiler = new HarmonyMethod (
-                    typeof (Addon).GetMethod (nameof (TankWindowCheckTranspiler), BindingFlags.NonPublic | BindingFlags.Static));
-                foreach (var name in new [] { "UpdateTransfers", "IsTransferBlockedOnPower", "IsTransferBlockedOnDisabledDonor" }) {
-                    var method = AccessTools.Method (typeof (global::KSA.Tank), name)
-                        ?? throw new MissingMethodException ("KSA.Tank", name);
-                    windowChecksReplaced = 0;
-                    harmony.Patch (method, transpiler: transpiler);
-                    if (windowChecksReplaced == 0)
-                        throw new InvalidOperationException ("Tank." + name + " has no part window check");
-                }
-                Utils.TankTransfers.Patched = true;
-            } catch (Exception e) {
-                // A method patched before the failure keeps its patch, which only widens a
-                // check for tanks whose mode a client set
-                GameCompatibility.PatchFailed (patch, e.Message, "KSA.Tank.TransferMode");
+            var transpiler = Hook (nameof (TankWindowCheckTranspiler));
+            foreach (var name in new [] { "UpdateTransfers", "IsTransferBlockedOnPower", "IsTransferBlockedOnDisabledDonor" }) {
+                windowChecksReplaced = 0;
+                harmony.Patch (Required (typeof (global::KSA.Tank), name), transpiler: transpiler);
+                if (windowChecksReplaced == 0)
+                    throw new InvalidOperationException ("Tank." + name + " has no part window check");
             }
+            Utils.TankTransfers.Patched = true;
         }
 
         static int windowChecksReplaced;

@@ -27,12 +27,8 @@ namespace KRPC.KSA.UI
         public static void Patch (Harmony harmony, Addon instance)
         {
             addon = instance;
-            var drawMenuBar = AccessTools.Method (typeof (Program), "DrawMenuBar");
-            if (drawMenuBar == null) {
-                Logger.WriteLine ("Program.DrawMenuBar not found, the kRPC menu is not shown", Logger.Severity.Error);
-                return;
-            }
-            harmony.Patch (drawMenuBar, transpiler: new HarmonyMethod (typeof (MenuBar), nameof (Transpiler)));
+            harmony.Patch (Addon.Required (typeof (Program), "DrawMenuBar"),
+                transpiler: new HarmonyMethod (typeof (MenuBar), nameof (Transpiler)));
         }
 
         static IEnumerable<CodeInstruction> Transpiler (IEnumerable<CodeInstruction> instructions)
@@ -40,10 +36,8 @@ namespace KRPC.KSA.UI
             var code = instructions.ToList ();
             var hook = AccessTools.Method (typeof (Program), "DrawProgramMenusHook");
             var index = hook == null ? -1 : code.FindIndex (x => x.Calls (hook));
-            if (index < 0) {
-                Logger.WriteLine ("Program.DrawProgramMenusHook call not found, the kRPC menu is not shown", Logger.Severity.Error);
-                return code;
-            }
+            if (index < 0)
+                throw new InvalidOperationException ("Program.DrawMenuBar has no Program.DrawProgramMenusHook call");
             code.Insert (index + 1, new CodeInstruction (OpCodes.Call, AccessTools.Method (typeof (MenuBar), nameof (Draw))));
             return code;
         }

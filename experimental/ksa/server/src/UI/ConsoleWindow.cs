@@ -65,13 +65,9 @@ namespace KRPC.KSA.UI
         /// </remarks>
         public static void Patch (Harmony harmony)
         {
-            var compute = AccessTools.Method (typeof (ImGuiWindow), "ComputeSafeWindowSize");
-            var center = AccessTools.Method (typeof (ImGuiWindow), "ComputeCenteredWindowPosition");
-            var draw = AccessTools.Method (typeof (ImGuiWindow), "OnDrawUiConsole");
-            if (compute == null || center == null || draw == null) {
-                Logger.WriteLine ("ImGuiWindow.OnDrawUiConsole not as expected, kRPC windows open at the game's size", Logger.Severity.Error);
-                return;
-            }
+            var compute = Addon.Required (typeof (ImGuiWindow), "ComputeSafeWindowSize");
+            var center = Addon.Required (typeof (ImGuiWindow), "ComputeCenteredWindowPosition");
+            var draw = Addon.Required (typeof (ImGuiWindow), "OnDrawUiConsole");
             computeSafeWindowSize = AccessTools.MethodDelegate<Func<ImGuiWindow, float2>> (compute);
             computeCenteredWindowPosition = AccessTools.MethodDelegate<Func<float2, float2>> (center);
             windowPos = AccessTools.Field (typeof (ConsoleStyle), "_windowPos");
@@ -87,17 +83,25 @@ namespace KRPC.KSA.UI
         {
             var compute = AccessTools.Method (typeof (ImGuiWindow), "ComputeSafeWindowSize");
             var center = AccessTools.Method (typeof (ImGuiWindow), "ComputeCenteredWindowPosition");
+            var result = new List<CodeInstruction> ();
+            var computed = false;
+            var centered = false;
             foreach (var instruction in instructions) {
                 if (instruction.Calls (compute)) {
                     instruction.opcode = OpCodes.Call;
                     instruction.operand = AccessTools.Method (typeof (ConsoleWindow), nameof (ComputeSafeWindowSize));
+                    computed = true;
                 } else if (instruction.Calls (center)) {
                     // The size is on the stack, and the window is passed after it
-                    yield return new CodeInstruction (OpCodes.Ldarg_0);
+                    result.Add (new CodeInstruction (OpCodes.Ldarg_0));
                     instruction.operand = AccessTools.Method (typeof (ConsoleWindow), nameof (ComputeWindowPosition));
+                    centered = true;
                 }
-                yield return instruction;
+                result.Add (instruction);
             }
+            if (!computed || !centered)
+                throw new InvalidOperationException ("ImGuiWindow.OnDrawUiConsole does not compute its window size and position");
+            return result;
         }
 
         /// <summary>
