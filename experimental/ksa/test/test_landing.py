@@ -1,5 +1,3 @@
-import math
-
 import ksatest
 
 SITE = "CCSFS LC-39A"
@@ -95,15 +93,14 @@ class TestHop(ksatest.TestCase):
     def test_hop(self):
         # A short burn straight up, and the predicted impact on the way back down
         control = self.vehicle.control
-        self.assertTrue(math.isnan(self.flight.time_to_impact))
         control.throttle = 1
         control.activate_next_sequence()
         control.engine_on = True
         ksatest.wait_until(lambda: self.flight.surface_altitude > 200, timeout=30)
         control.engine_on = False
-        ksatest.wait_until(
-            lambda: not math.isnan(self.flight.time_to_impact), timeout=30
-        )
+        # The vehicle settles onto the pad after launch, and the prediction made while it
+        # settled can still say impact, so wait for one in the future
+        ksatest.wait_until(lambda: self.flight.time_to_impact > 0, timeout=30)
         self.assertGreater(self.flight.time_to_impact, 0)
         orbit = self.vehicle.orbit
         self.assertEqual(self.ksa.OrbitTransition.impact, orbit.end_transition)
