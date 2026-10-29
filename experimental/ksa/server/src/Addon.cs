@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
+using Brutal.ImGuiApi;
 using Brutal.Logging;
 using HarmonyLib;
+using KRPC.KSA.UI;
 using KRPC.Server;
 using KRPC.Service;
 using KSA;
@@ -29,9 +32,13 @@ namespace KRPC.KSA
         readonly string modDirectory;
         Core core;
         ConfigurationFile config;
+        ClientRequestingConnectionEventArgs connectionRequest;
         // Whether the server was updated before the solver step of the current frame
         bool updatedThisFrame;
         double unpausedSpeed = 1.0;
+        // The RPCs broken by the running game, when it is not the version the mod was built against
+        IList<string> breakages;
+        bool showCompatibilityWarning;
 
         /// <summary>
         /// Construct the addon. StarMap creates one instance.
@@ -54,8 +61,9 @@ namespace KRPC.KSA
             core = Core.Instance;
             var version = typeof (Addon).Assembly.GetName ().Version;
             core.Version = version.Major + "." + version.Minor + "." + version.Build;
-            config = ConfigurationFile.Load (Path.Combine (modDirectory, "settings.toml"));
-            foreach (var server in config.Servers)
+            config = new ConfigurationFile (Path.Combine (modDirectory, "settings.toml"));
+            config.Load ();
+            foreach (var server in config.Configuration.Servers)
                 core.Add (server.Create ());
             core.OnClientRequestingConnection += OnClientRequestingConnection;
 
@@ -85,7 +93,10 @@ namespace KRPC.KSA
                 harmony.Patch (connected, finalizer: new HarmonyMethod (
                     typeof (Addon).GetMethod (nameof (TCPClientConnectedFinalizer), BindingFlags.NonPublic | BindingFlags.Static)));
 
-            if (config.AutoStartServers) {
+            MenuBar.Patch (harmony, this);
+            ConsoleWindow.Patch (harmony);
+
+            if (config.Configuration.AutoStartServers) {
                 Logger.WriteLine ("Auto-starting server");
                 try {
                     core.StartAll ();
@@ -93,6 +104,155 @@ namespace KRPC.KSA
                     Logger.WriteLine ("Failed to auto-start servers: " + e, Logger.Severity.Error);
                 }
             }
+
+            CheckGameVersion ();
+        }
+
+        /// <summary>
+        /// Find the RPCs broken by the running game, when it is not the version the mod was
+        /// built against.
+        /// </summary>
+        void CheckGameVersion ()
+        {
+            var running = GameCompatibility.Running;
+            if (running == GameCompatibility.BuiltFor)
+                return;
+            Logger.WriteLine ("Built for KSA " + GameCompatibility.BuiltFor + ", running on KSA " + running, Logger.Severity.Warning);
+            try {
+                breakages = GameCompatibility.FindBreakages ();
+                Logger.WriteLine (breakages.Count + " RPCs use game members missing from KSA " + running, Logger.Severity.Warning);
+            } catch (Exception e) {
+                Logger.WriteLine ("Failed to check the RPCs against the game: " + e, Logger.Severity.Error);
+                breakages = new List<string> ();
+            }
+            showCompatibilityWarning = config.IgnoredGameVersion != running.ToString ();
+        }
+
+        // In a method of its own, so that a popup broken by the running game fails only here
+        [MethodImpl (MethodImplOptions.NoInlining)]
+        void ShowCompatibilityPopup ()
+        {
+            new CompatibilityPopup (typeof (Addon).Assembly.GetName ().Version, breakages, () => {
+                config.IgnoredGameVersion = GameCompatibility.Running.ToString ();
+                config.Save ();
+            });
+        }
+
+        /// <summary>
+        /// The server.
+        /// </summary>
+        internal Core Core {
+            get { return core; }
+        }
+
+        /// <summary>
+        /// The kRPC window, created on the first UI frame.
+        /// </summary>
+        internal MainWindow MainWindow { get; private set; }
+
+        /// <summary>
+        /// The server statistics window, created on the first UI frame.
+        /// </summary>
+        internal InfoWindow InfoWindow { get; private set; }
+
+        PromptPopup connectingPrompt;
+
+        /// <summary>
+        /// Create the windows, which need the game's UI to be up, and save their visibility,
+        /// position and size when they change.
+        /// </summary>
+        [StarMapBeforeGui]
+        public void OnBeforeGui (double dt)
+        {
+            if (core == null)
+                return;
+            var c = config.Configuration;
+            if (MainWindow == null) {
+                InfoWindow = new InfoWindow (core, c.InfoWindowVisible, c.InfoWindowPosition);
+                MainWindow = new MainWindow (this, core, config);
+                if (showCompatibilityWarning) {
+                    try {
+                        ShowCompatibilityPopup ();
+                    } catch (Exception e) {
+                        Logger.WriteLine ("Failed to show the game version warning: " + e, Logger.Severity.Error);
+                    }
+                }
+            }
+            // Window rectangles are saved once a move or resize has finished
+            var moving = ImGui.IsMouseDown (ImGuiMouseButton.Left);
+            if (MainWindow.IsShown != c.MainWindowVisible || InfoWindow.IsShown != c.InfoWindowVisible ||
+                (!moving && (!MainWindow.Rect.Equals (c.MainWindowPosition) || !InfoWindow.Rect.Equals (c.InfoWindowPosition)))) {
+                c.MainWindowVisible = MainWindow.IsShown;
+                c.InfoWindowVisible = InfoWindow.IsShown;
+                c.MainWindowPosition = MainWindow.Rect;
+                c.InfoWindowPosition = InfoWindow.Rect;
+                config.Save ();
+            }
+        }
+
+        /// <summary>
+        /// Start a server, reporting a failure in the kRPC window.
+        /// </summary>
+        internal void StartServer (Server.Server server)
+        {
+            try {
+                server.Start ();
+            } catch (ServerException e) {
+                Logger.WriteLine ("Server exception: " + e.Message, Logger.Severity.Error);
+                MainWindow?.Errors.Add (e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Stop a server.
+        /// </summary>
+        internal void StopServer (Server.Server server)
+        {
+            server.Stop ();
+            if (!core.AnyRunning)
+                CloseConnectionRequest ();
+        }
+
+        /// <summary>
+        /// Start every server that is not running.
+        /// </summary>
+        internal void StartAllServers ()
+        {
+            MainWindow?.Errors.Clear ();
+            foreach (var server in core.Servers) {
+                if (!server.Running)
+                    StartServer (server);
+            }
+        }
+
+        /// <summary>
+        /// Stop every server.
+        /// </summary>
+        internal void StopAllServers ()
+        {
+            foreach (var server in core.Servers) {
+                if (server.Running)
+                    StopServer (server);
+            }
+        }
+
+        /// <summary>
+        /// Ask the player to confirm disconnecting a client.
+        /// </summary>
+        internal void ConfirmDisconnect (IClient client)
+        {
+            var name = client.Name;
+            new PromptPopup (
+                "Are you sure you want to disconnect " + (name.Length == 0 ? "the client" : "'" + name + "'") + "?",
+                new [] {
+                    new KeyValuePair<string, Action> ("Yes", client.Close),
+                    new KeyValuePair<string, Action> ("Yes (don't ask again)", () => {
+                        config.Configuration.ConfirmRemoveClient = false;
+                        config.Save ();
+                        client.Close ();
+                    }),
+                    new KeyValuePair<string, Action> ("No", () => { })
+                });
         }
 
         /// <summary>
@@ -151,6 +311,8 @@ namespace KRPC.KSA
         {
             if (core == null || !core.AnyRunning)
                 return;
+            if (config.Configuration.PauseServerWithGame && Universe.IsPaused ())
+                return;
             CallContext.GameScene =
                 Universe.CurrentSystem != null && Program.ControlledVehicle != null
                 ? GameScene.Flight : GameScene.None;
@@ -164,13 +326,51 @@ namespace KRPC.KSA
 
         void OnClientRequestingConnection (object sender, ClientRequestingConnectionEventArgs e)
         {
-            if (config.AutoAcceptConnections) {
+            if (config.Configuration.AutoAcceptConnections) {
                 Logger.WriteLine ("Accepting client connection (" + e.Client.Address + ")");
                 e.Request.Allow ();
-            } else {
-                Logger.WriteLine ("Denying client connection (" + e.Client.Address + "), auto_accept_connections is off");
-                e.Request.Deny ();
+                return;
             }
+            // The core raises the event on every update until the request is answered. The
+            // player answers the stored request, and the answer is passed on to the next event
+            // Another client waits for the stored request, unless that request was answered
+            // for a client that has since gone
+            if (connectionRequest != null && connectionRequest.Client != e.Client) {
+                if (connectionRequest.Request.StillPending)
+                    return;
+                connectionRequest = null;
+            }
+            if (connectionRequest == null) {
+                Logger.WriteLine ("Asking the player to allow or deny a client connection (" + e.Client.Address + ")");
+                connectionRequest = e;
+                var request = e.Request;
+                var name = e.Client.Name;
+                connectingPrompt = new PromptPopup (
+                    (name.Length == 0 ? "A client" : "'" + name + "'") + " is attempting to connect from " + e.Client.Address,
+                    new [] {
+                        new KeyValuePair<string, Action> ("Allow", request.Allow),
+                        new KeyValuePair<string, Action> ("Allow (don't ask again)", () => {
+                            config.Configuration.AutoAcceptConnections = true;
+                            config.Save ();
+                            request.Allow ();
+                        }),
+                        new KeyValuePair<string, Action> ("Deny", request.Deny)
+                    });
+            } else if (!connectionRequest.Request.StillPending) {
+                if (connectionRequest.Request.ShouldAllow)
+                    e.Request.Allow ();
+                else
+                    e.Request.Deny ();
+                CloseConnectionRequest ();
+            }
+        }
+
+        void CloseConnectionRequest ()
+        {
+            connectionRequest = null;
+            if (connectingPrompt != null)
+                connectingPrompt.Active = false;
+            connectingPrompt = null;
         }
 
         void Pause ()

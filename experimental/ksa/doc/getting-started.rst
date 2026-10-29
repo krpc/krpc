@@ -37,24 +37,27 @@ installs StarMap and the mod, and launches the game through StarMap.
 The server starts once the game has loaded its mods. It listens on ``127.0.0.1``, with RPC
 port 50000 and stream port 50001, and accepts every connection.
 
+Game Versions
+^^^^^^^^^^^^^
+
+kRPC for KSA @VERSION@ is built for KSA @KSA_VERSION@, and runs on other versions. On another
+version, a pop-up warns that the version is not supported, and lists the RPCs that use game
+code missing from it. Those RPCs throw an exception when called. Other RPCs may still behave
+differently, as the check finds only missing code. **Don't show again for this version**
+hides the pop-up until the game updates.
+
 Configuration
 ^^^^^^^^^^^^^
 
-The settings are in ``kRPC/settings.toml``:
+The **kRPC** menu in the game's menu bar opens the server window and the server info window,
+and starts and stops the server. The server window shows each server's address and connected
+clients, and edits its protocol, address and ports. **Advanced settings** at the bottom of the
+window holds the connection and rate control settings.
 
-.. code-block:: toml
+Set the address to **Any** to accept connections from other machines.
 
-   auto_start = true
-   auto_accept_connections = true
-
-   [[servers]]
-   name = "Default Server"
-   protocol = "ProtocolBuffersOverTCP"
-   address = "127.0.0.1"
-   rpc_port = 50000
-   stream_port = 50001
-
-Set ``address`` to ``0.0.0.0`` to accept connections from other machines.
+The window saves its settings to ``kRPC/settings.toml`` in the mods folder. Installing the
+mod again restores the default settings.
 
 The Python Client
 -----------------

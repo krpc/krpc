@@ -1,0 +1,32 @@
+# kRPC for KSA server settings for the tests, which build.sh --testing installs. The
+# server window opens at the left, clear of the windows the tests open.
+
+auto_start = true
+auto_accept_connections = true
+confirm_remove_client = true
+pause_server_with_game = false
+
+# Rate control. Times are in microseconds
+one_rpc_per_update = false
+max_time_per_update = 5000
+adaptive_rate_control = true
+blocking_recv = true
+recv_timeout = 1000
+tick_hold_timeout = 1000000
+
+verbose_errors = true
+debug_logging = false
+main_window_visible = true
+info_window_visible = false
+# Window (x, y, width, height) in pixels, with a zero width for the default
+main_window_rect = [388, 325, 400, 590]
+info_window_rect = [0, 0, 0, 0]
+
+[[servers]]
+name = "Default Server"
+# ProtocolBuffersOverTCP, ProtocolBuffersOverWebsockets, ProtocolBuffersOverLocalSocket
+# or ProtocolBuffersOverSerialIO
+protocol = "ProtocolBuffersOverTCP"
+address = "127.0.0.1"
+rpc_port = 50000
+stream_port = 50001

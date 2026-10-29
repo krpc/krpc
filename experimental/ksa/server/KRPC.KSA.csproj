@@ -8,6 +8,14 @@
   <ItemGroup>
     <Compile Include="src/Addon.cs" />
     <Compile Include="src/ConfigurationFile.cs" />
+    <Compile Include="src/GameCompatibility.cs" />
+    <Compile Include="src/UI/CompatibilityPopup.cs" />
+    <Compile Include="src/UI/ConsoleWindow.cs" />
+    <Compile Include="src/UI/EditServer.cs" />
+    <Compile Include="src/UI/InfoWindow.cs" />
+    <Compile Include="src/UI/MainWindow.cs" />
+    <Compile Include="src/UI/MenuBar.cs" />
+    <Compile Include="src/UI/PromptPopup.cs" />
   </ItemGroup>
   <ItemGroup>
     <!-- Shipped with StarMap, which loads them before any mod -->
@@ -15,6 +23,10 @@
     <PackageReference Include="Lib.Harmony" Version="2.4.2" ExcludeAssets="runtime" />
     <PackageReference Include="Google.Protobuf" Version="3.36.2" />
     <PackageReference Include="System.IO.Ports" Version="10.0.13" />
+    <!-- Compiles against the internal service list of the KRPC.Core release -->
+    <PackageReference Include="Krafs.Publicizer" Version="2.3.0" PrivateAssets="all" />
+    <Publicize Include="KRPC.Core:KRPC.Service.Services" />
+    <Publicize Include="KRPC.Core:KRPC.Service.Services.Signatures" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Tomlet">

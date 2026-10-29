@@ -52,6 +52,9 @@ for %%p in (%projects%) do (
 )
 rem The server reads the API documentation from the XML file beside each assembly
 copy /y "%krpc_bin%\KRPC.Core.xml" "%out%\" >nul || exit /b 1
+if exist "%out%\KRPC.KSA.TestingTools.dll" (
+  copy /y "%here%\testing\settings.toml" "%out%\" >nul || exit /b 1
+)
 del /q "%out%\*.pdb" 2>nul
 
 rem Generate the service definitions, which runs the server's service scan over the
