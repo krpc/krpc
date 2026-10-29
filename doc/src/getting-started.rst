@@ -42,7 +42,7 @@ The server is configured by clicking edit on the window displayed in-game:
 
 1. **Protocol**: this is the protocol used by the server. This affects type of client can connect to
    the server. For Python, and most other clients that communicate over TCP/IP, you want to select
-   "Protobuf over TCP".
+   "Protobuf over TCP/IP".
 2. **Address**: this is the IP address that the server will listen on. To only allow connections
    from the local machine, select 'localhost' (the default). To allow connections over a network,
    either select the local IP address of your machine, or choose 'Manual' and enter the local IP
