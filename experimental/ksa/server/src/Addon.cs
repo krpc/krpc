@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 using Brutal.ImGuiApi;
 using Brutal.Logging;
@@ -35,6 +36,9 @@ namespace KRPC.KSA
         // Whether the server was updated before the solver step of the current frame
         bool updatedThisFrame;
         double unpausedSpeed = 1.0;
+        // The RPCs broken by the running game, when it is not the version the mod was built against
+        IList<string> breakages;
+        bool showCompatibilityWarning;
 
         /// <summary>
         /// Construct the addon. StarMap creates one instance.
@@ -100,6 +104,38 @@ namespace KRPC.KSA
                     Logger.WriteLine ("Failed to auto-start servers: " + e, Logger.Severity.Error);
                 }
             }
+
+            CheckGameVersion ();
+        }
+
+        /// <summary>
+        /// Find the RPCs broken by the running game, when it is not the version the mod was
+        /// built against.
+        /// </summary>
+        void CheckGameVersion ()
+        {
+            var running = GameCompatibility.Running;
+            if (running == GameCompatibility.BuiltFor)
+                return;
+            Logger.WriteLine ("Built for KSA " + GameCompatibility.BuiltFor + ", running on KSA " + running, Logger.Severity.Warning);
+            try {
+                breakages = GameCompatibility.FindBreakages ();
+                Logger.WriteLine (breakages.Count + " RPCs use game members missing from KSA " + running, Logger.Severity.Warning);
+            } catch (Exception e) {
+                Logger.WriteLine ("Failed to check the RPCs against the game: " + e, Logger.Severity.Error);
+                breakages = new List<string> ();
+            }
+            showCompatibilityWarning = config.IgnoredGameVersion != running.ToString ();
+        }
+
+        // In a method of its own, so that a popup broken by the running game fails only here
+        [MethodImpl (MethodImplOptions.NoInlining)]
+        void ShowCompatibilityPopup ()
+        {
+            new CompatibilityPopup (typeof (Addon).Assembly.GetName ().Version, breakages, () => {
+                config.IgnoredGameVersion = GameCompatibility.Running.ToString ();
+                config.Save ();
+            });
         }
 
         /// <summary>
@@ -134,6 +170,13 @@ namespace KRPC.KSA
             if (MainWindow == null) {
                 InfoWindow = new InfoWindow (core, c.InfoWindowVisible, c.InfoWindowPosition);
                 MainWindow = new MainWindow (this, core, config);
+                if (showCompatibilityWarning) {
+                    try {
+                        ShowCompatibilityPopup ();
+                    } catch (Exception e) {
+                        Logger.WriteLine ("Failed to show the game version warning: " + e, Logger.Severity.Error);
+                    }
+                }
             }
             // Window rectangles are saved once a move or resize has finished
             var moving = ImGui.IsMouseDown (ImGuiMouseButton.Left);

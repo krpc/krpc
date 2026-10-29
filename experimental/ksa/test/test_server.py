@@ -43,3 +43,9 @@ class TestServer(ksatest.TestCase):
         with krpc.connect(name="after killed client") as conn:
             ksa = conn.ksa  # pyright: ignore[reportAttributeAccessIssue]
             self.assertIsNotNone(ksa.active_vehicle)
+
+
+class TestGameCompatibility(ksatest.TestCase):
+    def test_no_breakages(self):
+        # The game the mod was built against has every member the mod uses
+        self.assertEqual([], self.conn.testing_tools.compatibility_breakages)

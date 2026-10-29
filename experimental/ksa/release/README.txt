@@ -6,8 +6,9 @@ game exposes the game's API, and the kRPC @KRPC_VERSION@ client libraries call i
 Python, C#, C++, C, Java and Lua. kRPC for KSA is experimental, and its API may change
 between releases.
 
-Requires Kitten Space Agency @KSA_VERSION@ and the StarMap @STARMAP_VERSION@ code mod
-loader.
+Built for Kitten Space Agency @KSA_VERSION@, and requires the StarMap @STARMAP_VERSION@
+code mod loader. On another KSA version, the mod warns that it is not supported and lists
+the RPCs it found broken.
 
     kRPC/   the mod
     stubs/      client stubs for C#, C++, C and Java, and the service definitions

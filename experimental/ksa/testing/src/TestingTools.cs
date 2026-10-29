@@ -123,6 +123,15 @@ namespace KRPC.KSA.Testing
         }
 
         /// <summary>
+        /// The RPCs that use game members missing from the running game, found whatever the
+        /// game version.
+        /// </summary>
+        [KRPCProperty]
+        public static IList<string> CompatibilityBreakages {
+            get { return GameCompatibility.FindBreakages (); }
+        }
+
+        /// <summary>
         /// Quit the game at the end of the frame.
         /// </summary>
         [KRPCProcedure]

@@ -32,6 +32,11 @@ namespace KRPC.KSA
             get { return Configuration.Instance; }
         }
 
+        /// <summary>
+        /// The game version the player chose not to be warned about, or null for none.
+        /// </summary>
+        public string IgnoredGameVersion { get; set; }
+
         public void Load ()
         {
             var config = Configuration;
@@ -46,6 +51,7 @@ namespace KRPC.KSA
             config.AutoAcceptConnections = GetBoolean (document, "auto_accept_connections", config.AutoAcceptConnections);
             config.ConfirmRemoveClient = GetBoolean (document, "confirm_remove_client", config.ConfirmRemoveClient);
             config.PauseServerWithGame = GetBoolean (document, "pause_server_with_game", config.PauseServerWithGame);
+            IgnoredGameVersion = document.ContainsKey ("ignored_ksa_version") ? document.GetString ("ignored_ksa_version") : null;
             config.OneRPCPerUpdate = GetBoolean (document, "one_rpc_per_update", config.OneRPCPerUpdate);
             config.MaxTimePerUpdate = GetMicroseconds (document, "max_time_per_update", config.MaxTimePerUpdate);
             config.AdaptiveRateControl = GetBoolean (document, "adaptive_rate_control", config.AdaptiveRateControl);
@@ -126,6 +132,10 @@ namespace KRPC.KSA
             AppendValue (toml, "auto_accept_connections", config.AutoAcceptConnections);
             AppendValue (toml, "confirm_remove_client", config.ConfirmRemoveClient);
             AppendValue (toml, "pause_server_with_game", config.PauseServerWithGame);
+            if (IgnoredGameVersion != null) {
+                toml.Append ("# The KSA version with no warning that kRPC was built for another version\n");
+                AppendValue (toml, "ignored_ksa_version", IgnoredGameVersion);
+            }
             toml.Append ('\n');
             toml.Append ("# Rate control. Times are in microseconds\n");
             AppendValue (toml, "one_rpc_per_update", config.OneRPCPerUpdate);

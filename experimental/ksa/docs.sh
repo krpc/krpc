@@ -52,7 +52,7 @@ done
 
 find "$src" -name '*.rst' -exec sed -i \
   -e "s/@VERSION@/$mod_version/g" -e "s/@KRPC_VERSION@/$krpc_version/g" \
-  -e "s/@STARMAP_VERSION@/$starmap_version/g" {} +
+  -e "s/@STARMAP_VERSION@/$starmap_version/g" -e "s/@KSA_VERSION@/$ksa_version/g" {} +
 PYTHONWARNINGS="ignore:pkg_resources is deprecated:UserWarning" KSA_DOC_VERSION="$mod_version" "$venv/bin/sphinx-build" -q -W -b html "$src" "$out"
 echo "Documentation in $out/index.html"
 
