@@ -1,0 +1,13 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('KSA') }}
+{% import domain.macros as macros with context %}
+
+Power
+=====
+
+{{ macros.class(services['KSA'].classes['Battery']) }}
+{{ macros.class(services['KSA'].classes['SolarPanel']) }}
+{{ macros.class(services['KSA'].classes['Generator']) }}
+{{ macros.class(services['KSA'].classes['PowerConsumer']) }}
+{{ macros.class(services['KSA'].classes['Light']) }}

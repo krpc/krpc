@@ -179,6 +179,19 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// Whether the vehicle's lights are switched on, as the lights key does.
+        /// </summary>
+        [KRPCProperty]
+        public bool Lights {
+            get { return InternalVehicle.LightsOn; }
+            set {
+                var v = InternalVehicle;
+                if (v.LightsOn != value)
+                    v.ToggleLights ();
+            }
+        }
+
+        /// <summary>
         /// The number of the most recently activated sequence.
         /// </summary>
         [KRPCProperty]

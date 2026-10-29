@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Brutal.Numerics;
 using KRPC.KSA.Utils;
 using KRPC.Service;
@@ -204,6 +205,44 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public double AtmosphereDensity {
             get { return InternalVehicle.PhysicsEnvironment.AtmosphericDensity; }
+        }
+
+        /// <summary>
+        /// The radiation dose rate at the vehicle, in sieverts per second. Includes any solar
+        /// particle event under way.
+        /// </summary>
+        [KRPCProperty]
+        public double DoseRate {
+            get {
+                // As the game's dose gauge computes it
+                var v = InternalVehicle;
+                var position = v.GetPositionEcl ();
+                var rates = Radiation.ComputeDoseRates (v.Parent, v.GetPositionCci (), position);
+                var events = ParticleEvents.ComputeDoseRate (position, v.Parent, rates.StarExposure, Universe.GetElapsedSeconds (), doseTerms);
+                return (rates.Total + events).Value ();
+            }
+        }
+
+        // The game's cache for its orbit dose gauge, which samples the whole orbit
+        static readonly OrbitDoseAverageCache orbitDoseAverages = new OrbitDoseAverageCache ();
+        // Scratch space for the particle event dose
+        static readonly List<DoseTerm> doseTerms = new List<DoseTerm> ();
+
+        /// <summary>
+        /// The radiation dose rate averaged over the vehicle's orbit, in sieverts per second.
+        /// Includes any solar particle event under way. Not a number if the body has no
+        /// magnetosphere, or the orbit dips below the surface.
+        /// </summary>
+        [KRPCProperty]
+        public double OrbitAverageDoseRate {
+            get {
+                // As the game's orbit dose gauge computes it
+                var v = InternalVehicle;
+                if (!Radiation.TryComputeOrbitDoseRates (v, orbitDoseAverages, out var rates))
+                    return double.NaN;
+                var events = ParticleEvents.ComputeDoseRate (v.GetPositionEcl (), null, rates.StarExposure, Universe.GetElapsedSeconds (), doseTerms);
+                return (rates.Total + events).Value ();
+            }
         }
 
         /// <summary>

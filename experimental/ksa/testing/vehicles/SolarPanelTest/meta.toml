@@ -1,0 +1,5 @@
+name = "SolarPanelTest"
+created = 2026-10-25T00:00:00.0000000
+updated = 2026-10-25T00:00:00.0000000
+version = "v2026.10.19.5638"
+systems = [ "Sol", ]
