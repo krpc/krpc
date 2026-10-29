@@ -180,6 +180,8 @@ KSA.Flight.Roll
 KSA.Flight.StaticPressure
 KSA.Flight.AtmosphereDensity
 KSA.Flight.DynamicPressure
+KSA.Flight.DoseRate
+KSA.Flight.OrbitAverageDoseRate
 KSA.Flight.GForce
 KSA.Flight.AngleOfAttack
 KSA.Flight.SideslipAngle

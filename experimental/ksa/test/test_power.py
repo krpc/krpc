@@ -1,3 +1,5 @@
+import math
+
 import ksatest
 from test_parachute import SITE, VEHICLES
 
@@ -178,3 +180,30 @@ class TestMagneticScoop(TestVehicleCase):
 
     def test_no_scoop(self):
         self.assertEqual([], self.find_vehicle("Gemini7").magnetic_scoops)
+
+
+class TestRadiation(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.load_save()
+
+    def test_dose_rate(self):
+        rate = self.find_vehicle("Gemini7").flight.dose_rate
+        self.assertGreater(rate, 0)
+        self.assertTrue(math.isfinite(rate))
+
+    def test_orbit_average_dose_rate(self):
+        rate = self.find_vehicle("Gemini7").flight.orbit_average_dose_rate
+        self.assertGreater(rate, 0)
+        self.assertTrue(math.isfinite(rate))
+
+    def test_no_orbit_average_on_the_pad(self):
+        name = self.conn.testing_tools.register_vehicle(str(VEHICLES / "ScoopTest"))
+        flight = self.ksa.launch_vehicle(name, SITE).flight
+        self.assertTrue(math.isnan(flight.orbit_average_dose_rate))
+        self.assertGreater(flight.dose_rate, 0)
