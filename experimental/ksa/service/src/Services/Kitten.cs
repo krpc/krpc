@@ -122,14 +122,14 @@ namespace KRPC.KSA.Services
         /// The time the kitten has spent on missions, including the current one, in seconds.
         /// </summary>
         [KRPCProperty]
-        public double MissionTime {
+        public float MissionTime {
             get {
                 var entry = Entry;
                 var total = ((UniverseTime)entry.TotalMissionTime).Seconds ();
                 // The start time is set once the kitten's vehicle launches
                 if (entry.AssignedToVehicle && entry.CurrentMissionStartTime.IsValid ())
                     total += (Universe.GetElapsedTime () - entry.CurrentMissionStartTime).Seconds ();
-                return total;
+                return (float)total;
             }
         }
 
@@ -137,17 +137,17 @@ namespace KRPC.KSA.Services
         /// The distance the kitten has traveled on missions, in meters.
         /// </summary>
         [KRPCProperty]
-        public double DistanceTraveled {
-            get { return Entry.TravelledMeters.InMeters (); }
+        public float DistanceTraveled {
+            get { return (float)Entry.TravelledMeters.InMeters (); }
         }
 
         /// <summary>
         /// The kitten's highest speed on a mission, in meters per second.
         /// </summary>
         [KRPCProperty]
-        public double FastestSpeed {
+        public float FastestSpeed {
             // The game stores the speed in a distance field
-            get { return Entry.FastestSpeed.InMeters (); }
+            get { return (float)Entry.FastestSpeed.InMeters (); }
         }
 
         /// <summary>
@@ -155,8 +155,8 @@ namespace KRPC.KSA.Services
         /// radiation sickness from 1 sievert and death from 4 sieverts.
         /// </summary>
         [KRPCProperty]
-        public double AcuteDose {
-            get { return Entry.GetAcuteDose (Universe.GetElapsedTime ()).Value (); }
+        public float AcuteDose {
+            get { return (float)Entry.GetAcuteDose (Universe.GetElapsedTime ()).Value (); }
         }
 
         /// <summary>
@@ -164,8 +164,8 @@ namespace KRPC.KSA.Services
         /// mission that takes it past 0.6 sieverts.
         /// </summary>
         [KRPCProperty]
-        public double LifetimeDose {
-            get { return Entry.LifetimeDose.Value (); }
+        public float LifetimeDose {
+            get { return (float)Entry.LifetimeDose.Value (); }
         }
 
         /// <summary>
@@ -174,8 +174,8 @@ namespace KRPC.KSA.Services
         /// kitten is not on a mission.
         /// </summary>
         [KRPCProperty]
-        public double DoseRate {
-            get { return Entry.DoseRate.Value (); }
+        public float DoseRate {
+            get { return (float)Entry.DoseRate.Value (); }
         }
 
         /// <summary>
@@ -191,8 +191,8 @@ namespace KRPC.KSA.Services
         /// at home, in seconds. Zero if the kitten does not have radiation sickness.
         /// </summary>
         [KRPCProperty]
-        public double TimeUntilFitToFly {
-            get { return Entry.GetTimeUntilFitToFly (Universe.GetElapsedTime ()); }
+        public float TimeUntilFitToFly {
+            get { return (float)Entry.GetTimeUntilFitToFly (Universe.GetElapsedTime ()); }
         }
 
         /// <summary>
@@ -200,8 +200,8 @@ namespace KRPC.KSA.Services
         /// resting at home, in seconds.
         /// </summary>
         [KRPCProperty]
-        public double RecoveryTime {
-            get { return Entry.GetRecoveryTime (Universe.GetElapsedTime ()); }
+        public float RecoveryTime {
+            get { return (float)Entry.GetRecoveryTime (Universe.GetElapsedTime ()); }
         }
 
         /// <summary>

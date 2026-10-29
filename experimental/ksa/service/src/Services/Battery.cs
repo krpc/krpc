@@ -61,7 +61,7 @@ namespace KRPC.KSA.Services
         /// The energy stored in the battery, in joules.
         /// </summary>
         [KRPCProperty]
-        public double StoredEnergy {
+        public float StoredEnergy {
             get { return State.Charge.Value (); }
         }
 
@@ -69,7 +69,7 @@ namespace KRPC.KSA.Services
         /// The energy the battery can store, in joules.
         /// </summary>
         [KRPCProperty]
-        public double EnergyCapacity {
+        public float EnergyCapacity {
             get {
                 _ = Part.InternalPart;
                 return module.MaximumCapacity.Value ();

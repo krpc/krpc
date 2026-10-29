@@ -115,16 +115,16 @@ namespace KRPC.KSA.Services
         /// The time until <see cref="UT"/>, in seconds. Negative once that time has passed.
         /// </summary>
         [KRPCProperty]
-        public double TimeTo {
-            get { return (InternalBurn.Time - Universe.GetElapsedTime ()).Seconds (); }
+        public float TimeTo {
+            get { return (float)((InternalBurn.Time - Universe.GetElapsedTime ()).Seconds ()); }
         }
 
         /// <summary>
         /// The change in velocity in the prograde direction, in meters per second.
         /// </summary>
         [KRPCProperty]
-        public double Prograde {
-            get { return InternalBurn.DeltaVVlf.X; }
+        public float Prograde {
+            get { return (float)InternalBurn.DeltaVVlf.X; }
             set { SetDeltaV (0, value); }
         }
 
@@ -132,8 +132,8 @@ namespace KRPC.KSA.Services
         /// The change in velocity along the orbit normal, in meters per second.
         /// </summary>
         [KRPCProperty]
-        public double Normal {
-            get { return InternalBurn.DeltaVVlf.Y; }
+        public float Normal {
+            get { return (float)InternalBurn.DeltaVVlf.Y; }
             set { SetDeltaV (1, value); }
         }
 
@@ -141,8 +141,8 @@ namespace KRPC.KSA.Services
         /// The change in velocity radially outward, in meters per second.
         /// </summary>
         [KRPCProperty]
-        public double Radial {
-            get { return InternalBurn.DeltaVVlf.Z; }
+        public float Radial {
+            get { return (float)InternalBurn.DeltaVVlf.Z; }
             set { SetDeltaV (2, value); }
         }
 
@@ -150,8 +150,8 @@ namespace KRPC.KSA.Services
         /// The magnitude of the change in velocity, in meters per second.
         /// </summary>
         [KRPCProperty]
-        public double DeltaV {
-            get { return InternalBurn.DeltaVVlf.Length (); }
+        public float DeltaV {
+            get { return (float)InternalBurn.DeltaVVlf.Length (); }
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace KRPC.KSA.Services
         /// is <see cref="DeltaV"/>.
         /// </remarks>
         [KRPCProperty]
-        public double RemainingDeltaV {
+        public float RemainingDeltaV {
             get {
                 var target = Target;
                 return target == null ? DeltaV : target.DeltaVToGoCci.Length ();
@@ -187,10 +187,10 @@ namespace KRPC.KSA.Services
         /// for a burn other than the next one, and until the flight computer has timed it.
         /// </summary>
         [KRPCProperty]
-        public double BurnTime {
+        public float BurnTime {
             get {
                 var target = Target;
-                return target == null ? double.NaN : target.BurnDuration;
+                return (float)(target == null ? double.NaN : target.BurnDuration);
             }
         }
 
@@ -215,13 +215,13 @@ namespace KRPC.KSA.Services
         /// surface.
         /// </summary>
         [KRPCProperty]
-        public double OrbitAverageDoseRate {
+        public float OrbitAverageDoseRate {
             get {
                 // As the game's burn editor computes it
                 var orbit = InternalBurn.GetPostBurnPatch ()?.Orbit;
                 if (orbit == null || !Radiation.TryComputeOrbitDoseRate (orbit, orbit.Parent.GetPositionEcl (), orbitDoseAverages, out var rate))
-                    return double.NaN;
-                return rate.Value ();
+                    return (float)double.NaN;
+                return (float)rate.Value ();
             }
         }
 

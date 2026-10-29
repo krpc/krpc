@@ -126,8 +126,8 @@ namespace KRPC.KSA.Services
         /// Returns NaN in any other mode.
         /// </remarks>
         [KRPCProperty]
-        public double TargetPitch {
-            get { return TargetAngle (1); }
+        public float TargetPitch {
+            get { return (float)TargetAngle (1); }
             set {
                 CheckPitch (value);
                 SetTargetAngle (1, value);
@@ -142,11 +142,11 @@ namespace KRPC.KSA.Services
         /// Returns NaN in any other mode.
         /// </remarks>
         [KRPCProperty]
-        public double TargetHeading {
+        public float TargetHeading {
             get {
                 if (GetMode (Computer) != AutoPilotMode.Attitude)
-                    return double.NaN;
-                return Flight.YawToHeading (Computer.CustomAttitudeTarget.Z);
+                    return (float)double.NaN;
+                return (float)Flight.YawToHeading (Computer.CustomAttitudeTarget.Z);
             }
             set {
                 CheckFinite (value);
@@ -167,11 +167,11 @@ namespace KRPC.KSA.Services
         /// <see cref="AutoPilotMode.Attitude"/>.
         /// </remarks>
         [KRPCProperty]
-        public double TargetRoll {
+        public float TargetRoll {
             get {
                 if (Computer.RollMode == FlightComputerRollMode.Decoupled)
-                    return double.NaN;
-                return TargetAngle (0);
+                    return (float)double.NaN;
+                return (float)TargetAngle (0);
             }
             set {
                 if (double.IsNaN (value)) {
@@ -190,7 +190,7 @@ namespace KRPC.KSA.Services
         /// <param name="pitch">Target pitch, in degrees, between -90° and +90°.</param>
         /// <param name="heading">Target heading, in degrees, between 0° and 360°.</param>
         [KRPCMethod]
-        public void TargetPitchAndHeading (double pitch, double heading)
+        public void TargetPitchAndHeading (float pitch, float heading)
         {
             CheckPitch (pitch);
             CheckFinite (heading);
@@ -244,7 +244,7 @@ namespace KRPC.KSA.Services
             enu /= length;
             var pitch = Math.Asin (Math.Clamp (enu.Z, -1d, 1d)) * (180d / Math.PI);
             var heading = Math.Atan2 (enu.X, enu.Y) * (180d / Math.PI);
-            TargetPitchAndHeading (pitch, heading < 0 ? heading + 360 : heading);
+            TargetPitchAndHeading ((float)pitch, (float)(heading < 0 ? heading + 360 : heading));
         }
 
         /// <summary>
@@ -252,13 +252,13 @@ namespace KRPC.KSA.Services
         /// in degrees. NaN when the auto-pilot is not engaged.
         /// </summary>
         [KRPCProperty]
-        public double Error {
+        public float Error {
             get {
                 var computer = Computer;
                 if (computer.AttitudeMode != FlightComputerAttitudeMode.Auto)
-                    return double.NaN;
+                    return (float)double.NaN;
                 var errors = computer.ErrorAngles;
-                return RadiansToDegrees (Math.Sqrt (errors.Y * errors.Y + errors.Z * errors.Z));
+                return (float)RadiansToDegrees (Math.Sqrt (errors.Y * errors.Y + errors.Z * errors.Z));
             }
         }
 
@@ -267,12 +267,12 @@ namespace KRPC.KSA.Services
         /// NaN when the auto-pilot is not engaged.
         /// </summary>
         [KRPCProperty]
-        public double RollError {
+        public float RollError {
             get {
                 var computer = Computer;
                 if (computer.AttitudeMode != FlightComputerAttitudeMode.Auto)
-                    return double.NaN;
-                return RadiansToDegrees (Math.Abs (computer.ErrorAngles.X));
+                    return (float)double.NaN;
+                return (float)RadiansToDegrees (Math.Abs (computer.ErrorAngles.X));
             }
         }
 

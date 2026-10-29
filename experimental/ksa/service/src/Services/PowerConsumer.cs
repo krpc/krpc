@@ -70,7 +70,7 @@ namespace KRPC.KSA.Services
         /// The power the part uses, in watts.
         /// </summary>
         [KRPCProperty]
-        public double Power {
+        public float Power {
             get { return State.Consumed.Value (); }
         }
     }

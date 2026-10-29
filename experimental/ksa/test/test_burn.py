@@ -52,7 +52,9 @@ class TestBurn(ksatest.TestCase):
         burn.normal = 40
         burn.radial = -10
         self.assertEqual((30, 40, -10), (burn.prograde, burn.normal, burn.radial))
-        self.assertAlmostEqual(math.sqrt(30**2 + 40**2 + 10**2), burn.delta_v)
+        self.assertAlmostEqual(
+            math.sqrt(30**2 + 40**2 + 10**2), burn.delta_v, delta=1e-4
+        )
         # The edited burn keeps its object
         self.assertEqual([burn], self.vehicle.burns)
 

@@ -79,7 +79,7 @@ namespace KRPC.KSA.Services
         /// The rate the scoop collects gas at, in kilograms per second.
         /// </summary>
         [KRPCProperty]
-        public double CollectionRate {
+        public float CollectionRate {
             get {
                 if (!ModuleStateful<global::KSA.MagneticScoop, MagneticScoopState, EmptyStruct, EmptyStruct>.TryGetFrom (
                     Part.InternalVehicle.Parts.States, out var states))

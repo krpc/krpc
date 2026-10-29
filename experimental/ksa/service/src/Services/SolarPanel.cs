@@ -82,7 +82,7 @@ namespace KRPC.KSA.Services
         /// The power the solar panel produces, in watts.
         /// </summary>
         [KRPCProperty]
-        public double Power {
+        public float Power {
             get { return State.Produced.Value (); }
         }
 
@@ -91,8 +91,8 @@ namespace KRPC.KSA.Services
         /// Zero when the panel faces the sun.
         /// </summary>
         [KRPCProperty]
-        public double SunAngle {
-            get { return State.SunAoA * (180d / Math.PI); }
+        public float SunAngle {
+            get { return (float)(State.SunAoA * (180d / Math.PI)); }
         }
 
         /// <summary>

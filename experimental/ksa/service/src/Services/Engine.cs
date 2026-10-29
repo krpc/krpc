@@ -118,8 +118,8 @@ namespace KRPC.KSA.Services
         /// pressure, in Newtons. Zero when it is not firing.
         /// </summary>
         [KRPCProperty]
-        public double Thrust {
-            get { return Engines.Performance (Part.InternalVehicle, engine, fullThrottle: false).thrust; }
+        public float Thrust {
+            get { return (float)Engines.Performance (Part.InternalVehicle, engine, fullThrottle: false).thrust; }
         }
 
         /// <summary>
@@ -127,8 +127,8 @@ namespace KRPC.KSA.Services
         /// Newtons. Zero when it is inactive or has no propellant.
         /// </summary>
         [KRPCProperty]
-        public double AvailableThrust {
-            get { return Engines.Performance (Part.InternalVehicle, engine, fullThrottle: true).thrust; }
+        public float AvailableThrust {
+            get { return (float)Engines.Performance (Part.InternalVehicle, engine, fullThrottle: true).thrust; }
         }
 
         /// <summary>
@@ -136,10 +136,10 @@ namespace KRPC.KSA.Services
         /// Zero when it is inactive or has no propellant.
         /// </summary>
         [KRPCProperty]
-        public double SpecificImpulse {
+        public float SpecificImpulse {
             get {
                 var (thrust, massFlowRate) = Engines.Performance (Part.InternalVehicle, engine, fullThrottle: true);
-                return massFlowRate > 0 ? thrust / (massFlowRate * Engines.G0) : 0;
+                return (float)(massFlowRate > 0 ? thrust / (massFlowRate * Engines.G0) : 0);
             }
         }
     }

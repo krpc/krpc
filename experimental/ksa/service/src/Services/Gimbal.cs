@@ -69,16 +69,16 @@ namespace KRPC.KSA.Services
         /// The angle of the gimbal about its y axis, in degrees.
         /// </summary>
         [KRPCProperty]
-        public double AngleY {
-            get { return Degrees (State.AngleY); }
+        public float AngleY {
+            get { return (float)Degrees (State.AngleY); }
         }
 
         /// <summary>
         /// The angle of the gimbal about its z axis, in degrees.
         /// </summary>
         [KRPCProperty]
-        public double AngleZ {
-            get { return Degrees (State.AngleZ); }
+        public float AngleZ {
+            get { return (float)Degrees (State.AngleZ); }
         }
 
         /// <summary>
@@ -86,10 +86,10 @@ namespace KRPC.KSA.Services
         /// turn about that axis.
         /// </summary>
         [KRPCProperty]
-        public double MaxAngleY {
+        public float MaxAngleY {
             get {
                 _ = Part.InternalPart;
-                return Degrees (gimbal.AxisY.MaxAngle);
+                return (float)Degrees (gimbal.AxisY.MaxAngle);
             }
         }
 
@@ -98,10 +98,10 @@ namespace KRPC.KSA.Services
         /// turn about that axis.
         /// </summary>
         [KRPCProperty]
-        public double MaxAngleZ {
+        public float MaxAngleZ {
             get {
                 _ = Part.InternalPart;
-                return Degrees (gimbal.AxisZ.MaxAngle);
+                return (float)Degrees (gimbal.AxisZ.MaxAngle);
             }
         }
 

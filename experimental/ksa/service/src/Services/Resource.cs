@@ -74,16 +74,16 @@ namespace KRPC.KSA.Services
         /// The mass of the substance held, in kilograms.
         /// </summary>
         [KRPCProperty]
-        public double Amount {
-            get { return Sum ((mole, state) => state.Mass); }
+        public float Amount {
+            get { return (float)Sum ((mole, state) => state.Mass); }
         }
 
         /// <summary>
         /// The mass of the substance the tanks can hold, in kilograms.
         /// </summary>
         [KRPCProperty]
-        public double Max {
-            get { return Sum ((mole, state) => mole.GetStoredMass (mole.ContainerVolume)); }
+        public float Max {
+            get { return (float)Sum ((mole, state) => mole.GetStoredMass (mole.ContainerVolume)); }
         }
 
         double Sum (Func<Mole, MoleState, double> value)
