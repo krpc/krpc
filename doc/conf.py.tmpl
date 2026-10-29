@@ -134,7 +134,9 @@ spelling_ignore_contributor_names = False
 # still built and rendered) rather than listing every identifier in dictionary.txt.
 spelling_exclude_patterns = ['changelog.rst']
 
+# The Java client needs Java 17. Every java.* package the docs name is in the java.base module
 javadoc_url_map = {
+    'java' : ('https://docs.oracle.com/en/java/javase/17/docs/api/java.base/', 'javadoc'),
     'org.javatuples' : ('https://javadoc.io/static/org.javatuples/javatuples/1.2/', 'javadoc')
 }
 
@@ -246,6 +248,10 @@ nitpick_ignore = [
     ('cpp:identifier', 'services::KRPC'),
     ('cpp:identifier', 'services::KRPC::Expression'),
 
+    ('java:type', 'ConnectionResponse'),
+    ('java:type', 'ConnectionResponse.Status'),
+    ('java:type', 'Disconnect'),
+    ('java:type', 'Disconnect.Reason'),
     ('java:type', 'int'),
     ('java:type', 'long'),
     ('java:type', 'boolean'),

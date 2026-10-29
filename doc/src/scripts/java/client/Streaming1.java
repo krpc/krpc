@@ -1,6 +1,5 @@
 import krpc.client.Connection;
 import krpc.client.RPCException;
-import krpc.client.services.KRPC;
 import krpc.client.services.SpaceCenter;
 import krpc.client.services.SpaceCenter.ReferenceFrame;
 import krpc.client.services.SpaceCenter.Vessel;

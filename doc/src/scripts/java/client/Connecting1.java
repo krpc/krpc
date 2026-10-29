@@ -4,11 +4,10 @@ import krpc.client.services.KRPC;
 
 import java.io.IOException;
 
-public class Basic {
+public class Connecting1 {
   public static void main(String[] args) throws IOException, RPCException {
     try (Connection connection = Connection.newInstance()) {
-      KRPC krpc = KRPC.newInstance(connection);
-      System.out.println("Connected to kRPC version " + krpc.getStatus().getVersion());
+      System.out.println(KRPC.newInstance(connection).getStatus().getVersion());
     }
   }
 }
