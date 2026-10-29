@@ -44,7 +44,7 @@ class TestVehicle(ksatest.TestCase):
     def test_removed_by_load(self):
         vehicle = self.find_vehicle("Rocket")
         self.load_save()
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             _ = vehicle.name
         type(self).vehicle = self.find_vehicle("Gemini7")
 
@@ -106,3 +106,43 @@ class TestVehicle(ksatest.TestCase):
             self.vehicle.target_body = self.ksa.bodies["Sol"]
         with self.assertRaises(ValueError):
             self.vehicle.target_part = self.vehicle.root_part
+
+
+class TestObjectStore(ksatest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+
+    def test_load_frees_objects(self):
+        tools = self.conn.testing_tools
+        vehicles = self.ksa.vehicles
+        parts = [part for vehicle in vehicles for part in vehicle.parts]
+        frames = [vehicle.reference_frame for vehicle in vehicles]
+        earth = self.ksa.bodies["Earth"]
+        count = tools.object_count
+        self.assertGreater(count, len(parts) + len(frames))
+        self.load_save()
+        # Only the objects for the new vehicles are left
+        self.assertLess(tools.object_count, count - len(parts))
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
+            _ = parts[0].name
+        # A load keeps the bodies
+        self.assertEqual(earth, self.ksa.bodies["Earth"])
+        self.assertGreater(earth.radius, 0)
+
+    def test_decouple_keeps_objects(self):
+        tools = self.conn.testing_tools
+        vehicle = self.ksa.active_vehicle
+        parts = vehicle.parts
+        count = tools.object_count
+        decoupler = min(
+            (part for part in parts if part.decoupler is not None),
+            key=lambda part: part.sequence,
+        ).decoupler
+        separated = decoupler.decouple()
+        # Every part still exists, on one vehicle or the other
+        ksatest.wait_until(lambda: tools.object_count >= count)
+        for part in parts:
+            self.assertIn(part.vehicle, [vehicle, *separated])
+        self.load_save()

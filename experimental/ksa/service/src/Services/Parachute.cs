@@ -10,7 +10,7 @@ namespace KRPC.KSA.Services
     /// A parachute. Obtained from <see cref="Part.Parachute"/>.
     /// </summary>
     [KRPCClass (Service = "KSA")]
-    public class Parachute : Equatable<Parachute>
+    public class Parachute : Equatable<Parachute>, IGameObjectState
     {
         readonly global::KSA.Parachute parachute;
 
@@ -26,6 +26,13 @@ namespace KRPC.KSA.Services
         public override bool Equals (Parachute other)
         {
             return !ReferenceEquals (other, null) && ReferenceEquals (parachute, other.parachute);
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Part.GameObjectState; }
         }
 
         /// <summary>

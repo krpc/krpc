@@ -13,7 +13,7 @@ namespace KRPC.KSA.Services
     /// A planet, moon or star. See <see cref="KSA.Bodies"/>.
     /// </summary>
     [KRPCClass (Service = "KSA")]
-    public class Body : Equatable<Body>
+    public class Body : Equatable<Body>, IGameObjectState
     {
         internal Body (IParentBody body)
         {
@@ -31,6 +31,13 @@ namespace KRPC.KSA.Services
         public override bool Equals (Body other)
         {
             return !ReferenceEquals (other, null) && ReferenceEquals (InternalBody, other.InternalBody);
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Vehicles.StateOf (InternalBody); }
         }
 
         /// <summary>

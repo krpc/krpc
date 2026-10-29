@@ -14,7 +14,7 @@ namespace KRPC.KSA.Services
     /// See <see cref="Control.EngineOn"/> and <see cref="Control.Throttle"/>.
     /// </remarks>
     [KRPCClass (Service = "KSA")]
-    public class Engine : Equatable<Engine>
+    public class Engine : Equatable<Engine>, IGameObjectState
     {
         readonly EngineController engine;
 
@@ -30,6 +30,13 @@ namespace KRPC.KSA.Services
         public override bool Equals (Engine other)
         {
             return !ReferenceEquals (other, null) && ReferenceEquals (engine, other.engine);
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Part.GameObjectState; }
         }
 
         /// <summary>

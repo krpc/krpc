@@ -11,7 +11,7 @@ namespace KRPC.KSA.Services
     /// A docking port. Obtained from <see cref="Part.DockingPort"/>.
     /// </summary>
     [KRPCClass (Service = "KSA")]
-    public class DockingPort : Equatable<DockingPort>
+    public class DockingPort : Equatable<DockingPort>, IGameObjectState
     {
         readonly global::KSA.DockingPort port;
 
@@ -27,6 +27,13 @@ namespace KRPC.KSA.Services
         public override bool Equals (DockingPort other)
         {
             return !ReferenceEquals (other, null) && ReferenceEquals (port, other.port);
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Part.GameObjectState; }
         }
 
         /// <summary>

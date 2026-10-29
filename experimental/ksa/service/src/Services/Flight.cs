@@ -13,7 +13,7 @@ namespace KRPC.KSA.Services
     /// Obtained from <see cref="Vehicle.Flight"/>.
     /// </summary>
     [KRPCClass (Service = "KSA", GameScene = GameScene.Flight)]
-    public class Flight : Equatable<Flight>
+    public class Flight : Equatable<Flight>, IGameObjectState
     {
         readonly global::KSA.Vehicle vehicle;
 
@@ -28,6 +28,13 @@ namespace KRPC.KSA.Services
         public override bool Equals (Flight other)
         {
             return !ReferenceEquals (other, null) && ReferenceEquals (vehicle, other.vehicle);
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Vehicles.StateOf (vehicle); }
         }
 
         /// <summary>

@@ -20,7 +20,7 @@ namespace KRPC.KSA.Services
     /// releases the inputs when its window gains or loses focus, or the active vehicle changes.
     /// </remarks>
     [KRPCClass (Service = "KSA", GameScene = GameScene.Flight)]
-    public class Control : Equatable<Control>
+    public class Control : Equatable<Control>, IGameObjectState
     {
         // The vehicle's held player inputs. A struct, with no public setter
         static readonly FieldInfo manualControlInputs = typeof (global::KSA.Vehicle).GetField (
@@ -44,6 +44,13 @@ namespace KRPC.KSA.Services
         public override bool Equals (Control other)
         {
             return !ReferenceEquals (other, null) && ReferenceEquals (vehicle, other.vehicle);
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Vehicles.StateOf (vehicle); }
         }
 
         /// <summary>

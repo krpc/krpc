@@ -17,7 +17,7 @@ namespace KRPC.KSA.Services
     /// decoupler separates it. Throws an exception once the part no longer exists.
     /// </remarks>
     [KRPCClass (Service = "KSA")]
-    public class Part : Equatable<Part>
+    public class Part : Equatable<Part>, IGameObjectState
     {
         readonly global::KSA.Part part;
 
@@ -35,6 +35,13 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return StateOf (part); }
+        }
+
+        /// <summary>
         /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
@@ -49,9 +56,14 @@ namespace KRPC.KSA.Services
             get {
                 var vehicle = part.Tree?.OwningVehicle;
                 if (vehicle == null || !Vehicles.Exists (vehicle))
-                    throw new InvalidOperationException ("The part no longer exists");
+                    throw new Service.KRPC.ObjectDestroyedException ("The part no longer exists");
                 return part;
             }
+        }
+
+        internal static GameObjectState StateOf (global::KSA.Part part)
+        {
+            return Vehicles.StateOf (part.Tree?.OwningVehicle);
         }
 
         internal global::KSA.Vehicle InternalVehicle {

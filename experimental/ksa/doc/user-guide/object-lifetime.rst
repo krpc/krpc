@@ -12,6 +12,9 @@ finds the part it separated:
    :end-before: [/docs]
    :dedent:
 
+A call through an object whose game object is gone raises ``KRPC.ObjectDestroyedException``,
+and the server frees the object.
+
 Vehicles
 --------
 

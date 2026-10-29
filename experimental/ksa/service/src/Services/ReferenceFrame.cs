@@ -19,7 +19,7 @@ namespace KRPC.KSA.Services
     /// <c>(x, y, z, w)</c>.
     /// </remarks>
     [KRPCClass (Service = "KSA")]
-    public class ReferenceFrame : Equatable<ReferenceFrame>
+    public class ReferenceFrame : Equatable<ReferenceFrame>, IGameObjectState
     {
         internal enum Kind
         {
@@ -167,6 +167,13 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return State; }
+        }
+
+        /// <summary>
         /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
@@ -186,6 +193,22 @@ namespace KRPC.KSA.Services
             hash.Add (velocityFrame);
             hash.Add (angularVelocityFrame);
             return hash.ToHashCode ();
+        }
+
+        GameObjectState State {
+            get {
+                switch (kind) {
+                case Kind.Relative:
+                    return parent.GameObjectState;
+                case Kind.Hybrid:
+                    return positionFrame.GameObjectState.LeastAlive (rotationFrame.GameObjectState)
+                        .LeastAlive (velocityFrame.GameObjectState).LeastAlive (angularVelocityFrame.GameObjectState);
+                case Kind.Burn:
+                    return burn.GameObjectState;
+                default:
+                    return body != null ? Vehicles.StateOf (body) : Vehicles.StateOf (vehicle);
+                }
+            }
         }
 
         global::KSA.Vehicle LiveVehicle {
