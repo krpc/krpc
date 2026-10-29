@@ -80,6 +80,7 @@ call :stub cpp cpp\include\krpc\services\ksa.hpp "--include=StdLib=krpc/services
 call :stub cnano cnano\include\krpc_cnano\services\ksa.h "--include=StdLib=krpc_cnano/services/std_lib.h" || exit /b 1
 call :stub java java\krpc\client\services\KSA.java || exit /b 1
 python "%here%\grpc\protogen.py" "%here%\bin\KRPC.KSA.json" KSA "%stubs%\grpc\KSA.proto" || exit /b 1
+python "%here%\grpc\protogen.py" "%here%\bin\StdLib.json" StdLib "%stubs%\grpc\StdLib.proto" || exit /b 1
 powershell -NoProfile -Command "(Get-Content -Raw '%here%\stubs\README.md').Replace('@CLIENT_VERSION@', '%krpc_version%') | Set-Content -NoNewline -Encoding ascii '%stubs%\README.md'" || exit /b 1
 copy /y "%here%\bin\KRPC.KSA.json" "%stubs%\" >nul || exit /b 1
 echo Client stubs in %stubs%

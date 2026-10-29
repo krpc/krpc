@@ -33,7 +33,7 @@ set "grpc_python=%here%\bin\grpc-python"
 if exist "%grpc_python%" rmdir /s /q "%grpc_python%"
 mkdir "%grpc_python%"
 "%venv%\Scripts\python.exe" -m grpc_tools.protoc "-I%here%\bin\stubs\grpc" ^
-  "--python_out=%grpc_python%" "--grpc_python_out=%grpc_python%" "%here%\bin\stubs\grpc\KSA.proto" || exit /b 1
+  "--python_out=%grpc_python%" "--grpc_python_out=%grpc_python%" "%here%\bin\stubs\grpc\KSA.proto" "%here%\bin\stubs\grpc\StdLib.proto" || exit /b 1
 
 cd /d "%here%"
 "%venv%\Scripts\python.exe" -m pytest -p no:cacheprovider -c test\pytest.ini %*

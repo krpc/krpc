@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using Google.Protobuf;
 using KRPC.Service;
@@ -18,7 +19,8 @@ namespace KRPC.KSA.Grpc
     ///
     /// The request message holds parameter i as field i + 1, and the response message holds
     /// the return value as field 1. A class value is a message holding its object id as field
-    /// 1, with id 0 for null. A tuple is a message holding item i as field i + 1. A list or set
+    /// 1, with id 0 for null. A tuple is a message holding item i as field i + 1, and a
+    /// structure a message holding its field i as field i + 1. A list or set
     /// is a repeated field, and a dictionary a map. A nullable scalar, or a scalar parameter
     /// with a default value, is an optional field.
     /// </summary>
@@ -41,6 +43,23 @@ namespace KRPC.KSA.Grpc
             public ulong Number { get; }
 
             public ByteString Bytes { get; }
+        }
+
+        /// <summary>
+        /// The structures of every service, by their types.
+        /// </summary>
+        static readonly Lazy<Dictionary<Type, StructSignature>> structs = new Lazy<Dictionary<Type, StructSignature>> (
+            () => KRPC.Service.Services.Instance.Signatures.Values
+                .SelectMany (x => x.Structs.Values).ToDictionary (x => x.UnderlyingType));
+
+        static StructSignature Struct (TypeSpec spec)
+        {
+            return structs.Value [spec.Type];
+        }
+
+        static PropertyInfo Property (StructSignature signature, StructFieldSignature field)
+        {
+            return signature.UnderlyingType.GetProperty (field.Name);
         }
 
         /// <summary>
@@ -81,6 +100,10 @@ namespace KRPC.KSA.Grpc
                 return true;
             case TypeKind.Tuple:
                 return !spec.Nullable && spec.Types.All (x => IsSupported (x, false));
+            case TypeKind.Struct:
+                // A structure's fields are the fields of its own message, as a request's are
+                return (topLevel || !spec.Nullable) &&
+                    structs.Value.ContainsKey (spec.Type) && Struct (spec).Fields.All (x => IsSupported (x.Spec, true));
             case TypeKind.List:
             case TypeKind.Set:
                 return !spec.Nullable && IsElement (spec.Types [0]);
@@ -247,6 +270,15 @@ namespace KRPC.KSA.Grpc
                         WriteField (message, i + 1, tuple [i], spec.Types [i]);
                 });
                 break;
+            case TypeKind.Struct:
+                var signature = Struct (spec);
+                WriteMessageField (output, field, message => {
+                    for (int i = 0; i < signature.Fields.Count; i++) {
+                        var member = signature.Fields [i];
+                        WriteField (message, i + 1, Property (signature, member).GetValue (value), member.Spec);
+                    }
+                });
+                break;
             default:
                 output.WriteTag (field, WireType.Varint);
                 WriteVarint (output, value, spec);
@@ -376,6 +408,7 @@ namespace KRPC.KSA.Grpc
             case TypeKind.Bytes:
             case TypeKind.Class:
             case TypeKind.Tuple:
+            case TypeKind.Struct:
                 return new Raw (WireType.LengthDelimited, 0, ByteString.Empty);
             default:
                 return new Raw (WireType.Varint, 0, null);
@@ -429,6 +462,16 @@ namespace KRPC.KSA.Grpc
                     values [i] = Decode (spec.Types [i], Field (fields, i + 1));
                 return Type.GetType ("System.Tuple`" + types.Length)
                     .MakeGenericType (types).GetConstructor (types).Invoke (values);
+            case TypeKind.Struct:
+                Expect (raw, WireType.LengthDelimited, spec);
+                var members = ReadFields (raw.Bytes);
+                var signature = Struct (spec);
+                var instance = Activator.CreateInstance (signature.UnderlyingType);
+                for (int i = 0; i < signature.Fields.Count; i++) {
+                    var member = signature.Fields [i];
+                    Property (signature, member).SetValue (instance, Decode (member.Spec, Field (members, i + 1)));
+                }
+                return instance;
             default:
                 throw new ArgumentException (spec.Type + " has no typed form");
             }

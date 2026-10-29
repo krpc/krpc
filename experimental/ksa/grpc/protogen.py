@@ -1,6 +1,7 @@
 """Generate the gRPC .proto for a service from its kRPC service definitions.
 
     protogen.py KRPC.KSA.json KSA KSA.proto
+    protogen.py StdLib.json StdLib StdLib.proto
 
 The server registers its methods and encodes its messages by the same rules, in
 grpc/src/ProtoCodec.cs:
@@ -16,12 +17,14 @@ grpc/src/ProtoCodec.cs:
    MRequest holds parameter i as field i + 1, named in snake case. MResponse holds
    the return value as field 1.
  * A tuple is a message holding item i as field i + 1.
+ * Structure T is `message T`, holding its field i as field i + 1, named in snake
+   case. A structure of another service S is imported from S.proto.
  * A list or set is a repeated field, and a dictionary a map.
  * A nullable scalar, or a scalar parameter with a default value, is optional.
 
 A procedure with a type that has no typed form is left out, as the server leaves it
-out: nested containers, structures, nullable scalars inside a container, and types
-of other services.
+out: nested containers, nullable scalars or structures inside a container, and
+classes and enumerations of other services.
 """
 
 import json
@@ -108,6 +111,7 @@ class Generator:
         self.service_name = service_name
         self.service = service
         self.tuples = {}
+        self.imports = set()
 
     def element_type(self, typ):
         """The proto type of a value that is not a container."""
@@ -120,6 +124,11 @@ class Generator:
                     f"{typ['service']}.{typ['name']} is in another service"
                 )
             return typ["name"]
+        if code == "STRUCT":
+            if typ["service"] == self.service_name:
+                return typ["name"]
+            self.imports.add(typ["service"])
+            return f"krpc.{typ['service'].lower()}.{typ['name']}"
         if code == "TUPLE":
             name = "Tuple_" + "_".join(self.type_name(x) for x in typ["types"])
             if name not in self.tuples:
@@ -146,10 +155,10 @@ class Generator:
     def element(self, typ):
         if typ["code"] in CONTAINERS:
             raise Unsupported("nested containers have no typed form")
-        if typ.get("nullable") and (
-            typ["code"] in SCALARS or typ["code"] == "ENUMERATION"
-        ):
-            raise Unsupported("a nullable scalar in a container has no typed form")
+        if typ.get("nullable") and typ["code"] in (*SCALARS, "ENUMERATION", "STRUCT"):
+            raise Unsupported(
+                f"a nullable {typ['code']} in a container has no typed form"
+            )
         return self.element_type(typ)
 
     def field(self, typ, name, number, top_level, has_default):
@@ -166,6 +175,9 @@ class Generator:
                 f"map<{SCALARS[key['code']]}, {self.element(value)}> {name} = {number};"
             )
         proto_type = self.element_type(typ)
+        # A message field is absent for null, so needs no optional
+        if code == "STRUCT" and typ.get("nullable") and not top_level:
+            raise Unsupported("a nullable structure in a tuple has no typed form")
         if code in SCALARS or code == "ENUMERATION":
             if typ.get("nullable") and not top_level:
                 raise Unsupported("a nullable scalar in a tuple has no typed form")
@@ -194,10 +206,7 @@ class Generator:
         return request, response
 
     def generate(self):
-        out = ['syntax = "proto3";\n', "\n"]
-        out.append(comment(summary(self.service.get("documentation"))))
-        out.append(f"package krpc.{self.service_name.lower()};\n\n")
-
+        out = []
         # The methods and nested messages of each holder: a class, or the service
         rpcs, messages, skipped = {}, {}, []
         for name, procedure in self.service["procedures"].items():
@@ -272,11 +281,28 @@ class Generator:
                 )
             out.append("}\n")
 
+        # A structure's fields are the fields of its own message, as a request's are
+        for name, struct in self.service.get("structs", {}).items():
+            out.append("\n" + comment(summary(struct.get("documentation"))))
+            out.append(f"message {name} {{\n")
+            for i, field in enumerate(struct["fields"]):
+                out.append(
+                    f"  {self.field(field['type'], snake_case(field['name']), i + 1, True, False)}\n"
+                )
+            out.append("}\n")
+
         for name, fields in self.tuples.items():
             out.append(f"\nmessage {name} {{\n")
             out.extend(f"  {field}\n" for field in fields)
             out.append("}\n")
-        return "".join(out), skipped
+
+        header = ['syntax = "proto3";\n', "\n"]
+        header.append(comment(summary(self.service.get("documentation"))))
+        header.append(f"package krpc.{self.service_name.lower()};\n\n")
+        header.extend(f'import "{name}.proto";\n' for name in sorted(self.imports))
+        if self.imports:
+            header.append("\n")
+        return "".join(header + out), skipped
 
 
 def main():

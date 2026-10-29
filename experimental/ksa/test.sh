@@ -28,7 +28,8 @@ grpc_python="$here/bin/grpc-python"
 rm -rf "$grpc_python"
 mkdir -p "$grpc_python"
 "$venv/bin/python" -m grpc_tools.protoc -I"$here/bin/stubs/grpc" \
-  --python_out="$grpc_python" --grpc_python_out="$grpc_python" "$here/bin/stubs/grpc/KSA.proto"
+  --python_out="$grpc_python" --grpc_python_out="$grpc_python" \
+  "$here/bin/stubs/grpc/KSA.proto" "$here/bin/stubs/grpc/StdLib.proto"
 
 cd "$here"
 exec "$venv/bin/python" -m pytest -p no:cacheprovider -c test/pytest.ini "$@"

@@ -1,13 +1,16 @@
+import math
 import sys
 import threading
 
 import grpc
 import ksatest
 
-# Generated from bin/stubs/grpc/KSA.proto by test.sh
+# Generated from bin/stubs/grpc/KSA.proto and StdLib.proto by test.sh
 sys.path.insert(0, str(ksatest.ROOT / "bin" / "grpc-python"))
 import KSA_pb2 as pb  # noqa: E402
 import KSA_pb2_grpc  # noqa: E402
+import StdLib_pb2 as stdlib_pb  # noqa: E402
+import StdLib_pb2_grpc  # noqa: E402
 
 ADDRESS = "127.0.0.1:50002"
 
@@ -110,6 +113,46 @@ class TestGrpc(ksatest.TestCase):
             # The vehicle moves between the two calls
             self.assertAlmostEqual(x, y, delta=1e4)
         self.assertGreater(sum(x * x for x in actual) ** 0.5, 6.3e6)
+
+    def test_struct(self):
+        body = self.stub.KSA.GetBodies(pb.KSA.GetBodiesRequest()).value["Earth"]
+        frame = self.stub.Body.GetReferenceFrame(
+            pb.Body.GetReferenceFrameRequest(this=body)
+        ).value
+        line = self.stub.Drawing.AddLine(
+            pb.Drawing.AddLineRequest(
+                start=pb.Tuple_double_double_double(item1=0, item2=0, item3=0),
+                end=pb.Tuple_double_double_double(item1=1e7, item2=0, item3=0),
+                reference_frame=frame,
+            )
+        ).value
+        try:
+            self.stub.Line.SetColor(
+                pb.Line.SetColorRequest(
+                    this=line, value=stdlib_pb.ColorRGB(r=1, g=0.5, b=0.25)
+                )
+            )
+            color = self.stub.Line.GetColor(pb.Line.GetColorRequest(this=line)).value
+            self.assertEqual((1, 0.5, 0.25), (color.r, color.g, color.b))
+            color = self.ksa.Line(self.conn, line.id).color
+            self.assertEqual((1, 0.5, 0.25), (color.r, color.g, color.b))
+        finally:
+            self.stub.Line.Remove(pb.Line.RemoveRequest(this=line))
+
+    def test_struct_result(self):
+        stdlib = StdLib_pb2_grpc.StdLibServiceStub(self.channel)
+        half = math.sqrt(0.5)
+        result = stdlib.QuaternionToAxisAngle(
+            stdlib_pb.StdLib.QuaternionToAxisAngleRequest(
+                q=stdlib_pb.Tuple_double_double_double_double(
+                    item1=0, item2=0, item3=half, item4=half
+                )
+            )
+        ).value
+        axis = (result.axis.item1, result.axis.item2, result.axis.item3)
+        for x, y in zip((0, 0, 1), axis):
+            self.assertAlmostEqual(x, y)
+        self.assertAlmostEqual(math.pi / 2, result.angle)
 
     def test_list_and_dictionary(self):
         vehicles = self.stub.KSA.GetVehicles(pb.KSA.GetVehiclesRequest()).value
