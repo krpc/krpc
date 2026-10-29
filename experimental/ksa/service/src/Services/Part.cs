@@ -226,6 +226,46 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The part's batteries.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Battery> Batteries {
+            get { return InternalPart.SubtreeModules.Get<global::KSA.Battery> ().ToArray ().Select (module => new Battery (this, module)).ToList (); }
+        }
+
+        /// <summary>
+        /// The part's solar panels.
+        /// </summary>
+        [KRPCProperty]
+        public IList<SolarPanel> SolarPanels {
+            get { return InternalPart.SubtreeModules.Get<global::KSA.SolarPanel> ().ToArray ().Select (module => new SolarPanel (this, module)).ToList (); }
+        }
+
+        /// <summary>
+        /// The part's generators.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Generator> Generators {
+            get { return InternalPart.SubtreeModules.Get<global::KSA.Generator> ().ToArray ().Select (module => new Generator (this, module)).ToList (); }
+        }
+
+        /// <summary>
+        /// The part's power consumers.
+        /// </summary>
+        [KRPCProperty]
+        public IList<PowerConsumer> PowerConsumers {
+            get { return InternalPart.SubtreeModules.Get<global::KSA.PowerConsumer> ().ToArray ().Select (module => new PowerConsumer (this, module)).ToList (); }
+        }
+
+        /// <summary>
+        /// The part's lights.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Light> Lights {
+            get { return InternalPart.SubtreeModules.Get<LightModule> ().ToArray ().Select (module => new Light (this, module)).ToList (); }
+        }
+
+        /// <summary>
         /// The part's RCS thrusters, or <c>null</c> if it has none.
         /// </summary>
         [KRPCProperty (Nullable = true)]

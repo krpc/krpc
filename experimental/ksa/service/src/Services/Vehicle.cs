@@ -226,6 +226,74 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The vehicle's batteries.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Battery> Batteries {
+            get { return Parts.SelectMany (part => part.Batteries).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's solar panels.
+        /// </summary>
+        [KRPCProperty]
+        public IList<SolarPanel> SolarPanels {
+            get { return Parts.SelectMany (part => part.SolarPanels).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's generators.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Generator> Generators {
+            get { return Parts.SelectMany (part => part.Generators).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's power consumers.
+        /// </summary>
+        [KRPCProperty]
+        public IList<PowerConsumer> PowerConsumers {
+            get { return Parts.SelectMany (part => part.PowerConsumers).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's lights.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Light> Lights {
+            get { return Parts.SelectMany (part => part.Lights).ToList (); }
+        }
+
+        /// <summary>
+        /// The energy stored in the vehicle's batteries, in joules.
+        /// </summary>
+        [KRPCProperty]
+        public double StoredEnergy {
+            get { return Batteries.Sum (battery => battery.StoredEnergy); }
+        }
+
+        /// <summary>
+        /// The energy the vehicle's batteries can store, in joules.
+        /// </summary>
+        [KRPCProperty]
+        public double EnergyCapacity {
+            get { return Batteries.Sum (battery => battery.EnergyCapacity); }
+        }
+
+        /// <summary>
+        /// The power produced by the vehicle's solar panels and generators, less the power its
+        /// parts use, in watts.
+        /// </summary>
+        [KRPCProperty]
+        public double NetPower {
+            get {
+                return SolarPanels.Sum (panel => panel.Power) + Generators.Sum (generator => generator.Power) -
+                    PowerConsumers.Sum (consumer => consumer.Power);
+            }
+        }
+
+        /// <summary>
         /// The vehicle's docking ports.
         /// </summary>
         [KRPCProperty]

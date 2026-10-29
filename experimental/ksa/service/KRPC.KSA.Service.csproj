@@ -6,6 +6,7 @@
   <ItemGroup>
     <Compile Include="src/Services/AutoPilot.cs" />
     <Compile Include="src/Services/AutoPilotMode.cs" />
+    <Compile Include="src/Services/Battery.cs" />
     <Compile Include="src/Services/Body.cs" />
     <Compile Include="src/Services/Burn.cs" />
     <Compile Include="src/Services/Control.cs" />
@@ -15,18 +16,22 @@
     <Compile Include="src/Services/Flight.cs" />
     <Compile Include="src/Services/FuelLink.cs" />
     <Compile Include="src/Services/FuelLinkFlow.cs" />
+    <Compile Include="src/Services/Generator.cs" />
     <Compile Include="src/Services/Gimbal.cs" />
     <Compile Include="src/Services/KSA.cs" />
+    <Compile Include="src/Services/Light.cs" />
     <Compile Include="src/Services/Orbit.cs" />
     <Compile Include="src/Services/OrbitTransition.cs" />
     <Compile Include="src/Services/Parachute.cs" />
     <Compile Include="src/Services/ParachuteState.cs" />
     <Compile Include="src/Services/Part.cs" />
+    <Compile Include="src/Services/PowerConsumer.cs" />
     <Compile Include="src/Services/RCS.cs" />
     <Compile Include="src/Services/ReferenceFrame.cs" />
     <Compile Include="src/Services/Resource.cs" />
     <Compile Include="src/Services/Sequence.cs" />
     <Compile Include="src/Services/Situation.cs" />
+    <Compile Include="src/Services/SolarPanel.cs" />
     <Compile Include="src/Services/Tank.cs" />
     <Compile Include="src/Services/TankTransferMode.cs" />
     <Compile Include="src/Services/Vehicle.cs" />
