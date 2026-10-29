@@ -263,7 +263,7 @@ py_test(
 # The documentation of the client, which its users read through sphinx
 py_autodoc_test(
     name = "autodoc",
-    size = "small",
+    size = "medium",
     exclude = ["krpc.test"],
     package = "krpc",
     deps = [":krpc_lib"],
