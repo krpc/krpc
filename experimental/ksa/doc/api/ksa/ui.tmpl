@@ -1,0 +1,18 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('KSA') }}
+{% import domain.macros as macros with context %}
+
+UI
+==
+
+{{ macros.class(services['KSA'].classes['UI']) }}
+{{ macros.class(services['KSA'].classes['Window']) }}
+{{ macros.class(services['KSA'].classes['Row']) }}
+{{ macros.class(services['KSA'].classes['Label']) }}
+{{ macros.class(services['KSA'].classes['Button']) }}
+{{ macros.class(services['KSA'].classes['InputField']) }}
+{{ macros.class(services['KSA'].classes['Slider']) }}
+{{ macros.class(services['KSA'].classes['Toggle']) }}
+{{ macros.class(services['KSA'].classes['Dropdown']) }}
+{{ macros.class(services['KSA'].classes['Separator']) }}

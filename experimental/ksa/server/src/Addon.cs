@@ -169,7 +169,8 @@ namespace KRPC.KSA
 
         /// <summary>
         /// Create the windows, which need the game's UI to be up, and save their visibility,
-        /// position and size when they change. Draw the overlay of the drawing objects.
+        /// position and size when they change. Draw the overlay of the drawing objects, and
+        /// the windows added by clients.
         /// </summary>
         [StarMapBeforeGui]
         public void OnBeforeGui (double dt)
@@ -177,6 +178,7 @@ namespace KRPC.KSA
             if (core == null)
                 return;
             Utils.Drawables.DrawOverlay ();
+            Utils.Windows.Draw ();
             var c = config.Configuration;
             if (MainWindow == null) {
                 InfoWindow = new InfoWindow (core, c.InfoWindowVisible, c.InfoWindowPosition);

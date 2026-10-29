@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Brutal.ImGuiApi;
+using Brutal.Numerics;
 using HarmonyLib;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -110,6 +112,93 @@ namespace KRPC.KSA.Testing
         // The messages on screen, which the game does not expose
         static readonly FieldInfo alerts = AccessTools.Field (typeof (TimedAlert), "All");
         static readonly FieldInfo alertText = AccessTools.Field (typeof (TimedAlert), "_displayName");
+
+        /// <summary>
+        /// Click a button with the mouse.
+        /// </summary>
+        /// <returns>Whether the button has been drawn, and so was clicked.</returns>
+        [KRPCProcedure]
+        public static bool ClickButton (KRPC.KSA.Services.Button button)
+        {
+            return Click (button, 0.5f);
+        }
+
+        /// <summary>
+        /// Click a toggle with the mouse.
+        /// </summary>
+        /// <returns>Whether the toggle has been drawn, and so was clicked.</returns>
+        [KRPCProcedure]
+        public static bool ClickToggle (KRPC.KSA.Services.Toggle toggle)
+        {
+            return Click (toggle, 0.5f);
+        }
+
+        /// <summary>
+        /// Click a slider with the mouse, a fraction of the way along it. The widget includes
+        /// the label, so the fraction is of the slider only when the label is empty.
+        /// </summary>
+        /// <returns>Whether the slider has been drawn, and so was clicked.</returns>
+        [KRPCProcedure]
+        public static bool ClickSlider (KRPC.KSA.Services.Slider slider, float fraction)
+        {
+            return Click (slider, fraction);
+        }
+
+        /// <summary>
+        /// Click an input field with the mouse and type a text.
+        /// </summary>
+        /// <returns>Whether the field has been drawn, and so was typed in.</returns>
+        [KRPCProcedure]
+        public static bool TypeText (KRPC.KSA.Services.InputField field, string text)
+        {
+            if (!Click (field, 0.5f))
+                return false;
+            ImGui.GetIO ().AddInputCharactersUTF8 (text);
+            return true;
+        }
+
+        /// <summary>
+        /// Click a dropdown with the mouse, which opens or closes its list.
+        /// </summary>
+        /// <returns>Whether the dropdown has been drawn, and so was clicked.</returns>
+        [KRPCProcedure]
+        public static bool ClickDropdown (KRPC.KSA.Services.Dropdown dropdown)
+        {
+            return Click (dropdown, 0.5f);
+        }
+
+        /// <summary>
+        /// Click an option in the open list of a dropdown with the mouse.
+        /// </summary>
+        /// <returns>Whether the list has been drawn, and so the option was clicked.</returns>
+        [KRPCProcedure]
+        public static bool ClickDropdownOption (KRPC.KSA.Services.Dropdown dropdown, int index)
+        {
+            if (index >= dropdown.OptionCenters.Count)
+                return false;
+            Click (dropdown.OptionCenters [index]);
+            return true;
+        }
+
+        // Click a fraction of the way along a widget, at the middle of its height
+        static bool Click (KRPC.KSA.Services.Widget widget, float fraction)
+        {
+            var rect = widget.ScreenRect;
+            if (rect == null)
+                return false;
+            var (min, max) = rect;
+            Click (new float2 (min.X + fraction * (max.X - min.X), (min.Y + max.Y) / 2));
+            return true;
+        }
+
+        // ImGui takes the queued events one per frame
+        static void Click (float2 position)
+        {
+            var io = ImGui.GetIO ();
+            io.AddMousePosEvent (position.X, position.Y);
+            io.AddMouseButtonEvent (0, true);
+            io.AddMouseButtonEvent (0, false);
+        }
 
         /// <summary>
         /// Quit the game at the end of the frame.
