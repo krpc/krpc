@@ -9,7 +9,10 @@
     <Compile Include="src/Services/Battery.cs" />
     <Compile Include="src/Services/Body.cs" />
     <Compile Include="src/Services/Burn.cs" />
+    <Compile Include="src/Services/Camera.cs" />
+    <Compile Include="src/Services/CameraMode.cs" />
     <Compile Include="src/Services/Control.cs" />
+    <Compile Include="src/Services/Debug.cs" />
     <Compile Include="src/Services/Decoupler.cs" />
     <Compile Include="src/Services/Deployable.cs" />
     <Compile Include="src/Services/DeployableState.cs" />
@@ -41,6 +44,7 @@
     <Compile Include="src/Services/Tank.cs" />
     <Compile Include="src/Services/TankTransferMode.cs" />
     <Compile Include="src/Services/Vehicle.cs" />
+    <Compile Include="src/Services/VehicleDesign.cs" />
     <Compile Include="src/Utils/AfterFrame.cs" />
     <Compile Include="src/Utils/Engines.cs" />
     <Compile Include="src/Utils/ObjectSweep.cs" />

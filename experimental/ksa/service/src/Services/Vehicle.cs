@@ -77,6 +77,46 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// Destroy the vehicle, killing its crew, as abandoning the vehicle does. Returns once
+        /// the vehicle is gone.
+        /// </summary>
+        /// <remarks>
+        /// If the vehicle is the active vehicle, the game hands control to a nearby vehicle.
+        /// </remarks>
+        [KRPCMethod]
+        public void Destroy ()
+        {
+            var v = InternalVehicle;
+            InputEvents.VehicleDestroyBuffer.Add (new InputEvents.VehicleDestroyData { Vehicle = v });
+            Waits.Until (() => !Vehicles.Exists (v));
+        }
+
+        /// <summary>
+        /// Whether the vehicle can be recovered: at rest on the surface of the home planet.
+        /// </summary>
+        [KRPCProperty]
+        public bool CanRecover {
+            get { return InternalVehicle.CanRecover; }
+        }
+
+        /// <summary>
+        /// Recover the vehicle, ending its crew's missions, as the game's recover button does.
+        /// Returns once the vehicle is gone.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if the vehicle cannot be recovered, see <see cref="CanRecover"/>.
+        /// </remarks>
+        [KRPCMethod]
+        public void Recover ()
+        {
+            var v = InternalVehicle;
+            if (!v.CanRecover)
+                throw new InvalidOperationException ("The vehicle cannot be recovered");
+            v.Recover ();
+            Waits.Until (() => !Vehicles.Exists (v));
+        }
+
+        /// <summary>
         /// The situation of the vehicle.
         /// </summary>
         [KRPCProperty]

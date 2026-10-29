@@ -352,5 +352,10 @@ namespace KRPC.KSA.Services
         {
             return (angularVelocityEcl - AngularVelocityEcl).Transform (Rotation2Ecl.Inverse ());
         }
+
+        internal double3 AngularVelocityToEcl (double3 angularVelocity)
+        {
+            return angularVelocity.Transform (Rotation2Ecl) + AngularVelocityEcl;
+        }
     }
 }

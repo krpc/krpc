@@ -95,6 +95,23 @@ namespace KRPC.KSA.Testing
         }
 
         /// <summary>
+        /// The text of the messages on screen.
+        /// </summary>
+        [KRPCProperty]
+        public static IList<string> Messages {
+            get {
+                var result = new List<string> ();
+                foreach (var alert in (List<TimedAlert>)alerts.GetValue (null))
+                    result.Add ((string)alertText.GetValue (alert));
+                return result;
+            }
+        }
+
+        // The messages on screen, which the game does not expose
+        static readonly FieldInfo alerts = AccessTools.Field (typeof (TimedAlert), "All");
+        static readonly FieldInfo alertText = AccessTools.Field (typeof (TimedAlert), "_displayName");
+
+        /// <summary>
         /// Quit the game at the end of the frame.
         /// </summary>
         [KRPCProcedure]
