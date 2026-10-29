@@ -57,11 +57,26 @@ def source_dependencies():
     return set(targets_to_paths(targets))
 
 
+def declared_outputs():
+    """The paths, relative to SRC, of the files ``//doc:srcs`` declares"""
+    output = subprocess.check_output(
+        ["bazel", "cquery", "--output=files", "//doc:srcs"]
+    ).decode()
+    marker = "/bin/doc/srcs/"
+    return {
+        line.strip().split(marker, 1)[1]
+        for line in output.split("\n")
+        if marker in line
+    }
+
+
 def update_stage(strict=False):
     """Rebuild the staged doc tree and mirror it into the stage directory.
 
     The ``//doc:srcs`` outputs are symlinks, so the staged copy is dereferenced
-    into plain files that sphinx-autobuild can watch and read.
+    into plain files that sphinx-autobuild can watch and read. Only the outputs
+    the target currently declares are mirrored, as SRC also holds stale outputs
+    of earlier builds that Bazel never deletes.
 
     A failed rebuild (e.g. a source file saved mid-edit) is not fatal while
     watching: keep serving the previous build and try again on the next change.
@@ -71,6 +86,7 @@ def update_stage(strict=False):
     """
     try:
         subprocess.check_call(["bazel", "build", "//doc:srcs"])
+        declared = declared_outputs()
     except subprocess.CalledProcessError:
         if strict:
             raise
@@ -79,29 +95,31 @@ def update_stage(strict=False):
     if not os.path.exists(STAGE):
         os.makedirs(STAGE)
 
-    # Remove files from stage directory that are not in src directory
-    for basepath, _, filenames in os.walk(STAGE):
+    # Remove files and empty directories from the stage directory that are not
+    # declared outputs
+    for basepath, dirnames, filenames in os.walk(STAGE, topdown=False):
         for filename in filenames:
             path = os.path.relpath(os.path.join(basepath, filename), STAGE)
-            if not os.path.exists(os.path.join(SRC, path)):
+            if path not in declared:
                 print("Removing", path)
                 os.unlink(os.path.join(STAGE, path))
+        for dirname in dirnames:
+            dirpath = os.path.join(basepath, dirname)
+            if not os.listdir(dirpath):
+                os.rmdir(dirpath)
 
     # Update stale files in stage directory
-    for basepath, _, filenames in os.walk(SRC):
-        for filename in filenames:
-            path = os.path.relpath(os.path.join(basepath, filename), SRC)
-            srcpath = os.path.join(SRC, path)
-            stagepath = os.path.join(STAGE, path)
-            if not os.path.exists(stagepath):
-                print("Staging new file", path)
-                if not os.path.exists(os.path.dirname(stagepath)):
-                    os.makedirs(os.path.dirname(stagepath))
-                shutil.copy(srcpath, stagepath)
-            elif not filecmp.cmp(srcpath, stagepath):
-                print("Updating file", path)
-                os.unlink(stagepath)
-                shutil.copy(srcpath, stagepath)
+    for path in sorted(declared):
+        srcpath = os.path.join(SRC, path)
+        stagepath = os.path.join(STAGE, path)
+        if not os.path.exists(stagepath):
+            print("Staging new file", path)
+            os.makedirs(os.path.dirname(stagepath), exist_ok=True)
+            shutil.copy(srcpath, stagepath)
+        elif not filecmp.cmp(srcpath, stagepath):
+            print("Updating file", path)
+            os.unlink(stagepath)
+            shutil.copy(srcpath, stagepath)
 
 
 class UpdateStagedFiles(FileSystemEventHandler):
