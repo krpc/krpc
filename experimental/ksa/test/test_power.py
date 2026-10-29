@@ -1,4 +1,5 @@
 import ksatest
+from test_parachute import SITE, VEHICLES
 
 
 class TestPower(ksatest.TestCase):
@@ -90,3 +91,67 @@ class TestPower(ksatest.TestCase):
         drained = energy - self.vehicle.stored_energy
         elapsed = self.ksa.ut - ut
         self.assertAlmostEqual(power * elapsed, drained, delta=power * 0.5)
+
+
+class TestVehicleCase(ksatest.TestCase):
+    """Launches a vehicle from the test vehicles on the launch pad."""
+
+    vehicle_folder = ""
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.load_save()
+        name = cls.conn.testing_tools.register_vehicle(
+            str(VEHICLES / cls.vehicle_folder)
+        )
+        cls.vehicle = cls.ksa.launch_vehicle(name, SITE)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.load_save()
+
+
+class TestSolarPanel(TestVehicleCase):
+    vehicle_folder = "SolarPanelTest"
+
+    def test_part_lists(self):
+        for name in ("solar_panels", "deployables"):
+            with self.subTest(module=name):
+                expected = [
+                    module
+                    for part in self.vehicle.parts
+                    for module in getattr(part, name)
+                ]
+                self.assertEqual(expected, getattr(self.vehicle, name))
+
+    def test_deploy_and_retract(self):
+        (deployable,) = self.vehicle.deployables
+        panels = self.vehicle.solar_panels
+        self.assertEqual(4, len(panels))
+        self.assertEqual(deployable.part, self.vehicle.root_part)
+        for panel in panels:
+            self.assertEqual(deployable, panel.deployable)
+        state = self.ksa.DeployableState
+        self.assertEqual(state.retracted, deployable.state)
+        self.assertFalse(any(panel.active for panel in panels))
+        self.assertEqual(0, self.vehicle.net_power)
+
+        deployable.deploy()
+        self.assertEqual(state.deploying, deployable.state)
+        ksatest.wait_until(lambda: deployable.state == state.deployed, timeout=30)
+        ksatest.wait_until(lambda: all(panel.power > 0 for panel in panels))
+        for panel in panels:
+            self.assertTrue(panel.active)
+            self.assertFalse(panel.occluded)
+            self.assertGreater(panel.sun_angle, 0)
+            self.assertLess(panel.sun_angle, 90)
+        self.assertAlmostEqual(
+            sum(panel.power for panel in panels), self.vehicle.net_power, delta=1
+        )
+
+        deployable.retract()
+        self.assertEqual(state.retracting, deployable.state)
+        ksatest.wait_until(lambda: deployable.state == state.retracted, timeout=30)
+        ksatest.wait_until(lambda: not any(panel.active for panel in panels))
+        self.assertEqual(0, self.vehicle.net_power)

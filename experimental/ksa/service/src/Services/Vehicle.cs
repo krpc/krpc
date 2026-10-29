@@ -266,6 +266,14 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The vehicle's deployable sections.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Deployable> Deployables {
+            get { return Parts.SelectMany (part => part.Deployables).ToList (); }
+        }
+
+        /// <summary>
         /// The energy stored in the vehicle's batteries, in joules.
         /// </summary>
         [KRPCProperty]

@@ -48,6 +48,19 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public Part Part { get; }
 
+        /// <summary>
+        /// The deployable section that opens the solar panel, or <c>null</c> for a panel that
+        /// does not deploy.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Deployable Deployable {
+            get {
+                _ = Part.InternalPart;
+                var deployable = module.KeyframeAnimationModule;
+                return deployable == null ? null : new Deployable (Part, deployable);
+            }
+        }
+
         ref readonly SolarPanelState State {
             get {
                 if (!ModuleStateful<global::KSA.SolarPanel, SolarPanelState, EmptyStruct, EmptyStruct>.TryGetFrom (

@@ -266,6 +266,18 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The part's deployable sections. A part can have several, such as the doors of a
+        /// service module.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Deployable> Deployables {
+            get {
+                return InternalPart.SubtreeModules.Get<KeyframeAnimationModule> ().ToArray ()
+                    .Where (module => module.ShowDeployRetract).Select (module => new Deployable (this, module)).ToList ();
+            }
+        }
+
+        /// <summary>
         /// The part's RCS thrusters, or <c>null</c> if it has none.
         /// </summary>
         [KRPCProperty (Nullable = true)]

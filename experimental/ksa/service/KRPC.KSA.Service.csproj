@@ -11,6 +11,8 @@
     <Compile Include="src/Services/Burn.cs" />
     <Compile Include="src/Services/Control.cs" />
     <Compile Include="src/Services/Decoupler.cs" />
+    <Compile Include="src/Services/Deployable.cs" />
+    <Compile Include="src/Services/DeployableState.cs" />
     <Compile Include="src/Services/DockingPort.cs" />
     <Compile Include="src/Services/Engine.cs" />
     <Compile Include="src/Services/Flight.cs" />

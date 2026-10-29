@@ -45,6 +45,7 @@ KSA.Vehicle.StoredEnergy
 KSA.Vehicle.EnergyCapacity
 KSA.Vehicle.NetPower
 KSA.Vehicle.Lights
+KSA.Vehicle.Deployables
 KSA.Vehicle.FuelLinks
 KSA.Vehicle.DockingPorts
 KSA.Vehicle.Resources
@@ -251,6 +252,7 @@ KSA.Part.SolarPanels
 KSA.Part.Generators
 KSA.Part.PowerConsumers
 KSA.Part.Lights
+KSA.Part.Deployables
 KSA.Part.Position
 KSA.Part.Velocity
 KSA.Part.Rotation
@@ -287,6 +289,7 @@ KSA.SolarPanel.Active
 KSA.SolarPanel.Power
 KSA.SolarPanel.SunAngle
 KSA.SolarPanel.Occluded
+KSA.SolarPanel.Deployable
 KSA.Generator.Part
 KSA.Generator.Engine
 KSA.Generator.Active
@@ -338,3 +341,12 @@ KSA.DockingPort.Part
 KSA.DockingPort.Docked
 KSA.DockingPort.DockedPart
 KSA.DockingPort.Undock
+KSA.Deployable.Part
+KSA.Deployable.State
+KSA.Deployable.Deploy
+KSA.Deployable.Retract
+KSA.DeployableState.Deployed
+KSA.DeployableState.Retracted
+KSA.DeployableState.Deploying
+KSA.DeployableState.Retracting
+KSA.DeployableState.Broken
