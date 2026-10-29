@@ -278,6 +278,14 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The part's magnetic scoops. Empty if it has none.
+        /// </summary>
+        [KRPCProperty]
+        public IList<MagneticScoop> MagneticScoops {
+            get { return InternalPart.SubtreeModules.Get<global::KSA.MagneticScoop> ().ToArray ().Select (scoop => new MagneticScoop (this, scoop)).ToList (); }
+        }
+
+        /// <summary>
         /// The part's RCS thrusters, or <c>null</c> if it has none.
         /// </summary>
         [KRPCProperty (Nullable = true)]

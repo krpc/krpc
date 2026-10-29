@@ -22,6 +22,7 @@
     <Compile Include="src/Services/Gimbal.cs" />
     <Compile Include="src/Services/KSA.cs" />
     <Compile Include="src/Services/Light.cs" />
+    <Compile Include="src/Services/MagneticScoop.cs" />
     <Compile Include="src/Services/Orbit.cs" />
     <Compile Include="src/Services/OrbitTransition.cs" />
     <Compile Include="src/Services/Parachute.cs" />

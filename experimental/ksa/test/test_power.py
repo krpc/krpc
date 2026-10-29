@@ -155,3 +155,26 @@ class TestSolarPanel(TestVehicleCase):
         ksatest.wait_until(lambda: deployable.state == state.retracted, timeout=30)
         ksatest.wait_until(lambda: not any(panel.active for panel in panels))
         self.assertEqual(0, self.vehicle.net_power)
+
+
+class TestMagneticScoop(TestVehicleCase):
+    vehicle_folder = "ScoopTest"
+
+    def test_scoop(self):
+        (scoop,) = self.vehicle.root_part.magnetic_scoops
+        self.assertEqual([scoop], self.vehicle.magnetic_scoops)
+        self.assertEqual(self.vehicle.root_part, scoop.part)
+        self.assertEqual("Liquid Hydrogen", scoop.substance)
+        # No solar wind reaches the launch pad
+        self.assertEqual(0, scoop.collection_rate)
+
+    def test_active(self):
+        (scoop,) = self.vehicle.magnetic_scoops
+        self.assertTrue(scoop.active)
+        scoop.active = False
+        self.assertFalse(scoop.active)
+        scoop.active = True
+        self.assertTrue(scoop.active)
+
+    def test_no_scoop(self):
+        self.assertEqual([], self.find_vehicle("Gemini7").magnetic_scoops)

@@ -46,6 +46,7 @@ KSA.Vehicle.EnergyCapacity
 KSA.Vehicle.NetPower
 KSA.Vehicle.Lights
 KSA.Vehicle.Deployables
+KSA.Vehicle.MagneticScoops
 KSA.Vehicle.FuelLinks
 KSA.Vehicle.DockingPorts
 KSA.Vehicle.Resources
@@ -253,6 +254,7 @@ KSA.Part.Generators
 KSA.Part.PowerConsumers
 KSA.Part.Lights
 KSA.Part.Deployables
+KSA.Part.MagneticScoops
 KSA.Part.Position
 KSA.Part.Velocity
 KSA.Part.Rotation
@@ -350,3 +352,7 @@ KSA.DeployableState.Retracted
 KSA.DeployableState.Deploying
 KSA.DeployableState.Retracting
 KSA.DeployableState.Broken
+KSA.MagneticScoop.Part
+KSA.MagneticScoop.Active
+KSA.MagneticScoop.Substance
+KSA.MagneticScoop.CollectionRate

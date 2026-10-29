@@ -274,6 +274,14 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The vehicle's magnetic scoops.
+        /// </summary>
+        [KRPCProperty]
+        public IList<MagneticScoop> MagneticScoops {
+            get { return Parts.SelectMany (part => part.MagneticScoops).ToList (); }
+        }
+
+        /// <summary>
         /// The energy stored in the vehicle's batteries, in joules.
         /// </summary>
         [KRPCProperty]
