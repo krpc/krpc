@@ -9,7 +9,8 @@ void setup() {
 
   conn = &Serial;
   // Open the serial port connection
-  krpc_open(&conn, NULL);
+  if (krpc_open(&conn, NULL) != KRPC_OK)
+    return;
   // Set up communication with the server, retrying while part of an earlier session's message
   // is on the line
   krpc_error_t error;

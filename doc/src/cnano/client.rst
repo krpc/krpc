@@ -247,7 +247,8 @@ name and the baud rate. The following connects to a server, and prints its versi
 :func:`krpc_open` opens the serial port named by its second argument, such as ``COM3`` on Windows
 or ``/dev/ttyS0`` on Linux. It writes the connection into its first argument. You pass the
 connection to every call. :func:`krpc_connect` then starts a session, with a name for the
-connection that appears in the server window in the game.
+connection that appears in the server window in the game. Both return an error code, and the
+example ends on a failure.
 
 On an Arduino, :func:`krpc_open` takes a pointer to a ``HardwareSerial``:
 

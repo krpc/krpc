@@ -67,7 +67,7 @@ server window in the game:
       .. literalinclude:: /scripts/tutorials/suborbital-flight/SubOrbitalFlight.c
          :language: c
          :start-at: krpc_connection_t conn;
-         :end-at: krpc_connect(conn, "Sub-orbital flight");
+         :end-before: krpc_SpaceCenter_Vessel_t vessel;
 
    .. group-tab:: Java
 

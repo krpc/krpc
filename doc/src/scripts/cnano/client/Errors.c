@@ -3,8 +3,10 @@
 
 int main() {
   krpc_connection_t conn;
-  krpc_open(&conn, "COM0");
-  krpc_connect(conn, "Errors example");
+  if (krpc_open(&conn, "COM0") != KRPC_OK)
+    return 1;
+  if (krpc_connect(conn, "Errors example") != KRPC_OK)
+    return 1;
 
   krpc_error_t error = krpc_SpaceCenter_Load(conn, "missing");
   if (error != KRPC_OK)

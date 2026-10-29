@@ -15,7 +15,8 @@ public class EndCallback {
       Part part = spaceCenter.getActiveVessel().getParts().getRoot();
       Stream<Double> temperature = connection.addStream(part, "getTemperature");
       temperature.addCallback(value -> System.out.println("Temperature " + value));
-      temperature.addEndCallback(exn -> System.out.println("The stream ended: " + exn));
+      temperature.addEndCallback(
+          exn -> System.out.println("The stream ended: " + exn.getMessage()));
 
       // Keep the program running, while the callbacks are called
       while (true) {
