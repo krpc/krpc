@@ -1,4 +1,5 @@
 import ksatest
+from test_parachute import SITE
 
 
 class TestVehicle(ksatest.TestCase):
@@ -146,3 +147,47 @@ class TestObjectStore(ksatest.TestCase):
         for part in parts:
             self.assertIn(part.vehicle, [vehicle, *separated])
         self.load_save()
+
+
+class TestDestroy(ksatest.TestCase):
+    @classmethod
+    def tearDownClass(cls):
+        cls.load_save()
+
+    def setUp(self):
+        self.load_save()
+
+    def test_destroy(self):
+        vehicle = self.find_vehicle("Gemini7")
+        (kitten,) = vehicle.crew
+        vehicle.destroy()
+        self.assertNotIn("Gemini7", [v.name for v in self.ksa.vehicles])
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
+            vehicle.name
+        self.assertTrue(kitten.killed_in_action)
+        self.assertIsNone(kitten.vehicle)
+
+    def test_destroy_active_vehicle(self):
+        vehicle = self.ksa.active_vehicle
+        name = vehicle.name
+        vehicle.destroy()
+        self.assertNotIn(name, [v.name for v in self.ksa.vehicles])
+        self.assertNotEqual(vehicle, self.ksa.active_vehicle)
+
+    def test_recover(self):
+        vehicle = self.ksa.launch_vehicle("Rocket", SITE)
+        crew = vehicle.crew
+        # The vehicle settles on the pad
+        ksatest.wait_until(lambda: vehicle.can_recover)
+        vehicle.recover()
+        self.assertNotIn("Rocket_1", [v.name for v in self.ksa.vehicles])
+        for kitten in crew:
+            self.assertFalse(kitten.killed_in_action)
+            self.assertIsNone(kitten.vehicle)
+
+    def test_recover_in_orbit(self):
+        vehicle = self.find_vehicle("Gemini7")
+        self.assertFalse(vehicle.can_recover)
+        with self.assertRaises(RuntimeError):
+            vehicle.recover()
+        self.assertIn("Gemini7", [v.name for v in self.ksa.vehicles])

@@ -20,6 +20,9 @@ KSA.TransformVelocity
 KSA.ReferenceFrame.CreateRelative
 KSA.ReferenceFrame.CreateHybrid
 KSA.Vehicle.Name
+KSA.Vehicle.Destroy
+KSA.Vehicle.CanRecover
+KSA.Vehicle.Recover
 KSA.Vehicle.Situation
 KSA.Vehicle.OnRails
 KSA.Vehicle.IsDebris
