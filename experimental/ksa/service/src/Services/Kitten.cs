@@ -1,5 +1,6 @@
 using System;
 using KRPC.KSA.Utils;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using KSA;
@@ -159,6 +160,13 @@ namespace KRPC.KSA.Services
             }
         }
 
+        KittenEva EvaOrThrow {
+            get {
+                _ = Entry;
+                return Eva ?? throw new InvalidOperationException ("The kitten is not on EVA");
+            }
+        }
+
         /// <summary>
         /// Whether the kitten is on EVA.
         /// </summary>
@@ -168,6 +176,101 @@ namespace KRPC.KSA.Services
                 _ = Entry;
                 return Eva != null;
             }
+        }
+
+        /// <summary>
+        /// Leave the kitten's vehicle through its EVA hatch, and return once the kitten is on
+        /// EVA. The kitten becomes the controlled kitten, see <see cref="KSA.ActiveKitten"/>.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
+        /// </remarks>
+        [KRPCMethod]
+        public void GoOnEva ()
+        {
+            var seat = Seat ?? throw new InvalidOperationException ("The kitten is not in a seat");
+            if (!EVADoor.PerformEvaForSeat (seat.Part.InternalVehicle, seat.InternalSeat))
+                throw new InvalidOperationException ("The vehicle has no EVA hatch");
+            WaitFor (() => OnEva, "The kitten did not go on EVA", 10);
+        }
+
+        /// <summary>
+        /// Board the nearest vehicle with a free seat, and return once the kitten is in the
+        /// seat. The vehicle becomes the controlled vehicle.
+        /// </summary>
+        /// <returns>The vehicle the kitten boarded.</returns>
+        /// <remarks>
+        /// Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
+        /// within one meter.
+        /// </remarks>
+        [KRPCMethod]
+        public Vehicle Board ()
+        {
+            var eva = EvaOrThrow;
+            if (!eva.TryFindBoardTarget (out var host, out var door))
+                throw new InvalidOperationException ("No EVA hatch with a free seat is in range");
+            InputEvents.KittenBoardBuffer.Add (new InputEvents.KittenBoardData { Kitten = eva, Host = host, Door = door });
+            return WaitFor (() => !OnEva, () => new Vehicle (host), "The kitten did not board the vehicle", 10);
+        }
+
+        static void WaitFor (Func<bool> condition, string error, int updates)
+        {
+            if (condition ())
+                return;
+            if (updates == 0)
+                throw new InvalidOperationException (error);
+            throw new YieldException<Action> (() => WaitFor (condition, error, updates - 1));
+        }
+
+        static T WaitFor<T> (Func<bool> condition, Func<T> result, string error, int updates)
+        {
+            if (condition ())
+                return result ();
+            if (updates == 0)
+                throw new InvalidOperationException (error);
+            throw new YieldException<Func<T>> (() => WaitFor (condition, result, error, updates - 1));
+        }
+
+        /// <summary>
+        /// How the kitten on EVA is moving. Throws an exception if the kitten is not on EVA.
+        /// </summary>
+        [KRPCProperty]
+        public LocomotionMode LocomotionMode {
+            // The service enum lists the game's modes in the game's order
+            get { return (LocomotionMode)EvaOrThrow.LocomotionState.Mode; }
+        }
+
+        /// <summary>
+        /// The position of the kitten, in meters. For a kitten in a seat, the position of the
+        /// seat's part. Throws an exception if the kitten is neither in a seat nor on EVA.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the position.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> Position (ReferenceFrame referenceFrame)
+        {
+            var eva = Eva;
+            if (eva == null)
+                return SeatOrThrow.Part.Position (referenceFrame);
+            return Vectors.ToTuple (referenceFrame.PositionFromEcl (eva.GetPositionEcl ()));
+        }
+
+        /// <summary>
+        /// The velocity of the kitten, in meters per second. For a kitten in a seat, the
+        /// velocity of the seat's part. Throws an exception if the kitten is neither in a seat
+        /// nor on EVA.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the velocity.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> Velocity (ReferenceFrame referenceFrame)
+        {
+            var eva = Eva;
+            if (eva == null)
+                return SeatOrThrow.Part.Velocity (referenceFrame);
+            return Vectors.ToTuple (referenceFrame.VelocityFromEcl (eva.GetPositionEcl (), eva.GetVelocityEcl ()));
+        }
+
+        Seat SeatOrThrow {
+            get { return Seat ?? throw new InvalidOperationException ("The kitten is neither in a seat nor on EVA"); }
         }
     }
 }

@@ -17,21 +17,44 @@ namespace KRPC.KSA.Services
     public static class KSA
     {
         /// <summary>
-        /// The vehicle under the player's control.
+        /// The vehicle under the player's control, or <c>null</c> if the player controls a
+        /// kitten on EVA.
         /// </summary>
         /// <remarks>
-        /// Setting it moves the camera to the vehicle, as the switch vehicle key does.
+        /// Setting it moves the camera to the vehicle, as the switch vehicle key does. See
+        /// <see cref="ActiveKitten"/> for a kitten on EVA.
         /// </remarks>
         [KRPCProperty (Nullable = true)]
         public static Vehicle ActiveVehicle {
             get {
                 var vehicle = Program.ControlledVehicle;
-                return vehicle == null ? null : new Vehicle (vehicle);
+                return vehicle == null || vehicle is KittenEva ? null : new Vehicle (vehicle);
             }
             set {
                 if (ReferenceEquals (value, null))
                     throw new ArgumentNullException (nameof (ActiveVehicle));
                 Universe.FollowInHoveredViewport (value.InternalVehicle);
+            }
+        }
+
+        /// <summary>
+        /// The kitten on EVA under the player's control, or <c>null</c> if the player
+        /// controls a vehicle.
+        /// </summary>
+        /// <remarks>
+        /// Setting it moves the camera to the kitten. Throws an exception if the kitten is not
+        /// on EVA. See <see cref="ActiveVehicle"/> for a vehicle.
+        /// </remarks>
+        [KRPCProperty (Nullable = true)]
+        public static Kitten ActiveKitten {
+            get {
+                var vehicle = Program.ControlledVehicle as KittenEva;
+                return vehicle == null ? null : new Kitten (vehicle.Id);
+            }
+            set {
+                if (ReferenceEquals (value, null))
+                    throw new ArgumentNullException (nameof (ActiveKitten));
+                Universe.FollowInHoveredViewport (value.Eva ?? throw new InvalidOperationException ("The kitten is not on EVA"));
             }
         }
 

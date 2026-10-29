@@ -1,5 +1,6 @@
 KSA.ActiveVehicle
 KSA.Vehicles
+KSA.ActiveKitten
 KSA.Kittens
 KSA.Bodies
 KSA.UT
@@ -377,3 +378,15 @@ KSA.Kitten.MissionTime
 KSA.Kitten.DistanceTraveled
 KSA.Kitten.FastestSpeed
 KSA.Kitten.OnEva
+KSA.Kitten.GoOnEva
+KSA.Kitten.Board
+KSA.Kitten.LocomotionMode
+KSA.Kitten.Position
+KSA.Kitten.Velocity
+KSA.LocomotionMode.MMU
+KSA.LocomotionMode.Grounded
+KSA.LocomotionMode.Airborne
+KSA.LocomotionMode.Tumbling
+KSA.LocomotionMode.Righting
+KSA.LocomotionMode.Ladder
+KSA.LocomotionMode.Swimming
