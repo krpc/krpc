@@ -17,21 +17,62 @@ namespace KRPC.KSA.Services
     public static class KSA
     {
         /// <summary>
-        /// The vehicle under the player's control.
+        /// The vehicle under the player's control, or <c>null</c> if the player controls a
+        /// kitten on EVA.
         /// </summary>
         /// <remarks>
-        /// Setting it moves the camera to the vehicle, as the switch vehicle key does.
+        /// Setting it moves the camera to the vehicle, as the switch vehicle key does. See
+        /// <see cref="ActiveKitten"/> for a kitten on EVA.
         /// </remarks>
         [KRPCProperty (Nullable = true)]
         public static Vehicle ActiveVehicle {
             get {
                 var vehicle = Program.ControlledVehicle;
-                return vehicle == null ? null : new Vehicle (vehicle);
+                return vehicle == null || vehicle is KittenEva ? null : new Vehicle (vehicle);
             }
             set {
                 if (ReferenceEquals (value, null))
                     throw new ArgumentNullException (nameof (ActiveVehicle));
                 Universe.FollowInHoveredViewport (value.InternalVehicle);
+            }
+        }
+
+        /// <summary>
+        /// The kitten on EVA under the player's control, or <c>null</c> if the player
+        /// controls a vehicle.
+        /// </summary>
+        /// <remarks>
+        /// Setting it moves the camera to the kitten. Throws an exception if the kitten is not
+        /// on EVA. See <see cref="ActiveVehicle"/> for a vehicle.
+        /// </remarks>
+        [KRPCProperty (Nullable = true)]
+        public static Kitten ActiveKitten {
+            get {
+                var vehicle = Program.ControlledVehicle as KittenEva;
+                return vehicle == null ? null : new Kitten (vehicle.Id);
+            }
+            set {
+                if (ReferenceEquals (value, null))
+                    throw new ArgumentNullException (nameof (ActiveKitten));
+                Universe.FollowInHoveredViewport (value.Eva ?? throw new InvalidOperationException ("The kitten is not on EVA"));
+            }
+        }
+
+        /// <summary>
+        /// The kittens in the agency's roster, including those killed in action, keyed by name.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="Kitten.RosterIndex"/> gives their order in the roster.
+        /// </remarks>
+        [KRPCProperty]
+        public static IDictionary<string, Kitten> Kittens {
+            get {
+                if (Universe.CurrentSystem == null)
+                    throw new InvalidOperationException ("No game is loaded");
+                var kittens = new Dictionary<string, Kitten> ();
+                foreach (var kitten in Universe.KittenRoster.Kittens)
+                    kittens [kitten.Name] = new Kitten (kitten.Name);
+                return kittens;
             }
         }
 
@@ -112,7 +153,8 @@ namespace KRPC.KSA.Services
         /// <returns>The vehicle. Its name is the vehicle's name, with a number appended if
         /// another vehicle has that name.</returns>
         /// <remarks>
-        /// Throws an exception if there is no such vehicle or launch site.
+        /// Throws an exception if there is no such vehicle or launch site, or the name is one
+        /// of the game's kittens.
         /// </remarks>
         [KRPCProcedure]
         public static Vehicle LaunchVehicle (string name, string site)
@@ -126,6 +168,8 @@ namespace KRPC.KSA.Services
             }
             if (save == null)
                 throw new ArgumentException ("No vehicle named " + name);
+            if (!string.IsNullOrEmpty (save.VehicleSaveData.Character))
+                throw new ArgumentException (name + " is a kitten, not a vehicle");
             Celestial celestial = null;
             LocationReference location = null;
             foreach (var body in Utils.Vehicles.Bodies) {

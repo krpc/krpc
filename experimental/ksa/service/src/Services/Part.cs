@@ -210,6 +210,22 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The part's crew seats.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Seat> Seats {
+            get { return InternalPart.SubtreeModules.Get<IVASeat> ().ToArray ().Select (module => new Seat (this, module)).ToList (); }
+        }
+
+        /// <summary>
+        /// The kittens in the part's seats.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Kitten> Crew {
+            get { return Seats.Select (seat => seat.Kitten).Where (kitten => kitten != null).ToList (); }
+        }
+
+        /// <summary>
         /// The part's gimbals. An engine part can have several, each steering one nozzle.
         /// </summary>
         [KRPCProperty]
