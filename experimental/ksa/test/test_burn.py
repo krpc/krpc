@@ -34,7 +34,7 @@ class TestBurn(ksatest.TestCase):
         burn = self.vehicle.add_burn(self.ksa.ut + 900, prograde=10)
         burn.remove()
         self.assertEqual([], self.vehicle.burns)
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
             _ = burn.delta_v
 
     def test_order(self):

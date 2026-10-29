@@ -76,6 +76,11 @@ class TestKSA(ksatest.TestCase):
         finally:
             self.load_save()
 
+    def test_load_counts_game_state(self):
+        loads = self.conn.krpc.game_state_loads
+        self.load_save()
+        self.assertEqual(loads + 1, self.conn.krpc.game_state_loads)
+
     def test_load_missing_save(self):
         self.assertFalse(self.ksa.save_exists("krpctest-missing"))
         with self.assertRaises(ValueError):

@@ -12,7 +12,7 @@ namespace KRPC.KSA.Services
     /// Active thrusters fire when the vehicle's RCS is on. See <see cref="Control.RCS"/>.
     /// </remarks>
     [KRPCClass (Service = "KSA")]
-    public class RCS : Equatable<RCS>
+    public class RCS : Equatable<RCS>, IGameObjectState
     {
         readonly ThrusterController thruster;
 
@@ -28,6 +28,13 @@ namespace KRPC.KSA.Services
         public override bool Equals (RCS other)
         {
             return !ReferenceEquals (other, null) && ReferenceEquals (thruster, other.thruster);
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Part.GameObjectState; }
         }
 
         /// <summary>

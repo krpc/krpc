@@ -257,3 +257,24 @@ class TestPredictedOrbit(ksatest.TestCase):
         self.assertIsNone(orbit.next_orbit)
         # The vehicle's own trajectory does not hit the surface
         self.assertTrue(math.isnan(self.vehicle.flight.time_to_impact))
+
+    def test_follows_prediction(self):
+        burn, orbit = self.burn_orbit(3300, self.ksa.OrbitTransition.escape)
+        count = self.conn.testing_tools.object_count
+        burn.prograde = -300
+        # Each read during the new prediction returns the same object
+        ksatest.wait_until(
+            lambda: burn.orbit.end_transition == self.ksa.OrbitTransition.impact
+        )
+        self.assertEqual(orbit, burn.orbit)
+        self.assertEqual(count, self.conn.testing_tools.object_count)
+        self.assertLess(orbit.periapsis_altitude, 0)
+
+    def test_removed_burn(self):
+        burn, orbit = self.burn_orbit(3300, self.ksa.OrbitTransition.escape)
+        next_orbit = orbit.next_orbit
+        burn.remove()
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
+            _ = orbit.eccentricity
+        with self.assertRaises(self.conn.krpc.ObjectDestroyedException):
+            _ = next_orbit.eccentricity

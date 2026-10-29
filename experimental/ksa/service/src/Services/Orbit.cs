@@ -12,28 +12,30 @@ namespace KRPC.KSA.Services
     /// <see cref="Burn.Orbit"/> or <see cref="NextOrbit"/>.
     /// </summary>
     /// <remarks>
-    /// A vehicle's orbit follows the vehicle as its trajectory changes. A predicted orbit, from
-    /// <see cref="NextOrbit"/> or <see cref="Burn.Orbit"/>, is the prediction at the time it
-    /// was obtained.
+    /// An orbit follows the game's prediction as the trajectory changes. A predicted orbit, from
+    /// <see cref="NextOrbit"/> or <see cref="Burn.Orbit"/>, is a position in the vehicle's or the
+    /// burn's predicted trajectory, and throws an exception while the trajectory is too short to
+    /// reach it.
     /// </remarks>
     [KRPCClass (Service = "KSA")]
-    public class Orbit : Equatable<Orbit>
+    public class Orbit : Equatable<Orbit>, IGameObjectState
     {
-        // One of: the vehicle whose current orbit this is, a patch of a predicted trajectory,
-        // or a body's orbit
+        // One of: a patch of the vehicle's predicted trajectory, where patch 0 is its current
+        // orbit, a patch of the trajectory after a burn, or a body's orbit
         readonly global::KSA.Vehicle vehicle;
-        readonly FlightPlan plan;
+        readonly Burn burn;
         readonly int patchIndex;
         readonly global::KSA.Orbit fixedOrbit;
 
-        internal Orbit (global::KSA.Vehicle vehicle)
+        internal Orbit (global::KSA.Vehicle vehicle, int patchIndex = 0)
         {
             this.vehicle = vehicle;
+            this.patchIndex = patchIndex;
         }
 
-        internal Orbit (FlightPlan plan, int patchIndex)
+        internal Orbit (Burn burn, int patchIndex = 0)
         {
-            this.plan = plan;
+            this.burn = burn;
             this.patchIndex = patchIndex;
         }
 
@@ -48,8 +50,15 @@ namespace KRPC.KSA.Services
         public override bool Equals (Orbit other)
         {
             return !ReferenceEquals (other, null) && ReferenceEquals (vehicle, other.vehicle) &&
-                ReferenceEquals (plan, other.plan) && patchIndex == other.patchIndex &&
+                Equals (burn, other.burn) && patchIndex == other.patchIndex &&
                 ReferenceEquals (fixedOrbit, other.fixedOrbit);
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return State; }
         }
 
         /// <summary>
@@ -57,13 +66,17 @@ namespace KRPC.KSA.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return HashCode.Combine (vehicle, plan, patchIndex, fixedOrbit);
+            return HashCode.Combine (vehicle, burn, patchIndex, fixedOrbit);
         }
 
-        // The vehicle replaces its orbit and flight plan as its trajectory changes, so we read
+        // The vehicle replaces its orbit and flight plans as its trajectory changes, so we read
         // them on each call
         FlightPlan Plan {
-            get { return vehicle != null ? new Vehicle (vehicle).InternalVehicle.FlightPlan : plan; }
+            get { return burn != null ? burn.FlightPlan : new Vehicle (vehicle).InternalVehicle.FlightPlan; }
+        }
+
+        bool IsCurrent {
+            get { return vehicle != null && patchIndex == 0; }
         }
 
         PatchedConic Patch {
@@ -79,9 +92,19 @@ namespace KRPC.KSA.Services
             get {
                 if (fixedOrbit != null)
                     return fixedOrbit;
-                if (vehicle != null)
+                if (IsCurrent)
                     return new Vehicle (vehicle).InternalVehicle.Orbit;
-                return Patch?.Orbit ?? throw new InvalidOperationException ("The orbit is no longer predicted");
+                return Patch?.Orbit ?? throw new InvalidOperationException ("The trajectory does not reach the orbit");
+            }
+        }
+
+        GameObjectState State {
+            get {
+                if (fixedOrbit != null)
+                    return Vehicles.StateOf (fixedOrbit.Parent);
+                if (burn != null)
+                    return burn.GameObjectState;
+                return Vehicles.StateOf (vehicle);
             }
         }
 
@@ -413,7 +436,7 @@ namespace KRPC.KSA.Services
         Encounter? ClosestApproach {
             get {
                 var patch = Patch;
-                var target = vehicle != null ? new Vehicle (vehicle).InternalVehicle.Target : null;
+                var target = IsCurrent ? new Vehicle (vehicle).InternalVehicle.Target : null;
                 if (patch == null || target == null)
                     return null;
                 return patch.TryFindClosestApproach (target);
@@ -523,8 +546,9 @@ namespace KRPC.KSA.Services
                 var transition = EndTransition;
                 if (transition != OrbitTransition.Encounter && transition != OrbitTransition.Escape)
                     return null;
-                var next = Plan;
-                return patchIndex + 1 < next.Patches.Count ? new Orbit (next, patchIndex + 1) : null;
+                if (patchIndex + 1 >= Plan.Patches.Count)
+                    return null;
+                return burn != null ? new Orbit (burn, patchIndex + 1) : new Orbit (vehicle, patchIndex + 1);
             }
         }
     }

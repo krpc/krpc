@@ -10,7 +10,7 @@ namespace KRPC.KSA.Services
     /// A decoupler. Obtained from <see cref="Part.Decoupler"/>.
     /// </summary>
     [KRPCClass (Service = "KSA")]
-    public class Decoupler : Equatable<Decoupler>
+    public class Decoupler : Equatable<Decoupler>, IGameObjectState
     {
         readonly global::KSA.Decoupler decoupler;
 
@@ -26,6 +26,13 @@ namespace KRPC.KSA.Services
         public override bool Equals (Decoupler other)
         {
             return !ReferenceEquals (other, null) && ReferenceEquals (decoupler, other.decoupler);
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Part.GameObjectState; }
         }
 
         /// <summary>

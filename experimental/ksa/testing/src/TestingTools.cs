@@ -30,6 +30,19 @@ namespace KRPC.KSA.Testing
         }
 
         /// <summary>
+        /// The number of objects in the server's object store.
+        /// </summary>
+        [KRPCProperty]
+        public static int ObjectCount {
+            get { return (int)objectCount.GetValue (objectStore.GetValue (null)); }
+        }
+
+        // The object store, which the core does not expose
+        static readonly Type objectStoreType = typeof (GameState).Assembly.GetType ("KRPC.Service.ObjectStore");
+        static readonly PropertyInfo objectStore = objectStoreType.GetProperty ("Instance");
+        static readonly PropertyInfo objectCount = objectStoreType.GetProperty ("Count");
+
+        /// <summary>
         /// Close the game's update available pop-up, and any shown later.
         /// </summary>
         /// <remarks>

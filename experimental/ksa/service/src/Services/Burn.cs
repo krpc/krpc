@@ -19,7 +19,7 @@ namespace KRPC.KSA.Services
     /// when another burn follows it, and keeps the last one.
     /// </remarks>
     [KRPCClass (Service = "KSA")]
-    public class Burn : Equatable<Burn>
+    public class Burn : Equatable<Burn>, IGameObjectState
     {
         readonly global::KSA.Vehicle vehicle;
         readonly global::KSA.Burn burn;
@@ -39,6 +39,13 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Vehicles.StateOf (vehicle).LeastAlive (InPlan ? GameObjectState.Live : GameObjectState.Destroyed); }
+        }
+
+        /// <summary>
         /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
@@ -55,12 +62,28 @@ namespace KRPC.KSA.Services
         // The burn, which throws if it is no longer in the vehicle's burn plan
         global::KSA.Burn InternalBurn {
             get {
-                var plan = Computer.BurnPlan;
+                if (!InPlan)
+                    throw new Service.KRPC.ObjectDestroyedException ("The burn has been removed");
+                return burn;
+            }
+        }
+
+        // The predicted trajectory after the burn, which the game replaces as it predicts again
+        internal FlightPlan FlightPlan {
+            get { return InternalBurn.FlightPlan; }
+        }
+
+        // A removed burn never returns to the plan
+        bool InPlan {
+            get {
+                if (!Vehicles.Exists (vehicle))
+                    return false;
+                var plan = vehicle.FlightComputer.BurnPlan;
                 for (var i = 0; i < plan.BurnCount; i++) {
                     if (plan.TryGetBurn (i, out var planned) && ReferenceEquals (planned, burn))
-                        return burn;
+                        return true;
                 }
-                throw new InvalidOperationException ("The burn has been removed");
+                return false;
             }
         }
 
@@ -180,7 +203,7 @@ namespace KRPC.KSA.Services
         /// </remarks>
         [KRPCProperty]
         public Orbit Orbit {
-            get { return new Orbit (InternalBurn.FlightPlan, 0); }
+            get { return new Orbit (this); }
         }
 
         /// <summary>

@@ -16,7 +16,7 @@ namespace KRPC.KSA.Services
     /// propellant.
     /// </remarks>
     [KRPCClass (Service = "KSA")]
-    public class Sequence : Equatable<Sequence>
+    public class Sequence : Equatable<Sequence>, IGameObjectState
     {
         readonly global::KSA.Vehicle vehicle;
 
@@ -32,6 +32,13 @@ namespace KRPC.KSA.Services
         public override bool Equals (Sequence other)
         {
             return !ReferenceEquals (other, null) && ReferenceEquals (vehicle, other.vehicle) && Number == other.Number;
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Vehicles.StateOf (vehicle); }
         }
 
         /// <summary>

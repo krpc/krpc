@@ -17,7 +17,7 @@ namespace KRPC.KSA.Services
     /// controls change the same settings.
     /// </remarks>
     [KRPCClass (Service = "KSA", GameScene = GameScene.Flight)]
-    public class AutoPilot : Equatable<AutoPilot>
+    public class AutoPilot : Equatable<AutoPilot>, IGameObjectState
     {
         // The number of updates Wait lets pass before reading the pointing error. The
         // error is computed by the solver step that follows a server update, so after a
@@ -37,6 +37,13 @@ namespace KRPC.KSA.Services
         public override bool Equals (AutoPilot other)
         {
             return !ReferenceEquals (other, null) && ReferenceEquals (vehicle, other.vehicle);
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Vehicles.StateOf (vehicle); }
         }
 
         /// <summary>

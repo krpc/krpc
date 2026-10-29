@@ -19,7 +19,7 @@ namespace KRPC.KSA.Services
     /// throws an exception afterwards.
     /// </remarks>
     [KRPCClass (Service = "KSA")]
-    public class Vehicle : Equatable<Vehicle>
+    public class Vehicle : Equatable<Vehicle>, IGameObjectState
     {
         // KSA vehicles have no permanent id: the id is the name, and changes on a rename.
         // The object is the identity
@@ -39,6 +39,13 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Vehicles.StateOf (vehicle); }
+        }
+
+        /// <summary>
         /// Hash code for the object.
         /// </summary>
         public override int GetHashCode ()
@@ -52,7 +59,7 @@ namespace KRPC.KSA.Services
         public global::KSA.Vehicle InternalVehicle {
             get {
                 if (!Vehicles.Exists (vehicle))
-                    throw new InvalidOperationException ("The vehicle no longer exists");
+                    throw new Service.KRPC.ObjectDestroyedException ("The vehicle no longer exists");
                 return vehicle;
             }
         }

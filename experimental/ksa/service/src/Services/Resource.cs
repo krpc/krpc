@@ -13,7 +13,7 @@ namespace KRPC.KSA.Services
     /// Obtained from <see cref="Part.Resources"/> or <see cref="Vehicle.Resources"/>.
     /// </summary>
     [KRPCClass (Service = "KSA")]
-    public class Resource : Equatable<Resource>
+    public class Resource : Equatable<Resource>, IGameObjectState
     {
         readonly global::KSA.Vehicle vehicle;
         readonly global::KSA.Part part;
@@ -47,6 +47,13 @@ namespace KRPC.KSA.Services
         {
             return !ReferenceEquals (other, null) && ReferenceEquals (vehicle, other.vehicle) &&
                 ReferenceEquals (part, other.part) && Name == other.Name;
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return part == null ? Vehicles.StateOf (vehicle) : Part.StateOf (part); }
         }
 
         /// <summary>

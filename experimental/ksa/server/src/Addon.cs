@@ -92,6 +92,15 @@ namespace KRPC.KSA
                 harmony.Patch (connected, finalizer: new HarmonyMethod (
                     typeof (Addon).GetMethod (nameof (TCPClientConnectedFinalizer), BindingFlags.NonPublic | BindingFlags.Static)));
 
+            // A save load replaces every vehicle, which the core counts as a new game state
+            var deserialize = typeof (Universe).GetMethod (
+                nameof (Universe.DeserializeSave), BindingFlags.Public | BindingFlags.Static);
+            if (deserialize == null)
+                Logger.WriteLine ("Universe.DeserializeSave not found, save loads are not counted", Logger.Severity.Error);
+            else
+                harmony.Patch (deserialize, postfix: new HarmonyMethod (
+                    typeof (Addon).GetMethod (nameof (AfterSaveLoaded), BindingFlags.NonPublic | BindingFlags.Static)));
+
             MenuBar.Patch (harmony, this);
             ConsoleWindow.Patch (harmony);
 
@@ -285,6 +294,11 @@ namespace KRPC.KSA
             return null;
         }
 
+        static void AfterSaveLoaded ()
+        {
+            GameState.Changed ();
+        }
+
         static void BeforeVehicleSolvers ()
         {
             instance.updatedThisFrame = true;
@@ -301,6 +315,7 @@ namespace KRPC.KSA
                 Universe.CurrentSystem != null && Program.ControlledVehicle != null
                 ? GameScene.Flight : GameScene.None;
             try {
+                Utils.ObjectSweep.Update ();
                 core.Update ();
             } catch (Exception e) {
                 // An exception escaping the patch would take the game's frame down with it

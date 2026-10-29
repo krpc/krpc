@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
+using KRPC.Utils;
 using KSA;
 
 namespace KRPC.KSA.Utils
@@ -71,16 +72,24 @@ namespace KRPC.KSA.Utils
         }
 
         /// <summary>
-        /// Whether the vehicle is still in the current system. Docking, undocking and
+        /// Live if the vehicle or body is in the current system, and destroyed otherwise.
+        /// </summary>
+        public static GameObjectState StateOf (object astronomical)
+        {
+            return astronomical != null && Exists (astronomical) ? GameObjectState.Live : GameObjectState.Destroyed;
+        }
+
+        /// <summary>
+        /// Whether the vehicle or body is still in the current system. Docking, undocking and
         /// destruction remove the vehicle object.
         /// </summary>
-        public static bool Exists (Vehicle vehicle)
+        public static bool Exists (object astronomical)
         {
             var system = Universe.CurrentSystem;
             if (system == null)
                 return false;
-            foreach (var astronomical in system.All.AsSpan ()) {
-                if (ReferenceEquals (astronomical, vehicle))
+            foreach (var other in system.All.AsSpan ()) {
+                if (ReferenceEquals (other, astronomical))
                     return true;
             }
             return false;
