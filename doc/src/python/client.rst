@@ -4,7 +4,8 @@
 Python Client
 =============
 
-This client provides a Python API for interacting with a kRPC server.
+This guide describes how to install the Python client, and the features it provides. The
+:ref:`python-client-reference` describes each function and class.
 
 Installing the Library
 ----------------------
@@ -18,304 +19,393 @@ To install using pip:
 
    pip install krpc
 
-Getting Started
----------------
+Connecting to the Server
+------------------------
 
-The :func:`krpc.connect` function is used to open a connection to a server. It returns a connection
-object (of type :class:`krpc.client.Client`) through which you can interact with the server. The
-following example connects to a server running on the local machine, queries its version and prints
-it out:
+The game must be running with the server started. :ref:`getting-started-server` in the
+getting started guide shows how to install and start it.
 
-.. literalinclude:: /scripts/python/client/Connecting1.py
-
-This function also accepts arguments that specify what address and port to connect to, and
-an optional descriptive name for the connection which is displayed in the kRPC window in the
-game. For example:
-
-.. literalinclude:: /scripts/python/client/Connecting2.py
+The client connects over TCP/IP or over a local socket. Each server in the server window uses one
+protocol, and accepts connections over that protocol only. Pick the protocol when you add the
+server, and connect with the matching function.
 
 .. note::
 
    A server with "Auto-accept new clients" turned off answers only once the player approves the
-   connection, and the client gives up after 5 seconds by default. Pass ``handshake_timeout=None`` to wait
-   for the player.
+   connection in game. The connection fails after 5 seconds by default. Pass
+   ``handshake_timeout=None`` to wait indefinitely for the player.
+
+Over TCP/IP
+^^^^^^^^^^^
+
+Select "Protobuf over TCP/IP" as the server's protocol. :func:`~krpc.connect` connects to it, and
+returns a :class:`krpc.client.Client`. You make every call through this object. The following
+connects to a server with the default settings, address ``127.0.0.1`` and port 50000, and prints
+its version:
+
+.. literalinclude:: /scripts/python/client/Connecting1.py
+
+:func:`~krpc.connect` also takes the address and port of the server, and a name for the connection.
+These match the address and port shown in the server window. The name appears in the server window
+in the game:
+
+.. literalinclude:: /scripts/python/client/Connecting2.py
+
+TCP/IP works over a network, so your program can run on a different machine from the game.
+
+Over a Local Socket
+^^^^^^^^^^^^^^^^^^^
+
+Select "Protobuf over local socket" as the server's protocol. :func:`~krpc.connect_local` connects
+to it, and returns a :class:`krpc.client.Client` as :func:`~krpc.connect` does. The following
+connects to a server with the default settings, at the default socket path for your platform, and
+prints its version:
+
+.. literalinclude:: /scripts/python/client/ConnectingLocal.py
+
+:func:`~krpc.connect_local` also takes a ``path``, for a server with another socket path. The path
+matches the one shown in the server window.
+
+A local socket works only on the machine running the game. It has lower overhead than TCP/IP, so
+it is faster.
+
+Closing the Connection
+^^^^^^^^^^^^^^^^^^^^^^
+
+Use the connection in a ``with`` statement to close it at the end of the block:
+
+.. literalinclude:: /scripts/python/client/Connecting3.py
+
+:meth:`~krpc.client.Client.close` closes a connection explicitly.
 
 Calling Remote Procedures
 -------------------------
 
-The kRPC server provides *procedures* that a client can run. These procedures are arranged in groups
-called *services* to keep things organized. When connecting, the Python client interrogates the
-server to discover what procedures it provides, and dynamically creates class types, methods,
-properties etc. to call them.
+The server provides *procedures* for your program to call, grouped into *services*.
 
-The following example demonstrates how to invoke remote procedures using the Python client. It calls
-:attr:`SpaceCenter.active_vessel` to get an object representing the active vessel (of type
-:class:`SpaceCenter.Vessel`). It sets the name of the vessel and then prints out its altitude:
+The following gets the active vessel from :attr:`SpaceCenter.active_vessel`, an object of type
+:class:`SpaceCenter.Vessel`. It sets the vessel's name, then prints its altitude:
 
 .. literalinclude:: /scripts/python/client/RemoteProcedures.py
 
-Many procedures return an object identifying something in the game, such as a vessel or
-a part. See :doc:`Object Lifetime </user-guide/object-lifetime>` for how such an object
-behaves when a game is loaded or what it identifies is destroyed.
+Each service is an attribute of the connection, such as ``conn.space_center`` for the
+``SpaceCenter`` service. From an interactive terminal, ``help(conn.space_center)`` lists the
+classes, enumerations, procedures and properties of the service. ``help(conn.space_center.Vessel)``
+does the same for a class.
 
-All of the functionality provided by the ``SpaceCenter`` service is accessible via
-``conn.space_center``. To explore the functionality provided by a service, you can use the
-``help()`` function from an interactive terminal. For example, running ``help(conn.space_center)``
-will list all of the classes, enumerations, procedures and properties provides by the
-``SpaceCenter`` service. This works similarly for class types, for example:
-``help(conn.space_center.Vessel)``.
+Handling Errors
+---------------
 
-Deprecated Members
-------------------
+A procedure that fails on the server raises an exception in your program. The following catches
+the error from loading a save that does not exist:
 
-Some members of the server's API are deprecated, and may be removed in a future release. Calling
-one emits a ``DeprecationWarning`` naming the replacement to use instead. The deprecation is also
-noted in the member's docstring. Python hides ``DeprecationWarning`` by default; run Python with
-``-W default`` or use the ``warnings`` module to see them.
+.. literalinclude:: /scripts/python/client/Errors.py
 
-Server Side Functions
----------------------
+The exception you catch depends on the error:
 
-A server side function is code that runs inside the game, on the server. Pass a Python function or
-lambda to :meth:`krpc.client.Client.run` to compile it into a server side function, run it once and
-return its value. Every value it reads comes from the same physics tick. For example, the following
-reads the vessel's altitude and speed together:
+* A standard error, such as an invalid argument, raises a subclass of the matching Python
+  exception. The example catches ``ValueError``, as a missing save raises
+  ``conn.krpc.ArgumentException``.
+* An error particular to a service raises a class of that service, such as
+  ``conn.krpc.ObjectDestroyedException``.
+* An error the client has no class for raises :class:`krpc.error.RPCError`.
+* A call made once the connection has closed or failed raises
+  :class:`krpc.error.ConnectionError`.
 
-.. literalinclude:: /scripts/python/client/RunFunction.py
+Remote Objects
+--------------
 
-Use ``run`` for a function with effects, such as setting a property. An event or a function stream
-evaluates its function on every update, repeating the effects.
+Many procedures return an object identifying something in the game, such as a vessel or a part.
+The object holds no copy of the game's state. It is just a reference to it. Each call through it
+reads the game as it is now:
 
-:ref:`python-client-compiling-functions` describes what a function can contain. The :ref:`server
-side functions guide <server-side-functions>` shows how to build larger functions.
+.. literalinclude:: /scripts/python/client/RemoteObjects.py
+
+Two objects for the same thing in the game compare equal, and can be used as dictionary keys.
+
+Once the thing an object identifies is destroyed, such as a part that explodes, each call through
+it raises ``conn.krpc.ObjectDestroyedException``.
+
+An object for a vessel or a part keeps working when you load a save, quickload or revert, and
+then reads the loaded game. Other objects depend on what they identify. A maneuver node, for
+example, is destroyed by a load.
+
+A vessel far from the active vessel is *unloaded*, and the game keeps no parts for it. The vessel
+itself reads normally, but a call on one of its parts raises
+``conn.krpc.ObjectNotLoadedException``. The part works again once the vessel comes back into
+range.
+
+.. seealso:: :doc:`/user-guide/object-lifetime` describes how each kind of object behaves in more
+             detail.
 
 .. _python-client-streams:
 
 Streaming Data
 --------------
 
-A common use case for kRPC is to continuously extract data from the game. The naive approach to do
-this would be to repeatedly call a remote procedure, such as in the following which repeatedly
-prints the position of the active vessel:
+A common use of kRPC is to read data from the game continuously. The following does so by calling
+a remote procedure in a loop, printing the position of the active vessel:
 
 .. literalinclude:: /scripts/python/client/Streaming1.py
 
-This approach requires significant communication overhead as request/response messages are
-repeatedly sent between the client and server. kRPC provides a more efficient mechanism to achieve
-this, called *streams*.
+Each call sends a request to the server and waits for its response. A *stream* is more efficient.
+The server runs the call repeatedly, and sends your program the result each time it changes.
 
-A stream repeatedly executes a procedure on the server (with a fixed set of argument values) and
-sends the result to the client. It only requires a single message to be sent to the server to
-establish the stream, which will then continuously send data to the client until the stream is
-closed.
-
-The following example does the same thing as above using streams:
+The following does the same as above using a stream:
 
 .. literalinclude:: /scripts/python/client/Streaming2.py
 
-It calls :meth:`krpc.client.Client.add_stream` once at the start of the program to create the
-stream, and then repeatedly prints the position returned by the stream. The stream is automatically
-closed when the client disconnects.
+:meth:`~krpc.client.Client.add_stream` creates the stream from the method and its arguments, and
+returns a :class:`krpc.stream.Stream`. Calling it returns the stream's latest value.
 
-Streams can also be created using the ``with`` statement, which ensures that the stream is closed
-after leaving the block:
-
-.. literalinclude:: /scripts/python/client/Streaming3.py
-
-A stream can be created for any procedure that returns a value. This includes both method calls and
-attribute accesses. The examples above demonstrated how to stream method calls. Attributes can be
-streamed as follows:
+A property is streamed with ``getattr`` and the property's name:
 
 .. literalinclude:: /scripts/python/client/Streaming4.py
 
-A stream can be created for any function call (except property setters). The most recent value of a
-stream can be obtained by calling :func:`krpc.stream.Stream.__call__`. A stream can be stopped and
-removed from the server by calling :func:`krpc.stream.Stream.remove` on the stream object. All of a
-clients streams are automatically stopped when it disconnects.
+A stream can be made of any procedure or property that returns a value. Each call to
+:meth:`~krpc.client.Client.add_stream` creates another stream.
 
-.. note::
+A stream runs until you remove it with :meth:`~krpc.stream.Stream.remove`, your program drops its
+last reference to it, or the connection closes. Keep a reference to a stream for as long as you
+need its values or its callbacks. :meth:`~krpc.client.Client.stream` creates a stream in a
+``with`` statement, which removes it at the end of the block:
 
-   A stream runs on the server until you remove it or the connection closes, even once the stream
-   object is garbage collected. Each call to ``add_stream`` adds another stream.
+.. literalinclude:: /scripts/python/client/Streaming3.py
 
-Synchronizing with Stream Updates
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+By default, the server sends a stream's value each time it changes. Set
+:attr:`~krpc.stream.Stream.rate` to limit how many times a second the stream updates:
 
-A common use case for kRPC is to wait until the value returned by a method or attribute changes, and
-then take some action. kRPC provides two mechanisms to do this efficiently: *condition variables*
-and *callbacks*.
+.. literalinclude:: /scripts/python/client/StreamRate.py
 
-Condition Variables
-~~~~~~~~~~~~~~~~~~~
+Waiting for Changes
+^^^^^^^^^^^^^^^^^^^
 
-Each stream has a condition variable associated with it, that is notified whenever the value of the
-stream changes. The condition variables are instances of ``threading.Condition`` from the Python
-standard library. These can be used to block the current thread of execution until the value of the
-stream changes.
+Each stream has a condition variable, a ``threading.Condition`` from the Python standard library.
+:meth:`~krpc.stream.Stream.wait` blocks until the stream's value changes. The following waits for
+the abort button to be pressed:
 
-The following example waits until the abort button is pressed in game, by waiting for the value of
-``vessel.control.abort`` to change to true:
+.. literalinclude:: /scripts/python/client/ConditionVariables.py
 
-.. literalinclude:: /scripts/python/client/ConditionVariables1.py
+Hold the condition when you call :meth:`~krpc.stream.Stream.wait`, as the ``with`` statement does
+here. While you hold it, the value changes only when you wait, so the loop misses no updates. An
+ending reaches you the same way: the wait returns, and your next read or wait raises the exception
+that ended the stream.
 
-This code creates a stream, acquires a lock on the streams condition variable (using a ``with``
-statement) and then repeatedly checks the value of ``abort``. It leaves the loop when it changes to
-true.
-
-While a thread holds the lock, the value of the stream changes only when the condition variable is
-notified. A check of the value and the wait that follows it therefore see the same updates. A
-wait returns for a value newer than the last one the thread read, with or without the lock.
-
-The body of the loop calls ``wait`` on the stream, which causes the program to block until the value
-changes. This prevents the loop from 'spinning' and so it does not consume processing resources
-whilst waiting.
-
-The example code above uses a ``with`` statement to acquire the lock on the condition variable. This
-can also be done explicitly using ``acquire`` and ``release``:
-
-.. literalinclude:: /scripts/python/client/ConditionVariables2.py
+:meth:`~krpc.stream.Stream.wait` takes a timeout in seconds, and returns ``False`` when it elapses
+before an update.
 
 Callbacks
-~~~~~~~~~
+^^^^^^^^^
 
-Streams allow you to register callback functions that are called whenever the value of the stream
-changes. Callback functions should take a single argument, which is the new value of the stream, and
-should return nothing.
-
-For example the following program registers two callbacks that are invoked when the value of
-``vessel.conrol.abort`` changes:
+A callback is a function the client calls with each new value of a stream. The following adds
+two callbacks to a stream of the abort button:
 
 .. literalinclude:: /scripts/python/client/Callbacks.py
 
 A callback added to a stream that already has a value is called with that value straight away.
+It is then called with each new value, in order.
 
 .. note::
 
-   Callbacks run on the client's callback thread, one at a time, and may make remote
-   procedure calls. A callback must not wait on a stream, as the same thread wakes the
-   stream's waiters. Any changes to shared state must be protected with appropriate
-   synchronization.
+   Each connection has a callback thread, which runs the callbacks of its streams one at a time. A
+   callback can make remote procedure calls. Other callbacks and waits are held up while it runs, so
+   return promptly, and do not wait on a stream in a callback. For a long running task, start a
+   worker thread from the callback.
+
+.. _python-client-stream-endings:
 
 Stream Endings
-~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^
 
-The following example streams the temperature of a part until the part is destroyed:
+A stream ends when its procedure raises an exception, when the server removes it, when you remove
+it, or when the connection closes. Calling the stream or waiting on it then raises the exception
+that ended it. The following streams the temperature of a part until the part is destroyed:
 
 .. literalinclude:: /scripts/python/client/StreamEnd.py
 
-Once a stream ends, calling the stream or waiting on it raises the exception that ended it. A stream
-ends when its procedure raises an exception, when the server removes it, when you remove it, or when
-the connection closes.
+The exception is the one the procedure raised, or one of the following:
 
-A stream that the server removes, such as an event that has finished, ends with
-``StreamRemovedException`` from the ``KRPC`` service. A stream you remove ends with ``StreamError``,
-and a closed connection with ``ConnectionError``.
+* ``conn.krpc.StreamRemovedException`` when the server removes the stream, such as for an
+  :ref:`event <python-client-events>` that has finished.
+* :class:`krpc.error.StreamError` when you remove the stream from the client.
+* :class:`krpc.error.ConnectionError` when the connection closes or fails.
 
-An exception for an object that is not loaded, or a procedure not available in the game scene,
-holds the stream instead. It resumes once the object or scene is available.
+An exception for an object that is not loaded, or for a procedure not available in the current
+game scene, does not end the stream. It pauses the stream's updates, and the stream keeps its last
+value. The updates resume once the object or the scene is available.
 
-.. seealso:: :doc:`/user-guide/object-lifetime`
+.. seealso:: :doc:`/user-guide/object-lifetime` describes when each kind of object is not loaded,
+             and how streams behave around a load.
 
-To handle an ending in a callback, add an end callback with
-:meth:`krpc.stream.Stream.add_end_callback`. It is called once, with the exception.
+:meth:`~krpc.stream.Stream.add_end_callback` adds a callback that is called once when the stream
+ends, with the exception. The following prints the temperature of a part with a callback, and
+prints the exception when the stream ends:
 
-Streaming Server Side Functions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. literalinclude:: /scripts/python/client/EndCallback.py
 
-Pass a Python function or lambda to :meth:`krpc.client.Client.add_stream` to stream its value,
-computed on the server. The server evaluates the function on each stream update, within one physics
-tick. The value can be any type the server can send, including collections and objects. For example,
-the following streams the vessel's altitude in kilometers:
+Server Side Functions
+---------------------
+
+A server side function is a Python function or lambda in your script that runs inside the game.
+The client compiles it and sends it to the server, which runs it there. The following reads the
+vessel's altitude and speed together:
+
+.. literalinclude:: /scripts/python/client/RunFunction.py
+
+:ref:`python-client-compiling-functions` describes what a function can contain. The :ref:`server
+side functions guide <server-side-functions>` shows how to build larger functions.
+
+Running a Function
+^^^^^^^^^^^^^^^^^^
+
+:meth:`~krpc.client.Client.run` runs a function once, and returns its value. The server runs the
+whole function within one physics tick, so every value it reads comes from the same moment in the
+game. In the example, the altitude and the speed are consistent with each other, which two
+separate calls cannot guarantee.
+
+Streaming a Function
+^^^^^^^^^^^^^^^^^^^^
+
+Pass a function to :meth:`~krpc.client.Client.add_stream` to stream its value. The server
+evaluates the function on each update, within one physics tick. The following streams the
+vessel's altitude in kilometers:
 
 .. literalinclude:: /scripts/python/client/CompiledFunctionStream.py
 
-Each call to ``add_stream`` creates a separate stream, which evaluates the function again on each
-update.
-
-A function stream or event ends on any exception its function raises. This includes
+A function stream ends on an exception its function raises, just like an
+:ref:`ordinary stream <python-client-stream-endings>`. Unlike an ordinary stream, it also ends on
 ``ObjectNotLoadedException`` from the ``KRPC`` service, raised while the game loads or when a vessel
-unloads. To keep a function running through a load, catch the exception in the function:
+unloads. The server cannot pause a function partway through, and running it again would repeat
+its effects. To keep a function running through a load, catch the exception in the function:
 
 .. literalinclude:: /scripts/python/client/NotLoadedStream.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
 
-For an event, the handler returns ``False`` so the event does not fire.
-
 .. _python-client-events:
 
 Events
 ------
 
-Some procedures return event objects of type :class:`krpc.event.Event`. These allow you to wait
-until an event occurs, by calling :class:`krpc.event.Event.wait`. Under the hood, these are
-implemented using streams and condition variables.
-
-A call to ``wait`` returns straight away if the event has fired since the previous call on the same
-event object, so no firing is missed between two calls. Several firings between two calls make
-``wait`` return once.
-
-You can also create a custom event from a Python function or lambda. The following creates an event
-that triggers when ``mean_altitude > 1000``:
+A common use of kRPC is to wait for something to happen in the game, such as the vessel reaching
+an altitude. An *event* does this efficiently. The server checks a condition, written as a server
+side function, and tells your program when it becomes true. The following waits
+until the vessel's altitude exceeds 1000 meters:
 
 .. literalinclude:: /scripts/python/client/CompiledEvent.py
 
-The same event can be built by hand from ``KRPC.Expression`` nodes, with the expression API:
+:meth:`~krpc.client.Client.add_event` creates the event, and :meth:`~krpc.event.Event.wait` waits
+for it to fire. The server checks the condition every physics tick, so the event catches a
+condition that holds for only a moment, which a loop of calls can miss.
 
-.. literalinclude:: /scripts/python/client/Event.py
+As with a stream, hold the event's condition when you call :meth:`~krpc.event.Event.wait`. A wait
+returns straight away if the event has fired since your last wait, so a firing between two waits is
+not missed.
+
+Event Callbacks
+^^^^^^^^^^^^^^^
+
+An event can also call a callback each time it fires. The callback takes no arguments:
+
+.. literalinclude:: /scripts/python/client/EventCallback.py
+
+Callbacks for events run on the connection's callback thread, as the callbacks of a stream do.
+
+Event Endings
+^^^^^^^^^^^^^
+
+An event ends in the same ways as a :ref:`stream <python-client-stream-endings>`. Waiting on an
+event that has ended raises the exception that ended it.
+
+When the event fires just before the server ends it, your next wait returns for that firing first.
+Removing the event, dropping your program's last reference to it, or closing the connection, ends
+it at once.
+
+:meth:`~krpc.event.Event.add_end_callback` adds a callback that is called once when the event ends,
+with the exception, just like an ordinary stream.
+
+Threading
+---------
+
+A connection can be shared between threads. Each thread makes calls over it as it would alone,
+and each call returns its own result. The following prints the altitude and speed of the vessel
+from two threads:
+
+.. literalinclude:: /scripts/python/client/Threads.py
+
+Streams and events can also be used from any thread:
+
+* Several threads can read a stream, or wait on a stream or an event. A change wakes every thread
+  waiting for it.
+* A thread holding a stream's condition does not stop other threads from making calls.
+* Callbacks run on the connection's callback thread, one at a time, and never on your program's
+  threads. A callback added to a stream that already has a value is different. Its first call, with
+  that value, might run on your thread, before :meth:`~krpc.stream.Stream.add_callback` returns.
+  Protect state that a callback shares with your program's threads, such as with a
+  ``threading.Lock``.
+
+When one thread closes the connection, or the connection fails, the calls and waits of the other
+threads end with :class:`krpc.error.ConnectionError`. A wait on a stream or an event that another
+thread removes ends with the exception for a removed stream.
+
+Deprecated Members
+------------------
+
+A member of a service can be deprecated, when a newer member replaces it. A deprecated member
+still works, but may be removed in a future release, so move to its replacement.
+
+The API reference and the member's docstring mark it as deprecated, and name the replacement.
+Calling it emits a ``DeprecationWarning`` naming the replacement too. Python hides
+``DeprecationWarning`` by default. Run Python with ``-W default``, or use the ``warnings`` module,
+to see them.
 
 .. _python-client-compiling-functions:
 
-Compiling Server Side Functions
--------------------------------
+Writing Server Side Functions
+-----------------------------
 
-Pass a Python function or lambda to :meth:`krpc.client.Client.compile` to compile it into a server
-side function. :meth:`krpc.client.Client.add_event`, :meth:`krpc.client.Client.add_stream` and
-:meth:`krpc.client.Client.run` take the result, and run it without compiling it again. The following
-compiles a function once, and runs it every second:
+The client includes a compiler, which converts a Python function or lambda into a server side
+function automatically when you pass it to :meth:`~krpc.client.Client.run`,
+:meth:`~krpc.client.Client.add_stream` or :meth:`~krpc.client.Client.add_event`. This section
+describes what a function can contain, and how to compile one ahead of time.
 
-.. literalinclude:: /scripts/python/client/CompiledFunction.py
-
-Given a Python function or lambda, ``add_event``, ``add_stream`` and ``run`` compile it again on
-every call, so its captured variables take their current values. A compiled function keeps the
-values from when it was compiled. Compiling makes a remote procedure call per node.
-
-To use a function repeatedly, compile it once with ``compile`` and pass the result. ``compile``
-also compiles the function on the server, so its first run is as fast as later ones.
-
-``compile`` also works as a decorator, which replaces the function with its compiled form:
-
-.. literalinclude:: /scripts/python/client/CompileDecorator.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
-
-A ``def`` can take parameters, each with a type annotation. ``run`` passes its arguments to them,
-with defaults and keyword arguments as in Python:
-
-.. literalinclude:: /scripts/python/client/CompiledFunctionArguments.py
-   :language: python
-   :start-after: [docs]
-   :end-before: [/docs]
-
-Only a ``def`` takes parameters. An event or a function stream runs its function with no arguments.
-Passing ``add_event`` or ``add_stream`` a ``def`` with parameters raises
-:class:`krpc.error.FunctionCompilationError`, and a compiled function with parameters raises
-``StreamError``.
+Remote Calls and Constants
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The compiler translates the function's source code into a server side function that computes
-the same result on the server:
+the same result on the server, inside the game. Each part of the function either runs on the server
+or becomes a constant:
 
 * Attribute accesses and method calls on remote objects and services become calls in the
   function, made again on each evaluation. This includes calls on the elements of a collection
-  in a comprehension. The procedures of the ``KRPC`` service cannot be called.
+  in a comprehension. The procedures of the ``KRPC`` service cannot be called. They build and
+  run server side functions and add streams, which a function would repeat on every evaluation.
+* Reading an attribute of a structure a service defines reads that field of it on the server.
+  Calling the structure type builds one there, with its field values given by position, by
+  field name, or both.
 * Captured variables, literals and any sub-expression that makes no remote call are evaluated
   once, when the function is compiled, and embedded as constants. A client side function called
-  there must not make a remote procedure call, as it would make it only once.
+  there is a compile error if it makes a remote procedure call, as the call would run only once,
+  when compiling. To use a value read once, read it before the function and capture the variable.
+
+The compiler raises :class:`krpc.error.FunctionCompilationError` for code that would run only once,
+when compiling, where you would expect it to run on every evaluation:
+
+* Reading a stream inside a function, as the stream would be read once.
+* A call to a client side function written as a statement, such as ``time.sleep(1)``. The
+  builtins under :ref:`python-client-builtins`, such as ``print``, run on the server instead.
+* A Python function passed to :meth:`~krpc.client.Client.add_event` or
+  :meth:`~krpc.client.Client.add_stream` that makes no remote procedure call and uses no state
+  variable, as its value is the same on every update. A function compiled with
+  :meth:`~krpc.client.Client.compile` first is not checked.
+
+Operators
+^^^^^^^^^
+
 * Operators, conditional expressions (``a if condition else b``), indexing, slices without a
   step, f-strings without format specifiers, ``in``, ``is None`` and ``is not None`` compile to
-  the matching expression operators. So do tuple, list, set and dictionary displays.
+  the matching expression operators.
 * ``/`` is true division, ``//`` is floor division, and the result of ``%`` takes the sign of
   the divisor, as in Python.
 * ``and`` and ``or`` short-circuit on the server, and produce the operand that decides the
@@ -324,12 +414,33 @@ the same result on the server:
   and the ordering comparisons take numbers only.
 * ``==``, ``!=`` and ``in`` take values of the same kind. Numbers of different types widen to a
   common type.
+
+None and Truth
+^^^^^^^^^^^^^^
+
 * ``None`` takes its type from where it is used: a parameter, the other branch of a
   conditional, the other elements of a list, the function's other returns, or the variable's
   other assignments. Elsewhere, give it a type with an annotation or ``typing.cast``, for
   example ``cast(Optional[str], None)``.
+* A condition tests truth as Python does. ``None`` is false, a number is true when it is not
+  zero, and a string, bytes or a collection when it is not empty. Any other value is true.
+
+Collections
+^^^^^^^^^^^
+
+* Tuple, list, set and dictionary displays compile to the matching expression operators.
 * Comprehensions compile to the server's collection operations, including dictionary
   comprehensions and several ``for`` clauses with conditions.
+* A comprehension target can unpack a tuple, as in ``[key for key, value in d.items()]``.
+* Iterating over a dictionary iterates over its keys, and ``in`` tests its keys. ``d.items()``
+  gives its key and value pairs, ``d.keys()`` its keys and ``d.values()`` its values.
+* A string cannot be iterated over.
+
+.. _python-client-builtins:
+
+Builtin Functions and Methods
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 * The builtin functions ``len``, ``sum``, ``any``, ``all``, ``reversed``, ``abs``, ``round``,
   ``int``, ``float``, ``str``, ``range``, ``enumerate`` and ``zip`` of two collections compile
   to server side operations. ``sorted``, ``min`` and ``max`` take an optional ``key`` lambda.
@@ -339,19 +450,13 @@ the same result on the server:
   ``split``, ``find``, ``startswith``, ``endswith`` and ``join`` compile to server side
   operations. ``strip``, ``lstrip`` and ``rstrip`` take no argument, and ``split`` takes a
   separator.
-* A ``math`` module function with server side arguments compiles to a ``StdLib`` procedure.
-* ``print`` writes a line to the game's log with ``StdLib.print``. An argument computed on the
+* A ``math`` module function with server side arguments compiles to a :mod:`StdLib` procedure.
+* ``print`` writes a line to the game's log with :meth:`StdLib.print`. An argument computed on the
   server is a string, a number or a bool. A constant argument is formatted on the client, as
   ``str()`` formats it. ``sep`` is a constant.
-* Iterating over a dictionary iterates over its keys, and ``in`` tests its keys. A string cannot
-  be iterated over. ``d.items()``
-  gives its key and value pairs, ``d.keys()`` its keys and ``d.values()`` its values.
-* A comprehension target can unpack a tuple, as in ``[key for key, value in d.items()]``.
-* A condition tests truth as Python does. ``None`` is false, a number is true when it is not
-  zero, and a string, bytes or a collection when it is not empty. Any other value is true.
-* Reading an attribute of a structure a service defines reads that field of it on the server.
-  Calling the structure type builds one there, with its field values given by position, by
-  field name, or both.
+
+Statements
+^^^^^^^^^^
 
 A Python function can also contain statements, which run on the server. This one shuts down
 the engines that have run out of fuel, and returns how many it shut down:
@@ -375,7 +480,11 @@ A function body can contain:
   assigned to names. Calls to them run on the server.
 * ``raise``, and ``try`` with ``except`` and ``finally`` clauses.
 
-Local variables and functions follow these rules:
+A function that returns a value must end with a ``return`` or ``raise`` statement, an ``if`` or
+``try`` that returns or raises on every path, or a ``while True`` loop with no ``break``.
+
+Variables and Types
+^^^^^^^^^^^^^^^^^^^
 
 * A variable takes its type from its first assignment. Annotate an assignment of an empty
   collection, for example ``result: list[int] = []``. An empty collection passed as an argument,
@@ -391,26 +500,46 @@ Local variables and functions follow these rules:
   an error.
 * A ``None`` reaching a variable, a parameter or a set that does not take one raises an error
   when the function runs.
+* A captured collection is copied to the server, so assigning to or deleting one of its
+  elements is an error.
+
+Scope
+^^^^^
+
 * A name assigned anywhere in the function is local to all of it, as in Python.
 * Reading a variable is an error unless every path to the read assigns it first. An assignment
   in a loop or a ``try`` body does not count after the loop or the ``try``.
 * A local function reads a variable when it is called, so the variable can be assigned after the
   function's definition, if every path to each call assigns it.
-* A captured collection is copied to the server, so assigning to or deleting one of its
-  elements is an error.
-* A captured variable declared ``nonlocal`` in the function is a state variable. It starts
-  with the value it holds when the function is compiled. A compiled function keeps its value
-  between runs, as does a stream or an event. The value belongs to the compiled function, so two
-  streams of one function advance it twice per update. A function compiled again on each call
-  starts it again. A local function cannot declare one.
-* A state variable's type comes from its starting value. To give it another type, cast it in
-  a statement of the function's body before any other use of it, for example
-  ``values = cast(List[int], values)`` for a list that starts empty, or
-  ``last = cast(Optional[float], last)`` for a value that starts as ``None``.
 * A local function defined or redefined in a nested block can only be called within that
   block.
-* A function that returns a value must end with a ``return`` or ``raise`` statement, an ``if``
-  or ``try`` that returns or raises on every path, or a ``while True`` loop with no ``break``.
+
+State Variables
+^^^^^^^^^^^^^^^
+
+A captured variable declared ``nonlocal`` in the function is a state variable, which keeps its
+value from one evaluation to the next. This stream gives the highest altitude the vessel has
+reached:
+
+.. literalinclude:: /scripts/python/client/StateVariable.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
+
+State variables follow these rules:
+
+* It starts with the value it holds when the function is compiled. A compiled function keeps its
+  value between runs, as does a stream or an event.
+* The value belongs to the compiled function, so two streams of one function advance it twice per
+  update. A function compiled again on each call starts it again.
+* A local function cannot declare one.
+* Its type comes from its starting value. To give it another type, cast it in a statement of the
+  function's body before any other use of it, for example ``values = cast(List[int], values)``
+  for a list that starts empty, or ``last = cast(Optional[float], last)`` for a value that starts
+  as ``None``.
+
+Exceptions
+^^^^^^^^^^
 
 Exceptions map to the exceptions the server raises:
 
@@ -429,6 +558,9 @@ Exceptions map to the exceptions the server raises:
   message.
 * ``except Exception``, a bare ``except`` and a tuple naming ``Exception`` catch every exception.
 * A ``break``, ``continue`` or ``return`` cannot leave a ``finally`` clause.
+
+Differences from Python
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Some results differ from Python's, as the server computes with fixed size numbers and its own
 collection operations:
@@ -456,73 +588,134 @@ collection operations:
 * ``str()`` and an f-string take a string, a number or a bool. A float uses the server's
   formatting, so ``1.0`` becomes ``1``.
 
+Unsupported Constructs
+^^^^^^^^^^^^^^^^^^^^^^
+
 A construct with no server side equivalent raises :class:`krpc.error.FunctionCompilationError`
 naming it. Examples are a format specifier, ``str.format``, and a call to a client side function
 with server side arguments.
 
-Reading a stream inside a function is an error, as the stream would be read once, when the
-function is compiled. So is a call to a client side function written as a statement, such as
-``time.sleep(1)``.
+Compiling Ahead of Time
+^^^^^^^^^^^^^^^^^^^^^^^
 
-A Python function passed to ``add_event`` or ``add_stream`` without ``compile`` is an error when it
-makes no remote procedure call and uses no state variable, as its value is the same on every update.
+Pass a Python function or lambda to :meth:`~krpc.client.Client.compile` to compile it into a server
+side function. :meth:`~krpc.client.Client.add_event`, :meth:`~krpc.client.Client.add_stream` and
+:meth:`~krpc.client.Client.run` take the result, and run it without compiling it again. The
+following compiles a function once, and runs it every second:
+
+.. literalinclude:: /scripts/python/client/CompiledFunction.py
+
+Given a Python function or lambda, :meth:`~krpc.client.Client.add_event`,
+:meth:`~krpc.client.Client.add_stream` and :meth:`~krpc.client.Client.run` compile it again on every
+call, so its captured variables take their current values. A compiled function keeps the values from
+when it was compiled. Compiling makes a remote procedure call per node.
+
+To use a function repeatedly, compile it once with :meth:`~krpc.client.Client.compile` and pass the
+result. :meth:`~krpc.client.Client.compile` also compiles the function on the server, so its first
+run is as fast as later ones.
+
+:meth:`~krpc.client.Client.compile` also works as a decorator, which replaces the function with
+its compiled form:
+
+.. literalinclude:: /scripts/python/client/CompileDecorator.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
+
+Parameters
+^^^^^^^^^^
+
+A ``def`` can take parameters, each with a type annotation. :meth:`~krpc.client.Client.run` passes
+its arguments to them, with defaults and keyword arguments as in Python:
+
+.. literalinclude:: /scripts/python/client/CompiledFunctionArguments.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
+
+Only a ``def`` takes parameters. An event or a function stream runs its function with no arguments.
+Passing :meth:`~krpc.client.Client.add_event` or :meth:`~krpc.client.Client.add_stream` a ``def``
+with parameters raises :class:`krpc.error.FunctionCompilationError`, and a compiled function with
+parameters raises ``StreamError``.
+
+Service Stubs
+-------------
+
+The client includes code for each service that ships with kRPC, generated from the services of
+one kRPC release. These *stubs* give your editor the classes, procedures and type hints of each
+service.
+
+The stubs match the server from the same release, so install the client version that matches your
+server. With another version, a procedure that was removed or renamed raises an error when you
+call it. A parameter or return type that changed is not checked, so a call can send or return a
+wrong value with no error.
+
+When you connect, the client fills in what the stubs lack from the service definitions the server
+sends:
+
+* A service with no stub, such as one added by another mod, is generated at runtime.
+* A class member that only the server declares is added to the stub's class.
+* A structure the server declares with fewer fields than the stub is read as a plain named tuple,
+  with a warning.
+
+To generate every service at runtime instead, pass ``use_pregenerated_stubs=False``:
+
+.. code-block:: python
+
+   conn = krpc.connect(use_pregenerated_stubs=False)
+
+The services then match the server you connect to, whatever its version, but have no type hints.
+
+.. _python-client-reference:
 
 Client API Reference
 --------------------
 
 .. function:: krpc.connect([name=None], [address='127.0.0.1'], [port=50000], [use_pregenerated_stubs=True], [timeout=None], [handshake_timeout=5], [stall_timeout=30])
 
-   This function creates a connection to a kRPC server. It returns a :class:`krpc.client.Client`
-   object, through which the server can be communicated with.
+   Connects to a kRPC server, and returns a :class:`krpc.client.Client`.
 
-   :param str name: A descriptive name for the connection. This is passed to the server and appears
-                    in the in-game server window.
-   :param str address: The address of the server to connect to. Can either be a hostname or an IP
-                       address in dotted decimal notation. Defaults to '127.0.0.1'.
-   :param int port: The port number of the server. Defaults to 50000. This should match the
-                       port number of the server you want to connect to.
-   :param bool use_pregenerated_stubs: Whether to use the pre-generated service stubs bundled with
-                           the client, which include type hints. If set to ``False``, or if the
-                           server provides a service with no bundled stub, the service is generated
-                           dynamically at runtime. Defaults to ``True``.
-   :param float timeout: How many seconds to wait for a connection before giving up. Defaults to
-                           ``None``, which waits indefinitely. A network that drops a connection
-                           attempt rather than refusing it otherwise leaves the client waiting.
+   :param str name: A name for the connection, shown in the server window in the game.
+   :param str address: The address of the server, as a host name or an IP address. Defaults to
+                       ``'127.0.0.1'``.
+   :param int port: The port of the server. Defaults to 50000.
+   :param bool use_pregenerated_stubs: Whether to use the service stubs bundled with the client,
+                           which include type hints. A service with no bundled stub, or every
+                           service when this is ``False``, is generated at runtime. Defaults to
+                           ``True``.
+   :param float timeout: How many seconds to wait for the connection to open. Defaults to
+                           ``None``, which waits indefinitely. Without a timeout, a network that
+                           drops the connection attempt leaves the client waiting.
    :param float handshake_timeout: How many seconds to wait for the server to accept the
-                           connection before giving up. Defaults to 5. ``None`` waits indefinitely,
-                           such as for a server that asks the player to approve each connection.
+                           connection. Defaults to 5. ``None`` waits indefinitely, such as for a
+                           server that asks the player to approve each connection.
    :param float stall_timeout: How many seconds a message from the server can go without a new
                            byte, once it has started to arrive, before the connection fails.
                            Defaults to 30. ``None`` waits indefinitely.
 
-   Raises ``krpc.error.ConnectionError`` if the server refuses the connection. Its ``status``
-   attribute names the status the server gave, such as ``"DENIED"``. An error raised when the
-   server ends the connection names the reason in its ``reason`` attribute, such as
-   ``"SERVER_STOPPED"``.
+   Raises :class:`krpc.error.ConnectionError` if the connection fails or the server refuses it,
+   and ``ValueError`` for a timeout that is not positive.
 
 .. function:: krpc.connect_local([name=None], [path], [use_pregenerated_stubs=True], [handshake_timeout=5], [stall_timeout=30])
 
-   This function creates a connection to a kRPC server running on the same machine, over a unix
-   domain socket rather than TCP/IP. It returns a :class:`krpc.client.Client` object, just as
-   :func:`krpc.connect` does, and the connection behaves identically thereafter.
+   Connects to a kRPC server on the same machine over a local socket, and returns a
+   :class:`krpc.client.Client`. The server must use the local socket protocol.
 
-   Use this when the script runs on the same machine as the game and the server is configured to
-   use the local socket protocol. A script that makes many calls in quick succession completes
-   more of them per physics update. A script that makes a call and then waits runs at the game's
-   update rate either way.
+   A script that makes many calls in quick succession completes more of them per physics update
+   than over TCP/IP. A script that makes a call and then waits runs at the game's update rate
+   either way.
 
-   Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows Server
-   2019 or later. Python's socket module does not expose the address family on Windows, so the
-   client opens the socket through winsock itself.
+   Local sockets are available on Linux, macOS, and Windows 10 1803 and Windows Server 2019 or
+   later.
 
-   :param str name: A descriptive name for the connection. This is passed to the server and appears
-                    in the in-game server window.
-   :param str path: The path of the socket the server is listening on. This should match the
-                    socket path shown in the in-game server window. Defaults to the path the
-                    server uses unless it was configured with another.
+   :param str name: A name for the connection, shown in the server window in the game.
+   :param str path: The path of the server's socket, shown in the server window in the game.
+                    Defaults to the path the server uses unless it was configured with another.
    :param bool use_pregenerated_stubs: As for :func:`krpc.connect`.
    :param float handshake_timeout: As for :func:`krpc.connect`.
    :param float stall_timeout: As for :func:`krpc.connect`.
+
+   Raises :class:`krpc.error.ConnectionError` and ``ValueError`` as :func:`krpc.connect` does.
 
 .. function:: krpc.get_object_id(obj)
 
@@ -534,176 +727,141 @@ Client API Reference
 
 .. class:: krpc.client.Client
 
-   This class provides the interface for communicating with the server. It is dynamically populated
-   with all the functionality provided by the server. Instances of this class should be obtained by
-   calling :func:`krpc.connect`.
+   A connection to the server, with an attribute for each of the server's services. Obtain one
+   by calling :func:`krpc.connect`. It can be used in a ``with`` statement, which closes it at the
+   end of the block.
+
+   .. method:: close()
+
+      Closes the connection. Closing a connection that is already closed does nothing.
+
+   .. attribute:: krpc
+
+      The :mod:`KRPC` service, providing the server's basic functionality. The client uses some
+      of its procedures itself, such as to add and remove streams, and your program does not need
+      to call those. Each of the server's other services is an attribute too, such as
+      ``space_center``.
 
    .. method:: add_stream(func, *args, **kwargs)
 
-      Create a stream for the remote procedure *func* called with arguments *args* and *kwargs*.
-      Returns a :class:`krpc.stream.Stream` object. Each call creates a new stream.
+      Creates a stream for the remote procedure *func* called with arguments *args* and *kwargs*,
+      and returns a :class:`krpc.stream.Stream`. Each call creates a new stream. Stream a property
+      by passing ``getattr`` as *func*, then the object and the property's name.
 
       *func* can also be a server side function, which the stream evaluates on each update. It
       is a ``KRPC.Expression`` object, or a Python function or lambda that is compiled with
-      :meth:`compile` on every call. A server side function takes no arguments. A function with
-      no result, or a compiled function with parameters, raises ``StreamError``. Any other value
-      raises ``TypeError``.
+      :meth:`compile` on every call. A server side function takes no arguments.
+
+      Raises :class:`krpc.error.StreamError` for a property setter, for arguments passed with a
+      server side function, for a function with no result, and for a compiled function with
+      parameters. Raises ``TypeError`` for any other value.
 
    .. method:: stream(func, *args, **kwargs)
 
-      Allows use of the ``with`` statement to create a stream and automatically remove it from the
-      server when it goes out of scope. The remote procedure or server side function to be
-      streamed should be passed as *func*, and its arguments as *args* and *kwargs*.
+      Creates a stream as :meth:`add_stream` does, for use in a ``with`` statement. The stream is
+      removed at the end of the block.
 
-   .. method:: compile(func)
+   .. attribute:: stream_update_condition
 
-      Compile a Python function or lambda into a server side function, a ``KRPC.Expression``
-      object. A ``def`` can take parameters, each with a type annotation. Can be used as a
-      decorator. Raises :class:`krpc.error.FunctionCompilationError` for a construct with no
-      server side equivalent. See :ref:`python-client-compiling-functions`.
+      A condition variable, of type ``threading.Condition``, notified after each stream update
+      message is processed.
+
+   .. method:: wait_for_stream_update(timeout=None)
+
+      Blocks until the next stream update message is processed, or the timeout elapses. The
+      timeout is in seconds, and ``None`` waits indefinitely. Hold
+      :attr:`stream_update_condition` when calling this method.
+
+   .. method:: add_stream_update_callback(callback)
+
+      Adds a callback, with no arguments, called after each stream update message is processed.
+      It runs on the connection's callback thread, as the callbacks of a stream do.
+
+   .. method:: remove_stream_update_callback(callback)
+
+      Removes a stream update callback.
+
+   .. method:: run(function, *args, **kwargs)
+
+      Runs a function on the server, within a single physics tick, and returns the value it
+      produces. The value is ``None`` when the function has no result or its result is null.
+      The function is a ``KRPC.Expression`` object, or a Python function or lambda, which is
+      compiled with :meth:`compile` on every call. The arguments are passed to the function's
+      parameters. A function built with the expression API takes positional arguments only.
+
+      Raises ``TypeError`` for a value that is not a function, and for an argument its parameter
+      cannot take, naming the argument's position.
 
    .. method:: add_event(function)
 
-      Create an event from a server side function that evaluates to a boolean value. The
-      function can also be a Python function or lambda that takes no arguments, which is
-      compiled with :meth:`compile` on every call. Returns a
-      :class:`krpc.event.Event` object.
+      Creates an event from a server side function that evaluates to a boolean value, and
+      returns a :class:`krpc.event.Event`. The function can also be a Python function or lambda
+      that takes no arguments, which is compiled with :meth:`compile` on every call.
 
       Raises ``StreamError`` for a compiled function with parameters. A function that does not
       evaluate to a boolean value raises ``ValueError``, and a value that is not a function
       raises ``TypeError``.
 
-   .. method:: run(function, *args, **kwargs)
+   .. method:: compile(func)
 
-      Run a function on the server, within a single physics tick, and return the value it
-      produces. The value is ``None`` when the function has no result or its result is null.
-      The function is a ``KRPC.Expression`` object, or a Python function or lambda, which is
-      compiled with :meth:`compile` on every call. The arguments are passed to the function's
-      parameters. A function built with the expression API takes positional arguments only.
-      This is the intended way to run a function with side effects once, where an event or a
-      stream runs it on every update.
-
-      Raises ``TypeError`` for a value that is not a function, and for an argument its parameter
-      cannot take, naming the argument's position.
-
-   .. attribute:: stream_update_condition
-
-      A condition variable (of type ``threading.Condition``) that is notified whenever a stream
-      update finishes processing.
-
-   .. method:: wait_for_stream_update(timeout=None)
-
-      This method blocks until a stream update finishes processing or the operation times out.
-
-      The stream update condition variable must be locked before calling this method.
-
-      If *timeout* is specified and is not ``None``, it should be a floating point number specifying
-      the timeout in seconds for the operation.
-
-   .. method:: add_stream_update_callback(callback)
-
-      Adds a callback function that is invoked whenever a stream update finishes processing.
-
-      .. note::
-
-         Callbacks run on the client's callback thread, one at a time, and may make remote
-         procedure calls. A callback must not wait on a stream, as the same thread wakes the
-         stream's waiters. Any changes to shared state must be protected with appropriate
-         synchronization.
-
-   .. method:: remove_stream_update_callback(callback)
-
-      Removes a stream update callback function.
+      Compiles a Python function or lambda into a server side function, a ``KRPC.Expression``
+      object. A ``def`` can take parameters, each with a type annotation. Can be used as a
+      decorator. Raises :class:`krpc.error.FunctionCompilationError` for a construct with no
+      server side equivalent. See :ref:`python-client-compiling-functions`.
 
    .. method:: get_call(func, *args, **kwargs)
 
-      Converts a call to function *func* with arguments *args* and *kwargs* into a message
-      object. This allows descriptions of procedure calls to be passed to the server, for example
-      when constructing custom events. See :ref:`python-client-events`.
-
-   .. method:: close()
-
-      Tells the server the connection is closing, then closes it.
-
-   .. attribute:: krpc
-
-      The basic KRPC service, providing interaction with basic functionality of the server.
-
-      :rtype: :class:`krpc.client.KRPC`
-
-.. class:: krpc.client.KRPC
-
-      This class provides access to the basic server functionality provided by the :class:`KRPC`
-      service. An instance can be obtained by calling :attr:`krpc.client.Client.krpc`.
-
-      See :class:`KRPC` for full documentation of this class.
-
-      Some of this functionality is used internally by the python client (for example to create and
-      remove streams) and therefore does not need to be used directly from application code.
-
-.. class:: krpc.error.FunctionCompilationError
-
-   Raised when a Python function cannot be compiled into a server side function. The error
-   message names the unsupported construct. See :ref:`python-client-compiling-functions`.
+      Converts a call to the remote procedure *func* with arguments *args* and *kwargs* into a
+      ``KRPC.ProcedureCall`` message, for use in a server side function built with the
+      expression API. See :ref:`server-side-functions-api`.
 
 .. class:: krpc.stream.Stream
 
-   This class represents a stream. See :ref:`python-client-streams`.
-
-   .. attribute:: rate
-
-      The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
+   A stream. See :ref:`python-client-streams`.
 
    .. method:: __call__()
 
-      Returns the most recent value for the stream, waiting for the first value if none has arrived
-      yet. Raises the exception that ended the stream, if it has ended, such as an exception thrown
-      by the remote procedure.
-
-   .. attribute:: condition
-
-      A condition variable (of type ``threading.Condition``) that is notified whenever the value of
-      the stream changes.
+      Returns the most recent value of the stream, waiting for the first value if none has
+      arrived yet. Raises the exception that ended the stream, if it has ended.
 
    .. method:: wait(timeout=None)
 
-      This method blocks until the value of the stream changes or the operation times out. Returns
-      ``True`` if the value changed, and ``False`` on a timeout.
+      Blocks until the value of the stream changes, or the timeout elapses. Returns ``True`` if
+      the value changed, and ``False`` on a timeout. Hold :attr:`condition` when calling this
+      method.
 
-      The streams condition variable must be locked before calling this method.
+      The timeout is in seconds, and ``None`` waits indefinitely. Raises ``ValueError`` for a
+      negative timeout. Raises the exception that ended the stream, if it ends before or during
+      the wait. A thread holding the condition sees an ending as an update: the wait returns
+      ``True``, and later reads and waits raise the exception.
 
-      If *timeout* is specified and is not ``None``, it should be a floating point number specifying
-      the timeout in seconds for the operation.
+   .. attribute:: condition
 
-      Raises the exception that ended the stream, if it ends before or during the wait.
+      A condition variable, of type ``threading.Condition``, notified when the value of the
+      stream changes.
+
+   .. attribute:: rate
+
+      The update rate of the stream, in Hertz. Zero, the default, means no limit.
 
    .. method:: add_callback(callback)
 
-      Adds a callback function that is invoked whenever the value of the stream changes. The
-      callback function should take one argument, which is passed the new value of the stream. If
-      the stream already has a value, the callback is invoked with it straight away.
-      An error from the stream does not invoke the callback. Calling the stream raises it.
-
-      .. note::
-
-         Callbacks run on the client's callback thread, one at a time, and may make remote
-         procedure calls. A callback must not wait on a stream, as the same thread wakes the
-         stream's waiters. Any changes to shared state must be protected with appropriate
-         synchronization.
+      Adds a callback, called with each new value of the stream. If the stream already has a
+      value, the callback is called with it straight away. The exception that ends a stream goes
+      to its end callbacks.
 
    .. method:: remove_callback(callback)
 
-      Removes a callback function from the stream.
+      Removes a callback.
 
    .. method:: add_end_callback(callback)
 
-      Adds a callback function that is invoked once when the stream ends. The callback function
-      should take one argument, which is passed the exception that ended the stream. It is
-      invoked straight away if the stream has already ended.
+      Adds a callback, called once when the stream ends, with the exception that ended it. It is
+      called straight away if the stream has already ended.
 
    .. method:: remove_end_callback(callback)
 
-      Removes an end callback function from the stream.
+      Removes an end callback.
 
    .. method:: remove()
 
@@ -711,48 +869,40 @@ Client API Reference
 
 .. class:: krpc.event.Event
 
-   This class represents an event. See :ref:`python-client-events`. It is wrapper around a stream of
-   type ``bool`` that indicates when the event occurs.
-
-   .. attribute:: condition
-
-      The condition variable (of type ``threading.Condition``) that is notified whenever the event
-      occurs.
+   An event, made from a stream of ``bool`` that is true when the event fires. See
+   :ref:`python-client-events`.
 
    .. method:: wait(timeout=None)
 
-      This method blocks until the event occurs or the operation times out. It returns straight
-      away if the event has occurred since the previous call on this event object. Returns
-      ``True`` if the event occurred, and ``False`` on a timeout.
+      Blocks until the event fires, or the timeout elapses. Returns straight away if the event
+      has fired since the previous wait. Returns ``True`` if the event fired, and ``False`` on a
+      timeout. Hold :attr:`condition` when calling this method.
 
-      The events condition variable must be locked before calling this method.
+      The timeout is in seconds, and ``None`` waits indefinitely. Raises ``ValueError`` for a
+      negative timeout. Raises the exception that ended the event, if it ends before or during
+      the wait.
 
-      If *timeout* is specified and is not ``None``, it should be a floating point number specifying
-      the timeout in seconds for the operation.
+   .. attribute:: condition
 
-      Raises the exception that ended the event, if it ends before or during the wait.
+      A condition variable, of type ``threading.Condition``, notified when the event fires.
 
    .. method:: add_callback(callback)
 
-      Adds a callback function that is invoked whenever the event occurs. The callback function
-      should be a function that takes zero arguments. It is invoked straight away if the event
-      has occurred since the previous call to :meth:`krpc.event.Event.wait` on this event
-      object, and the event's callbacks have not been invoked for it. A callback added after the
-      event has ended is not invoked for an earlier firing. An error from the event does not invoke
-      the callback. Waiting on the event raises it.
+      Adds a callback, with no arguments, called each time the event fires. It is called straight
+      away for a firing that no wait has returned for and no callback has been called for.
 
    .. method:: remove_callback(callback)
 
-      Removes a callback function from the event.
+      Removes a callback.
 
    .. method:: add_end_callback(callback)
 
-      Adds a callback function that is invoked once when the event ends, with the exception that
-      ended it. It is invoked straight away if the event has already ended.
+      Adds a callback, called once when the event ends, with the exception that ended it. It is
+      called straight away if the event has already ended.
 
    .. method:: remove_end_callback(callback)
 
-      Removes an end callback function from the event.
+      Removes an end callback.
 
    .. method:: remove()
 
@@ -760,10 +910,43 @@ Client API Reference
 
    .. attribute:: stream
 
-      Returns the underlying stream for the event.
+      The stream the event is made from.
+
+.. class:: krpc.error.ConnectionError
+
+   Raised when connecting fails, and by each call once the connection has closed or failed. A
+   subclass of ``RuntimeError``.
+
+   .. attribute:: status
+
+      The status the server refused the connection with, such as ``"DENIED"``, or ``None``.
+
+   .. attribute:: reason
+
+      The reason the server gave for ending the connection, such as ``"SERVER_STOPPED"``, or
+      ``None``.
+
+.. class:: krpc.error.RPCError
+
+   Raised for an error from the server that the client has no exception class for. A subclass
+   of ``RuntimeError``.
+
+.. class:: krpc.error.StreamError
+
+   Raised by a stream or event that you removed, and when a stream cannot be created. A
+   subclass of ``RuntimeError``.
+
+.. class:: krpc.error.EncodingError
+
+   Raised when a value cannot be encoded or decoded. A subclass of ``RuntimeError``.
+
+.. class:: krpc.error.FunctionCompilationError
+
+   Raised when a Python function cannot be compiled into a server side function. The error
+   message names the unsupported construct. See :ref:`python-client-compiling-functions`.
 
 Numeric Limits
---------------
+^^^^^^^^^^^^^^
 
 The ``krpc.limits`` module names the extremes of the numeric types kRPC carries over the wire.
 Python integers are unbounded, and Python floats are C doubles, so the standard library covers

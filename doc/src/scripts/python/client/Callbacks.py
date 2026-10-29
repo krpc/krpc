@@ -1,3 +1,5 @@
+import time
+
 import krpc
 
 conn = krpc.connect()
@@ -16,6 +18,6 @@ def check_abort2(x):
 abort.add_callback(check_abort1)
 abort.add_callback(check_abort2)
 
-# Keep the program running...
+# Keep the program running, while the callbacks are called
 while True:
-    pass
+    time.sleep(1)
