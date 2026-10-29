@@ -78,6 +78,16 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// Whether the game moves the vehicle without simulating the forces on it: along its
+        /// orbit, or held on the surface. True in the freefall, landed, floating and bottomed
+        /// situations.
+        /// </summary>
+        [KRPCProperty]
+        public bool OnRails {
+            get { return InternalVehicle.Situation.IsOnRails (); }
+        }
+
+        /// <summary>
         /// Whether the vehicle has launched.
         /// </summary>
         [KRPCProperty]
@@ -127,7 +137,7 @@ namespace KRPC.KSA.Services
         /// </summary>
         [KRPCProperty]
         public double Thrust {
-            get { return Engines.Performance (InternalVehicle, fullThrottle: false).thrust; }
+            get { return Utils.Engines.Performance (InternalVehicle, fullThrottle: false).thrust; }
         }
 
         /// <summary>
@@ -137,8 +147,8 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public double SpecificImpulse {
             get {
-                var (thrust, massFlowRate) = Engines.Performance (InternalVehicle, fullThrottle: true);
-                return massFlowRate > 0 ? thrust / (massFlowRate * Engines.G0) : 0;
+                var (thrust, massFlowRate) = Utils.Engines.Performance (InternalVehicle, fullThrottle: true);
+                return massFlowRate > 0 ? thrust / (massFlowRate * Utils.Engines.G0) : 0;
             }
         }
 
@@ -148,6 +158,56 @@ namespace KRPC.KSA.Services
         [KRPCProperty]
         public IList<Part> Parts {
             get { return InternalVehicle.Parts.Parts.ToArray ().Select (part => new Part (part)).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's parts with the given template id. See <see cref="Part.Name"/>.
+        /// </summary>
+        /// <param name="name">The template id.</param>
+        [KRPCMethod]
+        public IList<Part> PartsWithName (string name)
+        {
+            return Parts.Where (part => part.Name == name).ToList ();
+        }
+
+        /// <summary>
+        /// The vehicle's engines.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Engine> Engines {
+            get { return Parts.Select (part => part.Engine).Where (engine => engine != null).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's RCS thrusters.
+        /// </summary>
+        [KRPCProperty]
+        public IList<RCS> RCS {
+            get { return Parts.Select (part => part.RCS).Where (rcs => rcs != null).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's decouplers.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Decoupler> Decouplers {
+            get { return Parts.Select (part => part.Decoupler).Where (decoupler => decoupler != null).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's parachutes.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Parachute> Parachutes {
+            get { return Parts.Select (part => part.Parachute).Where (parachute => parachute != null).ToList (); }
+        }
+
+        /// <summary>
+        /// The vehicle's docking ports.
+        /// </summary>
+        [KRPCProperty]
+        public IList<DockingPort> DockingPorts {
+            get { return Parts.Select (part => part.DockingPort).Where (port => port != null).ToList (); }
         }
 
         /// <summary>
@@ -226,6 +286,76 @@ namespace KRPC.KSA.Services
                     throw new ArgumentException ("The body cannot be targeted");
                 v.SetTarget (orbiter);
             }
+        }
+
+        /// <summary>
+        /// The part targeted by this vehicle, on the vehicle in <see cref="TargetVehicle"/>,
+        /// or <c>null</c>. Setting it targets the part and its vehicle, and <c>null</c> clears
+        /// the target.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Part TargetPart {
+            get {
+                var v = InternalVehicle;
+                var part = v.TargetPart;
+                return part == null || v.Target is not global::KSA.Vehicle ? null : new Part (part);
+            }
+            set {
+                var v = InternalVehicle;
+                if (value == null) {
+                    v.SetTarget (null);
+                    return;
+                }
+                var target = value.InternalVehicle;
+                if (ReferenceEquals (target, v))
+                    throw new ArgumentException ("A vehicle cannot target its own part");
+                v.SetTarget (target, value.InternalPart);
+            }
+        }
+
+        /// <summary>
+        /// Whether the vehicle is debris, such as a spent stage.
+        /// </summary>
+        [KRPCProperty]
+        public bool IsDebris {
+            get { return InternalVehicle.IsDebris; }
+        }
+
+        /// <summary>
+        /// The highest smoothed g-load on the vehicle during the last physics step, as a
+        /// multiple of standard gravity. Zero while the vehicle is <see cref="OnRails"/>.
+        /// </summary>
+        [KRPCProperty]
+        public double PeakGLoad {
+            get { return InternalVehicle.StructuralLoad.PeakGLoad; }
+        }
+
+        /// <summary>
+        /// The g-load the vehicle can take before it breaks up, as a multiple of standard
+        /// gravity. Zero while the vehicle is <see cref="OnRails"/>.
+        /// </summary>
+        [KRPCProperty]
+        public double MaxGLoad {
+            get { return InternalVehicle.StructuralLoad.MaxGLoad; }
+        }
+
+        /// <summary>
+        /// The highest dynamic pressure on the vehicle during the last physics step, in
+        /// pascals. In the sea, this is the dynamic pressure of the water. Zero while the
+        /// vehicle is <see cref="OnRails"/>.
+        /// </summary>
+        [KRPCProperty]
+        public double PeakDynamicPressure {
+            get { return InternalVehicle.StructuralLoad.PeakDynamicPressure; }
+        }
+
+        /// <summary>
+        /// The dynamic pressure the vehicle can take before it breaks up, in pascals. Zero
+        /// while the vehicle is <see cref="OnRails"/>.
+        /// </summary>
+        [KRPCProperty]
+        public double MaxDynamicPressure {
+            get { return InternalVehicle.StructuralLoad.MaxDynamicPressure; }
         }
 
         /// <summary>

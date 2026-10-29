@@ -29,6 +29,9 @@
     <Publicize Include="KRPC.Core:KRPC.Service.Services.Signatures" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="../service/KRPC.KSA.Service.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Tomlet">
       <HintPath>$(KSADir)Tomlet.dll</HintPath>
       <Private>false</Private>

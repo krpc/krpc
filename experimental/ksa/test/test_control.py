@@ -67,7 +67,121 @@ class TestControl(ksatest.TestCase):
             self.assertAlmostEqual(
                 g_force, self.vehicle.flight.g_force, delta=g_force * 0.05
             )
+            # The peak g-load is smoothed, so settles on the steady acceleration
+            ksatest.wait_until(
+                lambda: abs(self.vehicle.peak_g_load - g_force) < g_force * 0.05,
+                timeout=5,
+            )
+            self.assertFalse(self.vehicle.on_rails)
+            self.assertLess(self.vehicle.peak_g_load, self.vehicle.max_g_load)
+            self.assertEqual(200000, self.vehicle.max_dynamic_pressure)
         finally:
             self.control.engine_on = False
             self.control.throttle = throttle
         ksatest.wait_until(lambda: self.vehicle.thrust == 0, timeout=5)
+
+    def test_inputs(self):
+        for axis in ("pitch", "yaw", "roll", "forward", "right", "up"):
+            with self.subTest(axis=axis):
+                try:
+                    for value in (1, -1, 0):
+                        setattr(self.control, axis, value)
+                        self.assertEqual(value, getattr(self.control, axis))
+                    with self.assertRaises(ValueError):
+                        setattr(self.control, axis, 2)
+                    self.assertEqual(0, getattr(self.control, axis))
+                finally:
+                    setattr(self.control, axis, 0)
+
+    def test_pulse(self):
+        pulse = self.control.pulse
+        try:
+            self.control.pulse = not pulse
+            self.assertEqual(not pulse, self.control.pulse)
+        finally:
+            self.control.pulse = pulse
+        self.assertEqual(pulse, self.control.pulse)
+
+
+class TestControlInputs(ksatest.TestCase):
+    """Each test starts from the save, so the vehicle starts at rest."""
+
+    def setUp(self):
+        self.load_save()
+        self.vehicle = self.ksa.active_vehicle
+        self.control = self.vehicle.control
+        self.control.stabilization = False
+        self.frame = self.vehicle.reference_frame
+
+    def tearDown(self):
+        for axis in ("pitch", "yaw", "roll", "forward", "right", "up"):
+            setattr(self.control, axis, 0)
+
+    def angular_velocity(self):
+        # The vehicle's own frame rotates with it, so measure in a fixed frame
+        fixed = self.vehicle.orbit.body.non_rotating_reference_frame
+        velocity = self.vehicle.angular_velocity(fixed)
+        return self.ksa.transform_direction(velocity, fixed, self.frame)
+
+    def check_rotation(self, axis, index):
+        setattr(self.control, axis, 1)
+        try:
+            # Positive inputs turn the vehicle about the positive axis of its frame
+            ksatest.wait_until(
+                lambda: abs(self.angular_velocity()[index]) > 0.01, timeout=5
+            )
+            velocity = self.angular_velocity()
+            self.assertGreater(velocity[index], 0, velocity)
+        finally:
+            setattr(self.control, axis, 0)
+
+    def test_roll(self):
+        self.check_rotation("roll", 0)
+
+    def test_pitch(self):
+        self.check_rotation("pitch", 1)
+
+    def test_yaw(self):
+        self.check_rotation("yaw", 2)
+
+    def test_translation(self):
+        for axis in ("forward", "right", "up"):
+            with self.subTest(axis=axis):
+                self.assertEqual(0, self.vehicle.flight.g_force)
+                setattr(self.control, axis, 1)
+                try:
+                    ksatest.wait_until(
+                        lambda: self.vehicle.flight.g_force > 0, timeout=5
+                    )
+                finally:
+                    setattr(self.control, axis, 0)
+                ksatest.wait_until(lambda: self.vehicle.flight.g_force == 0, timeout=5)
+
+    def test_switch_vehicle_releases_inputs(self):
+        other = next(v for v in self.ksa.vehicles if v != self.vehicle)
+        self.control.pitch = 1
+        self.control.forward = 1
+        try:
+            self.ksa.active_vehicle = other
+            self.assertEqual(0, self.control.pitch)
+            self.assertEqual(0, self.control.forward)
+        finally:
+            self.ksa.active_vehicle = self.vehicle
+
+    def test_overrides_auto_pilot(self):
+        auto_pilot = self.vehicle.auto_pilot
+        auto_pilot.target_pitch_and_heading(0, 90)
+        auto_pilot.target_roll = 0
+        auto_pilot.engage()
+        try:
+            auto_pilot.wait()
+            roll = self.vehicle.flight.roll
+            self.control.roll = 1
+            # The auto-pilot ignores its roll error while the input is held
+            ksatest.wait_until(lambda: self.vehicle.flight.roll > roll + 10, timeout=10)
+            self.assertEqual(0, auto_pilot.roll_error)
+            self.control.roll = 0
+            ksatest.wait_until(lambda: auto_pilot.roll_error > 10, timeout=5)
+        finally:
+            self.control.roll = 0
+            auto_pilot.disengage()

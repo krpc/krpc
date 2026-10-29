@@ -145,13 +145,33 @@ namespace KRPC.KSA.Services
         [KRPCMethod]
         public Tuple<double, double, double> Position (ReferenceFrame referenceFrame)
         {
-            var p = InternalPart;
-            var vehicle = p.Tree.OwningVehicle;
-            // The vehicle's position is its center of mass, in its body frame
-            var centerOfMass = vehicle.TotalMassPropsAsmb.Offset;
-            var offsetBody = p.PositionVehicleAsmb - new double3 (centerOfMass.X, centerOfMass.Y, centerOfMass.Z);
-            var positionEcl = vehicle.GetPositionEcl () + offsetBody.Transform (vehicle.GetBodyFixed2Ecl ());
-            return Vectors.ToTuple (referenceFrame.PositionFromEcl (positionEcl));
+            return Vectors.ToTuple (referenceFrame.PositionFromEcl (PositionEcl));
+        }
+
+        /// <summary>
+        /// The velocity of the part's origin, in meters per second.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the velocity.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> Velocity (ReferenceFrame referenceFrame)
+        {
+            var vehicle = InternalVehicle;
+            var positionEcl = PositionEcl;
+            // The vehicle is rigid, so the part moves with its rotation about the center of mass
+            var velocityEcl = vehicle.GetVelocityEcl () +
+                double3.Cross (Vectors.AngularVelocityEcl (vehicle), positionEcl - vehicle.GetPositionEcl ());
+            return Vectors.ToTuple (referenceFrame.VelocityFromEcl (positionEcl, velocityEcl));
+        }
+
+        double3 PositionEcl {
+            get {
+                var p = InternalPart;
+                var vehicle = p.Tree.OwningVehicle;
+                // The vehicle's position is its center of mass, in its body frame
+                var centerOfMass = vehicle.TotalMassPropsAsmb.Offset;
+                var offsetBody = p.PositionVehicleAsmb - new double3 (centerOfMass.X, centerOfMass.Y, centerOfMass.Z);
+                return vehicle.GetPositionEcl () + offsetBody.Transform (vehicle.GetBodyFixed2Ecl ());
+            }
         }
 
         /// <summary>

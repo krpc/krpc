@@ -83,6 +83,92 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// Whether the body is a star.
+        /// </summary>
+        [KRPCProperty]
+        public bool IsStar {
+            get { return InternalBody is Astronomical astronomical && astronomical.IsStar (); }
+        }
+
+        PhysicalAtmosphereReference Atmosphere {
+            get { return InternalBody.GetAtmosphereReference ()?.Physical; }
+        }
+
+        /// <summary>
+        /// Whether the body has an atmosphere.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasAtmosphere {
+            get { return Atmosphere != null; }
+        }
+
+        /// <summary>
+        /// The atmospheric pressure at the body's mean radius, in pascals. Zero for a body
+        /// with no atmosphere.
+        /// </summary>
+        [KRPCProperty]
+        public double SeaLevelPressure {
+            get { return PressureAt (0); }
+        }
+
+        /// <summary>
+        /// The density of the atmosphere at the body's mean radius, in kilograms per cubic
+        /// meter. Zero for a body with no atmosphere.
+        /// </summary>
+        [KRPCProperty]
+        public double SeaLevelDensity {
+            get { return DensityAt (0); }
+        }
+
+        /// <summary>
+        /// The height over which the atmospheric pressure falls by a factor of <c>e</c>, in
+        /// meters. Zero for a body with no atmosphere.
+        /// </summary>
+        [KRPCProperty]
+        public double ScaleHeight {
+            get { return Atmosphere?.ScaleHeight.InMeters () ?? 0; }
+        }
+
+        /// <summary>
+        /// The atmospheric pressure at an altitude, in pascals. Zero for a body with no
+        /// atmosphere.
+        /// </summary>
+        /// <param name="altitude">Altitude above the body's mean radius, in meters.</param>
+        [KRPCMethod]
+        public double PressureAt (double altitude)
+        {
+            return Atmosphere?.GetAtmosphericPressureAtAltitude (altitude) ?? 0;
+        }
+
+        /// <summary>
+        /// The density of the atmosphere at an altitude, in kilograms per cubic meter. Zero
+        /// for a body with no atmosphere.
+        /// </summary>
+        /// <param name="altitude">Altitude above the body's mean radius, in meters.</param>
+        [KRPCMethod]
+        public double DensityAt (double altitude)
+        {
+            return Atmosphere?.GetAtmosphericDensityAtAltitude (altitude) ?? 0;
+        }
+
+        /// <summary>
+        /// Whether the body has an ocean.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasOcean {
+            get { return InternalBody.GetOceanReference () != null; }
+        }
+
+        /// <summary>
+        /// The density of the ocean, in kilograms per cubic meter. Zero for a body with no
+        /// ocean.
+        /// </summary>
+        [KRPCProperty]
+        public double OceanDensity {
+            get { return InternalBody.GetOceanReference ()?.Density.KgPerM3 ?? 0; }
+        }
+
+        /// <summary>
         /// The acceleration due to gravity at the body's mean radius, in meters per second
         /// squared.
         /// </summary>
@@ -254,6 +340,96 @@ namespace KRPC.KSA.Services
             if (InternalBody is not Celestial celestial)
                 return 0;
             return celestial.GetTerrainHeightFromDirCcf (celestial.GetDirCcfFromLatLon (latitude, longitude));
+        }
+
+        /// <summary>
+        /// The names of the body's biomes. Empty for a body with no biomes.
+        /// </summary>
+        [KRPCProperty]
+        public IList<string> Biomes {
+            get {
+                var biomes = (InternalBody as Celestial)?.BodyTemplate.BiomesReference;
+                if (biomes == null)
+                    return new List<string> ();
+                return biomes.Biomes.Select (biome => biome.Alias).ToList ();
+            }
+        }
+
+        /// <summary>
+        /// The biome at a point on the body, or <c>null</c> if the body has no biomes.
+        /// </summary>
+        /// <param name="latitude">Latitude, in degrees.</param>
+        /// <param name="longitude">Longitude, in degrees.</param>
+        [KRPCMethod (Nullable = true)]
+        public string BiomeAt (double latitude, double longitude)
+        {
+            if (InternalBody is not Celestial celestial)
+                return null;
+            return BiomeAt (celestial, celestial.GetDirCcfFromLatLon (latitude, longitude));
+        }
+
+        // The biome at a direction in the body's rotating frame. Up to four biomes blend at
+        // each point, and we take the one with the highest weight
+        internal static string BiomeAt (Celestial celestial, double3 directionCcf)
+        {
+            var biomes = celestial.BodyTemplate.BiomesReference;
+            if (biomes == null)
+                return null;
+            var ids = celestial.SampleBiomeIdMap (directionCcf);
+            var weights = celestial.SampleBiomeControlMap (directionCcf);
+            var id = ids.R;
+            var weight = weights.R;
+            if (weights.G > weight) {
+                id = ids.G;
+                weight = weights.G;
+            }
+            if (weights.B > weight) {
+                id = ids.B;
+                weight = weights.B;
+            }
+            if (weights.A > weight)
+                id = ids.A;
+            return biomes.TryGetBiomeAlias (id);
+        }
+
+        // A position in the body's rotating frame
+        double3 PositionCcf (Tuple<double, double, double> position, ReferenceFrame referenceFrame)
+        {
+            var positionCce = referenceFrame.PositionToEcl (Vectors.ToVector (position)) - InternalBody.GetPositionEcl ();
+            return positionCce.Transform (InternalBody.GetCcf2Cce ().Inverse ());
+        }
+
+        /// <summary>
+        /// The latitude of a position, in degrees.
+        /// </summary>
+        /// <param name="position">Position, in meters.</param>
+        /// <param name="referenceFrame">The reference frame of the position.</param>
+        [KRPCMethod]
+        public double LatitudeAtPosition (Tuple<double, double, double> position, ReferenceFrame referenceFrame)
+        {
+            return Celestial.GetLatitudeFromCcf (PositionCcf (position, referenceFrame));
+        }
+
+        /// <summary>
+        /// The longitude of a position, in degrees.
+        /// </summary>
+        /// <param name="position">Position, in meters.</param>
+        /// <param name="referenceFrame">The reference frame of the position.</param>
+        [KRPCMethod]
+        public double LongitudeAtPosition (Tuple<double, double, double> position, ReferenceFrame referenceFrame)
+        {
+            return Celestial.GetLongitudeFromCcf (PositionCcf (position, referenceFrame));
+        }
+
+        /// <summary>
+        /// The altitude of a position above the body's mean radius, in meters.
+        /// </summary>
+        /// <param name="position">Position, in meters.</param>
+        /// <param name="referenceFrame">The reference frame of the position.</param>
+        [KRPCMethod]
+        public double AltitudeAtPosition (Tuple<double, double, double> position, ReferenceFrame referenceFrame)
+        {
+            return PositionCcf (position, referenceFrame).Length () - InternalBody.MeanRadius;
         }
 
         /// <summary>

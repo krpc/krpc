@@ -245,9 +245,10 @@ experimental/ksa/test.sh --no-launch            # against a game started with ru
    that save, so starts from the game's default start state. `--no-launch` needs the save from
    an earlier launched run.
  * The client is `krpc` 0.7.0 from PyPI, in `bin/test-venv`.
- * `TestingTools` saves, loads and quits the game. `LoadSave` loads at the end of the frame,
-   where the game's menus load saves, and returns once the load is done. The game is paused
-   after a load, and the harness unpauses it.
+ * The harness saves and loads with `KSA.Save` and `KSA.Load`. `Load` loads at the end of the
+   frame, where the game's menus load saves, and returns once the load is done. The game is
+   paused after a load, and the harness unpauses it.
+ * `TestingTools.Quit` quits the game.
  * `TestingTools.RegisterVehicle` adds a vehicle in `testing/vehicles` to the game's default
    vehicles. `test_parachute.py` launches single parachute parts from there.
  * `build.sh --install` without `--testing` removes `TestingTools` from the installed mod.

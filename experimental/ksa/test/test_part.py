@@ -78,6 +78,37 @@ class TestPart(ksatest.TestCase):
         rotation = self.vehicle.root_part.rotation(self.vehicle.reference_frame)
         self.assertAlmostEqual(1, sum(x * x for x in rotation), delta=1e-6)
 
+    def test_velocity(self):
+        # The parts are fixed in the vehicle's frame, and move with the vehicle
+        for part in self.parts:
+            for x in part.velocity(self.vehicle.reference_frame):
+                self.assertAlmostEqual(0, x, delta=1e-3)
+        frame = self.ksa.bodies["Earth"].non_rotating_reference_frame
+        expected = self.vehicle.velocity(frame)
+        actual = self.vehicle.root_part.velocity(frame)
+        for x, y in zip(expected, actual):
+            self.assertAlmostEqual(x, y, delta=0.1)
+
+    def test_parts_with_name(self):
+        root = self.vehicle.root_part
+        self.assertIn(root, self.vehicle.parts_with_name(root.name))
+        for part in self.vehicle.parts_with_name(root.name):
+            self.assertEqual(root.name, part.name)
+        self.assertEqual([], self.vehicle.parts_with_name("NoSuchPart"))
+
+    def test_module_lists(self):
+        for name in ("engine", "rcs", "decoupler", "parachute", "docking_port"):
+            with self.subTest(module=name):
+                expected = [
+                    getattr(part, name)
+                    for part in self.parts
+                    if getattr(part, name) is not None
+                ]
+                attribute = "rcs" if name == "rcs" else name + "s"
+                self.assertEqual(expected, getattr(self.vehicle, attribute))
+        self.assertTrue(self.vehicle.engines)
+        self.assertTrue(self.vehicle.decouplers)
+
     def test_engines(self):
         engines = [part.engine for part in self.engine_parts()]
         self.assertTrue(engines)
@@ -174,9 +205,12 @@ class TestDecoupler(ksatest.TestCase):
         self.assertFalse(decoupler.decoupled)
         count = len(self.ksa.vehicles)
         parts = len(self.vehicle.parts)
-        decoupler.decouple()
+        separated = decoupler.decouple()
         self.assertTrue(decoupler.decoupled)
-        ksatest.wait_until(lambda: len(self.ksa.vehicles) > count)
-        self.assertLess(len(self.vehicle.parts), parts)
+        self.assertEqual(1, len(separated))
+        self.assertEqual(count + 1, len(self.ksa.vehicles))
+        self.assertIn(separated[0], self.ksa.vehicles)
+        self.assertNotEqual(self.vehicle, separated[0])
+        self.assertEqual(parts, len(self.vehicle.parts) + len(separated[0].parts))
         with self.assertRaises(RuntimeError):
             decoupler.decouple()

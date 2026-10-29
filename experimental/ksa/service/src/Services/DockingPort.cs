@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using KRPC.KSA.Utils;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -68,21 +69,23 @@ namespace KRPC.KSA.Services
         /// Undock the port, separating the vehicle into two. Returns once it has undocked.
         /// Throws an exception if the port is not docked.
         /// </summary>
+        /// <returns>The new vehicles.</returns>
         /// <remarks>
         /// Docking and undocking replace the vehicles involved. See <see cref="Vehicle"/>.
         /// </remarks>
         [KRPCMethod]
-        public void Undock ()
+        public IList<Vehicle> Undock ()
         {
             var p = Part.InternalPart;
             if (!port.Docked)
                 throw new InvalidOperationException ("The docking port is not docked");
+            var before = new HashSet<global::KSA.Vehicle> (Vehicles.All);
             InputEvents.VehicleDockingInputBuffer.Add (new InputEvents.VehicleDockingInputData {
                 Vehicle = p.Tree.OwningVehicle,
                 DockingPort = port,
                 Undock = true
             });
-            Waits.Until (() => !port.Docked);
+            return Vehicles.SeparatedWhen (() => !port.Docked, before);
         }
     }
 }

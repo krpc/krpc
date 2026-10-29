@@ -11,9 +11,14 @@ using KSA;
 namespace KRPC.KSA.Services
 {
     /// <summary>
-    /// The controls of a vehicle: engines, stabilization and sequences.
+    /// The controls of a vehicle: engines, manual inputs, stabilization and sequences.
     /// Obtained from <see cref="Vehicle.Control"/>.
     /// </summary>
+    /// <remarks>
+    /// The rotation and translation inputs act as held keys. Each is on or off, with no
+    /// partial strength. A held rotation input overrides the auto-pilot on its axis. The game
+    /// releases the inputs when its window gains or loses focus, or the active vehicle changes.
+    /// </remarks>
     [KRPCClass (Service = "KSA", GameScene = GameScene.Flight)]
     public class Control : Equatable<Control>
     {
@@ -76,6 +81,72 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The pitch input: 1 for pitch up, -1 for pitch down, 0 for neither.
+        /// </summary>
+        [KRPCProperty]
+        public int Pitch {
+            get { return GetAxis (ThrusterMapFlags.PitchUp, ThrusterMapFlags.PitchDown); }
+            set { SetAxis (value, ThrusterMapFlags.PitchUp, ThrusterMapFlags.PitchDown); }
+        }
+
+        /// <summary>
+        /// The yaw input: 1 for yaw right, -1 for yaw left, 0 for neither.
+        /// </summary>
+        [KRPCProperty]
+        public int Yaw {
+            get { return GetAxis (ThrusterMapFlags.YawRight, ThrusterMapFlags.YawLeft); }
+            set { SetAxis (value, ThrusterMapFlags.YawRight, ThrusterMapFlags.YawLeft); }
+        }
+
+        /// <summary>
+        /// The roll input: 1 for roll right, -1 for roll left, 0 for neither.
+        /// </summary>
+        [KRPCProperty]
+        public int Roll {
+            get { return GetAxis (ThrusterMapFlags.RollRight, ThrusterMapFlags.RollLeft); }
+            set { SetAxis (value, ThrusterMapFlags.RollRight, ThrusterMapFlags.RollLeft); }
+        }
+
+        /// <summary>
+        /// The forward translation input: 1 for forward, -1 for backward, 0 for neither.
+        /// </summary>
+        [KRPCProperty]
+        public int Forward {
+            get { return GetAxis (ThrusterMapFlags.TranslateForward, ThrusterMapFlags.TranslateBackward); }
+            set { SetAxis (value, ThrusterMapFlags.TranslateForward, ThrusterMapFlags.TranslateBackward); }
+        }
+
+        /// <summary>
+        /// The right translation input: 1 for right, -1 for left, 0 for neither.
+        /// </summary>
+        [KRPCProperty]
+        public int Right {
+            get { return GetAxis (ThrusterMapFlags.TranslateRight, ThrusterMapFlags.TranslateLeft); }
+            set { SetAxis (value, ThrusterMapFlags.TranslateRight, ThrusterMapFlags.TranslateLeft); }
+        }
+
+        /// <summary>
+        /// The up translation input: 1 for up, -1 for down, 0 for neither.
+        /// </summary>
+        [KRPCProperty]
+        public int Up {
+            get { return GetAxis (ThrusterMapFlags.TranslateUp, ThrusterMapFlags.TranslateDown); }
+            set { SetAxis (value, ThrusterMapFlags.TranslateUp, ThrusterMapFlags.TranslateDown); }
+        }
+
+        /// <summary>
+        /// Whether the rotation and translation inputs fire the thrusters in short pulses.
+        /// </summary>
+        [KRPCProperty]
+        public bool Pulse {
+            get { return InternalVehicle.FlightComputer.ManualThrustMode == FlightComputerManualThrustMode.Pulse; }
+            set {
+                InternalVehicle.FlightComputer.ManualThrustMode =
+                    value ? FlightComputerManualThrustMode.Pulse : FlightComputerManualThrustMode.Direct;
+            }
+        }
+
+        /// <summary>
         /// Whether the flight computer is controlling the vehicle's attitude.
         /// </summary>
         /// <remarks>
@@ -123,14 +194,28 @@ namespace KRPC.KSA.Services
                 throw new InvalidOperationException ("The vehicle is not the active vehicle");
             var preVehicles = new HashSet<global::KSA.Vehicle> (Vehicles.All);
             v.Parts.SequenceList.ActivateNextSequence (v);
-            return CollectSeparated (preVehicles, SequenceSettleUpdates);
+            return Vehicles.Separated (preVehicles, SequenceSettleUpdates);
         }
 
-        static IList<Vehicle> CollectSeparated (HashSet<global::KSA.Vehicle> preVehicles, int updates)
+        // Opposing inputs cancel in the game, so both held reads as 0
+        int GetAxis (ThrusterMapFlags positive, ThrusterMapFlags negative)
         {
-            if (updates > 0)
-                throw new YieldException<Func<IList<Vehicle>>> (() => CollectSeparated (preVehicles, updates - 1));
-            return Vehicles.All.Where (x => !preVehicles.Contains (x)).Select (x => new Vehicle (x)).ToList ();
+            var flags = GetInputs ().ThrusterCommandFlags;
+            return ((flags & positive) != 0 ? 1 : 0) - ((flags & negative) != 0 ? 1 : 0);
+        }
+
+        void SetAxis (int value, ThrusterMapFlags positive, ThrusterMapFlags negative)
+        {
+            if (value < -1 || value > 1)
+                throw new ArgumentOutOfRangeException (nameof (value), "The input is not -1, 0 or 1");
+            SetInputs ((ref ManualControlInputs inputs) => {
+                var flags = inputs.ThrusterCommandFlags & ~(positive | negative);
+                if (value > 0)
+                    flags |= positive;
+                else if (value < 0)
+                    flags |= negative;
+                inputs.ThrusterCommandFlags = flags;
+            });
         }
 
         delegate void InputsSetter (ref ManualControlInputs inputs);

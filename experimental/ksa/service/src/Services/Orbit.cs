@@ -144,6 +144,38 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The semi-minor axis of the orbit, in meters. Not a number for a parabolic or
+        /// hyperbolic orbit.
+        /// </summary>
+        [KRPCProperty]
+        public double SemiMinorAxis {
+            get {
+                var orbit = InternalOrbit;
+                return orbit.Eccentricity < 1 ? orbit.SemiMinorAxis : double.NaN;
+            }
+        }
+
+        /// <summary>
+        /// The mean angular motion of the orbit, in radians per second.
+        /// </summary>
+        [KRPCProperty]
+        public double MeanMotion {
+            get { return InternalOrbit.GetMeanMotion (); }
+        }
+
+        /// <summary>
+        /// The specific orbital energy, the sum of the kinetic and potential energy per unit
+        /// mass, in joules per kilogram. Negative for an elliptical orbit.
+        /// </summary>
+        [KRPCProperty]
+        public double SpecificEnergy {
+            get {
+                var orbit = InternalOrbit;
+                return -orbit.Mu / (2 * orbit.SemiMajorAxis);
+            }
+        }
+
+        /// <summary>
         /// The current orbital speed, in meters per second.
         /// </summary>
         [KRPCProperty]
@@ -252,6 +284,18 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The current <a href="https://en.wikipedia.org/wiki/Eccentric_anomaly">eccentric
+        /// anomaly</a>, in radians. For a hyperbolic orbit, this is the hyperbolic anomaly.
+        /// </summary>
+        [KRPCProperty]
+        public double EccentricAnomaly {
+            get {
+                var orbit = InternalOrbit;
+                return Radians (orbit.GetEccentricAnomaly (orbit.GetStateVectorsAt (Now).TrueAnomaly).Degrees);
+            }
+        }
+
+        /// <summary>
         /// The true anomaly at the given time, in radians.
         /// </summary>
         /// <param name="ut">Universal time, in seconds.</param>
@@ -312,6 +356,94 @@ namespace KRPC.KSA.Services
             var orbit = InternalOrbit;
             var velocityCci = orbit.GetVelocityCciAt (new UniverseTime (ut));
             return Vectors.ToTuple (referenceFrame.DirectionFromEcl (velocityCci.Transform (orbit.Parent.GetCci2Cce ())));
+        }
+
+        /// <summary>
+        /// The inclination of the orbit relative to another orbit, in radians.
+        /// </summary>
+        /// <param name="orbit">The other orbit.</param>
+        [KRPCMethod]
+        public double RelativeInclination (Orbit orbit)
+        {
+            if (ReferenceEquals (orbit, null))
+                throw new ArgumentNullException (nameof (orbit));
+            return InternalOrbit.GetRelativeInclination (orbit.InternalOrbit).Value ();
+        }
+
+        /// <summary>
+        /// The true anomaly of the ascending node with another orbit, in radians.
+        /// </summary>
+        /// <param name="orbit">The other orbit.</param>
+        /// <remarks>
+        /// Throws an exception if the orbits are around different bodies.
+        /// </remarks>
+        [KRPCMethod]
+        public double TrueAnomalyAtAN (Orbit orbit)
+        {
+            var other = OtherOrbit (orbit);
+            return Radians (InternalOrbit.GetAscendingNode (other).Degrees);
+        }
+
+        /// <summary>
+        /// The true anomaly of the descending node with another orbit, in radians.
+        /// </summary>
+        /// <param name="orbit">The other orbit.</param>
+        /// <remarks>
+        /// Throws an exception if the orbits are around different bodies.
+        /// </remarks>
+        [KRPCMethod]
+        public double TrueAnomalyAtDN (Orbit orbit)
+        {
+            var other = OtherOrbit (orbit);
+            return Radians (InternalOrbit.GetDescendingNode (other).Degrees);
+        }
+
+        global::KSA.Orbit OtherOrbit (Orbit orbit)
+        {
+            if (ReferenceEquals (orbit, null))
+                throw new ArgumentNullException (nameof (orbit));
+            var other = orbit.InternalOrbit;
+            if (!ReferenceEquals (other.Parent, InternalOrbit.Parent))
+                throw new ArgumentException ("The orbits are around different bodies");
+            return other;
+        }
+
+        // The closest approach on this orbit to the target of the vehicle it belongs to. The
+        // game finds them while it predicts the vehicle's trajectory
+        Encounter? ClosestApproach {
+            get {
+                var patch = Patch;
+                var target = vehicle != null ? new Vehicle (vehicle).InternalVehicle.Target : null;
+                if (patch == null || target == null)
+                    return null;
+                return patch.TryFindClosestApproach (target);
+            }
+        }
+
+        /// <summary>
+        /// The universal time of the closest approach on this orbit to the vehicle's target,
+        /// in seconds. Not a number if there is none.
+        /// </summary>
+        /// <remarks>
+        /// Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+        /// worker thread, so a new target shows here shortly after it is set.
+        /// </remarks>
+        [KRPCProperty]
+        public double TimeOfClosestApproach {
+            get { return ClosestApproach?.GameTime.Seconds () ?? double.NaN; }
+        }
+
+        /// <summary>
+        /// The distance at the closest approach on this orbit to the vehicle's target, in
+        /// meters. Not a number if there is none.
+        /// </summary>
+        /// <remarks>
+        /// Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+        /// worker thread, so a new target shows here shortly after it is set.
+        /// </remarks>
+        [KRPCProperty]
+        public double DistanceAtClosestApproach {
+            get { return ClosestApproach?.ClosestDistance ?? double.NaN; }
         }
 
         /// <summary>

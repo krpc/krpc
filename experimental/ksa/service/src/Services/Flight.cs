@@ -172,6 +172,18 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The biome below the vehicle, or <c>null</c> if the body has no biomes.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public string Biome {
+            get {
+                if (InternalVehicle.Orbit.Parent is not Celestial celestial)
+                    return null;
+                return Body.BiomeAt (celestial, PositionCcf.NormalizeOrZero ());
+            }
+        }
+
+        /// <summary>
         /// The static atmospheric pressure at the vehicle, in pascals.
         /// </summary>
         [KRPCProperty]
@@ -269,6 +281,49 @@ namespace KRPC.KSA.Services
                 var velocity = SurfaceVelocityHelm;
                 return velocity == double3.Zero ? 0 : RadiansToDegrees (Math.Atan2 (-velocity.Y, velocity.X));
             }
+        }
+
+        /// <summary>
+        /// The unit vector of the vehicle's velocity relative to the surface.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the direction.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> Prograde (ReferenceFrame referenceFrame)
+        {
+            return SurfaceDirection (double3.UnitX, referenceFrame);
+        }
+
+        /// <summary>
+        /// The unit vector normal to the plane of the vehicle's position and its velocity
+        /// relative to the surface.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the direction.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> Normal (ReferenceFrame referenceFrame)
+        {
+            return SurfaceDirection (double3.UnitY, referenceFrame);
+        }
+
+        /// <summary>
+        /// The unit vector pointing radially outward, perpendicular to <see cref="Prograde"/>
+        /// and <see cref="Normal"/>.
+        /// </summary>
+        /// <param name="referenceFrame">The reference frame of the direction.</param>
+        [KRPCMethod]
+        public Tuple<double, double, double> Radial (ReferenceFrame referenceFrame)
+        {
+            return SurfaceDirection (double3.UnitZ, referenceFrame);
+        }
+
+        // An axis of the prograde, normal and radial frame of the velocity relative to the
+        // surface, as the orbital reference frame is for the orbital velocity
+        Tuple<double, double, double> SurfaceDirection (double3 axis, ReferenceFrame referenceFrame)
+        {
+            var v = InternalVehicle;
+            var vlf2Cci = VehicleReferenceFrameEx.GetVlf2Cci (v.GetPositionCci (), v.GetSurfaceVelocityCci ())
+                ?? throw new InvalidOperationException ("The vehicle is not moving relative to the surface");
+            var direction = axis.Transform (doubleQuat.Concatenate (vlf2Cci, v.Orbit.Parent.GetCci2Cce ()));
+            return Vectors.ToTuple (referenceFrame.DirectionFromEcl (direction));
         }
 
         // The velocity relative to the surface in the vehicle's frame, with x forward, y right

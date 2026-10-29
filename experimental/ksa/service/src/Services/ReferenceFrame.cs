@@ -10,7 +10,8 @@ namespace KRPC.KSA.Services
     /// <summary>
     /// A reference frame, in which positions, directions, rotations and velocities are given.
     /// Obtained from the reference frame properties of <see cref="Vehicle"/> and
-    /// <see cref="Body"/>.
+    /// <see cref="Body"/>, or created with <see cref="CreateRelative"/> and
+    /// <see cref="CreateHybrid"/>.
     /// </summary>
     /// <remarks>
     /// Every reference frame is right-handed. Positions are in meters, velocities in meters
@@ -26,12 +27,27 @@ namespace KRPC.KSA.Services
             BodyNonRotating,
             Vehicle,
             VehicleSurface,
-            VehicleOrbital
+            VehicleOrbital,
+            Burn,
+            Relative,
+            Hybrid
         }
 
         readonly Kind kind;
         readonly IParentBody body;
         readonly global::KSA.Vehicle vehicle;
+        readonly Burn burn;
+        // A relative frame's parent and offsets, in the parent frame
+        readonly ReferenceFrame parent;
+        readonly double3 position;
+        readonly doubleQuat rotation;
+        readonly double3 velocity;
+        readonly double3 angularVelocity;
+        // The frames a hybrid frame takes its components from
+        readonly ReferenceFrame positionFrame;
+        readonly ReferenceFrame rotationFrame;
+        readonly ReferenceFrame velocityFrame;
+        readonly ReferenceFrame angularVelocityFrame;
 
         internal ReferenceFrame (Kind kind, IParentBody body)
         {
@@ -45,13 +61,109 @@ namespace KRPC.KSA.Services
             this.vehicle = vehicle;
         }
 
+        internal ReferenceFrame (Burn burn)
+        {
+            kind = Kind.Burn;
+            this.burn = burn;
+        }
+
+        ReferenceFrame (ReferenceFrame parent, double3 position, doubleQuat rotation, double3 velocity, double3 angularVelocity)
+        {
+            kind = Kind.Relative;
+            this.parent = parent;
+            this.position = position;
+            this.rotation = rotation;
+            this.velocity = velocity;
+            this.angularVelocity = angularVelocity;
+        }
+
+        ReferenceFrame (ReferenceFrame position, ReferenceFrame rotation, ReferenceFrame velocity, ReferenceFrame angularVelocity)
+        {
+            kind = Kind.Hybrid;
+            positionFrame = position;
+            rotationFrame = rotation;
+            velocityFrame = velocity;
+            angularVelocityFrame = angularVelocity;
+        }
+
+        static class VectorZero
+        {
+            public static object Create ()
+            {
+                return Tuple.Create (0d, 0d, 0d);
+            }
+        }
+
+        static class QuaternionIdentity
+        {
+            public static object Create ()
+            {
+                return Tuple.Create (0d, 0d, 0d, 1d);
+            }
+        }
+
+        /// <summary>
+        /// Create a reference frame that is offset from a parent frame.
+        /// </summary>
+        /// <param name="referenceFrame">The parent reference frame.</param>
+        /// <param name="position">The position of the origin in the parent frame, in meters.
+        /// Defaults to <c>(0, 0, 0)</c>.</param>
+        /// <param name="rotation">The rotation of the frame relative to the parent frame.
+        /// Defaults to <c>(0, 0, 0, 1)</c>, no rotation.</param>
+        /// <param name="velocity">The velocity of the origin in the parent frame, in meters
+        /// per second. Defaults to <c>(0, 0, 0)</c>.</param>
+        /// <param name="angularVelocity">The angular velocity of the frame relative to the
+        /// parent frame, in radians per second, in the axes of the parent frame. Defaults to
+        /// <c>(0, 0, 0)</c>.</param>
+        [KRPCMethod]
+        public static ReferenceFrame CreateRelative (
+            ReferenceFrame referenceFrame,
+            [KRPCDefaultValue (typeof (VectorZero))] Tuple<double, double, double> position,
+            [KRPCDefaultValue (typeof (QuaternionIdentity))] Tuple<double, double, double, double> rotation,
+            [KRPCDefaultValue (typeof (VectorZero))] Tuple<double, double, double> velocity,
+            [KRPCDefaultValue (typeof (VectorZero))] Tuple<double, double, double> angularVelocity)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
+            return new ReferenceFrame (
+                referenceFrame, Vectors.ToVector (position), Vectors.ToRotation (rotation),
+                Vectors.ToVector (velocity), Vectors.ToVector (angularVelocity));
+        }
+
+        /// <summary>
+        /// Create a reference frame that takes its components from other frames.
+        /// </summary>
+        /// <param name="position">The reference frame that gives the origin.</param>
+        /// <param name="rotation">The reference frame that gives the axes. Defaults to
+        /// <paramref name="position"/>.</param>
+        /// <param name="velocity">The reference frame that gives the velocity of the origin.
+        /// Defaults to <paramref name="position"/>.</param>
+        /// <param name="angularVelocity">The reference frame that gives the angular velocity.
+        /// Defaults to <paramref name="position"/>.</param>
+        [KRPCMethod]
+        public static ReferenceFrame CreateHybrid (
+            ReferenceFrame position, ReferenceFrame rotation = null,
+            ReferenceFrame velocity = null, ReferenceFrame angularVelocity = null)
+        {
+            if (ReferenceEquals (position, null))
+                throw new ArgumentNullException (nameof (position));
+            return new ReferenceFrame (position, rotation ?? position, velocity ?? position, angularVelocity ?? position);
+        }
+
         /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
         public override bool Equals (ReferenceFrame other)
         {
             return !ReferenceEquals (other, null) && kind == other.kind &&
-                ReferenceEquals (body, other.body) && ReferenceEquals (vehicle, other.vehicle);
+                ReferenceEquals (body, other.body) && ReferenceEquals (vehicle, other.vehicle) &&
+                Equals (burn, other.burn) &&
+                Equals (parent, other.parent) && position == other.position &&
+                rotation == other.rotation && velocity == other.velocity &&
+                angularVelocity == other.angularVelocity &&
+                Equals (positionFrame, other.positionFrame) && Equals (rotationFrame, other.rotationFrame) &&
+                Equals (velocityFrame, other.velocityFrame) &&
+                Equals (angularVelocityFrame, other.angularVelocityFrame);
         }
 
         /// <summary>
@@ -59,7 +171,21 @@ namespace KRPC.KSA.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return HashCode.Combine (kind, body, vehicle);
+            var hash = new HashCode ();
+            hash.Add (kind);
+            hash.Add (body);
+            hash.Add (vehicle);
+            hash.Add (burn);
+            hash.Add (parent);
+            hash.Add (position);
+            hash.Add (rotation);
+            hash.Add (velocity);
+            hash.Add (angularVelocity);
+            hash.Add (positionFrame);
+            hash.Add (rotationFrame);
+            hash.Add (velocityFrame);
+            hash.Add (angularVelocityFrame);
+            return hash.ToHashCode ();
         }
 
         global::KSA.Vehicle LiveVehicle {
@@ -70,16 +196,44 @@ namespace KRPC.KSA.Services
         // frame. Ecliptic axes are shared by every body-centered ecliptic (Cce) frame.
 
         internal double3 OriginEcl {
-            get { return body != null ? body.GetPositionEcl () : LiveVehicle.GetPositionEcl (); }
+            get {
+                switch (kind) {
+                case Kind.Relative:
+                    return parent.PositionToEcl (position);
+                case Kind.Hybrid:
+                    return positionFrame.OriginEcl;
+                case Kind.Burn:
+                    return burn.PositionEcl;
+                default:
+                    return body != null ? body.GetPositionEcl () : LiveVehicle.GetPositionEcl ();
+                }
+            }
         }
 
         internal double3 VelocityEcl {
-            get { return body != null ? body.GetVelocityEcl () : LiveVehicle.GetVelocityEcl (); }
+            get {
+                switch (kind) {
+                case Kind.Relative:
+                    return parent.VelocityToEcl (parent.PositionToEcl (position), velocity);
+                case Kind.Hybrid:
+                    return velocityFrame.VelocityEcl;
+                case Kind.Burn:
+                    return burn.Body.GetVelocityEcl ();
+                default:
+                    return body != null ? body.GetVelocityEcl () : LiveVehicle.GetVelocityEcl ();
+                }
+            }
         }
 
         internal doubleQuat Rotation2Ecl {
             get {
                 switch (kind) {
+                case Kind.Relative:
+                    return parent.RotationToEcl (rotation);
+                case Kind.Hybrid:
+                    return rotationFrame.Rotation2Ecl;
+                case Kind.Burn:
+                    return burn.Vlf2Ecl;
                 case Kind.Body:
                     return body.GetCcf2Cce ();
                 case Kind.BodyNonRotating:
@@ -105,6 +259,12 @@ namespace KRPC.KSA.Services
         internal double3 AngularVelocityEcl {
             get {
                 switch (kind) {
+                case Kind.Relative:
+                    return parent.AngularVelocityEcl + parent.DirectionToEcl (angularVelocity);
+                case Kind.Hybrid:
+                    return angularVelocityFrame.AngularVelocityEcl;
+                case Kind.Burn:
+                    return double3.Zero;
                 case Kind.Body:
                     return body.GetAngularVelocityCce ();
                 case Kind.BodyNonRotating:

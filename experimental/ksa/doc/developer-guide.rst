@@ -35,7 +35,7 @@ The tests are Python scripts that drive a live game, run with pytest:
 
 The harness launches KSA through StarMap when no server is running, and quits it at the end.
 Each test class starts from a save of the game's start state. The ``TestingTools`` service,
-installed only for the tests, saves, loads and quits the game.
+installed only for the tests, registers test vehicles and quits the game.
 
 Documentation
 -------------

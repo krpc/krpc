@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using KRPC.KSA.Utils;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -71,14 +72,16 @@ namespace KRPC.KSA.Services
         /// Fire the decoupler, separating the vehicle into two. Returns once it has fired.
         /// Throws an exception if the decoupler is disabled or <see cref="Decoupled"/>.
         /// </summary>
+        /// <returns>The vehicles that separated from this one.</returns>
         [KRPCMethod]
-        public void Decouple ()
+        public IList<Vehicle> Decouple ()
         {
             var p = Part.InternalPart;
             if (!decoupler.IsEnabled || !Attached (p))
                 throw new InvalidOperationException ("The decoupler cannot fire");
+            var before = new HashSet<global::KSA.Vehicle> (Vehicles.All);
             decoupler.SetIsActive (p.Tree.OwningVehicle, true);
-            Waits.Until (() => !Attached (p));
+            return Vehicles.SeparatedWhen (() => !Attached (p), before);
         }
     }
 }

@@ -92,7 +92,7 @@ def _launch() -> None:
             raise RuntimeError("KSA did not load a system with a controlled vehicle")
         time.sleep(1)
     conn.testing_tools.suppress_update_popup()
-    conn.testing_tools.save_game(SAVE)
+    conn.ksa.save(SAVE)
 
 
 def stop_game() -> None:
@@ -148,11 +148,11 @@ class TestCase(unittest.TestCase):
     @classmethod
     def load_save(cls):
         """Load the krpctest save, unpause the game, and let it run for half a second."""
-        if not cls.conn.testing_tools.save_exists(SAVE):
+        if not cls.conn.ksa.save_exists(SAVE):
             raise RuntimeError(
                 f"No {SAVE} save. Run the tests once without --no-launch to create it."
             )
-        cls.conn.testing_tools.load_save(SAVE)
+        cls.conn.ksa.load(SAVE)
         # Engine performance and other solver outputs are filled in by the first steps
         ut = cls.ksa.ut
         cls.ksa.simulation_speed = 1
