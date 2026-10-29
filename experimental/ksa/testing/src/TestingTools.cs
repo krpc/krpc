@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using KRPC.Service;
@@ -27,6 +28,20 @@ namespace KRPC.KSA.Testing
             if (save == null)
                 throw new ArgumentException ("No vehicle in '" + directory + "'");
             return save.Id;
+        }
+
+        /// <summary>
+        /// Add a fuel link between two parts of a vehicle, with propellant flowing either way.
+        /// </summary>
+        /// <param name="partA">One part.</param>
+        /// <param name="partB">The other part.</param>
+        [KRPCProcedure]
+        public static void AddFuelLink (KRPC.KSA.Services.Part partA, KRPC.KSA.Services.Part partB)
+        {
+            var a = partA.InternalPart.FullPart;
+            var b = partB.InternalPart.FullPart;
+            if (!a.Tree.FuelLinks.Add (a, b, FuelLinkFlow.Both))
+                throw new InvalidOperationException ("Failed to add the fuel link");
         }
 
         /// <summary>
@@ -72,11 +87,11 @@ namespace KRPC.KSA.Testing
 
         /// <summary>
         /// The RPCs that use game members missing from the running game, found whatever the
-        /// game version.
+        /// game version, and the RPCs that need a game patch that failed to apply.
         /// </summary>
         [KRPCProperty]
         public static IList<string> CompatibilityBreakages {
-            get { return GameCompatibility.FindBreakages (); }
+            get { return GameCompatibility.FindBreakages ().Union (GameCompatibility.PatchBreakages).ToList (); }
         }
 
         /// <summary>

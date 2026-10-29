@@ -1,3 +1,5 @@
+import math
+
 import ksatest
 
 
@@ -128,6 +130,100 @@ class TestPart(ksatest.TestCase):
                 self.assertTrue(engine.active)
                 self.assertTrue(engine.has_propellant)
                 self.assertGreater(engine.specific_impulse, 0)
+
+    def test_gimbals(self):
+        gimbals = [gimbal for part in self.engine_parts() for gimbal in part.gimbals]
+        self.assertTrue(gimbals)
+        for gimbal in gimbals:
+            self.assertIn(gimbal.part, self.parts)
+            self.assertGreaterEqual(gimbal.max_angle_y, 0)
+            self.assertGreaterEqual(gimbal.max_angle_z, 0)
+            self.assertLessEqual(gimbal.max_angle_y, 90)
+            self.assertLessEqual(gimbal.max_angle_z, 90)
+            self.assertGreater(gimbal.max_angle_y + gimbal.max_angle_z, 0)
+            self.assertLessEqual(abs(gimbal.angle_y), gimbal.max_angle_y + 1e-6)
+            self.assertLessEqual(abs(gimbal.angle_z), gimbal.max_angle_z + 1e-6)
+        # The LR91 Sea's main nozzle turns 5 degrees about both axes, in the game's data
+        sea = [gimbal for gimbal in gimbals if gimbal.part.title == "LR91 Sea"]
+        self.assertIn(5, [round(gimbal.max_angle_y, 3) for gimbal in sea])
+        self.assertTrue(all(gimbal.active for gimbal in sea))
+
+    def test_engine_gimbals(self):
+        steered = []
+        for part in self.engine_parts():
+            gimbals = part.engine.gimbals
+            for gimbal in gimbals:
+                self.assertIn(gimbal, part.gimbals)
+            steered.extend(gimbals)
+        self.assertTrue(steered)
+
+    def test_gimbal_rotation(self):
+        frame = self.vehicle.reference_frame
+        for part in self.engine_parts():
+            for gimbal in part.gimbals:
+                rotation = gimbal.rotation(frame)
+                self.assertAlmostEqual(
+                    1, math.sqrt(sum(x * x for x in rotation)), places=6
+                )
+
+    def test_tanks(self):
+        tanks = self.vehicle.tanks
+        self.assertTrue(tanks)
+        for tank in tanks:
+            self.assertGreater(tank.volume, 0)
+            self.assertGreaterEqual(tank.rated_pressure, 0)
+            self.assertGreaterEqual(tank.filled_fraction, 0)
+            self.assertLessEqual(tank.filled_fraction, 1)
+            held = sum(resource.amount for resource in tank.part.resources)
+            self.assertEqual(held > 0, tank.filled_fraction > 0)
+            self.assertTrue(tank.propellant_use_enabled)
+            self.assertEqual(self.ksa.TankTransferMode.none, tank.transfer_mode)
+            self.assertIn(tank, tank.part.tanks)
+        self.assertEqual(len(tanks), sum(len(part.tanks) for part in self.parts))
+
+    def test_tank_transfer_mode(self):
+        tank = self.vehicle.tanks[0]
+        try:
+            for mode in (self.ksa.TankTransferMode.in_, self.ksa.TankTransferMode.out):
+                tank.transfer_mode = mode
+                # The mode holds with the part window closed
+                ksatest.wait_until(lambda end=self.ksa.ut + 1: self.ksa.ut > end)
+                self.assertEqual(mode, tank.transfer_mode)
+        finally:
+            tank.transfer_mode = self.ksa.TankTransferMode.none
+        self.assertEqual(self.ksa.TankTransferMode.none, tank.transfer_mode)
+
+    def test_propellant_use(self):
+        # With no tank to draw from, the engines stop
+        tanks = self.vehicle.tanks
+        control = self.vehicle.control
+        throttle = control.throttle
+        try:
+            control.throttle = 1
+            control.engine_on = True
+            ksatest.wait_until(lambda: self.vehicle.thrust > 0, timeout=5)
+            for tank in tanks:
+                tank.propellant_use_enabled = False
+            self.assertFalse(tanks[0].propellant_use_enabled)
+            ksatest.wait_until(lambda: self.vehicle.thrust == 0, timeout=5)
+            active = [engine for engine in self.vehicle.engines if engine.active]
+            self.assertFalse(any(engine.has_propellant for engine in active))
+        finally:
+            for tank in tanks:
+                tank.propellant_use_enabled = True
+            control.engine_on = False
+            control.throttle = throttle
+        ksatest.wait_until(lambda: self.vehicle.thrust == 0, timeout=5)
+
+    def test_engine_propellants(self):
+        names = {resource.name for resource in self.vehicle.resources}
+        for engine in self.vehicle.engines:
+            self.assertGreaterEqual(engine.minimum_throttle, 0)
+            self.assertLess(engine.minimum_throttle, 1)
+            self.assertTrue(engine.propellants)
+            self.assertEqual(len(engine.propellants), len(set(engine.propellants)))
+            for name in engine.propellants:
+                self.assertIn(name, names)
 
     def test_engine_active(self):
         engine = next(

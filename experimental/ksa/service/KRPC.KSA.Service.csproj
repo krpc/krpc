@@ -13,6 +13,9 @@
     <Compile Include="src/Services/DockingPort.cs" />
     <Compile Include="src/Services/Engine.cs" />
     <Compile Include="src/Services/Flight.cs" />
+    <Compile Include="src/Services/FuelLink.cs" />
+    <Compile Include="src/Services/FuelLinkFlow.cs" />
+    <Compile Include="src/Services/Gimbal.cs" />
     <Compile Include="src/Services/KSA.cs" />
     <Compile Include="src/Services/Orbit.cs" />
     <Compile Include="src/Services/OrbitTransition.cs" />
@@ -24,11 +27,14 @@
     <Compile Include="src/Services/Resource.cs" />
     <Compile Include="src/Services/Sequence.cs" />
     <Compile Include="src/Services/Situation.cs" />
+    <Compile Include="src/Services/Tank.cs" />
+    <Compile Include="src/Services/TankTransferMode.cs" />
     <Compile Include="src/Services/Vehicle.cs" />
     <Compile Include="src/Utils/AfterFrame.cs" />
     <Compile Include="src/Utils/Engines.cs" />
     <Compile Include="src/Utils/ObjectSweep.cs" />
     <Compile Include="src/Utils/Sequences.cs" />
+    <Compile Include="src/Utils/TankTransfers.cs" />
     <Compile Include="src/Utils/Vectors.cs" />
     <Compile Include="src/Utils/Vehicles.cs" />
     <Compile Include="src/Utils/Waits.cs" />
