@@ -1,79 +1,13 @@
 Installing the kRPC C++ client library
 ======================================
 
-Via vcpkg
----------
+The C++ client documentation describes how to install the library with vcpkg
+or CMake, and how to compile a program against it:
 
-The library is published to the vcpkg registry, so it can be installed without
-this archive:
+https://krpc.github.io/krpc/latest/cpp/client.html#installing-the-library
 
-On Linux:
+To build and install the library from this archive, with CMake 3.15 or later:
 
-    vcpkg install krpc
-
-On Windows:
-
-    vcpkg install krpc:x64-windows
-
-Then pass the vcpkg toolchain file when configuring your CMake project:
-
-    cmake -B build -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
-
-And link the library in your CMakeLists.txt:
-
-    find_package(krpc CONFIG REQUIRED)
-    target_link_libraries(my_app PRIVATE krpc::krpc)
-
-
-Via CMake
----------
-
-CMake 3.15 or later is required. By default, CMake looks for system-installed
-protobuf and ASIO. On Ubuntu:
-
-    sudo apt-get install libasio-dev libprotobuf-dev protobuf-compiler
-
-Alternatively, CMake can download them automatically via FetchContent — see
-"Using FetchContent for dependencies" below.
-
-To compile and install the library:
-
-    cmake -B build
-    cmake --build build
-    sudo cmake --install build
-    sudo ldconfig
-
-
-Installing to a custom location
--------------------------------
-
-Pass CMAKE_INSTALL_PREFIX to the configure step:
-
-    cmake -B build -DCMAKE_INSTALL_PREFIX=/install/path
+    cmake -B build -DCMAKE_INSTALL_PREFIX=/path/to/install
     cmake --build build
     cmake --install build
-
-
-Using FetchContent for dependencies
-------------------------------------
-
-To download all dependencies (protobuf, ASIO, abseil) automatically at build
-time instead of using system packages, pass KRPC_FETCH_DEPS=ON:
-
-    cmake -B build -DKRPC_FETCH_DEPS=ON
-    cmake --build build
-    sudo cmake --install build
-
-To enable FetchContent for individual dependencies only, use the fine-grained
-options (KRPC_FETCH_PROTOBUF, KRPC_FETCH_ASIO, KRPC_FETCH_ABSL). When an
-option is OFF (the default), the system package is required and CMake will
-error if it cannot be found.
-
-
-Using the installed library from another CMake project
-------------------------------------------------------
-
-After installation, downstream projects can find and link the library with:
-
-    find_package(krpc CONFIG REQUIRED)
-    target_link_libraries(my_app PRIVATE krpc::krpc)
