@@ -1,6 +1,7 @@
 import math
 
 import ksatest
+from test_parachute import SITE
 
 # The kittens the game starts on EVA. The roster names the others at random
 EVA_KITTENS = ("Hunter", "Banjo", "Polaris")
@@ -74,6 +75,10 @@ class TestCrew(CrewCase):
         self.assertIsNone(kitten.vehicle)
         self.assertIsNone(kitten.seat)
         self.assertEqual(0, kitten.mission_time)
+
+    def test_launch_kitten(self):
+        with self.assertRaises(ValueError):
+            self.ksa.launch_vehicle("Banjo", SITE)
 
 
 class TestSeats(CrewCase):

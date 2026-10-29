@@ -153,7 +153,8 @@ namespace KRPC.KSA.Services
         /// <returns>The vehicle. Its name is the vehicle's name, with a number appended if
         /// another vehicle has that name.</returns>
         /// <remarks>
-        /// Throws an exception if there is no such vehicle or launch site.
+        /// Throws an exception if there is no such vehicle or launch site, or the name is one
+        /// of the game's kittens.
         /// </remarks>
         [KRPCProcedure]
         public static Vehicle LaunchVehicle (string name, string site)
@@ -167,6 +168,8 @@ namespace KRPC.KSA.Services
             }
             if (save == null)
                 throw new ArgumentException ("No vehicle named " + name);
+            if (!string.IsNullOrEmpty (save.VehicleSaveData.Character))
+                throw new ArgumentException (name + " is a kitten, not a vehicle");
             Celestial celestial = null;
             LocationReference location = null;
             foreach (var body in Utils.Vehicles.Bodies) {
