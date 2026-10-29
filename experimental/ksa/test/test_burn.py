@@ -70,6 +70,12 @@ class TestBurn(ksatest.TestCase):
         burn = self.vehicle.add_burn(self.ksa.ut + 900, prograde=10)
         self.assertAlmostEqual(burn.ut - self.ksa.ut, burn.time_to, delta=1)
 
+    def test_orbit_average_dose_rate(self):
+        burn = self.vehicle.add_burn(self.ksa.ut + 900, prograde=10)
+        # The game predicts the orbit after the burn in its next solver step
+        ksatest.wait_until(lambda: math.isfinite(burn.orbit_average_dose_rate))
+        self.assertGreater(burn.orbit_average_dose_rate, 0)
+
     def test_position(self):
         ut = self.ksa.ut + 900
         burn = self.vehicle.add_burn(ut, prograde=10)

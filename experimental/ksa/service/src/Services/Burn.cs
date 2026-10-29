@@ -206,6 +206,25 @@ namespace KRPC.KSA.Services
             get { return new Orbit (this); }
         }
 
+        // The game's cache for its burn editor dose gauge
+        static readonly OrbitDoseAverageCache orbitDoseAverages = new OrbitDoseAverageCache ();
+
+        /// <summary>
+        /// The radiation dose rate averaged over the orbit after the burn, in sieverts per
+        /// second. Not a number if the body has no magnetosphere, or the orbit dips below the
+        /// surface.
+        /// </summary>
+        [KRPCProperty]
+        public double OrbitAverageDoseRate {
+            get {
+                // As the game's burn editor computes it
+                var orbit = InternalBurn.GetPostBurnPatch ()?.Orbit;
+                if (orbit == null || !Radiation.TryComputeOrbitDoseRate (orbit, orbit.Parent.GetPositionEcl (), orbitDoseAverages, out var rate))
+                    return double.NaN;
+                return rate.Value ();
+            }
+        }
+
         /// <summary>
         /// The reference frame with its origin at the position of the burn, and axes along
         /// the orbit at the time of the burn. The x axis points prograde, the y axis along the

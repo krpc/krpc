@@ -236,6 +236,7 @@ KSA.Burn.RemainingDeltaV
 KSA.Burn.IgnitionTime
 KSA.Burn.BurnTime
 KSA.Burn.Orbit
+KSA.Burn.OrbitAverageDoseRate
 KSA.Burn.ReferenceFrame
 KSA.Burn.Position
 KSA.Burn.Direction
