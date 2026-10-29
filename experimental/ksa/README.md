@@ -4,7 +4,7 @@ A kRPC server for Kitten Space Agency (KSA). It is a [StarMap](https://github.co
 code mod that serves the `KRPC` service and a `KSA` service written for KSA's own model. The tests
 run in game on Linux and Windows.
 
-Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `versions.sh`.
+Built against kRPC 0.7.0, KSA 2026.10.25.5707 and StarMap 0.4.8, set in `versions.sh`.
 
 ## Layout
 
@@ -253,8 +253,8 @@ experimental/ksa/test.sh --no-launch            # against a game started with ru
  * `test_examples.py` flies `examples/launch_into_orbit.py` to orbit, which takes about eight
    minutes. It is marked `slow`, so `-m "not slow"` skips it.
 
-All the tests pass on Linux and Windows, with KSA 2026.10.19.5638, and the release archive built
-on Linux installs and runs on Windows.
+All the tests pass on Linux with KSA 2026.10.25.5707. With KSA 2026.10.19.5638 they also passed
+on Windows, and the release archive built on Linux installed and ran there.
 
 ## Open Questions
 
