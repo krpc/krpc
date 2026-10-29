@@ -13,6 +13,8 @@
     <Compile Include="src/Services/DockingPort.cs" />
     <Compile Include="src/Services/Engine.cs" />
     <Compile Include="src/Services/Flight.cs" />
+    <Compile Include="src/Services/FuelLink.cs" />
+    <Compile Include="src/Services/FuelLinkFlow.cs" />
     <Compile Include="src/Services/Gimbal.cs" />
     <Compile Include="src/Services/KSA.cs" />
     <Compile Include="src/Services/Orbit.cs" />

@@ -37,6 +37,7 @@ KSA.Vehicle.RCS
 KSA.Vehicle.Decouplers
 KSA.Vehicle.Parachutes
 KSA.Vehicle.Tanks
+KSA.Vehicle.FuelLinks
 KSA.Vehicle.DockingPorts
 KSA.Vehicle.Resources
 KSA.Vehicle.DeltaV
@@ -256,6 +257,13 @@ KSA.Tank.TransferMode
 KSA.TankTransferMode.None
 KSA.TankTransferMode.In
 KSA.TankTransferMode.Out
+KSA.FuelLink.PartA
+KSA.FuelLink.PartB
+KSA.FuelLink.Flow
+KSA.FuelLink.Enabled
+KSA.FuelLinkFlow.AToB
+KSA.FuelLinkFlow.BToA
+KSA.FuelLinkFlow.Both
 KSA.Engine.Part
 KSA.Engine.Gimbals
 KSA.Engine.Active

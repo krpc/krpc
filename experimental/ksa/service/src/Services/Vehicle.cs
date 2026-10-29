@@ -218,6 +218,14 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The vehicle's fuel links.
+        /// </summary>
+        [KRPCProperty]
+        public IList<FuelLink> FuelLinks {
+            get { return InternalVehicle.Parts.FuelLinks.Links.ToArray ().Select (link => new FuelLink (link)).ToList (); }
+        }
+
+        /// <summary>
         /// The vehicle's docking ports.
         /// </summary>
         [KRPCProperty]

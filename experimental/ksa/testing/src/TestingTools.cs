@@ -31,6 +31,20 @@ namespace KRPC.KSA.Testing
         }
 
         /// <summary>
+        /// Add a fuel link between two parts of a vehicle, with propellant flowing either way.
+        /// </summary>
+        /// <param name="partA">One part.</param>
+        /// <param name="partB">The other part.</param>
+        [KRPCProcedure]
+        public static void AddFuelLink (KRPC.KSA.Services.Part partA, KRPC.KSA.Services.Part partB)
+        {
+            var a = partA.InternalPart.FullPart;
+            var b = partB.InternalPart.FullPart;
+            if (!a.Tree.FuelLinks.Add (a, b, FuelLinkFlow.Both))
+                throw new InvalidOperationException ("Failed to add the fuel link");
+        }
+
+        /// <summary>
         /// The number of objects in the server's object store.
         /// </summary>
         [KRPCProperty]
