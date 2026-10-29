@@ -154,11 +154,23 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The vehicle designs that can be launched, keyed by name.
+        /// </summary>
+        [KRPCProperty]
+        public static IDictionary<string, VehicleDesign> VehicleDesigns {
+            get {
+                var designs = new Dictionary<string, VehicleDesign> ();
+                foreach (var design in VehicleDesign.All)
+                    designs [design.Name] = design;
+                return designs;
+            }
+        }
+
+        /// <summary>
         /// Launch a vehicle from a launch site, and make it the active vehicle. Returns once
         /// the vehicle is on the launch site.
         /// </summary>
-        /// <param name="name">The name of the vehicle, one of the game's default vehicles or
-        /// a vehicle saved by the player.</param>
+        /// <param name="name">The name of the vehicle design. See <see cref="VehicleDesigns"/>.</param>
         /// <param name="site">The name of the launch site. See <see cref="Body.LaunchSites"/>.</param>
         /// <returns>The vehicle. Its name is the vehicle's name, with a number appended if
         /// another vehicle has that name.</returns>
@@ -169,17 +181,9 @@ namespace KRPC.KSA.Services
         [KRPCProcedure]
         public static Vehicle LaunchVehicle (string name, string site)
         {
-            var save = DefaultVehicleSaves.FindSave (name);
-            if (save == null) {
-                foreach (var playerSave in VehicleSaves.AsSpan ()) {
-                    if (playerSave.Id == name)
-                        save = playerSave;
-                }
-            }
+            var save = VehicleDesign.Find (name);
             if (save == null)
-                throw new ArgumentException ("No vehicle named " + name);
-            if (!string.IsNullOrEmpty (save.VehicleSaveData.Character))
-                throw new ArgumentException (name + " is a kitten, not a vehicle");
+                throw new ArgumentException (Kitten.Find (name) != null ? name + " is a kitten, not a vehicle" : "No vehicle named " + name);
             Celestial celestial = null;
             LocationReference location = null;
             foreach (var body in Utils.Vehicles.Bodies) {

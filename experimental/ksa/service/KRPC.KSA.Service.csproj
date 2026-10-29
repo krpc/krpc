@@ -44,6 +44,7 @@
     <Compile Include="src/Services/Tank.cs" />
     <Compile Include="src/Services/TankTransferMode.cs" />
     <Compile Include="src/Services/Vehicle.cs" />
+    <Compile Include="src/Services/VehicleDesign.cs" />
     <Compile Include="src/Utils/AfterFrame.cs" />
     <Compile Include="src/Utils/Engines.cs" />
     <Compile Include="src/Utils/ObjectSweep.cs" />

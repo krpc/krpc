@@ -7,6 +7,7 @@ KSA.Bodies
 KSA.UT
 KSA.SimulationSpeed
 KSA.WarpTo
+KSA.VehicleDesigns
 KSA.LaunchVehicle
 KSA.SaveExists
 KSA.Save
@@ -429,3 +430,9 @@ KSA.Debug.DuplicateVehicle
 KSA.Debug.ExplodeVehicle
 KSA.Debug.ShowVelocityArrows
 KSA.Debug.RunCommand
+KSA.VehicleDesign.Name
+KSA.VehicleDesign.IsDefault
+KSA.VehicleDesign.PartCount
+KSA.VehicleDesign.Mass
+KSA.VehicleDesign.DryMass
+KSA.VehicleDesign.DeltaV
