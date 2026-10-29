@@ -76,6 +76,7 @@ test_suite(
         ":client-tcpip",
         ":communication-localsocket",
         ":communication-tcpip",
+        ":lint",
         ":unit",
     ],
 )
