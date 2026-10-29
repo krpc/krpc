@@ -210,6 +210,14 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The vehicle's propellant tanks.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Tank> Tanks {
+            get { return Parts.SelectMany (part => part.Tanks).ToList (); }
+        }
+
+        /// <summary>
         /// The vehicle's docking ports.
         /// </summary>
         [KRPCProperty]

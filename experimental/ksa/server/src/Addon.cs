@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Runtime.Loader;
 using Brutal.ImGuiApi;
@@ -101,6 +103,8 @@ namespace KRPC.KSA
                 harmony.Patch (deserialize, postfix: new HarmonyMethod (
                     typeof (Addon).GetMethod (nameof (AfterSaveLoaded), BindingFlags.NonPublic | BindingFlags.Static)));
 
+            PatchTankTransfers ();
+
             MenuBar.Patch (harmony, this);
             ConsoleWindow.Patch (harmony);
 
@@ -123,17 +127,19 @@ namespace KRPC.KSA
         void CheckGameVersion ()
         {
             var running = GameCompatibility.Running;
-            if (running == GameCompatibility.BuiltFor)
-                return;
-            Logger.WriteLine ("Built for KSA " + GameCompatibility.BuiltFor + ", running on KSA " + running, Logger.Severity.Warning);
-            try {
-                breakages = GameCompatibility.FindBreakages ();
-                Logger.WriteLine (breakages.Count + " RPCs use game members missing from KSA " + running, Logger.Severity.Warning);
-            } catch (Exception e) {
-                Logger.WriteLine ("Failed to check the RPCs against the game: " + e, Logger.Severity.Error);
-                breakages = new List<string> ();
+            var mismatch = running != GameCompatibility.BuiltFor;
+            IList<string> missing = new List<string> ();
+            if (mismatch) {
+                Logger.WriteLine ("Built for KSA " + GameCompatibility.BuiltFor + ", running on KSA " + running, Logger.Severity.Warning);
+                try {
+                    missing = GameCompatibility.FindBreakages ();
+                    Logger.WriteLine (missing.Count + " RPCs use game members missing from KSA " + running, Logger.Severity.Warning);
+                } catch (Exception e) {
+                    Logger.WriteLine ("Failed to check the RPCs against the game: " + e, Logger.Severity.Error);
+                }
             }
-            showCompatibilityWarning = config.IgnoredGameVersion != running.ToString ();
+            breakages = missing.Union (GameCompatibility.PatchBreakages).OrderBy (x => x, StringComparer.Ordinal).ToList ();
+            showCompatibilityWarning = (mismatch || breakages.Count > 0) && config.IgnoredGameVersion != running.ToString ();
         }
 
         // In a method of its own, so that a popup broken by the running game fails only here
@@ -284,6 +290,52 @@ namespace KRPC.KSA
             harmony.UnpatchAll (harmony.Id);
             if (core != null)
                 core.StopAll ();
+        }
+
+        /// <summary>
+        /// The game runs a tank transfer only while the part window is open, and resets the
+        /// transfer mode otherwise. We patch its window checks so that the modes clients set
+        /// pass them. On a game the patch does not fit, the transfer mode is reported broken.
+        /// </summary>
+        // In a method of its own, so that game members missing from the running game fail only here
+        [MethodImpl (MethodImplOptions.NoInlining)]
+        void PatchTankTransfers ()
+        {
+            const string patch = "the tank transfer window checks";
+            try {
+                var transpiler = new HarmonyMethod (
+                    typeof (Addon).GetMethod (nameof (TankWindowCheckTranspiler), BindingFlags.NonPublic | BindingFlags.Static));
+                foreach (var name in new [] { "UpdateTransfers", "IsTransferBlockedOnPower", "IsTransferBlockedOnDisabledDonor" }) {
+                    var method = AccessTools.Method (typeof (global::KSA.Tank), name)
+                        ?? throw new MissingMethodException ("KSA.Tank", name);
+                    windowChecksReplaced = 0;
+                    harmony.Patch (method, transpiler: transpiler);
+                    if (windowChecksReplaced == 0)
+                        throw new InvalidOperationException ("Tank." + name + " has no part window check");
+                }
+                Utils.TankTransfers.Patched = true;
+            } catch (Exception e) {
+                // A method patched before the failure keeps its patch, which only widens a
+                // check for tanks whose mode a client set
+                GameCompatibility.PatchFailed (patch, e.Message, "KSA.Tank.TransferMode");
+            }
+        }
+
+        static int windowChecksReplaced;
+
+        static IEnumerable<CodeInstruction> TankWindowCheckTranspiler (IEnumerable<CodeInstruction> instructions)
+        {
+            var windowOpen = AccessTools.PropertyGetter (typeof (global::KSA.Part), nameof (global::KSA.Part.IsPartWindowOpen));
+            var check = typeof (Utils.TankTransfers).GetMethod (nameof (Utils.TankTransfers.IsPartWindowOpen));
+            var result = new List<CodeInstruction> (instructions);
+            foreach (var instruction in result) {
+                if (instruction.Calls (windowOpen)) {
+                    instruction.opcode = OpCodes.Call;
+                    instruction.operand = check;
+                    windowChecksReplaced++;
+                }
+            }
+            return result;
         }
 
         static Exception TCPClientConnectedFinalizer (Exception __exception, ref bool __result)

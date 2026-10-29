@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using HarmonyLib;
 using KRPC.Service;
@@ -72,11 +73,11 @@ namespace KRPC.KSA.Testing
 
         /// <summary>
         /// The RPCs that use game members missing from the running game, found whatever the
-        /// game version.
+        /// game version, and the RPCs that need a game patch that failed to apply.
         /// </summary>
         [KRPCProperty]
         public static IList<string> CompatibilityBreakages {
-            get { return GameCompatibility.FindBreakages (); }
+            get { return GameCompatibility.FindBreakages ().Union (GameCompatibility.PatchBreakages).ToList (); }
         }
 
         /// <summary>

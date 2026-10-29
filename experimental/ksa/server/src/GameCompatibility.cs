@@ -63,6 +63,26 @@ namespace KRPC.KSA
             return breakages.ToList ();
         }
 
+        static readonly SortedSet<string> patchBreakages = new SortedSet<string> (StringComparer.Ordinal);
+
+        /// <summary>
+        /// The RPCs that need a game patch that failed to apply, as service, class and member
+        /// names.
+        /// </summary>
+        public static IList<string> PatchBreakages {
+            get { return patchBreakages.ToList (); }
+        }
+
+        /// <summary>
+        /// Record a game patch that failed to apply, and log the RPCs that need it.
+        /// </summary>
+        public static void PatchFailed (string patch, string error, params string [] rpcs)
+        {
+            Logger.WriteLine ("Failed to patch " + patch + ", needed by " + string.Join (", ", rpcs) + ": " + error, Logger.Severity.Error);
+            foreach (var rpc in rpcs)
+                patchBreakages.Add (rpc);
+        }
+
         // A procedure name without its get_, set_ and static_ parts, e.g. Part_get_Mass is Part.Mass
         static string DisplayName (string service, string procedure)
         {

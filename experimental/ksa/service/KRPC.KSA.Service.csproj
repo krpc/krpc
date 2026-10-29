@@ -25,11 +25,14 @@
     <Compile Include="src/Services/Resource.cs" />
     <Compile Include="src/Services/Sequence.cs" />
     <Compile Include="src/Services/Situation.cs" />
+    <Compile Include="src/Services/Tank.cs" />
+    <Compile Include="src/Services/TankTransferMode.cs" />
     <Compile Include="src/Services/Vehicle.cs" />
     <Compile Include="src/Utils/AfterFrame.cs" />
     <Compile Include="src/Utils/Engines.cs" />
     <Compile Include="src/Utils/ObjectSweep.cs" />
     <Compile Include="src/Utils/Sequences.cs" />
+    <Compile Include="src/Utils/TankTransfers.cs" />
     <Compile Include="src/Utils/Vectors.cs" />
     <Compile Include="src/Utils/Vehicles.cs" />
     <Compile Include="src/Utils/Waits.cs" />

@@ -218,6 +218,14 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The part's propellant tanks. Empty if it has none.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Tank> Tanks {
+            get { return InternalPart.SubtreeModules.Get<global::KSA.Tank> ().ToArray ().Select (tank => new Tank (this, tank)).ToList (); }
+        }
+
+        /// <summary>
         /// The part's RCS thrusters, or <c>null</c> if it has none.
         /// </summary>
         [KRPCProperty (Nullable = true)]
