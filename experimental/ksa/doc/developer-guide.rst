@@ -5,7 +5,7 @@ kRPC for KSA lives in the ``experimental/ksa`` folder of the `kRPC repository
 <https://github.com/krpc/krpc/tree/main/experimental/ksa>`_. Its scripts build the mod, the
 client stubs and this documentation, and run the tests in the game. They need Python 3, the
 .NET 10 SDK, ``zip``, and KSA installed in ``KSA_DIR``, which defaults to ``../KSA`` beside the
-repository.
+repository. Set ``KSA_DIR`` to build and test against another install.
 
 Building
 --------
@@ -14,7 +14,7 @@ Build the mod and the client stubs:
 
 .. code-block:: bash
 
-   experimental/ksa/build.sh            # build into bin/kRPC.KSA
+   experimental/ksa/build.sh            # build into bin/kRPC
    experimental/ksa/build.sh --install  # also install it into the KSA mods folder
 
 The build uses the kRPC @KRPC_VERSION@ release from PyPI. Its ``krpctools`` package provides
@@ -54,5 +54,6 @@ Releasing
 ---------
 
 ``release.sh`` builds the release archive into ``bin/release``, with its checksum. The archive
-holds one folder, with a readme and the licenses, the ``kRPC.KSA`` mod folder, the client stubs
-and the example scripts.
+holds the ``kRPC`` mod folder, the client stubs, the example scripts, a readme and the
+licenses. The mod folder sits at the top, with its own copy of the licenses, so that the Borea
+mod manager installs it.

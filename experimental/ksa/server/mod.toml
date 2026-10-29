@@ -1,4 +1,4 @@
-name = "kRPC.KSA"
+name = "kRPC"
 
 [StarMap]
 EntryAssembly = "KRPC.KSA"

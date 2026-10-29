@@ -1,9 +1,9 @@
 This license (LGPL v3) applies to all parts of kRPC for KSA except for the following:
 
-  - kRPC.KSA/Google.Protobuf.dll is a binary from Google's protobuf project.
+  - kRPC/Google.Protobuf.dll is a binary from Google's protobuf project.
     See LICENSE.Google.Protobuf
 
-  - kRPC.KSA/System.IO.Ports.dll and kRPC.KSA/runtimes/ are binaries from the .NET
+  - kRPC/System.IO.Ports.dll and kRPC/runtimes/ are binaries from the .NET
     project. See LICENSE.System.IO.Ports
 
 Copyright 2015-2026 kRPC Org

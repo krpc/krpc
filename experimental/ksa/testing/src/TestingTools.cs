@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using HarmonyLib;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KSA;
@@ -90,6 +92,34 @@ namespace KRPC.KSA.Testing
                 throw new YieldException<Action> (() => WaitForLoad (loaded, error));
             if (error () != null)
                 throw new InvalidOperationException ("Failed to load save: " + error ().Message);
+        }
+
+        /// <summary>
+        /// Close the game's update available pop-up, and any shown later.
+        /// </summary>
+        /// <remarks>
+        /// The pop-up holds the keyboard, and the game clears the control inputs of the
+        /// controlled vehicle each frame while the keyboard is held.
+        /// </remarks>
+        [KRPCProcedure]
+        public static void SuppressUpdatePopup ()
+        {
+            if (harmony == null) {
+                harmony = new Harmony ("kRPC.TestingTools");
+                harmony.Patch (AccessTools.Method (typeof (Popup), nameof (Popup.DrawAll)),
+                    prefix: new HarmonyMethod (typeof (TestingTools), nameof (CloseUpdatePopups)));
+            }
+            CloseUpdatePopups ();
+        }
+
+        static Harmony harmony;
+
+        // The open pop-ups, which the game does not expose
+        static readonly FieldInfo popups = AccessTools.Field (typeof (Popup), "Popups");
+
+        static void CloseUpdatePopups ()
+        {
+            ((List<Popup>)popups.GetValue (null)).RemoveAll (popup => popup is UpdateAvailablePopup);
         }
 
         /// <summary>

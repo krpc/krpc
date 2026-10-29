@@ -14,17 +14,25 @@ The server is a code mod, which runs in the game through StarMap, the KSA code m
 
 1. Install `StarMap <https://github.com/StarMapLoader/StarMap/releases>`_
    @STARMAP_VERSION@.
-2. Copy the ``kRPC.KSA`` folder from the release archive into the KSA mods folder,
+2. Copy the ``kRPC`` folder from the release archive into the KSA mods folder,
    ``<Documents>/My Games/Kitten Space Agency/mods``.
 3. Enable the mod in ``<Documents>/My Games/Kitten Space Agency/manifest.toml``:
 
    .. code-block:: toml
 
       [[mods]]
-      id = "kRPC.KSA"
+      id = "kRPC"
       enabled = true
 
 4. Launch the game through StarMap.
+
+The `Borea <https://github.com/KSAModding/Borea>`_ mod manager can do all four steps: it
+installs StarMap and the mod, and launches the game through StarMap.
+
+.. note::
+
+   Version 0.1.0 named the mod ``kRPC.KSA``. To upgrade from it, delete the ``mods/kRPC.KSA``
+   folder, and change its ``manifest.toml`` entry to ``id = "kRPC"``.
 
 The server starts once the game has loaded its mods. It listens on ``127.0.0.1``, with RPC
 port 50000 and stream port 50001, and accepts every connection.
@@ -32,7 +40,7 @@ port 50000 and stream port 50001, and accepts every connection.
 Configuration
 ^^^^^^^^^^^^^
 
-The settings are in ``kRPC.KSA/settings.toml``:
+The settings are in ``kRPC/settings.toml``:
 
 .. code-block:: toml
 

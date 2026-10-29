@@ -10,6 +10,6 @@ set "starmap_version=0.4.8"
 set "starmap_sha256=5324240f15d6841835158940057359ef011149bbc30b4d50f7b27480df7b2d5c"
 
 @rem The KSA build the mod is compiled and tested against
-set "ksa_version=2026.10.19.5638"
+set "ksa_version=2026.10.25.5707"
 
 for /f "tokens=3 delims=<>" %%v in ('findstr /c:"<Version>" "%~dp0Directory.Build.props"') do set "mod_version=%%v"

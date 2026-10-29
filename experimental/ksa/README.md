@@ -4,7 +4,7 @@ A kRPC server for Kitten Space Agency (KSA). It is a [StarMap](https://github.co
 code mod that serves the `KRPC` service and a `KSA` service written for KSA's own model. The tests
 run in game on Linux and Windows.
 
-Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `versions.sh`.
+Built against kRPC 0.7.0, KSA 2026.10.25.5707 and StarMap 0.4.8, set in `versions.sh`.
 
 ## Layout
 
@@ -28,7 +28,7 @@ Built against kRPC 0.7.0, KSA 2026.10.19.5638 and StarMap 0.4.8, set in `version
 
 ## Build
 
-Build the mod into `bin/kRPC.KSA`:
+Build the mod into `bin/kRPC`:
 
 ```bash
 experimental/ksa/build.sh
@@ -40,7 +40,7 @@ The build uses a kRPC release, set by `krpc_version` in `versions.sh`, and needs
  * `krpctools` from PyPI, installed into `bin/venv`, provides the .NET `KRPC.Core.dll`, the
    `ServiceDefinitions` tool and `krpc-clientgen`.
  * Both projects compile against that `KRPC.Core.dll` and the KSA assemblies in `KSA_DIR`, which
-   defaults to `../KSA` beside the repo.
+   defaults to `../KSA` beside the repo. Set `KSA_DIR` to build and test against another install.
  * `ServiceDefinitions` writes `bin/KRPC.KSA.json`, which runs the server's service scan and
    checks the documentation.
  * `krpc-clientgen` builds client stubs from the definitions into `bin/stubs`, which also holds
@@ -83,10 +83,11 @@ Build the release archive, `bin/release/kRPC-KSA-0.1.0.zip`, and its `SHA256SUMS
 experimental/ksa/release.sh
 ```
 
-The archive holds one folder, `kRPC-KSA-0.1.0`, with the readme and licenses at the top, as the
-featured mods on SpaceDock lay out theirs:
+The archive holds the readme and licenses, and three folders:
 
- * `kRPC.KSA/` - the mod folder, without `TestingTools`, which players copy into the KSA mods folder.
+ * `kRPC/` - the mod folder, without `TestingTools`, which players copy into the KSA mods folder.
+   It sits at the top of the archive, with its own copy of the licenses, as the Borea mod manager
+   installs only the folder holding `mod.toml`.
  * `stubs/` - the client stubs and service definitions.
  * `examples/` - the example scripts.
 
@@ -123,7 +124,7 @@ The game opens a configuration window before loading. Untick "Always Show" in it
 to run unattended.
 
 The server starts when the game has loaded its mods. Server settings are in
-`kRPC.KSA/settings.toml`. By default it listens on `127.0.0.1`, ports 50000 and 50001, and
+`kRPC/settings.toml`. By default it listens on `127.0.0.1`, ports 50000 and 50001, and
 accepts every connection.
 
 ## Clients
@@ -252,8 +253,8 @@ experimental/ksa/test.sh --no-launch            # against a game started with ru
  * `test_examples.py` flies `examples/launch_into_orbit.py` to orbit, which takes about eight
    minutes. It is marked `slow`, so `-m "not slow"` skips it.
 
-All the tests pass on Linux and Windows, with KSA 2026.10.19.5638, and the release archive built
-on Linux installs and runs on Windows.
+All the tests pass on Linux with KSA 2026.10.25.5707. With KSA 2026.10.19.5638 they also passed
+on Windows, and the release archive built on Linux installed and ran there.
 
 ## Open Questions
 

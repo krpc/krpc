@@ -1,5 +1,5 @@
 @echo off
-rem Build the kRPC for KSA mod into experimental\ksa\bin\kRPC.KSA, on Windows.
+rem Build the kRPC for KSA mod into experimental\ksa\bin\kRPC, on Windows.
 rem
 rem   build.bat            build the mod folder
 rem   build.bat --install  also copy it into the KSA mods folder and enable it
@@ -16,7 +16,7 @@ setlocal enableextensions
 set "here=%~dp0"
 set "here=%here:~0,-1%"
 call "%here%\versions.bat"
-set "out=%here%\bin\kRPC.KSA"
+set "out=%here%\bin\kRPC"
 if not defined KSA_DIR set "KSA_DIR=%here%\..\..\..\KSA"
 for %%d in ("%KSA_DIR%") do set "ksa_dir=%%~fd"
 
@@ -87,15 +87,15 @@ if not defined KSA_MODS_DIR (
   for /f "delims=" %%d in ('powershell -NoProfile -Command "[Environment]::GetFolderPath('MyDocuments')"') do set "KSA_MODS_DIR=%%d\My Games\Kitten Space Agency\mods"
 )
 for %%d in ("%KSA_MODS_DIR%\..") do set "manifest=%%~fd\manifest.toml"
-if exist "%KSA_MODS_DIR%\kRPC.KSA" rmdir /s /q "%KSA_MODS_DIR%\kRPC.KSA"
+if exist "%KSA_MODS_DIR%\kRPC" rmdir /s /q "%KSA_MODS_DIR%\kRPC"
 if not exist "%KSA_MODS_DIR%" mkdir "%KSA_MODS_DIR%"
-xcopy /e /i /q /y "%out%" "%KSA_MODS_DIR%\kRPC.KSA" >nul || exit /b 1
-findstr /c:"id = \"kRPC.KSA\"" "%manifest%" >nul 2>&1
+xcopy /e /i /q /y "%out%" "%KSA_MODS_DIR%\kRPC" >nul || exit /b 1
+findstr /c:"id = \"kRPC\"" "%manifest%" >nul 2>&1
 if errorlevel 1 (
   >>"%manifest%" echo.
   >>"%manifest%" echo [[mods]]
-  >>"%manifest%" echo id = "kRPC.KSA"
+  >>"%manifest%" echo id = "kRPC"
   >>"%manifest%" echo enabled = true
 )
-echo Installed into %KSA_MODS_DIR%\kRPC.KSA
+echo Installed into %KSA_MODS_DIR%\kRPC
 exit /b 0

@@ -10,6 +10,6 @@ starmap_version=0.4.8
 starmap_sha256=5324240f15d6841835158940057359ef011149bbc30b4d50f7b27480df7b2d5c
 
 # The KSA build the mod is compiled and tested against
-ksa_version=2026.10.19.5638
+ksa_version=2026.10.25.5707
 
 mod_version="$(sed -n 's|.*<Version>\(.*\)</Version>.*|\1|p' "$(dirname "${BASH_SOURCE[0]}")/Directory.Build.props")"

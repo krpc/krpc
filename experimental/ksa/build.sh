@@ -1,5 +1,5 @@
 #!/bin/bash
-# Build the kRPC for KSA mod into experimental/ksa/bin/kRPC.KSA.
+# Build the kRPC for KSA mod into experimental/ksa/bin/kRPC.
 #
 #   build.sh            build the mod folder
 #   build.sh --install  also copy it into the KSA mods folder and enable it
@@ -16,7 +16,7 @@ set -euo pipefail
 
 here="$(dirname "$(readlink -f "$0")")"
 source "$here/versions.sh"
-out="$here/bin/kRPC.KSA"
+out="$here/bin/kRPC"
 ksa_dir="$(readlink -f "${KSA_DIR:-$(dirname "$(dirname "$(dirname "$here")")")/KSA}")"
 
 install=0
@@ -78,11 +78,11 @@ if [ "$install" = 1 ]; then
     KSA_MODS_DIR="$documents/My Games/Kitten Space Agency/mods"
   fi
   manifest="$(dirname "$KSA_MODS_DIR")/manifest.toml"
-  rm -rf "$KSA_MODS_DIR/kRPC.KSA"
+  rm -rf "$KSA_MODS_DIR/kRPC"
   mkdir -p "$KSA_MODS_DIR"
   cp -r "$out" "$KSA_MODS_DIR/"
-  if ! grep -q 'id = "kRPC.KSA"' "$manifest" 2>/dev/null; then
-    printf '\n[[mods]]\nid = "kRPC.KSA"\nenabled = true\n' >> "$manifest"
+  if ! grep -q 'id = "kRPC"' "$manifest" 2>/dev/null; then
+    printf '\n[[mods]]\nid = "kRPC"\nenabled = true\n' >> "$manifest"
   fi
-  echo "Installed into $KSA_MODS_DIR/kRPC.KSA"
+  echo "Installed into $KSA_MODS_DIR/kRPC"
 fi

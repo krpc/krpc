@@ -91,6 +91,7 @@ def _launch() -> None:
             stop_game()
             raise RuntimeError("KSA did not load a system with a controlled vehicle")
         time.sleep(1)
+    conn.testing_tools.suppress_update_popup()
     conn.testing_tools.save_game(SAVE)
 
 
