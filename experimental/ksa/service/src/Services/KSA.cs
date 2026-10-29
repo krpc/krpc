@@ -36,6 +36,24 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The kittens in the agency's roster, including those killed in action, keyed by name.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="Kitten.RosterIndex"/> gives their order in the roster.
+        /// </remarks>
+        [KRPCProperty]
+        public static IDictionary<string, Kitten> Kittens {
+            get {
+                if (Universe.CurrentSystem == null)
+                    throw new InvalidOperationException ("No game is loaded");
+                var kittens = new Dictionary<string, Kitten> ();
+                foreach (var kitten in Universe.KittenRoster.Kittens)
+                    kittens [kitten.Name] = new Kitten (kitten.Name);
+                return kittens;
+            }
+        }
+
+        /// <summary>
         /// The vehicles in the current system, excluding kittens on EVA.
         /// </summary>
         [KRPCProperty]

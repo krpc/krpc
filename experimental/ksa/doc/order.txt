@@ -1,5 +1,6 @@
 KSA.ActiveVehicle
 KSA.Vehicles
+KSA.Kittens
 KSA.Bodies
 KSA.UT
 KSA.SimulationSpeed
@@ -32,6 +33,9 @@ KSA.Vehicle.MaxDynamicPressure
 KSA.Vehicle.Parts
 KSA.Vehicle.RootPart
 KSA.Vehicle.PartsWithName
+KSA.Vehicle.Seats
+KSA.Vehicle.Crew
+KSA.Vehicle.CrewCapacity
 KSA.Vehicle.Engines
 KSA.Vehicle.RCS
 KSA.Vehicle.Decouplers
@@ -267,6 +271,8 @@ KSA.Part.RCS
 KSA.Part.Decoupler
 KSA.Part.Parachute
 KSA.Part.DockingPort
+KSA.Part.Seats
+KSA.Part.Crew
 KSA.Resource.Name
 KSA.Resource.Amount
 KSA.Resource.Max
@@ -359,3 +365,15 @@ KSA.MagneticScoop.Part
 KSA.MagneticScoop.Active
 KSA.MagneticScoop.Substance
 KSA.MagneticScoop.CollectionRate
+KSA.Seat.Part
+KSA.Seat.Kitten
+KSA.Kitten.Name
+KSA.Kitten.RosterIndex
+KSA.Kitten.Vehicle
+KSA.Kitten.Seat
+KSA.Kitten.KilledInAction
+KSA.Kitten.MissionCount
+KSA.Kitten.MissionTime
+KSA.Kitten.DistanceTraveled
+KSA.Kitten.FastestSpeed
+KSA.Kitten.OnEva

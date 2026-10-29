@@ -178,6 +178,30 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The vehicle's crew seats.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Seat> Seats {
+            get { return Parts.SelectMany (part => part.Seats).ToList (); }
+        }
+
+        /// <summary>
+        /// The kittens in the vehicle's seats.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Kitten> Crew {
+            get { return Seats.Select (seat => seat.Kitten).Where (kitten => kitten != null).ToList (); }
+        }
+
+        /// <summary>
+        /// The number of crew seats in the vehicle.
+        /// </summary>
+        [KRPCProperty]
+        public int CrewCapacity {
+            get { return InternalVehicle.Crew.Length; }
+        }
+
+        /// <summary>
         /// The vehicle's engines.
         /// </summary>
         [KRPCProperty]

@@ -20,6 +20,7 @@
     <Compile Include="src/Services/FuelLinkFlow.cs" />
     <Compile Include="src/Services/Generator.cs" />
     <Compile Include="src/Services/Gimbal.cs" />
+    <Compile Include="src/Services/Kitten.cs" />
     <Compile Include="src/Services/KSA.cs" />
     <Compile Include="src/Services/Light.cs" />
     <Compile Include="src/Services/MagneticScoop.cs" />
@@ -31,6 +32,7 @@
     <Compile Include="src/Services/PowerConsumer.cs" />
     <Compile Include="src/Services/RCS.cs" />
     <Compile Include="src/Services/ReferenceFrame.cs" />
+    <Compile Include="src/Services/Seat.cs" />
     <Compile Include="src/Services/Resource.cs" />
     <Compile Include="src/Services/Sequence.cs" />
     <Compile Include="src/Services/Situation.cs" />
@@ -54,6 +56,10 @@
     </Reference>
     <Reference Include="Planet.Core">
       <HintPath>$(KSADir)Planet.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Planet.Render.Core">
+      <HintPath>$(KSADir)Planet.Render.Core.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

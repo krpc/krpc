@@ -1,0 +1,173 @@
+using System;
+using KRPC.KSA.Utils;
+using KRPC.Service.Attributes;
+using KRPC.Utils;
+using KSA;
+
+namespace KRPC.KSA.Services
+{
+    /// <summary>
+    /// A kitten in the agency's roster. Obtained from <see cref="KSA.Kittens"/>,
+    /// <see cref="Vehicle.Crew"/> or <see cref="Seat.Kitten"/>.
+    /// </summary>
+    [KRPCClass (Service = "KSA")]
+    public class Kitten : Equatable<Kitten>, IGameObjectState
+    {
+        // The roster identifies kittens by name, and a save load replaces the roster entries
+        readonly string name;
+
+        internal Kitten (string name)
+        {
+            this.name = name ?? throw new ArgumentNullException (nameof (name));
+        }
+
+        /// <summary>
+        /// Returns true if the objects are equal.
+        /// </summary>
+        public override bool Equals (Kitten other)
+        {
+            return !ReferenceEquals (other, null) && name == other.name;
+        }
+
+        /// <summary>
+        /// The state of the game object.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Find (name) != null ? GameObjectState.Live : GameObjectState.Destroyed; }
+        }
+
+        /// <summary>
+        /// Hash code for the object.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            return name.GetHashCode (StringComparison.Ordinal);
+        }
+
+        internal static KittenRosterEntryData Find (string name)
+        {
+            return Universe.CurrentSystem == null ? null : Universe.KittenRoster?.Find (name);
+        }
+
+        /// <summary>
+        /// The kitten's roster entry. Throws an exception if the roster has no kitten with
+        /// this name.
+        /// </summary>
+        internal KittenRosterEntryData Entry {
+            get { return Find (name) ?? throw new Service.KRPC.ObjectDestroyedException ("The kitten no longer exists"); }
+        }
+
+        /// <summary>
+        /// The kitten's name, which is unique in the roster.
+        /// </summary>
+        [KRPCProperty]
+        public string Name {
+            get {
+                _ = Entry;
+                return name;
+            }
+        }
+
+        /// <summary>
+        /// The kitten's position in the agency's roster, from 0. See <see cref="KSA.Kittens"/>.
+        /// </summary>
+        [KRPCProperty]
+        public int RosterIndex {
+            get { return Universe.KittenRoster.Kittens.IndexOf (Entry); }
+        }
+
+        /// <summary>
+        /// The seat the kitten is in, or <c>null</c> if it is not in a seat.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Seat Seat {
+            get {
+                var hash = Entry.NameHash;
+                foreach (var vehicle in Vehicles.All) {
+                    foreach (var seat in vehicle.Crew) {
+                        if (seat.AssignedKittenHash == hash)
+                            return new Seat (new Part (seat.Parent.FullPart), seat);
+                    }
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// The vehicle the kitten is in, or <c>null</c> if it is not in a seat.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Vehicle Vehicle {
+            get { return Seat?.Part.Vehicle; }
+        }
+
+        /// <summary>
+        /// Whether the kitten has been killed in action.
+        /// </summary>
+        [KRPCProperty]
+        public bool KilledInAction {
+            get { return Entry.Kia; }
+        }
+
+        /// <summary>
+        /// The number of missions the kitten has flown, including the current one.
+        /// </summary>
+        [KRPCProperty]
+        public int MissionCount {
+            get { return Entry.MissionCount; }
+        }
+
+        /// <summary>
+        /// The time the kitten has spent on missions, including the current one, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public double MissionTime {
+            get {
+                var entry = Entry;
+                var total = ((UniverseTime)entry.TotalMissionTime).Seconds ();
+                // The start time is set once the kitten's vehicle launches
+                if (entry.AssignedToVehicle && entry.CurrentMissionStartTime.IsValid ())
+                    total += (Universe.GetElapsedTime () - entry.CurrentMissionStartTime).Seconds ();
+                return total;
+            }
+        }
+
+        /// <summary>
+        /// The distance the kitten has traveled on missions, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public double DistanceTraveled {
+            get { return Entry.TravelledMeters.InMeters (); }
+        }
+
+        /// <summary>
+        /// The kitten's highest speed on a mission, in meters per second.
+        /// </summary>
+        [KRPCProperty]
+        public double FastestSpeed {
+            // The game stores the speed in a distance field
+            get { return Entry.FastestSpeed.InMeters (); }
+        }
+
+        /// <summary>
+        /// The kitten on EVA, or <c>null</c> if the kitten is not on EVA.
+        /// </summary>
+        internal KittenEva Eva {
+            get {
+                var system = Universe.CurrentSystem;
+                return system != null && system.All.TryGet (name, out Astronomical eva) ? eva as KittenEva : null;
+            }
+        }
+
+        /// <summary>
+        /// Whether the kitten is on EVA.
+        /// </summary>
+        [KRPCProperty]
+        public bool OnEva {
+            get {
+                _ = Entry;
+                return Eva != null;
+            }
+        }
+    }
+}
