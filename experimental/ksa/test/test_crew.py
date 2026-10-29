@@ -70,11 +70,25 @@ class TestCrew(CrewCase):
         self.assertGreaterEqual(self.kitten.distance_traveled, 0)
         self.assertGreaterEqual(self.kitten.fastest_speed, 0)
 
+    def test_radiation(self):
+        flight = self.vehicle.flight
+        # The game credits the crew's dose in its solver step
+        ksatest.wait_until(lambda: self.kitten.dose_rate > 0)
+        # The capsule shields its crew
+        self.assertLess(self.kitten.dose_rate, flight.dose_rate)
+        self.assertGreater(self.kitten.acute_dose, 0)
+        self.assertGreaterEqual(self.kitten.lifetime_dose, self.kitten.acute_dose)
+        self.assertGreaterEqual(self.kitten.recovery_time, 0)
+        self.assertFalse(self.kitten.radiation_sickness)
+        self.assertEqual(0, self.kitten.time_until_fit_to_fly)
+        self.assertFalse(self.kitten.retired)
+
     def test_free_kitten(self):
         kitten = self.free_kitten()
         self.assertIsNone(kitten.vehicle)
         self.assertIsNone(kitten.seat)
         self.assertEqual(0, kitten.mission_time)
+        self.assertEqual(0, kitten.dose_rate)
 
     def test_launch_kitten(self):
         with self.assertRaises(ValueError):

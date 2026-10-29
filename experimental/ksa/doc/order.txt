@@ -377,6 +377,13 @@ KSA.Kitten.MissionCount
 KSA.Kitten.MissionTime
 KSA.Kitten.DistanceTraveled
 KSA.Kitten.FastestSpeed
+KSA.Kitten.AcuteDose
+KSA.Kitten.LifetimeDose
+KSA.Kitten.DoseRate
+KSA.Kitten.RadiationSickness
+KSA.Kitten.TimeUntilFitToFly
+KSA.Kitten.RecoveryTime
+KSA.Kitten.Retired
 KSA.Kitten.OnEva
 KSA.Kitten.GoOnEva
 KSA.Kitten.Board

@@ -151,6 +151,68 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The kitten's acute radiation dose, in sieverts. It heals over time, and causes
+        /// radiation sickness from 1 sievert and death from 4 sieverts.
+        /// </summary>
+        [KRPCProperty]
+        public double AcuteDose {
+            get { return Entry.GetAcuteDose (Universe.GetElapsedTime ()).Value (); }
+        }
+
+        /// <summary>
+        /// The kitten's lifetime radiation dose, in sieverts. The kitten retires after a
+        /// mission that takes it past 0.6 sieverts.
+        /// </summary>
+        [KRPCProperty]
+        public double LifetimeDose {
+            get { return Entry.LifetimeDose.Value (); }
+        }
+
+        /// <summary>
+        /// The radiation dose rate the kitten receives, in sieverts per second. The vehicle's
+        /// shielding reduces it in a seat, and on EVA the kitten is unshielded. Zero when the
+        /// kitten is not on a mission.
+        /// </summary>
+        [KRPCProperty]
+        public double DoseRate {
+            get { return Entry.DoseRate.Value (); }
+        }
+
+        /// <summary>
+        /// Whether the kitten has radiation sickness, which keeps it from flying.
+        /// </summary>
+        [KRPCProperty]
+        public bool RadiationSickness {
+            get { return Entry.HasRadiationSickness (Universe.GetElapsedTime ()); }
+        }
+
+        /// <summary>
+        /// The time until the kitten has recovered from radiation sickness and can fly, resting
+        /// at home, in seconds. Zero if the kitten does not have radiation sickness.
+        /// </summary>
+        [KRPCProperty]
+        public double TimeUntilFitToFly {
+            get { return Entry.GetTimeUntilFitToFly (Universe.GetElapsedTime ()); }
+        }
+
+        /// <summary>
+        /// The time until the kitten's acute radiation dose has healed below 1 millisievert,
+        /// resting at home, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public double RecoveryTime {
+            get { return Entry.GetRecoveryTime (Universe.GetElapsedTime ()); }
+        }
+
+        /// <summary>
+        /// Whether the kitten has retired, having reached its lifetime radiation dose limit.
+        /// </summary>
+        [KRPCProperty]
+        public bool Retired {
+            get { return Entry.Retired; }
+        }
+
+        /// <summary>
         /// The kitten on EVA, or <c>null</c> if the kitten is not on EVA.
         /// </summary>
         internal KittenEva Eva {
