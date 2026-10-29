@@ -5,7 +5,7 @@ kRPC for KSA lives in the ``experimental/ksa`` folder of the `kRPC repository
 <https://github.com/krpc/krpc/tree/main/experimental/ksa>`_. Its scripts build the mod, the
 client stubs and this documentation, and run the tests in the game. They need Python 3, the
 .NET 10 SDK, ``zip``, and KSA installed in ``KSA_DIR``, which defaults to ``../KSA`` beside the
-repository.
+repository. Set ``KSA_DIR`` to build and test against another install.
 
 Building
 --------

@@ -40,7 +40,7 @@ The build uses a kRPC release, set by `krpc_version` in `versions.sh`, and needs
  * `krpctools` from PyPI, installed into `bin/venv`, provides the .NET `KRPC.Core.dll`, the
    `ServiceDefinitions` tool and `krpc-clientgen`.
  * Both projects compile against that `KRPC.Core.dll` and the KSA assemblies in `KSA_DIR`, which
-   defaults to `../KSA` beside the repo.
+   defaults to `../KSA` beside the repo. Set `KSA_DIR` to build and test against another install.
  * `ServiceDefinitions` writes `bin/KRPC.KSA.json`, which runs the server's service scan and
    checks the documentation.
  * `krpc-clientgen` builds client stubs from the definitions into `bin/stubs`, which also holds
