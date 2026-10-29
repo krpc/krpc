@@ -1,3 +1,5 @@
+import math
+
 import ksatest
 
 
@@ -128,6 +130,41 @@ class TestPart(ksatest.TestCase):
                 self.assertTrue(engine.active)
                 self.assertTrue(engine.has_propellant)
                 self.assertGreater(engine.specific_impulse, 0)
+
+    def test_gimbals(self):
+        gimbals = [gimbal for part in self.engine_parts() for gimbal in part.gimbals]
+        self.assertTrue(gimbals)
+        for gimbal in gimbals:
+            self.assertIn(gimbal.part, self.parts)
+            self.assertGreaterEqual(gimbal.max_angle_y, 0)
+            self.assertGreaterEqual(gimbal.max_angle_z, 0)
+            self.assertLessEqual(gimbal.max_angle_y, 90)
+            self.assertLessEqual(gimbal.max_angle_z, 90)
+            self.assertGreater(gimbal.max_angle_y + gimbal.max_angle_z, 0)
+            self.assertLessEqual(abs(gimbal.angle_y), gimbal.max_angle_y + 1e-6)
+            self.assertLessEqual(abs(gimbal.angle_z), gimbal.max_angle_z + 1e-6)
+        # The LR91 Sea's main nozzle turns 5 degrees about both axes, in the game's data
+        sea = [gimbal for gimbal in gimbals if gimbal.part.title == "LR91 Sea"]
+        self.assertIn(5, [round(gimbal.max_angle_y, 3) for gimbal in sea])
+        self.assertTrue(all(gimbal.active for gimbal in sea))
+
+    def test_engine_gimbals(self):
+        steered = []
+        for part in self.engine_parts():
+            gimbals = part.engine.gimbals
+            for gimbal in gimbals:
+                self.assertIn(gimbal, part.gimbals)
+            steered.extend(gimbals)
+        self.assertTrue(steered)
+
+    def test_gimbal_rotation(self):
+        frame = self.vehicle.reference_frame
+        for part in self.engine_parts():
+            for gimbal in part.gimbals:
+                rotation = gimbal.rotation(frame)
+                self.assertAlmostEqual(
+                    1, math.sqrt(sum(x * x for x in rotation)), places=6
+                )
 
     def test_engine_active(self):
         engine = next(

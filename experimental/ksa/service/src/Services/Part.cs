@@ -210,6 +210,14 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The part's gimbals. An engine part can have several, each steering one nozzle.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Gimbal> Gimbals {
+            get { return InternalPart.SubtreeModules.Get<global::KSA.Gimbal> ().ToArray ().Select (gimbal => new Gimbal (this, gimbal)).ToList (); }
+        }
+
+        /// <summary>
         /// The part's RCS thrusters, or <c>null</c> if it has none.
         /// </summary>
         [KRPCProperty (Nullable = true)]

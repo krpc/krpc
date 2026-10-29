@@ -54,6 +54,17 @@ namespace KRPC.KSA.Services
         public Part Part { get; }
 
         /// <summary>
+        /// The gimbals that steer the engine's nozzles. Empty if the engine has none.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Gimbal> Gimbals {
+            get {
+                _ = Part.InternalPart;
+                return Part.Gimbals.Where (gimbal => gimbal.Steers (engine)).ToList ();
+            }
+        }
+
+        /// <summary>
         /// Whether the engine is active, as when its sequence is activated. Setting it returns
         /// once the change has applied.
         /// </summary>

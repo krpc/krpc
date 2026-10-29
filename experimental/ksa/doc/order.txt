@@ -238,6 +238,7 @@ KSA.Part.Position
 KSA.Part.Velocity
 KSA.Part.Rotation
 KSA.Part.Engine
+KSA.Part.Gimbals
 KSA.Part.RCS
 KSA.Part.Decoupler
 KSA.Part.Parachute
@@ -246,11 +247,19 @@ KSA.Resource.Name
 KSA.Resource.Amount
 KSA.Resource.Max
 KSA.Engine.Part
+KSA.Engine.Gimbals
 KSA.Engine.Active
 KSA.Engine.HasPropellant
 KSA.Engine.Thrust
 KSA.Engine.AvailableThrust
 KSA.Engine.SpecificImpulse
+KSA.Gimbal.Part
+KSA.Gimbal.AngleY
+KSA.Gimbal.AngleZ
+KSA.Gimbal.MaxAngleY
+KSA.Gimbal.MaxAngleZ
+KSA.Gimbal.Active
+KSA.Gimbal.Rotation
 KSA.RCS.Part
 KSA.RCS.Active
 KSA.Decoupler.Part
