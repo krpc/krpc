@@ -96,10 +96,11 @@ class TestReferenceFrame(ksatest.TestCase):
         for frame in (self.inertial, self.rotating):
             self.assertVectorAlmostEqual((0, 0, 0), self.earth.position(frame), 1e-6)
             self.assertVectorAlmostEqual((0, 0, 0), self.earth.velocity(frame), 1e-6)
+        # The rotational speed is a float
         self.assertVectorAlmostEqual(
             (0, 0, self.earth.rotational_speed),
             self.earth.angular_velocity(self.inertial),
-            1e-12,
+            1e-10,
         )
         self.assertVectorAlmostEqual(
             (0, 0, 0), self.earth.angular_velocity(self.rotating), 1e-12

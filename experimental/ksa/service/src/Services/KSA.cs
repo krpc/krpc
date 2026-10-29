@@ -119,8 +119,8 @@ namespace KRPC.KSA.Services
         /// The simulation speed, as a multiple of real time. Zero when paused.
         /// </summary>
         [KRPCProperty]
-        public static double SimulationSpeed {
-            get { return Universe.SimulationSpeed; }
+        public static float SimulationSpeed {
+            get { return (float)Universe.SimulationSpeed; }
             set {
                 if (!(value >= 0))
                     throw new ArgumentOutOfRangeException (nameof (SimulationSpeed));
@@ -304,7 +304,7 @@ namespace KRPC.KSA.Services
         /// shows a message for at least 2 seconds.</param>
         /// <param name="warning">Whether to show the message in the warning color.</param>
         [KRPCProcedure]
-        public static void ShowMessage (string text, double duration = 5, bool warning = false)
+        public static void ShowMessage (string text, float duration = 5, bool warning = false)
         {
             if (text == null)
                 throw new ArgumentNullException (nameof (text));

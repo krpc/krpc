@@ -70,20 +70,20 @@ namespace KRPC.KSA.Services
         /// The speed of the vehicle relative to the surface, in meters per second.
         /// </summary>
         [KRPCProperty]
-        public double Speed {
-            get { return InternalVehicle.GetSurfaceSpeed (); }
+        public float Speed {
+            get { return (float)InternalVehicle.GetSurfaceSpeed (); }
         }
 
         /// <summary>
         /// The horizontal speed of the vehicle relative to the surface, in meters per second.
         /// </summary>
         [KRPCProperty]
-        public double HorizontalSpeed {
+        public float HorizontalSpeed {
             get {
                 var v = InternalVehicle;
                 var speed = v.GetSurfaceSpeed ();
                 var vertical = VerticalSpeedOf (v);
-                return Math.Sqrt (Math.Max (0, speed * speed - vertical * vertical));
+                return (float)Math.Sqrt (Math.Max (0, speed * speed - vertical * vertical));
             }
         }
 
@@ -91,8 +91,8 @@ namespace KRPC.KSA.Services
         /// The vertical speed of the vehicle relative to the surface, in meters per second.
         /// </summary>
         [KRPCProperty]
-        public double VerticalSpeed {
-            get { return VerticalSpeedOf (InternalVehicle); }
+        public float VerticalSpeed {
+            get { return (float)VerticalSpeedOf (InternalVehicle); }
         }
 
         static double VerticalSpeedOf (global::KSA.Vehicle v)
@@ -195,7 +195,7 @@ namespace KRPC.KSA.Services
         /// The static atmospheric pressure at the vehicle, in pascals.
         /// </summary>
         [KRPCProperty]
-        public double StaticPressure {
+        public float StaticPressure {
             get { return InternalVehicle.PhysicsEnvironment.AtmosphericPressure; }
         }
 
@@ -203,7 +203,7 @@ namespace KRPC.KSA.Services
         /// The density of the atmosphere at the vehicle, in kilograms per cubic meter.
         /// </summary>
         [KRPCProperty]
-        public double AtmosphereDensity {
+        public float AtmosphereDensity {
             get { return InternalVehicle.PhysicsEnvironment.AtmosphericDensity; }
         }
 
@@ -212,14 +212,14 @@ namespace KRPC.KSA.Services
         /// particle event under way.
         /// </summary>
         [KRPCProperty]
-        public double DoseRate {
+        public float DoseRate {
             get {
                 // As the game's dose gauge computes it
                 var v = InternalVehicle;
                 var position = v.GetPositionEcl ();
                 var rates = Radiation.ComputeDoseRates (v.Parent, v.GetPositionCci (), position);
                 var events = ParticleEvents.ComputeDoseRate (position, v.Parent, rates.StarExposure, Universe.GetElapsedSeconds (), doseTerms);
-                return (rates.Total + events).Value ();
+                return (float)((rates.Total + events).Value ());
             }
         }
 
@@ -234,14 +234,14 @@ namespace KRPC.KSA.Services
         /// magnetosphere, or the orbit dips below the surface.
         /// </summary>
         [KRPCProperty]
-        public double OrbitAverageDoseRate {
+        public float OrbitAverageDoseRate {
             get {
                 // As the game's orbit dose gauge computes it
                 var v = InternalVehicle;
                 if (!Radiation.TryComputeOrbitDoseRates (v, orbitDoseAverages, out var rates))
-                    return double.NaN;
+                    return (float)double.NaN;
                 var events = ParticleEvents.ComputeDoseRate (v.GetPositionEcl (), null, rates.StarExposure, Universe.GetElapsedSeconds (), doseTerms);
-                return (rates.Total + events).Value ();
+                return (float)((rates.Total + events).Value ());
             }
         }
 
@@ -249,8 +249,8 @@ namespace KRPC.KSA.Services
         /// The dynamic pressure acting on the vehicle, in pascals.
         /// </summary>
         [KRPCProperty]
-        public double DynamicPressure {
-            get { return PhysicalAtmosphereReference.GetDynamicPressure (InternalVehicle); }
+        public float DynamicPressure {
+            get { return (float)PhysicalAtmosphereReference.GetDynamicPressure (InternalVehicle); }
         }
 
         /// <summary>
@@ -258,8 +258,8 @@ namespace KRPC.KSA.Services
         /// gravity.
         /// </summary>
         [KRPCProperty]
-        public double GForce {
-            get { return InternalVehicle.AccelerationBody.Length () / Engines.G0; }
+        public float GForce {
+            get { return (float)(InternalVehicle.AccelerationBody.Length () / Engines.G0); }
         }
 
         /// <summary>
@@ -294,12 +294,12 @@ namespace KRPC.KSA.Services
         /// shortly after.
         /// </remarks>
         [KRPCProperty]
-        public double TimeToImpact {
+        public float TimeToImpact {
             get {
                 var patch = InternalVehicle.FlightPlan.Patches[0];
                 if (patch.EndTransition != PatchTransition.Impact)
-                    return double.NaN;
-                return (patch.EndTime - Universe.GetElapsedTime ()).Seconds ();
+                    return (float)double.NaN;
+                return (float)((patch.EndTime - Universe.GetElapsedTime ()).Seconds ());
             }
         }
 
@@ -309,10 +309,10 @@ namespace KRPC.KSA.Services
         /// above the velocity.
         /// </summary>
         [KRPCProperty]
-        public double AngleOfAttack {
+        public float AngleOfAttack {
             get {
                 var velocity = SurfaceVelocityHelm;
-                return velocity == double3.Zero ? 0 : RadiansToDegrees (Math.Atan2 (velocity.Z, velocity.X));
+                return (float)(velocity == double3.Zero ? 0 : RadiansToDegrees (Math.Atan2 (velocity.Z, velocity.X)));
             }
         }
 
@@ -322,10 +322,10 @@ namespace KRPC.KSA.Services
         /// the right of the velocity.
         /// </summary>
         [KRPCProperty]
-        public double SideslipAngle {
+        public float SideslipAngle {
             get {
                 var velocity = SurfaceVelocityHelm;
-                return velocity == double3.Zero ? 0 : RadiansToDegrees (Math.Atan2 (-velocity.Y, velocity.X));
+                return (float)(velocity == double3.Zero ? 0 : RadiansToDegrees (Math.Atan2 (-velocity.Y, velocity.X)));
             }
         }
 

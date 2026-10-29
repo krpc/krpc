@@ -75,8 +75,8 @@ namespace KRPC.KSA.Services
         /// in any mode other than orbit and map.
         /// </summary>
         [KRPCProperty]
-        public double Azimuth {
-            get { return View.Azimuth * (180 / Math.PI); }
+        public float Azimuth {
+            get { return (float)(View.Azimuth * (180 / Math.PI)); }
             set { View.Azimuth = value * (Math.PI / 180); }
         }
 
@@ -85,8 +85,8 @@ namespace KRPC.KSA.Services
         /// 90. Throws an exception in any mode other than orbit and map.
         /// </summary>
         [KRPCProperty]
-        public double Elevation {
-            get { return View.Elevation * (180 / Math.PI); }
+        public float Elevation {
+            get { return (float)(View.Elevation * (180 / Math.PI)); }
             set {
                 if (!(value >= -90 && value <= 90))
                     throw new ArgumentOutOfRangeException (nameof (Elevation));
@@ -103,14 +103,14 @@ namespace KRPC.KSA.Services
         /// radius from it in map mode, and half its radius in orbit mode.
         /// </remarks>
         [KRPCProperty]
-        public double Distance {
+        public float Distance {
             get {
                 var view = View;
                 var viewport = Viewport;
                 if (viewport.Mode == global::KSA.CameraMode.Map)
-                    return viewport.MapController.Scope;
+                    return (float)viewport.MapController.Scope;
                 // The orbit camera's distance is a multiple of the focused object's radius
-                return view.DistancePower * Following.MeanRadius;
+                return (float)(view.DistancePower * Following.MeanRadius);
             }
             set {
                 var view = View;
@@ -128,8 +128,8 @@ namespace KRPC.KSA.Services
         /// The camera's vertical field of view, in degrees, between 15 and 120.
         /// </summary>
         [KRPCProperty]
-        public double FieldOfView {
-            get { return Viewport.GetCamera ().GetFieldOfView () * (180 / Math.PI); }
+        public float FieldOfView {
+            get { return (float)(Viewport.GetCamera ().GetFieldOfView () * (180 / Math.PI)); }
             set {
                 if (!(value >= global::KSA.Camera.MINIMUM_FOV && value <= global::KSA.Camera.MAXIMUM_FOV))
                     throw new ArgumentOutOfRangeException (nameof (FieldOfView));

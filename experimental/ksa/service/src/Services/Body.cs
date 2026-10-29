@@ -114,7 +114,7 @@ namespace KRPC.KSA.Services
         /// with no atmosphere.
         /// </summary>
         [KRPCProperty]
-        public double SeaLevelPressure {
+        public float SeaLevelPressure {
             get { return PressureAt (0); }
         }
 
@@ -123,7 +123,7 @@ namespace KRPC.KSA.Services
         /// meter. Zero for a body with no atmosphere.
         /// </summary>
         [KRPCProperty]
-        public double SeaLevelDensity {
+        public float SeaLevelDensity {
             get { return DensityAt (0); }
         }
 
@@ -132,8 +132,8 @@ namespace KRPC.KSA.Services
         /// meters. Zero for a body with no atmosphere.
         /// </summary>
         [KRPCProperty]
-        public double ScaleHeight {
-            get { return Atmosphere?.ScaleHeight.InMeters () ?? 0; }
+        public float ScaleHeight {
+            get { return (float)(Atmosphere?.ScaleHeight.InMeters () ?? 0); }
         }
 
         /// <summary>
@@ -142,9 +142,9 @@ namespace KRPC.KSA.Services
         /// </summary>
         /// <param name="altitude">Altitude above the body's mean radius, in meters.</param>
         [KRPCMethod]
-        public double PressureAt (double altitude)
+        public float PressureAt (double altitude)
         {
-            return Atmosphere?.GetAtmosphericPressureAtAltitude (altitude) ?? 0;
+            return (float)(Atmosphere?.GetAtmosphericPressureAtAltitude (altitude) ?? 0);
         }
 
         /// <summary>
@@ -153,9 +153,9 @@ namespace KRPC.KSA.Services
         /// </summary>
         /// <param name="altitude">Altitude above the body's mean radius, in meters.</param>
         [KRPCMethod]
-        public double DensityAt (double altitude)
+        public float DensityAt (double altitude)
         {
-            return Atmosphere?.GetAtmosphericDensityAtAltitude (altitude) ?? 0;
+            return (float)(Atmosphere?.GetAtmosphericDensityAtAltitude (altitude) ?? 0);
         }
 
         /// <summary>
@@ -171,8 +171,8 @@ namespace KRPC.KSA.Services
         /// ocean.
         /// </summary>
         [KRPCProperty]
-        public double OceanDensity {
-            get { return InternalBody.GetOceanReference ()?.Density.KgPerM3 ?? 0; }
+        public float OceanDensity {
+            get { return (float)(InternalBody.GetOceanReference ()?.Density.KgPerM3 ?? 0); }
         }
 
         /// <summary>
@@ -180,16 +180,16 @@ namespace KRPC.KSA.Services
         /// squared.
         /// </summary>
         [KRPCProperty]
-        public double SurfaceGravity {
-            get { return InternalBody.Mu / (InternalBody.MeanRadius * InternalBody.MeanRadius); }
+        public float SurfaceGravity {
+            get { return (float)(InternalBody.Mu / (InternalBody.MeanRadius * InternalBody.MeanRadius)); }
         }
 
         /// <summary>
         /// The rate at which the body rotates about its axis, in radians per second.
         /// </summary>
         [KRPCProperty]
-        public double RotationalSpeed {
-            get { return InternalBody.GetAngularVelocity (); }
+        public float RotationalSpeed {
+            get { return (float)InternalBody.GetAngularVelocity (); }
         }
 
         /// <summary>
@@ -197,10 +197,10 @@ namespace KRPC.KSA.Services
         /// seconds. Infinite for a body that does not rotate.
         /// </summary>
         [KRPCProperty]
-        public double RotationalPeriod {
+        public float RotationalPeriod {
             get {
                 var speed = Math.Abs (InternalBody.GetAngularVelocity ());
-                return speed > 0 ? 2 * Math.PI / speed : double.PositiveInfinity;
+                return (float)(speed > 0 ? 2 * Math.PI / speed : double.PositiveInfinity);
             }
         }
 

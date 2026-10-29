@@ -183,8 +183,8 @@ namespace KRPC.KSA.Services
         /// pressure, in Newtons.
         /// </summary>
         [KRPCProperty]
-        public double Thrust {
-            get { return Utils.Engines.Performance (InternalVehicle, fullThrottle: false).thrust; }
+        public float Thrust {
+            get { return (float)Utils.Engines.Performance (InternalVehicle, fullThrottle: false).thrust; }
         }
 
         /// <summary>
@@ -192,10 +192,10 @@ namespace KRPC.KSA.Services
         /// current atmospheric pressure, in seconds. Zero when no engine is active.
         /// </summary>
         [KRPCProperty]
-        public double SpecificImpulse {
+        public float SpecificImpulse {
             get {
                 var (thrust, massFlowRate) = Utils.Engines.Performance (InternalVehicle, fullThrottle: true);
-                return massFlowRate > 0 ? thrust / (massFlowRate * Utils.Engines.G0) : 0;
+                return (float)(massFlowRate > 0 ? thrust / (massFlowRate * Utils.Engines.G0) : 0);
             }
         }
 
@@ -349,7 +349,7 @@ namespace KRPC.KSA.Services
         /// The energy stored in the vehicle's batteries, in joules.
         /// </summary>
         [KRPCProperty]
-        public double StoredEnergy {
+        public float StoredEnergy {
             get { return Batteries.Sum (battery => battery.StoredEnergy); }
         }
 
@@ -357,7 +357,7 @@ namespace KRPC.KSA.Services
         /// The energy the vehicle's batteries can store, in joules.
         /// </summary>
         [KRPCProperty]
-        public double EnergyCapacity {
+        public float EnergyCapacity {
             get { return Batteries.Sum (battery => battery.EnergyCapacity); }
         }
 
@@ -366,7 +366,7 @@ namespace KRPC.KSA.Services
         /// parts use, in watts.
         /// </summary>
         [KRPCProperty]
-        public double NetPower {
+        public float NetPower {
             get {
                 return SolarPanels.Sum (panel => panel.Power) + Generators.Sum (generator => generator.Power) -
                     PowerConsumers.Sum (consumer => consumer.Power);
@@ -497,8 +497,8 @@ namespace KRPC.KSA.Services
         /// multiple of standard gravity. Zero while the vehicle is <see cref="OnRails"/>.
         /// </summary>
         [KRPCProperty]
-        public double PeakGLoad {
-            get { return InternalVehicle.StructuralLoad.PeakGLoad; }
+        public float PeakGLoad {
+            get { return (float)InternalVehicle.StructuralLoad.PeakGLoad; }
         }
 
         /// <summary>
@@ -506,8 +506,8 @@ namespace KRPC.KSA.Services
         /// gravity. Zero while the vehicle is <see cref="OnRails"/>.
         /// </summary>
         [KRPCProperty]
-        public double MaxGLoad {
-            get { return InternalVehicle.StructuralLoad.MaxGLoad; }
+        public float MaxGLoad {
+            get { return (float)InternalVehicle.StructuralLoad.MaxGLoad; }
         }
 
         /// <summary>
@@ -516,8 +516,8 @@ namespace KRPC.KSA.Services
         /// vehicle is <see cref="OnRails"/>.
         /// </summary>
         [KRPCProperty]
-        public double PeakDynamicPressure {
-            get { return InternalVehicle.StructuralLoad.PeakDynamicPressure; }
+        public float PeakDynamicPressure {
+            get { return (float)InternalVehicle.StructuralLoad.PeakDynamicPressure; }
         }
 
         /// <summary>
@@ -525,8 +525,8 @@ namespace KRPC.KSA.Services
         /// while the vehicle is <see cref="OnRails"/>.
         /// </summary>
         [KRPCProperty]
-        public double MaxDynamicPressure {
-            get { return InternalVehicle.StructuralLoad.MaxDynamicPressure; }
+        public float MaxDynamicPressure {
+            get { return (float)InternalVehicle.StructuralLoad.MaxDynamicPressure; }
         }
 
         /// <summary>
@@ -562,7 +562,7 @@ namespace KRPC.KSA.Services
         /// trajectory.
         /// </remarks>
         [KRPCMethod]
-        public Burn AddBurn (double ut, double prograde = 0, double normal = 0, double radial = 0)
+        public Burn AddBurn (double ut, float prograde = 0, float normal = 0, float radial = 0)
         {
             var v = InternalVehicle;
             if (!double.IsFinite (prograde) || !double.IsFinite (normal) || !double.IsFinite (radial))

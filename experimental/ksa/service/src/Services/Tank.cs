@@ -62,7 +62,7 @@ namespace KRPC.KSA.Services
         /// The volume of the tank, in cubic meters.
         /// </summary>
         [KRPCProperty]
-        public double Volume {
+        public float Volume {
             get { return InternalTank.StorageVolume; }
         }
 
@@ -70,7 +70,7 @@ namespace KRPC.KSA.Services
         /// The pressure the tank stores gas at, in pascals. Zero if the tank cannot store gas.
         /// </summary>
         [KRPCProperty]
-        public double RatedPressure {
+        public float RatedPressure {
             get { return InternalTank.RatedPressure; }
         }
 
@@ -78,7 +78,7 @@ namespace KRPC.KSA.Services
         /// The fraction of the tank's volume that is filled, between 0 and 1.
         /// </summary>
         [KRPCProperty]
-        public double FilledFraction {
+        public float FilledFraction {
             get { return InternalTank.FilledFraction (Part.InternalPart.Tree.Moles.States); }
         }
 

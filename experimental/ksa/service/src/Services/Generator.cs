@@ -87,7 +87,7 @@ namespace KRPC.KSA.Services
         /// The power the generator produces, in watts.
         /// </summary>
         [KRPCProperty]
-        public double Power {
+        public float Power {
             get { return State.Produced.Value (); }
         }
     }

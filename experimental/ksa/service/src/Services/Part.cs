@@ -125,12 +125,12 @@ namespace KRPC.KSA.Services
         /// The mass of the part without its propellant, in kilograms.
         /// </summary>
         [KRPCProperty]
-        public double DryMass {
+        public float DryMass {
             get {
                 double mass = 0;
                 foreach (var inert in InternalPart.SubtreeModules.Get<InertMass> ())
                     mass += inert.MassPropertiesAsmb.Props.Mass;
-                return mass;
+                return (float)mass;
             }
         }
 
@@ -138,7 +138,7 @@ namespace KRPC.KSA.Services
         /// The mass of the part, including its propellant, in kilograms.
         /// </summary>
         [KRPCProperty]
-        public double Mass {
+        public float Mass {
             get { return DryMass + Resources.Sum (resource => resource.Amount); }
         }
 
