@@ -3,10 +3,10 @@
 
 int main() {
   krpc_connection_t conn;
-  krpc_open(&conn, "COM0");
-  krpc_connect(conn, "Basic example");
+  krpc_open(&conn, "/run/user/1000/krpc.sock");
+  krpc_connect(conn, "My Example Program");
   krpc_schema_Status status;
   krpc_KRPC_GetStatus(conn, &status);
-  printf("Connected to kRPC server version %s\n", status.version);
+  printf("%s\n", status.version);
   krpc_disconnect(conn);
 }

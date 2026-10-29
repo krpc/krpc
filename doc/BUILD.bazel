@@ -377,10 +377,38 @@ filegroup(
     ],
 )
 
+# The TCP/IP and local socket examples build against the library for their protocol
 cc_binary_multiple(
-    name = "compile-scripts-cnano",
-    srcs = glob(["src/scripts/**/*.c"]),
+    name = "compile-scripts-cnano-serialio",
+    srcs = glob(
+        ["src/scripts/**/*.c"],
+        exclude = [
+            "src/scripts/cnano/client/ConnectingLocal.c",
+            "src/scripts/cnano/client/ConnectingTcp.c",
+        ],
+    ),
     deps = ["//client/cnano:krpc_cnano"],
+)
+
+cc_binary_multiple(
+    name = "compile-scripts-cnano-tcpip",
+    srcs = ["src/scripts/cnano/client/ConnectingTcp.c"],
+    deps = ["//client/cnano:krpc_cnano_tcpip"],
+)
+
+cc_binary_multiple(
+    name = "compile-scripts-cnano-localsocket",
+    srcs = ["src/scripts/cnano/client/ConnectingLocal.c"],
+    deps = ["//client/cnano:krpc_cnano_localsocket"],
+)
+
+filegroup(
+    name = "compile-scripts-cnano",
+    srcs = [
+        ":compile-scripts-cnano-localsocket",
+        ":compile-scripts-cnano-serialio",
+        ":compile-scripts-cnano-tcpip",
+    ],
 )
 
 # The example scripts are compiled as libraries; this only checks that they
