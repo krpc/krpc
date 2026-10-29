@@ -2,6 +2,7 @@ KSA.ActiveVehicle
 KSA.Vehicles
 KSA.ActiveKitten
 KSA.Kittens
+KSA.Camera
 KSA.Bodies
 KSA.UT
 KSA.SimulationSpeed
@@ -397,3 +398,16 @@ KSA.LocomotionMode.Tumbling
 KSA.LocomotionMode.Righting
 KSA.LocomotionMode.Ladder
 KSA.LocomotionMode.Swimming
+KSA.Camera.Mode
+KSA.Camera.Azimuth
+KSA.Camera.Elevation
+KSA.Camera.Distance
+KSA.Camera.FieldOfView
+KSA.Camera.FocusedVehicle
+KSA.Camera.FocusedBody
+KSA.Camera.FocusedKitten
+KSA.CameraMode.Orbit
+KSA.CameraMode.Free
+KSA.CameraMode.Map
+KSA.CameraMode.IVA
+KSA.CameraMode.Fixed

@@ -59,6 +59,14 @@ namespace KRPC.KSA.Services
         }
 
         /// <summary>
+        /// The game's main camera.
+        /// </summary>
+        [KRPCProperty]
+        public static Camera Camera {
+            get { return new Camera (); }
+        }
+
+        /// <summary>
         /// The kittens in the agency's roster, including those killed in action, keyed by name.
         /// </summary>
         /// <remarks>

@@ -9,6 +9,8 @@
     <Compile Include="src/Services/Battery.cs" />
     <Compile Include="src/Services/Body.cs" />
     <Compile Include="src/Services/Burn.cs" />
+    <Compile Include="src/Services/Camera.cs" />
+    <Compile Include="src/Services/CameraMode.cs" />
     <Compile Include="src/Services/Control.cs" />
     <Compile Include="src/Services/Decoupler.cs" />
     <Compile Include="src/Services/Deployable.cs" />
