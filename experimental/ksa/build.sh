@@ -55,6 +55,8 @@ rm -f "$out"/*.pdb
 "$krpc_bin/ServiceDefinitions" \
   --output="$here/bin/KRPC.KSA.json" --reference-dir="$ksa_dir" --reference-dir="$out" \
   KSA "$out/KRPC.KSA.Service.dll"
+# The definitions of the StdLib structures the service uses, such as the colors
+"$krpc_bin/ServiceDefinitions" --output="$here/bin/StdLib.json" StdLib "$krpc_bin/KRPC.Core.dll"
 
 # Client stubs, at the paths each client includes them from
 stubs="$here/bin/stubs"
@@ -66,10 +68,15 @@ declare -A stub_paths=(
   [cnano]="cnano/include/krpc_cnano/services/ksa.h"
   [java]="java/krpc/client/services/KSA.java"
 )
+# The StdLib headers of the C++ and C nano clients
+declare -A stdlib_includes=(
+  [cpp]="--include=StdLib=krpc/services/std_lib.hpp"
+  [cnano]="--include=StdLib=krpc_cnano/services/std_lib.h"
+)
 for language in "${!stub_paths[@]}"; do
   path="$stubs/${stub_paths[$language]}"
   mkdir -p "$(dirname "$path")"
-  "$venv/bin/krpc-clientgen" "$language" KSA "$here/bin/KRPC.KSA.json" --output="$path"
+  "$venv/bin/krpc-clientgen" "$language" KSA "$here/bin/KRPC.KSA.json" "$here/bin/StdLib.json" --output="$path" ${stdlib_includes[$language]:-}
 done
 sed "s/@CLIENT_VERSION@/$krpc_version/" "$here/stubs/README.md" > "$stubs/README.md"
 cp "$here/bin/KRPC.KSA.json" "$stubs/"

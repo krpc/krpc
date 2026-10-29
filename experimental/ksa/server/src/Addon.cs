@@ -94,6 +94,13 @@ namespace KRPC.KSA
 
             TryPatch ("the tank transfer window checks", new [] { "KSA.Tank.TransferMode" }, PatchTankTransfers);
 
+            // The game resets its gizmos at the start of each frame, and renders them after
+            // its pre-render step. Text is drawn over the overlay, which needs no patch
+            TryPatch ("Program.OnPreRender", new [] {
+                "KSA.Drawing.AddLine", "KSA.Drawing.AddDirection", "KSA.Drawing.AddPolyline", "KSA.Drawing.AddCircle",
+                "KSA.Drawing.AddArc", "KSA.Drawing.AddBox", "KSA.Drawing.AddSphere"
+            }, () => harmony.Patch (Required (typeof (Program), "OnPreRender"), prefix: Hook (nameof (BeforePreRender))));
+
             TryPatch ("Program.DrawMenuBar", "the kRPC menu is not shown", () => MenuBar.Patch (harmony, this));
             TryPatch ("ImGuiWindow.OnDrawUiConsole", "kRPC windows open at the game's size", () => ConsoleWindow.Patch (harmony));
 
@@ -162,13 +169,14 @@ namespace KRPC.KSA
 
         /// <summary>
         /// Create the windows, which need the game's UI to be up, and save their visibility,
-        /// position and size when they change.
+        /// position and size when they change. Draw the overlay of the drawing objects.
         /// </summary>
         [StarMapBeforeGui]
         public void OnBeforeGui (double dt)
         {
             if (core == null)
                 return;
+            Utils.Drawables.DrawOverlay ();
             var c = config.Configuration;
             if (MainWindow == null) {
                 InfoWindow = new InfoWindow (core, c.InfoWindowVisible, c.InfoWindowPosition);
@@ -375,6 +383,11 @@ namespace KRPC.KSA
         static void AfterSaveLoaded ()
         {
             GameState.Changed ();
+        }
+
+        static void BeforePreRender ()
+        {
+            Utils.Drawables.DrawGizmos ();
         }
 
         static void BeforeVehicleSolvers ()

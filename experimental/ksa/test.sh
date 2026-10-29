@@ -18,10 +18,10 @@ source "$here/versions.sh"
 "$here/build.sh" --install --testing
 
 venv="$here/bin/test-venv"
-if [ "$("$venv/bin/python" -c 'import krpc; print(krpc.__version__)' 2>/dev/null)" != "$krpc_version" ]; then
+if [ "$("$venv/bin/python" -c 'import krpc, PIL; print(krpc.__version__)' 2>/dev/null)" != "$krpc_version" ]; then
   rm -rf "$venv"
   python3 -m venv "$venv"
-  "$venv/bin/pip" install --quiet --disable-pip-version-check "krpc==$krpc_version" pytest
+  "$venv/bin/pip" install --quiet --disable-pip-version-check "krpc==$krpc_version" pytest pillow
 fi
 
 cd "$here"

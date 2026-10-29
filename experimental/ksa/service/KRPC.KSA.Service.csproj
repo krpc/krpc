@@ -4,19 +4,24 @@
     <RootNamespace>KRPC.KSA</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src/Services/Arc.cs" />
     <Compile Include="src/Services/AutoPilot.cs" />
     <Compile Include="src/Services/AutoPilotMode.cs" />
     <Compile Include="src/Services/Battery.cs" />
     <Compile Include="src/Services/Body.cs" />
+    <Compile Include="src/Services/Box.cs" />
     <Compile Include="src/Services/Burn.cs" />
     <Compile Include="src/Services/Camera.cs" />
     <Compile Include="src/Services/CameraMode.cs" />
+    <Compile Include="src/Services/Circle.cs" />
     <Compile Include="src/Services/Control.cs" />
     <Compile Include="src/Services/Debug.cs" />
     <Compile Include="src/Services/Decoupler.cs" />
     <Compile Include="src/Services/Deployable.cs" />
     <Compile Include="src/Services/DeployableState.cs" />
     <Compile Include="src/Services/DockingPort.cs" />
+    <Compile Include="src/Services/Drawable.cs" />
+    <Compile Include="src/Services/Drawing.cs" />
     <Compile Include="src/Services/Engine.cs" />
     <Compile Include="src/Services/Flight.cs" />
     <Compile Include="src/Services/FuelLink.cs" />
@@ -26,6 +31,7 @@
     <Compile Include="src/Services/Kitten.cs" />
     <Compile Include="src/Services/KSA.cs" />
     <Compile Include="src/Services/Light.cs" />
+    <Compile Include="src/Services/Line.cs" />
     <Compile Include="src/Services/LocomotionMode.cs" />
     <Compile Include="src/Services/MagneticScoop.cs" />
     <Compile Include="src/Services/Orbit.cs" />
@@ -33,19 +39,23 @@
     <Compile Include="src/Services/Parachute.cs" />
     <Compile Include="src/Services/ParachuteState.cs" />
     <Compile Include="src/Services/Part.cs" />
+    <Compile Include="src/Services/Polyline.cs" />
     <Compile Include="src/Services/PowerConsumer.cs" />
     <Compile Include="src/Services/RCS.cs" />
     <Compile Include="src/Services/ReferenceFrame.cs" />
-    <Compile Include="src/Services/Seat.cs" />
     <Compile Include="src/Services/Resource.cs" />
+    <Compile Include="src/Services/Seat.cs" />
     <Compile Include="src/Services/Sequence.cs" />
     <Compile Include="src/Services/Situation.cs" />
     <Compile Include="src/Services/SolarPanel.cs" />
+    <Compile Include="src/Services/Sphere.cs" />
     <Compile Include="src/Services/Tank.cs" />
     <Compile Include="src/Services/TankTransferMode.cs" />
+    <Compile Include="src/Services/Text.cs" />
     <Compile Include="src/Services/Vehicle.cs" />
     <Compile Include="src/Services/VehicleDesign.cs" />
     <Compile Include="src/Utils/AfterFrame.cs" />
+    <Compile Include="src/Utils/Drawables.cs" />
     <Compile Include="src/Utils/Engines.cs" />
     <Compile Include="src/Utils/ObjectSweep.cs" />
     <Compile Include="src/Utils/Sequences.cs" />
