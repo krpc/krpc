@@ -53,6 +53,8 @@ class TestBurn(ksatest.TestCase):
         burn.radial = -10
         self.assertEqual((30, 40, -10), (burn.prograde, burn.normal, burn.radial))
         self.assertAlmostEqual(math.sqrt(30**2 + 40**2 + 10**2), burn.delta_v)
+        # The edited burn keeps its object
+        self.assertEqual([burn], self.vehicle.burns)
 
     def test_direction(self):
         # The orbit normal is the same along the orbit

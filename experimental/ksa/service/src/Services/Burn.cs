@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using Brutal.Numerics;
 using KRPC.KSA.Utils;
 using KRPC.Service.Attributes;
@@ -42,7 +43,9 @@ namespace KRPC.KSA.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return burn.GetHashCode ();
+            // The game's burn hashes its time and change in velocity, which change when the
+            // burn is edited
+            return RuntimeHelpers.GetHashCode (burn);
         }
 
         FlightComputer Computer {
