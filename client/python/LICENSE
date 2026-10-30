@@ -1,3 +1,7 @@
+This license (LGPL v3) applies to all parts of the kRPC Python client except for the following:
+
+  - Parts of krpc/decoder.py are from Google's protobuf project. See LICENSE.protobuf
+
 Copyright 2015-2026 kRPC Org
 
 This program is free software: you can redistribute it and/or modify

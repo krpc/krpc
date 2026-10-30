@@ -27,7 +27,7 @@ cp "$here"/examples/*.py "$staging/examples/"
 for dir in "$staging" "$staging/kRPC"; do
   cp "$here/release/LICENSE" "$here/release/LICENSE.System.IO.Ports" \
     "$repo/COPYING" "$repo/COPYING.LESSER" "$dir/"
-  cp "$repo/tools/build/protobuf/LICENSE" "$dir/LICENSE.Google.Protobuf"
+  cp "$repo/tools/build/protobuf/LICENSE.Google.Protobuf" "$dir/LICENSE.Google.Protobuf"
 done
 sed -e "s/@VERSION@/$mod_version/g" -e "s/@KRPC_VERSION@/$krpc_version/g" \
   -e "s/@STARMAP_VERSION@/$starmap_version/g" -e "s/@KSA_VERSION@/$ksa_version/g" \

@@ -31,7 +31,7 @@ nuget_package(
     description = "C# client for kRPC",
     framework = "net472",
     id = "KRPC.Client",
-    license = "LGPL-3.0-only",
+    license = "LGPL-3.0-or-later",
     project_url = "https://github.com/krpc/krpc",
     readme = "README.md",
     version = nuget_version,

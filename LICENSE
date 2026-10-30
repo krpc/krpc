@@ -6,11 +6,22 @@ This license (LGPL v3) applies to all parts of kRPC except for the following:
     is adapted from the KSP Trajectories mod (https://github.com/neuoy/KSPTrajectories)
     released under the MIT License (MIT) by Youen Toupin, aka neuoy
 
-  - tools/clientgen/* is under the GPLv3 license.
+  - service/Debug/* is under the GPLv3 license.
+
+  - tools/krpctools/* is under the GPLv3 license.
 
   - tools/ServiceDefinitions/* is under the GPLv3 license.
 
   - protobuf/* is under the MIT license.
+
+  - client/python/krpc/decoder.py contains code from Google's protobuf project.
+    See tools/build/protobuf/LICENSE.Google.Protobuf
+
+  - tools/TestingTools/src/AutoLoadGame.cs and AutoSwitchVessel.cs are adapted
+    from the AutoLoadGame plugin, released under the MIT License (MIT) by Allis Tauri
+
+  - experimental/ksa/release/ holds the license files of the kRPC for KSA release,
+    which cover the third-party binaries it ships.
 
 Copyright 2015-2026 kRPC Org
 

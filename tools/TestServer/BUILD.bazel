@@ -49,6 +49,39 @@ exe_deps = [
     "//tools/build/dotnet:NDesk.Options",
 ]
 
+license_text = """This license (LGPL v3) applies to all parts of TestServer except for the following:
+
+  - Google.Protobuf.dll is a binary from Google's protobuf project.
+    See LICENSE.protobuf
+
+  - NDesk.Options.dll is under the MIT license.
+    See https://www.nuget.org/packages/NDesk.Options/
+
+  - System.IO.Ports.dll and runtimes/ are binaries from the .NET project, under the MIT license.
+    See https://github.com/dotnet/runtime
+
+Copyright 2015-2026 kRPC Org
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the Lesser GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+Lesser GNU General Public License for more details.
+
+You should have received a copy of the Lesser GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+genrule(
+    name = "license",
+    outs = ["LICENSE"],
+    cmd = 'echo "%s" > "$@"' % license_text,
+)
+
 pkg_zip(
     name = "archive",
     out = "TestServer-%s.zip" % version,
@@ -56,10 +89,13 @@ pkg_zip(
     files = [
         ":README.md",
         ":TestServer-xmldoc",
+        ":license",
         ":publish",
+        "//:COPYING",
+        "//:COPYING.LESSER",
         "//:version",
         "//core:KRPC.Core.net10-xmldoc",
-        "//tools/build/protobuf:LICENSE",
+        "//tools/build/protobuf:LICENSE.Google.Protobuf",
     ],
     mode_map = {
         "TestServer": "755",
@@ -69,7 +105,7 @@ pkg_zip(
         "tools/TestServer/publish/publish/linux-x64/": "",
         "tools/TestServer/xmldoc/": "",
         "tools/TestServer/": "",
-        "tools/build/protobuf/LICENSE": "LICENSE.protobuf",
+        "tools/build/protobuf/LICENSE.Google.Protobuf": "LICENSE.protobuf",
     },
     visibility = ["//visibility:public"],
 )

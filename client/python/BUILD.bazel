@@ -92,11 +92,13 @@ py_sdist(
         "//:python_version",
         "//:version",
         "//protobuf:python",
+        "//tools/build/protobuf:LICENSE.Google.Protobuf",
     ] + glob(["krpc/**/*"]),
     path_map = {
         "version.py": "krpc/version.py",
         "client/python/": "",
         "protobuf/": "krpc/schema/",
+        "tools/build/protobuf/LICENSE.Google.Protobuf": "LICENSE.protobuf",
     },
 )
 
@@ -124,11 +126,13 @@ py_sdist(
         "//:python_version",
         "//:version",
         "//protobuf:python",
+        "//tools/build/protobuf:LICENSE.Google.Protobuf",
     ] + services + glob(["krpc/**/*"]),
     path_map = {
         "version.py": "krpc/version.py",
         "client/python/": "",
         "protobuf/": "krpc/schema/",
+        "tools/build/protobuf/LICENSE.Google.Protobuf": "LICENSE.protobuf",
     },
 )
 

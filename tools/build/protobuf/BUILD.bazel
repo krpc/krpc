@@ -3,7 +3,7 @@ load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 
 package(default_visibility = ["//visibility:public"])
 
-exports_files(["LICENSE"])
+exports_files(["LICENSE.Google.Protobuf"])
 
 # Driver for the codegen rules: runs protoc and copies/rewrites its output.
 py_binary(

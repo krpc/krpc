@@ -233,7 +233,7 @@ class _ValueDecoder:
     # The code for the following two methods is taken from
     # google.protobuf.internal.decoder._FloatDecoder and _DoubleDecoder
     # Copyright 2008, Google Inc.
-    # See protobuf-license.txt distributed with this file
+    # See LICENSE.protobuf distributed with this file
 
     @classmethod
     def decode_double(cls, data: bytes) -> float:
