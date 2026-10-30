@@ -18,10 +18,12 @@ call "%here%\versions.bat"
 call "%here%\build.bat" --install --testing || exit /b 1
 
 set "venv=%here%\bin\test-venv"
-if not exist "%venv%\Lib\site-packages\krpc-%krpc_version%.dist-info" (
+set "venv_ok="
+if exist "%venv%\Lib\site-packages\krpc-%krpc_version%.dist-info" if exist "%venv%\Lib\site-packages\PIL" set "venv_ok=1"
+if not defined venv_ok (
   if exist "%venv%" rmdir /s /q "%venv%"
   python -m venv "%venv%" || exit /b 1
-  "%venv%\Scripts\pip.exe" install --quiet --disable-pip-version-check "krpc==%krpc_version%" pytest || exit /b 1
+  "%venv%\Scripts\pip.exe" install --quiet --disable-pip-version-check "krpc==%krpc_version%" pytest pillow || exit /b 1
 )
 
 cd /d "%here%"
