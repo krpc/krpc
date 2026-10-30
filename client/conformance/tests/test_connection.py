@@ -274,13 +274,14 @@ def test_default_address():
 
 
 @pytest.mark.parametrize("kind", ["port", "socket"])
-def test_unreachable(client, server, tmp_path, kind):
+def test_unreachable(client, server, tmp_path, scripted_dir, kind):
     """Connecting raises the connection error when no server listens at the address, no socket
     is at the local socket path, or no serial port is at the path."""
     if kind == "socket":
         if "localsocket" not in client.testee.hello.protocols:
             pytest.skip("%s has no local socket protocol" % client.name)
-        endpoint = Endpoint("localsocket", path=str(tmp_path / "missing.sock"))
+        path = os.path.join(scripted_dir, "missing.sock")
+        endpoint = Endpoint("localsocket", path=path)
     elif server.protocol == "serialio":
         endpoint = Endpoint("serialio", path=str(tmp_path / "missing"))
     else:
