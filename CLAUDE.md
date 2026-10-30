@@ -2,7 +2,7 @@
 
 **kRPC** — an RPC server for Kerbal Space Program (KSP 1.12.5). A C# mod runs in the game, services
 add RPCs, clients in several languages talk to it over protobuf (TCP, websockets, serial).
-Current version: `tools/krpc-version.sh`. Full setup: `Development-Guide.md`.
+Current version: `tools/krpc-version.sh`. Full setup: `doc/src/krpc-development/building.rst`.
 
 ## Layout
 

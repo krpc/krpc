@@ -1,9 +1,8 @@
 Developer Guide
 ===============
 
-The developer guide covers writing new services, the communication protocols, and the
-specification a client library follows. To build kRPC from source, see the
-`development guide <https://github.com/krpc/krpc/blob/main/Development-Guide.md>`_ on GitHub.
+The developer guide covers writing new services, the communication protocols, the specification a
+client library follows, and working on kRPC itself.
 
 .. toctree::
    :maxdepth: 1
@@ -11,3 +10,4 @@ specification a client library follows. To build kRPC from source, see the
    extending
    communication-protocols
    client-spec
+   krpc-development

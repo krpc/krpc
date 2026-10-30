@@ -121,7 +121,7 @@ Some general guidelines on using git and the structure of the repository:
 
 ## Writing Code
 
- * Development-Guide.md explains how to set up a build environment and compile the project.
+ * The [developer guide](https://krpc.github.io/krpc/dev/krpc-development/building.html) explains how to set up a build environment and compile the project.
  * Write readable code that is "self documenting", and if not add comments to explain complex
    code. Remember that someone else may need to fix or improve upon your code in future, so they
    need to be able to understand it!
@@ -146,7 +146,8 @@ Some general guidelines on using git and the structure of the repository:
    can then be included in the automated testing for all Pull Requests in future. How these tests
    are implemented is of course dependent on the component that is being modified.
     * A change to a client library, or a feature that clients use, needs conformance tests. These
-      also update the client specification. See Development-Guide.md.
+      also update the client specification. See the
+      [testing guide](https://krpc.github.io/krpc/dev/krpc-development/testing.html).
     * Note: this advice does not apply to services, as these need to be tested while running the
       game, which is hard to automate. In this case, manual testing is sufficient.
 

@@ -9,6 +9,7 @@ Config
 Ferram
 GameData
 Goliath
+Graphviz
 IDisposable
 Javascript
 Jeb
@@ -112,6 +113,7 @@ latus
 libxml
 libxslt
 libz
+linters
 linux
 localhost
 lua
@@ -154,6 +156,7 @@ prograde
 proto
 protobuf
 py
+pytest
 quaternion
 quaternions
 quickload
@@ -193,6 +196,7 @@ thruster
 thrusters
 toggleable
 toolchain
+toolchains
 tooltip
 tradeoff
 translational

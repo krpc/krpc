@@ -7,8 +7,8 @@ body:
       value: |
         The kRPC docs can be found here 👉 [https://krpc.github.io/krpc/](https://krpc.github.io/krpc/)
 
-        You can also suggest changes to documents in this repository including `README.md`,
-        `Contributing.md` and `Development-Guide.md`.
+        You can also suggest changes to documents in this repository including `README.md`
+        and `Contributing.md`.
 
   - type: textarea
     id: affected

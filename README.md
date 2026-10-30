@@ -26,7 +26,7 @@ Contributions to kRPC are very welcome. We are happy to take bug reports and fea
 
 ## Links for Developers
 
- * [Development Guide](Development-Guide.md) for information on the project structure, compiling the code and the various tools.
+ * [Developer Guide](https://krpc.github.io/krpc/dev/krpc-development.html) for the project structure, building from source and running the tests.
  * [Release guide](Release-Guide.md) for project maintainers to do releases.
  * See the #devchat channels on Discord for informal dev discussions
 
