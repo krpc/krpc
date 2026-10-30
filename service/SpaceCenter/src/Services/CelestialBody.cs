@@ -158,7 +158,8 @@ namespace KRPC.SpaceCenter.Services
         public double SurfaceHeight (double latitude, double longitude)
         {
             var alt = Math.Max (0, BedrockHeight (latitude, longitude));
-            // Using raycast to find real surface height.
+            // Raycast onto the terrain mesh. Adapted from kOS (GPLv3, https://github.com/KSP-KOS/KOS),
+            // GeoCoordinates.cs
             const double raySource = 1000;
             const double raySecondPoint = 500;
             Vector3d rayCastStart = InternalBody.GetWorldSurfacePosition(latitude, longitude, alt + raySource);
@@ -355,6 +356,7 @@ namespace KRPC.SpaceCenter.Services
         {
             // Where the terrain colliders exist, the mesh a vessel actually rests on is a better
             // description of the slope than the height map the terrain is generated from.
+            // The raycast is adapted from kOS, as in SurfaceHeight
             var alt = Math.Max (0, BedrockHeight (latitude, longitude));
             const double raySource = 1000;
             const double raySecondPoint = 500;

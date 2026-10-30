@@ -9,6 +9,9 @@ exports_files([
     ".luacheckrc",
     "COPYING",
     "COPYING.LESSER",
+    "media/logo-mark.svg",
+    "media/logo-on-dark.svg",
+    "media/logo-on-light.svg",
     "pyrightconfig.json",
     "ruff.toml",
 ])
@@ -16,8 +19,6 @@ exports_files([
 readme_text = """Documentation: https://krpc.github.io/krpc
 
 Forum release thread: https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/
-
-Forum development thread: https://forum.kerbalspaceprogram.com/topic/62902-18x-to-112x-krpc-remote-procedure-call-server-v051-2nd-march-2023/
 
 """
 
@@ -29,15 +30,21 @@ license_text = """This license (LGPL v3) applies to all parts of kRPC except for
   - GameData/kRPC/KRPC.Debug.* is under the GPLv3 license.
     See LICENSE.KRPC.Debug
 
+  - GameData/kRPC/KRPC.InfernalRobotics.* is under the GPLv3 license.
+    See LICENSE.KRPC.InfernalRobotics
+
   - GameData/kRPC/Google.Protobuf.dll is a binary from Google's protobuf project.
     See LICENSE.Google.Protobuf
 
   - GameData/kRPC/KRPC.IO.Ports.dll is a modified binary from the Mono project.
     See LICENSE.KRPC.IO.Ports
 
+  - GameData/ModuleManager.*.dll is Module Manager, released under a CC share-alike
+    license. See https://github.com/sarbian/ModuleManager
+
   - schema/* is under the MIT license. See schema/LICENSE
 
-Copyright 2015-2023 kRPC Org
+Copyright 2015-2026 kRPC Org
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the Lesser GNU General Public License as published by
@@ -118,7 +125,7 @@ pkg_zip(
         "//server",
         ":blank_settings",
         "//tools/build/ksp:Google.Protobuf.dll",
-        "//tools/build/protobuf:LICENSE",
+        "//tools/build/protobuf:LICENSE.Google.Protobuf",
         "//tools/build/ksp:KRPC.IO.Ports.dll",
         "@csharp_krpc_io_ports_license//file",
         # Services
@@ -146,7 +153,7 @@ pkg_zip(
         "server/": "GameData/kRPC/",
         "server/src/icons": "GameData/kRPC/icons",
         "tools/build/ksp/": "GameData/kRPC/",
-        "tools/build/protobuf/LICENSE": "LICENSE.Google.Protobuf",
+        "tools/build/protobuf/LICENSE.Google.Protobuf": "LICENSE.Google.Protobuf",
         "../+http_file+csharp_krpc_io_ports_license/file/LICENSE.KRPC.IO.Ports": "LICENSE.KRPC.IO.Ports",
         # Services
         "service/SpaceCenter/KRPC.SpaceCenter/net472/": "GameData/kRPC/",
@@ -164,6 +171,7 @@ pkg_zip(
         "service/InfernalRobotics/KRPC.InfernalRobotics/net472/": "GameData/kRPC/",
         "service/InfernalRobotics/": "GameData/kRPC/",
         "service/InfernalRobotics/CHANGELOG.md": "GameData/kRPC/CHANGELOG.InfernalRobotics.md",
+        "service/InfernalRobotics/LICENSE": "LICENSE.KRPC.InfernalRobotics",
         "service/KerbalAlarmClock/KRPC.KerbalAlarmClock/net472/": "GameData/kRPC/",
         "service/KerbalAlarmClock/": "GameData/kRPC/",
         "service/KerbalAlarmClock/CHANGELOG.md": "GameData/kRPC/CHANGELOG.KerbalAlarmClock.md",

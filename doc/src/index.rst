@@ -1,5 +1,5 @@
-kRPC - Remote Procedure Calls for Kerbal Space Program
-======================================================
+Remote Procedure Calls for Kerbal Space Program
+===============================================
 
 kRPC lets you control Kerbal Space Program from scripts running outside the game. A server
 inside the game exposes the game's API, and client libraries call it from Python, C#, C++, C,

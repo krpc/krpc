@@ -10,7 +10,7 @@ authors = [
 ]
 description = "Development tools and scripts for kRPC."
 readme = "README.md"
-license = "GPL-3.0-only"
+license = "LGPL-3.0-or-later"
 requires-python = ">=3.10"
 dependencies = ["krpc >= 0.8.0", "jinja2", "pytest >= 9"]
 classifiers = [
@@ -45,6 +45,7 @@ include = [
     "CHANGELOG.md",
     "LICENSE",
     "COPYING",
+    "COPYING.LESSER",
     "VERSION.txt",
 ]
 

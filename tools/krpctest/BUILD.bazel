@@ -59,6 +59,7 @@ py_sdist(
         "krpctest/krpctest_career.sfs",
         "pyproject.toml",
         "//:COPYING",
+        "//:COPYING.LESSER",
         "//:python_version",
         "//:version",
     ] + glob(["krpctest/**/*.py"]),

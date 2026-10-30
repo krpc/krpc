@@ -1,3 +1,6 @@
+// Adapted from Infernal Robotics (GPLv3, https://github.com/MagicSmokeIndustries/InfernalRobotics),
+// IRWrapper.cs
+
 #pragma warning disable 1591
 
 using System;

@@ -1,4 +1,11 @@
-# kRPC - Remote Procedure Calls for Kerbal Space Program
+<p>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="media/logo-on-dark.svg">
+    <img src="media/logo-on-light.svg" alt="kRPC" height="80">
+  </picture>
+</p>
+
+## Remote Procedure Calls for Kerbal Space Program
 
 kRPC allows you to control Kerbal Space Program from scripts running outside of
 the game, and comes with client libraries for many popular languages.
@@ -8,16 +15,24 @@ the game, and comes with client libraries for many popular languages.
  * [Forum release thread](https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/)
  * [Discord](https://discord.gg/bXuaTrj)
 
+| [**Python**](https://krpc.github.io/krpc/latest/python.html) | [**C#**](https://krpc.github.io/krpc/latest/csharp.html) | [**C++**](https://krpc.github.io/krpc/latest/cpp.html) | [**C-nano**](https://krpc.github.io/krpc/latest/cnano.html) | [**Java**](https://krpc.github.io/krpc/latest/java.html) | [**Lua**](https://krpc.github.io/krpc/latest/lua.html) | [**Others**](https://krpc.github.io/krpc/latest/third-party.html) |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+
 ## Contributing
 
-Contributions to kRPC are very welcome. [Please refer to this guide.](Contributing.md)
+Contributions to kRPC are very welcome. We are happy to take bug reports and feature requests as
+[issues](https://github.com/krpc/krpc/issues), and changes as
+[pull requests](https://github.com/krpc/krpc/pulls). Please refer to [this guide](Contributing.md) for details.
 
 ## Links for Developers
 
  * [Development Guide](Development-Guide.md) for information on the project structure, compiling the code and the various tools.
  * [Release guide](Release-Guide.md) for project maintainers to do releases.
  * See the #devchat channels on Discord for informal dev discussions
- * [Forum development thread](https://forum.kerbalspaceprogram.com/topic/62902-18x-to-112x-krpc-remote-procedure-call-server-v051-2nd-march-2023/)
+
+## KSA
+
+kRPC for Kitten Space Agency (KSA) is in active development. See [experimental/ksa](experimental/ksa).
 
 ## KSP2
 

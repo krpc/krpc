@@ -58,6 +58,7 @@ html_static_path = ['crafts', 'scripts', '_static']
 templates_path = ['_templates']
 html_css_files = ['custom.css']
 html_js_files = ['external-links.js', 'build-info.js']
+html_favicon = '_static/logo-mark.svg'
 
 # A dev build is published under /dev/ and overwritten on every merge to main.
 # Its footer names the commit it was built from, but the sha is not baked into
@@ -75,10 +76,12 @@ html_context = {'build_info': '%SUBPATH%' == 'dev'}
 html_baseurl = 'https://krpc.github.io/krpc/%SUBPATH%/'
 
 html_theme_options = {
-    # Brand text in the header. The theme otherwise shows the full docstitle
-    # ("kRPC vX.Y.Z documentation"); the version switcher already exposes the
-    # version, so keep it out of the header.
-    'logo': {'text': 'kRPC'},
+    # The logo in the header, with the lettering for each color mode
+    'logo': {
+        'image_light': '_static/logo-on-light.svg',
+        'image_dark': '_static/logo-on-dark.svg',
+        'alt_text': 'kRPC',
+    },
     # Runtime version switcher. Each version's HTML is built once and frozen, so
     # the version list is not baked into the pages: every page fetches
     # switcher.json from a stable absolute URL at page-load time, and

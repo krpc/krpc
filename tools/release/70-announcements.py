@@ -12,7 +12,6 @@ https://krpc.github.io/krpc/{version}/changelog.html):
 
 Announce the release:
  - [ ] Forum release thread (update the post + post an update notice)
- - [ ] Forum development thread
  - [ ] Discord
  - [ ] Reddit\
 """

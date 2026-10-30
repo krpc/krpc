@@ -913,6 +913,8 @@ namespace KRPC.SpaceCenter.Services
             ContinueWarpTo (ut, maxRailsRate, maxPhysicsRate, CallContext.GameScene & WarpScenes);
         }
 
+        // The warp rate control is adapted from MechJeb2 (GPLv3, https://github.com/MuMech/MechJeb2),
+        // MechJebModuleWarpController.cs
         static void ContinueWarpTo (double ut, float maxRailsRate, float maxPhysicsRate, GameScene scene)
         {
             // The server checks the game scene of the first call only

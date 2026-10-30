@@ -76,8 +76,7 @@ not landed within the wait (inflation can lag by a few hours), re-run the step l
     * Upload `assets/krpc-x.x.x.zip` to CurseForge and SpaceDock, linking the changelog at
       `https://krpc.github.io/krpc/<version>/changelog.html`.
     * Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).
-    * Update the forum release and development threads, and post an update notice to the release
-      thread.
+    * Update the forum release thread, and post an update notice to it.
     * Post on Discord and Reddit.
 
 ## 6. Start the next version

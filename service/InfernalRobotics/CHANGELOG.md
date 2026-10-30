@@ -1,3 +1,7 @@
+## [v0.8.0] - unreleased
+
+- Relicense the InfernalRobotics service under the GPLv3 (#1221)
+
 ## [v0.7.0]
 
 - Look up a servo and a servo group on every call, so they keep working across a quickload and
