@@ -10,6 +10,8 @@
   - Add a kRPC menu to the game's menu bar, with a server window and an info window that start
     and stop the server and edit its settings (#1206)
   - Reset the server settings to the defaults when the mod is updated (#1206)
+  - Add a gRPC server, with a `.proto` file and an API reference for each service, to
+    control the game from any language gRPC supports (#1222)
   - **Breaking:** Use `float` for values that do not need `double` precision, such as
     `Flight.Speed` and `Engine.Thrust` (#1214)
 
