@@ -20,7 +20,9 @@ the game, and comes with client libraries for many popular languages.
 
 ## Contributing
 
-Contributions to kRPC are very welcome. [Please refer to this guide.](Contributing.md)
+Contributions to kRPC are very welcome. We are happy to take bug reports and feature requests as
+[issues](https://github.com/krpc/krpc/issues), and changes as
+[pull requests](https://github.com/krpc/krpc/pulls). Please refer to [this guide](Contributing.md) for details.
 
 ## Links for Developers
 
