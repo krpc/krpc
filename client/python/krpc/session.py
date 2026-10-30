@@ -338,11 +338,11 @@ class Session:
                 pass
             finally:
                 self._write_lock.release()
-        deadline = time.monotonic() + CLOSE_TIMEOUT
+        deadline = time.perf_counter() + CLOSE_TIMEOUT
         # A thread already reading finds the server's close itself
         with self._lock:
             while self._reading and not self._ended:
-                remaining = deadline - time.monotonic()
+                remaining = deadline - time.perf_counter()
                 if remaining <= 0:
                     break
                 # Counted as waiting, so a reader releasing the role wakes this thread
@@ -370,7 +370,7 @@ class Session:
         deadline."""
         try:
             while True:
-                remaining = deadline - time.monotonic()
+                remaining = deadline - time.perf_counter()
                 if remaining <= 0:
                     return
                 self._connection.discard(remaining)
@@ -651,7 +651,7 @@ class Session:
         else:
             self.dispatch(disconnect)
             self._half_closed.wait(CLOSE_TIMEOUT)
-        self._drain(time.monotonic() + CLOSE_TIMEOUT)
+        self._drain(time.perf_counter() + CLOSE_TIMEOUT)
         return error
 
     def _dispatch(self) -> None:

@@ -62,7 +62,7 @@ class Connection:
         # Data read from the socket that has not been consumed yet
         self._buffer = bytearray()
         # When a read last received a byte
-        self._progress = time.monotonic()
+        self._progress = time.perf_counter()
 
     def connect(self) -> None:
         self._socket = self._open()
@@ -117,7 +117,7 @@ class Connection:
         # Read until the buffer holds the size prefix and the whole message it
         # describes, then take the message out in one go. An incomplete prefix
         # runs off the end of the buffer, which is an IndexError
-        deadline = None if timeout is None else time.monotonic() + timeout
+        deadline = None if timeout is None else time.perf_counter() + timeout
         buffer = self._buffer
         while True:
             if len(buffer) >= _MAXIMUM_PREFIX_LENGTH and all(
@@ -139,7 +139,7 @@ class Connection:
             if buffer and stall_timeout is not None:
                 wait = self.stall_remaining(stall_timeout)
             if deadline is not None:
-                remaining = max(0.0, deadline - time.monotonic())
+                remaining = max(0.0, deadline - time.perf_counter())
                 wait = remaining if wait is None else min(wait, remaining)
             self._fill(wait)
         data = bytes(buffer[prefix_length:end])
@@ -161,7 +161,7 @@ class Connection:
         if not data:
             raise OSError("Connection closed")
         self._buffer += data
-        self._progress = time.monotonic()
+        self._progress = time.perf_counter()
 
     def has_message(self) -> bool:
         """Whether the buffer holds a whole message."""
@@ -180,7 +180,7 @@ class Connection:
 
     def stall_remaining(self, stall_timeout: float) -> float:
         """Seconds left before a partial message in the buffer stalls."""
-        return max(0.0, stall_timeout - (time.monotonic() - self._progress))
+        return max(0.0, stall_timeout - (time.perf_counter() - self._progress))
 
     def wait_readable(self, timeout: float | None = None) -> bool:
         """Wait until the socket has data to read, or the connection has closed. Returns

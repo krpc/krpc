@@ -47,7 +47,7 @@ class Event:
             if deadline is None:
                 stream.condition.wait()
             else:
-                remaining = deadline - time.monotonic()
+                remaining = deadline - time.perf_counter()
                 if remaining <= 0:
                     return False
                 stream.condition.wait(remaining)
