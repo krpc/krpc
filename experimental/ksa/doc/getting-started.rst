@@ -10,7 +10,11 @@ The Server Mod
 Installation
 ^^^^^^^^^^^^
 
-The server is a code mod, which runs in the game through StarMap, the KSA code mod loader:
+The server is a code mod, which runs in the game through StarMap, the KSA code mod loader.
+The simplest way to install it is with the `Borea <https://github.com/KSAModding/Borea>`_ mod
+manager. Borea installs StarMap and the mod, and launches the game through StarMap.
+
+To install the mod by hand:
 
 1. Install `StarMap <https://github.com/StarMapLoader/StarMap/releases>`_
    @STARMAP_VERSION@.
@@ -26,9 +30,6 @@ The server is a code mod, which runs in the game through StarMap, the KSA code m
 
 4. Launch the game through StarMap.
 
-The `Borea <https://github.com/KSAModding/Borea>`_ mod manager can do all four steps: it
-installs StarMap and the mod, and launches the game through StarMap.
-
 .. note::
 
    Version 0.1.0 named the mod ``kRPC.KSA``. To upgrade from it, delete the ``mods/kRPC.KSA``
@@ -40,10 +41,10 @@ port 50000 and stream port 50001, and accepts every connection.
 Game Versions
 ^^^^^^^^^^^^^
 
-kRPC for KSA @VERSION@ is built for KSA @KSA_VERSION@, and runs on other versions. On another
-version, a pop-up warns that the version is not supported, and lists the RPCs that use game
-code missing from it. Those RPCs throw an exception when called. Other RPCs may still behave
-differently, as the check finds only missing code. **Don't show again for this version**
+kRPC for KSA @VERSION@ is built for KSA @KSA_VERSION@, and may run on other versions. If the mod
+detects that the game version is not supported, a pop-up warns you, and lists the RPCs that use
+game code missing from it. Those RPCs throw an exception when called. Other RPCs may still
+behave differently, as the check finds only missing code. **Don't show again for this version**
 hides the pop-up until the game updates.
 
 Configuration
@@ -52,7 +53,10 @@ Configuration
 The **kRPC** menu in the game's menu bar opens the server window and the server info window,
 and starts and stops the server. The server window shows each server's address and connected
 clients, and edits its protocol, address and ports. **Advanced settings** at the bottom of the
-window holds the connection and rate control settings.
+window holds the connection and rate control settings. The kRPC documentation describes the
+`rate control settings
+<https://krpc.github.io/krpc/@KRPC_VERSION@/internals.html#server-performance-settings>`_ in
+more detail.
 
 Set the address to **Any** to accept connections from other machines.
 
@@ -81,8 +85,7 @@ This script connects to the game, and prints the bodies of the system and the ac
    :start-at: conn = krpc.connect
    :end-at: print(f"Active vehicle
 
-The client builds the ``KSA`` service from the definitions the server sends when it connects,
-so the service is ``conn.ksa``. The complete script, :download:`telemetry.py
+The complete script, :download:`telemetry.py
 </scripts/telemetry.py>`, goes on to print the vehicle's altitude, apoapsis and attitude once a
 second.
 
@@ -91,7 +94,9 @@ Next Steps
 
 * The :doc:`tutorials` walk through complete scripts, from :doc:`tutorials/launch-into-orbit`
   to planning and executing burns.
-* The :doc:`user-guide` describe how the server and the game behave. :doc:`Server side
-  functions </user-guide/server-side-functions>` run your code inside the game, for events and
-  streams computed there.
-* The :doc:`clients` pages cover each client language, and the API reference.
+* The :doc:`user-guide` describe how the server and the game behave, from reference frames to
+  the auto-pilot. They cover running code in the game using :doc:`server side functions
+  </user-guide/server-side-functions>`, the :doc:`timing </user-guide/timing>` of calls, and
+  the :doc:`lifetime </user-guide/object-lifetime>` of the objects the server returns.
+* The :doc:`clients` pages cover installing and using each client language, with its API
+  reference.
