@@ -261,12 +261,17 @@ conformance_testee_srcs = [
     services_out = "conformance/services/{snake_service}.h",
 )
 
+# The dispatch calls the deprecated TestService members
+conformance_testee_copts = select({
+    "@rules_cc//cc/compiler:msvc-cl": ["/wd4996"],
+    "//conditions:default": ["-Wno-deprecated-declarations"],
+})
+
 cc_binary(
     name = "conformance-testee",
     testonly = True,
     srcs = conformance_testee_srcs,
-    # The dispatch calls the deprecated TestService members
-    copts = ["-Wno-deprecated-declarations"],
+    copts = conformance_testee_copts,
     includes = [
         "conformance",
         "test",
@@ -281,8 +286,7 @@ cc_binary(
     name = "conformance-testee-serialio",
     testonly = True,
     srcs = conformance_testee_srcs,
-    # The dispatch calls the deprecated TestService members
-    copts = ["-Wno-deprecated-declarations"],
+    copts = conformance_testee_copts,
     includes = [
         "conformance",
         "test",
@@ -297,8 +301,7 @@ cc_binary(
     name = "conformance-testee-localsocket",
     testonly = True,
     srcs = conformance_testee_srcs,
-    # The dispatch calls the deprecated TestService members
-    copts = ["-Wno-deprecated-declarations"],
+    copts = conformance_testee_copts,
     includes = [
         "conformance",
         "test",

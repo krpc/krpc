@@ -183,7 +183,10 @@ cc_binary(
         services_out = "conformance/services/{snake_service}.hpp",
     ),
     # The dispatch calls the deprecated TestService members
-    copts = ["-Wno-deprecated-declarations"],
+    copts = select({
+        "@rules_cc//cc/compiler:msvc-cl": ["/wd4996"],
+        "//conditions:default": ["-Wno-deprecated-declarations"],
+    }),
     includes = [
         "conformance",
         "test",
