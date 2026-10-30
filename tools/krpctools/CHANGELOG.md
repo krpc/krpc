@@ -1,4 +1,5 @@
 ## [v0.8.0] - unreleased
+- Relicense krpctools, including the bundled ServiceDefinitions tool, under the LGPLv3 (#1221)
 - Add `<unit>` and a LaTeX subset for `<math>` to service documentation, typeset by
   `krpc-docgen` and written as Unicode text by `krpc-clientgen` (#1169)
 - Report invalid documentation markup as an error from `krpc-docgen`, and a warning from
