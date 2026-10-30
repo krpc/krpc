@@ -1,5 +1,7 @@
 ## [v0.8.0] - unreleased
 
+- Log an auto-pilot failure once, naming the vessel and client, in place of on every physics
+  tick (#1235)
 - Typeset units and formulas in the API documentation, and write them as Unicode text in
   client documentation, e.g. `m/s²` (#1169)
 - Allow the rails warp rates the game allows the player, which ignore the altitude limits when

@@ -31,6 +31,11 @@
   - Allow a `<see cref>` in service documentation to link to an exception, including a .NET
     exception that a kRPC exception maps (#1185)
 
+- Logging
+  - Log the transport connection lines and object store sweeps at the debug level (#1235)
+  - Log the address and settings of a server when it starts (#1235)
+  - Leave the time out of log lines, which the game log adds (#1235)
+
 ## [v0.7.0]
 
 - Server side functions

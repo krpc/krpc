@@ -1,3 +1,7 @@
+## [v0.8.0] - unreleased
+
+- Stop logging each read of `Camera.Image` (#1235)
+
 ## [v0.7.0]
 
 - A `Camera` whose part is destroyed, or that is no longer a camera, raises
