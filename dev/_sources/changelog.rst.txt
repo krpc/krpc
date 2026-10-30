@@ -60,6 +60,12 @@ SpaceCenter service
 * Add an aerodynamics section to the auto-pilot info window, and make its sections collapsible (:issue:`1191`)
 
 
+InfernalRobotics service
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Relicense the InfernalRobotics service under the GPLv3 (:issue:`1221`)
+
+
 C-nano client
 ^^^^^^^^^^^^^
 
@@ -201,6 +207,7 @@ Python client
 krpctools
 ^^^^^^^^^
 
+* Relicense krpctools, including the bundled ServiceDefinitions tool, under the LGPLv3 (:issue:`1221`)
 * Add ``<unit>`` and a LaTeX subset for ``<math>`` to service documentation, typeset by ``krpc-docgen`` and written as Unicode text by ``krpc-clientgen`` (:issue:`1169`)
 * Report invalid documentation markup as an error from ``krpc-docgen``, and a warning from ``krpc-clientgen`` (:issue:`1169`)
 * Write the ``mapped_type`` of each exception to the service definitions (:issue:`1172`)
