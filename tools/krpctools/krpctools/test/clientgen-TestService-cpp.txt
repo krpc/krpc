@@ -93,11 +93,17 @@ class TestService : public Service {
 
   std::string add_multiple_values(float x, int32_t y, int64_t z);
 
+  std::map<std::string, TestService::TestClass> add_to_object_dictionary(std::map<std::string, TestService::TestClass> d, std::string key);
+
   std::vector<TestService::TestClass> add_to_object_list(std::vector<TestService::TestClass> l, std::string value);
+
+  std::set<TestService::TestClass> add_to_object_set(std::set<TestService::TestClass> h, std::string value);
 
   int32_t blocking_procedure(int32_t n, int32_t sum);
 
   std::string bool_to_string(bool value);
+
+  std::string bytes_default(std::string x);
 
   std::string bytes_to_hex_string(std::string value);
 
@@ -149,6 +155,18 @@ class TestService : public Service {
 
   TestService::TestNestedNullableStruct echo_nested_nullable_struct(TestService::TestNestedNullableStruct value);
 
+  std::optional<bool> echo_nullable_bool(std::optional<bool> value);
+
+  std::optional<std::string> echo_nullable_bytes(std::optional<std::string> value);
+
+  std::optional<std::map<std::string, int32_t> > echo_nullable_dictionary(std::optional<std::map<std::string, int32_t> > d);
+
+  std::optional<double> echo_nullable_double(std::optional<double> value);
+
+  std::optional<TestService::TestEnum> echo_nullable_enum(std::optional<TestService::TestEnum> x);
+
+  std::optional<float> echo_nullable_float(std::optional<float> value);
+
   /**
    * Returns the given value.
    * @param value The value, or `null`.
@@ -158,7 +176,19 @@ class TestService : public Service {
 
   std::optional<std::vector<int32_t> > echo_nullable_list(std::optional<std::vector<int32_t> > l);
 
+  std::optional<int64_t> echo_nullable_long(std::optional<int64_t> value);
+
+  std::optional<std::set<int32_t> > echo_nullable_set(std::optional<std::set<int32_t> > h);
+
   std::optional<std::string> echo_nullable_string(std::optional<std::string> value);
+
+  std::optional<std::tuple<int32_t, int64_t> > echo_nullable_tuple(std::optional<std::tuple<int32_t, int64_t> > t);
+
+  std::optional<uint32_t> echo_nullable_u_int(std::optional<uint32_t> value);
+
+  std::optional<uint64_t> echo_nullable_u_long(std::optional<uint64_t> value);
+
+  std::set<std::string> echo_string_set(std::set<std::string> h);
 
   std::optional<TestService::TestClass> echo_test_object(std::optional<TestService::TestClass> value);
 
@@ -166,13 +196,13 @@ class TestService : public Service {
 
   std::vector<std::string> empty_list_default(std::vector<std::string> x);
 
-  TestService::TestEnum enum_default_arg(TestService::TestEnum x);
+  TestService::TestEnum enum_default(TestService::TestEnum x);
 
   TestService::TestEnum enum_echo(TestService::TestEnum x);
 
   std::vector<TestService::TestEnum> enum_list_default(std::vector<TestService::TestEnum> x);
 
-  TestService::TestEnum enum_return();
+  std::string enum_to_string(TestService::TestEnum x);
 
   /**
    * Procedure whose defaults are the special values of float, plus a finite fraction
@@ -184,6 +214,8 @@ class TestService : public Service {
    * Procedure documentation string.
    */
   std::string float_to_string(float value);
+
+  std::string hex_string_to_bytes(std::string value);
 
   std::map<std::string, int32_t> increment_dictionary(std::map<std::string, int32_t> d);
 
@@ -213,7 +245,7 @@ class TestService : public Service {
 
   /**
    * Returns first_value and from joined by an at
-   * sign, e.g. `jeb@kerbin`. The parameter names are:
+   * sign, e.g. `name@host`. The parameter names are:
    *
    * - a name in camel case, and
    * - a name that is a keyword in some languages.
@@ -229,15 +261,17 @@ class TestService : public Service {
 
   TestService::TestClass not_nullable_object(TestService::TestClass value);
 
+  std::string null_default(std::optional<TestService::TestClass> obj);
+
   TestService::TestNullableStruct nullable_struct_echo(TestService::TestNullableStruct x);
 
   ::krpc::Event on_timer(uint32_t milliseconds, uint32_t repeats);
 
-  ::krpc::Event on_timer_using_lambda(uint32_t milliseconds);
-
   std::string optional_arguments(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
   ::krpc::Event remove_event_after(uint32_t milliseconds);
+
+  void remove_test_object(TestService::TestClass value);
 
   void reset_custom_exception_later();
 
@@ -245,15 +279,35 @@ class TestService : public Service {
 
   TestService::TestClass return_null_when_not_allowed();
 
+  int32_t scalar_default(int32_t x);
+
   std::set<int32_t> set_default(std::set<int32_t> x);
 
+  std::string string_default(std::string x);
+
+  bool string_to_bool(std::string value);
+
+  double string_to_double(std::string value);
+
+  TestService::TestEnum string_to_enum(std::string value);
+
+  float string_to_float(std::string value);
+
   int32_t string_to_int32(std::string value);
+
+  int64_t string_to_int64(std::string value);
+
+  uint32_t string_to_u_int32(std::string value);
+
+  uint64_t string_to_u_int64(std::string value);
 
   TestService::TestStruct struct_default(TestService::TestStruct x);
 
   TestService::TestStruct struct_echo(TestService::TestStruct x);
 
   std::optional<TestService::TestStruct> struct_echo_nullable(std::optional<TestService::TestStruct> x);
+
+  std::tuple<TestService::TestClass, TestService::TestClass> swap_object_tuple(std::tuple<TestService::TestClass, TestService::TestClass> t);
 
   int32_t throw_argument_exception();
 
@@ -280,7 +334,17 @@ class TestService : public Service {
 
   int32_t throw_invalid_operation_exception_later();
 
+  /**
+   * Throws the system exception of the given name, which the server maps to the KRPC
+   * exception of that name.
+   */
+  int32_t throw_mapped_exception(std::string name);
+
   std::tuple<int32_t, bool> tuple_default(std::tuple<int32_t, bool> x);
+
+  std::string u_int32_to_string(uint32_t value);
+
+  std::string u_int64_to_string(uint64_t value);
 
   /**
    * Procedure whose default is the largest uint.
@@ -339,11 +403,17 @@ class TestService : public Service {
 
   ::krpc::Stream<std::string> add_multiple_values_stream(float x, int32_t y, int64_t z);
 
+  ::krpc::Stream<std::map<std::string, TestService::TestClass>> add_to_object_dictionary_stream(std::map<std::string, TestService::TestClass> d, std::string key);
+
   ::krpc::Stream<std::vector<TestService::TestClass>> add_to_object_list_stream(std::vector<TestService::TestClass> l, std::string value);
+
+  ::krpc::Stream<std::set<TestService::TestClass>> add_to_object_set_stream(std::set<TestService::TestClass> h, std::string value);
 
   ::krpc::Stream<int32_t> blocking_procedure_stream(int32_t n, int32_t sum);
 
   ::krpc::Stream<std::string> bool_to_string_stream(bool value);
+
+  ::krpc::Stream<std::string> bytes_default_stream(std::string x);
 
   ::krpc::Stream<std::string> bytes_to_hex_string_stream(std::string value);
 
@@ -375,11 +445,35 @@ class TestService : public Service {
 
   ::krpc::Stream<TestService::TestNestedNullableStruct> echo_nested_nullable_struct_stream(TestService::TestNestedNullableStruct value);
 
+  ::krpc::Stream<std::optional<bool>> echo_nullable_bool_stream(std::optional<bool> value);
+
+  ::krpc::Stream<std::optional<std::string>> echo_nullable_bytes_stream(std::optional<std::string> value);
+
+  ::krpc::Stream<std::optional<std::map<std::string, int32_t> >> echo_nullable_dictionary_stream(std::optional<std::map<std::string, int32_t> > d);
+
+  ::krpc::Stream<std::optional<double>> echo_nullable_double_stream(std::optional<double> value);
+
+  ::krpc::Stream<std::optional<TestService::TestEnum>> echo_nullable_enum_stream(std::optional<TestService::TestEnum> x);
+
+  ::krpc::Stream<std::optional<float>> echo_nullable_float_stream(std::optional<float> value);
+
   ::krpc::Stream<std::optional<int32_t>> echo_nullable_int_stream(std::optional<int32_t> value);
 
   ::krpc::Stream<std::optional<std::vector<int32_t> >> echo_nullable_list_stream(std::optional<std::vector<int32_t> > l);
 
+  ::krpc::Stream<std::optional<int64_t>> echo_nullable_long_stream(std::optional<int64_t> value);
+
+  ::krpc::Stream<std::optional<std::set<int32_t> >> echo_nullable_set_stream(std::optional<std::set<int32_t> > h);
+
   ::krpc::Stream<std::optional<std::string>> echo_nullable_string_stream(std::optional<std::string> value);
+
+  ::krpc::Stream<std::optional<std::tuple<int32_t, int64_t> >> echo_nullable_tuple_stream(std::optional<std::tuple<int32_t, int64_t> > t);
+
+  ::krpc::Stream<std::optional<uint32_t>> echo_nullable_u_int_stream(std::optional<uint32_t> value);
+
+  ::krpc::Stream<std::optional<uint64_t>> echo_nullable_u_long_stream(std::optional<uint64_t> value);
+
+  ::krpc::Stream<std::set<std::string>> echo_string_set_stream(std::set<std::string> h);
 
   ::krpc::Stream<std::optional<TestService::TestClass>> echo_test_object_stream(std::optional<TestService::TestClass> value);
 
@@ -387,17 +481,19 @@ class TestService : public Service {
 
   ::krpc::Stream<std::vector<std::string>> empty_list_default_stream(std::vector<std::string> x);
 
-  ::krpc::Stream<TestService::TestEnum> enum_default_arg_stream(TestService::TestEnum x);
+  ::krpc::Stream<TestService::TestEnum> enum_default_stream(TestService::TestEnum x);
 
   ::krpc::Stream<TestService::TestEnum> enum_echo_stream(TestService::TestEnum x);
 
   ::krpc::Stream<std::vector<TestService::TestEnum>> enum_list_default_stream(std::vector<TestService::TestEnum> x);
 
-  ::krpc::Stream<TestService::TestEnum> enum_return_stream();
+  ::krpc::Stream<std::string> enum_to_string_stream(TestService::TestEnum x);
 
   ::krpc::Stream<std::vector<float>> float_special_defaults_stream(float nan, float infinity, float negative_infinity, float maximum, float lowest, float fraction);
 
   ::krpc::Stream<std::string> float_to_string_stream(float value);
+
+  ::krpc::Stream<std::string> hex_string_to_bytes_stream(std::string value);
 
   ::krpc::Stream<std::map<std::string, int32_t>> increment_dictionary_stream(std::map<std::string, int32_t> d);
 
@@ -427,11 +523,11 @@ class TestService : public Service {
 
   ::krpc::Stream<TestService::TestClass> not_nullable_object_stream(TestService::TestClass value);
 
+  ::krpc::Stream<std::string> null_default_stream(std::optional<TestService::TestClass> obj);
+
   ::krpc::Stream<TestService::TestNullableStruct> nullable_struct_echo_stream(TestService::TestNullableStruct x);
 
   ::krpc::Stream<::krpc::Event> on_timer_stream(uint32_t milliseconds, uint32_t repeats);
-
-  ::krpc::Stream<::krpc::Event> on_timer_using_lambda_stream(uint32_t milliseconds);
 
   ::krpc::Stream<std::string> optional_arguments_stream(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
@@ -439,15 +535,35 @@ class TestService : public Service {
 
   ::krpc::Stream<TestService::TestClass> return_null_when_not_allowed_stream();
 
+  ::krpc::Stream<int32_t> scalar_default_stream(int32_t x);
+
   ::krpc::Stream<std::set<int32_t>> set_default_stream(std::set<int32_t> x);
 
+  ::krpc::Stream<std::string> string_default_stream(std::string x);
+
+  ::krpc::Stream<bool> string_to_bool_stream(std::string value);
+
+  ::krpc::Stream<double> string_to_double_stream(std::string value);
+
+  ::krpc::Stream<TestService::TestEnum> string_to_enum_stream(std::string value);
+
+  ::krpc::Stream<float> string_to_float_stream(std::string value);
+
   ::krpc::Stream<int32_t> string_to_int32_stream(std::string value);
+
+  ::krpc::Stream<int64_t> string_to_int64_stream(std::string value);
+
+  ::krpc::Stream<uint32_t> string_to_u_int32_stream(std::string value);
+
+  ::krpc::Stream<uint64_t> string_to_u_int64_stream(std::string value);
 
   ::krpc::Stream<TestService::TestStruct> struct_default_stream(TestService::TestStruct x);
 
   ::krpc::Stream<TestService::TestStruct> struct_echo_stream(TestService::TestStruct x);
 
   ::krpc::Stream<std::optional<TestService::TestStruct>> struct_echo_nullable_stream(std::optional<TestService::TestStruct> x);
+
+  ::krpc::Stream<std::tuple<TestService::TestClass, TestService::TestClass>> swap_object_tuple_stream(std::tuple<TestService::TestClass, TestService::TestClass> t);
 
   ::krpc::Stream<int32_t> throw_argument_exception_stream();
 
@@ -463,7 +579,13 @@ class TestService : public Service {
 
   ::krpc::Stream<int32_t> throw_invalid_operation_exception_later_stream();
 
+  ::krpc::Stream<int32_t> throw_mapped_exception_stream(std::string name);
+
   ::krpc::Stream<std::tuple<int32_t, bool>> tuple_default_stream(std::tuple<int32_t, bool> x);
+
+  ::krpc::Stream<std::string> u_int32_to_string_stream(uint32_t value);
+
+  ::krpc::Stream<std::string> u_int64_to_string_stream(uint64_t value);
 
   ::krpc::Stream<std::vector<uint32_t>> uint32_special_defaults_stream(uint32_t maximum);
 
@@ -481,11 +603,17 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall add_multiple_values_call(float x, int32_t y, int64_t z);
 
+  ::krpc::schema::ProcedureCall add_to_object_dictionary_call(std::map<std::string, TestService::TestClass> d, std::string key);
+
   ::krpc::schema::ProcedureCall add_to_object_list_call(std::vector<TestService::TestClass> l, std::string value);
+
+  ::krpc::schema::ProcedureCall add_to_object_set_call(std::set<TestService::TestClass> h, std::string value);
 
   ::krpc::schema::ProcedureCall blocking_procedure_call(int32_t n, int32_t sum);
 
   ::krpc::schema::ProcedureCall bool_to_string_call(bool value);
+
+  ::krpc::schema::ProcedureCall bytes_default_call(std::string x);
 
   ::krpc::schema::ProcedureCall bytes_to_hex_string_call(std::string value);
 
@@ -517,11 +645,35 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall echo_nested_nullable_struct_call(TestService::TestNestedNullableStruct value);
 
+  ::krpc::schema::ProcedureCall echo_nullable_bool_call(std::optional<bool> value);
+
+  ::krpc::schema::ProcedureCall echo_nullable_bytes_call(std::optional<std::string> value);
+
+  ::krpc::schema::ProcedureCall echo_nullable_dictionary_call(std::optional<std::map<std::string, int32_t> > d);
+
+  ::krpc::schema::ProcedureCall echo_nullable_double_call(std::optional<double> value);
+
+  ::krpc::schema::ProcedureCall echo_nullable_enum_call(std::optional<TestService::TestEnum> x);
+
+  ::krpc::schema::ProcedureCall echo_nullable_float_call(std::optional<float> value);
+
   ::krpc::schema::ProcedureCall echo_nullable_int_call(std::optional<int32_t> value);
 
   ::krpc::schema::ProcedureCall echo_nullable_list_call(std::optional<std::vector<int32_t> > l);
 
+  ::krpc::schema::ProcedureCall echo_nullable_long_call(std::optional<int64_t> value);
+
+  ::krpc::schema::ProcedureCall echo_nullable_set_call(std::optional<std::set<int32_t> > h);
+
   ::krpc::schema::ProcedureCall echo_nullable_string_call(std::optional<std::string> value);
+
+  ::krpc::schema::ProcedureCall echo_nullable_tuple_call(std::optional<std::tuple<int32_t, int64_t> > t);
+
+  ::krpc::schema::ProcedureCall echo_nullable_u_int_call(std::optional<uint32_t> value);
+
+  ::krpc::schema::ProcedureCall echo_nullable_u_long_call(std::optional<uint64_t> value);
+
+  ::krpc::schema::ProcedureCall echo_string_set_call(std::set<std::string> h);
 
   ::krpc::schema::ProcedureCall echo_test_object_call(std::optional<TestService::TestClass> value);
 
@@ -529,17 +681,19 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall empty_list_default_call(std::vector<std::string> x);
 
-  ::krpc::schema::ProcedureCall enum_default_arg_call(TestService::TestEnum x);
+  ::krpc::schema::ProcedureCall enum_default_call(TestService::TestEnum x);
 
   ::krpc::schema::ProcedureCall enum_echo_call(TestService::TestEnum x);
 
   ::krpc::schema::ProcedureCall enum_list_default_call(std::vector<TestService::TestEnum> x);
 
-  ::krpc::schema::ProcedureCall enum_return_call();
+  ::krpc::schema::ProcedureCall enum_to_string_call(TestService::TestEnum x);
 
   ::krpc::schema::ProcedureCall float_special_defaults_call(float nan, float infinity, float negative_infinity, float maximum, float lowest, float fraction);
 
   ::krpc::schema::ProcedureCall float_to_string_call(float value);
+
+  ::krpc::schema::ProcedureCall hex_string_to_bytes_call(std::string value);
 
   ::krpc::schema::ProcedureCall increment_dictionary_call(std::map<std::string, int32_t> d);
 
@@ -569,15 +723,17 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall not_nullable_object_call(TestService::TestClass value);
 
+  ::krpc::schema::ProcedureCall null_default_call(std::optional<TestService::TestClass> obj);
+
   ::krpc::schema::ProcedureCall nullable_struct_echo_call(TestService::TestNullableStruct x);
 
   ::krpc::schema::ProcedureCall on_timer_call(uint32_t milliseconds, uint32_t repeats);
 
-  ::krpc::schema::ProcedureCall on_timer_using_lambda_call(uint32_t milliseconds);
-
   ::krpc::schema::ProcedureCall optional_arguments_call(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
   ::krpc::schema::ProcedureCall remove_event_after_call(uint32_t milliseconds);
+
+  ::krpc::schema::ProcedureCall remove_test_object_call(TestService::TestClass value);
 
   ::krpc::schema::ProcedureCall reset_custom_exception_later_call();
 
@@ -585,15 +741,35 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall return_null_when_not_allowed_call();
 
+  ::krpc::schema::ProcedureCall scalar_default_call(int32_t x);
+
   ::krpc::schema::ProcedureCall set_default_call(std::set<int32_t> x);
 
+  ::krpc::schema::ProcedureCall string_default_call(std::string x);
+
+  ::krpc::schema::ProcedureCall string_to_bool_call(std::string value);
+
+  ::krpc::schema::ProcedureCall string_to_double_call(std::string value);
+
+  ::krpc::schema::ProcedureCall string_to_enum_call(std::string value);
+
+  ::krpc::schema::ProcedureCall string_to_float_call(std::string value);
+
   ::krpc::schema::ProcedureCall string_to_int32_call(std::string value);
+
+  ::krpc::schema::ProcedureCall string_to_int64_call(std::string value);
+
+  ::krpc::schema::ProcedureCall string_to_u_int32_call(std::string value);
+
+  ::krpc::schema::ProcedureCall string_to_u_int64_call(std::string value);
 
   ::krpc::schema::ProcedureCall struct_default_call(TestService::TestStruct x);
 
   ::krpc::schema::ProcedureCall struct_echo_call(TestService::TestStruct x);
 
   ::krpc::schema::ProcedureCall struct_echo_nullable_call(std::optional<TestService::TestStruct> x);
+
+  ::krpc::schema::ProcedureCall swap_object_tuple_call(std::tuple<TestService::TestClass, TestService::TestClass> t);
 
   ::krpc::schema::ProcedureCall throw_argument_exception_call();
 
@@ -609,7 +785,13 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall throw_invalid_operation_exception_later_call();
 
+  ::krpc::schema::ProcedureCall throw_mapped_exception_call(std::string name);
+
   ::krpc::schema::ProcedureCall tuple_default_call(std::tuple<int32_t, bool> x);
+
+  ::krpc::schema::ProcedureCall u_int32_to_string_call(uint32_t value);
+
+  ::krpc::schema::ProcedureCall u_int64_to_string_call(uint64_t value);
 
   ::krpc::schema::ProcedureCall uint32_special_defaults_call(uint32_t maximum);
 
@@ -678,7 +860,7 @@ class TestService : public Service {
     std::string optional_arguments(std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
     /**
-     * Returns jeb followed by a and b.
+     * Returns static followed by a and b.
      * @param client A client object.
      * @param a The first string.
      * @param b The second string.
@@ -687,6 +869,8 @@ class TestService : public Service {
     static std::string static_method(Client& client, std::string a, std::string b);
 
     static std::optional<TestService::TestClass> static_nullable_object(Client& client, std::optional<TestService::TestClass> value);
+
+    static std::string static_optional_arguments(Client& client, std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
     /**
      * Property documentation string.
@@ -727,6 +911,8 @@ class TestService : public Service {
 
     static ::krpc::Stream<std::optional<TestService::TestClass>> static_nullable_object_stream(Client& client, std::optional<TestService::TestClass> value);
 
+    static ::krpc::Stream<std::string> static_optional_arguments_stream(Client& client, std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
+
     ::krpc::Stream<int32_t> int_property_stream();
 
     ::krpc::Stream<std::optional<TestService::TestClass>> object_property_stream();
@@ -746,6 +932,8 @@ class TestService : public Service {
     static ::krpc::schema::ProcedureCall static_method_call(Client& client, std::string a, std::string b);
 
     static ::krpc::schema::ProcedureCall static_nullable_object_call(Client& client, std::optional<TestService::TestClass> value);
+
+    static ::krpc::schema::ProcedureCall static_optional_arguments_call(Client& client, std::string x, std::string y, std::string z, std::optional<TestService::TestClass> obj);
 
     ::krpc::schema::ProcedureCall int_property_call();
 
@@ -1295,6 +1483,18 @@ inline std::string TestService::add_multiple_values(float x, int32_t y, int64_t 
   return _result;
 }
 
+inline std::map<std::string, TestService::TestClass> TestService::add_to_object_dictionary(std::map<std::string, TestService::TestClass> d, std::string key) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(2);
+  _args.push_back(encoder::encode_arg(d));
+  _args.push_back(encoder::encode_arg(key));
+  auto _data = this->_client->invoke("TestService", "AddToObjectDictionary", _args, ::krpc::Client::Returns::value);
+  std::map<std::string, TestService::TestClass> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline std::vector<TestService::TestClass> TestService::add_to_object_list(std::vector<TestService::TestClass> l, std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(2);
@@ -1302,6 +1502,18 @@ inline std::vector<TestService::TestClass> TestService::add_to_object_list(std::
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_client->invoke("TestService", "AddToObjectList", _args, ::krpc::Client::Returns::value);
   std::vector<TestService::TestClass> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::set<TestService::TestClass> TestService::add_to_object_set(std::set<TestService::TestClass> h, std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(2);
+  _args.push_back(encoder::encode_arg(h));
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "AddToObjectSet", _args, ::krpc::Client::Returns::value);
+  std::set<TestService::TestClass> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
@@ -1324,6 +1536,17 @@ inline std::string TestService::bool_to_string(bool value) {
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_client->invoke("TestService", "BoolToString", _args, ::krpc::Client::Returns::value);
+  std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::string TestService::bytes_default(std::string x = std::string("\xca\xfe", 2)) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  auto _data = this->_client->invoke("TestService", "BytesDefault", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1500,6 +1723,72 @@ inline TestService::TestNestedNullableStruct TestService::echo_nested_nullable_s
   return _result;
 }
 
+inline std::optional<bool> TestService::echo_nullable_bool(std::optional<bool> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "EchoNullableBool", _args, ::krpc::Client::Returns::value);
+  std::optional<bool> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::optional<std::string> TestService::echo_nullable_bytes(std::optional<std::string> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "EchoNullableBytes", _args, ::krpc::Client::Returns::value);
+  std::optional<std::string> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::optional<std::map<std::string, int32_t> > TestService::echo_nullable_dictionary(std::optional<std::map<std::string, int32_t> > d) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(d));
+  auto _data = this->_client->invoke("TestService", "EchoNullableDictionary", _args, ::krpc::Client::Returns::value);
+  std::optional<std::map<std::string, int32_t> > _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::optional<double> TestService::echo_nullable_double(std::optional<double> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "EchoNullableDouble", _args, ::krpc::Client::Returns::value);
+  std::optional<double> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::optional<TestService::TestEnum> TestService::echo_nullable_enum(std::optional<TestService::TestEnum> x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  auto _data = this->_client->invoke("TestService", "EchoNullableEnum", _args, ::krpc::Client::Returns::value);
+  std::optional<TestService::TestEnum> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::optional<float> TestService::echo_nullable_float(std::optional<float> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "EchoNullableFloat", _args, ::krpc::Client::Returns::value);
+  std::optional<float> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline std::optional<int32_t> TestService::echo_nullable_int(std::optional<int32_t> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -1522,12 +1811,78 @@ inline std::optional<std::vector<int32_t> > TestService::echo_nullable_list(std:
   return _result;
 }
 
+inline std::optional<int64_t> TestService::echo_nullable_long(std::optional<int64_t> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "EchoNullableLong", _args, ::krpc::Client::Returns::value);
+  std::optional<int64_t> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::optional<std::set<int32_t> > TestService::echo_nullable_set(std::optional<std::set<int32_t> > h) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(h));
+  auto _data = this->_client->invoke("TestService", "EchoNullableSet", _args, ::krpc::Client::Returns::value);
+  std::optional<std::set<int32_t> > _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline std::optional<std::string> TestService::echo_nullable_string(std::optional<std::string> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_client->invoke("TestService", "EchoNullableString", _args, ::krpc::Client::Returns::value);
   std::optional<std::string> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::optional<std::tuple<int32_t, int64_t> > TestService::echo_nullable_tuple(std::optional<std::tuple<int32_t, int64_t> > t) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(t));
+  auto _data = this->_client->invoke("TestService", "EchoNullableTuple", _args, ::krpc::Client::Returns::value);
+  std::optional<std::tuple<int32_t, int64_t> > _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::optional<uint32_t> TestService::echo_nullable_u_int(std::optional<uint32_t> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "EchoNullableUInt", _args, ::krpc::Client::Returns::value);
+  std::optional<uint32_t> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::optional<uint64_t> TestService::echo_nullable_u_long(std::optional<uint64_t> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "EchoNullableULong", _args, ::krpc::Client::Returns::value);
+  std::optional<uint64_t> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::set<std::string> TestService::echo_string_set(std::set<std::string> h) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(h));
+  auto _data = this->_client->invoke("TestService", "EchoStringSet", _args, ::krpc::Client::Returns::value);
+  std::set<std::string> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
@@ -1566,11 +1921,11 @@ inline std::vector<std::string> TestService::empty_list_default(std::vector<std:
   return _result;
 }
 
-inline TestService::TestEnum TestService::enum_default_arg(TestService::TestEnum x = TestService::TestEnum::value_c) {
+inline TestService::TestEnum TestService::enum_default(TestService::TestEnum x = TestService::TestEnum::value_c) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  auto _data = this->_client->invoke("TestService", "EnumDefaultArg", _args, ::krpc::Client::Returns::value);
+  auto _data = this->_client->invoke("TestService", "EnumDefault", _args, ::krpc::Client::Returns::value);
   TestService::TestEnum _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1599,9 +1954,12 @@ inline std::vector<TestService::TestEnum> TestService::enum_list_default(std::ve
   return _result;
 }
 
-inline TestService::TestEnum TestService::enum_return() {
-  auto _data = this->_client->invoke("TestService", "EnumReturn", {}, ::krpc::Client::Returns::value);
-  TestService::TestEnum _result{};
+inline std::string TestService::enum_to_string(TestService::TestEnum x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  auto _data = this->_client->invoke("TestService", "EnumToString", _args, ::krpc::Client::Returns::value);
+  std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
@@ -1628,6 +1986,17 @@ inline std::string TestService::float_to_string(float value) {
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   auto _data = this->_client->invoke("TestService", "FloatToString", _args, ::krpc::Client::Returns::value);
+  std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::string TestService::hex_string_to_bytes(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "HexStringToBytes", _args, ::krpc::Client::Returns::value);
   std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1791,6 +2160,17 @@ inline TestService::TestClass TestService::not_nullable_object(TestService::Test
   return _result;
 }
 
+inline std::string TestService::null_default(std::optional<TestService::TestClass> obj = std::optional<TestService::TestClass>()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(obj));
+  auto _data = this->_client->invoke("TestService", "NullDefault", _args, ::krpc::Client::Returns::value);
+  std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline TestService::TestNullableStruct TestService::nullable_struct_echo(TestService::TestNullableStruct x) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -1808,17 +2188,6 @@ inline ::krpc::Event TestService::on_timer(uint32_t milliseconds, uint32_t repea
   _args.push_back(encoder::encode_arg(milliseconds));
   _args.push_back(encoder::encode_arg(repeats));
   auto _data = this->_client->invoke("TestService", "OnTimer", _args, ::krpc::Client::Returns::event);
-  ::krpc::Event _result{};
-  if (!_data.is_null())
-    decoder::decode(_result, _data.value(), this->_client);
-  return _result;
-}
-
-inline ::krpc::Event TestService::on_timer_using_lambda(uint32_t milliseconds) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(milliseconds));
-  auto _data = this->_client->invoke("TestService", "OnTimerUsingLambda", _args, ::krpc::Client::Returns::event);
   ::krpc::Event _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
@@ -1850,6 +2219,13 @@ inline ::krpc::Event TestService::remove_event_after(uint32_t milliseconds) {
   return _result;
 }
 
+inline void TestService::remove_test_object(TestService::TestClass value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  this->_client->invoke("TestService", "RemoveTestObject", _args, ::krpc::Client::Returns::value);
+}
+
 inline void TestService::reset_custom_exception_later() {
   this->_client->invoke("TestService", "ResetCustomExceptionLater", {}, ::krpc::Client::Returns::value);
 }
@@ -1866,12 +2242,78 @@ inline TestService::TestClass TestService::return_null_when_not_allowed() {
   return _result;
 }
 
+inline int32_t TestService::scalar_default(int32_t x = 42) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  auto _data = this->_client->invoke("TestService", "ScalarDefault", _args, ::krpc::Client::Returns::value);
+  int32_t _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline std::set<int32_t> TestService::set_default(std::set<int32_t> x = std::set<int32_t>{1, 2, 3}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_client->invoke("TestService", "SetDefault", _args, ::krpc::Client::Returns::value);
   std::set<int32_t> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::string TestService::string_default(std::string x = "foo") {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  auto _data = this->_client->invoke("TestService", "StringDefault", _args, ::krpc::Client::Returns::value);
+  std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline bool TestService::string_to_bool(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "StringToBool", _args, ::krpc::Client::Returns::value);
+  bool _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline double TestService::string_to_double(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "StringToDouble", _args, ::krpc::Client::Returns::value);
+  double _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline TestService::TestEnum TestService::string_to_enum(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "StringToEnum", _args, ::krpc::Client::Returns::value);
+  TestService::TestEnum _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline float TestService::string_to_float(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "StringToFloat", _args, ::krpc::Client::Returns::value);
+  float _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
@@ -1888,7 +2330,40 @@ inline int32_t TestService::string_to_int32(std::string value) {
   return _result;
 }
 
-inline TestService::TestStruct TestService::struct_default(TestService::TestStruct x = TestService::TestStruct{42, "jeb", TestService::TestEnum::value_b, std::vector<int32_t>{1, 2, 3}}) {
+inline int64_t TestService::string_to_int64(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "StringToInt64", _args, ::krpc::Client::Returns::value);
+  int64_t _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline uint32_t TestService::string_to_u_int32(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "StringToUInt32", _args, ::krpc::Client::Returns::value);
+  uint32_t _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline uint64_t TestService::string_to_u_int64(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "StringToUInt64", _args, ::krpc::Client::Returns::value);
+  uint64_t _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline TestService::TestStruct TestService::struct_default(TestService::TestStruct x = TestService::TestStruct{42, "alpha", TestService::TestEnum::value_b, std::vector<int32_t>{1, 2, 3}}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
@@ -1916,6 +2391,17 @@ inline std::optional<TestService::TestStruct> TestService::struct_echo_nullable(
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_client->invoke("TestService", "StructEchoNullable", _args, ::krpc::Client::Returns::value);
   std::optional<TestService::TestStruct> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::tuple<TestService::TestClass, TestService::TestClass> TestService::swap_object_tuple(std::tuple<TestService::TestClass, TestService::TestClass> t) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(t));
+  auto _data = this->_client->invoke("TestService", "SwapObjectTuple", _args, ::krpc::Client::Returns::value);
+  std::tuple<TestService::TestClass, TestService::TestClass> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
@@ -1983,12 +2469,45 @@ inline int32_t TestService::throw_invalid_operation_exception_later() {
   return _result;
 }
 
+inline int32_t TestService::throw_mapped_exception(std::string name) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(name));
+  auto _data = this->_client->invoke("TestService", "ThrowMappedException", _args, ::krpc::Client::Returns::value);
+  int32_t _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline std::tuple<int32_t, bool> TestService::tuple_default(std::tuple<int32_t, bool> x = std::tuple<int32_t, bool>{1, false}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
   auto _data = this->_client->invoke("TestService", "TupleDefault", _args, ::krpc::Client::Returns::value);
   std::tuple<int32_t, bool> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::string TestService::u_int32_to_string(uint32_t value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "UInt32ToString", _args, ::krpc::Client::Returns::value);
+  std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::string TestService::u_int64_to_string(uint64_t value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  auto _data = this->_client->invoke("TestService", "UInt64ToString", _args, ::krpc::Client::Returns::value);
+  std::string _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
@@ -2100,12 +2619,28 @@ inline ::krpc::Stream<std::string> TestService::add_multiple_values_stream(float
   return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "AddMultipleValues", _args));
 }
 
+inline ::krpc::Stream<std::map<std::string, TestService::TestClass>> TestService::add_to_object_dictionary_stream(std::map<std::string, TestService::TestClass> d, std::string key) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(2);
+  _args.push_back(encoder::encode_arg(d));
+  _args.push_back(encoder::encode_arg(key));
+  return ::krpc::Stream<std::map<std::string, TestService::TestClass>>(this->_client, this->_client->build_call("TestService", "AddToObjectDictionary", _args));
+}
+
 inline ::krpc::Stream<std::vector<TestService::TestClass>> TestService::add_to_object_list_stream(std::vector<TestService::TestClass> l, std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(l));
   _args.push_back(encoder::encode_arg(value));
   return ::krpc::Stream<std::vector<TestService::TestClass>>(this->_client, this->_client->build_call("TestService", "AddToObjectList", _args));
+}
+
+inline ::krpc::Stream<std::set<TestService::TestClass>> TestService::add_to_object_set_stream(std::set<TestService::TestClass> h, std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(2);
+  _args.push_back(encoder::encode_arg(h));
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::set<TestService::TestClass>>(this->_client, this->_client->build_call("TestService", "AddToObjectSet", _args));
 }
 
 inline ::krpc::Stream<int32_t> TestService::blocking_procedure_stream(int32_t n, int32_t sum = 0) {
@@ -2121,6 +2656,13 @@ inline ::krpc::Stream<std::string> TestService::bool_to_string_stream(bool value
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "BoolToString", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::bytes_default_stream(std::string x = std::string("\xca\xfe", 2)) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "BytesDefault", _args));
 }
 
 inline ::krpc::Stream<std::string> TestService::bytes_to_hex_string_stream(std::string value) {
@@ -2233,6 +2775,48 @@ inline ::krpc::Stream<TestService::TestNestedNullableStruct> TestService::echo_n
   return ::krpc::Stream<TestService::TestNestedNullableStruct>(this->_client, this->_client->build_call("TestService", "EchoNestedNullableStruct", _args));
 }
 
+inline ::krpc::Stream<std::optional<bool>> TestService::echo_nullable_bool_stream(std::optional<bool> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::optional<bool>>(this->_client, this->_client->build_call("TestService", "EchoNullableBool", _args));
+}
+
+inline ::krpc::Stream<std::optional<std::string>> TestService::echo_nullable_bytes_stream(std::optional<std::string> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::optional<std::string>>(this->_client, this->_client->build_call("TestService", "EchoNullableBytes", _args));
+}
+
+inline ::krpc::Stream<std::optional<std::map<std::string, int32_t> >> TestService::echo_nullable_dictionary_stream(std::optional<std::map<std::string, int32_t> > d) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(d));
+  return ::krpc::Stream<std::optional<std::map<std::string, int32_t> >>(this->_client, this->_client->build_call("TestService", "EchoNullableDictionary", _args));
+}
+
+inline ::krpc::Stream<std::optional<double>> TestService::echo_nullable_double_stream(std::optional<double> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::optional<double>>(this->_client, this->_client->build_call("TestService", "EchoNullableDouble", _args));
+}
+
+inline ::krpc::Stream<std::optional<TestService::TestEnum>> TestService::echo_nullable_enum_stream(std::optional<TestService::TestEnum> x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return ::krpc::Stream<std::optional<TestService::TestEnum>>(this->_client, this->_client->build_call("TestService", "EchoNullableEnum", _args));
+}
+
+inline ::krpc::Stream<std::optional<float>> TestService::echo_nullable_float_stream(std::optional<float> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::optional<float>>(this->_client, this->_client->build_call("TestService", "EchoNullableFloat", _args));
+}
+
 inline ::krpc::Stream<std::optional<int32_t>> TestService::echo_nullable_int_stream(std::optional<int32_t> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -2247,11 +2831,53 @@ inline ::krpc::Stream<std::optional<std::vector<int32_t> >> TestService::echo_nu
   return ::krpc::Stream<std::optional<std::vector<int32_t> >>(this->_client, this->_client->build_call("TestService", "EchoNullableList", _args));
 }
 
+inline ::krpc::Stream<std::optional<int64_t>> TestService::echo_nullable_long_stream(std::optional<int64_t> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::optional<int64_t>>(this->_client, this->_client->build_call("TestService", "EchoNullableLong", _args));
+}
+
+inline ::krpc::Stream<std::optional<std::set<int32_t> >> TestService::echo_nullable_set_stream(std::optional<std::set<int32_t> > h) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(h));
+  return ::krpc::Stream<std::optional<std::set<int32_t> >>(this->_client, this->_client->build_call("TestService", "EchoNullableSet", _args));
+}
+
 inline ::krpc::Stream<std::optional<std::string>> TestService::echo_nullable_string_stream(std::optional<std::string> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return ::krpc::Stream<std::optional<std::string>>(this->_client, this->_client->build_call("TestService", "EchoNullableString", _args));
+}
+
+inline ::krpc::Stream<std::optional<std::tuple<int32_t, int64_t> >> TestService::echo_nullable_tuple_stream(std::optional<std::tuple<int32_t, int64_t> > t) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(t));
+  return ::krpc::Stream<std::optional<std::tuple<int32_t, int64_t> >>(this->_client, this->_client->build_call("TestService", "EchoNullableTuple", _args));
+}
+
+inline ::krpc::Stream<std::optional<uint32_t>> TestService::echo_nullable_u_int_stream(std::optional<uint32_t> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::optional<uint32_t>>(this->_client, this->_client->build_call("TestService", "EchoNullableUInt", _args));
+}
+
+inline ::krpc::Stream<std::optional<uint64_t>> TestService::echo_nullable_u_long_stream(std::optional<uint64_t> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::optional<uint64_t>>(this->_client, this->_client->build_call("TestService", "EchoNullableULong", _args));
+}
+
+inline ::krpc::Stream<std::set<std::string>> TestService::echo_string_set_stream(std::set<std::string> h) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(h));
+  return ::krpc::Stream<std::set<std::string>>(this->_client, this->_client->build_call("TestService", "EchoStringSet", _args));
 }
 
 inline ::krpc::Stream<std::optional<TestService::TestClass>> TestService::echo_test_object_stream(std::optional<TestService::TestClass> value) {
@@ -2275,11 +2901,11 @@ inline ::krpc::Stream<std::vector<std::string>> TestService::empty_list_default_
   return ::krpc::Stream<std::vector<std::string>>(this->_client, this->_client->build_call("TestService", "EmptyListDefault", _args));
 }
 
-inline ::krpc::Stream<TestService::TestEnum> TestService::enum_default_arg_stream(TestService::TestEnum x = TestService::TestEnum::value_c) {
+inline ::krpc::Stream<TestService::TestEnum> TestService::enum_default_stream(TestService::TestEnum x = TestService::TestEnum::value_c) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumDefaultArg", _args));
+  return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumDefault", _args));
 }
 
 inline ::krpc::Stream<TestService::TestEnum> TestService::enum_echo_stream(TestService::TestEnum x) {
@@ -2296,8 +2922,11 @@ inline ::krpc::Stream<std::vector<TestService::TestEnum>> TestService::enum_list
   return ::krpc::Stream<std::vector<TestService::TestEnum>>(this->_client, this->_client->build_call("TestService", "EnumListDefault", _args));
 }
 
-inline ::krpc::Stream<TestService::TestEnum> TestService::enum_return_stream() {
-  return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumReturn"));
+inline ::krpc::Stream<std::string> TestService::enum_to_string_stream(TestService::TestEnum x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "EnumToString", _args));
 }
 
 inline ::krpc::Stream<std::vector<float>> TestService::float_special_defaults_stream(float nan = std::numeric_limits<float>::quiet_NaN(), float infinity = std::numeric_limits<float>::infinity(), float negative_infinity = -std::numeric_limits<float>::infinity(), float maximum = (std::numeric_limits<float>::max)(), float lowest = std::numeric_limits<float>::lowest(), float fraction = 0.1f) {
@@ -2317,6 +2946,13 @@ inline ::krpc::Stream<std::string> TestService::float_to_string_stream(float val
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "FloatToString", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::hex_string_to_bytes_stream(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "HexStringToBytes", _args));
 }
 
 inline ::krpc::Stream<std::map<std::string, int32_t>> TestService::increment_dictionary_stream(std::map<std::string, int32_t> d) {
@@ -2420,6 +3056,13 @@ inline ::krpc::Stream<TestService::TestClass> TestService::not_nullable_object_s
   return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "NotNullableObject", _args));
 }
 
+inline ::krpc::Stream<std::string> TestService::null_default_stream(std::optional<TestService::TestClass> obj = std::optional<TestService::TestClass>()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(obj));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "NullDefault", _args));
+}
+
 inline ::krpc::Stream<TestService::TestNullableStruct> TestService::nullable_struct_echo_stream(TestService::TestNullableStruct x) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -2433,13 +3076,6 @@ inline ::krpc::Stream<::krpc::Event> TestService::on_timer_stream(uint32_t milli
   _args.push_back(encoder::encode_arg(milliseconds));
   _args.push_back(encoder::encode_arg(repeats));
   return ::krpc::Stream<::krpc::Event>(this->_client, this->_client->build_call("TestService", "OnTimer", _args));
-}
-
-inline ::krpc::Stream<::krpc::Event> TestService::on_timer_using_lambda_stream(uint32_t milliseconds) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(milliseconds));
-  return ::krpc::Stream<::krpc::Event>(this->_client, this->_client->build_call("TestService", "OnTimerUsingLambda", _args));
 }
 
 inline ::krpc::Stream<std::string> TestService::optional_arguments_stream(std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestService::TestClass> obj = std::optional<TestService::TestClass>()) {
@@ -2463,11 +3099,53 @@ inline ::krpc::Stream<TestService::TestClass> TestService::return_null_when_not_
   return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "ReturnNullWhenNotAllowed"));
 }
 
+inline ::krpc::Stream<int32_t> TestService::scalar_default_stream(int32_t x = 42) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "ScalarDefault", _args));
+}
+
 inline ::krpc::Stream<std::set<int32_t>> TestService::set_default_stream(std::set<int32_t> x = std::set<int32_t>{1, 2, 3}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
   return ::krpc::Stream<std::set<int32_t>>(this->_client, this->_client->build_call("TestService", "SetDefault", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::string_default_stream(std::string x = "foo") {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "StringDefault", _args));
+}
+
+inline ::krpc::Stream<bool> TestService::string_to_bool_stream(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<bool>(this->_client, this->_client->build_call("TestService", "StringToBool", _args));
+}
+
+inline ::krpc::Stream<double> TestService::string_to_double_stream(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<double>(this->_client, this->_client->build_call("TestService", "StringToDouble", _args));
+}
+
+inline ::krpc::Stream<TestService::TestEnum> TestService::string_to_enum_stream(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "StringToEnum", _args));
+}
+
+inline ::krpc::Stream<float> TestService::string_to_float_stream(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<float>(this->_client, this->_client->build_call("TestService", "StringToFloat", _args));
 }
 
 inline ::krpc::Stream<int32_t> TestService::string_to_int32_stream(std::string value) {
@@ -2477,7 +3155,28 @@ inline ::krpc::Stream<int32_t> TestService::string_to_int32_stream(std::string v
   return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "StringToInt32", _args));
 }
 
-inline ::krpc::Stream<TestService::TestStruct> TestService::struct_default_stream(TestService::TestStruct x = TestService::TestStruct{42, "jeb", TestService::TestEnum::value_b, std::vector<int32_t>{1, 2, 3}}) {
+inline ::krpc::Stream<int64_t> TestService::string_to_int64_stream(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<int64_t>(this->_client, this->_client->build_call("TestService", "StringToInt64", _args));
+}
+
+inline ::krpc::Stream<uint32_t> TestService::string_to_u_int32_stream(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<uint32_t>(this->_client, this->_client->build_call("TestService", "StringToUInt32", _args));
+}
+
+inline ::krpc::Stream<uint64_t> TestService::string_to_u_int64_stream(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<uint64_t>(this->_client, this->_client->build_call("TestService", "StringToUInt64", _args));
+}
+
+inline ::krpc::Stream<TestService::TestStruct> TestService::struct_default_stream(TestService::TestStruct x = TestService::TestStruct{42, "alpha", TestService::TestEnum::value_b, std::vector<int32_t>{1, 2, 3}}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
@@ -2496,6 +3195,13 @@ inline ::krpc::Stream<std::optional<TestService::TestStruct>> TestService::struc
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
   return ::krpc::Stream<std::optional<TestService::TestStruct>>(this->_client, this->_client->build_call("TestService", "StructEchoNullable", _args));
+}
+
+inline ::krpc::Stream<std::tuple<TestService::TestClass, TestService::TestClass>> TestService::swap_object_tuple_stream(std::tuple<TestService::TestClass, TestService::TestClass> t) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(t));
+  return ::krpc::Stream<std::tuple<TestService::TestClass, TestService::TestClass>>(this->_client, this->_client->build_call("TestService", "SwapObjectTuple", _args));
 }
 
 inline ::krpc::Stream<int32_t> TestService::throw_argument_exception_stream() {
@@ -2532,11 +3238,32 @@ inline ::krpc::Stream<int32_t> TestService::throw_invalid_operation_exception_la
   return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "ThrowInvalidOperationExceptionLater"));
 }
 
+inline ::krpc::Stream<int32_t> TestService::throw_mapped_exception_stream(std::string name) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(name));
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "ThrowMappedException", _args));
+}
+
 inline ::krpc::Stream<std::tuple<int32_t, bool>> TestService::tuple_default_stream(std::tuple<int32_t, bool> x = std::tuple<int32_t, bool>{1, false}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
   return ::krpc::Stream<std::tuple<int32_t, bool>>(this->_client, this->_client->build_call("TestService", "TupleDefault", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::u_int32_to_string_stream(uint32_t value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "UInt32ToString", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::u_int64_to_string_stream(uint64_t value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "UInt64ToString", _args));
 }
 
 inline ::krpc::Stream<std::vector<uint32_t>> TestService::uint32_special_defaults_stream(uint32_t maximum = (std::numeric_limits<uint32_t>::max)()) {
@@ -2582,12 +3309,28 @@ inline ::krpc::schema::ProcedureCall TestService::add_multiple_values_call(float
   return this->_client->build_call("TestService", "AddMultipleValues", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::add_to_object_dictionary_call(std::map<std::string, TestService::TestClass> d, std::string key) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(2);
+  _args.push_back(encoder::encode_arg(d));
+  _args.push_back(encoder::encode_arg(key));
+  return this->_client->build_call("TestService", "AddToObjectDictionary", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::add_to_object_list_call(std::vector<TestService::TestClass> l, std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(2);
   _args.push_back(encoder::encode_arg(l));
   _args.push_back(encoder::encode_arg(value));
   return this->_client->build_call("TestService", "AddToObjectList", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::add_to_object_set_call(std::set<TestService::TestClass> h, std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(2);
+  _args.push_back(encoder::encode_arg(h));
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "AddToObjectSet", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::blocking_procedure_call(int32_t n, int32_t sum = 0) {
@@ -2603,6 +3346,13 @@ inline ::krpc::schema::ProcedureCall TestService::bool_to_string_call(bool value
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return this->_client->build_call("TestService", "BoolToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::bytes_default_call(std::string x = std::string("\xca\xfe", 2)) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return this->_client->build_call("TestService", "BytesDefault", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::bytes_to_hex_string_call(std::string value) {
@@ -2715,6 +3465,48 @@ inline ::krpc::schema::ProcedureCall TestService::echo_nested_nullable_struct_ca
   return this->_client->build_call("TestService", "EchoNestedNullableStruct", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_bool_call(std::optional<bool> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "EchoNullableBool", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_bytes_call(std::optional<std::string> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "EchoNullableBytes", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_dictionary_call(std::optional<std::map<std::string, int32_t> > d) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(d));
+  return this->_client->build_call("TestService", "EchoNullableDictionary", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_double_call(std::optional<double> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "EchoNullableDouble", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_enum_call(std::optional<TestService::TestEnum> x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return this->_client->build_call("TestService", "EchoNullableEnum", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_float_call(std::optional<float> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "EchoNullableFloat", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::echo_nullable_int_call(std::optional<int32_t> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -2729,11 +3521,53 @@ inline ::krpc::schema::ProcedureCall TestService::echo_nullable_list_call(std::o
   return this->_client->build_call("TestService", "EchoNullableList", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_long_call(std::optional<int64_t> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "EchoNullableLong", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_set_call(std::optional<std::set<int32_t> > h) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(h));
+  return this->_client->build_call("TestService", "EchoNullableSet", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::echo_nullable_string_call(std::optional<std::string> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return this->_client->build_call("TestService", "EchoNullableString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_tuple_call(std::optional<std::tuple<int32_t, int64_t> > t) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(t));
+  return this->_client->build_call("TestService", "EchoNullableTuple", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_u_int_call(std::optional<uint32_t> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "EchoNullableUInt", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_u_long_call(std::optional<uint64_t> value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "EchoNullableULong", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_string_set_call(std::set<std::string> h) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(h));
+  return this->_client->build_call("TestService", "EchoStringSet", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::echo_test_object_call(std::optional<TestService::TestClass> value) {
@@ -2757,11 +3591,11 @@ inline ::krpc::schema::ProcedureCall TestService::empty_list_default_call(std::v
   return this->_client->build_call("TestService", "EmptyListDefault", _args);
 }
 
-inline ::krpc::schema::ProcedureCall TestService::enum_default_arg_call(TestService::TestEnum x = TestService::TestEnum::value_c) {
+inline ::krpc::schema::ProcedureCall TestService::enum_default_call(TestService::TestEnum x = TestService::TestEnum::value_c) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
-  return this->_client->build_call("TestService", "EnumDefaultArg", _args);
+  return this->_client->build_call("TestService", "EnumDefault", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::enum_echo_call(TestService::TestEnum x) {
@@ -2778,8 +3612,11 @@ inline ::krpc::schema::ProcedureCall TestService::enum_list_default_call(std::ve
   return this->_client->build_call("TestService", "EnumListDefault", _args);
 }
 
-inline ::krpc::schema::ProcedureCall TestService::enum_return_call() {
-  return this->_client->build_call("TestService", "EnumReturn");
+inline ::krpc::schema::ProcedureCall TestService::enum_to_string_call(TestService::TestEnum x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return this->_client->build_call("TestService", "EnumToString", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::float_special_defaults_call(float nan = std::numeric_limits<float>::quiet_NaN(), float infinity = std::numeric_limits<float>::infinity(), float negative_infinity = -std::numeric_limits<float>::infinity(), float maximum = (std::numeric_limits<float>::max)(), float lowest = std::numeric_limits<float>::lowest(), float fraction = 0.1f) {
@@ -2799,6 +3636,13 @@ inline ::krpc::schema::ProcedureCall TestService::float_to_string_call(float val
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return this->_client->build_call("TestService", "FloatToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::hex_string_to_bytes_call(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "HexStringToBytes", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::increment_dictionary_call(std::map<std::string, int32_t> d) {
@@ -2902,6 +3746,13 @@ inline ::krpc::schema::ProcedureCall TestService::not_nullable_object_call(TestS
   return this->_client->build_call("TestService", "NotNullableObject", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::null_default_call(std::optional<TestService::TestClass> obj = std::optional<TestService::TestClass>()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(obj));
+  return this->_client->build_call("TestService", "NullDefault", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::nullable_struct_echo_call(TestService::TestNullableStruct x) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -2915,13 +3766,6 @@ inline ::krpc::schema::ProcedureCall TestService::on_timer_call(uint32_t millise
   _args.push_back(encoder::encode_arg(milliseconds));
   _args.push_back(encoder::encode_arg(repeats));
   return this->_client->build_call("TestService", "OnTimer", _args);
-}
-
-inline ::krpc::schema::ProcedureCall TestService::on_timer_using_lambda_call(uint32_t milliseconds) {
-  std::vector<krpc::encoder::Value> _args;
-  _args.reserve(1);
-  _args.push_back(encoder::encode_arg(milliseconds));
-  return this->_client->build_call("TestService", "OnTimerUsingLambda", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::optional_arguments_call(std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestService::TestClass> obj = std::optional<TestService::TestClass>()) {
@@ -2941,6 +3785,13 @@ inline ::krpc::schema::ProcedureCall TestService::remove_event_after_call(uint32
   return this->_client->build_call("TestService", "RemoveEventAfter", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::remove_test_object_call(TestService::TestClass value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "RemoveTestObject", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::reset_custom_exception_later_call() {
   return this->_client->build_call("TestService", "ResetCustomExceptionLater");
 }
@@ -2953,11 +3804,53 @@ inline ::krpc::schema::ProcedureCall TestService::return_null_when_not_allowed_c
   return this->_client->build_call("TestService", "ReturnNullWhenNotAllowed");
 }
 
+inline ::krpc::schema::ProcedureCall TestService::scalar_default_call(int32_t x = 42) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return this->_client->build_call("TestService", "ScalarDefault", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::set_default_call(std::set<int32_t> x = std::set<int32_t>{1, 2, 3}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
   return this->_client->build_call("TestService", "SetDefault", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_default_call(std::string x = "foo") {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(x));
+  return this->_client->build_call("TestService", "StringDefault", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_bool_call(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "StringToBool", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_double_call(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "StringToDouble", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_enum_call(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "StringToEnum", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_float_call(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "StringToFloat", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::string_to_int32_call(std::string value) {
@@ -2967,7 +3860,28 @@ inline ::krpc::schema::ProcedureCall TestService::string_to_int32_call(std::stri
   return this->_client->build_call("TestService", "StringToInt32", _args);
 }
 
-inline ::krpc::schema::ProcedureCall TestService::struct_default_call(TestService::TestStruct x = TestService::TestStruct{42, "jeb", TestService::TestEnum::value_b, std::vector<int32_t>{1, 2, 3}}) {
+inline ::krpc::schema::ProcedureCall TestService::string_to_int64_call(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "StringToInt64", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_u_int32_call(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "StringToUInt32", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::string_to_u_int64_call(std::string value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "StringToUInt64", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::struct_default_call(TestService::TestStruct x = TestService::TestStruct{42, "alpha", TestService::TestEnum::value_b, std::vector<int32_t>{1, 2, 3}}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
@@ -2986,6 +3900,13 @@ inline ::krpc::schema::ProcedureCall TestService::struct_echo_nullable_call(std:
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
   return this->_client->build_call("TestService", "StructEchoNullable", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::swap_object_tuple_call(std::tuple<TestService::TestClass, TestService::TestClass> t) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(t));
+  return this->_client->build_call("TestService", "SwapObjectTuple", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::throw_argument_exception_call() {
@@ -3022,11 +3943,32 @@ inline ::krpc::schema::ProcedureCall TestService::throw_invalid_operation_except
   return this->_client->build_call("TestService", "ThrowInvalidOperationExceptionLater");
 }
 
+inline ::krpc::schema::ProcedureCall TestService::throw_mapped_exception_call(std::string name) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(name));
+  return this->_client->build_call("TestService", "ThrowMappedException", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::tuple_default_call(std::tuple<int32_t, bool> x = std::tuple<int32_t, bool>{1, false}) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(x));
   return this->_client->build_call("TestService", "TupleDefault", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::u_int32_to_string_call(uint32_t value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "UInt32ToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::u_int64_to_string_call(uint64_t value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return this->_client->build_call("TestService", "UInt64ToString", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::uint32_special_defaults_call(uint32_t maximum = (std::numeric_limits<uint32_t>::max)()) {
@@ -3271,6 +4213,20 @@ inline std::optional<TestService::TestClass> TestService::TestClass::static_null
   return _result;
 }
 
+inline std::string TestService::TestClass::static_optional_arguments(Client& _client, std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestService::TestClass> obj = std::optional<TestService::TestClass>()) {
+    std::vector<krpc::encoder::Value> _args;
+  _args.reserve(4);
+  _args.push_back(encoder::encode_arg(x));
+  _args.push_back(encoder::encode_arg(y));
+  _args.push_back(encoder::encode_arg(z));
+  _args.push_back(encoder::encode_arg(obj));
+  auto _data = _client.invoke("TestService", "TestClass_static_StaticOptionalArguments", _args, ::krpc::Client::Returns::value);
+    std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), &_client);
+  return _result;
+}
+
 inline ::krpc::Stream<std::optional<TestService::TestClass>> TestService::TestClass::echo_nullable_object_stream(std::optional<TestService::TestClass> value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(2);
@@ -3347,6 +4303,16 @@ inline ::krpc::Stream<std::optional<TestService::TestClass>> TestService::TestCl
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return ::krpc::Stream<std::optional<TestService::TestClass>>(&_client, _client.build_call("TestService", "TestClass_static_StaticNullableObject", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::TestClass::static_optional_arguments_stream(Client& _client, std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestService::TestClass> obj = std::optional<TestService::TestClass>()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(4);
+  _args.push_back(encoder::encode_arg(x));
+  _args.push_back(encoder::encode_arg(y));
+  _args.push_back(encoder::encode_arg(z));
+  _args.push_back(encoder::encode_arg(obj));
+  return ::krpc::Stream<std::string>(&_client, _client.build_call("TestService", "TestClass_static_StaticOptionalArguments", _args));
 }
 
 inline ::krpc::schema::ProcedureCall TestService::TestClass::echo_nullable_object_call(std::optional<TestService::TestClass> value) {
@@ -3449,6 +4415,16 @@ inline ::krpc::schema::ProcedureCall TestService::TestClass::static_nullable_obj
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(value));
   return _client.build_call("TestService", "TestClass_static_StaticNullableObject", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::static_optional_arguments_call(Client& _client, std::string x, std::string y = "foo", std::string z = "bar", std::optional<TestService::TestClass> obj = std::optional<TestService::TestClass>()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(4);
+  _args.push_back(encoder::encode_arg(x));
+  _args.push_back(encoder::encode_arg(y));
+  _args.push_back(encoder::encode_arg(z));
+  _args.push_back(encoder::encode_arg(obj));
+  return _client.build_call("TestService", "TestClass_static_StaticOptionalArguments", _args);
 }
 }  // namespace services
 

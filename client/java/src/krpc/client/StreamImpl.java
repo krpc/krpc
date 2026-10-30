@@ -280,10 +280,10 @@ class StreamImpl {
     final ReentrantLock lock = new ReentrantLock();
     // Accessed with the update lock held
     long version = 0;
-    boolean adding = false;
+    private boolean adding = false;
     // Whether the adding thread is passing on the values queued during the first call
-    boolean draining = false;
-    Queue<Missed> missed = new ArrayDeque<Missed>();
+    private boolean draining = false;
+    private Queue<Missed> missed = new ArrayDeque<Missed>();
     private List<Consumer<Exception>> endCallbacks;
     private Exception ending;
 
@@ -335,6 +335,7 @@ class StreamImpl {
       if (!callback.lock.tryLock()) {
         return;
       }
+      RacePoint.reach(RacePoint.FIRST_CALL_STARTED, callback.tag);
     } else if (!enterOnDispatcherThread(callback, version, value)) {
       return;
     }
@@ -351,6 +352,7 @@ class StreamImpl {
         StreamManager.invokeCallback(() -> callback.function.accept(value));
         if (added) {
           callMissed(callback);
+          RacePoint.reach(RacePoint.FIRST_CALL_ENDED, callback.tag);
         }
       } catch (Error exn) {
         if (added) {
@@ -503,6 +505,7 @@ class StreamImpl {
     }
     // Called with the value the stream already has, which no update will pass to it
     if (hasValue) {
+      RacePoint.reach(RacePoint.FIRST_CALL, callback.tag);
       call(callback, current, currentValue, true);
     }
     return callback.tag;
@@ -524,6 +527,7 @@ class StreamImpl {
       firing = reserveReplay(seen);
     }
     if (firing > 0) {
+      RacePoint.reach(RacePoint.REPLAY, callback.tag);
       replay(callback, firing);
     }
     return callback.tag;
@@ -534,7 +538,7 @@ class StreamImpl {
    * a wait that has seen the given number of firings, passed to an event callback, or reserved by
    * another replay.
    */
-  long reserveReplay(long seen) {
+  private long reserveReplay(long seen) {
     synchronized (updateLock) {
       if (endedByClient || fired <= Math.max(seen, Math.max(callbacksFired, replaying))) {
         return 0;
@@ -549,7 +553,7 @@ class StreamImpl {
    * the callback is not passed, as it was removed or the stream ended, is left for the next late
    * callback.
    */
-  void replay(Callback callback, long firing) {
+  private void replay(Callback callback, long firing) {
     try {
       call(callback, firing, Boolean.TRUE, true);
     } finally {

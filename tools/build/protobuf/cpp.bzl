@@ -11,8 +11,9 @@ def _impl(ctx):
     args = ctx.actions.args()
     args.add("--protoc", ctx.file._protoc.path)
     args.add("--mkdir", proto_output)
-    args.add("--copy", proto_output + "/protobuf/*.pb.h=" + header.path)
-    args.add("--copy", proto_output + "/protobuf/*.pb.cc=" + source.path)
+    generated = proto_output + "/" + ctx.file.src.dirname
+    args.add("--copy", generated + "/*.pb.h=" + header.path)
+    args.add("--copy", generated + "/*.pb.cc=" + source.path)
     args.add("--rewrite", "%s=#include \"%s\"=#include \"%s\"" % (source.path, proto_include, include))
     args.add("--")
     args.add("--cpp_out=" + proto_output)

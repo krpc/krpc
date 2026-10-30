@@ -53,6 +53,7 @@
     <Compile Include="TypeSpec.cs" />
     <Compile Include="UnixEndPoint.cs" />
     <Compile Include="ValueUtils.cs" />
+    <Compile Include="WriteFault.cs" />
     <Compile Include="$(bazel-bin)\protobuf\KRPC.cs">
       <Link>KRPC.cs</Link>
     </Compile>

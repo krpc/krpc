@@ -94,6 +94,7 @@ maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
 maven.install(
     artifacts = [
         "com.google.protobuf:protobuf-java:4.36.2",
+        "com.google.protobuf:protobuf-java-util:4.36.2",
         "com.puppycrawl.tools:checkstyle:14.3.0",
         "junit:junit:4.13.2",
         "org.hamcrest:hamcrest:3.0",

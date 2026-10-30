@@ -9,8 +9,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import krpc.client.services.KRPC;
@@ -265,22 +263,6 @@ class StreamManager {
   }
 
   /**
-   * Stores one result and waits for the dispatcher thread to apply it. For the tests, which stand
-   * in for the reader.
-   */
-  void update(long id, ProcedureResult result) {
-    update(Collections.singletonList(
-        StreamResult.newBuilder().setId(id).setResult(result).build()));
-    CountDownLatch applied = new CountDownLatch(1);
-    session.dispatch(applied::countDown);
-    try {
-      applied.await(10, TimeUnit.SECONDS);
-    } catch (InterruptedException exn) {
-      Thread.currentThread().interrupt();
-    }
-  }
-
-  /**
    * Wakes the waiters of streams with a new value or an ending, and calls their callbacks. Runs on
    * the dispatcher thread, with no lock held.
    */
@@ -288,6 +270,7 @@ class StreamManager {
     for (Change change : changes) {
       StreamImpl stream = change.stream;
       if (change.ending != null) {
+        RacePoint.reach(RacePoint.STREAM_ENDING, -1);
         stream.wakeAnnouncingEnding();
         if (change.endCallbacks != null
             && !stream.deferEnding(change.endCallbacks, change.ending)) {
@@ -295,7 +278,9 @@ class StreamManager {
         }
         continue;
       }
+      RacePoint.reach(RacePoint.STREAM_VALUE, -1);
       stream.announce(change.value, change.version);
+      RacePoint.reach(RacePoint.STREAM_CALLBACKS, -1);
       for (StreamImpl.Callback callback : change.callbacks) {
         stream.call(callback, callback.event ? change.fired : change.version, change.value);
       }

@@ -13,7 +13,7 @@ namespace KRPC.Test.Service
             var classType = typeof(TestService.TestClass);
             var handler = new ClassStaticMethodHandler (classType.GetMethod ("StaticMethod"), false);
             Assert.IsFalse (handler.HasInstance);
-            Assert.AreEqual ("jebfoo", handler.Invoke (null, new object [] { "foo" }));
+            Assert.AreEqual ("staticfoo", handler.Invoke (null, new object [] { "foo" }));
         }
 
         [Test]

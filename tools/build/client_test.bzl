@@ -60,6 +60,7 @@ def client_test(
             test_executable,
             server_executable,
         ],
+        deps = [Label("//tools/build:serverprocess")],
         target_compatible_with = target_compatible_with,
         **kwargs
     )

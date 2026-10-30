@@ -1,0 +1,15 @@
+{
+  "native_types": {
+    "System.InvalidOperationException": "System.InvalidOperationException",
+    "System.ArgumentException": "System.ArgumentException",
+    "System.ArgumentNullException": "System.ArgumentNullException",
+    "System.ArgumentOutOfRangeException": "System.ArgumentOutOfRangeException",
+    "System.NullReferenceException": "System.NullReferenceException",
+    "System.Collections.Generic.KeyNotFoundException": "System.Collections.Generic.KeyNotFoundException",
+    "System.IndexOutOfRangeException": "System.IndexOutOfRangeException",
+    "System.DivideByZeroException": "System.DivideByZeroException",
+    "System.NotSupportedException": "System.NotSupportedException",
+    "System.TimeoutException": "System.TimeoutException",
+    "System.OverflowException": "System.OverflowException"
+  }
+}

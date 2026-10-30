@@ -379,6 +379,7 @@ class Session {
    * An interrupt is held back until the write ends, as a message cut short breaks the framing.
    */
   private void write(ByteBuffer data) throws IOException {
+    WriteFault.reach();
     boolean interrupted = false;
     try {
       while (true) {

@@ -1,10 +1,15 @@
 load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 load("//:config.bzl", "lua_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
+load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build:lua.bzl", "lua_binary", "lua_library", "lua_luacheck_test", "lua_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 
-exports_files(["CHANGELOG.md"])
+exports_files([
+    "CHANGELOG.md",
+    "conformance/expected-failures.txt",
+    "conformance/unsupported.txt",
+])
 
 # The client's own modules, laid out where require expects to find them. The schema's
 # descriptor set is generated, and is the one module whose source path is not already its
@@ -72,10 +77,8 @@ pkg_zip(
 test_suite(
     name = "test",
     tests = [
-        ":client-localsocket",
         ":client-tcpip",
-        ":communication-localsocket",
-        ":communication-tcpip",
+        ":conformance",
         ":lint",
         ":unit",
     ],
@@ -91,37 +94,13 @@ lua_test(
     deps = lua_deps,
 )
 
-# The transport, one test each. Both run against a server the test listens on itself, so
-# neither needs a kRPC server.
-lua_test(
-    name = "communication-tcpip",
-    size = "small",
-    main = "krpc/test/connection_tcpip.lua",
-    tags = ["requires-network"],
-    deps = lua_deps,
-)
-
-lua_test(
-    name = "communication-localsocket",
-    size = "small",
-    main = "krpc/test/connection_localsocket.lua",
-    deps = lua_deps,
-)
-
-# The client end to end against a TestServer, once per transport it can reach one over.
+# The client's own API against a TestServer. The conformance tests cover each transport, so
+# this runs over one.
 client_test(
     name = "client-tcpip",
     size = "small",
     server_executable = "//tools/TestServer",
     tags = ["requires-network"],
-    test_executable = ":luatest",
-)
-
-client_test(
-    name = "client-localsocket",
-    size = "small",
-    server_executable = "//tools/TestServer",
-    server_type = "localsocket",
     test_executable = ":luatest",
 )
 
@@ -137,9 +116,49 @@ lua_binary(
 lua_test(
     name = "luatest",
     size = "small",
-    main = "krpc/test/client.lua",
+    main = "krpc/test/test_client.lua",
     tags = ["requires-network"],
     deps = lua_deps,
+)
+
+# The conformance tests, driving the client through its testee
+lua_library(
+    name = "conformance-modules",
+    srcs = [
+        "conformance/protojson.lua",
+        "//client/conformance:testee-lua",
+    ],
+    path_map = {
+        "client/lua/conformance/": "conformance/",
+        "client/conformance/": "conformance/",
+    },
+)
+
+lua_binary(
+    name = "conformance-testee",
+    main = "conformance/testee.lua",
+    deps = lua_deps + [":conformance-modules"],
+)
+
+conformance_test(
+    name = "conformance",
+    size = "medium",
+    conventions = "conformance/conventions.json",
+    expected_failures = "conformance/expected-failures.txt",
+    profiles = [
+        "core",
+        "dynamic",
+        "defaults",
+        "connections",
+        "ordering",
+    ],
+    protocols = [
+        "tcpip",
+        "localsocket",
+    ],
+    tags = ["requires-network"],
+    testee = ":conformance-testee",
+    unsupported = "conformance/unsupported.txt",
 )
 
 lua_luacheck_test(

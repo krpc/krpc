@@ -141,7 +141,7 @@ def decode_default_value(
     """Decode the default value of a parameter from the encoded form a definition carries it in.
 
     location names the parameter the value belongs to, for example
-    'TestService.EnumDefaultArg parameter x', and is included in the error raised when the value
+    'TestService.EnumDefault parameter x', and is included in the error raised when the value
     cannot be decoded."""
     _check_registered(typ, location)
     try:

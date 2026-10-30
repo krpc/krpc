@@ -45,6 +45,14 @@ def _winsock() -> ctypes.CDLL:
         ctypes.c_int,
     ]
     library.connect.restype = ctypes.c_int
+    library.bind.argtypes = [
+        ctypes.c_void_p,
+        ctypes.POINTER(SockaddrUn),
+        ctypes.c_int,
+    ]
+    library.bind.restype = ctypes.c_int
+    library.listen.argtypes = [ctypes.c_void_p, ctypes.c_int]
+    library.listen.restype = ctypes.c_int
     library.closesocket.argtypes = [ctypes.c_void_p]
     library.closesocket.restype = ctypes.c_int
     return library
@@ -65,6 +73,20 @@ def connect(path: str) -> socket.socket:
     receiving therefore go to the socket that was opened here, and nothing above this reads the
     address a connection was made to.
     """
+    return _open(path, listen=False)
+
+
+def listen(path: str) -> socket.socket:
+    """Listen on the unix domain socket at the given path, for a single connection at a time.
+
+    Returns a socket object holding the listening socket, with a family as in connect. The
+    client never listens; the conformance tests use this for the servers they script.
+    """
+    return _open(path, listen=True)
+
+
+def _open(path: str, listen: bool) -> socket.socket:
+    """A socket connected to, or listening on, the unix domain socket at the given path."""
     if sys.platform != "win32":
         raise RuntimeError("this is only for Windows, which has no socket.AF_UNIX")
 
@@ -87,9 +109,18 @@ def connect(path: str) -> socket.socket:
         raise _error("failed to create socket")
 
     address = SockaddrUn(sun_family=AF_UNIX, sun_path=encoded)
-    connected = library.connect(handle, ctypes.byref(address), ctypes.sizeof(address))
-    if connected == SOCKET_ERROR:
-        error = _error("failed to connect to %s" % path)
+    pointer = ctypes.byref(address)
+    size = ctypes.sizeof(address)
+    if listen:
+        failed = (
+            library.bind(handle, pointer, size) == SOCKET_ERROR
+            or library.listen(handle, 1) == SOCKET_ERROR
+        )
+    else:
+        failed = library.connect(handle, pointer, size) == SOCKET_ERROR
+    if failed:
+        action = "listen on" if listen else "connect to"
+        error = _error("failed to %s %s" % (action, path))
         library.closesocket(handle)
         raise error
 

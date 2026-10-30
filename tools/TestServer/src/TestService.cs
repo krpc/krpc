@@ -43,6 +43,18 @@ namespace TestServer
         }
 
         [KRPCProcedure]
+        public static string UInt32ToString (uint value)
+        {
+            return value.ToString (CultureInfo.InvariantCulture);
+        }
+
+        [KRPCProcedure]
+        public static string UInt64ToString (ulong value)
+        {
+            return value.ToString (CultureInfo.InvariantCulture);
+        }
+
+        [KRPCProcedure]
         public static string BoolToString (bool value)
         {
             return value.ToString ();
@@ -52,6 +64,53 @@ namespace TestServer
         public static int StringToInt32 (string value)
         {
             return Convert.ToInt32 (value, CultureInfo.InvariantCulture);
+        }
+
+        [KRPCProcedure]
+        public static long StringToInt64 (string value)
+        {
+            return Convert.ToInt64 (value, CultureInfo.InvariantCulture);
+        }
+
+        [KRPCProcedure]
+        public static uint StringToUInt32 (string value)
+        {
+            return Convert.ToUInt32 (value, CultureInfo.InvariantCulture);
+        }
+
+        [KRPCProcedure]
+        public static ulong StringToUInt64 (string value)
+        {
+            return Convert.ToUInt64 (value, CultureInfo.InvariantCulture);
+        }
+
+        [KRPCProcedure]
+        public static double StringToDouble (string value)
+        {
+            return Convert.ToDouble (value, CultureInfo.InvariantCulture);
+        }
+
+        [KRPCProcedure]
+        public static float StringToFloat (string value)
+        {
+            return Convert.ToSingle (value, CultureInfo.InvariantCulture);
+        }
+
+        [KRPCProcedure]
+        public static bool StringToBool (string value)
+        {
+            return Convert.ToBoolean (value, CultureInfo.InvariantCulture);
+        }
+
+        [KRPCProcedure]
+        public static byte[] HexStringToBytes (string value)
+        {
+            if (value == null)
+                throw new ArgumentNullException (nameof (value));
+            var result = new byte [value.Length / 2];
+            for (int i = 0; i < result.Length; i++)
+                result [i] = Convert.ToByte (value.Substring (2 * i, 2), 16);
+            return result;
         }
 
         [KRPCProcedure]
@@ -102,6 +161,14 @@ namespace TestServer
         [KRPCProperty (Nullable = true)]
         public static TestClass ObjectProperty { get; set; }
 
+        // Removes the object from the object store, as the server does for a game object that
+        // is destroyed
+        [KRPCProcedure]
+        public static void RemoveTestObject (TestClass value)
+        {
+            KRPC.Service.ObjectStore.Instance.RemoveInstance (value);
+        }
+
         [KRPCProcedure]
         public static TestClass ReturnNullWhenNotAllowed ()
         {
@@ -135,6 +202,66 @@ namespace TestServer
         public static int? EchoNullableInt (int? value)
         {
             return value;
+        }
+
+        [KRPCProcedure]
+        public static float? EchoNullableFloat (float? value)
+        {
+            return value;
+        }
+
+        [KRPCProcedure]
+        public static bool? EchoNullableBool (bool? value)
+        {
+            return value;
+        }
+
+        [KRPCProcedure]
+        public static double? EchoNullableDouble (double? value)
+        {
+            return value;
+        }
+
+        [KRPCProcedure]
+        public static long? EchoNullableLong (long? value)
+        {
+            return value;
+        }
+
+        [KRPCProcedure]
+        public static uint? EchoNullableUInt (uint? value)
+        {
+            return value;
+        }
+
+        [KRPCProcedure]
+        public static ulong? EchoNullableULong (ulong? value)
+        {
+            return value;
+        }
+
+        [KRPCProcedure (Nullable = true)]
+        public static byte[] EchoNullableBytes ([KRPCNullable] byte[] value)
+        {
+            return value;
+        }
+
+        [KRPCProcedure (Nullable = true)]
+        public static HashSet<int> EchoNullableSet ([KRPCNullable] HashSet<int> h)
+        {
+            return h;
+        }
+
+        [KRPCProcedure (Nullable = true)]
+        public static IDictionary<string,int> EchoNullableDictionary ([KRPCNullable] IDictionary<string,int> d)
+        {
+            return d;
+        }
+
+        [KRPCProcedure (Nullable = true)]
+        public static Tuple<int,long> EchoNullableTuple ([KRPCNullable] Tuple<int,long> t)
+        {
+            return t;
         }
 
         static TestClass nullableObject;
@@ -231,7 +358,7 @@ namespace TestServer
             }
 
             /// <summary>
-            /// Returns jeb followed by <paramref name="a"/> and <paramref name="b"/>.
+            /// Returns static followed by <paramref name="a"/> and <paramref name="b"/>.
             /// </summary>
             /// <param name="a">The first string.</param>
             /// <param name="b">The second string.</param>
@@ -239,7 +366,7 @@ namespace TestServer
             [KRPCMethod]
             public static string StaticMethod (string a = "", string b = "")
             {
-                return "jeb" + a + b;
+                return "static" + a + b;
             }
 
             [KRPCMethod (Nullable = true)]
@@ -247,11 +374,17 @@ namespace TestServer
             {
                 return value;
             }
+
+            [KRPCMethod]
+            public static string StaticOptionalArguments (string x, string y = "foo", string z = "bar", TestClass obj = null)
+            {
+                return x + y + z + (obj == null ? "null" : obj.instanceValue);
+            }
         }
 
         /// <summary>
         /// Returns <paramref name="firstValue"/> and <paramref name="from"/> joined by an at
-        /// sign, e.g. <c>jeb@kerbin</c>. The parameter names are:
+        /// sign, e.g. <c>name@host</c>. The parameter names are:
         /// <list type="bullet">
         /// <item><description>a name in camel case, and</description></item>
         /// <item><description>a name that is a keyword in some languages.</description></item>
@@ -295,19 +428,31 @@ namespace TestServer
         }
 
         [KRPCProcedure]
-        public static TestEnum EnumReturn ()
-        {
-            return TestEnum.ValueB;
-        }
-
-        [KRPCProcedure]
         public static TestEnum EnumEcho (TestEnum x)
         {
             return x;
         }
 
         [KRPCProcedure]
-        public static TestEnum EnumDefaultArg (TestEnum x = TestEnum.ValueC)
+        public static TestEnum EnumDefault (TestEnum x = TestEnum.ValueC)
+        {
+            return x;
+        }
+
+        [KRPCProcedure]
+        public static string EnumToString (TestEnum x)
+        {
+            return x.ToString ();
+        }
+
+        [KRPCProcedure]
+        public static TestEnum StringToEnum (string value)
+        {
+            return (TestEnum)Enum.Parse (typeof(TestEnum), value);
+        }
+
+        [KRPCProcedure]
+        public static TestEnum? EchoNullableEnum (TestEnum? x)
         {
             return x;
         }
@@ -468,7 +613,7 @@ namespace TestServer
             {
                 return new TestStruct {
                     IntField = 42,
-                    StringField = "jeb",
+                    StringField = "alpha",
                     EnumField = TestEnum.ValueB,
                     ListField = new List<int> { 1, 2, 3 }
                 };
@@ -539,6 +684,14 @@ namespace TestServer
             foreach (var item in h)
                 result.Add (item + 1);
             return result;
+        }
+
+        [KRPCProcedure]
+        public static HashSet<string> EchoStringSet (HashSet<string> h)
+        {
+            if (h == null)
+                throw new ArgumentNullException (nameof (h));
+            return h;
         }
 
         [KRPCProcedure]
@@ -662,6 +815,65 @@ namespace TestServer
             return l;
         }
 
+        [KRPCProcedure]
+        public static HashSet<TestClass> AddToObjectSet (HashSet<TestClass> h, string value)
+        {
+            if (h == null)
+                throw new ArgumentNullException (nameof (h));
+            h.Add (new TestClass (value));
+            return h;
+        }
+
+        [KRPCProcedure]
+        public static IDictionary<string,TestClass> AddToObjectDictionary (IDictionary<string,TestClass> d, string key)
+        {
+            if (d == null)
+                throw new ArgumentNullException (nameof (d));
+            d [key] = new TestClass (key);
+            return d;
+        }
+
+        [KRPCProcedure]
+        public static Tuple<TestClass,TestClass> SwapObjectTuple (Tuple<TestClass,TestClass> t)
+        {
+            if (t == null)
+                throw new ArgumentNullException (nameof (t));
+            return Tuple.Create (t.Item2, t.Item1);
+        }
+
+        [KRPCProcedure]
+        public static int ScalarDefault (int x = 42)
+        {
+            return x;
+        }
+
+        [KRPCProcedure]
+        public static string StringDefault (string x = "foo")
+        {
+            return x;
+        }
+
+        public static class CreateBytesDefault
+        {
+            public static object Create ()
+            {
+                return new byte[] { 0xca, 0xfe };
+            }
+        }
+
+        [KRPCProcedure]
+        public static byte[] BytesDefault (
+            [KRPCDefaultValue (typeof(CreateBytesDefault))] byte[] x)
+        {
+            return x;
+        }
+
+        [KRPCProcedure]
+        public static string NullDefault (TestClass obj = null)
+        {
+            return obj == null ? "null" : obj.instanceValue;
+        }
+
         static IDictionary<Guid, IDictionary<string, int>> counters = new Dictionary<Guid, IDictionary<string, int>> ();
 
         [KRPCProcedure]
@@ -715,6 +927,33 @@ namespace TestServer
         public static int ThrowArgumentOutOfRangeException (int foo)
         {
             throw new ArgumentOutOfRangeException (nameof (foo));
+        }
+
+        /// <summary>
+        /// Throws the system exception of the given name, which the server maps to the KRPC
+        /// exception of that name.
+        /// </summary>
+        [KRPCProcedure]
+        public static int ThrowMappedException (string name)
+        {
+            switch (name) {
+            case "NullReferenceException":
+                throw new NullReferenceException ("Null reference");
+            case "KeyNotFoundException":
+                throw new KeyNotFoundException ("Key not found");
+            case "IndexOutOfRangeException":
+                throw new IndexOutOfRangeException ("Index out of range");
+            case "DivideByZeroException":
+                throw new DivideByZeroException ("Divide by zero");
+            case "NotSupportedException":
+                throw new NotSupportedException ("Not supported");
+            case "TimeoutException":
+                throw new TimeoutException ("Timeout");
+            case "OverflowException":
+                throw new OverflowException ("Overflow");
+            default:
+                throw new ArgumentException ("No mapped exception " + name);
+            }
         }
 
         [KRPCException]
@@ -802,25 +1041,6 @@ namespace TestServer
                     return true;
                 });
             timer.Start();
-            return evnt.Message;
-        }
-
-        [KRPCProcedure]
-        public static KRPC.Service.Messages.Event OnTimerUsingLambda (uint milliseconds) {
-            int triggered = 0;
-            var timer = new System.Timers.Timer (milliseconds);
-            timer.Elapsed += (s, e) => {
-                Volatile.Write (ref triggered, 1);
-                timer.Enabled = false;
-            };
-            timer.Start();
-            var evnt = new KRPC.Service.Event (
-                (KRPC.Service.Event e) => {
-                    var fire = Volatile.Read (ref triggered) == 1;
-                    if (fire)
-                        e.Remove();
-                    return fire;
-                });
             return evnt.Message;
         }
 

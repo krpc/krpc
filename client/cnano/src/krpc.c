@@ -70,6 +70,21 @@ static bool write_callback(pb_ostream_t *stream, const uint8_t *buf, size_t coun
 static bool read_callback(pb_istream_t *stream, uint8_t *buf, size_t count);
 static krpc_error_t krpc_send_message(krpc_connection_t connection, const pb_msgdesc_t *fields,
                                       const void *message);
+
+#ifdef KRPC_WRITE_FAULTS
+krpc_error_t (*krpc_write_fault_hook)(void) = NULL;
+#endif
+
+/* Write to the connection, unless the testee's write fault fails the write first */
+static krpc_error_t krpc_write_to(krpc_connection_t connection, const uint8_t *buf, size_t count) {
+#ifdef KRPC_WRITE_FAULTS
+  if (krpc_write_fault_hook != NULL) {
+    krpc_error_t error = krpc_write_fault_hook();
+    if (error != KRPC_OK) return error;
+  }
+#endif
+  return krpc_write(connection, buf, count);
+}
 static krpc_error_t krpc_receive_message(krpc_connection_t connection, const pb_msgdesc_t *fields,
                                          void *message);
 
@@ -383,7 +398,7 @@ static krpc_error_t krpc_writer_flush(krpc_writer_t *writer) {
   size_t used = writer->used;
   writer->used = 0;
   if (used == 0) return KRPC_OK;
-  return krpc_write(writer->connection, writer->data, used);
+  return krpc_write_to(writer->connection, writer->data, used);
 }
 
 static bool write_callback(pb_ostream_t *stream, const uint8_t *buf, size_t count) {
@@ -489,7 +504,7 @@ static krpc_error_t krpc_send_message(krpc_connection_t connection, const pb_msg
       size >>= 7;
     }
     *at = (uint8_t)size;
-    return krpc_write(connection, start, length + buffer.used);
+    return krpc_write_to(connection, start, length + buffer.used);
   }
   /* A message that failed to encode for any other reason would only fail the same way again,
      so it is reported here rather than encoded a second time. */

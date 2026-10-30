@@ -81,7 +81,7 @@ namespace KRPC.Test.Service
         [KRPCMethod]
         public static string ExtensionMethodOnOtherServicesClass (this TestClass3 obj)
         {
-            return obj == null ? string.Empty : "jeb";
+            return obj == null ? string.Empty : "alpha";
         }
     }
 }

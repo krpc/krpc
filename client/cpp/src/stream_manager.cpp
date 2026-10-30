@@ -17,6 +17,7 @@
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
 #include "krpc/krpc.pb.hpp"
+#include "krpc/race_point.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/session.hpp"
 #include "krpc/stream_impl.hpp"
@@ -282,6 +283,8 @@ bool StreamManager::lock(RecursiveMutex* mutex) {
 void StreamManager::apply(const std::vector<Change>& changes, const Callbacks& update_callbacks) {
   for (const auto& change : changes) {
     const auto& stream = change.stream;
+    detail::reach_race_point(change.ending ? RacePoint::stream_ending : RacePoint::stream_value,
+                             -1);
     bool locked = lock(&stream->get_condition_mutex());
     if (locked) {
       std::lock_guard<RecursiveMutex> held(stream->get_condition_mutex(), std::adopt_lock);
@@ -297,12 +300,14 @@ void StreamManager::apply(const std::vector<Change>& changes, const Callbacks& u
       continue;
     }
     if (!locked) continue;
+    detail::reach_race_point(RacePoint::stream_callbacks, -1);
     for (const auto& callback : change.callbacks)
       stream->call(callback, callback->event ? change.fired : change.version, change.data,
                    change.is_null);
   }
 
   notify_update(true);
+  detail::reach_race_point(RacePoint::update_callbacks, -1);
   for (const auto& callback : update_callbacks) {
     // Update callbacks have no stream ending to stop them once the client closes
     if (closed) break;

@@ -2,12 +2,17 @@ load("@rules_python//python:defs.bzl", "py_test")
 load("//:config.bzl", "assembly_version", "author", "nuget_version")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:client_test.bzl", "client_test")
+load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build:csharp.bzl", "csharp_binary", "csharp_library", "csharp_nunit_test")
 load("//tools/build:nuget.bzl", "nuget_package")
-load("//tools/krpctools:clientgen.bzl", "clientgen_services")
+load("//tools/krpctools:clientgen.bzl", "clientgen_dispatch", "clientgen_services")
 load("//tools/krpctools:services.bzl", "SERVICES")
 
-exports_files(["CHANGELOG.md"])
+exports_files([
+    "CHANGELOG.md",
+    "conformance/expected-failures.txt",
+    "conformance/unsupported.txt",
+])
 
 services = clientgen_services("csharp")
 
@@ -58,12 +63,10 @@ deps = [
     "//tools/build/dotnet:System.Runtime.CompilerServices.Unsafe",
 ]
 
-# The test assemblies, which reach the internals of the client: the transport, the message
-# reader and the endpoint a unix domain socket is named by are not part of its public API.
+# The test assemblies, which reach the internals of the client: the function compiler, the
+# type specs and the endpoint a unix domain socket is named by are not part of its public API.
 test_assemblies = [
     "KRPC.Client.Test",
-    "KRPC.Client.Test.CommunicationLocalSocket",
-    "KRPC.Client.Test.CommunicationTCPIP",
     "KRPC.Client.Test.Unit",
 ]
 
@@ -110,10 +113,8 @@ csharp_library(
 test_suite(
     name = "test",
     tests = [
-        ":client-localsocket",
         ":client-tcpip",
-        ":communication-localsocket",
-        ":communication-tcpip",
+        ":conformance",
         ":csproj-services",
         ":unit",
     ],
@@ -135,7 +136,8 @@ py_test(
     main = "csproj_services_test.py",
 )
 
-# The client end to end against a TestServer, once per transport it can reach one over.
+# The client's own API against a TestServer. The conformance tests cover each transport, so
+# this runs over one.
 client_test(
     name = "client-tcpip",
     size = "medium",
@@ -147,15 +149,6 @@ client_test(
     test_executable = ":test-KRPC.Client",
 )
 
-client_test(
-    name = "client-localsocket",
-    size = "medium",
-    server_executable = "//tools/TestServer",
-    server_type = "localsocket",
-    tags = ["local"],
-    test_executable = ":test-KRPC.Client",
-)
-
 csharp_assembly_info(
     name = "TestAssemblyInfo",
     cls_compliant = False,
@@ -164,7 +157,7 @@ csharp_assembly_info(
     version = assembly_version,
 )
 
-# CS1701: Google.Protobuf/Moq reference net5/6-era framework assemblies; unification
+# CS1701: Google.Protobuf references net5/6-era framework assemblies; unification
 # handles this at runtime (MSBuild suppresses this warning by default). Matches the
 # KRPC.Core targets.
 test_nowarn = [
@@ -176,22 +169,17 @@ test_nowarn = [
 
 test_deps = [
     ":KRPC.Client.net10",
-    "//tools/build/dotnet:Castle.Core",
     "//tools/build/dotnet:Google.Protobuf",
-    "//tools/build/dotnet:Moq",
 ]
 
-# What the client does regardless of the transport it talks over: encoding and decoding
-# values, taking a message out of the blocks a read brings in, and naming a unix domain
-# socket. It needs no server, so it runs on its own rather than under the harness that
-# starts one.
+# The tests that need no server: type specs, structure ordering and the endpoint a unix
+# domain socket is named by.
 csharp_nunit_test(
     name = "unit",
     size = "small",
     srcs = [
         "test/EncoderTest.cs",
-        "test/MessageReaderTest.cs",
-        "test/TestingTools.cs",
+        "test/StructTest.cs",
         "test/UnixEndPointTest.cs",
         ":TestAssemblyInfo",
         ":services-testservice",
@@ -202,53 +190,16 @@ csharp_nunit_test(
     deps = test_deps,
 )
 
-# The transport, one test each. Both run against a server the test listens on itself, which
-# answers the handshake and every request after it, so neither needs a kRPC server. The
-# bodies are shared and each transport supplies only how a connection is opened.
-csharp_nunit_test(
-    name = "communication-tcpip",
-    size = "small",
-    srcs = [
-        "test/ConnectionTestCase.cs",
-        "test/StandInServer.cs",
-        "test/TCPIPConnectionTest.cs",
-        ":TestAssemblyInfo",
-    ],
-    out = "KRPC.Client.Test.CommunicationTCPIP",
-    nowarn = test_nowarn,
-    tags = ["requires-network"],
-    target_frameworks = ["net10.0"],
-    deps = test_deps,
-)
-
-csharp_nunit_test(
-    name = "communication-localsocket",
-    size = "small",
-    srcs = [
-        "test/ConnectionTestCase.cs",
-        "test/LocalSocketConnectionTest.cs",
-        "test/StandInServer.cs",
-        ":TestAssemblyInfo",
-    ],
-    out = "KRPC.Client.Test.CommunicationLocalSocket",
-    nowarn = test_nowarn,
-    target_frameworks = ["net10.0"],
-    deps = test_deps,
-)
-
+# The tests of the lambda compiler and of streams of functions, against a TestServer.
 csharp_nunit_test(
     name = "test-KRPC.Client",
     size = "small",
     srcs = [
-        "test/ConnectionTest.cs",
-        "test/EventTest.cs",
         "test/ExpressionTreeTest.cs",
         "test/FunctionCompilerTest.cs",
         "test/FunctionStreamTest.cs",
-        "test/ObjectTest.cs",
         "test/ServerTestCase.cs",
         "test/StreamTest.cs",
-        "test/TestingTools.cs",
         ":TestAssemblyInfo",
         ":services-testservice",
     ],
@@ -281,6 +232,62 @@ csharp_binary(
         ":KRPC.Client.net10",
         "//tools/build/dotnet:Google.Protobuf",
     ],
+)
+
+# The conformance tests, driving the client through its testee
+csharp_binary(
+    name = "conformance-testee",
+    testonly = True,
+    srcs = glob(["conformance/*.cs"]) + clientgen_dispatch(
+        out = "conformance/{service}Dispatch.cs",
+        language = "csharp",
+    ) + [
+        ":TestAssemblyInfo",
+        ":services-testservice",
+        "//client/conformance:testee-csharp",
+    ],
+    nowarn = [
+        "CS1591",
+        "CS1573",
+        "CS1701",
+    ],
+    target_frameworks = ["net10.0"],
+    deps = [
+        ":KRPC.Client.net10",
+        "//tools/build/dotnet:Google.Protobuf",
+    ],
+)
+
+conformance_test(
+    name = "conformance",
+    size = "medium",
+    conventions = "conformance/conventions.json",
+    expected_failures = "conformance/expected-failures.txt",
+    profiles = [
+        "core",
+        "error-types",
+        "defaults",
+        "streams",
+        "events",
+        "functions",
+        "function-types",
+        "connections",
+        "threads",
+        "callbacks",
+        "conditions",
+        "ordering",
+        "races",
+    ],
+    protocols = [
+        "tcpip",
+        "localsocket",
+    ],
+    tags = [
+        "local",
+        "requires-network",
+    ],
+    testee = ":conformance-testee",
+    unsupported = "conformance/unsupported.txt",
 )
 
 # Sources for //:csproj-test, which checks them against the .csproj file lists.

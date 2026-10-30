@@ -48,12 +48,19 @@ stage_files(
         ":java-api",
         ":lua-api",
         ":python-api",
+        "//client/conformance:coverage",
+        "//client/conformance:requirements",
+        "//client/conformance:testee.proto",
         "//protobuf:krpc.proto",
     ],
     path_map = {
         "doc/src/": "",
         # The protocol pages include their message definitions from the schema
         "protobuf/krpc.proto": "communication-protocols/krpc.proto",
+        # The specification's requirement lists are generated from the conformance tests
+        "client/conformance/requirements/": "communication-protocols/client-spec/requirements/",
+        "client/conformance/testee.proto": "communication-protocols/client-spec/testee.proto",
+        "client/conformance/coverage.txt": "communication-protocols/client-spec/requirements/coverage.txt",
     },
 )
 

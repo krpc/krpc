@@ -1,36 +1,13 @@
-load("//:config.bzl", "python_version", "version")
-load("//tools/build:client_test.bzl", "client_test")
-load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_sdist", "py_test")
-
-py_sdist(
-    name = "krpcwebsockets",
-    out = "krpcwebsockets-%s.tar.gz" % version,
-    files = [
-        "pyproject.toml",
-        "//:python_version",
-        "//:version",
-    ] + glob(["krpcwebsockets/**/*"]),
-    path_map = {
-        "version.py": "krpcwebsockets/version.py",
-        "client/websockets/": "",
-    },
-)
+load("@rules_python//python:defs.bzl", "py_binary")
+load("//tools/build:conformance.bzl", "conformance_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
 
 test_suite(
     name = "test",
     tests = [
+        ":conformance",
         ":lint",
-        ":wstest",
     ],
-)
-
-client_test(
-    name = "wstest",
-    size = "medium",
-    server_executable = "//tools/TestServer",
-    server_type = "websockets",
-    tags = ["requires-network"],
-    test_executable = ":wstestexe",
 )
 
 deps = [
@@ -39,13 +16,22 @@ deps = [
     "@krpc_pypi//websocket_client",
 ]
 
-py_test(
-    name = "wstestexe",
-    size = "small",
-    src = ":krpcwebsockets",
-    pkg = "krpcwebsockets-" + python_version,
+# A minimal testee, to run the conformance tests over websockets
+py_binary(
+    name = "conformance-testee",
+    srcs = ["conformance/testee.py"],
+    main = "conformance/testee.py",
+    deps = deps + ["//client/conformance:testee_py"],
+)
+
+conformance_test(
+    name = "conformance",
+    size = "medium",
+    expected_failures = "conformance/expected-failures.txt",
+    profiles = ["core"],
+    protocols = ["websockets"],
     tags = ["requires-network"],
-    deps = deps,
+    testee = ":conformance-testee",
 )
 
 test_suite(
@@ -59,12 +45,12 @@ test_suite(
 py_ruff_test(
     name = "ruff",
     size = "small",
-    srcs = glob(["krpcwebsockets/**/*.py"]),
+    srcs = glob(["conformance/*.py"]),
 )
 
 py_pyright_test(
     name = "pyright",
     size = "medium",
-    srcs = glob(["krpcwebsockets/**/*.py"]),
-    deps = deps,
+    srcs = glob(["conformance/*.py"]),
+    deps = deps + ["//client/conformance:testee_py"],
 )

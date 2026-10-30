@@ -22,7 +22,35 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_AddToObjectDictionary(krpc_connection_t connection, krpc_dictionary_string_object_t * returnValue, const krpc_dictionary_string_object_t * d, const char * key)
+
+
+
+   :Parameters:
+
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_AddToObjectList(krpc_connection_t connection, krpc_list_object_t * returnValue, const krpc_list_object_t * l, const char * value)
+
+
+
+   :Parameters:
+
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_AddToObjectSet(krpc_connection_t connection, krpc_set_object_t * returnValue, const krpc_set_object_t * h, const char * value)
 
 
 
@@ -51,6 +79,19 @@ Service documentation string.
 
 
 .. function:: krpc_error_t krpc_TestService_BoolToString(krpc_connection_t connection, char * * returnValue, bool value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_BytesDefault(krpc_connection_t connection, krpc_bytes_t * returnValue, krpc_bytes_t x)
 
 
 
@@ -280,6 +321,84 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_EchoNullableBool(krpc_connection_t connection, bool * returnValue, bool * returnValueIsNull, const bool * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNullableBytes(krpc_connection_t connection, krpc_bytes_t * returnValue, bool * returnValueIsNull, const krpc_bytes_t * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNullableDictionary(krpc_connection_t connection, krpc_dictionary_string_int32_t * returnValue, bool * returnValueIsNull, const krpc_dictionary_string_int32_t * d)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNullableDouble(krpc_connection_t connection, double * returnValue, bool * returnValueIsNull, const double * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNullableEnum(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, bool * returnValueIsNull, const krpc_TestService_TestEnum_t * x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNullableFloat(krpc_connection_t connection, float * returnValue, bool * returnValueIsNull, const float * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_EchoNullableInt(krpc_connection_t connection, int32_t * returnValue, bool * returnValueIsNull, const int32_t * value)
 
    Returns the given value.
@@ -307,7 +426,85 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_EchoNullableLong(krpc_connection_t connection, int64_t * returnValue, bool * returnValueIsNull, const int64_t * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNullableSet(krpc_connection_t connection, krpc_set_int32_t * returnValue, bool * returnValueIsNull, const krpc_set_int32_t * h)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_EchoNullableString(krpc_connection_t connection, char * * returnValue, bool * returnValueIsNull, const char * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNullableTuple(krpc_connection_t connection, krpc_tuple_int32_int64_t * returnValue, bool * returnValueIsNull, const krpc_tuple_int32_int64_t * t)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNullableUInt(krpc_connection_t connection, uint32_t * returnValue, bool * returnValueIsNull, const uint32_t * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNullableULong(krpc_connection_t connection, uint64_t * returnValue, bool * returnValueIsNull, const uint64_t * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoStringSet(krpc_connection_t connection, krpc_set_string_t * returnValue, const krpc_set_string_t * h)
 
 
 
@@ -359,7 +556,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EnumDefaultArg(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x)
+.. function:: krpc_error_t krpc_TestService_EnumDefault(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x)
 
 
 
@@ -398,8 +595,11 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_EnumReturn(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue)
+.. function:: krpc_error_t krpc_TestService_EnumToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestEnum_t x)
 
+
+
+   :Parameters:
 
 
 
@@ -430,6 +630,19 @@ Service documentation string.
 .. function:: krpc_error_t krpc_TestService_FloatToString(krpc_connection_t connection, char * * returnValue, float value)
 
    Procedure documentation string.
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_HexStringToBytes(krpc_connection_t connection, krpc_bytes_t * returnValue, const char * value)
+
+
 
    :Parameters:
 
@@ -575,7 +788,7 @@ Service documentation string.
 .. function:: krpc_error_t krpc_TestService_JoinWithAtSign(krpc_connection_t connection, char * * returnValue, const char * firstValue, const char * from)
 
    Returns *firstValue* and *from* joined by an at
-   sign, e.g. ``jeb@kerbin``. The parameter names are:
+   sign, e.g. ``name@host``. The parameter names are:
 
    * a name in camel case, and
    * a name that is a keyword in some languages.
@@ -618,6 +831,19 @@ Service documentation string.
 
 
 .. function:: krpc_error_t krpc_TestService_NotNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_NullDefault(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t obj)
 
 
 
@@ -678,19 +904,6 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_OnTimerUsingLambda(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds)
-
-
-
-   :Parameters:
-
-
-
-   
-
-
-
-
 .. function:: krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t connection, char * * returnValue, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj)
 
 
@@ -708,6 +921,19 @@ Service documentation string.
 
 
 .. function:: krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_RemoveTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t value)
 
 
 
@@ -750,7 +976,33 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_ScalarDefault(krpc_connection_t connection, int32_t * returnValue, int32_t x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_SetDefault(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_StringDefault(krpc_connection_t connection, char * * returnValue, const char * x)
 
 
 
@@ -791,7 +1043,98 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_StringToBool(krpc_connection_t connection, bool * returnValue, const char * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_StringToDouble(krpc_connection_t connection, double * returnValue, const char * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_StringToEnum(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, const char * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_StringToFloat(krpc_connection_t connection, float * returnValue, const char * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_StringToInt32(krpc_connection_t connection, int32_t * returnValue, const char * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_StringToInt64(krpc_connection_t connection, int64_t * returnValue, const char * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_StringToUInt32(krpc_connection_t connection, uint32_t * returnValue, const char * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_StringToUInt64(krpc_connection_t connection, uint64_t * returnValue, const char * value)
 
 
 
@@ -831,6 +1174,19 @@ Service documentation string.
 
 
 .. function:: krpc_error_t krpc_TestService_StructEchoNullable(krpc_connection_t connection, krpc_TestService_TestStruct_t * returnValue, bool * returnValueIsNull, const krpc_TestService_TestStruct_t * x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_SwapObjectTuple(krpc_connection_t connection, krpc_tuple_object_object_t * returnValue, const krpc_tuple_object_object_t * t)
 
 
 
@@ -929,7 +1285,47 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_ThrowMappedException(krpc_connection_t connection, int32_t * returnValue, const char * name)
+
+   Throws the system exception of the given name, which the server maps to the KRPC
+   exception of that name.
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_TupleDefault(krpc_connection_t connection, krpc_tuple_int32_bool_t * returnValue, const krpc_tuple_int32_bool_t * x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_UInt32ToString(krpc_connection_t connection, char * * returnValue, uint32_t value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_UInt64ToString(krpc_connection_t connection, char * * returnValue, uint64_t value)
 
 
 
@@ -1040,7 +1436,7 @@ Service documentation string.
 
    .. function:: krpc_error_t krpc_TestService_TestClass_StaticMethod(krpc_connection_t connection, char * * returnValue, const char * a, const char * b)
 
-      Returns jeb followed by *a* and *b*.
+      Returns static followed by *a* and *b*.
 
       :Parameters:
 
@@ -1055,6 +1451,19 @@ Service documentation string.
 
 
       :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_TestClass_StaticOptionalArguments(krpc_connection_t connection, char * * returnValue, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj)
+
+
+
+      :Parameters:
+
+
+
 
 
 

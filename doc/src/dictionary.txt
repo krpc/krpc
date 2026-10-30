@@ -15,6 +15,7 @@ Jeb
 Kerbal
 Kerbals
 Kerbin
+KiB
 Konstructs
 Kosmo
 Landers
@@ -24,6 +25,7 @@ MoI
 ModuleEngines
 MyGroup
 NUnit
+NaN
 Olex
 PID
 RemoteTech
@@ -62,6 +64,7 @@ deadband
 decoupler
 decouplers
 deployable
+destructor
 dict
 differencing
 dll
@@ -69,6 +72,7 @@ docstring
 doesn
 draggable
 dropdown
+endian
 enum
 ephemeris
 erm
@@ -95,6 +99,7 @@ intra
 javac
 jetpack
 jitter
+js
 kN
 kOS
 kRPC
@@ -116,6 +121,7 @@ macOS
 mach
 massless
 maths
+microcontroller
 microcontrollers
 mitigations
 mits
@@ -135,10 +141,12 @@ nullable
 omni
 online
 overdamped
+parametrized
 pdflatex
 periapsis
 physicsless
 plugin
+pluggable
 polyline
 pre
 prebuilt
@@ -180,6 +188,7 @@ sudo
 symlink
 targetting
 teleporting
+testee
 thruster
 thrusters
 toggleable

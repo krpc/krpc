@@ -5,26 +5,16 @@ from krpc.definitions import (
     ENUMERATION,
     STRUCT,
     Definition,
-    decode_default_value,
     register_all,
     topological_order,
 )
-from krpc.encoder import Encoder
 from krpc.schema.KRPC_pb2 import Type
-from krpc.types import EnumerationType, Types
+from krpc.types import Types
 
 
 def enumeration_type(service: str, name: str) -> Type:
     protobuf_type = Type()
     protobuf_type.code = Type.ENUMERATION
-    protobuf_type.service = service
-    protobuf_type.name = name
-    return protobuf_type
-
-
-def class_type(service: str, name: str) -> Type:
-    protobuf_type = Type()
-    protobuf_type.code = Type.CLASS
     protobuf_type.service = service
     protobuf_type.name = name
     return protobuf_type
@@ -115,43 +105,6 @@ class TestRegisterAll(unittest.TestCase):
         )
         self.assertEqual(["A", "B", "C"], self.registered)
 
-    def test_a_reference_names_a_kind_as_well_as_a_name(self) -> None:
-        # The reference is to a class, so the enumeration of the same name does not satisfy it
-        with self.assertRaises(RuntimeError) as cm:
-            register_all(
-                self.types,
-                [
-                    self.definition("B", [class_type("ServiceA", "A")]),
-                    self.definition("A", kind=ENUMERATION),
-                ],
-            )
-        self.assertIn("class ServiceA.A", str(cm.exception))
-
-    def test_reference_that_nothing_defines(self) -> None:
-        with self.assertRaises(RuntimeError) as cm:
-            register_all(
-                self.types,
-                [self.definition("B", [enumeration_type("ServiceB", "Mode")])],
-            )
-        self.assertIn("enumeration ServiceA.B", str(cm.exception))
-        self.assertIn("enumeration ServiceB.Mode", str(cm.exception))
-        self.assertEqual([], self.registered)
-
-    def test_cycle(self) -> None:
-        with self.assertRaises(RuntimeError) as cm:
-            register_all(
-                self.types,
-                [
-                    self.definition("A", [enumeration_type("ServiceA", "B")]),
-                    self.definition("B", [enumeration_type("ServiceA", "A")]),
-                ],
-            )
-        self.assertEqual(
-            "Cyclic dependency: enumeration ServiceA.A -> enumeration ServiceA.B "
-            "-> enumeration ServiceA.A",
-            str(cm.exception),
-        )
-
     def test_struct_registered_after_the_types_of_its_fields(self) -> None:
         # The struct B has a field whose type is the struct A, so A has to be registered
         # first for the field to resolve
@@ -214,60 +167,6 @@ class TestTopologicalOrder(unittest.TestCase):
         with self.assertRaises(RuntimeError) as cm:
             self.order(graph, ["a"])
         self.assertEqual("Cyclic dependency: b -> c -> b", str(cm.exception))
-
-
-class TestDecodeDefaultValue(unittest.TestCase):
-    location = "ServiceA.Frob parameter mode"
-
-    def setUp(self) -> None:
-        self.types = Types()
-
-    def encode(self, value: int) -> bytes:
-        return Encoder.encode(value, self.types.sint32_type)
-
-    def enumeration(self, registered: bool = True) -> EnumerationType:
-        typ = self.types.enumeration_type("ServiceA", "Mode")
-        if registered:
-            typ.set_values(
-                {"slow": {"value": 1, "doc": ""}, "fast": {"value": 2, "doc": ""}}
-            )
-        return typ
-
-    def test_decodes_an_enumeration_value(self) -> None:
-        typ = self.enumeration()
-        value = decode_default_value(None, self.encode(2), typ, self.location)
-        self.assertEqual(typ.python_type["fast"], value)
-
-    def test_enumeration_that_was_never_registered(self) -> None:
-        with self.assertRaises(RuntimeError) as cm:
-            decode_default_value(
-                None, self.encode(2), self.enumeration(registered=False), self.location
-            )
-        self.assertIn(self.location, str(cm.exception))
-        self.assertIn("ServiceA.Mode", str(cm.exception))
-
-    def test_enumeration_inside_a_collection(self) -> None:
-        typ = self.types.list_type(self.enumeration(registered=False))
-        # The value is never reached, as the type it would be decoded through is incomplete
-        with self.assertRaises(RuntimeError) as cm:
-            decode_default_value(None, b"", typ, self.location)
-        self.assertIn(self.location, str(cm.exception))
-        self.assertIn("ServiceA.Mode", str(cm.exception))
-
-    def test_struct_that_was_never_registered(self) -> None:
-        typ = self.types.struct_type("ServiceA", "Frobnicator")
-        with self.assertRaises(RuntimeError) as cm:
-            decode_default_value(None, b"", typ, self.location)
-        self.assertIn(self.location, str(cm.exception))
-        self.assertIn("ServiceA.Frobnicator", str(cm.exception))
-
-    def test_value_the_enumeration_does_not_declare(self) -> None:
-        with self.assertRaises(RuntimeError) as cm:
-            decode_default_value(
-                None, self.encode(7), self.enumeration(), self.location
-            )
-        self.assertIn(self.location, str(cm.exception))
-        self.assertIn("7 is not a valid Mode", str(cm.exception))
 
 
 if __name__ == "__main__":

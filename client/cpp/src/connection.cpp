@@ -8,12 +8,10 @@
 #include <asio/error.hpp>
 #include <asio/error_code.hpp>
 #include <asio/local/stream_protocol.hpp>
-#include <asio/read.hpp>  // IWYU pragma: keep
 #include <asio/steady_timer.hpp>
 #include <asio/write.hpp>  // IWYU pragma: keep
 #include <climits>
 #include <cstdint>
-#include <cstring>
 #include <exception>
 #include <memory>
 #include <new>
@@ -28,6 +26,7 @@
 
 #include "krpc/decoder.hpp"
 #include "krpc/error.hpp"
+#include "krpc/write_fault.hpp"
 
 #ifndef _WIN32
 #include <poll.h>
@@ -151,10 +150,14 @@ void Connection::shutdown_both() {
 }
 
 void Connection::send(const char* data, size_t length) {
+  detail::reach_write_fault();
   asio::write(socket, asio::buffer(data, length));
 }
 
-void Connection::send(const std::string& data) { asio::write(socket, asio::buffer(data)); }
+void Connection::send(const std::string& data) {
+  detail::reach_write_fault();
+  asio::write(socket, asio::buffer(data));
+}
 
 std::string Connection::receive_message() {
   auto [data, size] = this->buffered_message();
@@ -313,67 +316,6 @@ bool Connection::fill(std::chrono::milliseconds timeout) {
   filled += read;
   if (read > 0) progress = std::chrono::steady_clock::now();
   return read > 0;
-}
-
-void Connection::take(char* data, size_t length) {
-  std::memcpy(data, buffer.data() + consumed, length);
-  consumed += length;
-}
-
-std::string Connection::receive(size_t length) {
-  std::string data;
-  data.resize(length);
-  size_t buffered = std::min(length, available());
-  this->take(&data[0], buffered);
-  // Whatever an earlier read has already brought in is used first, and the rest read into the
-  // caller's own storage: a message this long is one the buffer was never going to hold.
-  if (buffered < length) asio::read(socket, asio::buffer(&data[buffered], length - buffered));
-  return data;
-}
-
-std::string Connection::partial_receive(size_t length, std::chrono::milliseconds timeout) {
-  // Data read for an earlier message is data that has arrived, so a caller polling for more
-  // has to be given it before the socket is waited on.
-  if (available() > 0) {
-    length = std::min(length, available());
-    std::string data;
-    data.resize(length);
-    this->take(&data[0], length);
-    return data;
-  }
-
-  size_t read = 0;
-  std::string data;
-  data.resize(length);
-
-  bool timer_complete = false;
-  asio::steady_timer timer(socket.get_executor());
-  timer.expires_after(timeout);
-  timer.async_wait([&timer_complete](const asio::error_code& error) { timer_complete = true; });
-
-  bool read_complete = false;
-  asio::error_code read_error;
-  asio::async_read(
-      socket, asio::buffer(&data[0], length),
-      [&read, &read_complete, &read_error](const asio::error_code& error, size_t length) {
-        read = length;
-        read_error = error;
-        read_complete = true;
-      });
-
-  io_context.restart();
-  while (io_context.run_one()) {
-    if (read_complete)
-      timer.cancel();
-    else if (timer_complete)
-      socket.cancel();
-  }
-
-  // The timeout cancels the read, which is the one failure that leaves the connection usable
-  if (read == 0 && read_error && read_error != asio::error::operation_aborted)
-    throw asio::system_error(read_error);
-  if (read < length) data.resize(read);
-  return data;
 }
 
 }  // namespace krpc

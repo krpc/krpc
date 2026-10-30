@@ -1,7 +1,9 @@
 using System.Linq;
 using System.Text;
 using System.Threading;
+using KRPC.Server;
 using KRPC.Server.WebSockets;
+using KRPC.Service.Messages;
 using NUnit.Framework;
 using ContentCase = KRPC.Schema.KRPC.Message.ContentOneofCase;
 using Reason = KRPC.Schema.KRPC.Disconnect.Types.Reason;
@@ -65,7 +67,7 @@ namespace KRPC.Test.Server.WebSockets
         public void QueryStringIsIgnored ()
         {
             CheckValidConnectionRequest (
-                "GET /?name=Jebediah%20Kerman HTTP/1.1\r\n" +
+                "GET /?name=Test%20Client HTTP/1.1\r\n" +
                 "Host: localhost\r\n" +
                 "Upgrade: websocket\r\n" +
                 "Connection: Upgrade\r\n" +
@@ -131,8 +133,8 @@ namespace KRPC.Test.Server.WebSockets
         {
             var harness = Harness ();
             harness.Upgrade ();
-            var client = harness.Handshake ("Jebediah Kerman");
-            Assert.AreEqual ("Jebediah Kerman", client.Name);
+            var client = harness.Handshake ("Test Client");
+            Assert.AreEqual ("Test Client", client.Name);
         }
 
         [Test]
@@ -160,6 +162,21 @@ namespace KRPC.Test.Server.WebSockets
             var message = harness.ReceiveOne ();
             Assert.AreEqual (ContentCase.Response, message.ContentCase);
             Assert.AreEqual (3, message.Response.Id);
+        }
+
+        [Test]
+        public void WriteStreamUpdate ()
+        {
+            var harness = Harness ();
+            harness.Upgrade ();
+            var client = harness.Handshake ();
+            var update = new StreamUpdate ();
+            update.Results.Add (new StreamResult { Id = 3, Result = new ProcedureResult { Value = 42, Spec = KRPC.Service.TypeSpec.Create (typeof (int)) } });
+            ((IMessageStream)client.Stream).Write (update);
+            var message = harness.ReceiveOne ();
+            Assert.AreEqual (ContentCase.StreamUpdate, message.ContentCase);
+            Assert.AreEqual (1, message.StreamUpdate.Results.Count);
+            Assert.AreEqual (3, message.StreamUpdate.Results [0].Id);
         }
 
         [Test]

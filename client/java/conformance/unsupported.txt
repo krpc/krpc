@@ -1,0 +1,18 @@
+# The conformance tests the Java client's language has no way to carry out, one per line, with the reason as a comment
+test_connection.py::test_handshake_timeout_values[nan]  # A Duration cannot hold NaN
+test_connection.py::test_stall_timeout_values[nan]  # As test_handshake_timeout_values[nan]
+test_values.py::test_null_for_non_nullable[bool]  # A primitive type cannot hold null
+test_values.py::test_null_for_non_nullable[double]  # A primitive type cannot hold null
+test_values.py::test_null_for_non_nullable[float]  # A primitive type cannot hold null
+test_values.py::test_null_for_non_nullable[sint32]  # A primitive type cannot hold null
+test_values.py::test_null_for_non_nullable[sint64]  # A primitive type cannot hold null
+test_values.py::test_null_for_non_nullable[uint32]  # A primitive type cannot hold null
+test_values.py::test_null_for_non_nullable[uint64]  # A primitive type cannot hold null
+test_values.py::test_null_in_non_nullable_slot[struct-field]  # A primitive type cannot hold null
+test_functions.py::test_null_for_non_nullable_type[double]  # The value of a run or a stream is boxed, and a boxed type can hold null
+test_functions.py::test_stream_null_for_non_nullable_type[double]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_null_for_non_nullable_type[TestClass]  # A Java class type can hold null
+test_functions.py::test_stream_null_for_non_nullable_type[TestClass]  # As test_null_for_non_nullable_type[TestClass]
+test_functions.py::test_null_in_callback[double]  # As test_null_for_non_nullable_type[double]
+test_functions.py::test_null_in_callback[TestClass]  # A Java class type can hold null
+test_objects.py::test_static_method_through_an_object_connection  # A static method is called through its class

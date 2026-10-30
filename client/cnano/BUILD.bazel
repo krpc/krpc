@@ -2,10 +2,11 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load("//:config.bzl", "cmake_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:cog.bzl", "cog_test")
+load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test", "doxygen_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:nanopb.bzl", "protobuf_nanopb")
-load("//tools/krpctools:clientgen.bzl", "clientgen_services")
+load("//tools/krpctools:clientgen.bzl", "clientgen_dispatch", "clientgen_services")
 
 services = clientgen_services(
     "cnano",
@@ -68,17 +69,15 @@ cc_library(
 test_suite(
     name = "test",
     tests = [
-        ":client-localsocket",
-        ":client-serialio",
         ":client-tcpip",
         ":cog",
         ":communication-arduino",
         ":communication-localsocket",
         ":communication-serialio",
         ":communication-tcpip",
+        ":conformance",
         ":doxygen",
         ":lint",
-        ":unit",
     ],
 )
 
@@ -104,7 +103,10 @@ cc_library(
     testonly = True,
     srcs = srcs + [":protobuf"],
     hdrs = hdrs + [":protobuf"],
-    defines = ["KRPC_ERROR_MESSAGES"],
+    defines = [
+        "KRPC_ERROR_MESSAGES",
+        "KRPC_WRITE_FAULTS",
+    ],
     includes = ["include"],
     deps = ["@c_nanopb//:nanopb"],
 )
@@ -143,39 +145,52 @@ cc_library(
     deps = ["@c_nanopb//:nanopb"],
 )
 
-# What the client does regardless of the transport it talks over: encoding and decoding values
-# and messages. It needs no server, so it runs on its own rather than under the harness that
-# starts one, and it is built for one transport rather than every one of them.
-cc_test(
-    name = "unit",
-    size = "small",
-    srcs = [
-        "test/test_decoder.cpp",
-        "test/test_encode_decode.cpp",
-        "test/test_encoder.cpp",
-        "test/test_utils.cpp",
-        "test/testing_tools.hpp",
-        ":services-testservice",
+# The socket libraries with the write fault compiled in, for the conformance testees
+cc_library(
+    name = "krpc_cnano_tcpip_testee",
+    testonly = True,
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = [
+        "KRPC_COMMUNICATION_TCP",
+        "KRPC_ERROR_MESSAGES",
+        "KRPC_WRITE_FAULTS",
     ],
-    includes = ["test"],
-    deps = [
-        ":krpc_cnano_serialio",
-        "@cpp_googletest//:gmock",
-        "@cpp_googletest//:gtest",
-    ],
+    includes = ["include"],
+    linkopts = select({
+        "@platforms//os:windows": ["ws2_32.lib"],
+        "//conditions:default": [],
+    }),
+    deps = ["@c_nanopb//:nanopb"],
 )
 
-# The communication backends, one test each. Every one of them runs against something that
-# behaves as the thing it talks to does, so none needs the hardware, port or server it is
-# written for. The serial backend has a source per platform, POSIX and Windows being separate
-# implementations of it.
+cc_library(
+    name = "krpc_cnano_localsocket_testee",
+    testonly = True,
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = [
+        "KRPC_COMMUNICATION_LOCALSOCKET",
+        "KRPC_ERROR_MESSAGES",
+        "KRPC_WRITE_FAULTS",
+    ],
+    includes = ["include"],
+    linkopts = select({
+        "@platforms//os:windows": ["ws2_32.lib"],
+        "//conditions:default": [],
+    }),
+    deps = ["@c_nanopb//:nanopb"],
+)
+
+# The communication backends, for what the conformance tests do not reach. Every one of them
+# runs against something that behaves as the thing it talks to does, so none needs the
+# hardware, port or server it is written for. The serial conformance tests run on Linux only,
+# so the Windows serial backend is tested here.
 cc_test(
     name = "communication-serialio",
     size = "small",
-    srcs = [
-        "test/test_communication_posix.cpp",
-        "test/test_communication_windows.cpp",
-    ],
+    srcs = ["test/test_windows.cpp"],
+    target_compatible_with = ["@platforms//os:windows"],
     deps = [
         ":krpc_cnano_serialio",
         "@cpp_googletest//:gtest",
@@ -185,7 +200,7 @@ cc_test(
 cc_test(
     name = "communication-tcpip",
     size = "small",
-    srcs = ["test/test_communication_socket.cpp"],
+    srcs = ["test/test_socket.cpp"],
     deps = [
         ":krpc_cnano_tcpip",
         "@cpp_googletest//:gtest",
@@ -203,8 +218,8 @@ cc_test(
         "include/krpc_cnano/communication.h",
         "include/krpc_cnano/error.h",
         "src/communication.c",
-        "test/arduino/HardwareSerial.h",
-        "test/arduino/test_communication_arduino.cpp",
+        "test/HardwareSerial.h",
+        "test/test_arduino.cpp",
     ],
     # communication.c is C, but the Arduino backend it holds is C++ and the header
     # says so. Compile it as C++, spelled for the active compiler.
@@ -214,42 +229,110 @@ cc_test(
     }),
     includes = [
         "include",
-        "test/arduino",
+        "test",
     ],
     local_defines = ["ARDUINO"],
     deps = ["@cpp_googletest//:gtest"],
 )
 
-# Builds the library for a unix domain socket, together with the tests it shares with the other
-# socket transport, and exercises it against a socket the test itself listens on.
+# The library built for a unix domain socket, with the tests it shares with the other socket
+# transport.
 cc_test(
     name = "communication-localsocket",
     size = "small",
-    srcs = [
-        "test/test_communication_localsocket.cpp",
-        "test/test_communication_socket.cpp",
-    ],
+    srcs = ["test/test_socket.cpp"],
     deps = [
         ":krpc_cnano_localsocket",
         "@cpp_googletest//:gtest",
     ],
 )
 
-# The client end to end against a TestServer, once per transport. They differ in more than the
-# socket: a client on a serial port skips messages an earlier session left on the line while it
-# connects.
-client_test(
-    name = "client-serialio",
-    size = "small",
-    server_executable = "//tools/TestServer",
-    server_type = "serialio",
-    tags = [
-        "local",
-        "requires-network",
-    ],
-    test_executable = ":cnanotest-serialio",
+# The conformance tests, driving the client through its testee. The library is built for one
+# transport, so there is a testee for each.
+conformance_testee_srcs = [
+    "conformance/codec.hpp",
+    "conformance/dispatch_values.hpp",
+    "conformance/framing.hpp",
+    "conformance/main.cpp",
+    ":services-testservice",
+] + clientgen_dispatch(
+    out = "conformance/{snake_service}_dispatch.hpp",
+    language = "cnano",
+    services_out = "conformance/services/{snake_service}.h",
 )
 
+# The dispatch calls the deprecated TestService members
+conformance_testee_copts = select({
+    "@rules_cc//cc/compiler:msvc-cl": ["/wd4996"],
+    "//conditions:default": ["-Wno-deprecated-declarations"],
+})
+
+cc_binary(
+    name = "conformance-testee",
+    testonly = True,
+    srcs = conformance_testee_srcs,
+    copts = conformance_testee_copts,
+    includes = [
+        "conformance",
+        "test",
+    ],
+    deps = [
+        ":krpc_cnano_tcpip_testee",
+        "//client/conformance:testee-cpp",
+    ],
+)
+
+cc_binary(
+    name = "conformance-testee-serialio",
+    testonly = True,
+    srcs = conformance_testee_srcs,
+    copts = conformance_testee_copts,
+    includes = [
+        "conformance",
+        "test",
+    ],
+    deps = [
+        ":krpc_cnano_serialio",
+        "//client/conformance:testee-cpp",
+    ],
+)
+
+cc_binary(
+    name = "conformance-testee-localsocket",
+    testonly = True,
+    srcs = conformance_testee_srcs,
+    copts = conformance_testee_copts,
+    includes = [
+        "conformance",
+        "test",
+    ],
+    deps = [
+        ":krpc_cnano_localsocket_testee",
+        "//client/conformance:testee-cpp",
+    ],
+)
+
+conformance_test(
+    name = "conformance",
+    size = "medium",
+    expected_failures = "conformance/expected-failures.txt",
+    profiles = ["core"],
+    protocol_testees = {
+        "localsocket": ":conformance-testee-localsocket",
+        "serialio": ":conformance-testee-serialio",
+    },
+    protocols = [
+        "tcpip",
+        "localsocket",
+        "serialio",
+    ],
+    tags = ["requires-network"],
+    testee = ":conformance-testee",
+    unsupported = "conformance/unsupported.txt",
+)
+
+# The client's own API against a TestServer. The conformance tests cover each transport, so
+# this runs over one.
 client_test(
     name = "client-tcpip",
     size = "small",
@@ -262,55 +345,12 @@ client_test(
     test_executable = ":cnanotest-tcpip",
 )
 
-# And again over a unix domain socket. The framing is the one TCP/IP uses, so what this adds is
-# the client reaching a server the way that transport does, against a server serving it.
-client_test(
-    name = "client-localsocket",
-    size = "small",
-    server_executable = "//tools/TestServer",
-    server_type = "localsocket",
-    tags = ["local"],
-    test_executable = ":cnanotest-localsocket",
-)
-
-client_test_srcs = [
-    "test/server_test.hpp",
-    "test/test_client.cpp",
-    ":services-testservice",
-]
-
-cc_binary(
-    name = "cnanotest-serialio",
-    testonly = True,
-    srcs = client_test_srcs,
-    includes = ["test"],
-    deps = [
-        ":krpc_cnano_serialio",
-        "@cpp_googletest//:gmock",
-        "@cpp_googletest//:gtest",
-    ],
-)
-
 cc_binary(
     name = "cnanotest-tcpip",
     testonly = True,
-    srcs = client_test_srcs,
-    includes = ["test"],
+    srcs = ["test/test_client.cpp"],
     deps = [
         ":krpc_cnano_tcpip",
-        "@cpp_googletest//:gmock",
-        "@cpp_googletest//:gtest",
-    ],
-)
-
-cc_binary(
-    name = "cnanotest-localsocket",
-    testonly = True,
-    srcs = client_test_srcs,
-    includes = ["test"],
-    deps = [
-        ":krpc_cnano_localsocket",
-        "@cpp_googletest//:gmock",
         "@cpp_googletest//:gtest",
     ],
 )
@@ -360,11 +400,13 @@ clang_format_test(
     name = "clangformat",
     size = "small",
     srcs = glob([
+        "conformance/*.cpp",
+        "conformance/*.hpp",
         "benchmark/*.c",
         "src/*.c",
         "include/**/*.h",
-        "test/**/*.cpp",
-        "test/**/*.hpp",
+        "test/*.cpp",
+        "test/*.h",
     ]),
 )
 
@@ -378,7 +420,11 @@ protobuf_nanopb(
     source = "src/krpc.pb.c",
 )
 
-exports_files(["CHANGELOG.md"])
+exports_files([
+    "CHANGELOG.md",
+    "conformance/expected-failures.txt",
+    "conformance/unsupported.txt",
+])
 
 # The documentation of the client and of the test service, which exercises every form the
 # documentation takes, as Doxygen reads it. Doxygen on Linux links no static function from

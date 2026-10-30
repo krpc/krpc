@@ -28,10 +28,6 @@ class Object;
 
 namespace decoder {
 
-const size_t GUID_LENGTH = 16;
-
-std::string guid(const std::string& data);
-
 void decode(double& value, const std::string& data, Client* client = nullptr);
 void decode(float& value, const std::string& data, Client* client = nullptr);
 void decode(int32_t& value, const std::string& data, Client* client = nullptr);

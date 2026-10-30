@@ -1,0 +1,7 @@
+{
+  "naming": {
+    "case": "snake",
+    "accessors": true,
+    "exceptions": false
+  }
+}

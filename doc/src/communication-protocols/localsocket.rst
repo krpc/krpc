@@ -40,6 +40,8 @@ The handshake is identical to :doc:`tcpip`, differing only in how the connection
 
 Ending the connection is also identical to :doc:`tcpip`.
 
+.. _communication-protocol-localsocket-default-path:
+
 Default Socket Path
 -------------------
 

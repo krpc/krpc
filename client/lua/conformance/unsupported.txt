@@ -1,0 +1,4 @@
+# The conformance tests the Lua client's language has no way to carry out, one per line, with the reason as a comment
+test_objects.py::test_hash  # The language has no hash of an object
+test_objects.py::test_hash_across_connections  # As test_hash
+test_values.py::test_structure_hash  # The language has no hash of a value

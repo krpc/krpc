@@ -1,4 +1,4 @@
-load("@rules_python//python:defs.bzl", "py_binary")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load(":python.bzl", "py_pyright_test", "py_ruff_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -10,6 +10,7 @@ exports_files([
     "run_checkstyle.py",
     "run_client_test.py",
     "run_doxygen.py",
+    "serverprocess.py",
     "run_sphinx_autodoc.py",
     "run_sphinx_test.py",
 ])
@@ -21,6 +22,14 @@ py_binary(
         "@krpc_pypi//pyvips",
         "@krpc_pypi//pyvips_binary",
     ],
+)
+
+# Starting a TestServer and reading what it reports, for the client tests and the conformance
+# driver
+py_library(
+    name = "serverprocess",
+    srcs = ["serverprocess.py"],
+    imports = ["."],
 )
 
 py_binary(

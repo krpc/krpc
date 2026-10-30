@@ -413,7 +413,7 @@ namespace KRPC.Test.Service
                 } else if (proc.Name == "ProcedureThreeOptionalArgsNoReturn") {
                     MessageAssert.HasParameters (proc, 3);
                     MessageAssert.HasParameter (proc, 0, typeof(float), "x");
-                    MessageAssert.HasParameterWithDefaultValue (proc, 1, typeof(string), "y", "jeb");
+                    MessageAssert.HasParameterWithDefaultValue (proc, 1, typeof(string), "y", "alpha");
                     MessageAssert.HasParameterWithDefaultValue (proc, 2, typeof(int), "z", 42);
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
@@ -535,9 +535,9 @@ namespace KRPC.Test.Service
                     Assert.IsTrue (parameter.HasDefaultValue);
                     var defaultValue = (TestService.TestStruct)parameter.DefaultValue;
                     Assert.AreEqual (42, defaultValue.IntField);
-                    Assert.AreEqual ("jeb", defaultValue.StringField);
+                    Assert.AreEqual ("alpha", defaultValue.StringField);
                     Assert.AreEqual (global::KRPC.Test.Service.TestService.TestEnum.Y, defaultValue.EnumField);
-                    Assert.AreEqual ("kerbin", defaultValue.ObjectField.Value);
+                    Assert.AreEqual ("home", defaultValue.ObjectField.Value);
                     CollectionAssert.AreEqual (new [] { "a", "b" }, defaultValue.ListField);
                     MessageAssert.HasReturnType (proc, typeof(TestService.TestStruct));
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);

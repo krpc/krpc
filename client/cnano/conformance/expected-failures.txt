@@ -1,0 +1,63 @@
+# The conformance tests the C nano client fails, one per line, with the reason as a comment
+test_connection.py::test_close  # krpc_disconnect sends the disconnect and closes, with no half-close or drain
+test_connection.py::test_handshake_refused[DENIED]  # The status is reported only in the message
+test_connection.py::test_handshake_refused[MALFORMED_MESSAGE]  # As above
+test_connection.py::test_handshake_refused[TIMEOUT]  # As above
+test_connection.py::test_handshake_refused[WRONG_PROTOCOL_VERSION]  # As above
+test_errors.py::test_exception_name  # RPC errors carry only a message
+test_errors.py::test_description[empty]  # An empty description drops the colon after the name
+test_errors.py::test_whole_message[ArgumentException]  # The message is cut to KRPC_ERROR_MESSAGE_LENGTH
+test_errors.py::test_whole_message[ArgumentNullException]  # As above
+test_errors.py::test_whole_message[ArgumentOutOfRangeException]  # As above
+test_errors.py::test_whole_message[CustomException]  # As above
+test_errors.py::test_whole_message[DivideByZeroException]  # As above
+test_errors.py::test_whole_message[IndexOutOfRangeException]  # As above
+test_errors.py::test_whole_message[InvalidOperationException]  # As above
+test_errors.py::test_whole_message[KeyNotFoundException]  # As above
+test_errors.py::test_whole_message[NotSupportedException]  # As above
+test_errors.py::test_whole_message[NullReferenceException]  # As above
+test_errors.py::test_whole_message[OverflowException]  # As above
+test_errors.py::test_whole_message[TimeoutException]  # As above
+test_calls.py::test_class_extension_members  # The testee dispatch covers KRPC and TestService only
+test_objects.py::test_get_object_id  # An object is its id, with no helper to raise on null
+test_codec.py::test_too_few_items[tuple]  # A short wire tuple decodes short
+test_codec.py::test_string[nul]  # As test_values.py::test_string[nul]
+test_codec.py::test_extra_items[tuple]  # A tuple with extra items fails to decode
+test_codec.py::test_invalid_utf8  # A string that is not valid UTF-8 decodes
+test_connection.py::test_handshake_timeout[none]  # No handshake timeout
+test_connection.py::test_handshake_timeout[partial]  # As test_handshake_timeout[none]
+test_connection.py::test_handshake_unknown_status  # An unknown status is reported without its message
+test_connection.py::test_handshake_disconnect  # The disconnect reason is not reported
+test_connection.py::test_lost[disconnect]  # As test_handshake_disconnect
+test_connection.py::test_stall  # No stall timeout
+test_connection.py::test_serialio_no_answer[malformed-message]  # No timed read, so a request the server did not read returns an error for the program to retry
+test_connection.py::test_serialio_no_answer[timeout]  # As above
+test_connection.py::test_serialio_no_answer[disconnect]  # As above
+test_connection.py::test_handshake_timeout_values[zero]  # No handshake timeout
+test_connection.py::test_handshake_timeout_values[negative]  # As test_handshake_timeout_values[zero]
+test_connection.py::test_handshake_timeout_values[nan]  # As test_handshake_timeout_values[zero]
+test_connection.py::test_stall_timeout_values[zero]  # No stall timeout
+test_connection.py::test_stall_timeout_values[negative]  # As test_stall_timeout_values[zero]
+test_connection.py::test_stall_timeout_values[nan]  # As test_stall_timeout_values[zero]
+test_connection.py::test_lost[partway]@serialio @flaky  # Raises an encoding error, not the connection error, except now and then
+test_values.py::test_undeclared_enum_result  # An enum result holds any number
+test_values.py::test_string[nul]  # A string is a NUL-terminated C string
+test_values.py::test_null_in_non_nullable_slot[dictionary-key]  # Encoding a NULL string key calls strlen on it, which crashes
+test_codec.py::test_collections[tuple(uint32)]  # The testee has no codec type tuple(uint32)
+test_codec.py::test_collections[tuple(uint32,string,bool)]  # The testee has no codec type tuple(uint32,string,bool)
+test_codec.py::test_nullable[dictionary(string,nullable sint32)]  # The testee has no codec type dictionary(string,nullable sint32)
+test_codec.py::test_nullable[list(nullable TestStruct)]  # The testee has no codec type list(nullable TestStruct)
+test_codec.py::test_nullable[list(nullable list(uint32))]  # The testee has no codec type list(nullable list(uint32))
+test_codec.py::test_nullable[tuple(sint32,nullable string)]  # The testee has no codec type tuple(sint32,nullable string)
+test_values.py::test_null_for_non_nullable[string]  # The C type cannot refuse null
+test_codec.py::test_dictionary_value_left_out  # The testee has no codec type dictionary(string,list(uint32))
+test_values.py::test_null_for_non_nullable[object]  # A null object is sent as the id 0
+test_values.py::test_null_in_non_nullable_slot[object-element]  # As test_null_for_non_nullable[object]
+test_codec.py::test_object  # An object id of 0 is KRPC_NULL
+test_codec.py::test_malformed_data[list(nullable sint32)]  # A presence bool other than 0 or 1, or data after a null, decodes
+test_codec.py::test_nullable[list(nullable bool)]  # The testee has no codec type list(nullable bool)
+test_codec.py::test_nullable[list(nullable bytes)]  # The testee has no codec type list(nullable bytes)
+test_values.py::test_null_result_with_a_value  # A result with is_null set reads as null, whatever its value
+test_values.py::test_null_in_non_nullable_slot[string-element]  # The testee exits
+test_connection.py::test_failed_write  # The error of a failed write carries no message
+test_connection.py::test_handshake_failed_write  # A failed write of the connection request returns KRPC_ERROR_ENCODING_FAILED

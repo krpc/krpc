@@ -1,0 +1,218 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library", "py_test")
+load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
+load("//tools/build/protobuf:cpp.bzl", "protobuf_cpp")
+load("//tools/build/protobuf:csharp.bzl", "protobuf_csharp")
+load("//tools/build/protobuf:java.bzl", "protobuf_java")
+load("//tools/build/protobuf:lua.bzl", "protobuf_lua")
+load("//tools/build/protobuf:python.bzl", "protobuf_py")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files(
+    [
+        "driver/main.py",
+        "testee.proto",
+    ],
+)
+
+protobuf_py(
+    name = "testee-py",
+    src = "testee.proto",
+    out = "testee_pb2.py",
+    out_pyi = "testee_pb2.pyi",
+)
+
+protobuf_csharp(
+    name = "testee-csharp",
+    src = "testee.proto",
+    out = "Testee.cs",
+)
+
+protobuf_cpp(
+    name = "testee-cpp-srcs",
+    src = "testee.proto",
+    include = "testee.pb.h",
+    header = "cpp/testee.pb.h",
+    source = "cpp/testee.pb.cc",
+)
+
+cc_library(
+    name = "testee-cpp",
+    srcs = [":testee-cpp-srcs"],
+    hdrs = [":testee-cpp-srcs"],
+    includes = ["cpp"],
+    deps = ["@protobuf"],
+)
+
+protobuf_java(
+    name = "testee-java",
+    src = "testee.proto",
+    out = "Testee.java",
+)
+
+protobuf_lua(
+    name = "testee-lua",
+    src = "testee.proto",
+    out = "testee_schema.lua",
+)
+
+# The testee protocol, for the driver and the Python testee
+py_library(
+    name = "testee_py",
+    srcs = [":testee-py"],
+    data = [":testee-py"],
+    imports = ["."],
+    deps = ["@krpc_pypi//protobuf"],
+)
+
+# The pytest plugin and the tests it runs. The tests are data, collected by pytest at run time.
+py_library(
+    name = "driver",
+    srcs = glob(["driver/*.py"]),
+    data = glob(["tests/*.py"]) + ["pytest.ini"],
+    imports = ["."],
+    deps = [
+        ":testee_py",
+        "//client/python:krpc_lib",
+        "//tools/build:serverprocess",
+        "@krpc_pypi//pytest",
+    ],
+)
+
+py_binary(
+    name = "specgen",
+    srcs = ["specgen.py"],
+)
+
+# The requirement lists of the client specification, one per test file, for the docs to include
+genrule(
+    name = "requirements",
+    srcs = glob(["tests/test_*.py"]),
+    outs = [
+        "requirements/%s.txt" % x.removeprefix("tests/test_").removesuffix(".py")
+        for x in glob(["tests/test_*.py"])
+    ],
+    cmd = "$(execpath :specgen) requirements $(RULEDIR)/requirements $(SRCS)",
+    tools = [":specgen"],
+)
+
+# The clients in the coverage table, in the docs' language order
+COVERAGE_CLIENTS = {
+    "python": "Python",
+    "csharp": "C#",
+    "cpp": "C++",
+    "cnano": "C",
+    "java": "Java",
+    "lua": "Lua",
+}
+
+# The areas in the specification's page order
+COVERAGE_ORDER = ["tests/test_%s.py" % x for x in [
+    "connection",
+    "calls",
+    "values",
+    "codec",
+    "errors",
+    "objects",
+    "streams",
+    "events",
+    "threading",
+    "functions",
+]]
+
+# Every area, with any the page order lacks at the end
+COVERAGE_TESTS = COVERAGE_ORDER + [
+    x
+    for x in glob(["tests/test_*.py"])
+    if x not in COVERAGE_ORDER
+]
+
+# A table of each requirement against each client, for the docs
+genrule(
+    name = "coverage",
+    srcs = COVERAGE_TESTS + [
+        "//client/%s:conformance-profiles" % x
+        for x in COVERAGE_CLIENTS
+    ] + [
+        "//client/%s:conformance/expected-failures.txt" % x
+        for x in COVERAGE_CLIENTS
+    ] + [
+        "//client/%s:conformance/unsupported.txt" % x
+        for x in COVERAGE_CLIENTS
+    ],
+    outs = ["coverage.txt"],
+    cmd = " ".join(
+        ["$(execpath :specgen) coverage $@"] + [
+            "--client '%s' $(execpath //client/%s:conformance-profiles) $(execpath //client/%s:conformance/expected-failures.txt) $(execpath //client/%s:conformance/unsupported.txt)" % (title, name, name, name)
+            for name, title in COVERAGE_CLIENTS.items()
+        ] + ["$(execpath %s)" % x for x in COVERAGE_TESTS],
+    ),
+    tools = [":specgen"],
+)
+
+py_test(
+    name = "specgen-test",
+    size = "small",
+    srcs = [
+        "specgen.py",
+        "specgen_test.py",
+    ],
+    imports = ["."],
+    main = "specgen_test.py",
+)
+
+# The driver as it ships in the krpctools package, to test a client outside this repository
+filegroup(
+    name = "dist",
+    srcs = glob([
+        "driver/*.py",
+        "tests/*.py",
+    ]) + [
+        "pytest.ini",
+        "testee.proto",
+        ":testee-py",
+        "//tools/build:serverprocess.py",
+    ],
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":lint",
+        ":specgen-test",
+    ],
+)
+
+test_suite(
+    name = "lint",
+    tests = [
+        ":pyright",
+        ":ruff",
+    ],
+)
+
+py_ruff_test(
+    name = "ruff",
+    size = "small",
+    srcs = glob([
+        "driver/*.py",
+        "tests/*.py",
+    ]) + [
+        "specgen.py",
+        "specgen_test.py",
+    ],
+)
+
+py_pyright_test(
+    name = "pyright",
+    size = "medium",
+    srcs = glob([
+        "driver/*.py",
+        "tests/*.py",
+    ]) + [
+        "specgen.py",
+        "specgen_test.py",
+    ],
+    deps = [":driver"],
+)

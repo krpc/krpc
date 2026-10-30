@@ -1,12 +1,17 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load("//:config.bzl", "cmake_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
+load("//tools/build:conformance.bzl", "conformance_test")
 load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test", "doxygen_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:cpp.bzl", "protobuf_cpp")
-load("//tools/krpctools:clientgen.bzl", "clientgen_services")
+load("//tools/krpctools:clientgen.bzl", "clientgen_dispatch", "clientgen_services")
 
-exports_files(["CHANGELOG.md"])
+exports_files([
+    "CHANGELOG.md",
+    "conformance/expected-failures.txt",
+    "conformance/unsupported.txt",
+])
 
 services = clientgen_services(
     "cpp",
@@ -67,13 +72,25 @@ cc_library(
     ],
 )
 
+# The client with its race points compiled in, for the conformance testee
+cc_library(
+    name = "krpc-race-points",
+    testonly = True,
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = ["KRPC_RACE_POINTS"],
+    includes = ["include"],
+    deps = [
+        "@cpp_asio//:asio",
+        "@protobuf//:protobuf_lite",
+    ],
+)
+
 test_suite(
     name = "test",
     tests = [
-        ":client-localsocket",
         ":client-tcpip",
-        ":communication-localsocket",
-        ":communication-tcpip",
+        ":conformance",
         ":doxygen",
         ":lint",
         ":unit",
@@ -88,17 +105,13 @@ test_suite(
     ],
 )
 
-# What the client does regardless of the transport it talks over: encoding and decoding
-# values and messages, and the locks streams use. It needs no server, so it runs on its own,
-# outside the harness that starts one.
+# What the client does without a server: the locks streams use, and hashing. It needs no
+# server, so it runs on its own, outside the harness that starts one.
 cc_test(
     name = "unit",
     size = "small",
     srcs = [
         "test/test_condition.cpp",
-        "test/test_decoder.cpp",
-        "test/test_encode_decode.cpp",
-        "test/test_encoder.cpp",
         "test/test_hash.cpp",
         ":services-testservice",
     ],
@@ -110,39 +123,8 @@ cc_test(
     ],
 )
 
-# The transport, one test each. Both run against a server the test listens on itself, so
-# neither needs a kRPC server. The bodies are shared and instantiated once per transport,
-# as only opening the connection differs between them.
-cc_test(
-    name = "communication-tcpip",
-    size = "small",
-    srcs = [
-        "test/connection_test.hpp",
-        "test/test_connection_tcpip.cpp",
-    ],
-    includes = ["test"],
-    tags = ["requires-network"],
-    deps = [
-        ":krpc",
-        "@cpp_googletest//:gtest",
-    ],
-)
-
-cc_test(
-    name = "communication-localsocket",
-    size = "small",
-    srcs = [
-        "test/connection_test.hpp",
-        "test/test_connection_localsocket.cpp",
-    ],
-    includes = ["test"],
-    deps = [
-        ":krpc",
-        "@cpp_googletest//:gtest",
-    ],
-)
-
-# The client end to end against a TestServer, once per transport it can reach one over.
+# The client's own API against a TestServer. The conformance tests cover each transport, so
+# this runs over one.
 client_test(
     name = "client-tcpip",
     size = "medium",
@@ -151,20 +133,10 @@ client_test(
     test_executable = ":cpptest",
 )
 
-client_test(
-    name = "client-localsocket",
-    size = "medium",
-    server_executable = "//tools/TestServer",
-    server_type = "localsocket",
-    test_executable = ":cpptest",
-)
-
 test_srcs = [
     "test/test_client.cpp",
     "test/test_event.cpp",
     "test/test_function_stream.cpp",
-    "test/test_object.cpp",
-    "test/test_services.cpp",
     "test/test_stream.cpp",
     ":services-testservice",
     "test/server_test.hpp",
@@ -194,6 +166,66 @@ cc_binary(
     deps = [":krpc"],
 )
 
+# The conformance tests, driving the client through its testee
+cc_binary(
+    name = "conformance-testee",
+    testonly = True,
+    srcs = [
+        "conformance/codec.hpp",
+        "conformance/dispatch_values.hpp",
+        "conformance/framing.hpp",
+        "conformance/functions.hpp",
+        "conformance/main.cpp",
+        ":services-testservice",
+    ] + clientgen_dispatch(
+        out = "conformance/{snake_service}_dispatch.hpp",
+        language = "cpp",
+        services_out = "conformance/services/{snake_service}.hpp",
+    ),
+    # The dispatch calls the deprecated TestService members
+    copts = select({
+        "@rules_cc//cc/compiler:msvc-cl": ["/wd4996"],
+        "//conditions:default": ["-Wno-deprecated-declarations"],
+    }),
+    includes = [
+        "conformance",
+        "test",
+    ],
+    deps = [
+        ":krpc-race-points",
+        "//client/conformance:testee-cpp",
+    ],
+)
+
+conformance_test(
+    name = "conformance",
+    size = "medium",
+    conventions = "conformance/conventions.json",
+    expected_failures = "conformance/expected-failures.txt",
+    profiles = [
+        "core",
+        "error-types",
+        "defaults",
+        "streams",
+        "events",
+        "functions",
+        "function-types",
+        "connections",
+        "threads",
+        "callbacks",
+        "conditions",
+        "ordering",
+        "races",
+    ],
+    protocols = [
+        "tcpip",
+        "localsocket",
+    ],
+    tags = ["requires-network"],
+    testee = ":conformance-testee",
+    unsupported = "conformance/unsupported.txt",
+)
+
 clang_tidy_test(
     name = "clangtidy",
     size = "large",
@@ -210,6 +242,8 @@ clang_format_test(
     name = "clangformat",
     size = "small",
     srcs = glob([
+        "conformance/*.cpp",
+        "conformance/*.hpp",
         "src/*.cpp",
         "include/**/*.hpp",
         "test/**/*.cpp",

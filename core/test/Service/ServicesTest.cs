@@ -410,27 +410,27 @@ namespace KRPC.Test.Service
         [Test]
         public void ExecuteCallForObjectMethod ()
         {
-            var instance = new TestService.TestClass ("jeb");
+            var instance = new TestService.TestClass ("alpha");
             const float arg = 3.14159f;
             var result = Run (Call ("TestService", "TestClass_FloatToString", Arg (0, instance), Arg (1, arg)));
             CheckResultNotEmpty (result);
-            Assert.AreEqual ("jeb3.14159", (string)result.Value);
+            Assert.AreEqual ("alpha3.14159", (string)result.Value);
         }
 
         [Test]
         public void ExecuteCallForObjectMethodWithObjectParameter ()
         {
-            var instance = new TestService.TestClass ("bill");
-            var arg = new TestService.TestClass ("bob");
+            var instance = new TestService.TestClass ("gamma");
+            var arg = new TestService.TestClass ("beta");
             var result = Run (Call ("TestService", "TestClass_ObjectToString", Arg (0, instance), Arg (1, arg)));
             CheckResultNotEmpty (result);
-            Assert.AreEqual ("billbob", (string)result.Value);
+            Assert.AreEqual ("gammabeta", (string)result.Value);
         }
 
         [Test]
         public void ExecuteCallForClassPropertyGetter ()
         {
-            var instance = new TestService.TestClass ("jeb");
+            var instance = new TestService.TestClass ("alpha");
             instance.IntProperty = 42;
             var result = Run (Call ("TestService", "TestClass_get_IntProperty", Arg (0, instance)));
             CheckResultNotEmpty (result);
@@ -440,7 +440,7 @@ namespace KRPC.Test.Service
         [Test]
         public void ExecuteCallForClassPropertySetter ()
         {
-            var instance = new TestService.TestClass ("jeb");
+            var instance = new TestService.TestClass ("alpha");
             instance.IntProperty = 42;
             var result = Run (Call ("TestService", "TestClass_set_IntProperty", Arg (0, instance), Arg (1, 1337)));
             CheckResultEmpty (result);
@@ -450,15 +450,15 @@ namespace KRPC.Test.Service
         [Test]
         public void ExecuteCallForClassStaticMethod ()
         {
-            var result = Run (Call ("TestService", "TestClass_static_StaticMethod", Arg (0, "bob")));
+            var result = Run (Call ("TestService", "TestClass_static_StaticMethod", Arg (0, "beta")));
             CheckResultNotEmpty (result);
-            Assert.AreEqual ("jebbob", (string)result.Value);
+            Assert.AreEqual ("staticbeta", (string)result.Value);
         }
 
         [Test]
         public void ExecuteCallForNullableObjectMethodWithNull ()
         {
-            var instance = new TestService.TestClass ("jeb");
+            var instance = new TestService.TestClass ("alpha");
             var result = Run (Call ("TestService", "TestClass_EchoNullableObject",
                              Arg (0, instance), Arg (1, null)));
             CheckResultNotEmpty (result);
@@ -540,7 +540,7 @@ namespace KRPC.Test.Service
         [Test]
         public void ExecuteCallSetNullableClassPropertyToNull ()
         {
-            var instance = new TestService.TestClass ("jeb");
+            var instance = new TestService.TestClass ("alpha");
             instance.ObjectProperty = new TestService.TestClass ("initial");
             var result = Run (Call ("TestService", "TestClass_set_ObjectProperty",
                              Arg (0, instance), Arg (1, null)));
@@ -551,7 +551,7 @@ namespace KRPC.Test.Service
         [Test]
         public void ExecuteCallWithClassTypeParameterFromDifferentService ()
         {
-            var instance = new TestService.TestClass ("jeb");
+            var instance = new TestService.TestClass ("alpha");
             instance.IntProperty = 42;
             ObjectStore.Instance.AddInstance (instance);
             var result = Run (Call ("TestService2", "ClassTypeFromOtherServiceAsParameter", Arg (0, instance)));
@@ -562,11 +562,11 @@ namespace KRPC.Test.Service
         [Test]
         public void ExecuteCallWithClassTypeReturnFromDifferentService ()
         {
-            var result = Run (Call ("TestService2", "ClassTypeFromOtherServiceAsReturn", Arg (0, "jeb")));
+            var result = Run (Call ("TestService2", "ClassTypeFromOtherServiceAsReturn", Arg (0, "alpha")));
             CheckResultNotEmpty (result);
             Assert.IsNotNull (result.Value);
             var obj = (TestService.TestClass)result.Value;
-            Assert.AreEqual ("jeb", obj.Value);
+            Assert.AreEqual ("alpha", obj.Value);
         }
 
         [Test]
@@ -595,7 +595,7 @@ namespace KRPC.Test.Service
                             string y,
                             int z) => {
                 Assert.AreEqual (arg0, x);
-                Assert.AreEqual ("jeb", y);
+                Assert.AreEqual ("alpha", y);
                 Assert.AreEqual (arg2, z);
             });
             TestService.Service = mock.Object;
@@ -785,7 +785,7 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleEchoList ()
         {
-            var list = new List<string> { "jeb", "bob", "bill" };
+            var list = new List<string> { "alpha", "beta", "gamma" };
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoList (It.IsAny<IList<string>> ())).Returns ((IList<string> x) => x);
             TestService.Service = mock.Object;
@@ -799,7 +799,7 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleEchoDictionary ()
         {
-            var dictionary = new Dictionary<int,string> { { 0, "jeb" }, { 1, "bob" }, { 2, "bill" } };
+            var dictionary = new Dictionary<int,string> { { 0, "alpha" }, { 1, "beta" }, { 2, "gamma" } };
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoDictionary (It.IsAny<IDictionary<int,string>> ()))
                 .Returns ((IDictionary<int,string> x) => x);
@@ -843,9 +843,9 @@ namespace KRPC.Test.Service
         [Test]
         public void HandleEchoNestedCollection ()
         {
-            var list0 = new List<string> { "jeb", "bob" };
+            var list0 = new List<string> { "alpha", "beta" };
             var list1 = new List<string> ();
-            var list2 = new List<string> { "bill", "edzor" };
+            var list2 = new List<string> { "gamma", "delta" };
             var collection = new Dictionary<int, IList<string>> { { 0, list0 }, { 1, list1 }, { 2, list2 } };
             var mock = new Mock<ITestService> (MockBehavior.Strict);
             mock.Setup (x => x.EchoNestedCollection (It.IsAny<IDictionary<int,IList<string>>> ()))
@@ -985,7 +985,7 @@ namespace KRPC.Test.Service
         [Test]
         public void ClassMethodGameModeInheritedFromService ()
         {
-            var instance = new TestService.TestClass ("jeb");
+            var instance = new TestService.TestClass ("alpha");
             CallContext.GameScene = GameScene.TrackingStation;
             CheckError ("UnsupportedSceneException", "Procedure not available in game scene 'TrackingStation'",
                 Run (Call ("TestService", "TestClass_MethodAvailableInInheritedGameScene", Arg(0, instance))));
@@ -1001,7 +1001,7 @@ namespace KRPC.Test.Service
         [Test]
         public void ClassMethodGameModeSpecifiedInAttribute ()
         {
-            var instance = new TestService.TestClass ("jeb");
+            var instance = new TestService.TestClass ("alpha");
             CallContext.GameScene = GameScene.Flight;
             CheckError ("UnsupportedSceneException", "Procedure not available in game scene 'Flight'",
                 Run (Call ("TestService", "TestClass_MethodAvailableInSpecifiedGameScene", Arg(0, instance))));
@@ -1017,7 +1017,7 @@ namespace KRPC.Test.Service
         [Test]
         public void ClassPropertyGameModeInheritedFromService ()
         {
-            var instance = new TestService.TestClass ("jeb");
+            var instance = new TestService.TestClass ("alpha");
             CallContext.GameScene = GameScene.TrackingStation;
             CheckError ("UnsupportedSceneException", "Procedure not available in game scene 'TrackingStation'",
                 Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInInheritedGameScene", Arg(0, instance))));
@@ -1037,7 +1037,7 @@ namespace KRPC.Test.Service
         [Test]
         public void ClassPropertyGameModeSpecifiedInAttribute ()
         {
-            var instance = new TestService.TestClass ("jeb");
+            var instance = new TestService.TestClass ("alpha");
             CallContext.GameScene = GameScene.Flight;
             CheckError ("UnsupportedSceneException", "Procedure not available in game scene 'Flight'",
                 Run (Call ("TestService", "TestClass_get_ClassPropertyAvailableInSpecifiedGameScene", Arg(0, instance))));

@@ -39,22 +39,6 @@ if TYPE_CHECKING:
     from krpc.client import Client
 
 
-def _signature(param_types: Iterable[TypeBase], return_type: TypeBase) -> str:
-    """Generate a signature for a procedure that
-    can be used as its docstring"""
-    if not param_types and return_type is None:
-        return ""
-    types = [x.python_type.__name__ for x in param_types]
-    sig = ",".join(types)
-    if not types:
-        sig = "()"
-    elif len(types) > 1:
-        sig = "(" + sig + ")"
-    if return_type is not None:
-        sig += " -> " + return_type.python_type.__name__
-    return sig
-
-
 def _as_literal(value: object, typ: TypeBase) -> str:
     if value is None:
         return "None"

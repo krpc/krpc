@@ -22,11 +22,6 @@ namespace KRPC.Client
             stream = connection.StreamManager.GetStream (returnType, id);
         }
 
-        internal Stream (Connection connection, ProcedureCall call)
-        {
-            stream = connection.StreamManager.AddStream (TypeSpec.For (typeof(TReturnType)), call);
-        }
-
         internal Stream (Connection connection, ProcedureCall call, TypeSpec returnType)
         {
             stream = connection.StreamManager.AddStream (returnType, call);

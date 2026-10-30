@@ -81,6 +81,12 @@ krpc_error_t krpc_read(krpc_connection_t connection, uint8_t* buf, size_t count)
 /* Write count bytes of data from into buf to the connection */
 krpc_error_t krpc_write(krpc_connection_t connection, const uint8_t* buf, size_t count);
 
+#ifdef KRPC_WRITE_FAULTS
+/* Called before each write to the connection, for the conformance testee. A hook that returns an
+   error fails the write with it, as a failed write to the connection does. None is set at first. */
+extern krpc_error_t (*krpc_write_fault_hook)(void);
+#endif
+
 #ifdef __cplusplus
 }  // extern "C"
 #endif

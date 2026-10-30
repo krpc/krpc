@@ -13,6 +13,7 @@
 
 #include "krpc/client.hpp"
 #include "krpc/error.hpp"
+#include "krpc/race_point.hpp"
 #include "krpc/services/krpc.hpp"
 #include "krpc/stream_manager.hpp"
 
@@ -208,6 +209,7 @@ void StreamImpl::call(const std::shared_ptr<CallbackEntry>& callback, uint64_t v
   if (callback->event && !is_firing(data, is_null)) return;
   if (added) {
     if (!callback->lock.try_lock()) return;
+    detail::reach_race_point(RacePoint::first_call_started, callback->tag);
   } else if (!enter_on_update_thread(callback.get(), version, data, is_null)) {
     return;
   }
@@ -221,7 +223,10 @@ void StreamImpl::call(const std::shared_ptr<CallbackEntry>& callback, uint64_t v
   }
   // invoke reports what a callback throws, so the adding thread always passes on the queue
   invoke(*callback, data, is_null);
-  if (added) call_missed(callback.get());
+  if (added) {
+    call_missed(callback.get());
+    detail::reach_race_point(RacePoint::first_call_ended, callback->tag);
+  }
 }
 
 bool StreamImpl::enter_on_update_thread(CallbackEntry* callback, uint64_t version,
@@ -321,7 +326,10 @@ int StreamImpl::add_callback(const Callback& callback) {
     value_version = version;
   }
   // Called with the value the stream already has, which no update will pass to it
-  if (has_value) call(entry, value_version, value, value_is_null, true);
+  if (has_value) {
+    detail::reach_race_point(RacePoint::first_call, entry->tag);
+    call(entry, value_version, value, value_is_null, true);
+  }
   return entry->tag;
 }
 
@@ -334,7 +342,10 @@ int StreamImpl::add_event_callback(const Callback& callback, uint64_t seen) {
     callbacks[entry->tag] = entry;
     replay_fired = reserve_replay(seen);
   }
-  if (replay_fired > 0) replay(entry, replay_fired);
+  if (replay_fired > 0) {
+    detail::reach_race_point(RacePoint::replay, entry->tag);
+    replay(entry, replay_fired);
+  }
   return entry->tag;
 }
 

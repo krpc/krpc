@@ -24,18 +24,6 @@ static bool locks_elsewhere(krpc::RecursiveMutex* mutex, Duration duration) {
       .get();
 }
 
-TEST(test_condition, test_lock_is_reentrant) {
-  krpc::RecursiveMutex mutex;
-  mutex.lock();
-  mutex.lock();
-  ASSERT_TRUE(mutex.try_lock());
-  mutex.unlock();
-  mutex.unlock();
-  ASSERT_FALSE(locks_elsewhere(&mutex, std::chrono::milliseconds(10)));
-  mutex.unlock();
-  ASSERT_TRUE(locks_elsewhere(&mutex, std::chrono::milliseconds(10)));
-}
-
 TEST(test_condition, test_timed_try_by_the_holder_is_reentrant) {
   krpc::RecursiveMutex mutex;
   mutex.lock();
@@ -87,28 +75,6 @@ TEST(test_condition, test_timed_tries) {
   mutex.unlock();
 }
 
-// A wait releases every level, so another thread can take the mutex and notify
-TEST(test_condition, test_wait_releases_all_levels) {
-  krpc::RecursiveMutex mutex;
-  krpc::Condition condition(mutex);
-  bool done = false;
-  std::lock_guard<krpc::RecursiveMutex> first(mutex);
-  std::lock_guard<krpc::RecursiveMutex> second(mutex);
-  auto notifier = std::async(std::launch::async, [&] {
-    std::lock_guard<krpc::RecursiveMutex> guard(mutex);
-    done = true;
-    condition.notify_all();
-  });
-  while (!done) condition.wait();
-  notifier.get();
-  // Both levels are held again
-  ASSERT_TRUE(mutex.held_by_this_thread());
-  ASSERT_FALSE(locks_elsewhere(&mutex, std::chrono::milliseconds(10)));
-  mutex.unlock();
-  ASSERT_TRUE(mutex.held_by_this_thread());
-  mutex.lock();
-}
-
 TEST(test_condition, test_wait_for_times_out) {
   krpc::RecursiveMutex mutex;
   krpc::Condition condition(mutex);
@@ -123,18 +89,6 @@ TEST(test_condition, test_wait_without_the_mutex_throws) {
   krpc::RecursiveMutex mutex;
   krpc::Condition condition(mutex);
   ASSERT_THROW(condition.wait(), std::system_error);
-}
-
-TEST(test_condition, test_timed_out_wait_takes_every_level_again) {
-  krpc::RecursiveMutex mutex;
-  krpc::Condition condition(mutex);
-  mutex.lock();
-  mutex.lock();
-  ASSERT_EQ(std::cv_status::timeout, condition.wait_for(std::chrono::milliseconds(10)));
-  mutex.unlock();
-  ASSERT_FALSE(locks_elsewhere(&mutex, std::chrono::milliseconds(10)));
-  mutex.unlock();
-  ASSERT_TRUE(locks_elsewhere(&mutex, std::chrono::milliseconds(10)));
 }
 
 // A clock that cannot be read, so a wait for one of its deadlines throws

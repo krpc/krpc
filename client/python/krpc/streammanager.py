@@ -464,10 +464,6 @@ _Value = tuple[list[_Callback], int, int, object]
 _Ending = tuple[list[Callable[[Exception], None]], Exception]
 
 
-def _run_inline(work: Callable[[], object]) -> None:
-    work()
-
-
 class StreamManager:
     """The streams of a connection. The thread reading the socket registers streams and
     stores their values, and the dispatcher thread wakes their waiters and calls their
@@ -476,7 +472,7 @@ class StreamManager:
     def __init__(
         self,
         client: Client,
-        dispatch: Callable[[Callable[[], object]], None] = _run_inline,
+        dispatch: Callable[[Callable[[], object]], None],
     ) -> None:
         self._client = client
         self._dispatch = dispatch

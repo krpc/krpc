@@ -3,13 +3,10 @@ local Set = require 'pl.Set'
 local Map = require 'pl.Map'
 local utils = require 'pl.utils'
 local compat = require 'krpc.compat'
-local platform = require 'krpc.platform'
 local protobuf = require 'krpc.protobuf'
 local Types = require 'krpc.types'
 
 local decoder = {}
-
-decoder.OK_MESSAGE = '\79\75'
 
 -- Returns nil for data with no bytes, which we read as the zero value, as a protobuf field left
 -- out reads. Raises an error for data cut short.
@@ -75,17 +72,6 @@ local _value_decoders = {
   end,
   [Types.CLASS] = function(data, typ) return typ.lua_type(_decode_varint(data)) end,
 }
-
-function decoder.guid(data)
-  local parts = {
-    platform.hexlify(data:sub(1,4):reverse()),
-    platform.hexlify(data:sub(5,6):reverse()),
-    platform.hexlify(data:sub(7,8):reverse()),
-    platform.hexlify(data:sub(9,10)),
-    platform.hexlify(data:sub(11,16))
-  }
-  return table.concat(parts, '-')
-end
 
 -- The tag every value of a collection is carried under: field number 1, length delimited, for
 -- the items of a Tuple, a List and a Set and for the entries of a Dictionary. A DictionaryEntry

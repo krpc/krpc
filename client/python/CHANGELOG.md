@@ -22,6 +22,7 @@
   - **Breaking:** Raise `ValueError` from `Stream.wait` and `Event.wait` for a negative or NaN
     timeout, and wait with no deadline for an infinite one (#1219)
   - Keep a stream running when a value fails to decode, dropping the value (#1219)
+  - Fix `Stream.wait` and `Event.wait` returning before the timeout on Windows (#1220)
 
 - Link the references in service docstrings with Sphinx roles (#1185)
 - Fix the lists and parameter references in service docstrings, which were invalid

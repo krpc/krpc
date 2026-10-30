@@ -17,11 +17,27 @@
       :param long z:
    
 
+   .. method:: java.util.Map<String,TestClass> addToObjectDictionary(java.util.Map<String,TestClass> d, String key)
+
+
+
+      :param java.util.Map<String,TestClass> d:
+      :param String key:
+   
+
    .. method:: java.util.List<TestClass> addToObjectList(java.util.List<TestClass> l, String value)
 
 
 
       :param java.util.List<TestClass> l:
+      :param String value:
+   
+
+   .. method:: java.util.Set<TestClass> addToObjectSet(java.util.Set<TestClass> h, String value)
+
+
+
+      :param java.util.Set<TestClass> h:
       :param String value:
    
 
@@ -38,6 +54,13 @@
 
 
       :param boolean value:
+   
+
+   .. method:: byte[] bytesDefault(byte[] x)
+
+
+
+      :param byte[] x:
    
 
    .. method:: String bytesToHexString(byte[] value)
@@ -165,6 +188,48 @@
       :param TestNestedNullableStruct value:
    
 
+   .. method:: Boolean echoNullableBool(Boolean value)
+
+
+
+      :param Boolean value:
+   
+
+   .. method:: byte[] echoNullableBytes(byte[] value)
+
+
+
+      :param byte[] value:
+   
+
+   .. method:: java.util.Map<String,Integer> echoNullableDictionary(java.util.Map<String,Integer> d)
+
+
+
+      :param java.util.Map<String,Integer> d:
+   
+
+   .. method:: Double echoNullableDouble(Double value)
+
+
+
+      :param Double value:
+   
+
+   .. method:: TestEnum echoNullableEnum(TestEnum x)
+
+
+
+      :param TestEnum x:
+   
+
+   .. method:: Float echoNullableFloat(Float value)
+
+
+
+      :param Float value:
+   
+
    .. method:: Integer echoNullableInt(Integer value)
 
       Returns the given value.
@@ -180,11 +245,53 @@
       :param java.util.List<Integer> l:
    
 
+   .. method:: Long echoNullableLong(Long value)
+
+
+
+      :param Long value:
+   
+
+   .. method:: java.util.Set<Integer> echoNullableSet(java.util.Set<Integer> h)
+
+
+
+      :param java.util.Set<Integer> h:
+   
+
    .. method:: String echoNullableString(String value)
 
 
 
       :param String value:
+   
+
+   .. method:: org.javatuples.Pair<Integer,Long> echoNullableTuple(org.javatuples.Pair<Integer,Long> t)
+
+
+
+      :param org.javatuples.Pair<Integer,Long> t:
+   
+
+   .. method:: Integer echoNullableUInt(Integer value)
+
+
+
+      :param Integer value:
+   
+
+   .. method:: Long echoNullableULong(Long value)
+
+
+
+      :param Long value:
+   
+
+   .. method:: java.util.Set<String> echoStringSet(java.util.Set<String> h)
+
+
+
+      :param java.util.Set<String> h:
    
 
    .. method:: TestClass echoTestObject(TestClass value)
@@ -208,7 +315,7 @@
       :param java.util.List<String> x:
    
 
-   .. method:: TestEnum enumDefaultArg(TestEnum x)
+   .. method:: TestEnum enumDefault(TestEnum x)
 
 
 
@@ -229,10 +336,11 @@
       :param java.util.List<TestEnum> x:
    
 
-   .. method:: TestEnum enumReturn()
+   .. method:: String enumToString(TestEnum x)
 
 
 
+      :param TestEnum x:
    
 
    .. method:: java.util.List<Float> floatSpecialDefaults(float nan, float infinity, float negativeInfinity, float maximum, float lowest, float fraction)
@@ -253,6 +361,13 @@
       Procedure documentation string.
 
       :param float value:
+   
+
+   .. method:: byte[] hexStringToBytes(String value)
+
+
+
+      :param String value:
    
 
    .. method:: java.util.Map<String,Integer> incrementDictionary(java.util.Map<String,Integer> d)
@@ -330,7 +445,7 @@
    .. method:: String joinWithAtSign(String firstValue, String from)
 
       Returns *firstValue* and *from* joined by an at
-      sign, e.g. ``jeb@kerbin``. The parameter names are:
+      sign, e.g. ``name@host``. The parameter names are:
 
       * a name in camel case, and
       * a name that is a keyword in some languages.
@@ -359,6 +474,13 @@
 
 
       :param TestClass value:
+   
+
+   .. method:: String nullDefault(TestClass obj)
+
+
+
+      :param TestClass obj:
    
 
    .. method:: TestClass getNullableObject()
@@ -393,13 +515,6 @@
       :param int repeats:
    
 
-   .. method:: krpc.client.Event onTimerUsingLambda(int milliseconds)
-
-
-
-      :param int milliseconds:
-   
-
    .. method:: String optionalArguments(String x, String y, String z, TestClass obj)
 
 
@@ -415,6 +530,13 @@
 
 
       :param int milliseconds:
+   
+
+   .. method:: void removeTestObject(TestClass value)
+
+
+
+      :param TestClass value:
    
 
    .. method:: void resetCustomExceptionLater()
@@ -435,11 +557,25 @@
 
    
 
+   .. method:: int scalarDefault(int x)
+
+
+
+      :param int x:
+   
+
    .. method:: java.util.Set<Integer> setDefault(java.util.Set<Integer> x)
 
 
 
       :param java.util.Set<Integer> x:
+   
+
+   .. method:: String stringDefault(String x)
+
+
+
+      :param String x:
    
 
    .. method:: String getStringProperty()
@@ -463,7 +599,56 @@
 
    
 
+   .. method:: boolean stringToBool(String value)
+
+
+
+      :param String value:
+   
+
+   .. method:: double stringToDouble(String value)
+
+
+
+      :param String value:
+   
+
+   .. method:: TestEnum stringToEnum(String value)
+
+
+
+      :param String value:
+   
+
+   .. method:: float stringToFloat(String value)
+
+
+
+      :param String value:
+   
+
    .. method:: int stringToInt32(String value)
+
+
+
+      :param String value:
+   
+
+   .. method:: long stringToInt64(String value)
+
+
+
+      :param String value:
+   
+
+   .. method:: int stringToUInt32(String value)
+
+
+
+      :param String value:
+   
+
+   .. method:: long stringToUInt64(String value)
 
 
 
@@ -489,6 +674,13 @@
 
 
       :param TestStruct x:
+   
+
+   .. method:: org.javatuples.Pair<TestClass,TestClass> swapObjectTuple(org.javatuples.Pair<TestClass,TestClass> t)
+
+
+
+      :param org.javatuples.Pair<TestClass,TestClass> t:
    
 
    .. method:: int throwArgumentException()
@@ -545,11 +737,33 @@
 
    
 
+   .. method:: int throwMappedException(String name)
+
+      Throws the system exception of the given name, which the server maps to the KRPC
+      exception of that name.
+
+      :param String name:
+   
+
    .. method:: org.javatuples.Pair<Integer,Boolean> tupleDefault(org.javatuples.Pair<Integer,Boolean> x)
 
 
 
       :param org.javatuples.Pair<Integer,Boolean> x:
+   
+
+   .. method:: String uInt32ToString(int value)
+
+
+
+      :param int value:
+   
+
+   .. method:: String uInt64ToString(long value)
+
+
+
+      :param long value:
    
 
    .. method:: java.util.List<Integer> uint32SpecialDefaults(int maximum)
@@ -628,7 +842,7 @@
 
    .. method:: static String staticMethod(Connection connection, String a, String b)
 
-      Returns jeb followed by *a* and *b*.
+      Returns static followed by *a* and *b*.
 
       :param String a: The first string.
       :param String b: The second string.
@@ -640,6 +854,16 @@
 
 
       :param TestClass value:
+   
+
+   .. method:: static String staticOptionalArguments(Connection connection, String x, String y, String z, TestClass obj)
+
+
+
+      :param String x:
+      :param String y:
+      :param String z:
+      :param TestClass obj:
    
 
    .. method:: void setStringPropertyPrivateGet(String value)

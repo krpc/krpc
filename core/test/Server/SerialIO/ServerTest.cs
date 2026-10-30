@@ -20,8 +20,8 @@ namespace KRPC.Test.Server.SerialIO
         public void Handshake ()
         {
             var harness = Harness ();
-            var client = harness.Handshake ("Jebediah Kerman!!!");
-            Assert.AreEqual ("Jebediah Kerman!!!", client.Name);
+            var client = harness.Handshake ("Test Client!!!");
+            Assert.AreEqual ("Test Client!!!", client.Name);
             Assert.AreEqual (1, harness.Server.Clients.Count ());
         }
 
@@ -73,6 +73,23 @@ namespace KRPC.Test.Server.SerialIO
             CollectionAssert.AreEqual (new [] { client }, harness.Disconnected);
             Assert.AreEqual (Status.Ok, harness.ReceiveOne ().ConnectionResponse.Status);
             Assert.AreEqual (2, harness.Connected.Count);
+        }
+
+        [Test]
+        public void QueuedConnectionRequestsEachStartASession ()
+        {
+            var harness = Harness ();
+            harness.Send (MessageHarness.ConnectionRequest (2));
+            harness.Send (MessageHarness.ConnectionRequest (2));
+            harness.Server.Update ();
+            Assert.AreEqual (Status.Ok, harness.ReceiveOne ().ConnectionResponse.Status);
+            var client = harness.Connected [0];
+            // The session reads the second request as a reconnect
+            Assert.IsFalse (client.Stream.DataAvailable);
+            harness.Server.Update ();
+            Assert.AreEqual (Status.Ok, harness.ReceiveOne ().ConnectionResponse.Status);
+            Assert.AreEqual (2, harness.Connected.Count);
+            CollectionAssert.AreEqual (new [] { client }, harness.Disconnected);
         }
 
         [Test]

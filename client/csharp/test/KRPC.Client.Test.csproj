@@ -12,7 +12,6 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
     <PackageReference Include="Google.Protobuf" Version="3.36.2" />
     <PackageReference Include="NUnit" Version="3.14.0" />
-    <PackageReference Include="Moq" Version="4.21.0" />
   </ItemGroup>
   <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
   <ItemGroup>
@@ -27,21 +26,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionTest.cs" />
-    <Compile Include="ConnectionTestCase.cs" />
     <Compile Include="EncoderTest.cs" />
-    <Compile Include="EventTest.cs" />
     <Compile Include="ExpressionTreeTest.cs" />
     <Compile Include="FunctionCompilerTest.cs" />
     <Compile Include="FunctionStreamTest.cs" />
-    <Compile Include="LocalSocketConnectionTest.cs" />
-    <Compile Include="MessageReaderTest.cs" />
-    <Compile Include="ObjectTest.cs" />
     <Compile Include="ServerTestCase.cs" />
-    <Compile Include="StandInServer.cs" />
     <Compile Include="StreamTest.cs" />
-    <Compile Include="TCPIPConnectionTest.cs" />
-    <Compile Include="TestingTools.cs" />
+    <Compile Include="StructTest.cs" />
     <Compile Include="UnixEndPointTest.cs" />
     <Compile Include="$(bazel-bin)\client\csharp\Services\TestService.cs">
       <Link>Services\TestService.cs</Link>

@@ -21,7 +21,7 @@ def wait_deadline(timeout: float | None) -> float | None:
         return None
     if not timeout >= 0:
         raise ValueError("timeout must not be negative or NaN, not %r" % timeout)
-    return time.monotonic() + timeout
+    return time.perf_counter() + timeout
 
 
 class Stream:
@@ -96,7 +96,7 @@ class Stream:
             if deadline is None:
                 stream.condition.wait()
             else:
-                remaining = deadline - time.monotonic()
+                remaining = deadline - time.perf_counter()
                 if remaining <= 0:
                     return False
                 stream.condition.wait(remaining)
