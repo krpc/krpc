@@ -18,7 +18,7 @@ license_text = """This license (GPL v3) applies to all parts of krpc.clientgen e
   - krpctools/bin/System.IO.Ports.dll is from the .NET project.
     See https://github.com/dotnet/runtime
 
-Copyright 2015-2023 kRPC Org
+Copyright 2015-2026 kRPC Org
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
