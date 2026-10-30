@@ -22,6 +22,10 @@ license_text = """This license (GPL v3) applies to all parts of krpctools except
     under the LGPLv3 license. See COPYING.LESSER. The other DLLs in
     krpctools/bin/TestServer/ are the third-party DLLs listed above.
 
+  - As an additional permission under section 7 of the GNU GPL v3, code that krpctools
+    generates for a client is under the license of that client, whatever the license of
+    krpctools or of the service it is generated from.
+
 Copyright 2015-2026 kRPC Org
 
 This program is free software: you can redistribute it and/or modify
