@@ -1,3 +1,4 @@
+using System.Linq;
 using KRPC.Server;
 using KRPC.UI;
 using KRPC.Utils;
@@ -87,7 +88,7 @@ namespace KRPC
 
             var gameScene = GameScenesExtensions.CurrentGameScene();
             Service.CallContext.GameScene = gameScene;
-            Utils.Logger.WriteLine ("Game scene switched to " + gameScene);
+            Utils.Logger.WriteLine ("Game scene switched to " + Service.GameSceneUtils.Name (gameScene));
 
             // The scene being left takes its game objects with it, so the service objects
             // standing for them are due to be swept once the new scene is built.
@@ -95,7 +96,7 @@ namespace KRPC
             GameStateChanged ();
 
             // Auto-start the server, if required
-            if (config.Configuration.AutoStartServers) {
+            if (config.Configuration.AutoStartServers && core.Servers.Any (server => !server.Running)) {
                 Utils.Logger.WriteLine ("Auto-starting server");
                 try {
                     core.StartAll ();
@@ -242,12 +243,11 @@ namespace KRPC
         {
             if (config.Configuration.AutoAcceptConnections)
             {
-                Utils.Logger.WriteLine("Auto-accepting client connection (" + e.Client.Address + ")");
+                Utils.Logger.WriteLine("Auto-accepting the connection from client " + e.Client.Label () + " ('" + e.Client.Name + "')", Utils.Logger.Severity.Debug);
                 e.Request.Allow();
             }
             else
             {
-                Utils.Logger.WriteLine("Asking player to accept client connection (" + e.Client.Address + ")");
                 clientConnectingDialog.OnClientRequestingConnection(sender, e);
             }
         }
@@ -325,7 +325,7 @@ namespace KRPC
             // editor being started is already the current one by the time this fires.
             var gameScene = GameScenesExtensions.CurrentGameScene();
             Service.CallContext.GameScene = gameScene;
-            Utils.Logger.WriteLine("Game scene switched to " + gameScene);
+            Utils.Logger.WriteLine("Game scene switched to " + Service.GameSceneUtils.Name (gameScene));
         }
 
         void OnAstronautComplexSpawn()

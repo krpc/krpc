@@ -82,11 +82,20 @@ namespace KRPC.Service
         All = ~0
     }
 
-    static class GameSceneUtils {
+    /// <summary>
+    /// Conversions of game scenes to text.
+    /// </summary>
+    public static class GameSceneUtils {
+        /// <summary>
+        /// The names of the scenes, separated by commas.
+        /// </summary>
         public static string Name(GameScene scene) {
             return string.Join(", ", scene.ToString().Split(new char[] { ',' }).Where(x => x != "Inherit").Select(x => x.Trim()).ToArray());
         }
 
+        /// <summary>
+        /// The names of the scenes in the service definitions.
+        /// </summary>
         public static IList<string> Serialize(GameScene scene) {
             IList<string> result = new List<string>();
             if ((scene & GameScene.SpaceCenter) != 0)
