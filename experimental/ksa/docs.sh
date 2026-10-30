@@ -50,6 +50,15 @@ for language in python csharp cpp cnano java lua; do
       "$page" "$here/bin/KRPC.KSA.json"
   done
 done
+# The gRPC API pages, from the same templates
+(cd "$here/doc/api" && find . -name '*.tmpl') | while read -r template; do
+  page="$src/grpc/api/${template%.tmpl}.rst"
+  mkdir -p "$(dirname "$page")"
+  "$here/bin/venv/bin/python" "$here/grpc/docgen.py" "$here/doc/api/$template" "$here/doc/order.txt" \
+    "$page" "$here/bin/KRPC.KSA.json"
+done
+"$here/bin/venv/bin/python" "$here/grpc/docgen.py" --messages KSA "$src/grpc/api/messages.rst" \
+  "$here/bin/KRPC.KSA.json" "$here/bin/StdLib.json"
 
 # The changelog page, generated as for the kRPC documentation
 python3 "$repo/doc/changeloggen.py" "$src/changelog.rst" --entry "kRPC for KSA" "$here/CHANGELOG.md"

@@ -19,19 +19,21 @@ namespace KRPC.KSA.UI
         const string LocalhostText = "localhost";
         const string AnyText = "Any";
         const string ManualText = "Manual";
+        const string InvalidAddressText = "Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"";
         static readonly string InvalidRPCPathText =
             "RPC socket path must not be empty, and must take at most " +
             LocalSocketServer.MaximumPathLength + " bytes";
         static readonly string InvalidStreamPathText =
             "Stream socket path must not be empty, and must take at most " +
             LocalSocketServer.MaximumPathLength + " bytes";
-        // In the order of the Protocol enum
-        static readonly string [] Protocols = {
-            MainWindow.ProtobufOverTcpText,
-            MainWindow.ProtobufOverWebSocketsText,
-            MainWindow.ProtobufOverSerialIOText,
-            MainWindow.ProtobufOverLocalSocketText
+        static readonly Protocol [] Protocols = {
+            Protocol.ProtocolBuffersOverTCP,
+            Protocol.ProtocolBuffersOverWebsockets,
+            Protocol.ProtocolBuffersOverSerialIO,
+            Protocol.ProtocolBuffersOverLocalSocket,
+            ConfigurationFile.GrpcProtocol
         };
+        static readonly string [] ProtocolNames = Protocols.Select (MainWindow.ProtocolName).ToArray ();
         static readonly string [] ParityOptions = { "None", "Odd", "Even", "Mark", "Space" };
         static readonly string [] StopBitsOptions = { "None", "One", "Two", "OnePointFive" };
 
@@ -63,14 +65,21 @@ namespace KRPC.KSA.UI
         public void Draw ()
         {
             DrawTextRow ("Name", "name", ref name, true);
-            var selected = (int)protocol;
-            if (DrawComboRow ("Protocol", "protocol", Protocols, ref selected))
-                protocol = (Protocol)selected;
+            var selected = Array.IndexOf (Protocols, protocol);
+            if (DrawComboRow ("Protocol", "protocol", ProtocolNames, ref selected)) {
+                // The port is a device name for serial IO and a number for gRPC
+                if (protocol == Protocol.ProtocolBuffersOverSerialIO || protocol == ConfigurationFile.GrpcProtocol)
+                    settings.Remove ("port");
+                protocol = Protocols [selected];
+            }
 
             if (protocol == Protocol.ProtocolBuffersOverTCP || protocol == Protocol.ProtocolBuffersOverWebsockets) {
                 DrawAddress ();
                 DrawSettingRow ("RPC port", "rpc_port", "50000", ValidPort, true);
                 DrawSettingRow ("Stream port", "stream_port", "50001", ValidPort, true);
+            } else if (protocol == ConfigurationFile.GrpcProtocol) {
+                DrawAddress ();
+                DrawSettingRow ("Port", "port", "50002", ValidPort, true);
             } else if (protocol == Protocol.ProtocolBuffersOverLocalSocket) {
                 DrawSettingRow ("RPC socket", "rpc_path", LocalSocketServer.DefaultPath ("rpc"), ValidPath);
                 DrawSettingRow ("Stream socket", "stream_path", LocalSocketServer.DefaultPath ("stream"), ValidPath);
@@ -182,12 +191,18 @@ namespace KRPC.KSA.UI
             string [] keys;
             if (protocol == Protocol.ProtocolBuffersOverTCP || protocol == Protocol.ProtocolBuffersOverWebsockets) {
                 if (!ValidAddress (settings ["address"]))
-                    errors.Add ("Invalid IP address. Must be in dot-decimal notation, e.g. \"192.168.1.0\"");
+                    errors.Add (InvalidAddressText);
                 if (!ValidPort (settings ["rpc_port"]))
                     errors.Add ("RPC port must be between 0 and 65535");
                 if (!ValidPort (settings ["stream_port"]))
                     errors.Add ("Stream port must be between 0 and 65535");
                 keys = new [] { "address", "rpc_port", "stream_port" };
+            } else if (protocol == ConfigurationFile.GrpcProtocol) {
+                if (!ValidAddress (settings ["address"]))
+                    errors.Add (InvalidAddressText);
+                if (!ValidPort (settings ["port"]))
+                    errors.Add ("Port must be between 0 and 65535");
+                keys = new [] { "address", "port" };
             } else if (protocol == Protocol.ProtocolBuffersOverLocalSocket) {
                 if (!ValidPath (settings ["rpc_path"]))
                     errors.Add (InvalidRPCPathText);

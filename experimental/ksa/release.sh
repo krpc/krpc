@@ -26,7 +26,8 @@ mkdir -p "$staging/examples"
 cp "$here"/examples/*.py "$staging/examples/"
 for dir in "$staging" "$staging/kRPC"; do
   cp "$here/release/LICENSE" "$here/release/LICENSE.System.IO.Ports" \
-    "$repo/COPYING" "$repo/COPYING.LESSER" "$dir/"
+    "$here/release/LICENSE.AspNetCore" "$here/release/THIRD-PARTY-NOTICES.AspNetCore" \
+    "$here/release/LICENSE.Grpc" "$repo/COPYING" "$repo/COPYING.LESSER" "$dir/"
   cp "$repo/tools/build/protobuf/LICENSE.Google.Protobuf" "$dir/LICENSE.Google.Protobuf"
 done
 sed -e "s/@VERSION@/$mod_version/g" -e "s/@KRPC_VERSION@/$krpc_version/g" \

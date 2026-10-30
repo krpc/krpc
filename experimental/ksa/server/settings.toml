@@ -23,8 +23,8 @@ info_window_rect = [0, 0, 0, 0]
 
 [[servers]]
 name = "Default Server"
-# ProtocolBuffersOverTCP, ProtocolBuffersOverWebsockets, ProtocolBuffersOverLocalSocket
-# or ProtocolBuffersOverSerialIO
+# ProtocolBuffersOverTCP, ProtocolBuffersOverWebsockets, ProtocolBuffersOverLocalSocket,
+# ProtocolBuffersOverSerialIO or gRPC
 protocol = "ProtocolBuffersOverTCP"
 address = "127.0.0.1"
 rpc_port = 50000

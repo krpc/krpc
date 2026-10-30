@@ -65,5 +65,6 @@ Source          https://github.com/krpc/krpc/tree/main/experimental/ksa
 Bug reports     https://github.com/krpc/krpc/issues
 
 kRPC for KSA is licensed under the LGPL v3, see LICENSE, COPYING and COPYING.LESSER. The
-bundled Google.Protobuf and System.IO.Ports libraries have their own licenses, in
-LICENSE.Google.Protobuf and LICENSE.System.IO.Ports.
+bundled Google.Protobuf, System.IO.Ports, ASP.NET Core and gRPC for .NET libraries have
+their own licenses, in LICENSE.Google.Protobuf, LICENSE.System.IO.Ports,
+LICENSE.AspNetCore (with THIRD-PARTY-NOTICES.AspNetCore) and LICENSE.Grpc.

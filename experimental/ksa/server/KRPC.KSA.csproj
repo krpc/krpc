@@ -9,6 +9,7 @@
     <Compile Include="src/Addon.cs" />
     <Compile Include="src/ConfigurationFile.cs" />
     <Compile Include="src/GameCompatibility.cs" />
+    <Compile Include="src/GrpcLoadContext.cs" />
     <Compile Include="src/UI/CompatibilityPopup.cs" />
     <Compile Include="src/UI/ConsoleWindow.cs" />
     <Compile Include="src/UI/EditServer.cs" />

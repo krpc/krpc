@@ -1,0 +1,125 @@
+{% macro service(x) %}{{ mark_documented(x) }}
+.. grpc:service:: {{ x.name }}Service
+
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
+{{ gendoc(x.documentation) | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% for member in x.members.values() %}
+{{ member_rpcs(member) | indent }}
+
+{% endfor %}
+{% endmacro %}
+
+{% macro class(x) %}{{ mark_documented(x) }}
+.. grpc:service:: {{ x.name }}Service
+
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
+{{ gendoc(x.documentation) | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% for member in x.members.values() %}
+{{ member_rpcs(member) | indent }}
+
+{% endfor %}
+{% endmacro %}
+
+{% macro member_rpcs(x) %}{{ mark_documented(x) }}
+{% for rpc in domain.rpcs(x) %}
+{{ method(x, rpc) }}
+
+{% endfor %}
+{% endmacro %}
+
+{% macro method(x, rpc) %}
+.. grpc:rpc:: {{ rpc.method }} ({{ rpc.holder }}.{{ rpc.method }}Request) returns ({{ rpc.holder }}.{{ rpc.method }}Response)
+
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
+{{ gendoc(x.documentation) | indent }}
+
+   :{{ rpc.holder }}.{{ rpc.method }}Request:{% if not rpc.request %} Empty{% endif %}
+
+{% for name, type, p in rpc.request %}
+      * ``{{ name }}`` ({{ type }}){% if hasdoc(x.documentation, './param[@name=\''+p.name+'\']') %}: {{ gendoc(x.documentation, './param[@name=\''+p.name+'\']') | singleline }}{% endif %}{% if p.has_default_value and domain.default_value(p.default_value, p.type) %} Defaults to {{ domain.default_value(p.default_value, p.type) }}.{% endif %}
+
+{% endfor %}
+
+{% if rpc.response %}
+   :{{ rpc.holder }}.{{ rpc.method }}Response: ``value`` ({{ rpc.response }}){% if hasdoc(x.documentation, './returns') %}: {{ gendoc(x.documentation, './returns') | singleline }}{% endif %}
+
+{% else %}
+   :{{ rpc.holder }}.{{ rpc.method }}Response: Empty
+
+{% endif %}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}
+
+{% endif %}
+{% if x.appended != '' %}{{ x.appended | indent }}
+{% endif %}
+{% endmacro %}
+
+{% macro enumeration(x) %}{{ mark_documented(x) }}
+.. grpc:enum:: {{ x.name }}
+
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
+{{ gendoc(x.documentation) | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% for value in x.values.values() %}{{ mark_documented(value) }}
+   .. grpc:value:: {{ domain.target(value).split('.')[-1] }}
+
+{% if value.deprecated %}{{ deprecated(value) | indent(width=6) }}
+
+{% endif %}
+{{ gendoc(value.documentation) | indent(width=6) }}
+
+{% if hasdoc(value.documentation, './remarks') %}{{ remarks(value.documentation) | indent(width=6) }}{% endif %}
+{% endfor %}
+{% endmacro %}
+
+{% macro struct(x) %}{{ mark_documented(x) }}
+.. grpc:message:: {{ x.name }}
+
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
+{{ gendoc(x.documentation) | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% for field in x.fields.values() %}{{ mark_documented(field) }}
+   .. grpc:field:: {{ field.name | snakecase }}
+
+{{ gendoc(field.documentation) | indent(width=6) }}
+{% endfor %}
+{% endmacro %}
+
+{% macro exception(x) %}{{ mark_documented(x) }}
+.. grpc:error:: {{ x.name }}
+
+{{ gendoc(x.documentation) | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% endmacro %}
+
+{% macro remarks(x) %}
+.. note::
+
+{{ gendoc(x, './remarks') | indent }}
+{% endmacro %}
+
+{% macro deprecated(x) %}
+.. warning:: Deprecated.{% if x.deprecated_reason != '' %} {{ gendesc(x.deprecated_reason) }}{% endif %}
+{% endmacro %}

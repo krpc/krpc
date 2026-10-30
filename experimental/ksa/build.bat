@@ -50,12 +50,17 @@ if exist "%out%" rmdir /s /q "%out%"
 for %%p in (%projects%) do (
   dotnet build "%here%\%%p" -c Release -warnaserror -o "%out%" "-p:KSADir=%ksa_dir%\\" "-p:KRPCCoreDll=%krpc_bin%\KRPC.Core.dll" || exit /b 1
 )
+dotnet build "%here%\grpc\KRPC.KSA.Grpc.csproj" -c Release -warnaserror -o "%out%\grpc" "-p:KSADir=%ksa_dir%\\" "-p:KRPCCoreDll=%krpc_bin%\KRPC.Core.dll" || exit /b 1
+rem KSA ships no ASP.NET Core, which the gRPC server runs on, so the mod carries the
+rem assemblies of its runtime pack for each platform, in a grpc folder per platform
+call :aspnetcore win-x64 %aspnetcore_win_x64_sha256% || exit /b 1
+call :aspnetcore linux-x64 %aspnetcore_linux_x64_sha256% || exit /b 1
 rem The server reads the API documentation from the XML file beside each assembly
 copy /y "%krpc_bin%\KRPC.Core.xml" "%out%\" >nul || exit /b 1
 if exist "%out%\KRPC.KSA.TestingTools.dll" (
   copy /y "%here%\testing\settings.toml" "%out%\" >nul || exit /b 1
 )
-del /q "%out%\*.pdb" 2>nul
+del /q "%out%\*.pdb" "%out%\grpc\*.pdb" "%out%\grpc\*.deps.json" "%out%\grpc\*.runtimeconfig.json" 2>nul
 
 rem Generate the service definitions, which runs the server's service scan over the
 rem service and checks its documentation
@@ -74,6 +79,8 @@ call :stub csharp csharp\KSA.cs || exit /b 1
 call :stub cpp cpp\include\krpc\services\ksa.hpp "--include=StdLib=krpc/services/std_lib.hpp" || exit /b 1
 call :stub cnano cnano\include\krpc_cnano\services\ksa.h "--include=StdLib=krpc_cnano/services/std_lib.h" || exit /b 1
 call :stub java java\krpc\client\services\KSA.java || exit /b 1
+python "%here%\grpc\protogen.py" "%here%\bin\KRPC.KSA.json" KSA "%stubs%\grpc\KSA.proto" || exit /b 1
+python "%here%\grpc\protogen.py" "%here%\bin\StdLib.json" StdLib "%stubs%\grpc\StdLib.proto" || exit /b 1
 powershell -NoProfile -Command "(Get-Content -Raw '%here%\stubs\README.md').Replace('@CLIENT_VERSION@', '%krpc_version%') | Set-Content -NoNewline -Encoding ascii '%stubs%\README.md'" || exit /b 1
 copy /y "%here%\bin\KRPC.KSA.json" "%stubs%\" >nul || exit /b 1
 echo Client stubs in %stubs%
@@ -88,6 +95,38 @@ set "path_=%stubs%\%~2"
 for %%f in ("%path_%") do if not exist "%%~dpf" mkdir "%%~dpf"
 "%venv%\Scripts\krpc-clientgen.exe" %1 KSA "%here%\bin\KRPC.KSA.json" "%here%\bin\StdLib.json" "--output=%path_%" %3
 exit /b
+
+:aspnetcore
+set "aspnetcore=%here%\bin\aspnetcore-%aspnetcore_version%-%1"
+if not exist "%aspnetcore%" (
+  call :download_aspnetcore %1 %2 || exit /b 1
+)
+if not exist "%out%\grpc\%1" mkdir "%out%\grpc\%1"
+copy /y "%aspnetcore%\*.dll" "%out%\grpc\%1\" >nul
+exit /b
+
+:download_aspnetcore
+set "package=microsoft.aspnetcore.app.runtime.%1"
+set "nupkg=%TEMP%\%package%-%RANDOM%.nupkg"
+curl.exe -sSfL -o "%nupkg%" "https://api.nuget.org/v3-flatcontainer/%package%/%aspnetcore_version%/%package%.%aspnetcore_version%.nupkg" || goto download_fail
+set "sha256="
+for /f "skip=1 delims=" %%h in ('certutil -hashfile "%nupkg%" SHA256') do if not defined sha256 set "sha256=%%h"
+set "sha256=%sha256: =%"
+if /i not "%sha256%"=="%2" (
+  echo %nupkg%: sha256 mismatch 1>&2
+  goto download_fail
+)
+if exist "%aspnetcore%.tmp" rmdir /s /q "%aspnetcore%.tmp"
+mkdir "%aspnetcore%.tmp"
+tar -x -f "%nupkg%" -C "%aspnetcore%.tmp" "runtimes/%1/lib/net10.0/*.dll" || goto download_fail
+move "%aspnetcore%.tmp\runtimes\%1\lib\net10.0" "%aspnetcore%" >nul || goto download_fail
+rmdir /s /q "%aspnetcore%.tmp"
+del /q "%nupkg%"
+exit /b 0
+
+:download_fail
+del /q "%nupkg%" 2>nul
+exit /b 1
 
 :install
 if not defined KSA_MODS_DIR (

@@ -11,6 +11,8 @@ Built against kRPC 0.7.0, KSA 2026.10.25.5707 and StarMap 0.4.8, set in `version
  * `server/` - the StarMap entry point (`Addon.cs`), settings and `mod.toml`. All StarMap and
    game lifecycle code is in `Addon.cs`. `src/UI` holds the server windows and the kRPC menu.
  * `service/` - the `KSA` service.
+ * `grpc/` - a prototype gRPC server, and `protogen.py`, which writes its `.proto` files into
+   `bin/stubs/grpc`. The mod carries it with ASP.NET Core in its `grpc/` folder.
  * `testing/` - the `TestingTools` service, installed only for the tests, test vehicles, and the
    server settings the tests install.
  * `test/` - integration tests, and their harness `ksatest.py`.
@@ -96,7 +98,7 @@ The archive holds the readme and licenses, and three folders:
 The documentation is published online rather than in the archive, see `publish-docs.sh`.
 
 The mod is under the LGPL v3, as `KRPC.Core` is. The archive includes the licenses of the bundled
-`Google.Protobuf` and `System.IO.Ports` binaries.
+`Google.Protobuf`, `System.IO.Ports`, ASP.NET Core and gRPC for .NET binaries.
 
 ## Install and Run
 

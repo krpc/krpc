@@ -17,6 +17,12 @@ namespace KRPC.KSA
     /// </summary>
     sealed class ConfigurationFile
     {
+        /// <summary>
+        /// The protocol of a gRPC server. The server core has no gRPC protocol, so the value is
+        /// outside its enumeration, and names the server only in logs.
+        /// </summary>
+        public const Protocol GrpcProtocol = (Protocol)100;
+
         readonly string path;
 
         public ConfigurationFile (string path)
@@ -107,7 +113,8 @@ namespace KRPC.KSA
                     server.Name = entry.Value.StringValue;
                     break;
                 case "protocol":
-                    server.Protocol = Enum.Parse<Protocol> (entry.Value.StringValue);
+                    var protocol = entry.Value.StringValue;
+                    server.Protocol = protocol == "gRPC" ? GrpcProtocol : Enum.Parse<Protocol> (protocol);
                     break;
                 default:
                     // Protocol settings, keyed as Configuration.Server.Create expects
@@ -156,9 +163,9 @@ namespace KRPC.KSA
                 toml.Append ("\n[[servers]]\n");
                 AppendValue (toml, "id", server.Id.ToString ());
                 AppendValue (toml, "name", server.Name);
-                toml.Append ("# ProtocolBuffersOverTCP, ProtocolBuffersOverWebsockets, ProtocolBuffersOverLocalSocket\n");
-                toml.Append ("# or ProtocolBuffersOverSerialIO\n");
-                AppendValue (toml, "protocol", server.Protocol.ToString ());
+                toml.Append ("# ProtocolBuffersOverTCP, ProtocolBuffersOverWebsockets, ProtocolBuffersOverLocalSocket,\n");
+                toml.Append ("# ProtocolBuffersOverSerialIO or gRPC\n");
+                AppendValue (toml, "protocol", server.Protocol == GrpcProtocol ? "gRPC" : server.Protocol.ToString ());
                 foreach (var setting in server.Settings) {
                     // Ports and the like are numbers, as in the shipped file
                     if (long.TryParse (setting.Value, NumberStyles.None, CultureInfo.InvariantCulture, out var number))
