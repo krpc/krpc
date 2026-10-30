@@ -78,7 +78,10 @@ namespace KRPC.Utils
                 Writer (string.Format (CultureInfo.InvariantCulture, format, DateTime.Now, severity, message), severity);
         }
 
-        internal static bool ShouldLog (Severity severity)
+        /// <summary>
+        /// Whether a message of the given severity is written, to skip building one that is not.
+        /// </summary>
+        public static bool ShouldLog (Severity severity)
         {
             return Enabled && severity >= Level;
         }
