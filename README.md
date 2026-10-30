@@ -1,4 +1,11 @@
-# kRPC - Remote Procedure Calls for Kerbal Space Program
+<p>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="media/logo-on-dark.svg">
+    <img src="media/logo-on-light.svg" alt="kRPC" height="80">
+  </picture>
+</p>
+
+## Remote Procedure Calls for Kerbal Space Program
 
 kRPC allows you to control Kerbal Space Program from scripts running outside of
 the game, and comes with client libraries for many popular languages.
