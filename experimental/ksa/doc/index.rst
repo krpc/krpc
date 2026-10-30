@@ -9,6 +9,12 @@ server inside the game exposes the game's API, and the `kRPC <https://krpc.githu
 
    kRPC for KSA is experimental, and its API may change between releases.
 
+.. note::
+
+   kRPC for KSA uses the kRPC client libraries for KSP. The C#, C++, C-nano and Java clients
+   also need the ``KSA`` :doc:`service stubs <clients>` from the release archive, which you add
+   by hand until a later release makes this easier.
+
 This script launches a rocket from Cape Canaveral straight up, then cuts the engines once it
 reaches an altitude of 10 km:
 
@@ -43,6 +49,11 @@ reaches an altitude of 10 km:
 
       .. literalinclude:: /scripts/index/Launch.lua
          :language: lua
+
+   .. tab:: gRPC (Python)
+
+      .. literalinclude:: /scripts/index/LaunchGrpc.py
+         :language: python
 
 .. grid:: 1 2 3 3
    :gutter: 3
@@ -86,13 +97,14 @@ reaches an altitude of 10 km:
 
    .. grid-item-card:: :fas:`satellite` kRPC for KSP
       :link: https://krpc.github.io/krpc/
+      :columns: 12
 
       The kRPC documentation, for Kerbal Space Program.
 
 Clients
 -------
 
-.. grid:: 2 3 6 6
+.. grid:: 2 4 7 7
    :gutter: 2
 
    .. grid-item-card:: Python
@@ -122,6 +134,11 @@ Clients
 
    .. grid-item-card:: Lua
       :link: lua
+      :link-type: doc
+      :text-align: center
+
+   .. grid-item-card:: gRPC
+      :link: grpc
       :link-type: doc
       :text-align: center
 
