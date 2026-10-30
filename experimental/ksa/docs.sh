@@ -11,6 +11,7 @@ set -euo pipefail
 
 here="$(dirname "$(readlink -f "$0")")"
 source "$here/versions.sh"
+repo="$(dirname "$(dirname "$here")")"
 src="$here/bin/doc-src"
 out="$here/bin/docs"
 
@@ -49,6 +50,9 @@ for language in python csharp cpp cnano java lua; do
       "$page" "$here/bin/KRPC.KSA.json"
   done
 done
+
+# The changelog page, generated as for the kRPC documentation
+python3 "$repo/doc/changeloggen.py" "$src/changelog.rst" --entry "kRPC for KSA" "$here/CHANGELOG.md"
 
 find "$src" -name '*.rst' -exec sed -i \
   -e "s/@VERSION@/$mod_version/g" -e "s/@KRPC_VERSION@/$krpc_version/g" \

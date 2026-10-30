@@ -78,6 +78,12 @@ reaches an altitude of 10 km:
 
       Build the mod, its client stubs and its documentation from source, and run the tests.
 
+   .. grid-item-card:: :fas:`clock-rotate-left` Changelog
+      :link: changelog
+      :link-type: doc
+
+      The changes in each release of kRPC for KSA.
+
    .. grid-item-card:: :fas:`satellite` kRPC for KSP
       :link: https://krpc.github.io/krpc/
 
@@ -127,3 +133,4 @@ Clients
    tutorials
    clients
    developer-guide
+   changelog
