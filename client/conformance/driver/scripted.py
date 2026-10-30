@@ -210,15 +210,15 @@ class ScriptedServer:
         return error
 
     def close(self) -> None:
-        """Close the connection to the client. Shutting it down first wakes a script waiting
-        to receive."""
+        """Close the connection to the client, by shutting it down. A script waiting to
+        receive wakes to the end of the stream. The socket is closed once the script
+        finishes, as a script reading a closed socket raises an error."""
         assert self._socket is not None
         try:
             self._socket.shutdown(socket.SHUT_RDWR)
         except OSError:
             # Closed already, as the script finished
             pass
-        self._socket.close()
 
     def receive(self) -> KRPC.Message | None:
         """The next message from the client, or None once it closes its write side."""
