@@ -1,4 +1,4 @@
-## [v0.2.0] - unreleased
+## [v0.2.0]
 
 - Mod
   - **Breaking:** Rename the mod folder and id from `kRPC.KSA` to `kRPC` (#1205)

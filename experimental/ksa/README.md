@@ -81,7 +81,7 @@ and version folders, and the version switcher lists only those.
 
 ## Release
 
-Build the release archive, `bin/release/kRPC-KSA-0.1.0.zip`, and its `SHA256SUMS`:
+Build the release archive, `bin/release/kRPC-KSA-0.2.0.zip`, and its `SHA256SUMS`:
 
 ```bash
 experimental/ksa/release.sh
