@@ -7,6 +7,11 @@ client stubs and this documentation, and run the tests in the game. They need Py
 .NET 10 SDK, ``zip``, and KSA installed in ``KSA_DIR``, which defaults to ``../KSA`` beside the
 repository. Set ``KSA_DIR`` to build and test against another install.
 
+.. note::
+
+   These scripts are temporary. kRPC for KSA will move to the Bazel build that the rest of the
+   repository uses.
+
 Building
 --------
 
