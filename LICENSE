@@ -6,6 +6,8 @@ This license (LGPL v3) applies to all parts of kRPC except for the following:
 
   - service/Debug/* is under the GPLv3 license.
 
+  - service/InfernalRobotics/* is under the GPLv3 license.
+
   - tools/krpctools/* is under the GPLv3 license.
 
   - tools/ServiceDefinitions/* is under the GPLv3 license.
@@ -27,6 +29,9 @@ Code adapted from other projects:
 
   - service/Debug/src/Debug.cs: the landing velocity damping is from HyperEdit
     (https://github.com/Ezriilc/HyperEdit), released under the GPLv3.
+
+  - service/InfernalRobotics/src/IRWrapper.cs is adapted from Infernal Robotics
+    (https://github.com/MagicSmokeIndustries/InfernalRobotics), released under the GPLv3.
 
   - service/KerbalAlarmClock/src/KACWrapper.cs is from Kerbal Alarm Clock
     (https://github.com/TriggerAu/KerbalAlarmClock), released under the MIT License (MIT)

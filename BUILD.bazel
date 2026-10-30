@@ -30,6 +30,9 @@ license_text = """This license (LGPL v3) applies to all parts of kRPC except for
   - GameData/kRPC/KRPC.Debug.* is under the GPLv3 license.
     See LICENSE.KRPC.Debug
 
+  - GameData/kRPC/KRPC.InfernalRobotics.* is under the GPLv3 license.
+    See LICENSE.KRPC.InfernalRobotics
+
   - GameData/kRPC/Google.Protobuf.dll is a binary from Google's protobuf project.
     See LICENSE.Google.Protobuf
 
@@ -168,6 +171,7 @@ pkg_zip(
         "service/InfernalRobotics/KRPC.InfernalRobotics/net472/": "GameData/kRPC/",
         "service/InfernalRobotics/": "GameData/kRPC/",
         "service/InfernalRobotics/CHANGELOG.md": "GameData/kRPC/CHANGELOG.InfernalRobotics.md",
+        "service/InfernalRobotics/LICENSE": "LICENSE.KRPC.InfernalRobotics",
         "service/KerbalAlarmClock/KRPC.KerbalAlarmClock/net472/": "GameData/kRPC/",
         "service/KerbalAlarmClock/": "GameData/kRPC/",
         "service/KerbalAlarmClock/CHANGELOG.md": "GameData/kRPC/CHANGELOG.KerbalAlarmClock.md",
