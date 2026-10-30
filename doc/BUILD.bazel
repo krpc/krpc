@@ -48,6 +48,9 @@ stage_files(
         ":java-api",
         ":lua-api",
         ":python-api",
+        "//:media/logo-mark.svg",
+        "//:media/logo-on-dark.svg",
+        "//:media/logo-on-light.svg",
         "//client/conformance:coverage",
         "//client/conformance:requirements",
         "//client/conformance:testee.proto",
@@ -55,6 +58,7 @@ stage_files(
     ],
     path_map = {
         "doc/src/": "",
+        "media/": "_static/",
         # The protocol pages include their message definitions from the schema
         "protobuf/krpc.proto": "communication-protocols/krpc.proto",
         # The specification's requirement lists are generated from the conformance tests

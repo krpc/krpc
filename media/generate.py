@@ -31,7 +31,7 @@ from pygments.token import Token
 
 MEDIA = Path(__file__).resolve().parent
 BUILD = MEDIA / "build"
-PUBLISHED = ["logo-on-light.svg", "logo-on-dark.svg"]
+PUBLISHED = ["logo-mark.svg", "logo-on-light.svg", "logo-on-dark.svg"]
 
 # Fonts: (file name, URL, member of a zip archive or None, sha256 of the font file)
 FONTS = {
@@ -610,7 +610,7 @@ def main():
     for name, content in outputs.items():
         (BUILD / name).write_text(content)
         print("wrote", f"build/{name}")
-    # The logos the repository README shows, which are committed
+    # The logos the README and documentation use, which are committed
     for name in PUBLISHED:
         shutil.copy(BUILD / name, MEDIA / name)
         print("wrote", name)

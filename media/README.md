@@ -15,8 +15,9 @@ The generated files, each as an SVG and a PNG:
    banner layout at 400 pixels high, with the screenshot continuing to the right. SpaceDock makes
    the listing thumbnail from the center of the header, which holds the logo, rocket and code.
 
-`build/` is not committed. The script also copies `logo-on-light.svg` and `logo-on-dark.svg` into
-this directory, where they are committed for the repository README.
+`build/` is not committed. The script also copies `logo-mark.svg`, `logo-on-light.svg` and
+`logo-on-dark.svg` into this directory, where they are committed for the README and the
+documentation.
 
 `generate.sh` installs the Python dependencies into a virtualenv and runs `generate.py`. The script
 downloads the fonts into `build/fonts`, as Nasalization's license does not allow redistributing

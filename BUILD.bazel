@@ -9,6 +9,9 @@ exports_files([
     ".luacheckrc",
     "COPYING",
     "COPYING.LESSER",
+    "media/logo-mark.svg",
+    "media/logo-on-dark.svg",
+    "media/logo-on-light.svg",
     "pyrightconfig.json",
     "ruff.toml",
 ])
