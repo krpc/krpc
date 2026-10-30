@@ -3,7 +3,7 @@
   "version": "0.6.0",
   "description": "kRPC C++ client — control Kerbal Space Program from C++ programs via RPC",
   "homepage": "https://krpc.github.io/krpc",
-  "license": "LGPL-3.0-or-later",
+  "license": "MIT",
   "dependencies": [
     "protobuf",
     { "name": "asio", "version>=": "1.20.0" },
