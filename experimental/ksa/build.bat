@@ -62,13 +62,17 @@ rem service and checks its documentation
 dotnet "%krpc_bin%\ServiceDefinitions.dll" ^
   "--output=%here%\bin\KRPC.KSA.json" "--reference-dir=%ksa_dir%" "--reference-dir=%out%" ^
   KSA "%out%\KRPC.KSA.Service.dll" || exit /b 1
+rem The definitions of the StdLib structures the service uses, such as the colors
+dotnet "%krpc_bin%\ServiceDefinitions.dll" ^
+  "--output=%here%\bin\StdLib.json" StdLib "%krpc_bin%\KRPC.Core.dll" || exit /b 1
 
-rem Client stubs, at the paths each client includes them from
+rem Client stubs, at the paths each client includes them from, with the StdLib headers
+rem of the C++ and C nano clients
 set "stubs=%here%\bin\stubs"
 if exist "%stubs%" rmdir /s /q "%stubs%"
 call :stub csharp csharp\KSA.cs || exit /b 1
-call :stub cpp cpp\include\krpc\services\ksa.hpp || exit /b 1
-call :stub cnano cnano\include\krpc_cnano\services\ksa.h || exit /b 1
+call :stub cpp cpp\include\krpc\services\ksa.hpp "--include=StdLib=krpc/services/std_lib.hpp" || exit /b 1
+call :stub cnano cnano\include\krpc_cnano\services\ksa.h "--include=StdLib=krpc_cnano/services/std_lib.h" || exit /b 1
 call :stub java java\krpc\client\services\KSA.java || exit /b 1
 powershell -NoProfile -Command "(Get-Content -Raw '%here%\stubs\README.md').Replace('@CLIENT_VERSION@', '%krpc_version%') | Set-Content -NoNewline -Encoding ascii '%stubs%\README.md'" || exit /b 1
 copy /y "%here%\bin\KRPC.KSA.json" "%stubs%\" >nul || exit /b 1
@@ -82,7 +86,7 @@ exit /b 0
 :stub
 set "path_=%stubs%\%~2"
 for %%f in ("%path_%") do if not exist "%%~dpf" mkdir "%%~dpf"
-"%venv%\Scripts\krpc-clientgen.exe" %1 KSA "%here%\bin\KRPC.KSA.json" "--output=%path_%"
+"%venv%\Scripts\krpc-clientgen.exe" %1 KSA "%here%\bin\KRPC.KSA.json" "%here%\bin\StdLib.json" "--output=%path_%" %3
 exit /b
 
 :install
