@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=eadf7411" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -427,6 +427,21 @@
 <li class="toctree-l2"><a class="reference internal" href="websockets.html">Protocol Buffers over WebSockets</a></li>
 <li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Protocol Buffers over Serial IO</a></li>
 <li class="toctree-l2"><a class="reference internal" href="messages.html">Messaging Protocol</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="client-spec/connection.html">Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client-spec/calls.html">Calls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client-spec/values.html">Values</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client-spec/codec.html">Codec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client-spec/errors.html">Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client-spec/objects.html">Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client-spec/streams.html">Streams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client-spec/events.html">Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client-spec/threading.html">Threading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client-spec/functions.html">Server Side Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client-spec/coverage.html">Client Coverage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="client-spec/conformance.html">Conformance Tests</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../compiling.html">Compiling kRPC</a></li>
@@ -552,7 +567,7 @@ after which the server reads the next message as a <code class="docutils literal
 resets.</p>
 </section>
 <section id="resetting-clients">
-<h2>Resetting Clients<a class="headerlink" href="#resetting-clients" title="Link to this heading">#</a></h2>
+<span id="communication-protocol-serialio-resetting"></span><h2>Resetting Clients<a class="headerlink" href="#resetting-clients" title="Link to this heading">#</a></h2>
 <p>A client that resets, such as an Arduino after a power cycle, can find the line in the state its
 earlier session left it in. The server ends a session whose message stalls for 3 seconds partway
 through, and drops the partial message. A client that may be resuming a line follows these rules,

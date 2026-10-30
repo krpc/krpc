@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e540dda1" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=eadf7411" />
   
   <!-- So that users can add custom icons -->
   <script defer src="_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -664,6 +664,7 @@
 <ul>
 <li><p><span class="changelog-marker breaking">Breaking</span> Raise <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> from <code class="docutils literal notranslate"><span class="pre">Stream.wait</span></code> and <code class="docutils literal notranslate"><span class="pre">Event.wait</span></code> for a negative or NaN timeout, and wait with no deadline for an infinite one (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p>Keep a stream running when a value fails to decode, dropping the value (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Stream.wait</span></code> and <code class="docutils literal notranslate"><span class="pre">Event.wait</span></code> returning before the timeout on Windows (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1220">#1220</a>)</p></li>
 </ul>
 </li>
 <li><p>Link the references in service docstrings with Sphinx roles (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
@@ -688,6 +689,8 @@
 <li><p>Allow a <code class="docutils literal notranslate"><span class="pre">&lt;see</span> <span class="pre">cref&gt;</span></code> to a service in <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
 <li><p>Fix the <code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code> link to a C-nano property that has only a setter (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
 <li><p>Fix bytes default arguments in generated C# and C++ code and in the Lua documentation (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1194">#1194</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">krpc-conformance</span></code>, which runs the client conformance tests against a client library (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1220">#1220</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Set the port of the <code class="docutils literal notranslate"><span class="pre">TestServer</span></code> websockets server with <code class="docutils literal notranslate"><span class="pre">--websockets-port</span></code>, in place of <code class="docutils literal notranslate"><span class="pre">--tcpip-port</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1220">#1220</a>)</p></li>
 </ul>
 </section>
 </section>

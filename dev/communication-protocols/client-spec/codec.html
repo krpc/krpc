@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Codec &#8212; kRPC vdev documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=eadf7411" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../_static/documentation_options.js?v=3ce10a4d"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'communication-protocols/client-spec/codec';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../_static/external-links.js?v=e8892020"></script>
+    <script src="../../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/communication-protocols/client-spec/codec.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Errors" href="errors.html" />
+    <link rel="prev" title="Values" href="values.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../extending.html">Extending kRPC</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../communication-protocols.html">Communication Protocols</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../tcpip.html">Protocol Buffers over TCP/IP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../localsocket.html">Protocol Buffers over a Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../websockets.html">Protocol Buffers over WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../serialio.html">Protocol Buffers over Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../messages.html">Messaging Protocol</a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="connection.html">Connection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="calls.html">Calls</a></li>
+<li class="toctree-l3"><a class="reference internal" href="values.html">Values</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Codec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="errors.html">Errors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="objects.html">Objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="streams.html">Streams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="events.html">Events</a></li>
+<li class="toctree-l3"><a class="reference internal" href="threading.html">Threading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="functions.html">Server Side Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="coverage.html">Client Coverage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="conformance.html">Conformance Tests</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../compiling.html">Compiling kRPC</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../developer-guide.html" class="nav-link">Developer Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../communication-protocols.html" class="nav-link">Communication Protocols</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../client-spec.html" class="nav-link">Client Specification</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Codec</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="codec">
+<h1>Codec<a class="headerlink" href="#codec" title="Link to this heading">#</a></h1>
+<p>This page covers how a client encodes and decodes values, as described under
+<a class="reference internal" href="../messages.html#communication-protocol-protobuf-encoding"><span class="std std-ref">Protocol Buffer Encoding</span></a>. The conformance tests check the client’s encoder
+and decoder against fixed encodings, with no server involved.</p>
+<section id="scalars">
+<h2>Scalars<a class="headerlink" href="#scalars" title="Link to this heading">#</a></h2>
+<dl class="simple" id="spec-codec-integers">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-integers</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An integer of each type encodes to, and decodes from, its zigzag or plain varint. The
+vectors include zero, the minimum and maximum, the edges of the one byte encodings, and
+values past the range of a smaller type or of the integers a <code class="docutils literal notranslate"><span class="pre">double</span></code> holds exactly. A
+decoded value is an integer.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-codec-floating-point">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-floating-point</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">double</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code> encodes to, and decodes from, its IEEE 754 bytes. The vectors
+include negative zero, the infinities, the largest value, the smallest normal value and
+the smallest subnormal value. A <code class="docutils literal notranslate"><span class="pre">NaN</span></code> of either sign, quiet or signaling, decodes as a
+<code class="docutils literal notranslate"><span class="pre">NaN</span></code>, and a <code class="docutils literal notranslate"><span class="pre">NaN</span></code> encodes to a <code class="docutils literal notranslate"><span class="pre">NaN</span></code>. A decoded value is a floating point
+number.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-codec-bool">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-bool</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A <code class="docutils literal notranslate"><span class="pre">bool</span></code> encodes as the varint 1 or 0.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-codec-enum">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-enum</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An enumeration value encodes as its value, as a <code class="docutils literal notranslate"><span class="pre">sint32</span></code>.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-codec-out-of-range">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-out-of-range</span> <span class="pre">[dynamic]</span> <span class="pre">[MUST]</span></code></dt><dd><p>In a dynamically typed language, encoding an integer outside the range of its type
+raises the encoding or argument error. This includes a negative value for an unsigned
+type.</p>
+</dd>
+</dl>
+</section>
+<section id="strings-and-bytes">
+<h2>Strings and Bytes<a class="headerlink" href="#strings-and-bytes" title="Link to this heading">#</a></h2>
+<dl class="simple" id="spec-codec-string">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-string</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A string encodes as the length of its UTF-8 bytes, as a varint, then the bytes. The
+vectors include characters of each UTF-8 length, a NUL character, and lengths that take
+one, two and three bytes.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-codec-bytes">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-bytes</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Bytes encode as their length, as a varint, then the bytes. The vectors include every
+byte value, bytes that are not valid UTF-8, and lengths that take one, two and three
+bytes.</p>
+</dd>
+</dl>
+</section>
+<section id="objects">
+<h2>Objects<a class="headerlink" href="#objects" title="Link to this heading">#</a></h2>
+<dl class="simple" id="spec-codec-object">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-object</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An object encodes as its id, as a <code class="docutils literal notranslate"><span class="pre">uint64</span></code>. Every id is an object, including 0, as a
+null is carried by the <code class="docutils literal notranslate"><span class="pre">is_null</span></code> flag or a presence bool. The vectors include an id past
+the range of a <code class="docutils literal notranslate"><span class="pre">uint32</span></code>.</p>
+</dd>
+</dl>
+</section>
+<section id="collections-and-structures">
+<h2>Collections and Structures<a class="headerlink" href="#collections-and-structures" title="Link to this heading">#</a></h2>
+<dl class="simple" id="spec-codec-collections">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-collections</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Lists, sets, dictionaries and tuples encode to, and decode from, their given
+encodings. The vectors include empty collections, empty items, and items longer than
+127 bytes. The entries of a dictionary and the items of a set may be encoded in any
+order.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-codec-dictionary-value-left-out">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-dictionary-value-left-out</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A dictionary entry with no value field decodes with the value that encodes to no
+bytes, such as an empty list. A protobuf encoder leaves out a field holding no
+bytes.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-codec-structures">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-structures</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A structure encodes as a tuple of its fields, in the order the structure declares
+them.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-codec-extra-items">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-extra-items</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>An encoded tuple or structure with more items than its type decodes, and the extra
+items are ignored. In a
+dynamically typed language, encoding a tuple or structure value with more items than
+its type raises the encoding or argument error.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-codec-too-few-items">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-too-few-items</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Decoding a tuple or structure with fewer items than its type raises the encoding
+error. In a dynamically typed language, encoding a tuple or structure value with too
+few items raises the encoding or argument error.</p>
+</dd>
+</dl>
+</section>
+<section id="null">
+<h2>Null<a class="headerlink" href="#null" title="Link to this heading">#</a></h2>
+<dl class="simple" id="spec-codec-nullable">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-nullable</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A value at a position that can hold null carries a presence bool, which alone
+encodes a null. The bool comes ahead of the value’s own encoding, including that of
+a collection or a structure. The vectors set apart a null from a zero, false, an empty
+string, empty bytes and an empty collection, in list items, tuple items, dictionary
+values and structure fields.</p>
+</dd>
+</dl>
+</section>
+<section id="malformed-data">
+<h2>Malformed Data<a class="headerlink" href="#malformed-data" title="Link to this heading">#</a></h2>
+<dl class="simple" id="spec-codec-malformed-data">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-malformed-data</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Decoding raises the encoding error for each of these:</p>
+<ul class="simple">
+<li><p>data cut short, including a varint cut short</p></li>
+<li><p>a length past the end of the data</p></li>
+<li><p>a nullable item with no presence bool, with a presence bool and no value, with a
+presence bool other than 0 or 1, or with data after a null</p></li>
+<li><p>a dictionary entry cut short</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple" id="spec-codec-empty-data">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-empty-data</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>Decoding data with no bytes as a number, a <code class="docutils literal notranslate"><span class="pre">bool</span></code>, a string or bytes raises the
+encoding error. Each of these types encodes to at least one byte.</p>
+</dd>
+</dl>
+<dl class="simple" id="spec-codec-invalid-utf8">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-invalid-utf8</span> <span class="pre">[core]</span> <span class="pre">[SHOULD]</span></code></dt><dd><p>Decoding a string that is not valid UTF-8 raises the encoding error.</p>
+</dd>
+</dl>
+</section>
+<section id="messages">
+<h2>Messages<a class="headerlink" href="#messages" title="Link to this heading">#</a></h2>
+<dl class="simple" id="spec-codec-message">
+<dt><code class="docutils literal notranslate"><span class="pre">codec-message</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>A protobuf message encodes as its serialized bytes, and with its length prefix
+when framed.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="values.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Values</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="errors.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Errors</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scalars">Scalars</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#strings-and-bytes">Strings and Bytes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objects">Objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#collections-and-structures">Collections and Structures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#null">Null</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#malformed-data">Malformed Data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#messages">Messages</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/communication-protocols/client-spec/codec.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__center">
+      
+        <div class="footer-item">
+<p class="build-info" data-build-info-url="../../build-info.json"></p></div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

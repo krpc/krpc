@@ -64,6 +64,8 @@ after which the server reads the next message as a ``connection_request``. A
 ``connection_request`` sent during a session also starts a new one, as a client does when it
 resets.
 
+.. _communication-protocol-serialio-resetting:
+
 Resetting Clients
 -----------------
 

@@ -11,7 +11,8 @@ kRPC provides four communication protocols:
 * :doc:`communication-protocols/serialio` for Arduino and similar.
 
 In each protocol, clients invoke remote procedure calls by :doc:`sending and receiving protobuf
-messages <communication-protocols/messages>`.
+messages <communication-protocols/messages>`. The :doc:`client specification
+<communication-protocols/client-spec>` states what a client library does on top of the messages.
 
 .. _communication-protocol-version:
 
@@ -49,3 +50,4 @@ transport. A client from an earlier release fails to connect. The server refuses
    communication-protocols/websockets
    communication-protocols/serialio
    communication-protocols/messages
+   communication-protocols/client-spec

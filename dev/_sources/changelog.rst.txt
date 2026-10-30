@@ -186,6 +186,7 @@ Python client
 
   * :breaking:`Breaking` Raise ``ValueError`` from ``Stream.wait`` and ``Event.wait`` for a negative or NaN timeout, and wait with no deadline for an infinite one (:issue:`1219`)
   * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
+  * Fix ``Stream.wait`` and ``Event.wait`` returning before the timeout on Windows (:issue:`1220`)
 
 * Link the references in service docstrings with Sphinx roles (:issue:`1185`)
 * Fix the lists and parameter references in service docstrings, which were invalid reStructuredText (:issue:`1185`)
@@ -208,6 +209,8 @@ krpctools
 * Allow a ``<see cref>`` to a service in ``krpc-docgen`` (:issue:`1185`)
 * Fix the ``krpc-docgen`` link to a C-nano property that has only a setter (:issue:`1185`)
 * Fix bytes default arguments in generated C# and C++ code and in the Lua documentation (:issue:`1194`)
+* Add ``krpc-conformance``, which runs the client conformance tests against a client library (:issue:`1220`)
+* :breaking:`Breaking` Set the port of the ``TestServer`` websockets server with ``--websockets-port``, in place of ``--tcpip-port`` (:issue:`1220`)
 
 
 v0.7.0
