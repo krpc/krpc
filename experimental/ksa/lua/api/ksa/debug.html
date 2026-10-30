@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Debug &#8212; kRPC v0.2.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'lua/api/ksa/debug';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="gRPC" href="../../../grpc.html" />
+    <link rel="prev" title="UI" href="ui.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.2.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../clients.html" class="nav-link">Clients</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../lua.html" class="nav-link">Lua</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../ksa.html" class="nav-link">KSA API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Debug</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="debug">
+<h1>Debug<a class="headerlink" href="#debug" title="Link to this heading">#</a></h1>
+<dl class="lua class">
+<dt class="sig sig-object lua" id="KSA.Debug">
+<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">KSA.</span></span><span class="sig-name descname"><span class="pre">Debug</span></span><a class="headerlink" href="#KSA.Debug" title="Link to this definition">#</a></dt>
+<dd><p>Changes the state of the simulation directly, as the game’s debug windows and console
+commands do: teleporting a vehicle, setting its attitude, refilling its tanks.</p>
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.set_circular_orbit">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">set_circular_orbit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vehicle</span></em>, <em class="sig-param"><span class="pre">body</span></em>, <em class="sig-param"><span class="pre">altitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.set_circular_orbit" title="Link to this definition">#</a></dt>
+<dd><p>Move a vehicle onto a circular orbit around a body, and return once it is there.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vehicle</strong> (<span><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></span>) – The vehicle.</p></li>
+<li><p><strong>body</strong> (<span><a class="reference internal" href="body.html#KSA.Body" title="KSA.Body"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Body</span></code></a></span>) – The body to orbit.</p></li>
+<li><p><strong>altitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The altitude of the orbit above the mean radius, in meters.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the game cannot compute the vehicle’s trajectory on the
+orbit.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.set_orbit">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">set_orbit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vehicle</span></em>, <em class="sig-param"><span class="pre">body</span></em>, <em class="sig-param"><span class="pre">semi_major_axis</span></em>, <em class="sig-param"><span class="pre">eccentricity</span></em>, <em class="sig-param"><span class="pre">inclination</span></em>, <em class="sig-param"><span class="pre">longitude_of_ascending_node</span></em>, <em class="sig-param"><span class="pre">argument_of_periapsis</span></em>, <em class="sig-param"><span class="pre">mean_anomaly_at_epoch</span></em>, <em class="sig-param"><span class="pre">epoch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.set_orbit" title="Link to this definition">#</a></dt>
+<dd><p>Move a vehicle onto the orbit with the given elements, and return once it is there.
+The angles are those of <a class="reference internal" href="orbit.html#KSA.Orbit" title="KSA.Orbit"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Orbit</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vehicle</strong> (<span><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></span>) – The vehicle.</p></li>
+<li><p><strong>body</strong> (<span><a class="reference internal" href="body.html#KSA.Body" title="KSA.Body"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Body</span></code></a></span>) – The body to orbit.</p></li>
+<li><p><strong>semi_major_axis</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The semi-major axis, in meters.</p></li>
+<li><p><strong>eccentricity</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The eccentricity.</p></li>
+<li><p><strong>inclination</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The inclination, in radians.</p></li>
+<li><p><strong>longitude_of_ascending_node</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The longitude of the ascending node, in radians.</p></li>
+<li><p><strong>argument_of_periapsis</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The argument of periapsis, in radians.</p></li>
+<li><p><strong>mean_anomaly_at_epoch</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The mean anomaly at the epoch, in radians.</p></li>
+<li><p><strong>epoch</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The universal time of the epoch, in seconds.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the game cannot compute the vehicle’s trajectory on the
+orbit.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.set_landed">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">set_landed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vehicle</span></em>, <em class="sig-param"><span class="pre">body</span></em>, <em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.set_landed" title="Link to this definition">#</a></dt>
+<dd><p>Place a vehicle on the surface of a body, as the game’s teleport window does, and
+return once it is there.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vehicle</strong> (<span><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></span>) – The vehicle.</p></li>
+<li><p><strong>body</strong> (<span><a class="reference internal" href="body.html#KSA.Body" title="KSA.Body"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Body</span></code></a></span>) – The body to land on.</p></li>
+<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The latitude, in degrees.</p></li>
+<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The longitude, in degrees.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the body has no surface.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.set_position">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">set_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vehicle</span></em>, <em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.set_position" title="Link to this definition">#</a></dt>
+<dd><p>Move a vehicle to the given position, keeping its velocity, and return once it is
+there.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vehicle</strong> (<span><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></span>) – The vehicle.</p></li>
+<li><p><strong>position</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The position of the vehicle, in meters.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the position.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the inverse of <a class="reference internal" href="vehicle.html#KSA.Vehicle.position" title="KSA.Vehicle.position"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.position()</span></code></a>. The vehicle keeps orbiting
+the same body.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.set_velocity">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">set_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vehicle</span></em>, <em class="sig-param"><span class="pre">velocity</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.set_velocity" title="Link to this definition">#</a></dt>
+<dd><p>Set the velocity of a vehicle, keeping its position, and return once it is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vehicle</strong> (<span><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></span>) – The vehicle.</p></li>
+<li><p><strong>velocity</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The velocity of the vehicle, in meters per second.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the velocity.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the inverse of <a class="reference internal" href="vehicle.html#KSA.Vehicle.velocity" title="KSA.Vehicle.velocity"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.velocity()</span></code></a>. The vehicle keeps orbiting
+the same body.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.set_rotation">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">set_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vehicle</span></em>, <em class="sig-param"><span class="pre">rotation</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.set_rotation" title="Link to this definition">#</a></dt>
+<dd><p>Set the rotation of a vehicle, and return once it is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vehicle</strong> (<span><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></span>) – The vehicle.</p></li>
+<li><p><strong>rotation</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The rotation of the vehicle, as a quaternion of the form <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z,</span> <span class="pre">w)</span></code>.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the rotation.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the inverse of <a class="reference internal" href="vehicle.html#KSA.Vehicle.rotation" title="KSA.Vehicle.rotation"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.rotation()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.set_angular_velocity">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">set_angular_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vehicle</span></em>, <em class="sig-param"><span class="pre">angular_velocity</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.set_angular_velocity" title="Link to this definition">#</a></dt>
+<dd><p>Set the angular velocity of a vehicle, and return once it is set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vehicle</strong> (<span><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></span>) – The vehicle.</p></li>
+<li><p><strong>angular_velocity</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The angular velocity, in radians per second. The vector points along the axis of rotation, and its length is the rate.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the angular velocity.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the inverse of <a class="reference internal" href="vehicle.html#KSA.Vehicle.angular_velocity" title="KSA.Vehicle.angular_velocity"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Vehicle.angular_velocity()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.fill_resources">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">fill_resources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vehicle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.fill_resources" title="Link to this definition">#</a></dt>
+<dd><p>Fill the propellant, batteries and other consumables of a vehicle, as the game’s
+refill command does.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vehicle</strong> (<span><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></span>) – The vehicle.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.empty_resources">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">empty_resources</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vehicle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.empty_resources" title="Link to this definition">#</a></dt>
+<dd><p>Empty the propellant, batteries and other consumables of a vehicle, as the game’s
+empty command does.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vehicle</strong> (<span><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></span>) – The vehicle.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.duplicate_vehicle">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">duplicate_vehicle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vehicle</span></em>, <em class="sig-param"><span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.duplicate_vehicle" title="Link to this definition">#</a></dt>
+<dd><p>Create a copy of a vehicle beside it, as the game’s duplicate command does, and
+return once it is created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vehicle</strong> (<span><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></span>) – The vehicle to copy.</p></li>
+<li><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the copy.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The copy.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the name is in use.</p>
+</div>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.explode_vehicle">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">explode_vehicle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">vehicle</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.explode_vehicle" title="Link to this definition">#</a></dt>
+<dd><p>Destroy a vehicle in an explosion, as the game’s explode command does, and return
+once the vehicle is gone. Its crew are killed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vehicle</strong> (<span><a class="reference internal" href="vehicle.html#KSA.Vehicle" title="KSA.Vehicle"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.Vehicle</span></code></a></span>) – The vehicle.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.show_velocity_arrows">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">show_velocity_arrows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.show_velocity_arrows" title="Link to this definition">#</a></dt>
+<dd><p>Show or hide the game’s debug arrows for the velocities of the vehicles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether to show the arrows.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="KSA.Debug.run_command">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">run_command</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">command</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Debug.run_command" title="Link to this definition">#</a></dt>
+<dd><p>Run a command in the game’s console, as typed in the console.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>command</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The command and its arguments.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The console output of the command, one line per message.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Most commands write their messages to the game’s log, not the returned output.
+Throws an exception if the console has no such command, or the arguments are not
+valid.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ui.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">UI</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../../grpc.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">gRPC</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/lua/api/ksa/debug.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

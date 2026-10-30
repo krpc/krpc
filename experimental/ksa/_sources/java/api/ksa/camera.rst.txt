@@ -1,0 +1,131 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Camera
+======
+
+
+.. type:: public class Camera
+
+   The game's main camera. Obtained from :meth:`getCamera()`.
+
+   .. method:: CameraMode getMode()
+
+   .. method:: void setMode(CameraMode value)
+
+      The mode of the camera.
+
+   
+
+      .. note::
+
+         Setting :meth:`CameraMode.IVA` while the camera is not focused on a vehicle
+         with a crew seat sets :meth:`CameraMode.ORBIT` instead, as the game does. A
+         change of mode releases the active vehicle's held rotation and translation inputs.
+
+   .. method:: float getAzimuth()
+
+   .. method:: void setAzimuth(float value)
+
+      The angle of the camera around the focused object, in degrees. Throws an exception
+      in any mode other than orbit and map.
+
+   
+
+   .. method:: float getElevation()
+
+   .. method:: void setElevation(float value)
+
+      The angle of the camera above the plane it orbits in, in degrees, between -90 and
+      90. Throws an exception in any mode other than orbit and map.
+
+   
+
+   .. method:: float getDistance()
+
+   .. method:: void setDistance(float value)
+
+      The distance from the camera to the focused object, in meters. Throws an exception
+      in any mode other than orbit and map.
+
+   
+
+      .. note::
+
+         The camera moves smoothly to a new distance, and stays at least the focused object's
+         radius from it in map mode, and half its radius in orbit mode.
+
+   .. method:: float getFieldOfView()
+
+   .. method:: void setFieldOfView(float value)
+
+      The camera's vertical field of view, in degrees, between 15 and 120.
+
+   
+
+   .. method:: Vehicle getFocusedVehicle()
+
+   .. method:: void setFocusedVehicle(Vehicle value)
+
+      Returns the vehicle the camera is focused on, or ``null`` if it is focused on
+      something else, and sets the focus to a vehicle.
+
+   
+
+      .. note::
+
+         Setting the focus leaves the active vehicle as it is.
+
+   .. method:: Body getFocusedBody()
+
+   .. method:: void setFocusedBody(Body value)
+
+      Returns the body the camera is focused on, or ``null`` if it is focused on
+      something else, and sets the focus to a body.
+
+   
+
+   .. method:: Kitten getFocusedKitten()
+
+   .. method:: void setFocusedKitten(Kitten value)
+
+      Returns the kitten on EVA the camera is focused on, or ``null`` if it is focused
+      on something else, and sets the focus to a kitten on EVA.
+
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA.
+
+
+
+.. type:: public enum CameraMode
+
+   The mode of the camera. See :meth:`Camera.getMode()`.
+
+
+   .. field:: public CameraMode ORBIT
+
+      Orbits the focused object.
+
+
+   .. field:: public CameraMode FREE
+
+      Flies freely.
+
+
+   .. field:: public CameraMode MAP
+
+      The map view.
+
+
+   .. field:: public CameraMode IVA
+
+      Inside the vehicle, from a crew seat.
+
+
+   .. field:: public CameraMode FIXED
+
+      Fixed to a part of the vehicle, such as a docking port.

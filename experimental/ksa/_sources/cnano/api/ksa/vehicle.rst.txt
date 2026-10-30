@@ -23,9 +23,53 @@ Vehicle
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Destroy(krpc_connection_t connection, krpc_KSA_Vehicle_t instance)
+
+      Destroy the vehicle, killing its crew, as abandoning the vehicle does. Returns once
+      the vehicle is gone.
+
+
+   
+
+      .. note::
+
+         If the vehicle is the active vehicle, the game hands control to a nearby vehicle.
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_CanRecover(krpc_connection_t connection, bool * returnValue, krpc_KSA_Vehicle_t instance)
+
+      Whether the vehicle can be recovered: at rest on the surface of the home planet.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Recover(krpc_connection_t connection, krpc_KSA_Vehicle_t instance)
+
+      Recover the vehicle, ending its crew's missions, as the game's recover button does.
+      Returns once the vehicle is gone.
+
+
+   
+
+      .. note::
+
+         Throws an exception if the vehicle cannot be recovered, see :func:`krpc_KSA_Vehicle_CanRecover`.
+
    .. function:: krpc_error_t krpc_KSA_Vehicle_Situation(krpc_connection_t connection, krpc_KSA_Situation_t * returnValue, krpc_KSA_Vehicle_t instance)
 
       The situation of the vehicle.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_OnRails(krpc_connection_t connection, bool * returnValue, krpc_KSA_Vehicle_t instance)
+
+      Whether the game moves the vehicle without simulating the forces on it: along its
+      orbit, or held on the surface. True in the freefall, landed, floating and bottomed
+      situations.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_IsDebris(krpc_connection_t connection, bool * returnValue, krpc_KSA_Vehicle_t instance)
+
+      Whether the vehicle is debris, such as a spent stage.
 
    
 
@@ -53,7 +97,7 @@ Vehicle
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Vehicle_Thrust(krpc_connection_t connection, double * returnValue, krpc_KSA_Vehicle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Thrust(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
 
       The thrust of the engines at their current throttle and the current atmospheric
       pressure, in Newtons.
@@ -67,10 +111,39 @@ Vehicle
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Vehicle_SpecificImpulse(krpc_connection_t connection, double * returnValue, krpc_KSA_Vehicle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Vehicle_SpecificImpulse(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
 
       The combined specific impulse of the active engines that have propellant, at the
       current atmospheric pressure, in seconds. Zero when no engine is active.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_PeakGLoad(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The highest smoothed g-load on the vehicle during the last physics step, as a
+      multiple of standard gravity. Zero while the vehicle is :func:`krpc_KSA_Vehicle_OnRails`.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_MaxGLoad(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The g-load the vehicle can take before it breaks up, as a multiple of standard
+      gravity. Zero while the vehicle is :func:`krpc_KSA_Vehicle_OnRails`.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_PeakDynamicPressure(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The highest dynamic pressure on the vehicle during the last physics step, in
+      pascals. In the sea, this is the dynamic pressure of the water. Zero while the
+      vehicle is :func:`krpc_KSA_Vehicle_OnRails`.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_MaxDynamicPressure(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The dynamic pressure the vehicle can take before it breaks up, in pascals. Zero
+      while the vehicle is :func:`krpc_KSA_Vehicle_OnRails`.
 
    
 
@@ -83,6 +156,137 @@ Vehicle
    .. function:: krpc_error_t krpc_KSA_Vehicle_RootPart(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Vehicle_t instance)
 
       The vehicle's root part, which the other parts are attached to.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_PartsWithName(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance, const char * name)
+
+      The vehicle's parts with the given template id. See :func:`krpc_KSA_Part_Name`.
+
+      :Parameters:
+
+       * **name** -- The template id.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Seats(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's crew seats.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Crew(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The kittens in the vehicle's seats.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_CrewCapacity(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The number of crew seats in the vehicle.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Engines(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's engines.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_RCS(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's RCS thrusters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Decouplers(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's decouplers.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Parachutes(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's parachutes.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Tanks(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's propellant tanks.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Batteries(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's batteries.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_SolarPanels(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's solar panels.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Generators(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's generators.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_PowerConsumers(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's power consumers.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_StoredEnergy(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The energy stored in the vehicle's batteries, in joules.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_EnergyCapacity(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The energy the vehicle's batteries can store, in joules.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_NetPower(krpc_connection_t connection, float * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The power produced by the vehicle's solar panels and generators, less the power its
+      parts use, in watts.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Lights(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's lights.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_Deployables(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's deployable sections.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_MagneticScoops(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's magnetic scoops.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_FuelLinks(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's fuel links.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Vehicle_DockingPorts(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
+
+      The vehicle's docking ports.
 
    
 
@@ -124,13 +328,22 @@ Vehicle
 
          Setting a body that orbits nothing, such as the star, throws an exception.
 
+   .. function:: krpc_error_t krpc_KSA_Vehicle_TargetPart(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Vehicle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Vehicle_set_TargetPart(krpc_connection_t connection, krpc_KSA_Vehicle_t instance, krpc_KSA_Part_t value)
+
+      The part targeted by this vehicle, on the vehicle in :func:`krpc_KSA_Vehicle_TargetVehicle`,
+      or ``nullptr``. Setting it targets the part and its vehicle, and ``nullptr`` clears
+      the target.
+
+   
+
    .. function:: krpc_error_t krpc_KSA_Vehicle_Burns(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Vehicle_t instance)
 
       The vehicle's planned burns, in time order.
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Vehicle_AddBurn(krpc_connection_t connection, krpc_KSA_Burn_t * returnValue, krpc_KSA_Vehicle_t instance, double ut, double prograde, double normal, double radial)
+   .. function:: krpc_error_t krpc_KSA_Vehicle_AddBurn(krpc_connection_t connection, krpc_KSA_Burn_t * returnValue, krpc_KSA_Vehicle_t instance, double ut, float prograde, float normal, float radial)
 
       Plan a burn, and add it to the vehicle's burn plan.
 
@@ -297,3 +510,55 @@ Vehicle
    .. macro:: KRPC_KSA_SITUATION_BOTTOMED
 
       At rest on terrain and in the ocean.
+
+
+
+.. type:: krpc_KSA_VehicleDesign_t
+
+   A vehicle design that can be launched: one of the game's default vehicles, or a vehicle
+   saved by the player in the editor. Obtained from :func:`krpc_KSA_VehicleDesigns`.
+
+   .. note::
+
+      The mass and delta-v are those the editor shows for the design.
+
+   .. function:: krpc_error_t krpc_KSA_VehicleDesign_Name(krpc_connection_t connection, char * * returnValue, krpc_KSA_VehicleDesign_t instance)
+
+      The name of the design, as passed to :func:`krpc_KSA_LaunchVehicle`.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_VehicleDesign_IsDefault(krpc_connection_t connection, bool * returnValue, krpc_KSA_VehicleDesign_t instance)
+
+      Whether the design is one of the game's default vehicles.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_VehicleDesign_PartCount(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_VehicleDesign_t instance)
+
+      The number of parts in the design.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_VehicleDesign_Mass(krpc_connection_t connection, float * returnValue, krpc_KSA_VehicleDesign_t instance)
+
+      The total mass of the design, including propellant, in kilograms.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_VehicleDesign_DryMass(krpc_connection_t connection, float * returnValue, krpc_KSA_VehicleDesign_t instance)
+
+      The mass of the design without propellant, in kilograms.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_VehicleDesign_DeltaV(krpc_connection_t connection, float * returnValue, krpc_KSA_VehicleDesign_t instance)
+
+      The change in velocity of all the design's sequences, in meters per second.
+
+   
+
+      .. note::
+
+         Each sequence is computed in the environment chosen for it in the editor, in vacuum
+         or at sea level.

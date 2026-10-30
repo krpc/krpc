@@ -1,0 +1,1182 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+UI
+==
+
+.. grpc:service:: UIService
+
+   Adds windows of buttons, text fields and other widgets to the game's UI.
+
+   .. note::
+
+      The windows are removed when the client that added them disconnects. For messages on
+      the screen, see :grpc:rpc:`KSAService.ShowMessage <krpc.ksa.KSAService.ShowMessage>`.
+
+   .. grpc:rpc:: AddWindow (UI.AddWindowRequest) returns (UI.AddWindowResponse)
+
+      Add a window, with no widgets.
+
+      :UI.AddWindowRequest:
+         * ``title`` (``string``): The text in the title bar.
+         * ``visible`` (``optional bool``): Whether the window is visible. Defaults to ``true``.
+
+      :UI.AddWindowResponse: ``value`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+
+   .. grpc:rpc:: Clear (UI.ClearRequest) returns (UI.ClearResponse)
+
+      Remove the windows.
+
+      :UI.ClearRequest:
+         * ``client_only`` (``optional bool``): Whether to remove only the windows added by the calling client. Defaults to ``false``.
+
+      :UI.ClearResponse: Empty
+
+.. grpc:service:: WindowService
+
+   A window, holding widgets one per line. Created using :grpc:rpc:`UIService.AddWindow <krpc.ksa.UIService.AddWindow>`.
+
+   .. note::
+
+      The window fits its widgets until its size is set. Closing the window makes it
+      invisible. The window is hidden with the game's UI.
+
+   .. grpc:rpc:: GetTitle (Window.GetTitleRequest) returns (Window.GetTitleResponse)
+
+      The text in the title bar.
+
+      :Window.GetTitleRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+
+      :Window.GetTitleResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: SetTitle (Window.SetTitleRequest) returns (Window.SetTitleResponse)
+
+      The text in the title bar.
+
+      :Window.SetTitleRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``value`` (``string``)
+
+      :Window.SetTitleResponse: Empty
+
+   .. grpc:rpc:: GetPosition (Window.GetPositionRequest) returns (Window.GetPositionResponse)
+
+      The position of the top left corner of the window, from the top left corner of the
+      game window, in pixels.
+
+      :Window.GetPositionRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+
+      :Window.GetPositionResponse: ``value`` (:grpc:message:`Tuple_float_float <krpc.ksa.Tuple_float_float>`)
+
+   .. grpc:rpc:: SetPosition (Window.SetPositionRequest) returns (Window.SetPositionResponse)
+
+      The position of the top left corner of the window, from the top left corner of the
+      game window, in pixels.
+
+      :Window.SetPositionRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``value`` (:grpc:message:`Tuple_float_float <krpc.ksa.Tuple_float_float>`)
+
+      :Window.SetPositionResponse: Empty
+
+   .. grpc:rpc:: GetSize (Window.GetSizeRequest) returns (Window.GetSizeResponse)
+
+      The width and height of the window, in pixels.
+
+      :Window.GetSizeRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+
+      :Window.GetSizeResponse: ``value`` (:grpc:message:`Tuple_float_float <krpc.ksa.Tuple_float_float>`)
+
+      .. note::
+
+         Throws an exception if the width or height is not positive.
+
+   .. grpc:rpc:: SetSize (Window.SetSizeRequest) returns (Window.SetSizeResponse)
+
+      The width and height of the window, in pixels.
+
+      :Window.SetSizeRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``value`` (:grpc:message:`Tuple_float_float <krpc.ksa.Tuple_float_float>`)
+
+      :Window.SetSizeResponse: Empty
+
+      .. note::
+
+         Throws an exception if the width or height is not positive.
+
+   .. grpc:rpc:: GetVisible (Window.GetVisibleRequest) returns (Window.GetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Window.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+
+      :Window.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Window.SetVisibleRequest) returns (Window.SetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Window.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``value`` (``bool``)
+
+      :Window.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetEnabled (Window.GetEnabledRequest) returns (Window.GetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Window.GetEnabledRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+
+      :Window.GetEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetEnabled (Window.SetEnabledRequest) returns (Window.SetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Window.SetEnabledRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``value`` (``bool``)
+
+      :Window.SetEnabledResponse: Empty
+
+   .. grpc:rpc:: AddLabel (Window.AddLabelRequest) returns (Window.AddLabelResponse)
+
+      Add a label.
+
+      :Window.AddLabelRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``content`` (``string``): The text of the label.
+         * ``visible`` (``optional bool``): Whether the label is visible. Defaults to ``true``.
+
+      :Window.AddLabelResponse: ``value`` (:grpc:service:`Label <krpc.ksa.LabelService>`)
+
+   .. grpc:rpc:: AddButton (Window.AddButtonRequest) returns (Window.AddButtonResponse)
+
+      Add a button.
+
+      :Window.AddButtonRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``content`` (``string``): The text on the button.
+         * ``visible`` (``optional bool``): Whether the button is visible. Defaults to ``true``.
+
+      :Window.AddButtonResponse: ``value`` (:grpc:service:`Button <krpc.ksa.ButtonService>`)
+
+   .. grpc:rpc:: AddInputField (Window.AddInputFieldRequest) returns (Window.AddInputFieldResponse)
+
+      Add a text input field, empty.
+
+      :Window.AddInputFieldRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``label`` (``optional string``): The text shown next to the field. Defaults to ``""``.
+         * ``visible`` (``optional bool``): Whether the field is visible. Defaults to ``true``.
+
+      :Window.AddInputFieldResponse: ``value`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+
+   .. grpc:rpc:: AddSlider (Window.AddSliderRequest) returns (Window.AddSliderResponse)
+
+      Add a slider, at its minimum value.
+
+      :Window.AddSliderRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``label`` (``optional string``): The text shown next to the slider. Defaults to ``""``.
+         * ``minimum`` (``optional float``): The minimum value. Defaults to ``0.0``.
+         * ``maximum`` (``optional float``): The maximum value. Defaults to ``1.0``.
+         * ``visible`` (``optional bool``): Whether the slider is visible. Defaults to ``true``.
+
+      :Window.AddSliderResponse: ``value`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. grpc:rpc:: AddToggle (Window.AddToggleRequest) returns (Window.AddToggleResponse)
+
+      Add a toggle, unchecked.
+
+      :Window.AddToggleRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``content`` (``string``): The text shown next to the toggle.
+         * ``visible`` (``optional bool``): Whether the toggle is visible. Defaults to ``true``.
+
+      :Window.AddToggleResponse: ``value`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+
+   .. grpc:rpc:: AddDropdown (Window.AddDropdownRequest) returns (Window.AddDropdownResponse)
+
+      Add a dropdown, with no option selected.
+
+      :Window.AddDropdownRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``options`` (``repeated string``): The options to choose from.
+         * ``label`` (``optional string``): The text shown next to the dropdown. Defaults to ``""``.
+         * ``visible`` (``optional bool``): Whether the dropdown is visible. Defaults to ``true``.
+
+      :Window.AddDropdownResponse: ``value`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+
+   .. grpc:rpc:: AddSeparator (Window.AddSeparatorRequest) returns (Window.AddSeparatorResponse)
+
+      Add a horizontal line.
+
+      :Window.AddSeparatorRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``visible`` (``optional bool``): Whether the line is visible. Defaults to ``true``.
+
+      :Window.AddSeparatorResponse: ``value`` (:grpc:service:`Separator <krpc.ksa.SeparatorService>`)
+
+   .. grpc:rpc:: AddRow (Window.AddRowRequest) returns (Window.AddRowResponse)
+
+      Add a row, which lays out its widgets from left to right.
+
+      :Window.AddRowRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+         * ``visible`` (``optional bool``): Whether the row is visible. Defaults to ``true``.
+
+      :Window.AddRowResponse: ``value`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+
+   .. grpc:rpc:: Remove (Window.RemoveRequest) returns (Window.RemoveResponse)
+
+      Remove the widget.
+
+      :Window.RemoveRequest:
+         * ``this`` (:grpc:service:`Window <krpc.ksa.WindowService>`)
+
+      :Window.RemoveResponse: Empty
+
+.. grpc:service:: RowService
+
+   A row of widgets, laid out from left to right. Added to a window or a row.
+
+   .. grpc:rpc:: GetVisible (Row.GetVisibleRequest) returns (Row.GetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Row.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+
+      :Row.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Row.SetVisibleRequest) returns (Row.SetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Row.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+         * ``value`` (``bool``)
+
+      :Row.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetEnabled (Row.GetEnabledRequest) returns (Row.GetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Row.GetEnabledRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+
+      :Row.GetEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetEnabled (Row.SetEnabledRequest) returns (Row.SetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Row.SetEnabledRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+         * ``value`` (``bool``)
+
+      :Row.SetEnabledResponse: Empty
+
+   .. grpc:rpc:: AddLabel (Row.AddLabelRequest) returns (Row.AddLabelResponse)
+
+      Add a label.
+
+      :Row.AddLabelRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+         * ``content`` (``string``): The text of the label.
+         * ``visible`` (``optional bool``): Whether the label is visible. Defaults to ``true``.
+
+      :Row.AddLabelResponse: ``value`` (:grpc:service:`Label <krpc.ksa.LabelService>`)
+
+   .. grpc:rpc:: AddButton (Row.AddButtonRequest) returns (Row.AddButtonResponse)
+
+      Add a button.
+
+      :Row.AddButtonRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+         * ``content`` (``string``): The text on the button.
+         * ``visible`` (``optional bool``): Whether the button is visible. Defaults to ``true``.
+
+      :Row.AddButtonResponse: ``value`` (:grpc:service:`Button <krpc.ksa.ButtonService>`)
+
+   .. grpc:rpc:: AddInputField (Row.AddInputFieldRequest) returns (Row.AddInputFieldResponse)
+
+      Add a text input field, empty.
+
+      :Row.AddInputFieldRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+         * ``label`` (``optional string``): The text shown next to the field. Defaults to ``""``.
+         * ``visible`` (``optional bool``): Whether the field is visible. Defaults to ``true``.
+
+      :Row.AddInputFieldResponse: ``value`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+
+   .. grpc:rpc:: AddSlider (Row.AddSliderRequest) returns (Row.AddSliderResponse)
+
+      Add a slider, at its minimum value.
+
+      :Row.AddSliderRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+         * ``label`` (``optional string``): The text shown next to the slider. Defaults to ``""``.
+         * ``minimum`` (``optional float``): The minimum value. Defaults to ``0.0``.
+         * ``maximum`` (``optional float``): The maximum value. Defaults to ``1.0``.
+         * ``visible`` (``optional bool``): Whether the slider is visible. Defaults to ``true``.
+
+      :Row.AddSliderResponse: ``value`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. grpc:rpc:: AddToggle (Row.AddToggleRequest) returns (Row.AddToggleResponse)
+
+      Add a toggle, unchecked.
+
+      :Row.AddToggleRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+         * ``content`` (``string``): The text shown next to the toggle.
+         * ``visible`` (``optional bool``): Whether the toggle is visible. Defaults to ``true``.
+
+      :Row.AddToggleResponse: ``value`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+
+   .. grpc:rpc:: AddDropdown (Row.AddDropdownRequest) returns (Row.AddDropdownResponse)
+
+      Add a dropdown, with no option selected.
+
+      :Row.AddDropdownRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+         * ``options`` (``repeated string``): The options to choose from.
+         * ``label`` (``optional string``): The text shown next to the dropdown. Defaults to ``""``.
+         * ``visible`` (``optional bool``): Whether the dropdown is visible. Defaults to ``true``.
+
+      :Row.AddDropdownResponse: ``value`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+
+   .. grpc:rpc:: AddSeparator (Row.AddSeparatorRequest) returns (Row.AddSeparatorResponse)
+
+      Add a horizontal line.
+
+      :Row.AddSeparatorRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+         * ``visible`` (``optional bool``): Whether the line is visible. Defaults to ``true``.
+
+      :Row.AddSeparatorResponse: ``value`` (:grpc:service:`Separator <krpc.ksa.SeparatorService>`)
+
+   .. grpc:rpc:: AddRow (Row.AddRowRequest) returns (Row.AddRowResponse)
+
+      Add a row, which lays out its widgets from left to right.
+
+      :Row.AddRowRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+         * ``visible`` (``optional bool``): Whether the row is visible. Defaults to ``true``.
+
+      :Row.AddRowResponse: ``value`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+
+   .. grpc:rpc:: Remove (Row.RemoveRequest) returns (Row.RemoveResponse)
+
+      Remove the widget.
+
+      :Row.RemoveRequest:
+         * ``this`` (:grpc:service:`Row <krpc.ksa.RowService>`)
+
+      :Row.RemoveResponse: Empty
+
+.. grpc:service:: LabelService
+
+   A line of text. Added to a window or a row.
+
+   .. grpc:rpc:: GetContent (Label.GetContentRequest) returns (Label.GetContentResponse)
+
+      The text of the label.
+
+      :Label.GetContentRequest:
+         * ``this`` (:grpc:service:`Label <krpc.ksa.LabelService>`)
+
+      :Label.GetContentResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: SetContent (Label.SetContentRequest) returns (Label.SetContentResponse)
+
+      The text of the label.
+
+      :Label.SetContentRequest:
+         * ``this`` (:grpc:service:`Label <krpc.ksa.LabelService>`)
+         * ``value`` (``string``)
+
+      :Label.SetContentResponse: Empty
+
+   .. grpc:rpc:: GetVisible (Label.GetVisibleRequest) returns (Label.GetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Label.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Label <krpc.ksa.LabelService>`)
+
+      :Label.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Label.SetVisibleRequest) returns (Label.SetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Label.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Label <krpc.ksa.LabelService>`)
+         * ``value`` (``bool``)
+
+      :Label.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetEnabled (Label.GetEnabledRequest) returns (Label.GetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Label.GetEnabledRequest:
+         * ``this`` (:grpc:service:`Label <krpc.ksa.LabelService>`)
+
+      :Label.GetEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetEnabled (Label.SetEnabledRequest) returns (Label.SetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Label.SetEnabledRequest:
+         * ``this`` (:grpc:service:`Label <krpc.ksa.LabelService>`)
+         * ``value`` (``bool``)
+
+      :Label.SetEnabledResponse: Empty
+
+   .. grpc:rpc:: Remove (Label.RemoveRequest) returns (Label.RemoveResponse)
+
+      Remove the widget.
+
+      :Label.RemoveRequest:
+         * ``this`` (:grpc:service:`Label <krpc.ksa.LabelService>`)
+
+      :Label.RemoveResponse: Empty
+
+.. grpc:service:: ButtonService
+
+   A button. Added to a window or a row.
+
+   .. grpc:rpc:: GetContent (Button.GetContentRequest) returns (Button.GetContentResponse)
+
+      The text on the button.
+
+      :Button.GetContentRequest:
+         * ``this`` (:grpc:service:`Button <krpc.ksa.ButtonService>`)
+
+      :Button.GetContentResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: SetContent (Button.SetContentRequest) returns (Button.SetContentResponse)
+
+      The text on the button.
+
+      :Button.SetContentRequest:
+         * ``this`` (:grpc:service:`Button <krpc.ksa.ButtonService>`)
+         * ``value`` (``string``)
+
+      :Button.SetContentResponse: Empty
+
+   .. grpc:rpc:: GetClicked (Button.GetClickedRequest) returns (Button.GetClickedResponse)
+
+      Whether the button has been clicked.
+
+      :Button.GetClickedRequest:
+         * ``this`` (:grpc:service:`Button <krpc.ksa.ButtonService>`)
+
+      :Button.GetClickedResponse: ``value`` (``bool``)
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``.
+
+   .. grpc:rpc:: SetClicked (Button.SetClickedRequest) returns (Button.SetClickedResponse)
+
+      Whether the button has been clicked.
+
+      :Button.SetClickedRequest:
+         * ``this`` (:grpc:service:`Button <krpc.ksa.ButtonService>`)
+         * ``value`` (``bool``)
+
+      :Button.SetClickedResponse: Empty
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``.
+
+   .. grpc:rpc:: GetVisible (Button.GetVisibleRequest) returns (Button.GetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Button.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Button <krpc.ksa.ButtonService>`)
+
+      :Button.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Button.SetVisibleRequest) returns (Button.SetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Button.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Button <krpc.ksa.ButtonService>`)
+         * ``value`` (``bool``)
+
+      :Button.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetEnabled (Button.GetEnabledRequest) returns (Button.GetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Button.GetEnabledRequest:
+         * ``this`` (:grpc:service:`Button <krpc.ksa.ButtonService>`)
+
+      :Button.GetEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetEnabled (Button.SetEnabledRequest) returns (Button.SetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Button.SetEnabledRequest:
+         * ``this`` (:grpc:service:`Button <krpc.ksa.ButtonService>`)
+         * ``value`` (``bool``)
+
+      :Button.SetEnabledResponse: Empty
+
+   .. grpc:rpc:: Remove (Button.RemoveRequest) returns (Button.RemoveResponse)
+
+      Remove the widget.
+
+      :Button.RemoveRequest:
+         * ``this`` (:grpc:service:`Button <krpc.ksa.ButtonService>`)
+
+      :Button.RemoveResponse: Empty
+
+.. grpc:service:: InputFieldService
+
+   A single line text input field. Added to a window or a row.
+
+   .. note::
+
+      While the field is being edited, the game clears the rotation and translation inputs
+      of the controlled vehicle each frame.
+
+   .. grpc:rpc:: GetLabel (InputField.GetLabelRequest) returns (InputField.GetLabelResponse)
+
+      The text shown next to the field.
+
+      :InputField.GetLabelRequest:
+         * ``this`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+
+      :InputField.GetLabelResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: SetLabel (InputField.SetLabelRequest) returns (InputField.SetLabelResponse)
+
+      The text shown next to the field.
+
+      :InputField.SetLabelRequest:
+         * ``this`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+         * ``value`` (``string``)
+
+      :InputField.SetLabelResponse: Empty
+
+   .. grpc:rpc:: GetValue (InputField.GetValueRequest) returns (InputField.GetValueResponse)
+
+      The text in the field.
+
+      :InputField.GetValueRequest:
+         * ``this`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+
+      :InputField.GetValueResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: SetValue (InputField.SetValueRequest) returns (InputField.SetValueResponse)
+
+      The text in the field.
+
+      :InputField.SetValueRequest:
+         * ``this`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+         * ``value`` (``string``)
+
+      :InputField.SetValueResponse: Empty
+
+   .. grpc:rpc:: GetChanged (InputField.GetChangedRequest) returns (InputField.GetChangedResponse)
+
+      Whether the text has been edited.
+
+      :InputField.GetChangedRequest:
+         * ``this`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+
+      :InputField.GetChangedResponse: ``value`` (``bool``)
+
+      .. note::
+
+         An edit sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :grpc:rpc:`InputFieldService.GetValue <krpc.ksa.InputFieldService.GetValue>` leaves it unchanged.
+
+   .. grpc:rpc:: SetChanged (InputField.SetChangedRequest) returns (InputField.SetChangedResponse)
+
+      Whether the text has been edited.
+
+      :InputField.SetChangedRequest:
+         * ``this`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+         * ``value`` (``bool``)
+
+      :InputField.SetChangedResponse: Empty
+
+      .. note::
+
+         An edit sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :grpc:rpc:`InputFieldService.GetValue <krpc.ksa.InputFieldService.GetValue>` leaves it unchanged.
+
+   .. grpc:rpc:: GetVisible (InputField.GetVisibleRequest) returns (InputField.GetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :InputField.GetVisibleRequest:
+         * ``this`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+
+      :InputField.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (InputField.SetVisibleRequest) returns (InputField.SetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :InputField.SetVisibleRequest:
+         * ``this`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+         * ``value`` (``bool``)
+
+      :InputField.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetEnabled (InputField.GetEnabledRequest) returns (InputField.GetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :InputField.GetEnabledRequest:
+         * ``this`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+
+      :InputField.GetEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetEnabled (InputField.SetEnabledRequest) returns (InputField.SetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :InputField.SetEnabledRequest:
+         * ``this`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+         * ``value`` (``bool``)
+
+      :InputField.SetEnabledResponse: Empty
+
+   .. grpc:rpc:: Remove (InputField.RemoveRequest) returns (InputField.RemoveResponse)
+
+      Remove the widget.
+
+      :InputField.RemoveRequest:
+         * ``this`` (:grpc:service:`InputField <krpc.ksa.InputFieldService>`)
+
+      :InputField.RemoveResponse: Empty
+
+.. grpc:service:: SliderService
+
+   A horizontal slider. Added to a window or a row.
+
+   .. grpc:rpc:: GetLabel (Slider.GetLabelRequest) returns (Slider.GetLabelResponse)
+
+      The text shown next to the slider.
+
+      :Slider.GetLabelRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+
+      :Slider.GetLabelResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: SetLabel (Slider.SetLabelRequest) returns (Slider.SetLabelResponse)
+
+      The text shown next to the slider.
+
+      :Slider.SetLabelRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+         * ``value`` (``string``)
+
+      :Slider.SetLabelResponse: Empty
+
+   .. grpc:rpc:: GetValue (Slider.GetValueRequest) returns (Slider.GetValueResponse)
+
+      The value of the slider, clamped to its range.
+
+      :Slider.GetValueRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+
+      :Slider.GetValueResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetValue (Slider.SetValueRequest) returns (Slider.SetValueResponse)
+
+      The value of the slider, clamped to its range.
+
+      :Slider.SetValueRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+         * ``value`` (``float``)
+
+      :Slider.SetValueResponse: Empty
+
+   .. grpc:rpc:: GetMinimum (Slider.GetMinimumRequest) returns (Slider.GetMinimumResponse)
+
+      The minimum value.
+
+      :Slider.GetMinimumRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+
+      :Slider.GetMinimumResponse: ``value`` (``float``)
+
+      .. note::
+
+         Throws an exception if set to a value not less than the maximum.
+
+   .. grpc:rpc:: SetMinimum (Slider.SetMinimumRequest) returns (Slider.SetMinimumResponse)
+
+      The minimum value.
+
+      :Slider.SetMinimumRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+         * ``value`` (``float``)
+
+      :Slider.SetMinimumResponse: Empty
+
+      .. note::
+
+         Throws an exception if set to a value not less than the maximum.
+
+   .. grpc:rpc:: GetMaximum (Slider.GetMaximumRequest) returns (Slider.GetMaximumResponse)
+
+      The maximum value.
+
+      :Slider.GetMaximumRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+
+      :Slider.GetMaximumResponse: ``value`` (``float``)
+
+      .. note::
+
+         Throws an exception if set to a value not greater than the minimum.
+
+   .. grpc:rpc:: SetMaximum (Slider.SetMaximumRequest) returns (Slider.SetMaximumResponse)
+
+      The maximum value.
+
+      :Slider.SetMaximumRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+         * ``value`` (``float``)
+
+      :Slider.SetMaximumResponse: Empty
+
+      .. note::
+
+         Throws an exception if set to a value not greater than the minimum.
+
+   .. grpc:rpc:: GetChanged (Slider.GetChangedRequest) returns (Slider.GetChangedResponse)
+
+      Whether the value has been changed by dragging the slider.
+
+      :Slider.GetChangedRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+
+      :Slider.GetChangedResponse: ``value`` (``bool``)
+
+      .. note::
+
+         A change sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :grpc:rpc:`SliderService.GetValue <krpc.ksa.SliderService.GetValue>` leaves it unchanged.
+
+   .. grpc:rpc:: SetChanged (Slider.SetChangedRequest) returns (Slider.SetChangedResponse)
+
+      Whether the value has been changed by dragging the slider.
+
+      :Slider.SetChangedRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+         * ``value`` (``bool``)
+
+      :Slider.SetChangedResponse: Empty
+
+      .. note::
+
+         A change sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :grpc:rpc:`SliderService.GetValue <krpc.ksa.SliderService.GetValue>` leaves it unchanged.
+
+   .. grpc:rpc:: GetVisible (Slider.GetVisibleRequest) returns (Slider.GetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Slider.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+
+      :Slider.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Slider.SetVisibleRequest) returns (Slider.SetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Slider.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+         * ``value`` (``bool``)
+
+      :Slider.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetEnabled (Slider.GetEnabledRequest) returns (Slider.GetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Slider.GetEnabledRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+
+      :Slider.GetEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetEnabled (Slider.SetEnabledRequest) returns (Slider.SetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Slider.SetEnabledRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+         * ``value`` (``bool``)
+
+      :Slider.SetEnabledResponse: Empty
+
+   .. grpc:rpc:: Remove (Slider.RemoveRequest) returns (Slider.RemoveResponse)
+
+      Remove the widget.
+
+      :Slider.RemoveRequest:
+         * ``this`` (:grpc:service:`Slider <krpc.ksa.SliderService>`)
+
+      :Slider.RemoveResponse: Empty
+
+.. grpc:service:: ToggleService
+
+   A check box with a label. Added to a window or a row.
+
+   .. grpc:rpc:: GetContent (Toggle.GetContentRequest) returns (Toggle.GetContentResponse)
+
+      The text shown next to the toggle.
+
+      :Toggle.GetContentRequest:
+         * ``this`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+
+      :Toggle.GetContentResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: SetContent (Toggle.SetContentRequest) returns (Toggle.SetContentResponse)
+
+      The text shown next to the toggle.
+
+      :Toggle.SetContentRequest:
+         * ``this`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+         * ``value`` (``string``)
+
+      :Toggle.SetContentResponse: Empty
+
+   .. grpc:rpc:: GetChecked (Toggle.GetCheckedRequest) returns (Toggle.GetCheckedResponse)
+
+      Whether the toggle is checked.
+
+      :Toggle.GetCheckedRequest:
+         * ``this`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+
+      :Toggle.GetCheckedResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetChecked (Toggle.SetCheckedRequest) returns (Toggle.SetCheckedResponse)
+
+      Whether the toggle is checked.
+
+      :Toggle.SetCheckedRequest:
+         * ``this`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+         * ``value`` (``bool``)
+
+      :Toggle.SetCheckedResponse: Empty
+
+   .. grpc:rpc:: GetChanged (Toggle.GetChangedRequest) returns (Toggle.GetChangedResponse)
+
+      Whether the toggle has been clicked.
+
+      :Toggle.GetChangedRequest:
+         * ``this`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+
+      :Toggle.GetChangedResponse: ``value`` (``bool``)
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :grpc:rpc:`ToggleService.GetChecked <krpc.ksa.ToggleService.GetChecked>` leaves it unchanged.
+
+   .. grpc:rpc:: SetChanged (Toggle.SetChangedRequest) returns (Toggle.SetChangedResponse)
+
+      Whether the toggle has been clicked.
+
+      :Toggle.SetChangedRequest:
+         * ``this`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+         * ``value`` (``bool``)
+
+      :Toggle.SetChangedResponse: Empty
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :grpc:rpc:`ToggleService.GetChecked <krpc.ksa.ToggleService.GetChecked>` leaves it unchanged.
+
+   .. grpc:rpc:: GetVisible (Toggle.GetVisibleRequest) returns (Toggle.GetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Toggle.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+
+      :Toggle.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Toggle.SetVisibleRequest) returns (Toggle.SetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Toggle.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+         * ``value`` (``bool``)
+
+      :Toggle.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetEnabled (Toggle.GetEnabledRequest) returns (Toggle.GetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Toggle.GetEnabledRequest:
+         * ``this`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+
+      :Toggle.GetEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetEnabled (Toggle.SetEnabledRequest) returns (Toggle.SetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Toggle.SetEnabledRequest:
+         * ``this`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+         * ``value`` (``bool``)
+
+      :Toggle.SetEnabledResponse: Empty
+
+   .. grpc:rpc:: Remove (Toggle.RemoveRequest) returns (Toggle.RemoveResponse)
+
+      Remove the widget.
+
+      :Toggle.RemoveRequest:
+         * ``this`` (:grpc:service:`Toggle <krpc.ksa.ToggleService>`)
+
+      :Toggle.RemoveResponse: Empty
+
+.. grpc:service:: DropdownService
+
+   A dropdown list of options. Added to a window or a row.
+
+   .. grpc:rpc:: GetLabel (Dropdown.GetLabelRequest) returns (Dropdown.GetLabelResponse)
+
+      The text shown next to the dropdown.
+
+      :Dropdown.GetLabelRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+
+      :Dropdown.GetLabelResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: SetLabel (Dropdown.SetLabelRequest) returns (Dropdown.SetLabelResponse)
+
+      The text shown next to the dropdown.
+
+      :Dropdown.SetLabelRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+         * ``value`` (``string``)
+
+      :Dropdown.SetLabelResponse: Empty
+
+   .. grpc:rpc:: GetOptions (Dropdown.GetOptionsRequest) returns (Dropdown.GetOptionsResponse)
+
+      The options to choose from.
+
+      :Dropdown.GetOptionsRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+
+      :Dropdown.GetOptionsResponse: ``value`` (``repeated string``)
+
+      .. note::
+
+         Setting the options clears the selection if the selected index is no longer in
+         the list.
+
+   .. grpc:rpc:: SetOptions (Dropdown.SetOptionsRequest) returns (Dropdown.SetOptionsResponse)
+
+      The options to choose from.
+
+      :Dropdown.SetOptionsRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+         * ``value`` (``repeated string``)
+
+      :Dropdown.SetOptionsResponse: Empty
+
+      .. note::
+
+         Setting the options clears the selection if the selected index is no longer in
+         the list.
+
+   .. grpc:rpc:: GetSelectedIndex (Dropdown.GetSelectedIndexRequest) returns (Dropdown.GetSelectedIndexResponse)
+
+      The index of the selected option, or -1 for none.
+
+      :Dropdown.GetSelectedIndexRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+
+      :Dropdown.GetSelectedIndexResponse: ``value`` (``sint32``)
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. grpc:rpc:: SetSelectedIndex (Dropdown.SetSelectedIndexRequest) returns (Dropdown.SetSelectedIndexResponse)
+
+      The index of the selected option, or -1 for none.
+
+      :Dropdown.SetSelectedIndexRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+         * ``value`` (``sint32``)
+
+      :Dropdown.SetSelectedIndexResponse: Empty
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. grpc:rpc:: GetChanged (Dropdown.GetChangedRequest) returns (Dropdown.GetChangedResponse)
+
+      Whether an option has been chosen from the list.
+
+      :Dropdown.GetChangedRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+
+      :Dropdown.GetChangedResponse: ``value`` (``bool``)
+
+      .. note::
+
+         A choice sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :grpc:rpc:`DropdownService.GetSelectedIndex <krpc.ksa.DropdownService.GetSelectedIndex>` leaves it unchanged.
+
+   .. grpc:rpc:: SetChanged (Dropdown.SetChangedRequest) returns (Dropdown.SetChangedResponse)
+
+      Whether an option has been chosen from the list.
+
+      :Dropdown.SetChangedRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+         * ``value`` (``bool``)
+
+      :Dropdown.SetChangedResponse: Empty
+
+      .. note::
+
+         A choice sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :grpc:rpc:`DropdownService.GetSelectedIndex <krpc.ksa.DropdownService.GetSelectedIndex>` leaves it unchanged.
+
+   .. grpc:rpc:: GetVisible (Dropdown.GetVisibleRequest) returns (Dropdown.GetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Dropdown.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+
+      :Dropdown.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Dropdown.SetVisibleRequest) returns (Dropdown.SetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Dropdown.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+         * ``value`` (``bool``)
+
+      :Dropdown.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetEnabled (Dropdown.GetEnabledRequest) returns (Dropdown.GetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Dropdown.GetEnabledRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+
+      :Dropdown.GetEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetEnabled (Dropdown.SetEnabledRequest) returns (Dropdown.SetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Dropdown.SetEnabledRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+         * ``value`` (``bool``)
+
+      :Dropdown.SetEnabledResponse: Empty
+
+   .. grpc:rpc:: Remove (Dropdown.RemoveRequest) returns (Dropdown.RemoveResponse)
+
+      Remove the widget.
+
+      :Dropdown.RemoveRequest:
+         * ``this`` (:grpc:service:`Dropdown <krpc.ksa.DropdownService>`)
+
+      :Dropdown.RemoveResponse: Empty
+
+.. grpc:service:: SeparatorService
+
+   A horizontal line between widgets. Added to a window or a row.
+
+   .. grpc:rpc:: GetVisible (Separator.GetVisibleRequest) returns (Separator.GetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Separator.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Separator <krpc.ksa.SeparatorService>`)
+
+      :Separator.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Separator.SetVisibleRequest) returns (Separator.SetVisibleResponse)
+
+      Whether the widget is visible.
+
+      :Separator.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Separator <krpc.ksa.SeparatorService>`)
+         * ``value`` (``bool``)
+
+      :Separator.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetEnabled (Separator.GetEnabledRequest) returns (Separator.GetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Separator.GetEnabledRequest:
+         * ``this`` (:grpc:service:`Separator <krpc.ksa.SeparatorService>`)
+
+      :Separator.GetEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetEnabled (Separator.SetEnabledRequest) returns (Separator.SetEnabledResponse)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Separator.SetEnabledRequest:
+         * ``this`` (:grpc:service:`Separator <krpc.ksa.SeparatorService>`)
+         * ``value`` (``bool``)
+
+      :Separator.SetEnabledResponse: Empty
+
+   .. grpc:rpc:: Remove (Separator.RemoveRequest) returns (Separator.RemoveResponse)
+
+      Remove the widget.
+
+      :Separator.RemoveRequest:
+         * ``this`` (:grpc:service:`Separator <krpc.ksa.SeparatorService>`)
+
+      :Separator.RemoveResponse: Empty

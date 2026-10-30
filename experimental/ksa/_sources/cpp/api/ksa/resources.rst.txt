@@ -17,12 +17,141 @@ Resources
 
    
 
-   .. function:: double amount()
+   .. function:: float amount()
 
       The mass of the substance held, in kilograms.
 
    
 
-   .. function:: double max()
+   .. function:: float max()
 
       The mass of the substance the tanks can hold, in kilograms.
+
+   
+
+
+
+.. class:: Tank
+
+   A propellant tank. Obtained from :func:`Part::tanks` or :func:`Vehicle::tanks`.
+
+   .. function:: Part part()
+
+      The part the tank is in.
+
+   
+
+   .. function:: float volume()
+
+      The volume of the tank, in cubic meters.
+
+   
+
+   .. function:: float rated_pressure()
+
+      The pressure the tank stores gas at, in pascals. Zero if the tank cannot store gas.
+
+   
+
+   .. function:: float filled_fraction()
+
+      The fraction of the tank's volume that is filled, between 0 and 1.
+
+   
+
+   .. function:: bool propellant_use_enabled()
+   .. function:: void set_propellant_use_enabled(bool value)
+
+      Whether engines can draw propellant from the tank.
+
+   
+
+   .. function:: TankTransferMode transfer_mode()
+   .. function:: void set_transfer_mode(TankTransferMode value)
+
+      The direction the tank transfers propellant in.
+
+   
+
+      .. note::
+
+         Propellant flows from tanks transferring out to tanks of the same vehicle transferring
+         in, and the transfer draws battery power. Setting a transfer throws an exception if
+         the running version of KSA does not support it.
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: TankTransferMode
+
+   The direction a tank transfers propellant in. See :func:`Tank::transfer_mode`.
+
+
+   .. enumerator:: none
+
+      No transfer.
+
+
+   .. enumerator:: in
+
+      Into the tank, from tanks transferring out.
+
+
+   .. enumerator:: out
+
+      Out of the tank, to tanks transferring in.
+
+
+
+.. class:: FuelLink
+
+   A fuel line between two parts of a vehicle, which lets propellant flow between them.
+   Obtained from :func:`Vehicle::fuel_links`.
+
+   .. function:: Part part_a()
+
+      One of the parts the link joins.
+
+   
+
+   .. function:: Part part_b()
+
+      The other part the link joins.
+
+   
+
+   .. function:: FuelLinkFlow flow()
+   .. function:: void set_flow(FuelLinkFlow value)
+
+      The direction propellant flows through the link.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether propellant can flow through the link.
+
+   
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: FuelLinkFlow
+
+   The direction propellant flows through a fuel link. See :func:`FuelLink::flow`.
+
+
+   .. enumerator:: a_to_b
+
+      From :func:`FuelLink::part_a` to :func:`FuelLink::part_b`.
+
+
+   .. enumerator:: b_to_a
+
+      From :func:`FuelLink::part_b` to :func:`FuelLink::part_a`.
+
+
+   .. enumerator:: both
+
+      Either way.

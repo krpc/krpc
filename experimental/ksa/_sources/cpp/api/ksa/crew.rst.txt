@@ -1,0 +1,242 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Crew
+====
+
+
+.. class:: Kitten
+
+   A kitten in the agency's roster. Obtained from :func:`kittens`,
+   :func:`Vehicle::crew` or :func:`Seat::kitten`.
+
+   .. function:: std::string name()
+
+      The kitten's name, which is unique in the roster.
+
+   
+
+   .. function:: int32_t roster_index()
+
+      The kitten's position in the agency's roster, from 0. See :func:`kittens`.
+
+   
+
+   .. function:: std::optional<Vehicle> vehicle()
+
+      The vehicle the kitten is in, or ``NULL`` if it is not in a seat.
+
+   
+
+   .. function:: std::optional<Seat> seat()
+
+      The seat the kitten is in, or ``NULL`` if it is not in a seat.
+
+   
+
+   .. function:: bool killed_in_action()
+
+      Whether the kitten has been killed in action.
+
+   
+
+   .. function:: int32_t mission_count()
+
+      The number of missions the kitten has flown, including the current one.
+
+   
+
+   .. function:: float mission_time()
+
+      The time the kitten has spent on missions, including the current one, in seconds.
+
+   
+
+   .. function:: float distance_traveled()
+
+      The distance the kitten has traveled on missions, in meters.
+
+   
+
+   .. function:: float fastest_speed()
+
+      The kitten's highest speed on a mission, in meters per second.
+
+   
+
+   .. function:: float acute_dose()
+
+      The kitten's acute radiation dose, in sieverts. It heals over time, and causes
+      radiation sickness from 1 sievert and death from 4 sieverts.
+
+   
+
+   .. function:: float lifetime_dose()
+
+      The kitten's lifetime radiation dose, in sieverts. The kitten retires after a
+      mission that takes it past 0.6 sieverts.
+
+   
+
+   .. function:: float dose_rate()
+
+      The radiation dose rate the kitten receives, in sieverts per second. The vehicle's
+      shielding reduces it in a seat, and on EVA the kitten is unshielded. Zero when the
+      kitten is not on a mission.
+
+   
+
+   .. function:: bool radiation_sickness()
+
+      Whether the kitten has radiation sickness, which keeps it from flying.
+
+   
+
+   .. function:: float time_until_fit_to_fly()
+
+      The time until the kitten has recovered from radiation sickness and can fly, resting
+      at home, in seconds. Zero if the kitten does not have radiation sickness.
+
+   
+
+   .. function:: float recovery_time()
+
+      The time until the kitten's acute radiation dose has healed below 1 millisievert,
+      resting at home, in seconds.
+
+   
+
+   .. function:: bool retired()
+
+      Whether the kitten has retired, having reached its lifetime radiation dose limit.
+
+   
+
+   .. function:: bool on_eva()
+
+      Whether the kitten is on EVA.
+
+   
+
+   .. function:: void go_on_eva()
+
+      Leave the kitten's vehicle through its EVA hatch, and return once the kitten is on
+      EVA. The kitten becomes the controlled kitten, see :func:`active_kitten`.
+
+
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
+
+   .. function:: Vehicle board()
+
+      Board the nearest vehicle with a free seat, and return once the kitten is in the
+      seat. The vehicle becomes the controlled vehicle.
+
+
+      :returns: The vehicle the kitten boarded.
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
+         within one meter.
+
+   .. function:: LocomotionMode locomotion_mode()
+
+      How the kitten on EVA is moving. Throws an exception if the kitten is not on EVA.
+
+   
+
+   .. function:: std::tuple<double, double, double> position(ReferenceFrame reference_frame)
+
+      The position of the kitten, in meters. For a kitten in a seat, the position of the
+      seat's part. Throws an exception if the kitten is neither in a seat nor on EVA.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the position.
+
+   
+
+   .. function:: std::tuple<double, double, double> velocity(ReferenceFrame reference_frame)
+
+      The velocity of the kitten, in meters per second. For a kitten in a seat, the
+      velocity of the seat's part. Throws an exception if the kitten is neither in a seat
+      nor on EVA.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the velocity.
+
+   
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: LocomotionMode
+
+   How a kitten on EVA is moving. See :func:`Kitten::locomotion_mode`.
+
+
+   .. enumerator:: mmu
+
+      Flying with the maneuvering unit, away from any surface.
+
+
+   .. enumerator:: grounded
+
+      Standing or walking on a surface.
+
+
+   .. enumerator:: airborne
+
+      In the air above a surface, such as during a jump.
+
+
+   .. enumerator:: tumbling
+
+      Tumbling after a fall or an impact.
+
+
+   .. enumerator:: righting
+
+      Getting back up after tumbling.
+
+
+   .. enumerator:: ladder
+
+      Holding a ladder or grab rail.
+
+
+   .. enumerator:: swimming
+
+      Swimming in an ocean.
+
+
+
+.. class:: Seat
+
+   A crew seat. Obtained from :func:`Part::seats`.
+
+   .. function:: Part part()
+
+      The part the seat is in.
+
+   
+
+   .. function:: std::optional<Kitten> kitten()
+   .. function:: void set_kitten(std::optional<Kitten> value)
+
+      Returns the kitten in the seat, or ``NULL`` if the seat is empty, and sets the
+      kitten in the seat. Setting ``NULL`` empties the seat.
+
+   
+
+      .. note::
+
+         A kitten in another seat of the vehicle moves to this one. Throws an exception if
+         the kitten is killed in action, on EVA, or in another vehicle.

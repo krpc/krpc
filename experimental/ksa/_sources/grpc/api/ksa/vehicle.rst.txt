@@ -1,0 +1,772 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Vehicle
+=======
+
+.. grpc:service:: VehicleService
+
+   A vehicle in the current system. Obtained from :grpc:rpc:`KSAService.GetActiveVehicle <krpc.ksa.KSAService.GetActiveVehicle>`
+   or :grpc:rpc:`KSAService.GetVehicles <krpc.ksa.KSAService.GetVehicles>`.
+
+   .. note::
+
+      Docking and undocking replace the vehicles involved, so an object for one of them
+      throws an exception afterwards.
+
+   .. grpc:rpc:: GetName (Vehicle.GetNameRequest) returns (Vehicle.GetNameResponse)
+
+      The name of the vehicle, which is unique in the system.
+
+      :Vehicle.GetNameRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetNameResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: SetName (Vehicle.SetNameRequest) returns (Vehicle.SetNameResponse)
+
+      The name of the vehicle, which is unique in the system.
+
+      :Vehicle.SetNameRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``value`` (``string``)
+
+      :Vehicle.SetNameResponse: Empty
+
+   .. grpc:rpc:: Destroy (Vehicle.DestroyRequest) returns (Vehicle.DestroyResponse)
+
+      Destroy the vehicle, killing its crew, as abandoning the vehicle does. Returns once
+      the vehicle is gone.
+
+      :Vehicle.DestroyRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.DestroyResponse: Empty
+
+      .. note::
+
+         If the vehicle is the active vehicle, the game hands control to a nearby vehicle.
+
+   .. grpc:rpc:: GetCanRecover (Vehicle.GetCanRecoverRequest) returns (Vehicle.GetCanRecoverResponse)
+
+      Whether the vehicle can be recovered: at rest on the surface of the home planet.
+
+      :Vehicle.GetCanRecoverRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetCanRecoverResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: Recover (Vehicle.RecoverRequest) returns (Vehicle.RecoverResponse)
+
+      Recover the vehicle, ending its crew's missions, as the game's recover button does.
+      Returns once the vehicle is gone.
+
+      :Vehicle.RecoverRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.RecoverResponse: Empty
+
+      .. note::
+
+         Throws an exception if the vehicle cannot be recovered, see :grpc:rpc:`VehicleService.GetCanRecover <krpc.ksa.VehicleService.GetCanRecover>`.
+
+   .. grpc:rpc:: GetSituation (Vehicle.GetSituationRequest) returns (Vehicle.GetSituationResponse)
+
+      The situation of the vehicle.
+
+      :Vehicle.GetSituationRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetSituationResponse: ``value`` (:grpc:enum:`Situation <krpc.ksa.Situation>`)
+
+   .. grpc:rpc:: GetOnRails (Vehicle.GetOnRailsRequest) returns (Vehicle.GetOnRailsResponse)
+
+      Whether the game moves the vehicle without simulating the forces on it: along its
+      orbit, or held on the surface. True in the freefall, landed, floating and bottomed
+      situations.
+
+      :Vehicle.GetOnRailsRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetOnRailsResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetIsDebris (Vehicle.GetIsDebrisRequest) returns (Vehicle.GetIsDebrisResponse)
+
+      Whether the vehicle is debris, such as a spent stage.
+
+      :Vehicle.GetIsDebrisRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetIsDebrisResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetHasLaunched (Vehicle.GetHasLaunchedRequest) returns (Vehicle.GetHasLaunchedResponse)
+
+      Whether the vehicle has launched.
+
+      :Vehicle.GetHasLaunchedRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetHasLaunchedResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetLaunchTime (Vehicle.GetLaunchTimeRequest) returns (Vehicle.GetLaunchTimeResponse)
+
+      The universal time the vehicle was created, in seconds.
+
+      :Vehicle.GetLaunchTimeRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetLaunchTimeResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetMass (Vehicle.GetMassRequest) returns (Vehicle.GetMassResponse)
+
+      The total mass of the vehicle, including propellant, in kilograms.
+
+      :Vehicle.GetMassRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetMassResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetPropellantMass (Vehicle.GetPropellantMassRequest) returns (Vehicle.GetPropellantMassResponse)
+
+      The mass of the propellant in the vehicle, in kilograms.
+
+      :Vehicle.GetPropellantMassRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetPropellantMassResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetThrust (Vehicle.GetThrustRequest) returns (Vehicle.GetThrustResponse)
+
+      The thrust of the engines at their current throttle and the current atmospheric
+      pressure, in Newtons.
+
+      :Vehicle.GetThrustRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetThrustResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetAvailableThrust (Vehicle.GetAvailableThrustRequest) returns (Vehicle.GetAvailableThrustResponse)
+
+      The thrust of the active engines that have propellant, at full throttle and the
+      current atmospheric pressure, in Newtons.
+
+      :Vehicle.GetAvailableThrustRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetAvailableThrustResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSpecificImpulse (Vehicle.GetSpecificImpulseRequest) returns (Vehicle.GetSpecificImpulseResponse)
+
+      The combined specific impulse of the active engines that have propellant, at the
+      current atmospheric pressure, in seconds. Zero when no engine is active.
+
+      :Vehicle.GetSpecificImpulseRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetSpecificImpulseResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetPeakGLoad (Vehicle.GetPeakGLoadRequest) returns (Vehicle.GetPeakGLoadResponse)
+
+      The highest smoothed g-load on the vehicle during the last physics step, as a
+      multiple of standard gravity. Zero while the vehicle is :grpc:rpc:`VehicleService.GetOnRails <krpc.ksa.VehicleService.GetOnRails>`.
+
+      :Vehicle.GetPeakGLoadRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetPeakGLoadResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetMaxGLoad (Vehicle.GetMaxGLoadRequest) returns (Vehicle.GetMaxGLoadResponse)
+
+      The g-load the vehicle can take before it breaks up, as a multiple of standard
+      gravity. Zero while the vehicle is :grpc:rpc:`VehicleService.GetOnRails <krpc.ksa.VehicleService.GetOnRails>`.
+
+      :Vehicle.GetMaxGLoadRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetMaxGLoadResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetPeakDynamicPressure (Vehicle.GetPeakDynamicPressureRequest) returns (Vehicle.GetPeakDynamicPressureResponse)
+
+      The highest dynamic pressure on the vehicle during the last physics step, in
+      pascals. In the sea, this is the dynamic pressure of the water. Zero while the
+      vehicle is :grpc:rpc:`VehicleService.GetOnRails <krpc.ksa.VehicleService.GetOnRails>`.
+
+      :Vehicle.GetPeakDynamicPressureRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetPeakDynamicPressureResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetMaxDynamicPressure (Vehicle.GetMaxDynamicPressureRequest) returns (Vehicle.GetMaxDynamicPressureResponse)
+
+      The dynamic pressure the vehicle can take before it breaks up, in pascals. Zero
+      while the vehicle is :grpc:rpc:`VehicleService.GetOnRails <krpc.ksa.VehicleService.GetOnRails>`.
+
+      :Vehicle.GetMaxDynamicPressureRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetMaxDynamicPressureResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetParts (Vehicle.GetPartsRequest) returns (Vehicle.GetPartsResponse)
+
+      The vehicle's parts.
+
+      :Vehicle.GetPartsRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetPartsResponse: ``value`` (``repeated`` :grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetRootPart (Vehicle.GetRootPartRequest) returns (Vehicle.GetRootPartResponse)
+
+      The vehicle's root part, which the other parts are attached to.
+
+      :Vehicle.GetRootPartRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetRootPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: PartsWithName (Vehicle.PartsWithNameRequest) returns (Vehicle.PartsWithNameResponse)
+
+      The vehicle's parts with the given template id. See :grpc:rpc:`PartService.GetName <krpc.ksa.PartService.GetName>`.
+
+      :Vehicle.PartsWithNameRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``name`` (``string``): The template id.
+
+      :Vehicle.PartsWithNameResponse: ``value`` (``repeated`` :grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetSeats (Vehicle.GetSeatsRequest) returns (Vehicle.GetSeatsResponse)
+
+      The vehicle's crew seats.
+
+      :Vehicle.GetSeatsRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetSeatsResponse: ``value`` (``repeated`` :grpc:service:`Seat <krpc.ksa.SeatService>`)
+
+   .. grpc:rpc:: GetCrew (Vehicle.GetCrewRequest) returns (Vehicle.GetCrewResponse)
+
+      The kittens in the vehicle's seats.
+
+      :Vehicle.GetCrewRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetCrewResponse: ``value`` (``repeated`` :grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+   .. grpc:rpc:: GetCrewCapacity (Vehicle.GetCrewCapacityRequest) returns (Vehicle.GetCrewCapacityResponse)
+
+      The number of crew seats in the vehicle.
+
+      :Vehicle.GetCrewCapacityRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetCrewCapacityResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetEngines (Vehicle.GetEnginesRequest) returns (Vehicle.GetEnginesResponse)
+
+      The vehicle's engines.
+
+      :Vehicle.GetEnginesRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetEnginesResponse: ``value`` (``repeated`` :grpc:service:`Engine <krpc.ksa.EngineService>`)
+
+   .. grpc:rpc:: GetRCS (Vehicle.GetRCSRequest) returns (Vehicle.GetRCSResponse)
+
+      The vehicle's RCS thrusters.
+
+      :Vehicle.GetRCSRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetRCSResponse: ``value`` (``repeated`` :grpc:service:`RCS <krpc.ksa.RCSService>`)
+
+   .. grpc:rpc:: GetDecouplers (Vehicle.GetDecouplersRequest) returns (Vehicle.GetDecouplersResponse)
+
+      The vehicle's decouplers.
+
+      :Vehicle.GetDecouplersRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetDecouplersResponse: ``value`` (``repeated`` :grpc:service:`Decoupler <krpc.ksa.DecouplerService>`)
+
+   .. grpc:rpc:: GetParachutes (Vehicle.GetParachutesRequest) returns (Vehicle.GetParachutesResponse)
+
+      The vehicle's parachutes.
+
+      :Vehicle.GetParachutesRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetParachutesResponse: ``value`` (``repeated`` :grpc:service:`Parachute <krpc.ksa.ParachuteService>`)
+
+   .. grpc:rpc:: GetTanks (Vehicle.GetTanksRequest) returns (Vehicle.GetTanksResponse)
+
+      The vehicle's propellant tanks.
+
+      :Vehicle.GetTanksRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetTanksResponse: ``value`` (``repeated`` :grpc:service:`Tank <krpc.ksa.TankService>`)
+
+   .. grpc:rpc:: GetBatteries (Vehicle.GetBatteriesRequest) returns (Vehicle.GetBatteriesResponse)
+
+      The vehicle's batteries.
+
+      :Vehicle.GetBatteriesRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetBatteriesResponse: ``value`` (``repeated`` :grpc:service:`Battery <krpc.ksa.BatteryService>`)
+
+   .. grpc:rpc:: GetSolarPanels (Vehicle.GetSolarPanelsRequest) returns (Vehicle.GetSolarPanelsResponse)
+
+      The vehicle's solar panels.
+
+      :Vehicle.GetSolarPanelsRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetSolarPanelsResponse: ``value`` (``repeated`` :grpc:service:`SolarPanel <krpc.ksa.SolarPanelService>`)
+
+   .. grpc:rpc:: GetGenerators (Vehicle.GetGeneratorsRequest) returns (Vehicle.GetGeneratorsResponse)
+
+      The vehicle's generators.
+
+      :Vehicle.GetGeneratorsRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetGeneratorsResponse: ``value`` (``repeated`` :grpc:service:`Generator <krpc.ksa.GeneratorService>`)
+
+   .. grpc:rpc:: GetPowerConsumers (Vehicle.GetPowerConsumersRequest) returns (Vehicle.GetPowerConsumersResponse)
+
+      The vehicle's power consumers.
+
+      :Vehicle.GetPowerConsumersRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetPowerConsumersResponse: ``value`` (``repeated`` :grpc:service:`PowerConsumer <krpc.ksa.PowerConsumerService>`)
+
+   .. grpc:rpc:: GetStoredEnergy (Vehicle.GetStoredEnergyRequest) returns (Vehicle.GetStoredEnergyResponse)
+
+      The energy stored in the vehicle's batteries, in joules.
+
+      :Vehicle.GetStoredEnergyRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetStoredEnergyResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetEnergyCapacity (Vehicle.GetEnergyCapacityRequest) returns (Vehicle.GetEnergyCapacityResponse)
+
+      The energy the vehicle's batteries can store, in joules.
+
+      :Vehicle.GetEnergyCapacityRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetEnergyCapacityResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetNetPower (Vehicle.GetNetPowerRequest) returns (Vehicle.GetNetPowerResponse)
+
+      The power produced by the vehicle's solar panels and generators, less the power its
+      parts use, in watts.
+
+      :Vehicle.GetNetPowerRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetNetPowerResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetLights (Vehicle.GetLightsRequest) returns (Vehicle.GetLightsResponse)
+
+      The vehicle's lights.
+
+      :Vehicle.GetLightsRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetLightsResponse: ``value`` (``repeated`` :grpc:service:`Light <krpc.ksa.LightService>`)
+
+   .. grpc:rpc:: GetDeployables (Vehicle.GetDeployablesRequest) returns (Vehicle.GetDeployablesResponse)
+
+      The vehicle's deployable sections.
+
+      :Vehicle.GetDeployablesRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetDeployablesResponse: ``value`` (``repeated`` :grpc:service:`Deployable <krpc.ksa.DeployableService>`)
+
+   .. grpc:rpc:: GetMagneticScoops (Vehicle.GetMagneticScoopsRequest) returns (Vehicle.GetMagneticScoopsResponse)
+
+      The vehicle's magnetic scoops.
+
+      :Vehicle.GetMagneticScoopsRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetMagneticScoopsResponse: ``value`` (``repeated`` :grpc:service:`MagneticScoop <krpc.ksa.MagneticScoopService>`)
+
+   .. grpc:rpc:: GetFuelLinks (Vehicle.GetFuelLinksRequest) returns (Vehicle.GetFuelLinksResponse)
+
+      The vehicle's fuel links.
+
+      :Vehicle.GetFuelLinksRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetFuelLinksResponse: ``value`` (``repeated`` :grpc:service:`FuelLink <krpc.ksa.FuelLinkService>`)
+
+   .. grpc:rpc:: GetDockingPorts (Vehicle.GetDockingPortsRequest) returns (Vehicle.GetDockingPortsResponse)
+
+      The vehicle's docking ports.
+
+      :Vehicle.GetDockingPortsRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetDockingPortsResponse: ``value`` (``repeated`` :grpc:service:`DockingPort <krpc.ksa.DockingPortService>`)
+
+   .. grpc:rpc:: GetResources (Vehicle.GetResourcesRequest) returns (Vehicle.GetResourcesResponse)
+
+      The resources the vehicle holds, one for each substance, totaled over its parts.
+
+      :Vehicle.GetResourcesRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetResourcesResponse: ``value`` (``repeated`` :grpc:service:`Resource <krpc.ksa.ResourceService>`)
+
+   .. grpc:rpc:: GetDeltaV (Vehicle.GetDeltaVRequest) returns (Vehicle.GetDeltaVResponse)
+
+      The change in velocity of all the vehicle's sequences, in meters per second.
+
+      :Vehicle.GetDeltaVRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetDeltaVResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSequences (Vehicle.GetSequencesRequest) returns (Vehicle.GetSequencesResponse)
+
+      The vehicle's sequences, in activation order.
+
+      :Vehicle.GetSequencesRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetSequencesResponse: ``value`` (``repeated`` :grpc:service:`Sequence <krpc.ksa.SequenceService>`)
+
+   .. grpc:rpc:: GetTargetVehicle (Vehicle.GetTargetVehicleRequest) returns (Vehicle.GetTargetVehicleResponse)
+
+      The vehicle targeted by this vehicle, or ``null``. Setting it replaces the
+      target, and ``null`` clears it.
+
+      :Vehicle.GetTargetVehicleRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetTargetVehicleResponse: ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+   .. grpc:rpc:: SetTargetVehicle (Vehicle.SetTargetVehicleRequest) returns (Vehicle.SetTargetVehicleResponse)
+
+      The vehicle targeted by this vehicle, or ``null``. Setting it replaces the
+      target, and ``null`` clears it.
+
+      :Vehicle.SetTargetVehicleRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.SetTargetVehicleResponse: Empty
+
+   .. grpc:rpc:: GetTargetBody (Vehicle.GetTargetBodyRequest) returns (Vehicle.GetTargetBodyResponse)
+
+      The body targeted by this vehicle, or ``null``. Setting it replaces the target,
+      and ``null`` clears it.
+
+      :Vehicle.GetTargetBodyRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetTargetBodyResponse: ``value`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      .. note::
+
+         Setting a body that orbits nothing, such as the star, throws an exception.
+
+   .. grpc:rpc:: SetTargetBody (Vehicle.SetTargetBodyRequest) returns (Vehicle.SetTargetBodyResponse)
+
+      The body targeted by this vehicle, or ``null``. Setting it replaces the target,
+      and ``null`` clears it.
+
+      :Vehicle.SetTargetBodyRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``value`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Vehicle.SetTargetBodyResponse: Empty
+
+      .. note::
+
+         Setting a body that orbits nothing, such as the star, throws an exception.
+
+   .. grpc:rpc:: GetTargetPart (Vehicle.GetTargetPartRequest) returns (Vehicle.GetTargetPartResponse)
+
+      The part targeted by this vehicle, on the vehicle in :grpc:rpc:`VehicleService.GetTargetVehicle <krpc.ksa.VehicleService.GetTargetVehicle>`,
+      or ``null``. Setting it targets the part and its vehicle, and ``null`` clears
+      the target.
+
+      :Vehicle.GetTargetPartRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetTargetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: SetTargetPart (Vehicle.SetTargetPartRequest) returns (Vehicle.SetTargetPartResponse)
+
+      The part targeted by this vehicle, on the vehicle in :grpc:rpc:`VehicleService.GetTargetVehicle <krpc.ksa.VehicleService.GetTargetVehicle>`,
+      or ``null``. Setting it targets the part and its vehicle, and ``null`` clears
+      the target.
+
+      :Vehicle.SetTargetPartRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Vehicle.SetTargetPartResponse: Empty
+
+   .. grpc:rpc:: GetBurns (Vehicle.GetBurnsRequest) returns (Vehicle.GetBurnsResponse)
+
+      The vehicle's planned burns, in time order.
+
+      :Vehicle.GetBurnsRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetBurnsResponse: ``value`` (``repeated`` :grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+   .. grpc:rpc:: AddBurn (Vehicle.AddBurnRequest) returns (Vehicle.AddBurnResponse)
+
+      Plan a burn, and add it to the vehicle's burn plan.
+
+      :Vehicle.AddBurnRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``ut`` (``double``): Universal time of the burn, in seconds.
+         * ``prograde`` (``optional float``): Change in velocity in the prograde direction, in meters per second. Defaults to ``0.0``.
+         * ``normal`` (``optional float``): Change in velocity along the orbit normal, in meters per second. Defaults to ``0.0``.
+         * ``radial`` (``optional float``): Change in velocity radially outward, in meters per second. Defaults to ``0.0``.
+
+      :Vehicle.AddBurnResponse: ``value`` (:grpc:service:`Burn <krpc.ksa.BurnService>`): The burn.
+
+      .. note::
+
+         Returns once the flight computer has timed the burn, if it is the next one. Throws
+         an exception if the time is in the past, or beyond the vehicle's predicted
+         trajectory.
+
+   .. grpc:rpc:: GetOrbit (Vehicle.GetOrbitRequest) returns (Vehicle.GetOrbitResponse)
+
+      The current orbit of the vehicle.
+
+      :Vehicle.GetOrbitRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetOrbitResponse: ``value`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+   .. grpc:rpc:: GetFlight (Vehicle.GetFlightRequest) returns (Vehicle.GetFlightResponse)
+
+      Flight telemetry for the vehicle, relative to the surface of the body it orbits.
+
+      :Vehicle.GetFlightRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetFlightResponse: ``value`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+   .. grpc:rpc:: GetControl (Vehicle.GetControlRequest) returns (Vehicle.GetControlResponse)
+
+      The controls of the vehicle.
+
+      :Vehicle.GetControlRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetControlResponse: ``value`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+   .. grpc:rpc:: GetAutoPilot (Vehicle.GetAutoPilotRequest) returns (Vehicle.GetAutoPilotResponse)
+
+      The auto-pilot of the vehicle.
+
+      :Vehicle.GetAutoPilotRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetAutoPilotResponse: ``value`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+
+   .. grpc:rpc:: GetReferenceFrame (Vehicle.GetReferenceFrameRequest) returns (Vehicle.GetReferenceFrameResponse)
+
+      The reference frame fixed to the vehicle, with its origin at the vehicle's position.
+      The x axis points forward, the y axis to the right and the z axis down, relative to
+      the vehicle's control point.
+
+      :Vehicle.GetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: GetSurfaceReferenceFrame (Vehicle.GetSurfaceReferenceFrameRequest) returns (Vehicle.GetSurfaceReferenceFrameResponse)
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      the surface below it. The x axis points east, the y axis north and the z axis up.
+      The frame rotates with the body.
+
+      :Vehicle.GetSurfaceReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetSurfaceReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: GetOrbitalReferenceFrame (Vehicle.GetOrbitalReferenceFrameRequest) returns (Vehicle.GetOrbitalReferenceFrameResponse)
+
+      The reference frame with its origin at the vehicle's position, and axes aligned with
+      its orbit. The x axis points prograde, the y axis along the orbit normal and the z
+      axis radially outward, perpendicular to the x axis.
+
+      :Vehicle.GetOrbitalReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Vehicle.GetOrbitalReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: Position (Vehicle.PositionRequest) returns (Vehicle.PositionResponse)
+
+      The position of the vehicle, in meters.
+
+      :Vehicle.PositionRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+
+      :Vehicle.PositionResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: Velocity (Vehicle.VelocityRequest) returns (Vehicle.VelocityResponse)
+
+      The velocity of the vehicle, in meters per second.
+
+      :Vehicle.VelocityRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the velocity.
+
+      :Vehicle.VelocityResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: Direction (Vehicle.DirectionRequest) returns (Vehicle.DirectionResponse)
+
+      The unit vector in which the vehicle points, the x axis of
+      :grpc:rpc:`VehicleService.GetReferenceFrame <krpc.ksa.VehicleService.GetReferenceFrame>`.
+
+      :Vehicle.DirectionRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the direction.
+
+      :Vehicle.DirectionResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: Rotation (Vehicle.RotationRequest) returns (Vehicle.RotationResponse)
+
+      The rotation of :grpc:rpc:`VehicleService.GetReferenceFrame <krpc.ksa.VehicleService.GetReferenceFrame>` relative to the given frame.
+
+      :Vehicle.RotationRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the rotation.
+
+      :Vehicle.RotationResponse: ``value`` (:grpc:message:`Tuple_double_double_double_double <krpc.ksa.Tuple_double_double_double_double>`)
+
+   .. grpc:rpc:: AngularVelocity (Vehicle.AngularVelocityRequest) returns (Vehicle.AngularVelocityResponse)
+
+      The angular velocity of the vehicle, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :Vehicle.AngularVelocityRequest:
+         * ``this`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the angular velocity.
+
+      :Vehicle.AngularVelocityResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+.. grpc:enum:: Situation
+
+   The situation of a vehicle: its contact with the surface, and whether the game is
+   simulating it with physics or propagating it along its orbit.
+   See :grpc:rpc:`VehicleService.GetSituation <krpc.ksa.VehicleService.GetSituation>`.
+
+   .. grpc:value:: SITUATION_MANEUVERING
+
+      No surface contact, simulated with physics.
+
+   .. grpc:value:: SITUATION_FREEFALL
+
+      No surface contact, on rails.
+
+   .. grpc:value:: SITUATION_ROLLING
+
+      On terrain, simulated with physics.
+
+   .. grpc:value:: SITUATION_LANDED
+
+      At rest on terrain.
+
+   .. grpc:value:: SITUATION_SAILING
+
+      In the ocean, simulated with physics.
+
+   .. grpc:value:: SITUATION_FLOATING
+
+      At rest in the ocean.
+
+   .. grpc:value:: SITUATION_DRAGGING
+
+      On terrain and in the ocean, simulated with physics.
+
+   .. grpc:value:: SITUATION_BOTTOMED
+
+      At rest on terrain and in the ocean.
+
+.. grpc:service:: VehicleDesignService
+
+   A vehicle design that can be launched: one of the game's default vehicles, or a vehicle
+   saved by the player in the editor. Obtained from :grpc:rpc:`KSAService.GetVehicleDesigns <krpc.ksa.KSAService.GetVehicleDesigns>`.
+
+   .. note::
+
+      The mass and delta-v are those the editor shows for the design.
+
+   .. grpc:rpc:: GetName (VehicleDesign.GetNameRequest) returns (VehicleDesign.GetNameResponse)
+
+      The name of the design, as passed to :grpc:rpc:`KSAService.LaunchVehicle <krpc.ksa.KSAService.LaunchVehicle>`.
+
+      :VehicleDesign.GetNameRequest:
+         * ``this`` (:grpc:service:`VehicleDesign <krpc.ksa.VehicleDesignService>`)
+
+      :VehicleDesign.GetNameResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: GetIsDefault (VehicleDesign.GetIsDefaultRequest) returns (VehicleDesign.GetIsDefaultResponse)
+
+      Whether the design is one of the game's default vehicles.
+
+      :VehicleDesign.GetIsDefaultRequest:
+         * ``this`` (:grpc:service:`VehicleDesign <krpc.ksa.VehicleDesignService>`)
+
+      :VehicleDesign.GetIsDefaultResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetPartCount (VehicleDesign.GetPartCountRequest) returns (VehicleDesign.GetPartCountResponse)
+
+      The number of parts in the design.
+
+      :VehicleDesign.GetPartCountRequest:
+         * ``this`` (:grpc:service:`VehicleDesign <krpc.ksa.VehicleDesignService>`)
+
+      :VehicleDesign.GetPartCountResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetMass (VehicleDesign.GetMassRequest) returns (VehicleDesign.GetMassResponse)
+
+      The total mass of the design, including propellant, in kilograms.
+
+      :VehicleDesign.GetMassRequest:
+         * ``this`` (:grpc:service:`VehicleDesign <krpc.ksa.VehicleDesignService>`)
+
+      :VehicleDesign.GetMassResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetDryMass (VehicleDesign.GetDryMassRequest) returns (VehicleDesign.GetDryMassResponse)
+
+      The mass of the design without propellant, in kilograms.
+
+      :VehicleDesign.GetDryMassRequest:
+         * ``this`` (:grpc:service:`VehicleDesign <krpc.ksa.VehicleDesignService>`)
+
+      :VehicleDesign.GetDryMassResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetDeltaV (VehicleDesign.GetDeltaVRequest) returns (VehicleDesign.GetDeltaVResponse)
+
+      The change in velocity of all the design's sequences, in meters per second.
+
+      :VehicleDesign.GetDeltaVRequest:
+         * ``this`` (:grpc:service:`VehicleDesign <krpc.ksa.VehicleDesignService>`)
+
+      :VehicleDesign.GetDeltaVResponse: ``value`` (``float``)
+
+      .. note::
+
+         Each sequence is computed in the environment chosen for it in the editor, in vacuum
+         or at sea level.

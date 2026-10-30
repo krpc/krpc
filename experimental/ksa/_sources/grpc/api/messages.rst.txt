@@ -1,0 +1,58 @@
+Messages
+========
+
+Tuples
+------
+
+.. grpc:package:: krpc.ksa
+
+A tuple is a message holding item *i* in the field ``item<i>``.
+
+.. grpc:message:: Tuple_double_double_double
+
+   .. code-block:: protobuf
+
+      message Tuple_double_double_double {
+        double item1 = 1;
+        double item2 = 2;
+        double item3 = 3;
+      }
+
+.. grpc:message:: Tuple_double_double_double_double
+
+   .. code-block:: protobuf
+
+      message Tuple_double_double_double_double {
+        double item1 = 1;
+        double item2 = 2;
+        double item3 = 3;
+        double item4 = 4;
+      }
+
+.. grpc:message:: Tuple_float_float
+
+   .. code-block:: protobuf
+
+      message Tuple_float_float {
+        float item1 = 1;
+        float item2 = 2;
+      }
+
+Structures
+----------
+
+The structures of other services that the ``KSA`` service uses.
+
+.. grpc:package:: krpc.stdlib
+
+.. grpc:message:: ColorRGB
+
+   A color, as red, green and blue components between 0 and 1.
+
+   .. code-block:: protobuf
+
+      message ColorRGB {
+        float r = 1;
+        float g = 2;
+        float b = 3;
+      }

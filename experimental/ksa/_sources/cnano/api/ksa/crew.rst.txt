@@ -1,0 +1,241 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Crew
+====
+
+
+.. type:: krpc_KSA_Kitten_t
+
+   A kitten in the agency's roster. Obtained from :func:`krpc_KSA_Kittens`,
+   :func:`krpc_KSA_Vehicle_Crew` or :func:`krpc_KSA_Seat_Kitten`.
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_Name(krpc_connection_t connection, char * * returnValue, krpc_KSA_Kitten_t instance)
+
+      The kitten's name, which is unique in the roster.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_RosterIndex(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Kitten_t instance)
+
+      The kitten's position in the agency's roster, from 0. See :func:`krpc_KSA_Kittens`.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_Vehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t * returnValue, krpc_KSA_Kitten_t instance)
+
+      The vehicle the kitten is in, or ``nullptr`` if it is not in a seat.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_Seat(krpc_connection_t connection, krpc_KSA_Seat_t * returnValue, krpc_KSA_Kitten_t instance)
+
+      The seat the kitten is in, or ``nullptr`` if it is not in a seat.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_KilledInAction(krpc_connection_t connection, bool * returnValue, krpc_KSA_Kitten_t instance)
+
+      Whether the kitten has been killed in action.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_MissionCount(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Kitten_t instance)
+
+      The number of missions the kitten has flown, including the current one.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_MissionTime(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance)
+
+      The time the kitten has spent on missions, including the current one, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_DistanceTraveled(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance)
+
+      The distance the kitten has traveled on missions, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_FastestSpeed(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance)
+
+      The kitten's highest speed on a mission, in meters per second.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_AcuteDose(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance)
+
+      The kitten's acute radiation dose, in sieverts. It heals over time, and causes
+      radiation sickness from 1 sievert and death from 4 sieverts.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_LifetimeDose(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance)
+
+      The kitten's lifetime radiation dose, in sieverts. The kitten retires after a
+      mission that takes it past 0.6 sieverts.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_DoseRate(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance)
+
+      The radiation dose rate the kitten receives, in sieverts per second. The vehicle's
+      shielding reduces it in a seat, and on EVA the kitten is unshielded. Zero when the
+      kitten is not on a mission.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_RadiationSickness(krpc_connection_t connection, bool * returnValue, krpc_KSA_Kitten_t instance)
+
+      Whether the kitten has radiation sickness, which keeps it from flying.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_TimeUntilFitToFly(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance)
+
+      The time until the kitten has recovered from radiation sickness and can fly, resting
+      at home, in seconds. Zero if the kitten does not have radiation sickness.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_RecoveryTime(krpc_connection_t connection, float * returnValue, krpc_KSA_Kitten_t instance)
+
+      The time until the kitten's acute radiation dose has healed below 1 millisievert,
+      resting at home, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_Retired(krpc_connection_t connection, bool * returnValue, krpc_KSA_Kitten_t instance)
+
+      Whether the kitten has retired, having reached its lifetime radiation dose limit.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_OnEva(krpc_connection_t connection, bool * returnValue, krpc_KSA_Kitten_t instance)
+
+      Whether the kitten is on EVA.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_GoOnEva(krpc_connection_t connection, krpc_KSA_Kitten_t instance)
+
+      Leave the kitten's vehicle through its EVA hatch, and return once the kitten is on
+      EVA. The kitten becomes the controlled kitten, see :func:`krpc_KSA_ActiveKitten`.
+
+
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_Board(krpc_connection_t connection, krpc_KSA_Vehicle_t * returnValue, krpc_KSA_Kitten_t instance)
+
+      Board the nearest vehicle with a free seat, and return once the kitten is in the
+      seat. The vehicle becomes the controlled vehicle.
+
+
+      :returns: The vehicle the kitten boarded.
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
+         within one meter.
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_LocomotionMode(krpc_connection_t connection, krpc_KSA_LocomotionMode_t * returnValue, krpc_KSA_Kitten_t instance)
+
+      How the kitten on EVA is moving. Throws an exception if the kitten is not on EVA.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Kitten_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The position of the kitten, in meters. For a kitten in a seat, the position of the
+      seat's part. Throws an exception if the kitten is neither in a seat nor on EVA.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the position.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Kitten_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Kitten_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The velocity of the kitten, in meters per second. For a kitten in a seat, the
+      velocity of the seat's part. Throws an exception if the kitten is neither in a seat
+      nor on EVA.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the velocity.
+
+   
+
+
+
+.. type:: krpc_KSA_LocomotionMode_t
+
+   How a kitten on EVA is moving. See :func:`krpc_KSA_Kitten_LocomotionMode`.
+
+
+   .. macro:: KRPC_KSA_LOCOMOTIONMODE_MMU
+
+      Flying with the maneuvering unit, away from any surface.
+
+
+   .. macro:: KRPC_KSA_LOCOMOTIONMODE_GROUNDED
+
+      Standing or walking on a surface.
+
+
+   .. macro:: KRPC_KSA_LOCOMOTIONMODE_AIRBORNE
+
+      In the air above a surface, such as during a jump.
+
+
+   .. macro:: KRPC_KSA_LOCOMOTIONMODE_TUMBLING
+
+      Tumbling after a fall or an impact.
+
+
+   .. macro:: KRPC_KSA_LOCOMOTIONMODE_RIGHTING
+
+      Getting back up after tumbling.
+
+
+   .. macro:: KRPC_KSA_LOCOMOTIONMODE_LADDER
+
+      Holding a ladder or grab rail.
+
+
+   .. macro:: KRPC_KSA_LOCOMOTIONMODE_SWIMMING
+
+      Swimming in an ocean.
+
+
+
+.. type:: krpc_KSA_Seat_t
+
+   A crew seat. Obtained from :func:`krpc_KSA_Part_Seats`.
+
+   .. function:: krpc_error_t krpc_KSA_Seat_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Seat_t instance)
+
+      The part the seat is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Seat_Kitten(krpc_connection_t connection, krpc_KSA_Kitten_t * returnValue, krpc_KSA_Seat_t instance)
+   .. function:: krpc_error_t krpc_KSA_Seat_set_Kitten(krpc_connection_t connection, krpc_KSA_Seat_t instance, krpc_KSA_Kitten_t value)
+
+      Returns the kitten in the seat, or ``nullptr`` if the seat is empty, and sets the
+      kitten in the seat. Setting ``nullptr`` empties the seat.
+
+   
+
+      .. note::
+
+         A kitten in another seat of the vehicle moves to this one. Throws an exception if
+         the kitten is killed in action, on EVA, or in another vehicle.

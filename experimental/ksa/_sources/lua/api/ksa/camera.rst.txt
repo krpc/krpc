@@ -1,0 +1,123 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KSA
+
+Camera
+======
+
+
+.. class:: Camera
+
+   The game's main camera. Obtained from :attr:`KSA.camera <KSA.KSA.camera>`.
+
+   .. attribute:: mode: KSA.CameraMode
+
+      The mode of the camera.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`KSA.CameraMode`
+
+      .. note::
+
+         Setting :attr:`KSA.CameraMode.iva` while the camera is not focused on a vehicle
+         with a crew seat sets :attr:`KSA.CameraMode.orbit` instead, as the game does. A
+         change of mode releases the active vehicle's held rotation and translation inputs.
+
+   .. attribute:: azimuth: number
+
+      The angle of the camera around the focused object, in degrees. Throws an exception
+      in any mode other than orbit and map.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: elevation: number
+
+      The angle of the camera above the plane it orbits in, in degrees, between -90 and
+      90. Throws an exception in any mode other than orbit and map.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: distance: number
+
+      The distance from the camera to the focused object, in meters. Throws an exception
+      in any mode other than orbit and map.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         The camera moves smoothly to a new distance, and stays at least the focused object's
+         radius from it in map mode, and half its radius in orbit mode.
+
+   .. attribute:: field_of_view: number
+
+      The camera's vertical field of view, in degrees, between 15 and 120.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: focused_vehicle: KSA.Vehicle
+
+      Returns the vehicle the camera is focused on, or ``nil`` if it is focused on
+      something else, and sets the focus to a vehicle.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`KSA.Vehicle` or ``Types.none``
+
+      .. note::
+
+         Setting the focus leaves the active vehicle as it is.
+
+   .. attribute:: focused_body: KSA.Body
+
+      Returns the body the camera is focused on, or ``nil`` if it is focused on
+      something else, and sets the focus to a body.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`KSA.Body` or ``Types.none``
+
+   .. attribute:: focused_kitten: KSA.Kitten
+
+      Returns the kitten on EVA the camera is focused on, or ``nil`` if it is focused
+      on something else, and sets the focus to a kitten on EVA.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`KSA.Kitten` or ``Types.none``
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA.
+
+
+
+.. class:: CameraMode
+
+   The mode of the camera. See :attr:`KSA.Camera.mode`.
+
+
+   .. data:: orbit
+
+      Orbits the focused object.
+
+
+   .. data:: free
+
+      Flies freely.
+
+
+   .. data:: map
+
+      The map view.
+
+
+   .. data:: iva
+
+      Inside the vehicle, from a crew seat.
+
+
+   .. data:: fixed
+
+      Fixed to a part of the vehicle, such as a docking port.

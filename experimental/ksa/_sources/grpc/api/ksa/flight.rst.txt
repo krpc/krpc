@@ -1,0 +1,260 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Flight
+======
+
+.. grpc:service:: FlightService
+
+   Flight telemetry for a vehicle, relative to the surface of the body it orbits.
+   Obtained from :grpc:rpc:`VehicleService.GetFlight <krpc.ksa.VehicleService.GetFlight>`.
+
+   .. grpc:rpc:: GetMeanAltitude (Flight.GetMeanAltitudeRequest) returns (Flight.GetMeanAltitudeResponse)
+
+      The altitude above the mean radius of the body, in meters.
+
+      :Flight.GetMeanAltitudeRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetMeanAltitudeResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetSurfaceAltitude (Flight.GetSurfaceAltitudeRequest) returns (Flight.GetSurfaceAltitudeResponse)
+
+      The altitude above the terrain or the ocean surface, whichever is higher, in meters.
+
+      :Flight.GetSurfaceAltitudeRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetSurfaceAltitudeResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetBedrockAltitude (Flight.GetBedrockAltitudeRequest) returns (Flight.GetBedrockAltitudeResponse)
+
+      The altitude above the terrain, in meters. Over the sea, this is the altitude above
+      the sea floor.
+
+      :Flight.GetBedrockAltitudeRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetBedrockAltitudeResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetElevation (Flight.GetElevationRequest) returns (Flight.GetElevationResponse)
+
+      The height of the terrain below the vehicle, in meters above the mean radius of the
+      body. Below the sea, this is the height of the sea floor.
+
+      :Flight.GetElevationRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetElevationResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetTimeToImpact (Flight.GetTimeToImpactRequest) returns (Flight.GetTimeToImpactResponse)
+
+      The time until the vehicle hits the surface on its current trajectory, in seconds.
+      Not a number if its trajectory does not hit the surface.
+
+      :Flight.GetTimeToImpactRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetTimeToImpactResponse: ``value`` (``float``)
+
+      .. note::
+
+         The game predicts the trajectory on a worker thread, so a change to it shows here
+         shortly after.
+
+   .. grpc:rpc:: GetLatitude (Flight.GetLatitudeRequest) returns (Flight.GetLatitudeResponse)
+
+      The latitude of the vehicle, in degrees.
+
+      :Flight.GetLatitudeRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetLatitudeResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetLongitude (Flight.GetLongitudeRequest) returns (Flight.GetLongitudeResponse)
+
+      The longitude of the vehicle, in degrees.
+
+      :Flight.GetLongitudeRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetLongitudeResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetBiome (Flight.GetBiomeRequest) returns (Flight.GetBiomeResponse)
+
+      The biome below the vehicle, or ``null`` if the body has no biomes.
+
+      :Flight.GetBiomeRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetBiomeResponse: ``value`` (``optional string``)
+
+   .. grpc:rpc:: GetSpeed (Flight.GetSpeedRequest) returns (Flight.GetSpeedResponse)
+
+      The speed of the vehicle relative to the surface, in meters per second.
+
+      :Flight.GetSpeedRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetSpeedResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetHorizontalSpeed (Flight.GetHorizontalSpeedRequest) returns (Flight.GetHorizontalSpeedResponse)
+
+      The horizontal speed of the vehicle relative to the surface, in meters per second.
+
+      :Flight.GetHorizontalSpeedRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetHorizontalSpeedResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetVerticalSpeed (Flight.GetVerticalSpeedRequest) returns (Flight.GetVerticalSpeedResponse)
+
+      The vertical speed of the vehicle relative to the surface, in meters per second.
+
+      :Flight.GetVerticalSpeedRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetVerticalSpeedResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetPitch (Flight.GetPitchRequest) returns (Flight.GetPitchResponse)
+
+      The pitch of the vehicle relative to the horizon, in degrees.
+      A value between -90° and +90°.
+
+      :Flight.GetPitchRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetPitchResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetHeading (Flight.GetHeadingRequest) returns (Flight.GetHeadingResponse)
+
+      The heading of the vehicle (its angle relative to north), in degrees.
+      A value between 0° and 360°.
+
+      :Flight.GetHeadingRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetHeadingResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetRoll (Flight.GetRollRequest) returns (Flight.GetRollResponse)
+
+      The roll of the vehicle relative to the horizon, in degrees.
+      A value between -180° and +180°.
+
+      :Flight.GetRollRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetRollResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetStaticPressure (Flight.GetStaticPressureRequest) returns (Flight.GetStaticPressureResponse)
+
+      The static atmospheric pressure at the vehicle, in pascals.
+
+      :Flight.GetStaticPressureRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetStaticPressureResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetAtmosphereDensity (Flight.GetAtmosphereDensityRequest) returns (Flight.GetAtmosphereDensityResponse)
+
+      The density of the atmosphere at the vehicle, in kilograms per cubic meter.
+
+      :Flight.GetAtmosphereDensityRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetAtmosphereDensityResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetDynamicPressure (Flight.GetDynamicPressureRequest) returns (Flight.GetDynamicPressureResponse)
+
+      The dynamic pressure acting on the vehicle, in pascals.
+
+      :Flight.GetDynamicPressureRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetDynamicPressureResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetDoseRate (Flight.GetDoseRateRequest) returns (Flight.GetDoseRateResponse)
+
+      The radiation dose rate at the vehicle, in sieverts per second. Includes any solar
+      particle event under way.
+
+      :Flight.GetDoseRateRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetDoseRateResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetOrbitAverageDoseRate (Flight.GetOrbitAverageDoseRateRequest) returns (Flight.GetOrbitAverageDoseRateResponse)
+
+      The radiation dose rate averaged over the vehicle's orbit, in sieverts per second.
+      Includes any solar particle event under way. Not a number if the body has no
+      magnetosphere, or the orbit dips below the surface.
+
+      :Flight.GetOrbitAverageDoseRateRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetOrbitAverageDoseRateResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetGForce (Flight.GetGForceRequest) returns (Flight.GetGForceResponse)
+
+      The acceleration of the vehicle, excluding gravity, in multiples of standard
+      gravity.
+
+      :Flight.GetGForceRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetGForceResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetAngleOfAttack (Flight.GetAngleOfAttackRequest) returns (Flight.GetAngleOfAttackResponse)
+
+      The angle between the direction the vehicle points in and its velocity relative to
+      the surface, in the vehicle's pitch plane, in degrees. Positive when the nose is
+      above the velocity.
+
+      :Flight.GetAngleOfAttackRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetAngleOfAttackResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSideslipAngle (Flight.GetSideslipAngleRequest) returns (Flight.GetSideslipAngleResponse)
+
+      The angle between the direction the vehicle points in and its velocity relative to
+      the surface, in the vehicle's yaw plane, in degrees. Positive when the nose is to
+      the right of the velocity.
+
+      :Flight.GetSideslipAngleRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+
+      :Flight.GetSideslipAngleResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: Prograde (Flight.ProgradeRequest) returns (Flight.ProgradeResponse)
+
+      The unit vector of the vehicle's velocity relative to the surface.
+
+      :Flight.ProgradeRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the direction.
+
+      :Flight.ProgradeResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: Normal (Flight.NormalRequest) returns (Flight.NormalResponse)
+
+      The unit vector normal to the plane of the vehicle's position and its velocity
+      relative to the surface.
+
+      :Flight.NormalRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the direction.
+
+      :Flight.NormalResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: Radial (Flight.RadialRequest) returns (Flight.RadialResponse)
+
+      The unit vector pointing radially outward, perpendicular to :grpc:rpc:`FlightService.Prograde <krpc.ksa.FlightService.Prograde>`
+      and :grpc:rpc:`FlightService.Normal <krpc.ksa.FlightService.Normal>`.
+
+      :Flight.RadialRequest:
+         * ``this`` (:grpc:service:`Flight <krpc.ksa.FlightService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the direction.
+
+      :Flight.RadialResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)

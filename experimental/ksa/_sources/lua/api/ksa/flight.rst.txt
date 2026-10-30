@@ -68,6 +68,13 @@ Flight
       :Attribute: Read-only, cannot be set
       :rtype: number
 
+   .. attribute:: biome: string
+
+      The biome below the vehicle, or ``nil`` if the body has no biomes.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string or ``Types.none``
+
    .. attribute:: speed: number
 
       The speed of the vehicle relative to the surface, in meters per second.
@@ -134,6 +141,23 @@ Flight
       :Attribute: Read-only, cannot be set
       :rtype: number
 
+   .. attribute:: dose_rate: number
+
+      The radiation dose rate at the vehicle, in sieverts per second. Includes any solar
+      particle event under way.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: orbit_average_dose_rate: number
+
+      The radiation dose rate averaged over the vehicle's orbit, in sieverts per second.
+      Includes any solar particle event under way. Not a number if the body has no
+      magnetosphere, or the orbit dips below the surface.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
    .. attribute:: g_force: number
 
       The acceleration of the vehicle, excluding gravity, in multiples of standard
@@ -159,3 +183,26 @@ Flight
 
       :Attribute: Read-only, cannot be set
       :rtype: number
+
+   .. method:: prograde(reference_frame)
+
+      The unit vector of the vehicle's velocity relative to the surface.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the direction.
+      :rtype: Tuple
+
+   .. method:: normal(reference_frame)
+
+      The unit vector normal to the plane of the vehicle's position and its velocity
+      relative to the surface.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the direction.
+      :rtype: Tuple
+
+   .. method:: radial(reference_frame)
+
+      The unit vector pointing radially outward, perpendicular to :meth:`KSA.Flight.prograde`
+      and :meth:`KSA.Flight.normal`.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the direction.
+      :rtype: Tuple

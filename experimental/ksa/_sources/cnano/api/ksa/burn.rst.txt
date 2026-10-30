@@ -24,34 +24,40 @@ Burn
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Burn_Prograde(krpc_connection_t connection, double * returnValue, krpc_KSA_Burn_t instance)
-   .. function:: krpc_error_t krpc_KSA_Burn_set_Prograde(krpc_connection_t connection, krpc_KSA_Burn_t instance, double value)
+   .. function:: krpc_error_t krpc_KSA_Burn_TimeTo(krpc_connection_t connection, float * returnValue, krpc_KSA_Burn_t instance)
+
+      The time until :func:`krpc_KSA_Burn_UT`, in seconds. Negative once that time has passed.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Burn_Prograde(krpc_connection_t connection, float * returnValue, krpc_KSA_Burn_t instance)
+   .. function:: krpc_error_t krpc_KSA_Burn_set_Prograde(krpc_connection_t connection, krpc_KSA_Burn_t instance, float value)
 
       The change in velocity in the prograde direction, in meters per second.
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Burn_Normal(krpc_connection_t connection, double * returnValue, krpc_KSA_Burn_t instance)
-   .. function:: krpc_error_t krpc_KSA_Burn_set_Normal(krpc_connection_t connection, krpc_KSA_Burn_t instance, double value)
+   .. function:: krpc_error_t krpc_KSA_Burn_Normal(krpc_connection_t connection, float * returnValue, krpc_KSA_Burn_t instance)
+   .. function:: krpc_error_t krpc_KSA_Burn_set_Normal(krpc_connection_t connection, krpc_KSA_Burn_t instance, float value)
 
       The change in velocity along the orbit normal, in meters per second.
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Burn_Radial(krpc_connection_t connection, double * returnValue, krpc_KSA_Burn_t instance)
-   .. function:: krpc_error_t krpc_KSA_Burn_set_Radial(krpc_connection_t connection, krpc_KSA_Burn_t instance, double value)
+   .. function:: krpc_error_t krpc_KSA_Burn_Radial(krpc_connection_t connection, float * returnValue, krpc_KSA_Burn_t instance)
+   .. function:: krpc_error_t krpc_KSA_Burn_set_Radial(krpc_connection_t connection, krpc_KSA_Burn_t instance, float value)
 
       The change in velocity radially outward, in meters per second.
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Burn_DeltaV(krpc_connection_t connection, double * returnValue, krpc_KSA_Burn_t instance)
+   .. function:: krpc_error_t krpc_KSA_Burn_DeltaV(krpc_connection_t connection, float * returnValue, krpc_KSA_Burn_t instance)
 
       The magnitude of the change in velocity, in meters per second.
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Burn_RemainingDeltaV(krpc_connection_t connection, double * returnValue, krpc_KSA_Burn_t instance)
+   .. function:: krpc_error_t krpc_KSA_Burn_RemainingDeltaV(krpc_connection_t connection, float * returnValue, krpc_KSA_Burn_t instance)
 
       The change in velocity still to burn, in meters per second. Less than
       :func:`krpc_KSA_Burn_DeltaV` once the vehicle has started the burn.
@@ -70,7 +76,7 @@ Burn
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Burn_BurnTime(krpc_connection_t connection, double * returnValue, krpc_KSA_Burn_t instance)
+   .. function:: krpc_error_t krpc_KSA_Burn_BurnTime(krpc_connection_t connection, float * returnValue, krpc_KSA_Burn_t instance)
 
       The time the remaining burn takes with the active engines, in seconds. Not a number
       for a burn other than the next one, and until the flight computer has timed it.
@@ -87,6 +93,34 @@ Burn
 
          The game predicts it in the solver step after the burn changes, so it reflects a
          change to the burn one update later.
+
+   .. function:: krpc_error_t krpc_KSA_Burn_OrbitAverageDoseRate(krpc_connection_t connection, float * returnValue, krpc_KSA_Burn_t instance)
+
+      The radiation dose rate averaged over the orbit after the burn, in sieverts per
+      second. Not a number if the body has no magnetosphere, or the orbit dips below the
+      surface.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Burn_ReferenceFrame(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_Burn_t instance)
+
+      The reference frame with its origin at the position of the burn, and axes along
+      the orbit at the time of the burn. The x axis points prograde, the y axis along the
+      orbit normal and the z axis radially outward, perpendicular to the x axis. The
+      frame does not move or rotate relative to the body being orbited.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Burn_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Burn_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The position of the burn, in meters, relative to where the body being orbited is
+      now.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the position.
+
+   
 
    .. function:: krpc_error_t krpc_KSA_Burn_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Burn_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
 

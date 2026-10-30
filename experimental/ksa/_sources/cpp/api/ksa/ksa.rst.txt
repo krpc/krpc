@@ -18,17 +18,44 @@ KSA
    .. function:: std::optional<Vehicle> active_vehicle()
    .. function:: void set_active_vehicle(std::optional<Vehicle> value)
 
-      The vehicle under the player's control.
+      The vehicle under the player's control, or ``NULL`` if the player controls a
+      kitten on EVA.
 
    
 
       .. note::
 
-         Setting it moves the camera to the vehicle, as the switch vehicle key does.
+         Setting it moves the camera to the vehicle, as the switch vehicle key does. See
+         :func:`active_kitten` for a kitten on EVA.
 
    .. function:: std::vector<Vehicle> vehicles()
 
       The vehicles in the current system, excluding kittens on EVA.
+
+   
+
+   .. function:: std::optional<Kitten> active_kitten()
+   .. function:: void set_active_kitten(std::optional<Kitten> value)
+
+      The kitten on EVA under the player's control, or ``NULL`` if the player
+      controls a vehicle.
+
+   
+
+      .. note::
+
+         Setting it moves the camera to the kitten. Throws an exception if the kitten is not
+         on EVA. See :func:`active_vehicle` for a vehicle.
+
+   .. function:: std::map<std::string, Kitten> kittens()
+
+      The kittens in the agency's roster, including those killed in action, keyed by name.
+
+   
+
+   .. function:: Camera camera()
+
+      The game's main camera.
 
    
 
@@ -44,8 +71,8 @@ KSA
 
    
 
-   .. function:: double simulation_speed()
-   .. function:: void set_simulation_speed(double value)
+   .. function:: float simulation_speed()
+   .. function:: void set_simulation_speed(float value)
 
       The simulation speed, as a multiple of real time. Zero when paused.
 
@@ -67,6 +94,12 @@ KSA
          Does nothing when the time is in the past. Returns early if the game stops the
          warp, for example when its menu pauses the game.
 
+   .. function:: std::map<std::string, VehicleDesign> vehicle_designs()
+
+      The vehicle designs that can be launched, keyed by name.
+
+   
+
    .. function:: Vehicle launch_vehicle(std::string name, std::string site)
 
       Launch a vehicle from a launch site, and make it the active vehicle. Returns once
@@ -74,7 +107,7 @@ KSA
 
       :Parameters:
 
-       * **name** -- The name of the vehicle, one of the game's default vehicles or a vehicle saved by the player.
+       * **name** -- The name of the vehicle design. See :func:`vehicle_designs`.
        * **site** -- The name of the launch site. See :func:`Body::launch_sites`.
 
       :returns: The vehicle. Its name is the vehicle's name, with a number appended if another vehicle has that name.
@@ -82,7 +115,70 @@ KSA
 
       .. note::
 
-         Throws an exception if there is no such vehicle or launch site.
+         Throws an exception if there is no such vehicle or launch site, or the name is one
+         of the game's kittens.
+
+   .. function:: bool save_exists(std::string name)
+
+      Whether a save with the given name exists.
+
+      :Parameters:
+
+       * **name** -- Name of the save.
+
+   
+
+   .. function:: void save(std::string name)
+
+      Save the game, replacing any save with the same name.
+
+      :Parameters:
+
+       * **name** -- Name of the save.
+
+   
+
+   .. function:: void load(std::string name)
+
+      Load a save, and return once it has loaded. The game is paused after loading.
+
+      :Parameters:
+
+       * **name** -- Name of the save.
+
+   
+
+      .. note::
+
+         Throws an exception if the save does not exist.
+
+   .. function:: std::string take_screenshot(int32_t scale = 1, bool ui = false)
+
+      Save a screenshot, as the screenshot key does, and return once the file is written.
+
+      :Parameters:
+
+       * **scale** -- The size of the image, as a multiple of the window size, from 1 to 8. The game reduces it to fit the graphics memory.
+       * **ui** -- Whether to include the game's windows. The image is then the size of the window.
+
+      :returns: The path of the PNG file, in the game's screenshots folder.
+   
+
+      .. note::
+
+         Throws an exception in the vehicle editor, or if a screenshot is already being taken.
+
+   .. function:: void show_message(std::string text, float duration = 5.0f, bool warning = false)
+
+      Show a message in the middle of the screen.
+
+      :Parameters:
+
+       * **text** -- The message.
+       * **duration** -- How long to show the message for, in seconds. The game shows a message for at least 2 seconds.
+       * **warning** -- Whether to show the message in the warning color.
+
+   
 
    .. function:: std::tuple<double, double, double> transform_position(std::tuple<double, double, double> position, ReferenceFrame from, ReferenceFrame to)
 

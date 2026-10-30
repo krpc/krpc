@@ -10,10 +10,35 @@ Reference Frame
 
    A reference frame, in which positions, directions, rotations and velocities are given.
    Obtained from the reference frame properties of :class:`KSA.Vehicle` and
-   :class:`KSA.Body`.
+   :class:`KSA.Body`, or created with :meth:`KSA.ReferenceFrame.create_relative` and
+   :meth:`KSA.ReferenceFrame.create_hybrid`.
 
    .. note::
 
       Every reference frame is right-handed. Positions are in meters, velocities in meters
       per second, and angular velocities in radians per second. A rotation is a quaternion
       ``(x, y, z, w)``.
+
+   .. staticmethod:: create_relative(reference_frame, [position = {0.0, 0.0, 0.0}], [rotation = {0.0, 0.0, 0.0, 1.0}], [velocity = {0.0, 0.0, 0.0}], [angular_velocity = {0.0, 0.0, 0.0}])
+
+      Create a reference frame that is offset from a parent frame.
+
+      :param KSA.ReferenceFrame reference_frame: The parent reference frame.
+      :param Tuple position: The position of the origin in the parent frame, in meters. Defaults to ``(0, 0, 0)``.
+      :param Tuple rotation: The rotation of the frame relative to the parent frame. Defaults to ``(0, 0, 0, 1)``, no rotation.
+      :param Tuple velocity: The velocity of the origin in the parent frame, in meters per second. Defaults to ``(0, 0, 0)``.
+      :param Tuple angular_velocity: The angular velocity of the frame relative to the parent frame, in radians per second, in the axes of the parent frame. Defaults to ``(0, 0, 0)``.
+      :rtype: :class:`KSA.ReferenceFrame`
+
+   .. staticmethod:: create_hybrid(position, [rotation = Types.none], [velocity = Types.none], [angular_velocity = Types.none])
+
+      Create a reference frame that takes its components from other frames.
+
+      :param KSA.ReferenceFrame position: The reference frame that gives the origin.
+      :param rotation: The reference frame that gives the axes. Defaults to *position*.
+      :type rotation: :class:`KSA.ReferenceFrame` or ``Types.none``
+      :param velocity: The reference frame that gives the velocity of the origin. Defaults to *position*.
+      :type velocity: :class:`KSA.ReferenceFrame` or ``Types.none``
+      :param angular_velocity: The reference frame that gives the angular velocity. Defaults to *position*.
+      :type angular_velocity: :class:`KSA.ReferenceFrame` or ``Types.none``
+      :rtype: :class:`KSA.ReferenceFrame`

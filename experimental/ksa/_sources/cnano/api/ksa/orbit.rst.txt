@@ -13,9 +13,10 @@ Orbit
 
    .. note::
 
-      A vehicle's orbit follows the vehicle as its trajectory changes. A predicted orbit, from
-      :func:`krpc_KSA_Orbit_NextOrbit` or :func:`krpc_KSA_Burn_Orbit`, is the prediction at the time it
-      was obtained.
+      An orbit follows the game's prediction as the trajectory changes. A predicted orbit, from
+      :func:`krpc_KSA_Orbit_NextOrbit` or :func:`krpc_KSA_Burn_Orbit`, is a position in the vehicle's or the
+      burn's predicted trajectory, and throws an exception while the trajectory is too short to
+      reach it.
 
    .. function:: krpc_error_t krpc_KSA_Orbit_Body(krpc_connection_t connection, krpc_KSA_Body_t * returnValue, krpc_KSA_Orbit_t instance)
 
@@ -54,6 +55,13 @@ Orbit
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Orbit_SemiMinorAxis(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The semi-minor axis of the orbit, in meters. Not a number for a parabolic or
+      hyperbolic orbit.
+
+   
+
    .. function:: krpc_error_t krpc_KSA_Orbit_Speed(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
 
       The current orbital speed, in meters per second.
@@ -69,6 +77,19 @@ Orbit
    .. function:: krpc_error_t krpc_KSA_Orbit_Period(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
 
       The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_MeanMotion(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The mean angular motion of the orbit, in radians per second.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_SpecificEnergy(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The specific orbital energy, the sum of the kinetic and potential energy per unit
+      mass, in joules per kilogram. Negative for an elliptical orbit.
 
    
 
@@ -123,6 +144,12 @@ Orbit
 
       The current `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_,
       in radians.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_EccentricAnomaly(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The current `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_, in radians. For a hyperbolic orbit, this is the hyperbolic anomaly.
 
    
 
@@ -182,6 +209,68 @@ Orbit
        * **referenceFrame** -- The reference frame of the velocity.
 
    
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_RelativeInclination(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance, krpc_KSA_Orbit_t orbit)
+
+      The inclination of the orbit relative to another orbit, in radians.
+
+      :Parameters:
+
+       * **orbit** -- The other orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_TrueAnomalyAtAN(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance, krpc_KSA_Orbit_t orbit)
+
+      The true anomaly of the ascending node with another orbit, in radians.
+
+      :Parameters:
+
+       * **orbit** -- The other orbit.
+
+   
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_TrueAnomalyAtDN(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance, krpc_KSA_Orbit_t orbit)
+
+      The true anomaly of the descending node with another orbit, in radians.
+
+      :Parameters:
+
+       * **orbit** -- The other orbit.
+
+   
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_TimeOfClosestApproach(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The universal time of the closest approach on this orbit to the vehicle's target,
+      in seconds. Not a number if there is none.
+
+   
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
+
+   .. function:: krpc_error_t krpc_KSA_Orbit_DistanceAtClosestApproach(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
+
+      The distance at the closest approach on this orbit to the vehicle's target, in
+      meters. Not a number if there is none.
+
+   
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
 
    .. function:: krpc_error_t krpc_KSA_Orbit_StartUT(krpc_connection_t connection, double * returnValue, krpc_KSA_Orbit_t instance)
 

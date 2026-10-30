@@ -13,9 +13,10 @@ Orbit
 
    .. note::
 
-      A vehicle's orbit follows the vehicle as its trajectory changes. A predicted orbit, from
-      :meth:`Orbit.getNextOrbit()` or :meth:`Burn.getOrbit()`, is the prediction at the time it
-      was obtained.
+      An orbit follows the game's prediction as the trajectory changes. A predicted orbit, from
+      :meth:`Orbit.getNextOrbit()` or :meth:`Burn.getOrbit()`, is a position in the vehicle's or the
+      burn's predicted trajectory, and throws an exception while the trajectory is too short to
+      reach it.
 
    .. method:: Body getBody()
 
@@ -60,6 +61,14 @@ Orbit
 
    
 
+   .. method:: double getSemiMinorAxis()
+
+
+      The semi-minor axis of the orbit, in meters. Not a number for a parabolic or
+      hyperbolic orbit.
+
+   
+
    .. method:: double getSpeed()
 
 
@@ -78,6 +87,21 @@ Orbit
 
 
       The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+   
+
+   .. method:: double getMeanMotion()
+
+
+      The mean angular motion of the orbit, in radians per second.
+
+   
+
+   .. method:: double getSpecificEnergy()
+
+
+      The specific orbital energy, the sum of the kinetic and potential energy per unit
+      mass, in joules per kilogram. Negative for an elliptical orbit.
 
    
 
@@ -143,6 +167,13 @@ Orbit
 
    
 
+   .. method:: double getEccentricAnomaly()
+
+
+      The current `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_, in radians. For a hyperbolic orbit, this is the hyperbolic anomaly.
+
+   
+
    .. method:: double trueAnomalyAtUT(double ut)
 
       The true anomaly at the given time, in radians.
@@ -184,6 +215,61 @@ Orbit
       :param double ut: Universal time, in seconds.
       :param ReferenceFrame referenceFrame: The reference frame of the velocity.
    
+
+   .. method:: double relativeInclination(Orbit orbit)
+
+      The inclination of the orbit relative to another orbit, in radians.
+
+      :param Orbit orbit: The other orbit.
+   
+
+   .. method:: double trueAnomalyAtAN(Orbit orbit)
+
+      The true anomaly of the ascending node with another orbit, in radians.
+
+      :param Orbit orbit: The other orbit.
+   
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. method:: double trueAnomalyAtDN(Orbit orbit)
+
+      The true anomaly of the descending node with another orbit, in radians.
+
+      :param Orbit orbit: The other orbit.
+   
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. method:: double getTimeOfClosestApproach()
+
+
+      The universal time of the closest approach on this orbit to the vehicle's target,
+      in seconds. Not a number if there is none.
+
+   
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
+
+   .. method:: double getDistanceAtClosestApproach()
+
+
+      The distance at the closest approach on this orbit to the vehicle's target, in
+      meters. Not a number if there is none.
+
+   
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
 
    .. method:: double getStartUT()
 

@@ -1,0 +1,99 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Sequence
+========
+
+.. grpc:service:: SequenceService
+
+   A sequence of a vehicle, the group of parts activated together, and its predicted
+   performance. Obtained from :grpc:rpc:`VehicleService.GetSequences <krpc.ksa.VehicleService.GetSequences>`.
+
+   .. note::
+
+      The performance is the game's prediction at the current atmospheric pressure. It
+      assumes the sequences activate in order, each once the one before has burned its
+      propellant.
+
+   .. grpc:rpc:: GetNumber (Sequence.GetNumberRequest) returns (Sequence.GetNumberResponse)
+
+      The number of the sequence, as shown in the game.
+
+      :Sequence.GetNumberRequest:
+         * ``this`` (:grpc:service:`Sequence <krpc.ksa.SequenceService>`)
+
+      :Sequence.GetNumberResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetActivated (Sequence.GetActivatedRequest) returns (Sequence.GetActivatedResponse)
+
+      Whether the sequence has been activated.
+
+      :Sequence.GetActivatedRequest:
+         * ``this`` (:grpc:service:`Sequence <krpc.ksa.SequenceService>`)
+
+      :Sequence.GetActivatedResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetDeltaV (Sequence.GetDeltaVRequest) returns (Sequence.GetDeltaVResponse)
+
+      The change in velocity the sequence provides, in meters per second.
+
+      :Sequence.GetDeltaVRequest:
+         * ``this`` (:grpc:service:`Sequence <krpc.ksa.SequenceService>`)
+
+      :Sequence.GetDeltaVResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetThrust (Sequence.GetThrustRequest) returns (Sequence.GetThrustResponse)
+
+      The thrust of the sequence's engines at full throttle, in Newtons.
+
+      :Sequence.GetThrustRequest:
+         * ``this`` (:grpc:service:`Sequence <krpc.ksa.SequenceService>`)
+
+      :Sequence.GetThrustResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSpecificImpulse (Sequence.GetSpecificImpulseRequest) returns (Sequence.GetSpecificImpulseResponse)
+
+      The combined specific impulse of the sequence's engines, in seconds.
+
+      :Sequence.GetSpecificImpulseRequest:
+         * ``this`` (:grpc:service:`Sequence <krpc.ksa.SequenceService>`)
+
+      :Sequence.GetSpecificImpulseResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetBurnTime (Sequence.GetBurnTimeRequest) returns (Sequence.GetBurnTimeResponse)
+
+      The time the sequence's engines take to burn its propellant at full throttle,
+      in seconds.
+
+      :Sequence.GetBurnTimeRequest:
+         * ``this`` (:grpc:service:`Sequence <krpc.ksa.SequenceService>`)
+
+      :Sequence.GetBurnTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetStartMass (Sequence.GetStartMassRequest) returns (Sequence.GetStartMassResponse)
+
+      The mass of the vehicle when the sequence starts to burn, in kilograms.
+
+      :Sequence.GetStartMassRequest:
+         * ``this`` (:grpc:service:`Sequence <krpc.ksa.SequenceService>`)
+
+      :Sequence.GetStartMassResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetEndMass (Sequence.GetEndMassRequest) returns (Sequence.GetEndMassResponse)
+
+      The mass of the vehicle once the sequence has burned its propellant, in kilograms.
+
+      :Sequence.GetEndMassRequest:
+         * ``this`` (:grpc:service:`Sequence <krpc.ksa.SequenceService>`)
+
+      :Sequence.GetEndMassResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetPropellantMass (Sequence.GetPropellantMassRequest) returns (Sequence.GetPropellantMassResponse)
+
+      The mass of propellant the sequence burns, in kilograms.
+
+      :Sequence.GetPropellantMassRequest:
+         * ``this`` (:grpc:service:`Sequence <krpc.ksa.SequenceService>`)
+
+      :Sequence.GetPropellantMassResponse: ``value`` (``float``)

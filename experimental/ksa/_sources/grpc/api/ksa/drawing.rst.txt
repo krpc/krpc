@@ -1,0 +1,1008 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Drawing
+=======
+
+.. grpc:service:: DrawingService
+
+   Draws lines, shapes and text in the scene, each placed in a reference frame.
+
+   .. note::
+
+      The objects are drawn every frame until removed, and are removed when the client that
+      added them disconnects. Lines are drawn at the game's fixed gizmo width.
+
+   .. grpc:rpc:: AddLine (Drawing.AddLineRequest) returns (Drawing.AddLineResponse)
+
+      Draw a line between two positions.
+
+      :Drawing.AddLineRequest:
+         * ``start`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The position of the start of the line, in meters.
+         * ``end`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The position of the end of the line, in meters.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the positions.
+         * ``visible`` (``optional bool``): Whether the line is visible. Defaults to ``true``.
+
+      :Drawing.AddLineResponse: ``value`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+
+   .. grpc:rpc:: AddDirection (Drawing.AddDirectionRequest) returns (Drawing.AddDirectionResponse)
+
+      Draw a line from the origin of a reference frame in a direction.
+
+      :Drawing.AddDirectionRequest:
+         * ``direction`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The direction of the line.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the direction.
+         * ``length`` (``optional float``): The length of the line, in meters. Defaults to ``10.0``.
+         * ``visible`` (``optional bool``): Whether the line is visible. Defaults to ``true``.
+
+      :Drawing.AddDirectionResponse: ``value`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+
+   .. grpc:rpc:: AddPolyline (Drawing.AddPolylineRequest) returns (Drawing.AddPolylineResponse)
+
+      Draw a line through a list of positions.
+
+      :Drawing.AddPolylineRequest:
+         * ``vertices`` (``repeated`` :grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The positions the line passes through, in meters.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the positions.
+         * ``closed`` (``optional bool``): Whether the line joins the last position back to the first. Defaults to ``false``.
+         * ``visible`` (``optional bool``): Whether the line is visible. Defaults to ``true``.
+
+      :Drawing.AddPolylineResponse: ``value`` (:grpc:service:`Polyline <krpc.ksa.PolylineService>`)
+
+   .. grpc:rpc:: AddCircle (Drawing.AddCircleRequest) returns (Drawing.AddCircleResponse)
+
+      Draw a circle.
+
+      :Drawing.AddCircleRequest:
+         * ``center`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The position of the center of the circle, in meters.
+         * ``normal`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The direction normal to the plane of the circle.
+         * ``radius`` (``float``): The radius of the circle, in meters.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position and direction.
+         * ``visible`` (``optional bool``): Whether the circle is visible. Defaults to ``true``.
+
+      :Drawing.AddCircleResponse: ``value`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+
+   .. grpc:rpc:: AddArc (Drawing.AddArcRequest) returns (Drawing.AddArcResponse)
+
+      Draw an arc of a circle.
+
+      :Drawing.AddArcRequest:
+         * ``center`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The position of the center of the arc's circle, in meters.
+         * ``normal`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The direction normal to the plane of the arc.
+         * ``start_direction`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The direction from the center to the start of the arc.
+         * ``angle`` (``float``): The angle the arc turns through, counterclockwise about the normal, in radians.
+         * ``radius`` (``float``): The radius of the arc, in meters.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position and directions.
+         * ``visible`` (``optional bool``): Whether the arc is visible. Defaults to ``true``.
+
+      :Drawing.AddArcResponse: ``value`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+
+   .. grpc:rpc:: AddBox (Drawing.AddBoxRequest) returns (Drawing.AddBoxResponse)
+
+      Draw the edges of a box.
+
+      :Drawing.AddBoxRequest:
+         * ``center`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The position of the center of the box, in meters.
+         * ``size`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The lengths of the box's edges along its x, y and z axes, in meters.
+         * ``rotation`` (:grpc:message:`Tuple_double_double_double_double <krpc.ksa.Tuple_double_double_double_double>`): The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position and rotation.
+         * ``visible`` (``optional bool``): Whether the box is visible. Defaults to ``true``.
+
+      :Drawing.AddBoxResponse: ``value`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+
+   .. grpc:rpc:: AddSphere (Drawing.AddSphereRequest) returns (Drawing.AddSphereResponse)
+
+      Draw a solid sphere.
+
+      :Drawing.AddSphereRequest:
+         * ``center`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The position of the center of the sphere, in meters.
+         * ``radius`` (``float``): The radius of the sphere, in meters.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+         * ``visible`` (``optional bool``): Whether the sphere is visible. Defaults to ``true``.
+
+      :Drawing.AddSphereResponse: ``value`` (:grpc:service:`Sphere <krpc.ksa.SphereService>`)
+
+   .. grpc:rpc:: AddText (Drawing.AddTextRequest) returns (Drawing.AddTextResponse)
+
+      Draw text over the scene, centered on a position.
+
+      :Drawing.AddTextRequest:
+         * ``text`` (``string``): The text.
+         * ``position`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The position of the center of the text, in meters.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+         * ``size`` (``optional float``): The height of the font, in pixels. Defaults to ``16.0``.
+         * ``visible`` (``optional bool``): Whether the text is visible. Defaults to ``true``.
+
+      :Drawing.AddTextResponse: ``value`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+
+   .. grpc:rpc:: Clear (Drawing.ClearRequest) returns (Drawing.ClearResponse)
+
+      Remove the drawing objects.
+
+      :Drawing.ClearRequest:
+         * ``client_only`` (``optional bool``): Whether to remove only the objects added by the calling client. Defaults to ``false``.
+
+      :Drawing.ClearResponse: Empty
+
+.. grpc:service:: LineService
+
+   A line. Created using :grpc:rpc:`DrawingService.AddLine <krpc.ksa.DrawingService.AddLine>` or :grpc:rpc:`DrawingService.AddDirection <krpc.ksa.DrawingService.AddDirection>`.
+
+   .. grpc:rpc:: GetStart (Line.GetStartRequest) returns (Line.GetStartResponse)
+
+      The start position of the line, in meters.
+
+      :Line.GetStartRequest:
+         * ``this`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+
+      :Line.GetStartResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SetStart (Line.SetStartRequest) returns (Line.SetStartResponse)
+
+      The start position of the line, in meters.
+
+      :Line.SetStartRequest:
+         * ``this`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+         * ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      :Line.SetStartResponse: Empty
+
+   .. grpc:rpc:: GetEnd (Line.GetEndRequest) returns (Line.GetEndResponse)
+
+      The end position of the line, in meters.
+
+      :Line.GetEndRequest:
+         * ``this`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+
+      :Line.GetEndResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SetEnd (Line.SetEndRequest) returns (Line.SetEndResponse)
+
+      The end position of the line, in meters.
+
+      :Line.SetEndRequest:
+         * ``this`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+         * ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      :Line.SetEndResponse: Empty
+
+   .. grpc:rpc:: GetReferenceFrame (Line.GetReferenceFrameRequest) returns (Line.GetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Line.GetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+
+      :Line.GetReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: SetReferenceFrame (Line.SetReferenceFrameRequest) returns (Line.SetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Line.SetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+         * ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+      :Line.SetReferenceFrameResponse: Empty
+
+   .. grpc:rpc:: GetVisible (Line.GetVisibleRequest) returns (Line.GetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Line.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+
+      :Line.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Line.SetVisibleRequest) returns (Line.SetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Line.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+         * ``value`` (``bool``)
+
+      :Line.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetColor (Line.GetColorRequest) returns (Line.GetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Line.GetColorRequest:
+         * ``this`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+
+      :Line.GetColorResponse: ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+   .. grpc:rpc:: SetColor (Line.SetColorRequest) returns (Line.SetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Line.SetColorRequest:
+         * ``this`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+         * ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+      :Line.SetColorResponse: Empty
+
+   .. grpc:rpc:: Remove (Line.RemoveRequest) returns (Line.RemoveResponse)
+
+      Remove the object.
+
+      :Line.RemoveRequest:
+         * ``this`` (:grpc:service:`Line <krpc.ksa.LineService>`)
+
+      :Line.RemoveResponse: Empty
+
+.. grpc:service:: PolylineService
+
+   A line through a list of points. Created using :grpc:rpc:`DrawingService.AddPolyline <krpc.ksa.DrawingService.AddPolyline>`.
+
+   .. grpc:rpc:: GetVertices (Polyline.GetVerticesRequest) returns (Polyline.GetVerticesResponse)
+
+      The points the line passes through, in meters.
+
+      :Polyline.GetVerticesRequest:
+         * ``this`` (:grpc:service:`Polyline <krpc.ksa.PolylineService>`)
+
+      :Polyline.GetVerticesResponse: ``value`` (``repeated`` :grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SetVertices (Polyline.SetVerticesRequest) returns (Polyline.SetVerticesResponse)
+
+      The points the line passes through, in meters.
+
+      :Polyline.SetVerticesRequest:
+         * ``this`` (:grpc:service:`Polyline <krpc.ksa.PolylineService>`)
+         * ``value`` (``repeated`` :grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      :Polyline.SetVerticesResponse: Empty
+
+   .. grpc:rpc:: GetClosed (Polyline.GetClosedRequest) returns (Polyline.GetClosedResponse)
+
+      Whether the line joins the last point back to the first.
+
+      :Polyline.GetClosedRequest:
+         * ``this`` (:grpc:service:`Polyline <krpc.ksa.PolylineService>`)
+
+      :Polyline.GetClosedResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetClosed (Polyline.SetClosedRequest) returns (Polyline.SetClosedResponse)
+
+      Whether the line joins the last point back to the first.
+
+      :Polyline.SetClosedRequest:
+         * ``this`` (:grpc:service:`Polyline <krpc.ksa.PolylineService>`)
+         * ``value`` (``bool``)
+
+      :Polyline.SetClosedResponse: Empty
+
+   .. grpc:rpc:: GetReferenceFrame (Polyline.GetReferenceFrameRequest) returns (Polyline.GetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Polyline.GetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Polyline <krpc.ksa.PolylineService>`)
+
+      :Polyline.GetReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: SetReferenceFrame (Polyline.SetReferenceFrameRequest) returns (Polyline.SetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Polyline.SetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Polyline <krpc.ksa.PolylineService>`)
+         * ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+      :Polyline.SetReferenceFrameResponse: Empty
+
+   .. grpc:rpc:: GetVisible (Polyline.GetVisibleRequest) returns (Polyline.GetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Polyline.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Polyline <krpc.ksa.PolylineService>`)
+
+      :Polyline.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Polyline.SetVisibleRequest) returns (Polyline.SetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Polyline.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Polyline <krpc.ksa.PolylineService>`)
+         * ``value`` (``bool``)
+
+      :Polyline.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetColor (Polyline.GetColorRequest) returns (Polyline.GetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Polyline.GetColorRequest:
+         * ``this`` (:grpc:service:`Polyline <krpc.ksa.PolylineService>`)
+
+      :Polyline.GetColorResponse: ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+   .. grpc:rpc:: SetColor (Polyline.SetColorRequest) returns (Polyline.SetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Polyline.SetColorRequest:
+         * ``this`` (:grpc:service:`Polyline <krpc.ksa.PolylineService>`)
+         * ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+      :Polyline.SetColorResponse: Empty
+
+   .. grpc:rpc:: Remove (Polyline.RemoveRequest) returns (Polyline.RemoveResponse)
+
+      Remove the object.
+
+      :Polyline.RemoveRequest:
+         * ``this`` (:grpc:service:`Polyline <krpc.ksa.PolylineService>`)
+
+      :Polyline.RemoveResponse: Empty
+
+.. grpc:service:: CircleService
+
+   A circle. Created using :grpc:rpc:`DrawingService.AddCircle <krpc.ksa.DrawingService.AddCircle>`.
+
+   .. grpc:rpc:: GetCenter (Circle.GetCenterRequest) returns (Circle.GetCenterResponse)
+
+      The position of the center of the circle, in meters.
+
+      :Circle.GetCenterRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+
+      :Circle.GetCenterResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SetCenter (Circle.SetCenterRequest) returns (Circle.SetCenterResponse)
+
+      The position of the center of the circle, in meters.
+
+      :Circle.SetCenterRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+         * ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      :Circle.SetCenterResponse: Empty
+
+   .. grpc:rpc:: GetNormal (Circle.GetNormalRequest) returns (Circle.GetNormalResponse)
+
+      The direction normal to the plane of the circle, as a unit vector.
+
+      :Circle.GetNormalRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+
+      :Circle.GetNormalResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SetNormal (Circle.SetNormalRequest) returns (Circle.SetNormalResponse)
+
+      The direction normal to the plane of the circle, as a unit vector.
+
+      :Circle.SetNormalRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+         * ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      :Circle.SetNormalResponse: Empty
+
+   .. grpc:rpc:: GetRadius (Circle.GetRadiusRequest) returns (Circle.GetRadiusResponse)
+
+      The radius of the circle, in meters.
+
+      :Circle.GetRadiusRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+
+      :Circle.GetRadiusResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetRadius (Circle.SetRadiusRequest) returns (Circle.SetRadiusResponse)
+
+      The radius of the circle, in meters.
+
+      :Circle.SetRadiusRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+         * ``value`` (``float``)
+
+      :Circle.SetRadiusResponse: Empty
+
+   .. grpc:rpc:: GetReferenceFrame (Circle.GetReferenceFrameRequest) returns (Circle.GetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Circle.GetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+
+      :Circle.GetReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: SetReferenceFrame (Circle.SetReferenceFrameRequest) returns (Circle.SetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Circle.SetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+         * ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+      :Circle.SetReferenceFrameResponse: Empty
+
+   .. grpc:rpc:: GetVisible (Circle.GetVisibleRequest) returns (Circle.GetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Circle.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+
+      :Circle.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Circle.SetVisibleRequest) returns (Circle.SetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Circle.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+         * ``value`` (``bool``)
+
+      :Circle.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetColor (Circle.GetColorRequest) returns (Circle.GetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Circle.GetColorRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+
+      :Circle.GetColorResponse: ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+   .. grpc:rpc:: SetColor (Circle.SetColorRequest) returns (Circle.SetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Circle.SetColorRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+         * ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+      :Circle.SetColorResponse: Empty
+
+   .. grpc:rpc:: Remove (Circle.RemoveRequest) returns (Circle.RemoveResponse)
+
+      Remove the object.
+
+      :Circle.RemoveRequest:
+         * ``this`` (:grpc:service:`Circle <krpc.ksa.CircleService>`)
+
+      :Circle.RemoveResponse: Empty
+
+.. grpc:service:: ArcService
+
+   An arc of a circle. Created using :grpc:rpc:`DrawingService.AddArc <krpc.ksa.DrawingService.AddArc>`.
+
+   .. grpc:rpc:: GetCenter (Arc.GetCenterRequest) returns (Arc.GetCenterResponse)
+
+      The position of the center of the arc's circle, in meters.
+
+      :Arc.GetCenterRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+
+      :Arc.GetCenterResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SetCenter (Arc.SetCenterRequest) returns (Arc.SetCenterResponse)
+
+      The position of the center of the arc's circle, in meters.
+
+      :Arc.SetCenterRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+         * ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      :Arc.SetCenterResponse: Empty
+
+   .. grpc:rpc:: GetNormal (Arc.GetNormalRequest) returns (Arc.GetNormalResponse)
+
+      The direction normal to the plane of the arc, as a unit vector.
+
+      :Arc.GetNormalRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+
+      :Arc.GetNormalResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SetNormal (Arc.SetNormalRequest) returns (Arc.SetNormalResponse)
+
+      The direction normal to the plane of the arc, as a unit vector.
+
+      :Arc.SetNormalRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+         * ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      :Arc.SetNormalResponse: Empty
+
+   .. grpc:rpc:: GetStartDirection (Arc.GetStartDirectionRequest) returns (Arc.GetStartDirectionResponse)
+
+      The direction from the center to the start of the arc, as a unit vector.
+
+      :Arc.GetStartDirectionRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+
+      :Arc.GetStartDirectionResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      .. note::
+
+         The part of the direction along :grpc:rpc:`ArcService.GetNormal <krpc.ksa.ArcService.GetNormal>` is ignored.
+
+   .. grpc:rpc:: SetStartDirection (Arc.SetStartDirectionRequest) returns (Arc.SetStartDirectionResponse)
+
+      The direction from the center to the start of the arc, as a unit vector.
+
+      :Arc.SetStartDirectionRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+         * ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      :Arc.SetStartDirectionResponse: Empty
+
+      .. note::
+
+         The part of the direction along :grpc:rpc:`ArcService.GetNormal <krpc.ksa.ArcService.GetNormal>` is ignored.
+
+   .. grpc:rpc:: GetAngle (Arc.GetAngleRequest) returns (Arc.GetAngleResponse)
+
+      The angle the arc turns through, counterclockwise about :grpc:rpc:`ArcService.GetNormal <krpc.ksa.ArcService.GetNormal>`, in radians.
+
+      :Arc.GetAngleRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+
+      :Arc.GetAngleResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetAngle (Arc.SetAngleRequest) returns (Arc.SetAngleResponse)
+
+      The angle the arc turns through, counterclockwise about :grpc:rpc:`ArcService.GetNormal <krpc.ksa.ArcService.GetNormal>`, in radians.
+
+      :Arc.SetAngleRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+         * ``value`` (``float``)
+
+      :Arc.SetAngleResponse: Empty
+
+   .. grpc:rpc:: GetRadius (Arc.GetRadiusRequest) returns (Arc.GetRadiusResponse)
+
+      The radius of the arc, in meters.
+
+      :Arc.GetRadiusRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+
+      :Arc.GetRadiusResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetRadius (Arc.SetRadiusRequest) returns (Arc.SetRadiusResponse)
+
+      The radius of the arc, in meters.
+
+      :Arc.SetRadiusRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+         * ``value`` (``float``)
+
+      :Arc.SetRadiusResponse: Empty
+
+   .. grpc:rpc:: GetReferenceFrame (Arc.GetReferenceFrameRequest) returns (Arc.GetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Arc.GetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+
+      :Arc.GetReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: SetReferenceFrame (Arc.SetReferenceFrameRequest) returns (Arc.SetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Arc.SetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+         * ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+      :Arc.SetReferenceFrameResponse: Empty
+
+   .. grpc:rpc:: GetVisible (Arc.GetVisibleRequest) returns (Arc.GetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Arc.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+
+      :Arc.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Arc.SetVisibleRequest) returns (Arc.SetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Arc.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+         * ``value`` (``bool``)
+
+      :Arc.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetColor (Arc.GetColorRequest) returns (Arc.GetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Arc.GetColorRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+
+      :Arc.GetColorResponse: ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+   .. grpc:rpc:: SetColor (Arc.SetColorRequest) returns (Arc.SetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Arc.SetColorRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+         * ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+      :Arc.SetColorResponse: Empty
+
+   .. grpc:rpc:: Remove (Arc.RemoveRequest) returns (Arc.RemoveResponse)
+
+      Remove the object.
+
+      :Arc.RemoveRequest:
+         * ``this`` (:grpc:service:`Arc <krpc.ksa.ArcService>`)
+
+      :Arc.RemoveResponse: Empty
+
+.. grpc:service:: BoxService
+
+   The edges of a box. Created using :grpc:rpc:`DrawingService.AddBox <krpc.ksa.DrawingService.AddBox>`.
+
+   .. grpc:rpc:: GetCenter (Box.GetCenterRequest) returns (Box.GetCenterResponse)
+
+      The position of the center of the box, in meters.
+
+      :Box.GetCenterRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+
+      :Box.GetCenterResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SetCenter (Box.SetCenterRequest) returns (Box.SetCenterResponse)
+
+      The position of the center of the box, in meters.
+
+      :Box.SetCenterRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+         * ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      :Box.SetCenterResponse: Empty
+
+   .. grpc:rpc:: GetSize (Box.GetSizeRequest) returns (Box.GetSizeResponse)
+
+      The lengths of the box's edges along its x, y and z axes, in meters.
+
+      :Box.GetSizeRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+
+      :Box.GetSizeResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SetSize (Box.SetSizeRequest) returns (Box.SetSizeResponse)
+
+      The lengths of the box's edges along its x, y and z axes, in meters.
+
+      :Box.SetSizeRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+         * ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      :Box.SetSizeResponse: Empty
+
+   .. grpc:rpc:: GetRotation (Box.GetRotationRequest) returns (Box.GetRotationResponse)
+
+      The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+
+      :Box.GetRotationRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+
+      :Box.GetRotationResponse: ``value`` (:grpc:message:`Tuple_double_double_double_double <krpc.ksa.Tuple_double_double_double_double>`)
+
+   .. grpc:rpc:: SetRotation (Box.SetRotationRequest) returns (Box.SetRotationResponse)
+
+      The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+
+      :Box.SetRotationRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+         * ``value`` (:grpc:message:`Tuple_double_double_double_double <krpc.ksa.Tuple_double_double_double_double>`)
+
+      :Box.SetRotationResponse: Empty
+
+   .. grpc:rpc:: GetReferenceFrame (Box.GetReferenceFrameRequest) returns (Box.GetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Box.GetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+
+      :Box.GetReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: SetReferenceFrame (Box.SetReferenceFrameRequest) returns (Box.SetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Box.SetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+         * ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+      :Box.SetReferenceFrameResponse: Empty
+
+   .. grpc:rpc:: GetVisible (Box.GetVisibleRequest) returns (Box.GetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Box.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+
+      :Box.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Box.SetVisibleRequest) returns (Box.SetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Box.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+         * ``value`` (``bool``)
+
+      :Box.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetColor (Box.GetColorRequest) returns (Box.GetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Box.GetColorRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+
+      :Box.GetColorResponse: ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+   .. grpc:rpc:: SetColor (Box.SetColorRequest) returns (Box.SetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Box.SetColorRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+         * ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+      :Box.SetColorResponse: Empty
+
+   .. grpc:rpc:: Remove (Box.RemoveRequest) returns (Box.RemoveResponse)
+
+      Remove the object.
+
+      :Box.RemoveRequest:
+         * ``this`` (:grpc:service:`Box <krpc.ksa.BoxService>`)
+
+      :Box.RemoveResponse: Empty
+
+.. grpc:service:: SphereService
+
+   A solid sphere. Created using :grpc:rpc:`DrawingService.AddSphere <krpc.ksa.DrawingService.AddSphere>`.
+
+   .. grpc:rpc:: GetCenter (Sphere.GetCenterRequest) returns (Sphere.GetCenterResponse)
+
+      The position of the center of the sphere, in meters.
+
+      :Sphere.GetCenterRequest:
+         * ``this`` (:grpc:service:`Sphere <krpc.ksa.SphereService>`)
+
+      :Sphere.GetCenterResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SetCenter (Sphere.SetCenterRequest) returns (Sphere.SetCenterResponse)
+
+      The position of the center of the sphere, in meters.
+
+      :Sphere.SetCenterRequest:
+         * ``this`` (:grpc:service:`Sphere <krpc.ksa.SphereService>`)
+         * ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      :Sphere.SetCenterResponse: Empty
+
+   .. grpc:rpc:: GetRadius (Sphere.GetRadiusRequest) returns (Sphere.GetRadiusResponse)
+
+      The radius of the sphere, in meters.
+
+      :Sphere.GetRadiusRequest:
+         * ``this`` (:grpc:service:`Sphere <krpc.ksa.SphereService>`)
+
+      :Sphere.GetRadiusResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetRadius (Sphere.SetRadiusRequest) returns (Sphere.SetRadiusResponse)
+
+      The radius of the sphere, in meters.
+
+      :Sphere.SetRadiusRequest:
+         * ``this`` (:grpc:service:`Sphere <krpc.ksa.SphereService>`)
+         * ``value`` (``float``)
+
+      :Sphere.SetRadiusResponse: Empty
+
+   .. grpc:rpc:: GetReferenceFrame (Sphere.GetReferenceFrameRequest) returns (Sphere.GetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Sphere.GetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Sphere <krpc.ksa.SphereService>`)
+
+      :Sphere.GetReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: SetReferenceFrame (Sphere.SetReferenceFrameRequest) returns (Sphere.SetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Sphere.SetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Sphere <krpc.ksa.SphereService>`)
+         * ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+      :Sphere.SetReferenceFrameResponse: Empty
+
+   .. grpc:rpc:: GetVisible (Sphere.GetVisibleRequest) returns (Sphere.GetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Sphere.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Sphere <krpc.ksa.SphereService>`)
+
+      :Sphere.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Sphere.SetVisibleRequest) returns (Sphere.SetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Sphere.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Sphere <krpc.ksa.SphereService>`)
+         * ``value`` (``bool``)
+
+      :Sphere.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetColor (Sphere.GetColorRequest) returns (Sphere.GetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Sphere.GetColorRequest:
+         * ``this`` (:grpc:service:`Sphere <krpc.ksa.SphereService>`)
+
+      :Sphere.GetColorResponse: ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+   .. grpc:rpc:: SetColor (Sphere.SetColorRequest) returns (Sphere.SetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Sphere.SetColorRequest:
+         * ``this`` (:grpc:service:`Sphere <krpc.ksa.SphereService>`)
+         * ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+      :Sphere.SetColorResponse: Empty
+
+   .. grpc:rpc:: Remove (Sphere.RemoveRequest) returns (Sphere.RemoveResponse)
+
+      Remove the object.
+
+      :Sphere.RemoveRequest:
+         * ``this`` (:grpc:service:`Sphere <krpc.ksa.SphereService>`)
+
+      :Sphere.RemoveResponse: Empty
+
+.. grpc:service:: TextService
+
+   Text drawn over the scene, centered on a position. Created using :grpc:rpc:`DrawingService.AddText <krpc.ksa.DrawingService.AddText>`.
+
+   .. note::
+
+      The text is hidden with the game's UI.
+
+   .. grpc:rpc:: GetContent (Text.GetContentRequest) returns (Text.GetContentResponse)
+
+      The text.
+
+      :Text.GetContentRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+
+      :Text.GetContentResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: SetContent (Text.SetContentRequest) returns (Text.SetContentResponse)
+
+      The text.
+
+      :Text.SetContentRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+         * ``value`` (``string``)
+
+      :Text.SetContentResponse: Empty
+
+   .. grpc:rpc:: GetPosition (Text.GetPositionRequest) returns (Text.GetPositionResponse)
+
+      The position of the center of the text, in meters.
+
+      :Text.GetPositionRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+
+      :Text.GetPositionResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SetPosition (Text.SetPositionRequest) returns (Text.SetPositionResponse)
+
+      The position of the center of the text, in meters.
+
+      :Text.SetPositionRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+         * ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+      :Text.SetPositionResponse: Empty
+
+   .. grpc:rpc:: GetSize (Text.GetSizeRequest) returns (Text.GetSizeResponse)
+
+      The height of the font, in pixels.
+
+      :Text.GetSizeRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+
+      :Text.GetSizeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetSize (Text.SetSizeRequest) returns (Text.SetSizeResponse)
+
+      The height of the font, in pixels.
+
+      :Text.SetSizeRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+         * ``value`` (``float``)
+
+      :Text.SetSizeResponse: Empty
+
+   .. grpc:rpc:: GetReferenceFrame (Text.GetReferenceFrameRequest) returns (Text.GetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Text.GetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+
+      :Text.GetReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: SetReferenceFrame (Text.SetReferenceFrameRequest) returns (Text.SetReferenceFrameResponse)
+
+      The reference frame for the positions and directions of the object.
+
+      :Text.SetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+         * ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+      :Text.SetReferenceFrameResponse: Empty
+
+   .. grpc:rpc:: GetVisible (Text.GetVisibleRequest) returns (Text.GetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Text.GetVisibleRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+
+      :Text.GetVisibleResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetVisible (Text.SetVisibleRequest) returns (Text.SetVisibleResponse)
+
+      Whether the object is visible.
+
+      :Text.SetVisibleRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+         * ``value`` (``bool``)
+
+      :Text.SetVisibleResponse: Empty
+
+   .. grpc:rpc:: GetColor (Text.GetColorRequest) returns (Text.GetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Text.GetColorRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+
+      :Text.GetColorResponse: ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+   .. grpc:rpc:: SetColor (Text.SetColorRequest) returns (Text.SetColorResponse)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Text.SetColorRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+         * ``value`` (:grpc:message:`krpc.stdlib.ColorRGB <krpc.stdlib.ColorRGB>`)
+
+      :Text.SetColorResponse: Empty
+
+   .. grpc:rpc:: Remove (Text.RemoveRequest) returns (Text.RemoveResponse)
+
+      Remove the object.
+
+      :Text.RemoveRequest:
+         * ``this`` (:grpc:service:`Text <krpc.ksa.TextService>`)
+
+      :Text.RemoveResponse: Empty

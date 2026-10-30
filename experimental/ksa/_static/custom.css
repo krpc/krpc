@@ -17,3 +17,30 @@
     font-size: 1.35rem;
     font-weight: 600;
 }
+
+/* The breaking and deprecated labels of changelog entries, as in the kRPC docs. */
+.changelog-marker {
+    margin-right: 0.4em;
+    padding: 0.05em 0.45em;
+    border-radius: 0.25rem;
+    font-size: 0.8em;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.changelog-marker.breaking {
+    color: var(--pst-color-danger-text);
+    background-color: var(--pst-color-danger);
+}
+
+.changelog-marker.deprecated {
+    color: var(--pst-color-warning-text);
+    background-color: var(--pst-color-warning);
+}
+
+html[data-theme="light"] .changelog-marker.deprecated {
+    color: #fff;
+    background-color: #b45309;
+}

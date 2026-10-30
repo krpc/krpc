@@ -13,14 +13,16 @@ Provides functionality to interact with Kitten Space Agency.
 
 .. attribute:: active_vehicle: KSA.Vehicle
 
-   The vehicle under the player's control.
+   The vehicle under the player's control, or ``nil`` if the player controls a
+   kitten on EVA.
 
    :Attribute: Can be read or written
    :rtype: :class:`KSA.Vehicle` or ``Types.none``
 
    .. note::
 
-      Setting it moves the camera to the vehicle, as the switch vehicle key does.
+      Setting it moves the camera to the vehicle, as the switch vehicle key does. See
+      :attr:`KSA.active_kitten <KSA.KSA.active_kitten>` for a kitten on EVA.
 
 
 
@@ -31,6 +33,42 @@ Provides functionality to interact with Kitten Space Agency.
 
    :Attribute: Read-only, cannot be set
    :rtype: List
+
+
+
+
+.. attribute:: active_kitten: KSA.Kitten
+
+   The kitten on EVA under the player's control, or ``nil`` if the player
+   controls a vehicle.
+
+   :Attribute: Can be read or written
+   :rtype: :class:`KSA.Kitten` or ``Types.none``
+
+   .. note::
+
+      Setting it moves the camera to the kitten. Throws an exception if the kitten is not
+      on EVA. See :attr:`KSA.active_vehicle <KSA.KSA.active_vehicle>` for a vehicle.
+
+
+
+
+.. attribute:: kittens: Map
+
+   The kittens in the agency's roster, including those killed in action, keyed by name.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: Map
+
+
+
+
+.. attribute:: camera: KSA.Camera
+
+   The game's main camera.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`KSA.Camera`
 
 
 
@@ -80,19 +118,89 @@ Provides functionality to interact with Kitten Space Agency.
 
 
 
+.. attribute:: vehicle_designs: Map
+
+   The vehicle designs that can be launched, keyed by name.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: Map
+
+
+
+
 .. staticmethod:: launch_vehicle(name, site)
 
    Launch a vehicle from a launch site, and make it the active vehicle. Returns once
    the vehicle is on the launch site.
 
-   :param string name: The name of the vehicle, one of the game's default vehicles or a vehicle saved by the player.
+   :param string name: The name of the vehicle design. See :attr:`KSA.vehicle_designs <KSA.KSA.vehicle_designs>`.
    :param string site: The name of the launch site. See :attr:`KSA.Body.launch_sites`.
    :returns: The vehicle. Its name is the vehicle's name, with a number appended if another vehicle has that name.
    :rtype: :class:`KSA.Vehicle`
 
    .. note::
 
-      Throws an exception if there is no such vehicle or launch site.
+      Throws an exception if there is no such vehicle or launch site, or the name is one
+      of the game's kittens.
+
+
+
+
+.. staticmethod:: save_exists(name)
+
+   Whether a save with the given name exists.
+
+   :param string name: Name of the save.
+   :rtype: boolean
+
+
+
+
+.. staticmethod:: save(name)
+
+   Save the game, replacing any save with the same name.
+
+   :param string name: Name of the save.
+
+
+
+
+.. staticmethod:: load(name)
+
+   Load a save, and return once it has loaded. The game is paused after loading.
+
+   :param string name: Name of the save.
+
+   .. note::
+
+      Throws an exception if the save does not exist.
+
+
+
+
+.. staticmethod:: take_screenshot([scale = 1], [ui = false])
+
+   Save a screenshot, as the screenshot key does, and return once the file is written.
+
+   :param number scale: The size of the image, as a multiple of the window size, from 1 to 8. The game reduces it to fit the graphics memory.
+   :param boolean ui: Whether to include the game's windows. The image is then the size of the window.
+   :returns: The path of the PNG file, in the game's screenshots folder.
+   :rtype: string
+
+   .. note::
+
+      Throws an exception in the vehicle editor, or if a screenshot is already being taken.
+
+
+
+
+.. staticmethod:: show_message(text, [duration = 5.0], [warning = false])
+
+   Show a message in the middle of the screen.
+
+   :param string text: The message.
+   :param number duration: How long to show the message for, in seconds. The game shows a message for at least 2 seconds.
+   :param boolean warning: Whether to show the message in the warning color.
 
 
 

@@ -22,9 +22,55 @@ Vehicle
 
       :Game Scenes: All
 
+   .. function:: void Destroy()
+
+      Destroy the vehicle, killing its crew, as abandoning the vehicle does. Returns once
+      the vehicle is gone.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         If the vehicle is the active vehicle, the game hands control to a nearby vehicle.
+
+   .. property:: bool CanRecover { get; }
+
+      Whether the vehicle can be recovered: at rest on the surface of the home planet.
+
+      :Game Scenes: All
+
+   .. function:: void Recover()
+
+      Recover the vehicle, ending its crew's missions, as the game's recover button does.
+      Returns once the vehicle is gone.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the vehicle cannot be recovered, see :prop:`Vehicle.CanRecover`.
+
    .. property:: Situation Situation { get; }
 
       The situation of the vehicle.
+
+      :Game Scenes: All
+
+   .. property:: bool OnRails { get; }
+
+      Whether the game moves the vehicle without simulating the forces on it: along its
+      orbit, or held on the surface. True in the freefall, landed, floating and bottomed
+      situations.
+
+      :Game Scenes: All
+
+   .. property:: bool IsDebris { get; }
+
+      Whether the vehicle is debris, such as a spent stage.
 
       :Game Scenes: All
 
@@ -52,7 +98,7 @@ Vehicle
 
       :Game Scenes: All
 
-   .. property:: double Thrust { get; }
+   .. property:: float Thrust { get; }
 
       The thrust of the engines at their current throttle and the current atmospheric
       pressure, in Newtons.
@@ -66,10 +112,39 @@ Vehicle
 
       :Game Scenes: All
 
-   .. property:: double SpecificImpulse { get; }
+   .. property:: float SpecificImpulse { get; }
 
       The combined specific impulse of the active engines that have propellant, at the
       current atmospheric pressure, in seconds. Zero when no engine is active.
+
+      :Game Scenes: All
+
+   .. property:: float PeakGLoad { get; }
+
+      The highest smoothed g-load on the vehicle during the last physics step, as a
+      multiple of standard gravity. Zero while the vehicle is :prop:`Vehicle.OnRails`.
+
+      :Game Scenes: All
+
+   .. property:: float MaxGLoad { get; }
+
+      The g-load the vehicle can take before it breaks up, as a multiple of standard
+      gravity. Zero while the vehicle is :prop:`Vehicle.OnRails`.
+
+      :Game Scenes: All
+
+   .. property:: float PeakDynamicPressure { get; }
+
+      The highest dynamic pressure on the vehicle during the last physics step, in
+      pascals. In the sea, this is the dynamic pressure of the water. Zero while the
+      vehicle is :prop:`Vehicle.OnRails`.
+
+      :Game Scenes: All
+
+   .. property:: float MaxDynamicPressure { get; }
+
+      The dynamic pressure the vehicle can take before it breaks up, in pascals. Zero
+      while the vehicle is :prop:`Vehicle.OnRails`.
 
       :Game Scenes: All
 
@@ -82,6 +157,137 @@ Vehicle
    .. property:: Part RootPart { get; }
 
       The vehicle's root part, which the other parts are attached to.
+
+      :Game Scenes: All
+
+   .. function:: System.Collections.Generic.IList<Part> PartsWithName(string name)
+
+      The vehicle's parts with the given template id. See :prop:`Part.Name`.
+
+      :parameters:
+
+       * **name** -- The template id.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Seat> Seats { get; }
+
+      The vehicle's crew seats.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Kitten> Crew { get; }
+
+      The kittens in the vehicle's seats.
+
+      :Game Scenes: All
+
+   .. property:: int CrewCapacity { get; }
+
+      The number of crew seats in the vehicle.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Engine> Engines { get; }
+
+      The vehicle's engines.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<RCS> RCS { get; }
+
+      The vehicle's RCS thrusters.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Decoupler> Decouplers { get; }
+
+      The vehicle's decouplers.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Parachute> Parachutes { get; }
+
+      The vehicle's parachutes.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Tank> Tanks { get; }
+
+      The vehicle's propellant tanks.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Battery> Batteries { get; }
+
+      The vehicle's batteries.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<SolarPanel> SolarPanels { get; }
+
+      The vehicle's solar panels.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Generator> Generators { get; }
+
+      The vehicle's generators.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<PowerConsumer> PowerConsumers { get; }
+
+      The vehicle's power consumers.
+
+      :Game Scenes: All
+
+   .. property:: float StoredEnergy { get; }
+
+      The energy stored in the vehicle's batteries, in joules.
+
+      :Game Scenes: All
+
+   .. property:: float EnergyCapacity { get; }
+
+      The energy the vehicle's batteries can store, in joules.
+
+      :Game Scenes: All
+
+   .. property:: float NetPower { get; }
+
+      The power produced by the vehicle's solar panels and generators, less the power its
+      parts use, in watts.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Light> Lights { get; }
+
+      The vehicle's lights.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Deployable> Deployables { get; }
+
+      The vehicle's deployable sections.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<MagneticScoop> MagneticScoops { get; }
+
+      The vehicle's magnetic scoops.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<FuelLink> FuelLinks { get; }
+
+      The vehicle's fuel links.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<DockingPort> DockingPorts { get; }
+
+      The vehicle's docking ports.
 
       :Game Scenes: All
 
@@ -122,13 +328,21 @@ Vehicle
 
          Setting a body that orbits nothing, such as the star, throws an exception.
 
+   .. property:: Part TargetPart { get; set; }
+
+      The part targeted by this vehicle, on the vehicle in :prop:`Vehicle.TargetVehicle`,
+      or ``null``. Setting it targets the part and its vehicle, and ``null`` clears
+      the target.
+
+      :Game Scenes: All
+
    .. property:: System.Collections.Generic.IList<Burn> Burns { get; }
 
       The vehicle's planned burns, in time order.
 
       :Game Scenes: All
 
-   .. function:: Burn AddBurn(double ut, double prograde = 0.0, double normal = 0.0, double radial = 0.0)
+   .. function:: Burn AddBurn(double ut, float prograde = 0.0f, float normal = 0.0f, float radial = 0.0f)
 
       Plan a burn, and add it to the vehicle's burn plan.
 
@@ -296,3 +510,56 @@ Vehicle
    .. enumerator:: Bottomed
 
       At rest on terrain and in the ocean.
+
+
+
+.. class:: VehicleDesign
+
+   A vehicle design that can be launched: one of the game's default vehicles, or a vehicle
+   saved by the player in the editor. Obtained from :prop:`KSA.VehicleDesigns <KSA.KSA.VehicleDesigns>`.
+
+   .. note::
+
+      The mass and delta-v are those the editor shows for the design.
+
+   .. property:: string Name { get; }
+
+      The name of the design, as passed to :meth:`KSA.LaunchVehicle <KSA.KSA.LaunchVehicle>`.
+
+      :Game Scenes: All
+
+   .. property:: bool IsDefault { get; }
+
+      Whether the design is one of the game's default vehicles.
+
+      :Game Scenes: All
+
+   .. property:: int PartCount { get; }
+
+      The number of parts in the design.
+
+      :Game Scenes: All
+
+   .. property:: float Mass { get; }
+
+      The total mass of the design, including propellant, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: float DryMass { get; }
+
+      The mass of the design without propellant, in kilograms.
+
+      :Game Scenes: All
+
+   .. property:: float DeltaV { get; }
+
+      The change in velocity of all the design's sequences, in meters per second.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Each sequence is computed in the environment chosen for it in the editor, in vacuum
+         or at sea level.

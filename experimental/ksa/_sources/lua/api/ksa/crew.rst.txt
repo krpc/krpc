@@ -1,0 +1,251 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KSA
+
+Crew
+====
+
+
+.. class:: Kitten
+
+   A kitten in the agency's roster. Obtained from :attr:`KSA.kittens <KSA.KSA.kittens>`,
+   :attr:`KSA.Vehicle.crew` or :attr:`KSA.Seat.kitten`.
+
+   .. attribute:: name: string
+
+      The kitten's name, which is unique in the roster.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string
+
+   .. attribute:: roster_index: number
+
+      The kitten's position in the agency's roster, from 0. See :attr:`KSA.kittens <KSA.KSA.kittens>`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: vehicle: KSA.Vehicle
+
+      The vehicle the kitten is in, or ``nil`` if it is not in a seat.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Vehicle` or ``Types.none``
+
+   .. attribute:: seat: KSA.Seat
+
+      The seat the kitten is in, or ``nil`` if it is not in a seat.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Seat` or ``Types.none``
+
+   .. attribute:: killed_in_action: boolean
+
+      Whether the kitten has been killed in action.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: mission_count: number
+
+      The number of missions the kitten has flown, including the current one.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: mission_time: number
+
+      The time the kitten has spent on missions, including the current one, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: distance_traveled: number
+
+      The distance the kitten has traveled on missions, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: fastest_speed: number
+
+      The kitten's highest speed on a mission, in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: acute_dose: number
+
+      The kitten's acute radiation dose, in sieverts. It heals over time, and causes
+      radiation sickness from 1 sievert and death from 4 sieverts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: lifetime_dose: number
+
+      The kitten's lifetime radiation dose, in sieverts. The kitten retires after a
+      mission that takes it past 0.6 sieverts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: dose_rate: number
+
+      The radiation dose rate the kitten receives, in sieverts per second. The vehicle's
+      shielding reduces it in a seat, and on EVA the kitten is unshielded. Zero when the
+      kitten is not on a mission.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: radiation_sickness: boolean
+
+      Whether the kitten has radiation sickness, which keeps it from flying.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: time_until_fit_to_fly: number
+
+      The time until the kitten has recovered from radiation sickness and can fly, resting
+      at home, in seconds. Zero if the kitten does not have radiation sickness.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: recovery_time: number
+
+      The time until the kitten's acute radiation dose has healed below 1 millisievert,
+      resting at home, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: retired: boolean
+
+      Whether the kitten has retired, having reached its lifetime radiation dose limit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: on_eva: boolean
+
+      Whether the kitten is on EVA.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. method:: go_on_eva()
+
+      Leave the kitten's vehicle through its EVA hatch, and return once the kitten is on
+      EVA. The kitten becomes the controlled kitten, see :attr:`KSA.active_kitten <KSA.KSA.active_kitten>`.
+
+
+      .. note::
+
+         Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
+
+   .. method:: board()
+
+      Board the nearest vehicle with a free seat, and return once the kitten is in the
+      seat. The vehicle becomes the controlled vehicle.
+
+      :returns: The vehicle the kitten boarded.
+      :rtype: :class:`KSA.Vehicle`
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
+         within one meter.
+
+   .. attribute:: locomotion_mode: KSA.LocomotionMode
+
+      How the kitten on EVA is moving. Throws an exception if the kitten is not on EVA.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.LocomotionMode`
+
+   .. method:: position(reference_frame)
+
+      The position of the kitten, in meters. For a kitten in a seat, the position of the
+      seat's part. Throws an exception if the kitten is neither in a seat nor on EVA.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: Tuple
+
+   .. method:: velocity(reference_frame)
+
+      The velocity of the kitten, in meters per second. For a kitten in a seat, the
+      velocity of the seat's part. Throws an exception if the kitten is neither in a seat
+      nor on EVA.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
+      :rtype: Tuple
+
+
+
+.. class:: LocomotionMode
+
+   How a kitten on EVA is moving. See :attr:`KSA.Kitten.locomotion_mode`.
+
+
+   .. data:: mmu
+
+      Flying with the maneuvering unit, away from any surface.
+
+
+   .. data:: grounded
+
+      Standing or walking on a surface.
+
+
+   .. data:: airborne
+
+      In the air above a surface, such as during a jump.
+
+
+   .. data:: tumbling
+
+      Tumbling after a fall or an impact.
+
+
+   .. data:: righting
+
+      Getting back up after tumbling.
+
+
+   .. data:: ladder
+
+      Holding a ladder or grab rail.
+
+
+   .. data:: swimming
+
+      Swimming in an ocean.
+
+
+
+.. class:: Seat
+
+   A crew seat. Obtained from :attr:`KSA.Part.seats`.
+
+   .. attribute:: part: KSA.Part
+
+      The part the seat is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: kitten: KSA.Kitten
+
+      Returns the kitten in the seat, or ``nil`` if the seat is empty, and sets the
+      kitten in the seat. Setting ``nil`` empties the seat.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`KSA.Kitten` or ``Types.none``
+
+      .. note::
+
+         A kitten in another seat of the vehicle moves to this one. Throws an exception if
+         the kitten is killed in action, on EVA, or in another vehicle.

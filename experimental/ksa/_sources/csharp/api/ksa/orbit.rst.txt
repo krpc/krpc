@@ -13,9 +13,10 @@ Orbit
 
    .. note::
 
-      A vehicle's orbit follows the vehicle as its trajectory changes. A predicted orbit, from
-      :prop:`Orbit.NextOrbit` or :prop:`Burn.Orbit`, is the prediction at the time it
-      was obtained.
+      An orbit follows the game's prediction as the trajectory changes. A predicted orbit, from
+      :prop:`Orbit.NextOrbit` or :prop:`Burn.Orbit`, is a position in the vehicle's or the
+      burn's predicted trajectory, and throws an exception while the trajectory is too short to
+      reach it.
 
    .. property:: Body Body { get; }
 
@@ -54,6 +55,13 @@ Orbit
 
       :Game Scenes: All
 
+   .. property:: double SemiMinorAxis { get; }
+
+      The semi-minor axis of the orbit, in meters. Not a number for a parabolic or
+      hyperbolic orbit.
+
+      :Game Scenes: All
+
    .. property:: double Speed { get; }
 
       The current orbital speed, in meters per second.
@@ -69,6 +77,19 @@ Orbit
    .. property:: double Period { get; }
 
       The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+      :Game Scenes: All
+
+   .. property:: double MeanMotion { get; }
+
+      The mean angular motion of the orbit, in radians per second.
+
+      :Game Scenes: All
+
+   .. property:: double SpecificEnergy { get; }
+
+      The specific orbital energy, the sum of the kinetic and potential energy per unit
+      mass, in joules per kilogram. Negative for an elliptical orbit.
 
       :Game Scenes: All
 
@@ -123,6 +144,12 @@ Orbit
 
       The current `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_,
       in radians.
+
+      :Game Scenes: All
+
+   .. property:: double EccentricAnomaly { get; }
+
+      The current `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_, in radians. For a hyperbolic orbit, this is the hyperbolic anomaly.
 
       :Game Scenes: All
 
@@ -182,6 +209,72 @@ Orbit
        * **referenceFrame** -- The reference frame of the velocity.
 
       :Game Scenes: All
+
+   .. function:: double RelativeInclination(Orbit orbit)
+
+      The inclination of the orbit relative to another orbit, in radians.
+
+      :parameters:
+
+       * **orbit** -- The other orbit.
+
+      :Game Scenes: All
+
+   .. function:: double TrueAnomalyAtAN(Orbit orbit)
+
+      The true anomaly of the ascending node with another orbit, in radians.
+
+      :parameters:
+
+       * **orbit** -- The other orbit.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. function:: double TrueAnomalyAtDN(Orbit orbit)
+
+      The true anomaly of the descending node with another orbit, in radians.
+
+      :parameters:
+
+       * **orbit** -- The other orbit.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. property:: double TimeOfClosestApproach { get; }
+
+      The universal time of the closest approach on this orbit to the vehicle's target,
+      in seconds. Not a number if there is none.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
+
+   .. property:: double DistanceAtClosestApproach { get; }
+
+      The distance at the closest approach on this orbit to the vehicle's target, in
+      meters. Not a number if there is none.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
 
    .. property:: double StartUT { get; }
 

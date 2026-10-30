@@ -1,0 +1,172 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Power
+=====
+
+
+.. type:: public class Battery
+
+   A battery, which stores electrical energy. Obtained from :meth:`Part.getBatteries()`.
+
+   .. method:: Part getPart()
+
+
+      The part the battery is in.
+
+   
+
+   .. method:: float getStoredEnergy()
+
+
+      The energy stored in the battery, in joules.
+
+   
+
+   .. method:: float getEnergyCapacity()
+
+
+      The energy the battery can store, in joules.
+
+   
+
+
+
+.. type:: public class SolarPanel
+
+   A solar panel, which turns sunlight into electrical power. Obtained from :meth:`Part.getSolarPanels()`.
+
+   .. method:: Part getPart()
+
+
+      The part the solar panel is in.
+
+   
+
+   .. method:: boolean getActive()
+
+
+      Whether the solar panel can produce power, because it is deployed or does not deploy.
+
+   
+
+   .. method:: float getPower()
+
+
+      The power the solar panel produces, in watts.
+
+   
+
+   .. method:: float getSunAngle()
+
+
+      The angle between the solar panel's face and the direction to the sun, in degrees.
+      Zero when the panel faces the sun.
+
+   
+
+   .. method:: boolean getOccluded()
+
+
+      Whether a body blocks the sunlight to the solar panel.
+
+   
+
+   .. method:: Deployable getDeployable()
+
+
+      The deployable section that opens the solar panel, or ``null`` for a panel that
+      does not deploy.
+
+   
+
+
+
+.. type:: public class Generator
+
+   A generator, which produces electrical power. Obtained from :meth:`Part.getGenerators()`.
+
+   .. note::
+
+      A generator runs while its :meth:`Generator.getEngine()` is active, and produces power in
+      proportion to the engine's throttle.
+
+   .. method:: Part getPart()
+
+
+      The part the generator is in.
+
+   
+
+   .. method:: Engine getEngine()
+
+
+      The engine that drives the generator, or ``null`` if it has none.
+
+   
+
+   .. method:: boolean getActive()
+
+
+      Whether the generator is producing power.
+
+   
+
+   .. method:: float getPower()
+
+
+      The power the generator produces, in watts.
+
+   
+
+
+
+.. type:: public class PowerConsumer
+
+   A power consumer, which uses electrical power, such as a light. Obtained from
+   :meth:`Part.getPowerConsumers()`.
+
+   .. method:: Part getPart()
+
+
+      The part the power consumer is in.
+
+   
+
+   .. method:: boolean getActive()
+
+
+      Whether the part is using power.
+
+   
+
+   .. method:: float getPower()
+
+
+      The power the part uses, in watts.
+
+   
+
+
+
+.. type:: public class Light
+
+   A light. Obtained from :meth:`Part.getLights()`.
+
+   .. note::
+
+      The vehicle's lights switch on and off together, see :meth:`Control.getLights()`.
+      Cabin lights are always on.
+
+   .. method:: Part getPart()
+
+
+      The part the light is in.
+
+   
+
+   .. method:: boolean getActive()
+
+
+      Whether the light is on.

@@ -1,0 +1,191 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KSA
+
+Power
+=====
+
+
+.. class:: Battery
+
+   A battery, which stores electrical energy. Obtained from :attr:`Part.batteries`.
+
+   .. attribute:: part
+
+      The part the battery is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: stored_energy
+
+      The energy stored in the battery, in joules.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: energy_capacity
+
+      The energy the battery can store, in joules.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: SolarPanel
+
+   A solar panel, which turns sunlight into electrical power. Obtained from :attr:`Part.solar_panels`.
+
+   .. attribute:: part
+
+      The part the solar panel is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: active
+
+      Whether the solar panel can produce power, because it is deployed or does not deploy.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: power
+
+      The power the solar panel produces, in watts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: sun_angle
+
+      The angle between the solar panel's face and the direction to the sun, in degrees.
+      Zero when the panel faces the sun.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: occluded
+
+      Whether a body blocks the sunlight to the solar panel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: deployable
+
+      The deployable section that opens the solar panel, or ``None`` for a panel that
+      does not deploy.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Deployable` or None
+   
+
+
+
+.. class:: Generator
+
+   A generator, which produces electrical power. Obtained from :attr:`Part.generators`.
+
+   .. note::
+
+      A generator runs while its :attr:`Generator.engine` is active, and produces power in
+      proportion to the engine's throttle.
+
+   .. attribute:: part
+
+      The part the generator is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: engine
+
+      The engine that drives the generator, or ``None`` if it has none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Engine` or None
+   
+
+   .. attribute:: active
+
+      Whether the generator is producing power.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: power
+
+      The power the generator produces, in watts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: PowerConsumer
+
+   A power consumer, which uses electrical power, such as a light. Obtained from
+   :attr:`Part.power_consumers`.
+
+   .. attribute:: part
+
+      The part the power consumer is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: active
+
+      Whether the part is using power.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: power
+
+      The power the part uses, in watts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: Light
+
+   A light. Obtained from :attr:`Part.lights`.
+
+   .. note::
+
+      The vehicle's lights switch on and off together, see :attr:`Control.lights`.
+      Cabin lights are always on.
+
+   .. attribute:: part
+
+      The part the light is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: active
+
+      Whether the light is on.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool

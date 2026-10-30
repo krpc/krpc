@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Flight &#8212; kRPC v0.1.0 documentation</title>
+    <title>Flight &#8212; kRPC v0.2.0 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1ea62e31" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -53,7 +53,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.0" />
+  <meta name="docsearch:version" content="0.2.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -166,6 +166,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../developer-guide.html">
     Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
   </a>
 </li>
 
@@ -298,6 +305,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -357,13 +371,14 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../python/client.html">Python Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
@@ -371,18 +386,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../csharp/client.html">C# Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
@@ -390,18 +410,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../client.html">C++ Client</a></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
 <li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
@@ -409,18 +434,23 @@
 <li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../cnano/client.html">C-nano Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
@@ -428,18 +458,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../java/client.html">Java Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
@@ -447,18 +482,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../lua/client.html">Lua Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
@@ -466,8 +506,39 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
 </ul>
 </details></li>
 </ul>
@@ -591,7 +662,7 @@ body. Below the sea, this is the height of the sea floor.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight14time_to_impactEv">
-<span id="_CPPv3N4krpc8services3KSA6Flight14time_to_impactEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight14time_to_impactEv"></span><span id="krpc::services::KSA::Flight::time_to_impact"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_to_impact</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight14time_to_impactEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services3KSA6Flight14time_to_impactEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight14time_to_impactEv"></span><span id="krpc::services::KSA::Flight::time_to_impact"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_to_impact</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight14time_to_impactEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The time until the vehicle hits the surface on its current trajectory, in seconds.
 Not a number if its trajectory does not hit the surface.</p>
 <dl class="field-list simple">
@@ -629,8 +700,19 @@ shortly after.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight5biomeEv">
+<span id="_CPPv3N4krpc8services3KSA6Flight5biomeEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight5biomeEv"></span><span id="krpc::services::KSA::Flight::biome"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">biome</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight5biomeEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The biome below the vehicle, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if the body has no biomes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight5speedEv">
-<span id="_CPPv3N4krpc8services3KSA6Flight5speedEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight5speedEv"></span><span id="krpc::services::KSA::Flight::speed"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight5speedEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services3KSA6Flight5speedEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight5speedEv"></span><span id="krpc::services::KSA::Flight::speed"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight5speedEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The speed of the vehicle relative to the surface, in meters per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -641,7 +723,7 @@ shortly after.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight16horizontal_speedEv">
-<span id="_CPPv3N4krpc8services3KSA6Flight16horizontal_speedEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight16horizontal_speedEv"></span><span id="krpc::services::KSA::Flight::horizontal_speed"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">horizontal_speed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight16horizontal_speedEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services3KSA6Flight16horizontal_speedEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight16horizontal_speedEv"></span><span id="krpc::services::KSA::Flight::horizontal_speed"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">horizontal_speed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight16horizontal_speedEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The horizontal speed of the vehicle relative to the surface, in meters per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -652,7 +734,7 @@ shortly after.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight14vertical_speedEv">
-<span id="_CPPv3N4krpc8services3KSA6Flight14vertical_speedEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight14vertical_speedEv"></span><span id="krpc::services::KSA::Flight::vertical_speed"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vertical_speed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight14vertical_speedEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services3KSA6Flight14vertical_speedEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight14vertical_speedEv"></span><span id="krpc::services::KSA::Flight::vertical_speed"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vertical_speed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight14vertical_speedEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The vertical speed of the vehicle relative to the surface, in meters per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -699,7 +781,7 @@ A value between -180° and +180°.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight15static_pressureEv">
-<span id="_CPPv3N4krpc8services3KSA6Flight15static_pressureEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight15static_pressureEv"></span><span id="krpc::services::KSA::Flight::static_pressure"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">static_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight15static_pressureEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services3KSA6Flight15static_pressureEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight15static_pressureEv"></span><span id="krpc::services::KSA::Flight::static_pressure"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">static_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight15static_pressureEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The static atmospheric pressure at the vehicle, in pascals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -710,7 +792,7 @@ A value between -180° and +180°.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight18atmosphere_densityEv">
-<span id="_CPPv3N4krpc8services3KSA6Flight18atmosphere_densityEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight18atmosphere_densityEv"></span><span id="krpc::services::KSA::Flight::atmosphere_density"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">atmosphere_density</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight18atmosphere_densityEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services3KSA6Flight18atmosphere_densityEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight18atmosphere_densityEv"></span><span id="krpc::services::KSA::Flight::atmosphere_density"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">atmosphere_density</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight18atmosphere_densityEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The density of the atmosphere at the vehicle, in kilograms per cubic meter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -721,7 +803,7 @@ A value between -180° and +180°.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight16dynamic_pressureEv">
-<span id="_CPPv3N4krpc8services3KSA6Flight16dynamic_pressureEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight16dynamic_pressureEv"></span><span id="krpc::services::KSA::Flight::dynamic_pressure"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dynamic_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight16dynamic_pressureEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services3KSA6Flight16dynamic_pressureEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight16dynamic_pressureEv"></span><span id="krpc::services::KSA::Flight::dynamic_pressure"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dynamic_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight16dynamic_pressureEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The dynamic pressure acting on the vehicle, in pascals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -731,8 +813,33 @@ A value between -180° and +180°.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight9dose_rateEv">
+<span id="_CPPv3N4krpc8services3KSA6Flight9dose_rateEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight9dose_rateEv"></span><span id="krpc::services::KSA::Flight::dose_rate"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dose_rate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight9dose_rateEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The radiation dose rate at the vehicle, in sieverts per second. Includes any solar
+particle event under way.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight23orbit_average_dose_rateEv">
+<span id="_CPPv3N4krpc8services3KSA6Flight23orbit_average_dose_rateEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight23orbit_average_dose_rateEv"></span><span id="krpc::services::KSA::Flight::orbit_average_dose_rate"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">orbit_average_dose_rate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight23orbit_average_dose_rateEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The radiation dose rate averaged over the vehicle’s orbit, in sieverts per second.
+Includes any solar particle event under way. Not a number if the body has no
+magnetosphere, or the orbit dips below the surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight7g_forceEv">
-<span id="_CPPv3N4krpc8services3KSA6Flight7g_forceEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight7g_forceEv"></span><span id="krpc::services::KSA::Flight::g_force"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">g_force</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight7g_forceEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services3KSA6Flight7g_forceEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight7g_forceEv"></span><span id="krpc::services::KSA::Flight::g_force"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">g_force</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight7g_forceEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The acceleration of the vehicle, excluding gravity, in multiples of standard
 gravity.</p>
 <dl class="field-list simple">
@@ -744,7 +851,7 @@ gravity.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight15angle_of_attackEv">
-<span id="_CPPv3N4krpc8services3KSA6Flight15angle_of_attackEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight15angle_of_attackEv"></span><span id="krpc::services::KSA::Flight::angle_of_attack"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">angle_of_attack</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight15angle_of_attackEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services3KSA6Flight15angle_of_attackEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight15angle_of_attackEv"></span><span id="krpc::services::KSA::Flight::angle_of_attack"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">angle_of_attack</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight15angle_of_attackEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The angle between the direction the vehicle points in and its velocity relative to
 the surface, in the vehicle’s pitch plane, in degrees. Positive when the nose is
 above the velocity.</p>
@@ -757,13 +864,63 @@ above the velocity.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight14sideslip_angleEv">
-<span id="_CPPv3N4krpc8services3KSA6Flight14sideslip_angleEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight14sideslip_angleEv"></span><span id="krpc::services::KSA::Flight::sideslip_angle"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sideslip_angle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight14sideslip_angleEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services3KSA6Flight14sideslip_angleEv"></span><span id="_CPPv2N4krpc8services3KSA6Flight14sideslip_angleEv"></span><span id="krpc::services::KSA::Flight::sideslip_angle"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sideslip_angle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight14sideslip_angleEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The angle between the direction the vehicle points in and its velocity relative to
 the surface, in the vehicle’s yaw plane, in degrees. Positive when the nose is to
 the right of the velocity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight8progradeE14ReferenceFrame">
+<span id="_CPPv3N4krpc8services3KSA6Flight8progradeE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services3KSA6Flight8progradeE14ReferenceFrame"></span><span id="krpc::services::KSA::Flight::prograde__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">prograde</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services3KSA14ReferenceFrameE" title="krpc::services::KSA::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight8progradeE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The unit vector of the vehicle’s velocity relative to the surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame of the direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight6normalE14ReferenceFrame">
+<span id="_CPPv3N4krpc8services3KSA6Flight6normalE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services3KSA6Flight6normalE14ReferenceFrame"></span><span id="krpc::services::KSA::Flight::normal__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">normal</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services3KSA14ReferenceFrameE" title="krpc::services::KSA::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight6normalE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The unit vector normal to the plane of the vehicle’s position and its velocity
+relative to the surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame of the direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA6Flight6radialE14ReferenceFrame">
+<span id="_CPPv3N4krpc8services3KSA6Flight6radialE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services3KSA6Flight6radialE14ReferenceFrame"></span><span id="krpc::services::KSA::Flight::radial__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radial</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services3KSA14ReferenceFrameE" title="krpc::services::KSA::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA6Flight6radialE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The unit vector pointing radially outward, perpendicular to <a class="reference internal" href="#_CPPv4N4krpc8services3KSA6Flight8progradeE14ReferenceFrame" title="krpc::services::KSA::Flight::prograde"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::prograde()</span></code></a>
+and <a class="reference internal" href="#_CPPv4N4krpc8services3KSA6Flight6normalE14ReferenceFrame" title="krpc::services::KSA::Flight::normal"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::normal()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>reference_frame</strong> – The reference frame of the direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
 </dd>
 </dl>
 </dd></dl>

@@ -1,0 +1,64 @@
+.. role:: breaking
+   :class: changelog-marker breaking
+
+.. role:: deprecated
+   :class: changelog-marker deprecated
+
+Changelog
+=========
+
+
+v0.2.0
+------
+
+* Mod
+
+  * :breaking:`Breaking` Rename the mod folder and id from ``kRPC.KSA`` to ``kRPC`` (:issue:`1205`)
+  * Support KSA v2026.10.25.5707 (:issue:`1205`)
+  * Show a pop-up listing the RPCs found broken when KSA is not the version kRPC was built for (:issue:`1206`, :issue:`1210`)
+  * Put the ``kRPC`` mod folder at the top of the release archive, so the Borea mod manager can install it (:issue:`1205`)
+  * Add a kRPC menu to the game's menu bar, with a server window and an info window that start and stop the server and edit its settings (:issue:`1206`)
+  * Reset the server settings to the defaults when the mod is updated (:issue:`1206`)
+  * Add a gRPC server, with a ``.proto`` file and an API reference for each service, to control the game from any language gRPC supports (:issue:`1222`)
+  * :breaking:`Breaking` Use ``float`` for values that do not need ``double`` precision, such as ``Flight.Speed`` and ``Engine.Thrust`` (:issue:`1214`)
+
+* Vehicles and parts
+
+  * :breaking:`Breaking` Return the separated vehicles from ``Decoupler.Decouple`` and ``DockingPort.Undock`` (:issue:`1207`)
+  * Add the target part, debris, on-rails and structural load to ``Vehicle`` (:issue:`1207`)
+  * Add ``Vehicle.Destroy`` and ``Vehicle.Recover`` (:issue:`1213`)
+  * Add part velocities, and part lists by name and by module (:issue:`1207`)
+  * Add engine gimbals, propellant tanks, fuel links, and the minimum throttle and propellants of engines (:issue:`1210`)
+  * Add power, lights, deployable parts and magnetic scoops (:issue:`1211`)
+  * Add kittens, their radiation doses, crew seats and EVA (:issue:`1212`)
+  * :breaking:`Breaking` Return ``null`` from ``KSA.ActiveVehicle`` while the player controls a kitten on EVA (:issue:`1212`)
+  * Add ``KSA.VehicleDesigns``, the designs ``KSA.LaunchVehicle`` can launch (:issue:`1213`)
+  * Fix ``KSA.LaunchVehicle`` failing in the game's placement code for an EVA kitten, which now throws an exception (:issue:`1212`)
+
+* Flight and orbits
+
+  * Add manual rotation and translation inputs to ``Control``, and pulsed thrust (:issue:`1207`)
+  * Add surface directions, the biome and radiation dose rates to ``Flight`` (:issue:`1207`, :issue:`1211`)
+  * Add atmosphere, ocean, biome and position queries to ``Body`` (:issue:`1207`)
+  * Add shape, energy, node and closest approach members to ``Orbit`` (:issue:`1207`)
+  * Add the time to, position, reference frame and orbit average dose rate of a ``Burn`` (:issue:`1207`, :issue:`1211`)
+  * Add relative and hybrid reference frames (:issue:`1207`)
+  * :breaking:`Breaking` ``Burn.Orbit`` and ``Orbit.NextOrbit`` follow the game's current prediction (:issue:`1209`)
+  * Fix an edited ``Burn`` getting a new object (:issue:`1209`)
+
+* Game
+
+  * Add ``KSA.Save``, ``KSA.Load`` and ``KSA.SaveExists`` (:issue:`1207`)
+  * Add the camera, screenshots and on-screen messages (:issue:`1213`)
+  * Add ``KSA.Debug``, which teleports vehicles, sets their attitude, fills and empties their resources, and runs console commands (:issue:`1213`)
+  * Add drawing of lines, shapes and text in the scene (:issue:`1215`)
+  * Add user interface windows, with labels, buttons, toggles, input fields, sliders and dropdowns (:issue:`1215`)
+  * Raise ``KRPC.ObjectDestroyedException`` from a call through an object whose game object is gone (:issue:`1209`)
+  * Fix ``KRPC.GameStateLoads`` not counting save loads (:issue:`1209`)
+
+
+
+v0.1.0
+------
+
+* Add the kRPC server and the ``KSA`` service for Kitten Space Agency, against the kRPC 0.7.0 clients (:issue:`1190`)

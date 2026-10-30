@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>UI &#8212; kRPC v0.2.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'java/api/ksa/ui';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Debug" href="debug.html" />
+    <link rel="prev" title="Drawing" href="drawing.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.2.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../java.html">Java</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../clients.html" class="nav-link">Clients</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../java.html" class="nav-link">Java</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../ksa.html" class="nav-link">KSA API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">UI</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="ui">
+<span id="package-krpc.client.services.KSA"></span><h1>UI<a class="headerlink" href="#ui" title="Link to this heading">#</a></h1>
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.UI">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">UI</span></span><a class="headerlink" href="#krpc.client.services.KSA.UI" title="Link to this definition">#</a></dt>
+<dd><p>Adds windows of buttons, text fields and other widgets to the game’s UI.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The windows are removed when the client that added them disconnects. For messages on
+the screen, see <a class="reference internal" href="ksa.html#krpc.client.services.KSA.KSA.showMessage(String, float, boolean)" title="krpc.client.services.KSA.KSA.showMessage(String, float, boolean)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">showMessage(String,</span> <span class="pre">float,</span> <span class="pre">boolean)</span></code></a>.</p>
+</div>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.UI.addWindow(Connection, String, boolean)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.services.KSA.Window" title="krpc.client.services.KSA.Window"><span class="pre">Window</span></a> <span class="sig-name descname"><span class="pre">addWindow</span></span><span class="sig-paren">(</span><span class="pre">Connection</span><em> <span class="pre">connection</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">title</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.UI.addWindow(Connection, String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a window, with no widgets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text in the title bar.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the window is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.UI.clear(Connection, boolean)">
+<span class="pre">static</span> <span class="pre">void</span> <span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="pre">Connection</span><em> <span class="pre">connection</span></em>, <span class="pre">boolean</span><em> <span class="pre">clientOnly</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.UI.clear(Connection, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Remove the windows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>clientOnly</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether to remove only the windows added by the calling client.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Window</span></span><a class="headerlink" href="#krpc.client.services.KSA.Window" title="Link to this definition">#</a></dt>
+<dd><p>A window, holding widgets one per line. Created using <a class="reference internal" href="#krpc.client.services.KSA.UI.addWindow(Connection, String, boolean)" title="krpc.client.services.KSA.UI.addWindow(Connection, String, boolean)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">UI.addWindow(String,</span> <span class="pre">boolean)</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The window fits its widgets until its size is set. Closing the window makes it
+invisible. The window is hidden with the game’s UI.</p>
+</div>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.getTitle()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTitle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.getTitle()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.setTitle(String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTitle</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.setTitle(String)" title="Link to this definition">#</a></dt>
+<dd><p>The text in the title bar.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.getPosition()">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><span class="pre">Pair</span><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.getPosition()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.setPosition(org.javatuples.Pair)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPosition</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><span class="pre">Pair</span><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.setPosition(org.javatuples.Pair)" title="Link to this definition">#</a></dt>
+<dd><p>The position of the top left corner of the window, from the top left corner of the
+game window, in pixels.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.getSize()">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><span class="pre">Pair</span><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getSize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.getSize()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.setSize(org.javatuples.Pair)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSize</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><span class="pre">Pair</span><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Float.html" title="java.lang.Float"><span class="pre">Float</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.setSize(org.javatuples.Pair)" title="Link to this definition">#</a></dt>
+<dd><p>The width and height of the window, in pixels.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the width or height is not positive.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.getVisible()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVisible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.getVisible()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.setVisible(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.setVisible(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget is visible.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.getEnabled()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.getEnabled()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.setEnabled(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.setEnabled(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget responds to input. A disabled widget is drawn dimmed.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.addLabel(String, boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Label" title="krpc.client.services.KSA.Label"><span class="pre">Label</span></a> <span class="sig-name descname"><span class="pre">addLabel</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.addLabel(String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a label.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text of the label.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the label is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.addButton(String, boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Button" title="krpc.client.services.KSA.Button"><span class="pre">Button</span></a> <span class="sig-name descname"><span class="pre">addButton</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.addButton(String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a button.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text on the button.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the button is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.addInputField(String, boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.InputField" title="krpc.client.services.KSA.InputField"><span class="pre">InputField</span></a> <span class="sig-name descname"><span class="pre">addInputField</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">label</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.addInputField(String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a text input field, empty.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text shown next to the field.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the field is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.addSlider(String, float, float, boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Slider" title="krpc.client.services.KSA.Slider"><span class="pre">Slider</span></a> <span class="sig-name descname"><span class="pre">addSlider</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">label</span></em>, <span class="pre">float</span><em> <span class="pre">minimum</span></em>, <span class="pre">float</span><em> <span class="pre">maximum</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.addSlider(String, float, float, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a slider, at its minimum value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text shown next to the slider.</p></li>
+<li><p><strong>minimum</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – The minimum value.</p></li>
+<li><p><strong>maximum</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – The maximum value.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the slider is visible.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the minimum is not less than the maximum.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.addToggle(String, boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Toggle" title="krpc.client.services.KSA.Toggle"><span class="pre">Toggle</span></a> <span class="sig-name descname"><span class="pre">addToggle</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.addToggle(String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a toggle, unchecked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text shown next to the toggle.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the toggle is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.addDropdown(java.util.List, String, boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Dropdown" title="krpc.client.services.KSA.Dropdown"><span class="pre">Dropdown</span></a> <span class="sig-name descname"><span class="pre">addDropdown</span></span><span class="sig-paren">(</span><span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span><em> <span class="pre">options</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">label</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.addDropdown(java.util.List, String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a dropdown, with no option selected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>options</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">java.util.List</span></code></a></span>) – The options to choose from.</p></li>
+<li><p><strong>label</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text shown next to the dropdown.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the dropdown is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.addSeparator(boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Separator" title="krpc.client.services.KSA.Separator"><span class="pre">Separator</span></a> <span class="sig-name descname"><span class="pre">addSeparator</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.addSeparator(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a horizontal line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the line is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.addRow(boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Row" title="krpc.client.services.KSA.Row"><span class="pre">Row</span></a> <span class="sig-name descname"><span class="pre">addRow</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.addRow(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a row, which lays out its widgets from left to right.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the row is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Window.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Window.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the widget.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Row</span></span><a class="headerlink" href="#krpc.client.services.KSA.Row" title="Link to this definition">#</a></dt>
+<dd><p>A row of widgets, laid out from left to right. Added to a window or a row.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.getVisible()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVisible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.getVisible()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.setVisible(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.setVisible(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget is visible.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.getEnabled()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.getEnabled()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.setEnabled(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.setEnabled(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget responds to input. A disabled widget is drawn dimmed.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.addLabel(String, boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Label" title="krpc.client.services.KSA.Label"><span class="pre">Label</span></a> <span class="sig-name descname"><span class="pre">addLabel</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.addLabel(String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a label.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text of the label.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the label is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.addButton(String, boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Button" title="krpc.client.services.KSA.Button"><span class="pre">Button</span></a> <span class="sig-name descname"><span class="pre">addButton</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.addButton(String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a button.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text on the button.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the button is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.addInputField(String, boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.InputField" title="krpc.client.services.KSA.InputField"><span class="pre">InputField</span></a> <span class="sig-name descname"><span class="pre">addInputField</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">label</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.addInputField(String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a text input field, empty.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text shown next to the field.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the field is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.addSlider(String, float, float, boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Slider" title="krpc.client.services.KSA.Slider"><span class="pre">Slider</span></a> <span class="sig-name descname"><span class="pre">addSlider</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">label</span></em>, <span class="pre">float</span><em> <span class="pre">minimum</span></em>, <span class="pre">float</span><em> <span class="pre">maximum</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.addSlider(String, float, float, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a slider, at its minimum value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text shown next to the slider.</p></li>
+<li><p><strong>minimum</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – The minimum value.</p></li>
+<li><p><strong>maximum</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – The maximum value.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the slider is visible.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the minimum is not less than the maximum.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.addToggle(String, boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Toggle" title="krpc.client.services.KSA.Toggle"><span class="pre">Toggle</span></a> <span class="sig-name descname"><span class="pre">addToggle</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.addToggle(String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a toggle, unchecked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text shown next to the toggle.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the toggle is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.addDropdown(java.util.List, String, boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Dropdown" title="krpc.client.services.KSA.Dropdown"><span class="pre">Dropdown</span></a> <span class="sig-name descname"><span class="pre">addDropdown</span></span><span class="sig-paren">(</span><span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span><em> <span class="pre">options</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">label</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.addDropdown(java.util.List, String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a dropdown, with no option selected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>options</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">java.util.List</span></code></a></span>) – The options to choose from.</p></li>
+<li><p><strong>label</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The text shown next to the dropdown.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the dropdown is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.addSeparator(boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Separator" title="krpc.client.services.KSA.Separator"><span class="pre">Separator</span></a> <span class="sig-name descname"><span class="pre">addSeparator</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.addSeparator(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a horizontal line.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the line is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.addRow(boolean)">
+ <a class="reference internal" href="#krpc.client.services.KSA.Row" title="krpc.client.services.KSA.Row"><span class="pre">Row</span></a> <span class="sig-name descname"><span class="pre">addRow</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.addRow(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a row, which lays out its widgets from left to right.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the row is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Row.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Row.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the widget.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Label">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Label</span></span><a class="headerlink" href="#krpc.client.services.KSA.Label" title="Link to this definition">#</a></dt>
+<dd><p>A line of text. Added to a window or a row.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Label.getContent()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getContent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Label.getContent()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Label.setContent(String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setContent</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Label.setContent(String)" title="Link to this definition">#</a></dt>
+<dd><p>The text of the label.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Label.getVisible()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVisible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Label.getVisible()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Label.setVisible(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Label.setVisible(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget is visible.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Label.getEnabled()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Label.getEnabled()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Label.setEnabled(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Label.setEnabled(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget responds to input. A disabled widget is drawn dimmed.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Label.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Label.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the widget.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Button">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Button</span></span><a class="headerlink" href="#krpc.client.services.KSA.Button" title="Link to this definition">#</a></dt>
+<dd><p>A button. Added to a window or a row.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Button.getContent()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getContent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Button.getContent()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Button.setContent(String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setContent</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Button.setContent(String)" title="Link to this definition">#</a></dt>
+<dd><p>The text on the button.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Button.getClicked()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getClicked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Button.getClicked()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Button.setClicked(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setClicked</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Button.setClicked(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the button has been clicked.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A click sets this to <code class="docutils literal notranslate"><span class="pre">true</span></code>, and it stays <code class="docutils literal notranslate"><span class="pre">true</span></code> until set to
+<code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Button.getVisible()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVisible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Button.getVisible()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Button.setVisible(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Button.setVisible(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget is visible.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Button.getEnabled()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Button.getEnabled()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Button.setEnabled(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Button.setEnabled(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget responds to input. A disabled widget is drawn dimmed.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Button.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Button.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the widget.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.InputField">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">InputField</span></span><a class="headerlink" href="#krpc.client.services.KSA.InputField" title="Link to this definition">#</a></dt>
+<dd><p>A single line text input field. Added to a window or a row.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>While the field is being edited, the game clears the rotation and translation inputs
+of the controlled vehicle each frame.</p>
+</div>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.InputField.getLabel()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getLabel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.InputField.getLabel()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.InputField.setLabel(String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setLabel</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.InputField.setLabel(String)" title="Link to this definition">#</a></dt>
+<dd><p>The text shown next to the field.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.InputField.getValue()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getValue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.InputField.getValue()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.InputField.setValue(String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setValue</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.InputField.setValue(String)" title="Link to this definition">#</a></dt>
+<dd><p>The text in the field.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.InputField.getChanged()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getChanged</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.InputField.getChanged()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.InputField.setChanged(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setChanged</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.InputField.setChanged(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the text has been edited.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An edit sets this to <code class="docutils literal notranslate"><span class="pre">true</span></code>, and it stays <code class="docutils literal notranslate"><span class="pre">true</span></code> until set to
+<code class="docutils literal notranslate"><span class="pre">false</span></code>. Setting <a class="reference internal" href="#krpc.client.services.KSA.InputField.getValue()" title="krpc.client.services.KSA.InputField.getValue()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">InputField.getValue()</span></code></a> leaves it unchanged.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.InputField.getVisible()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVisible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.InputField.getVisible()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.InputField.setVisible(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.InputField.setVisible(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget is visible.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.InputField.getEnabled()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.InputField.getEnabled()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.InputField.setEnabled(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.InputField.setEnabled(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget responds to input. A disabled widget is drawn dimmed.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.InputField.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.InputField.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the widget.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Slider</span></span><a class="headerlink" href="#krpc.client.services.KSA.Slider" title="Link to this definition">#</a></dt>
+<dd><p>A horizontal slider. Added to a window or a row.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.getLabel()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getLabel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.getLabel()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.setLabel(String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setLabel</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.setLabel(String)" title="Link to this definition">#</a></dt>
+<dd><p>The text shown next to the slider.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.getValue()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getValue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.getValue()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.setValue(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setValue</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.setValue(float)" title="Link to this definition">#</a></dt>
+<dd><p>The value of the slider, clamped to its range.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.getMinimum()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinimum</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.getMinimum()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.setMinimum(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMinimum</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.setMinimum(float)" title="Link to this definition">#</a></dt>
+<dd><p>The minimum value.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if set to a value not less than the maximum.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.getMaximum()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaximum</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.getMaximum()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.setMaximum(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMaximum</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.setMaximum(float)" title="Link to this definition">#</a></dt>
+<dd><p>The maximum value.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if set to a value not greater than the minimum.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.getChanged()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getChanged</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.getChanged()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.setChanged(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setChanged</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.setChanged(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the value has been changed by dragging the slider.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A change sets this to <code class="docutils literal notranslate"><span class="pre">true</span></code>, and it stays <code class="docutils literal notranslate"><span class="pre">true</span></code> until set to
+<code class="docutils literal notranslate"><span class="pre">false</span></code>. Setting <a class="reference internal" href="#krpc.client.services.KSA.Slider.getValue()" title="krpc.client.services.KSA.Slider.getValue()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Slider.getValue()</span></code></a> leaves it unchanged.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.getVisible()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVisible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.getVisible()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.setVisible(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.setVisible(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget is visible.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.getEnabled()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.getEnabled()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.setEnabled(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.setEnabled(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget responds to input. A disabled widget is drawn dimmed.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Slider.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Slider.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the widget.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Toggle">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Toggle</span></span><a class="headerlink" href="#krpc.client.services.KSA.Toggle" title="Link to this definition">#</a></dt>
+<dd><p>A check box with a label. Added to a window or a row.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Toggle.getContent()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getContent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Toggle.getContent()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Toggle.setContent(String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setContent</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Toggle.setContent(String)" title="Link to this definition">#</a></dt>
+<dd><p>The text shown next to the toggle.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Toggle.getChecked()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getChecked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Toggle.getChecked()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Toggle.setChecked(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setChecked</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Toggle.setChecked(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the toggle is checked.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Toggle.getChanged()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getChanged</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Toggle.getChanged()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Toggle.setChanged(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setChanged</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Toggle.setChanged(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the toggle has been clicked.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A click sets this to <code class="docutils literal notranslate"><span class="pre">true</span></code>, and it stays <code class="docutils literal notranslate"><span class="pre">true</span></code> until set to
+<code class="docutils literal notranslate"><span class="pre">false</span></code>. Setting <a class="reference internal" href="#krpc.client.services.KSA.Toggle.getChecked()" title="krpc.client.services.KSA.Toggle.getChecked()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Toggle.getChecked()</span></code></a> leaves it unchanged.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Toggle.getVisible()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVisible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Toggle.getVisible()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Toggle.setVisible(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Toggle.setVisible(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget is visible.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Toggle.getEnabled()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Toggle.getEnabled()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Toggle.setEnabled(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Toggle.setEnabled(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget responds to input. A disabled widget is drawn dimmed.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Toggle.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Toggle.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the widget.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Dropdown</span></span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown" title="Link to this definition">#</a></dt>
+<dd><p>A dropdown list of options. Added to a window or a row.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.getLabel()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getLabel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.getLabel()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.setLabel(String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setLabel</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.setLabel(String)" title="Link to this definition">#</a></dt>
+<dd><p>The text shown next to the dropdown.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.getOptions()">
+ <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getOptions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.getOptions()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.setOptions(java.util.List)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setOptions</span></span><span class="sig-paren">(</span><span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.setOptions(java.util.List)" title="Link to this definition">#</a></dt>
+<dd><p>The options to choose from.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Setting the options clears the selection if the selected index is no longer in
+the list.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.getSelectedIndex()">
+ <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getSelectedIndex</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.getSelectedIndex()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.setSelectedIndex(int)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSelectedIndex</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.setSelectedIndex(int)" title="Link to this definition">#</a></dt>
+<dd><p>The index of the selected option, or -1 for none.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the index is out of range.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.getChanged()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getChanged</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.getChanged()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.setChanged(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setChanged</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.setChanged(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether an option has been chosen from the list.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A choice sets this to <code class="docutils literal notranslate"><span class="pre">true</span></code>, and it stays <code class="docutils literal notranslate"><span class="pre">true</span></code> until set to
+<code class="docutils literal notranslate"><span class="pre">false</span></code>. Setting <a class="reference internal" href="#krpc.client.services.KSA.Dropdown.getSelectedIndex()" title="krpc.client.services.KSA.Dropdown.getSelectedIndex()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Dropdown.getSelectedIndex()</span></code></a> leaves it unchanged.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.getVisible()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVisible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.getVisible()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.setVisible(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.setVisible(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget is visible.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.getEnabled()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.getEnabled()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.setEnabled(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.setEnabled(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget responds to input. A disabled widget is drawn dimmed.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Dropdown.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Dropdown.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the widget.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Separator">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Separator</span></span><a class="headerlink" href="#krpc.client.services.KSA.Separator" title="Link to this definition">#</a></dt>
+<dd><p>A horizontal line between widgets. Added to a window or a row.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Separator.getVisible()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getVisible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Separator.getVisible()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Separator.setVisible(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Separator.setVisible(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget is visible.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Separator.getEnabled()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Separator.getEnabled()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Separator.setEnabled(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Separator.setEnabled(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the widget responds to input. A disabled widget is drawn dimmed.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.KSA.Separator.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.KSA.Separator.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the widget.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="drawing.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Drawing</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="debug.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Debug</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/java/api/ksa/ui.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

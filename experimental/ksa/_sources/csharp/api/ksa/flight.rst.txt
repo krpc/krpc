@@ -37,7 +37,7 @@ Flight
 
       :Game Scenes: Flight
 
-   .. property:: double TimeToImpact { get; }
+   .. property:: float TimeToImpact { get; }
 
       The time until the vehicle hits the surface on its current trajectory, in seconds.
       Not a number if its trajectory does not hit the surface.
@@ -62,19 +62,25 @@ Flight
 
       :Game Scenes: Flight
 
-   .. property:: double Speed { get; }
+   .. property:: string Biome { get; }
+
+      The biome below the vehicle, or ``null`` if the body has no biomes.
+
+      :Game Scenes: Flight
+
+   .. property:: float Speed { get; }
 
       The speed of the vehicle relative to the surface, in meters per second.
 
       :Game Scenes: Flight
 
-   .. property:: double HorizontalSpeed { get; }
+   .. property:: float HorizontalSpeed { get; }
 
       The horizontal speed of the vehicle relative to the surface, in meters per second.
 
       :Game Scenes: Flight
 
-   .. property:: double VerticalSpeed { get; }
+   .. property:: float VerticalSpeed { get; }
 
       The vertical speed of the vehicle relative to the surface, in meters per second.
 
@@ -101,32 +107,47 @@ Flight
 
       :Game Scenes: Flight
 
-   .. property:: double StaticPressure { get; }
+   .. property:: float StaticPressure { get; }
 
       The static atmospheric pressure at the vehicle, in pascals.
 
       :Game Scenes: Flight
 
-   .. property:: double AtmosphereDensity { get; }
+   .. property:: float AtmosphereDensity { get; }
 
       The density of the atmosphere at the vehicle, in kilograms per cubic meter.
 
       :Game Scenes: Flight
 
-   .. property:: double DynamicPressure { get; }
+   .. property:: float DynamicPressure { get; }
 
       The dynamic pressure acting on the vehicle, in pascals.
 
       :Game Scenes: Flight
 
-   .. property:: double GForce { get; }
+   .. property:: float DoseRate { get; }
+
+      The radiation dose rate at the vehicle, in sieverts per second. Includes any solar
+      particle event under way.
+
+      :Game Scenes: Flight
+
+   .. property:: float OrbitAverageDoseRate { get; }
+
+      The radiation dose rate averaged over the vehicle's orbit, in sieverts per second.
+      Includes any solar particle event under way. Not a number if the body has no
+      magnetosphere, or the orbit dips below the surface.
+
+      :Game Scenes: Flight
+
+   .. property:: float GForce { get; }
 
       The acceleration of the vehicle, excluding gravity, in multiples of standard
       gravity.
 
       :Game Scenes: Flight
 
-   .. property:: double AngleOfAttack { get; }
+   .. property:: float AngleOfAttack { get; }
 
       The angle between the direction the vehicle points in and its velocity relative to
       the surface, in the vehicle's pitch plane, in degrees. Positive when the nose is
@@ -134,10 +155,42 @@ Flight
 
       :Game Scenes: Flight
 
-   .. property:: double SideslipAngle { get; }
+   .. property:: float SideslipAngle { get; }
 
       The angle between the direction the vehicle points in and its velocity relative to
       the surface, in the vehicle's yaw plane, in degrees. Positive when the nose is to
       the right of the velocity.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Tuple<double,double,double> Prograde(ReferenceFrame referenceFrame)
+
+      The unit vector of the vehicle's velocity relative to the surface.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the direction.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Tuple<double,double,double> Normal(ReferenceFrame referenceFrame)
+
+      The unit vector normal to the plane of the vehicle's position and its velocity
+      relative to the surface.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the direction.
+
+      :Game Scenes: Flight
+
+   .. function:: System.Tuple<double,double,double> Radial(ReferenceFrame referenceFrame)
+
+      The unit vector pointing radially outward, perpendicular to :meth:`Flight.Prograde`
+      and :meth:`Flight.Normal`.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the direction.
 
       :Game Scenes: Flight

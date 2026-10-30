@@ -1,0 +1,266 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+KSA
+===
+
+.. grpc:service:: KSAService
+
+   Provides functionality to interact with Kitten Space Agency.
+
+   .. grpc:rpc:: GetActiveVehicle (KSA.GetActiveVehicleRequest) returns (KSA.GetActiveVehicleResponse)
+
+      The vehicle under the player's control, or ``null`` if the player controls a
+      kitten on EVA.
+
+      :KSA.GetActiveVehicleRequest: Empty
+
+      :KSA.GetActiveVehicleResponse: ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      .. note::
+
+         Setting it moves the camera to the vehicle, as the switch vehicle key does. See
+         :grpc:rpc:`KSAService.GetActiveKitten <krpc.ksa.KSAService.GetActiveKitten>` for a kitten on EVA.
+
+   .. grpc:rpc:: SetActiveVehicle (KSA.SetActiveVehicleRequest) returns (KSA.SetActiveVehicleResponse)
+
+      The vehicle under the player's control, or ``null`` if the player controls a
+      kitten on EVA.
+
+      :KSA.SetActiveVehicleRequest:
+         * ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :KSA.SetActiveVehicleResponse: Empty
+
+      .. note::
+
+         Setting it moves the camera to the vehicle, as the switch vehicle key does. See
+         :grpc:rpc:`KSAService.GetActiveKitten <krpc.ksa.KSAService.GetActiveKitten>` for a kitten on EVA.
+
+   .. grpc:rpc:: GetVehicles (KSA.GetVehiclesRequest) returns (KSA.GetVehiclesResponse)
+
+      The vehicles in the current system, excluding kittens on EVA.
+
+      :KSA.GetVehiclesRequest: Empty
+
+      :KSA.GetVehiclesResponse: ``value`` (``repeated`` :grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+   .. grpc:rpc:: GetActiveKitten (KSA.GetActiveKittenRequest) returns (KSA.GetActiveKittenResponse)
+
+      The kitten on EVA under the player's control, or ``null`` if the player
+      controls a vehicle.
+
+      :KSA.GetActiveKittenRequest: Empty
+
+      :KSA.GetActiveKittenResponse: ``value`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      .. note::
+
+         Setting it moves the camera to the kitten. Throws an exception if the kitten is not
+         on EVA. See :grpc:rpc:`KSAService.GetActiveVehicle <krpc.ksa.KSAService.GetActiveVehicle>` for a vehicle.
+
+   .. grpc:rpc:: SetActiveKitten (KSA.SetActiveKittenRequest) returns (KSA.SetActiveKittenResponse)
+
+      The kitten on EVA under the player's control, or ``null`` if the player
+      controls a vehicle.
+
+      :KSA.SetActiveKittenRequest:
+         * ``value`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :KSA.SetActiveKittenResponse: Empty
+
+      .. note::
+
+         Setting it moves the camera to the kitten. Throws an exception if the kitten is not
+         on EVA. See :grpc:rpc:`KSAService.GetActiveVehicle <krpc.ksa.KSAService.GetActiveVehicle>` for a vehicle.
+
+   .. grpc:rpc:: GetKittens (KSA.GetKittensRequest) returns (KSA.GetKittensResponse)
+
+      The kittens in the agency's roster, including those killed in action, keyed by name.
+
+      :KSA.GetKittensRequest: Empty
+
+      :KSA.GetKittensResponse: ``value`` (``map<string,`` :grpc:service:`Kitten <krpc.ksa.KittenService>`\ ``>``)
+
+   .. grpc:rpc:: GetCamera (KSA.GetCameraRequest) returns (KSA.GetCameraResponse)
+
+      The game's main camera.
+
+      :KSA.GetCameraRequest: Empty
+
+      :KSA.GetCameraResponse: ``value`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+
+   .. grpc:rpc:: GetBodies (KSA.GetBodiesRequest) returns (KSA.GetBodiesResponse)
+
+      The planets, moons and stars in the current system, keyed by name.
+
+      :KSA.GetBodiesRequest: Empty
+
+      :KSA.GetBodiesResponse: ``value`` (``map<string,`` :grpc:service:`Body <krpc.ksa.BodyService>`\ ``>``)
+
+   .. grpc:rpc:: GetUT (KSA.GetUTRequest) returns (KSA.GetUTResponse)
+
+      The universal time, in seconds.
+
+      :KSA.GetUTRequest: Empty
+
+      :KSA.GetUTResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetSimulationSpeed (KSA.GetSimulationSpeedRequest) returns (KSA.GetSimulationSpeedResponse)
+
+      The simulation speed, as a multiple of real time. Zero when paused.
+
+      :KSA.GetSimulationSpeedRequest: Empty
+
+      :KSA.GetSimulationSpeedResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetSimulationSpeed (KSA.SetSimulationSpeedRequest) returns (KSA.SetSimulationSpeedResponse)
+
+      The simulation speed, as a multiple of real time. Zero when paused.
+
+      :KSA.SetSimulationSpeedRequest:
+         * ``value`` (``float``)
+
+      :KSA.SetSimulationSpeedResponse: Empty
+
+   .. grpc:rpc:: WarpTo (KSA.WarpToRequest) returns (KSA.WarpToResponse)
+
+      Warp to the given universal time, and return once the warp has finished.
+      The game slows the warp down to normal speed toward the end.
+
+      :KSA.WarpToRequest:
+         * ``ut`` (``double``): The universal time to warp to, in seconds.
+
+      :KSA.WarpToResponse: Empty
+
+      .. note::
+
+         Does nothing when the time is in the past. Returns early if the game stops the
+         warp, for example when its menu pauses the game.
+
+   .. grpc:rpc:: GetVehicleDesigns (KSA.GetVehicleDesignsRequest) returns (KSA.GetVehicleDesignsResponse)
+
+      The vehicle designs that can be launched, keyed by name.
+
+      :KSA.GetVehicleDesignsRequest: Empty
+
+      :KSA.GetVehicleDesignsResponse: ``value`` (``map<string,`` :grpc:service:`VehicleDesign <krpc.ksa.VehicleDesignService>`\ ``>``)
+
+   .. grpc:rpc:: LaunchVehicle (KSA.LaunchVehicleRequest) returns (KSA.LaunchVehicleResponse)
+
+      Launch a vehicle from a launch site, and make it the active vehicle. Returns once
+      the vehicle is on the launch site.
+
+      :KSA.LaunchVehicleRequest:
+         * ``name`` (``string``): The name of the vehicle design. See :grpc:rpc:`KSAService.GetVehicleDesigns <krpc.ksa.KSAService.GetVehicleDesigns>`.
+         * ``site`` (``string``): The name of the launch site. See :grpc:rpc:`BodyService.GetLaunchSites <krpc.ksa.BodyService.GetLaunchSites>`.
+
+      :KSA.LaunchVehicleResponse: ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle. Its name is the vehicle's name, with a number appended if another vehicle has that name.
+
+      .. note::
+
+         Throws an exception if there is no such vehicle or launch site, or the name is one
+         of the game's kittens.
+
+   .. grpc:rpc:: SaveExists (KSA.SaveExistsRequest) returns (KSA.SaveExistsResponse)
+
+      Whether a save with the given name exists.
+
+      :KSA.SaveExistsRequest:
+         * ``name`` (``string``): Name of the save.
+
+      :KSA.SaveExistsResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: Save (KSA.SaveRequest) returns (KSA.SaveResponse)
+
+      Save the game, replacing any save with the same name.
+
+      :KSA.SaveRequest:
+         * ``name`` (``string``): Name of the save.
+
+      :KSA.SaveResponse: Empty
+
+   .. grpc:rpc:: Load (KSA.LoadRequest) returns (KSA.LoadResponse)
+
+      Load a save, and return once it has loaded. The game is paused after loading.
+
+      :KSA.LoadRequest:
+         * ``name`` (``string``): Name of the save.
+
+      :KSA.LoadResponse: Empty
+
+      .. note::
+
+         Throws an exception if the save does not exist.
+
+   .. grpc:rpc:: TakeScreenshot (KSA.TakeScreenshotRequest) returns (KSA.TakeScreenshotResponse)
+
+      Save a screenshot, as the screenshot key does, and return once the file is written.
+
+      :KSA.TakeScreenshotRequest:
+         * ``scale`` (``optional sint32``): The size of the image, as a multiple of the window size, from 1 to 8. The game reduces it to fit the graphics memory. Defaults to ``1``.
+         * ``ui`` (``optional bool``): Whether to include the game's windows. The image is then the size of the window. Defaults to ``false``.
+
+      :KSA.TakeScreenshotResponse: ``value`` (``string``): The path of the PNG file, in the game's screenshots folder.
+
+      .. note::
+
+         Throws an exception in the vehicle editor, or if a screenshot is already being taken.
+
+   .. grpc:rpc:: ShowMessage (KSA.ShowMessageRequest) returns (KSA.ShowMessageResponse)
+
+      Show a message in the middle of the screen.
+
+      :KSA.ShowMessageRequest:
+         * ``text`` (``string``): The message.
+         * ``duration`` (``optional float``): How long to show the message for, in seconds. The game shows a message for at least 2 seconds. Defaults to ``5.0``.
+         * ``warning`` (``optional bool``): Whether to show the message in the warning color. Defaults to ``false``.
+
+      :KSA.ShowMessageResponse: Empty
+
+   .. grpc:rpc:: TransformPosition (KSA.TransformPositionRequest) returns (KSA.TransformPositionResponse)
+
+      Convert a position from one reference frame to another.
+
+      :KSA.TransformPositionRequest:
+         * ``position`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): Position, in meters, in the frame ``from``.
+         * ``from`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame the position is in.
+         * ``to`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame to convert the position to.
+
+      :KSA.TransformPositionResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The position in the frame ``to``.
+
+   .. grpc:rpc:: TransformDirection (KSA.TransformDirectionRequest) returns (KSA.TransformDirectionResponse)
+
+      Convert a direction from one reference frame to another.
+
+      :KSA.TransformDirectionRequest:
+         * ``direction`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): Direction in the frame ``from``.
+         * ``from`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame the direction is in.
+         * ``to`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame to convert the direction to.
+
+      :KSA.TransformDirectionResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The direction in the frame ``to``.
+
+   .. grpc:rpc:: TransformRotation (KSA.TransformRotationRequest) returns (KSA.TransformRotationResponse)
+
+      Convert a rotation from one reference frame to another.
+
+      :KSA.TransformRotationRequest:
+         * ``rotation`` (:grpc:message:`Tuple_double_double_double_double <krpc.ksa.Tuple_double_double_double_double>`): Rotation in the frame ``from``.
+         * ``from`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame the rotation is in.
+         * ``to`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame to convert the rotation to.
+
+      :KSA.TransformRotationResponse: ``value`` (:grpc:message:`Tuple_double_double_double_double <krpc.ksa.Tuple_double_double_double_double>`): The rotation in the frame ``to``.
+
+   .. grpc:rpc:: TransformVelocity (KSA.TransformVelocityRequest) returns (KSA.TransformVelocityResponse)
+
+      Convert a velocity from one reference frame to another. The velocity of a point
+      depends on its position in a rotating frame, so the position is also needed.
+
+      :KSA.TransformVelocityRequest:
+         * ``position`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): Position, in meters, in the frame ``from``.
+         * ``velocity`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): Velocity, in meters per second, in the frame ``from``.
+         * ``from`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame the position and velocity are in.
+         * ``to`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame to convert the velocity to.
+
+      :KSA.TransformVelocityResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The velocity in the frame ``to``.

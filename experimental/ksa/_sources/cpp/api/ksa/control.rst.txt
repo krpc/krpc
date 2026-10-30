@@ -8,8 +8,14 @@ Control
 
 .. class:: Control
 
-   The controls of a vehicle: engines, stabilization and sequences.
+   The controls of a vehicle: engines, manual inputs, stabilization and sequences.
    Obtained from :func:`Vehicle::control`.
+
+   .. note::
+
+      The rotation and translation inputs act as held keys. Each is on or off, with no
+      partial strength. A held rotation input overrides the auto-pilot on its axis. The game
+      releases the inputs when its window gains or loses focus, or the active vehicle changes.
 
    .. function:: float throttle()
    .. function:: void set_throttle(float value)
@@ -31,6 +37,55 @@ Control
 
       :Game Scenes: Flight
 
+   .. function:: int32_t pitch()
+   .. function:: void set_pitch(int32_t value)
+
+      The pitch input: 1 for pitch up, -1 for pitch down, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t yaw()
+   .. function:: void set_yaw(int32_t value)
+
+      The yaw input: 1 for yaw right, -1 for yaw left, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t roll()
+   .. function:: void set_roll(int32_t value)
+
+      The roll input: 1 for roll right, -1 for roll left, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t forward()
+   .. function:: void set_forward(int32_t value)
+
+      The forward translation input: 1 for forward, -1 for backward, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t right()
+   .. function:: void set_right(int32_t value)
+
+      The right translation input: 1 for right, -1 for left, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t up()
+   .. function:: void set_up(int32_t value)
+
+      The up translation input: 1 for up, -1 for down, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. function:: bool pulse()
+   .. function:: void set_pulse(bool value)
+
+      Whether the rotation and translation inputs fire the thrusters in short pulses.
+
+      :Game Scenes: Flight
+
    .. function:: bool stabilization()
    .. function:: void set_stabilization(bool value)
 
@@ -48,6 +103,13 @@ Control
 
       Whether the flight computer may use the reaction control thrusters for attitude
       control.
+
+      :Game Scenes: Flight
+
+   .. function:: bool lights()
+   .. function:: void set_lights(bool value)
+
+      Whether the vehicle's lights are switched on, as the lights key does.
 
       :Game Scenes: Flight
 

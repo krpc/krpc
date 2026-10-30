@@ -55,9 +55,9 @@ Auto-Pilot
          Setting :meth:`AutoPilotMode.ATTITUDE` targets the vehicle's current pitch,
          heading and roll. Setting :meth:`AutoPilotMode.OTHER` throws an exception.
 
-   .. method:: double getTargetPitch()
+   .. method:: float getTargetPitch()
 
-   .. method:: void setTargetPitch(double value)
+   .. method:: void setTargetPitch(float value)
 
       The target pitch, in degrees, between -90° and +90°.
 
@@ -69,9 +69,9 @@ Auto-Pilot
          Setting it sets :meth:`AutoPilot.getMode()` to :meth:`AutoPilotMode.ATTITUDE`.
          Returns NaN in any other mode.
 
-   .. method:: double getTargetHeading()
+   .. method:: float getTargetHeading()
 
-   .. method:: void setTargetHeading(double value)
+   .. method:: void setTargetHeading(float value)
 
       The target heading, in degrees, between 0° and 360°.
 
@@ -83,9 +83,9 @@ Auto-Pilot
          Setting it sets :meth:`AutoPilot.getMode()` to :meth:`AutoPilotMode.ATTITUDE`.
          Returns NaN in any other mode.
 
-   .. method:: double getTargetRoll()
+   .. method:: float getTargetRoll()
 
-   .. method:: void setTargetRoll(double value)
+   .. method:: void setTargetRoll(float value)
 
       The target roll, in degrees. NaN when the auto-pilot does not control roll.
 
@@ -98,13 +98,13 @@ Auto-Pilot
          Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
          :meth:`AutoPilotMode.ATTITUDE`.
 
-   .. method:: void targetPitchAndHeading(double pitch, double heading)
+   .. method:: void targetPitchAndHeading(float pitch, float heading)
 
       Set the target pitch and heading, and the mode to
       :meth:`AutoPilotMode.ATTITUDE`.
 
-      :param double pitch: Target pitch, in degrees, between -90° and +90°.
-      :param double heading: Target heading, in degrees, between 0° and 360°.
+      :param float pitch: Target pitch, in degrees, between -90° and +90°.
+      :param float heading: Target heading, in degrees, between 0° and 360°.
       :Game Scenes: Flight
 
    .. method:: void targetDirection(org.javatuples.Triplet<Double,Double,Double> direction, ReferenceFrame referenceFrame)
@@ -118,7 +118,7 @@ Auto-Pilot
       :param ReferenceFrame referenceFrame: The reference frame of the direction.
       :Game Scenes: Flight
 
-   .. method:: double getError()
+   .. method:: float getError()
 
 
       The angle between the direction the vehicle points in and the target direction,
@@ -126,7 +126,7 @@ Auto-Pilot
 
       :Game Scenes: Flight
 
-   .. method:: double getRollError()
+   .. method:: float getRollError()
 
 
       The angle between the vehicle's roll and the target roll, in degrees.

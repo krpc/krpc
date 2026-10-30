@@ -31,3 +31,134 @@ Resources
 
       :Attribute: Read-only, cannot be set
       :rtype: number
+
+
+
+.. class:: Tank
+
+   A propellant tank. Obtained from :attr:`KSA.Part.tanks` or :attr:`KSA.Vehicle.tanks`.
+
+   .. attribute:: part: KSA.Part
+
+      The part the tank is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: volume: number
+
+      The volume of the tank, in cubic meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: rated_pressure: number
+
+      The pressure the tank stores gas at, in pascals. Zero if the tank cannot store gas.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: filled_fraction: number
+
+      The fraction of the tank's volume that is filled, between 0 and 1.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: propellant_use_enabled: boolean
+
+      Whether engines can draw propellant from the tank.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: transfer_mode: KSA.TankTransferMode
+
+      The direction the tank transfers propellant in.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`KSA.TankTransferMode`
+
+      .. note::
+
+         Propellant flows from tanks transferring out to tanks of the same vehicle transferring
+         in, and the transfer draws battery power. Setting a transfer throws an exception if
+         the running version of KSA does not support it.
+
+
+
+.. class:: TankTransferMode
+
+   The direction a tank transfers propellant in. See :attr:`KSA.Tank.transfer_mode`.
+
+
+   .. data:: none
+
+      No transfer.
+
+
+   .. data:: in
+
+      Into the tank, from tanks transferring out.
+
+
+   .. data:: out
+
+      Out of the tank, to tanks transferring in.
+
+
+
+.. class:: FuelLink
+
+   A fuel line between two parts of a vehicle, which lets propellant flow between them.
+   Obtained from :attr:`KSA.Vehicle.fuel_links`.
+
+   .. attribute:: part_a: KSA.Part
+
+      One of the parts the link joins.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: part_b: KSA.Part
+
+      The other part the link joins.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: flow: KSA.FuelLinkFlow
+
+      The direction propellant flows through the link.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`KSA.FuelLinkFlow`
+
+   .. attribute:: enabled: boolean
+
+      Whether propellant can flow through the link.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+
+
+.. class:: FuelLinkFlow
+
+   The direction propellant flows through a fuel link. See :attr:`KSA.FuelLink.flow`.
+
+
+   .. data:: a_to_b
+
+      From :attr:`KSA.FuelLink.part_a` to :attr:`KSA.FuelLink.part_b`.
+
+
+   .. data:: b_to_a
+
+      From :attr:`KSA.FuelLink.part_b` to :attr:`KSA.FuelLink.part_a`.
+
+
+   .. data:: both
+
+      Either way.

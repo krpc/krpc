@@ -24,10 +24,55 @@ Vehicle
 
    
 
+   .. method:: void destroy()
+
+      Destroy the vehicle, killing its crew, as abandoning the vehicle does. Returns once
+      the vehicle is gone.
+
+   
+
+      .. note::
+
+         If the vehicle is the active vehicle, the game hands control to a nearby vehicle.
+
+   .. method:: boolean getCanRecover()
+
+
+      Whether the vehicle can be recovered: at rest on the surface of the home planet.
+
+   
+
+   .. method:: void recover()
+
+      Recover the vehicle, ending its crew's missions, as the game's recover button does.
+      Returns once the vehicle is gone.
+
+   
+
+      .. note::
+
+         Throws an exception if the vehicle cannot be recovered, see :meth:`Vehicle.getCanRecover()`.
+
    .. method:: Situation getSituation()
 
 
       The situation of the vehicle.
+
+   
+
+   .. method:: boolean getOnRails()
+
+
+      Whether the game moves the vehicle without simulating the forces on it: along its
+      orbit, or held on the surface. True in the freefall, landed, floating and bottomed
+      situations.
+
+   
+
+   .. method:: boolean getIsDebris()
+
+
+      Whether the vehicle is debris, such as a spent stage.
 
    
 
@@ -59,7 +104,7 @@ Vehicle
 
    
 
-   .. method:: double getThrust()
+   .. method:: float getThrust()
 
 
       The thrust of the engines at their current throttle and the current atmospheric
@@ -75,11 +120,44 @@ Vehicle
 
    
 
-   .. method:: double getSpecificImpulse()
+   .. method:: float getSpecificImpulse()
 
 
       The combined specific impulse of the active engines that have propellant, at the
       current atmospheric pressure, in seconds. Zero when no engine is active.
+
+   
+
+   .. method:: float getPeakGLoad()
+
+
+      The highest smoothed g-load on the vehicle during the last physics step, as a
+      multiple of standard gravity. Zero while the vehicle is :meth:`Vehicle.getOnRails()`.
+
+   
+
+   .. method:: float getMaxGLoad()
+
+
+      The g-load the vehicle can take before it breaks up, as a multiple of standard
+      gravity. Zero while the vehicle is :meth:`Vehicle.getOnRails()`.
+
+   
+
+   .. method:: float getPeakDynamicPressure()
+
+
+      The highest dynamic pressure on the vehicle during the last physics step, in
+      pascals. In the sea, this is the dynamic pressure of the water. Zero while the
+      vehicle is :meth:`Vehicle.getOnRails()`.
+
+   
+
+   .. method:: float getMaxDynamicPressure()
+
+
+      The dynamic pressure the vehicle can take before it breaks up, in pascals. Zero
+      while the vehicle is :meth:`Vehicle.getOnRails()`.
 
    
 
@@ -94,6 +172,154 @@ Vehicle
 
 
       The vehicle's root part, which the other parts are attached to.
+
+   
+
+   .. method:: java.util.List<Part> partsWithName(String name)
+
+      The vehicle's parts with the given template id. See :meth:`Part.getName()`.
+
+      :param String name: The template id.
+   
+
+   .. method:: java.util.List<Seat> getSeats()
+
+
+      The vehicle's crew seats.
+
+   
+
+   .. method:: java.util.List<Kitten> getCrew()
+
+
+      The kittens in the vehicle's seats.
+
+   
+
+   .. method:: int getCrewCapacity()
+
+
+      The number of crew seats in the vehicle.
+
+   
+
+   .. method:: java.util.List<Engine> getEngines()
+
+
+      The vehicle's engines.
+
+   
+
+   .. method:: java.util.List<RCS> getRCS()
+
+
+      The vehicle's RCS thrusters.
+
+   
+
+   .. method:: java.util.List<Decoupler> getDecouplers()
+
+
+      The vehicle's decouplers.
+
+   
+
+   .. method:: java.util.List<Parachute> getParachutes()
+
+
+      The vehicle's parachutes.
+
+   
+
+   .. method:: java.util.List<Tank> getTanks()
+
+
+      The vehicle's propellant tanks.
+
+   
+
+   .. method:: java.util.List<Battery> getBatteries()
+
+
+      The vehicle's batteries.
+
+   
+
+   .. method:: java.util.List<SolarPanel> getSolarPanels()
+
+
+      The vehicle's solar panels.
+
+   
+
+   .. method:: java.util.List<Generator> getGenerators()
+
+
+      The vehicle's generators.
+
+   
+
+   .. method:: java.util.List<PowerConsumer> getPowerConsumers()
+
+
+      The vehicle's power consumers.
+
+   
+
+   .. method:: float getStoredEnergy()
+
+
+      The energy stored in the vehicle's batteries, in joules.
+
+   
+
+   .. method:: float getEnergyCapacity()
+
+
+      The energy the vehicle's batteries can store, in joules.
+
+   
+
+   .. method:: float getNetPower()
+
+
+      The power produced by the vehicle's solar panels and generators, less the power its
+      parts use, in watts.
+
+   
+
+   .. method:: java.util.List<Light> getLights()
+
+
+      The vehicle's lights.
+
+   
+
+   .. method:: java.util.List<Deployable> getDeployables()
+
+
+      The vehicle's deployable sections.
+
+   
+
+   .. method:: java.util.List<MagneticScoop> getMagneticScoops()
+
+
+      The vehicle's magnetic scoops.
+
+   
+
+   .. method:: java.util.List<FuelLink> getFuelLinks()
+
+
+      The vehicle's fuel links.
+
+   
+
+   .. method:: java.util.List<DockingPort> getDockingPorts()
+
+
+      The vehicle's docking ports.
 
    
 
@@ -140,6 +366,16 @@ Vehicle
 
          Setting a body that orbits nothing, such as the star, throws an exception.
 
+   .. method:: Part getTargetPart()
+
+   .. method:: void setTargetPart(Part value)
+
+      The part targeted by this vehicle, on the vehicle in :meth:`Vehicle.getTargetVehicle()`,
+      or ``null``. Setting it targets the part and its vehicle, and ``null`` clears
+      the target.
+
+   
+
    .. method:: java.util.List<Burn> getBurns()
 
 
@@ -147,14 +383,14 @@ Vehicle
 
    
 
-   .. method:: Burn addBurn(double ut, double prograde, double normal, double radial)
+   .. method:: Burn addBurn(double ut, float prograde, float normal, float radial)
 
       Plan a burn, and add it to the vehicle's burn plan.
 
       :param double ut: Universal time of the burn, in seconds.
-      :param double prograde: Change in velocity in the prograde direction, in meters per second.
-      :param double normal: Change in velocity along the orbit normal, in meters per second.
-      :param double radial: Change in velocity radially outward, in meters per second.
+      :param float prograde: Change in velocity in the prograde direction, in meters per second.
+      :param float normal: Change in velocity along the orbit normal, in meters per second.
+      :param float radial: Change in velocity radially outward, in meters per second.
       :returns: The burn.
    
 
@@ -303,3 +539,61 @@ Vehicle
    .. field:: public Situation BOTTOMED
 
       At rest on terrain and in the ocean.
+
+
+
+.. type:: public class VehicleDesign
+
+   A vehicle design that can be launched: one of the game's default vehicles, or a vehicle
+   saved by the player in the editor. Obtained from :meth:`getVehicleDesigns()`.
+
+   .. note::
+
+      The mass and delta-v are those the editor shows for the design.
+
+   .. method:: String getName()
+
+
+      The name of the design, as passed to :meth:`launchVehicle(String, String)`.
+
+   
+
+   .. method:: boolean getIsDefault()
+
+
+      Whether the design is one of the game's default vehicles.
+
+   
+
+   .. method:: int getPartCount()
+
+
+      The number of parts in the design.
+
+   
+
+   .. method:: float getMass()
+
+
+      The total mass of the design, including propellant, in kilograms.
+
+   
+
+   .. method:: float getDryMass()
+
+
+      The mass of the design without propellant, in kilograms.
+
+   
+
+   .. method:: float getDeltaV()
+
+
+      The change in velocity of all the design's sequences, in meters per second.
+
+   
+
+      .. note::
+
+         Each sequence is computed in the environment chosen for it in the editor, in vacuum
+         or at sea level.

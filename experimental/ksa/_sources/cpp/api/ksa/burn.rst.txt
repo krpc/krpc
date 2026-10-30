@@ -24,34 +24,40 @@ Burn
 
    
 
-   .. function:: double prograde()
-   .. function:: void set_prograde(double value)
+   .. function:: float time_to()
+
+      The time until :func:`Burn::ut`, in seconds. Negative once that time has passed.
+
+   
+
+   .. function:: float prograde()
+   .. function:: void set_prograde(float value)
 
       The change in velocity in the prograde direction, in meters per second.
 
    
 
-   .. function:: double normal()
-   .. function:: void set_normal(double value)
+   .. function:: float normal()
+   .. function:: void set_normal(float value)
 
       The change in velocity along the orbit normal, in meters per second.
 
    
 
-   .. function:: double radial()
-   .. function:: void set_radial(double value)
+   .. function:: float radial()
+   .. function:: void set_radial(float value)
 
       The change in velocity radially outward, in meters per second.
 
    
 
-   .. function:: double delta_v()
+   .. function:: float delta_v()
 
       The magnitude of the change in velocity, in meters per second.
 
    
 
-   .. function:: double remaining_delta_v()
+   .. function:: float remaining_delta_v()
 
       The change in velocity still to burn, in meters per second. Less than
       :func:`Burn::delta_v` once the vehicle has started the burn.
@@ -70,7 +76,7 @@ Burn
 
    
 
-   .. function:: double burn_time()
+   .. function:: float burn_time()
 
       The time the remaining burn takes with the active engines, in seconds. Not a number
       for a burn other than the next one, and until the flight computer has timed it.
@@ -87,6 +93,34 @@ Burn
 
          The game predicts it in the solver step after the burn changes, so it reflects a
          change to the burn one update later.
+
+   .. function:: float orbit_average_dose_rate()
+
+      The radiation dose rate averaged over the orbit after the burn, in sieverts per
+      second. Not a number if the body has no magnetosphere, or the orbit dips below the
+      surface.
+
+   
+
+   .. function:: ReferenceFrame reference_frame()
+
+      The reference frame with its origin at the position of the burn, and axes along
+      the orbit at the time of the burn. The x axis points prograde, the y axis along the
+      orbit normal and the z axis radially outward, perpendicular to the x axis. The
+      frame does not move or rotate relative to the body being orbited.
+
+   
+
+   .. function:: std::tuple<double, double, double> position(ReferenceFrame reference_frame)
+
+      The position of the burn, in meters, relative to where the body being orbited is
+      now.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the position.
+
+   
 
    .. function:: std::tuple<double, double, double> direction(ReferenceFrame reference_frame)
 

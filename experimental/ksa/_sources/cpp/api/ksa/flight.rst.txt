@@ -37,7 +37,7 @@ Flight
 
       :Game Scenes: Flight
 
-   .. function:: double time_to_impact()
+   .. function:: float time_to_impact()
 
       The time until the vehicle hits the surface on its current trajectory, in seconds.
       Not a number if its trajectory does not hit the surface.
@@ -62,19 +62,25 @@ Flight
 
       :Game Scenes: Flight
 
-   .. function:: double speed()
+   .. function:: std::optional<std::string> biome()
+
+      The biome below the vehicle, or ``NULL`` if the body has no biomes.
+
+      :Game Scenes: Flight
+
+   .. function:: float speed()
 
       The speed of the vehicle relative to the surface, in meters per second.
 
       :Game Scenes: Flight
 
-   .. function:: double horizontal_speed()
+   .. function:: float horizontal_speed()
 
       The horizontal speed of the vehicle relative to the surface, in meters per second.
 
       :Game Scenes: Flight
 
-   .. function:: double vertical_speed()
+   .. function:: float vertical_speed()
 
       The vertical speed of the vehicle relative to the surface, in meters per second.
 
@@ -101,32 +107,47 @@ Flight
 
       :Game Scenes: Flight
 
-   .. function:: double static_pressure()
+   .. function:: float static_pressure()
 
       The static atmospheric pressure at the vehicle, in pascals.
 
       :Game Scenes: Flight
 
-   .. function:: double atmosphere_density()
+   .. function:: float atmosphere_density()
 
       The density of the atmosphere at the vehicle, in kilograms per cubic meter.
 
       :Game Scenes: Flight
 
-   .. function:: double dynamic_pressure()
+   .. function:: float dynamic_pressure()
 
       The dynamic pressure acting on the vehicle, in pascals.
 
       :Game Scenes: Flight
 
-   .. function:: double g_force()
+   .. function:: float dose_rate()
+
+      The radiation dose rate at the vehicle, in sieverts per second. Includes any solar
+      particle event under way.
+
+      :Game Scenes: Flight
+
+   .. function:: float orbit_average_dose_rate()
+
+      The radiation dose rate averaged over the vehicle's orbit, in sieverts per second.
+      Includes any solar particle event under way. Not a number if the body has no
+      magnetosphere, or the orbit dips below the surface.
+
+      :Game Scenes: Flight
+
+   .. function:: float g_force()
 
       The acceleration of the vehicle, excluding gravity, in multiples of standard
       gravity.
 
       :Game Scenes: Flight
 
-   .. function:: double angle_of_attack()
+   .. function:: float angle_of_attack()
 
       The angle between the direction the vehicle points in and its velocity relative to
       the surface, in the vehicle's pitch plane, in degrees. Positive when the nose is
@@ -134,10 +155,42 @@ Flight
 
       :Game Scenes: Flight
 
-   .. function:: double sideslip_angle()
+   .. function:: float sideslip_angle()
 
       The angle between the direction the vehicle points in and its velocity relative to
       the surface, in the vehicle's yaw plane, in degrees. Positive when the nose is to
       the right of the velocity.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> prograde(ReferenceFrame reference_frame)
+
+      The unit vector of the vehicle's velocity relative to the surface.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the direction.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> normal(ReferenceFrame reference_frame)
+
+      The unit vector normal to the plane of the vehicle's position and its velocity
+      relative to the surface.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the direction.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> radial(ReferenceFrame reference_frame)
+
+      The unit vector pointing radially outward, perpendicular to :func:`Flight::prograde`
+      and :func:`Flight::normal`.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the direction.
 
       :Game Scenes: Flight

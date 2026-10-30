@@ -1,0 +1,535 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KSA
+
+Drawing
+=======
+
+
+.. class:: Drawing
+
+   Draws lines, shapes and text in the scene, each placed in a reference frame.
+
+   .. note::
+
+      The objects are drawn every frame until removed, and are removed when the client that
+      added them disconnects. Lines are drawn at the game's fixed gizmo width.
+
+   .. staticmethod:: add_line(start, end, reference_frame, [visible = True])
+
+      Draw a line between two positions.
+
+      :param tuple start: The position of the start of the line, in meters.
+      :param tuple end: The position of the end of the line, in meters.
+      :param ReferenceFrame reference_frame: The reference frame of the positions.
+      :param bool visible: Whether the line is visible.
+      :rtype: :class:`Line`
+   
+
+   .. staticmethod:: add_direction(direction, reference_frame, [length = 1e+01], [visible = True])
+
+      Draw a line from the origin of a reference frame in a direction.
+
+      :param tuple direction: The direction of the line.
+      :param ReferenceFrame reference_frame: The reference frame of the direction.
+      :param float length: The length of the line, in meters.
+      :param bool visible: Whether the line is visible.
+      :rtype: :class:`Line`
+   
+
+   .. staticmethod:: add_polyline(vertices, reference_frame, [closed = False], [visible = True])
+
+      Draw a line through a list of positions.
+
+      :param list vertices: The positions the line passes through, in meters.
+      :param ReferenceFrame reference_frame: The reference frame of the positions.
+      :param bool closed: Whether the line joins the last position back to the first.
+      :param bool visible: Whether the line is visible.
+      :rtype: :class:`Polyline`
+   
+
+   .. staticmethod:: add_circle(center, normal, radius, reference_frame, [visible = True])
+
+      Draw a circle.
+
+      :param tuple center: The position of the center of the circle, in meters.
+      :param tuple normal: The direction normal to the plane of the circle.
+      :param float radius: The radius of the circle, in meters.
+      :param ReferenceFrame reference_frame: The reference frame of the position and direction.
+      :param bool visible: Whether the circle is visible.
+      :rtype: :class:`Circle`
+   
+
+   .. staticmethod:: add_arc(center, normal, start_direction, angle, radius, reference_frame, [visible = True])
+
+      Draw an arc of a circle.
+
+      :param tuple center: The position of the center of the arc's circle, in meters.
+      :param tuple normal: The direction normal to the plane of the arc.
+      :param tuple start_direction: The direction from the center to the start of the arc.
+      :param float angle: The angle the arc turns through, counterclockwise about the normal, in radians.
+      :param float radius: The radius of the arc, in meters.
+      :param ReferenceFrame reference_frame: The reference frame of the position and directions.
+      :param bool visible: Whether the arc is visible.
+      :rtype: :class:`Arc`
+   
+
+   .. staticmethod:: add_box(center, size, rotation, reference_frame, [visible = True])
+
+      Draw the edges of a box.
+
+      :param tuple center: The position of the center of the box, in meters.
+      :param tuple size: The lengths of the box's edges along its x, y and z axes, in meters.
+      :param tuple rotation: The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+      :param ReferenceFrame reference_frame: The reference frame of the position and rotation.
+      :param bool visible: Whether the box is visible.
+      :rtype: :class:`Box`
+   
+
+   .. staticmethod:: add_sphere(center, radius, reference_frame, [visible = True])
+
+      Draw a solid sphere.
+
+      :param tuple center: The position of the center of the sphere, in meters.
+      :param float radius: The radius of the sphere, in meters.
+      :param ReferenceFrame reference_frame: The reference frame of the position.
+      :param bool visible: Whether the sphere is visible.
+      :rtype: :class:`Sphere`
+   
+
+   .. staticmethod:: add_text(text, position, reference_frame, [size = 16.0], [visible = True])
+
+      Draw text over the scene, centered on a position.
+
+      :param str text: The text.
+      :param tuple position: The position of the center of the text, in meters.
+      :param ReferenceFrame reference_frame: The reference frame of the position.
+      :param float size: The height of the font, in pixels.
+      :param bool visible: Whether the text is visible.
+      :rtype: :class:`Text`
+   
+
+   .. staticmethod:: clear([client_only = False])
+
+      Remove the drawing objects.
+
+      :param bool client_only: Whether to remove only the objects added by the calling client.
+   
+
+
+
+.. class:: Line
+
+   A line. Created using :meth:`Drawing.add_line` or :meth:`Drawing.add_direction`.
+
+   .. attribute:: start
+
+      The start position of the line, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: end
+
+      The end position of the line, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: reference_frame
+
+      The reference frame for the positions and directions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ReferenceFrame`
+   
+
+   .. attribute:: visible
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: color
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.
+
+   
+
+
+
+.. class:: Polyline
+
+   A line through a list of points. Created using :meth:`Drawing.add_polyline`.
+
+   .. attribute:: vertices
+
+      The points the line passes through, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: list(tuple(float, float, float))
+   
+
+   .. attribute:: closed
+
+      Whether the line joins the last point back to the first.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: reference_frame
+
+      The reference frame for the positions and directions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ReferenceFrame`
+   
+
+   .. attribute:: visible
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: color
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.
+
+   
+
+
+
+.. class:: Circle
+
+   A circle. Created using :meth:`Drawing.add_circle`.
+
+   .. attribute:: center
+
+      The position of the center of the circle, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: normal
+
+      The direction normal to the plane of the circle, as a unit vector.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: radius
+
+      The radius of the circle, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: reference_frame
+
+      The reference frame for the positions and directions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ReferenceFrame`
+   
+
+   .. attribute:: visible
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: color
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.
+
+   
+
+
+
+.. class:: Arc
+
+   An arc of a circle. Created using :meth:`Drawing.add_arc`.
+
+   .. attribute:: center
+
+      The position of the center of the arc's circle, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: normal
+
+      The direction normal to the plane of the arc, as a unit vector.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: start_direction
+
+      The direction from the center to the start of the arc, as a unit vector.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+      .. note::
+
+         The part of the direction along :attr:`Arc.normal` is ignored.
+
+   .. attribute:: angle
+
+      The angle the arc turns through, counterclockwise about :attr:`Arc.normal`, in radians.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: radius
+
+      The radius of the arc, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: reference_frame
+
+      The reference frame for the positions and directions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ReferenceFrame`
+   
+
+   .. attribute:: visible
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: color
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.
+
+   
+
+
+
+.. class:: Box
+
+   The edges of a box. Created using :meth:`Drawing.add_box`.
+
+   .. attribute:: center
+
+      The position of the center of the box, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: size
+
+      The lengths of the box's edges along its x, y and z axes, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: rotation
+
+      The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float, float)
+   
+
+   .. attribute:: reference_frame
+
+      The reference frame for the positions and directions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ReferenceFrame`
+   
+
+   .. attribute:: visible
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: color
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.
+
+   
+
+
+
+.. class:: Sphere
+
+   A solid sphere. Created using :meth:`Drawing.add_sphere`.
+
+   .. attribute:: center
+
+      The position of the center of the sphere, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: radius
+
+      The radius of the sphere, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: reference_frame
+
+      The reference frame for the positions and directions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ReferenceFrame`
+   
+
+   .. attribute:: visible
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: color
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.
+
+   
+
+
+
+.. class:: Text
+
+   Text drawn over the scene, centered on a position. Created using :meth:`Drawing.add_text`.
+
+   .. note::
+
+      The text is hidden with the game's UI.
+
+   .. attribute:: content
+
+      The text.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: position
+
+      The position of the center of the text, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: size
+
+      The height of the font, in pixels.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: reference_frame
+
+      The reference frame for the positions and directions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ReferenceFrame`
+   
+
+   .. attribute:: visible
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: color
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`StdLib.ColorRGB`
+   
+
+   .. method:: remove()
+
+      Remove the object.

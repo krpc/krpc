@@ -1,0 +1,236 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Camera
+======
+
+.. grpc:service:: CameraService
+
+   The game's main camera. Obtained from :grpc:rpc:`KSAService.GetCamera <krpc.ksa.KSAService.GetCamera>`.
+
+   .. grpc:rpc:: GetMode (Camera.GetModeRequest) returns (Camera.GetModeResponse)
+
+      The mode of the camera.
+
+      :Camera.GetModeRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+
+      :Camera.GetModeResponse: ``value`` (:grpc:enum:`CameraMode <krpc.ksa.CameraMode>`)
+
+      .. note::
+
+         Setting :grpc:value:`CAMERA_MODE_IVA <krpc.ksa.CameraMode.CAMERA_MODE_IVA>` while the camera is not focused on a vehicle
+         with a crew seat sets :grpc:value:`CAMERA_MODE_ORBIT <krpc.ksa.CameraMode.CAMERA_MODE_ORBIT>` instead, as the game does. A
+         change of mode releases the active vehicle's held rotation and translation inputs.
+
+   .. grpc:rpc:: SetMode (Camera.SetModeRequest) returns (Camera.SetModeResponse)
+
+      The mode of the camera.
+
+      :Camera.SetModeRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+         * ``value`` (:grpc:enum:`CameraMode <krpc.ksa.CameraMode>`)
+
+      :Camera.SetModeResponse: Empty
+
+      .. note::
+
+         Setting :grpc:value:`CAMERA_MODE_IVA <krpc.ksa.CameraMode.CAMERA_MODE_IVA>` while the camera is not focused on a vehicle
+         with a crew seat sets :grpc:value:`CAMERA_MODE_ORBIT <krpc.ksa.CameraMode.CAMERA_MODE_ORBIT>` instead, as the game does. A
+         change of mode releases the active vehicle's held rotation and translation inputs.
+
+   .. grpc:rpc:: GetAzimuth (Camera.GetAzimuthRequest) returns (Camera.GetAzimuthResponse)
+
+      The angle of the camera around the focused object, in degrees. Throws an exception
+      in any mode other than orbit and map.
+
+      :Camera.GetAzimuthRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+
+      :Camera.GetAzimuthResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetAzimuth (Camera.SetAzimuthRequest) returns (Camera.SetAzimuthResponse)
+
+      The angle of the camera around the focused object, in degrees. Throws an exception
+      in any mode other than orbit and map.
+
+      :Camera.SetAzimuthRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+         * ``value`` (``float``)
+
+      :Camera.SetAzimuthResponse: Empty
+
+   .. grpc:rpc:: GetElevation (Camera.GetElevationRequest) returns (Camera.GetElevationResponse)
+
+      The angle of the camera above the plane it orbits in, in degrees, between -90 and
+      90. Throws an exception in any mode other than orbit and map.
+
+      :Camera.GetElevationRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+
+      :Camera.GetElevationResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetElevation (Camera.SetElevationRequest) returns (Camera.SetElevationResponse)
+
+      The angle of the camera above the plane it orbits in, in degrees, between -90 and
+      90. Throws an exception in any mode other than orbit and map.
+
+      :Camera.SetElevationRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+         * ``value`` (``float``)
+
+      :Camera.SetElevationResponse: Empty
+
+   .. grpc:rpc:: GetDistance (Camera.GetDistanceRequest) returns (Camera.GetDistanceResponse)
+
+      The distance from the camera to the focused object, in meters. Throws an exception
+      in any mode other than orbit and map.
+
+      :Camera.GetDistanceRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+
+      :Camera.GetDistanceResponse: ``value`` (``float``)
+
+      .. note::
+
+         The camera moves smoothly to a new distance, and stays at least the focused object's
+         radius from it in map mode, and half its radius in orbit mode.
+
+   .. grpc:rpc:: SetDistance (Camera.SetDistanceRequest) returns (Camera.SetDistanceResponse)
+
+      The distance from the camera to the focused object, in meters. Throws an exception
+      in any mode other than orbit and map.
+
+      :Camera.SetDistanceRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+         * ``value`` (``float``)
+
+      :Camera.SetDistanceResponse: Empty
+
+      .. note::
+
+         The camera moves smoothly to a new distance, and stays at least the focused object's
+         radius from it in map mode, and half its radius in orbit mode.
+
+   .. grpc:rpc:: GetFieldOfView (Camera.GetFieldOfViewRequest) returns (Camera.GetFieldOfViewResponse)
+
+      The camera's vertical field of view, in degrees, between 15 and 120.
+
+      :Camera.GetFieldOfViewRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+
+      :Camera.GetFieldOfViewResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetFieldOfView (Camera.SetFieldOfViewRequest) returns (Camera.SetFieldOfViewResponse)
+
+      The camera's vertical field of view, in degrees, between 15 and 120.
+
+      :Camera.SetFieldOfViewRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+         * ``value`` (``float``)
+
+      :Camera.SetFieldOfViewResponse: Empty
+
+   .. grpc:rpc:: GetFocusedVehicle (Camera.GetFocusedVehicleRequest) returns (Camera.GetFocusedVehicleResponse)
+
+      Returns the vehicle the camera is focused on, or ``null`` if it is focused on
+      something else, and sets the focus to a vehicle.
+
+      :Camera.GetFocusedVehicleRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+
+      :Camera.GetFocusedVehicleResponse: ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      .. note::
+
+         Setting the focus leaves the active vehicle as it is.
+
+   .. grpc:rpc:: SetFocusedVehicle (Camera.SetFocusedVehicleRequest) returns (Camera.SetFocusedVehicleResponse)
+
+      Returns the vehicle the camera is focused on, or ``null`` if it is focused on
+      something else, and sets the focus to a vehicle.
+
+      :Camera.SetFocusedVehicleRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+         * ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+      :Camera.SetFocusedVehicleResponse: Empty
+
+      .. note::
+
+         Setting the focus leaves the active vehicle as it is.
+
+   .. grpc:rpc:: GetFocusedBody (Camera.GetFocusedBodyRequest) returns (Camera.GetFocusedBodyResponse)
+
+      Returns the body the camera is focused on, or ``null`` if it is focused on
+      something else, and sets the focus to a body.
+
+      :Camera.GetFocusedBodyRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+
+      :Camera.GetFocusedBodyResponse: ``value`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+   .. grpc:rpc:: SetFocusedBody (Camera.SetFocusedBodyRequest) returns (Camera.SetFocusedBodyResponse)
+
+      Returns the body the camera is focused on, or ``null`` if it is focused on
+      something else, and sets the focus to a body.
+
+      :Camera.SetFocusedBodyRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+         * ``value`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Camera.SetFocusedBodyResponse: Empty
+
+   .. grpc:rpc:: GetFocusedKitten (Camera.GetFocusedKittenRequest) returns (Camera.GetFocusedKittenResponse)
+
+      Returns the kitten on EVA the camera is focused on, or ``null`` if it is focused
+      on something else, and sets the focus to a kitten on EVA.
+
+      :Camera.GetFocusedKittenRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+
+      :Camera.GetFocusedKittenResponse: ``value`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA.
+
+   .. grpc:rpc:: SetFocusedKitten (Camera.SetFocusedKittenRequest) returns (Camera.SetFocusedKittenResponse)
+
+      Returns the kitten on EVA the camera is focused on, or ``null`` if it is focused
+      on something else, and sets the focus to a kitten on EVA.
+
+      :Camera.SetFocusedKittenRequest:
+         * ``this`` (:grpc:service:`Camera <krpc.ksa.CameraService>`)
+         * ``value`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Camera.SetFocusedKittenResponse: Empty
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA.
+
+.. grpc:enum:: CameraMode
+
+   The mode of the camera. See :grpc:rpc:`CameraService.GetMode <krpc.ksa.CameraService.GetMode>`.
+
+   .. grpc:value:: CAMERA_MODE_ORBIT
+
+      Orbits the focused object.
+
+   .. grpc:value:: CAMERA_MODE_FREE
+
+      Flies freely.
+
+   .. grpc:value:: CAMERA_MODE_MAP
+
+      The map view.
+
+   .. grpc:value:: CAMERA_MODE_IVA
+
+      Inside the vehicle, from a crew seat.
+
+   .. grpc:value:: CAMERA_MODE_FIXED
+
+      Fixed to a part of the vehicle, such as a docking port.

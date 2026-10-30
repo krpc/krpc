@@ -24,12 +24,60 @@ Vehicle
       :rtype: str
    
 
+   .. method:: destroy()
+
+      Destroy the vehicle, killing its crew, as abandoning the vehicle does. Returns once
+      the vehicle is gone.
+
+   
+
+      .. note::
+
+         If the vehicle is the active vehicle, the game hands control to a nearby vehicle.
+
+   .. attribute:: can_recover
+
+      Whether the vehicle can be recovered: at rest on the surface of the home planet.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. method:: recover()
+
+      Recover the vehicle, ending its crew's missions, as the game's recover button does.
+      Returns once the vehicle is gone.
+
+   
+
+      .. note::
+
+         Throws an exception if the vehicle cannot be recovered, see :attr:`Vehicle.can_recover`.
+
    .. attribute:: situation
 
       The situation of the vehicle.
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Situation`
+   
+
+   .. attribute:: on_rails
+
+      Whether the game moves the vehicle without simulating the forces on it: along its
+      orbit, or held on the surface. True in the freefall, landed, floating and bottomed
+      situations.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: is_debris
+
+      Whether the vehicle is debris, such as a spent stage.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
    
 
    .. attribute:: has_launched
@@ -91,6 +139,43 @@ Vehicle
       :rtype: float
    
 
+   .. attribute:: peak_g_load
+
+      The highest smoothed g-load on the vehicle during the last physics step, as a
+      multiple of standard gravity. Zero while the vehicle is :attr:`Vehicle.on_rails`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: max_g_load
+
+      The g-load the vehicle can take before it breaks up, as a multiple of standard
+      gravity. Zero while the vehicle is :attr:`Vehicle.on_rails`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: peak_dynamic_pressure
+
+      The highest dynamic pressure on the vehicle during the last physics step, in
+      pascals. In the sea, this is the dynamic pressure of the water. Zero while the
+      vehicle is :attr:`Vehicle.on_rails`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: max_dynamic_pressure
+
+      The dynamic pressure the vehicle can take before it breaks up, in pascals. Zero
+      while the vehicle is :attr:`Vehicle.on_rails`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
    .. attribute:: parts
 
       The vehicle's parts.
@@ -105,6 +190,175 @@ Vehicle
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
+   
+
+   .. method:: parts_with_name(name)
+
+      The vehicle's parts with the given template id. See :attr:`Part.name`.
+
+      :param str name: The template id.
+      :rtype: list(:class:`Part`)
+   
+
+   .. attribute:: seats
+
+      The vehicle's crew seats.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Seat`)
+   
+
+   .. attribute:: crew
+
+      The kittens in the vehicle's seats.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Kitten`)
+   
+
+   .. attribute:: crew_capacity
+
+      The number of crew seats in the vehicle.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: engines
+
+      The vehicle's engines.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Engine`)
+   
+
+   .. attribute:: rcs
+
+      The vehicle's RCS thrusters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`RCS`)
+   
+
+   .. attribute:: decouplers
+
+      The vehicle's decouplers.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Decoupler`)
+   
+
+   .. attribute:: parachutes
+
+      The vehicle's parachutes.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Parachute`)
+   
+
+   .. attribute:: tanks
+
+      The vehicle's propellant tanks.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Tank`)
+   
+
+   .. attribute:: batteries
+
+      The vehicle's batteries.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Battery`)
+   
+
+   .. attribute:: solar_panels
+
+      The vehicle's solar panels.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`SolarPanel`)
+   
+
+   .. attribute:: generators
+
+      The vehicle's generators.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Generator`)
+   
+
+   .. attribute:: power_consumers
+
+      The vehicle's power consumers.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`PowerConsumer`)
+   
+
+   .. attribute:: stored_energy
+
+      The energy stored in the vehicle's batteries, in joules.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: energy_capacity
+
+      The energy the vehicle's batteries can store, in joules.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: net_power
+
+      The power produced by the vehicle's solar panels and generators, less the power its
+      parts use, in watts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: lights
+
+      The vehicle's lights.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Light`)
+   
+
+   .. attribute:: deployables
+
+      The vehicle's deployable sections.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Deployable`)
+   
+
+   .. attribute:: magnetic_scoops
+
+      The vehicle's magnetic scoops.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`MagneticScoop`)
+   
+
+   .. attribute:: fuel_links
+
+      The vehicle's fuel links.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`FuelLink`)
+   
+
+   .. attribute:: docking_ports
+
+      The vehicle's docking ports.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`DockingPort`)
    
 
    .. attribute:: resources
@@ -152,6 +406,16 @@ Vehicle
       .. note::
 
          Setting a body that orbits nothing, such as the star, throws an exception.
+
+   .. attribute:: target_part
+
+      The part targeted by this vehicle, on the vehicle in :attr:`Vehicle.target_vehicle`,
+      or ``None``. Setting it targets the part and its vehicle, and ``None`` clears
+      the target.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`Part` or None
+   
 
    .. attribute:: burns
 
@@ -330,3 +594,67 @@ Vehicle
    .. data:: bottomed
 
       At rest on terrain and in the ocean.
+
+
+
+.. class:: VehicleDesign
+
+   A vehicle design that can be launched: one of the game's default vehicles, or a vehicle
+   saved by the player in the editor. Obtained from :attr:`vehicle_designs`.
+
+   .. note::
+
+      The mass and delta-v are those the editor shows for the design.
+
+   .. attribute:: name
+
+      The name of the design, as passed to :meth:`launch_vehicle`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: is_default
+
+      Whether the design is one of the game's default vehicles.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: part_count
+
+      The number of parts in the design.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: mass
+
+      The total mass of the design, including propellant, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: dry_mass
+
+      The mass of the design without propellant, in kilograms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: delta_v
+
+      The change in velocity of all the design's sequences, in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         Each sequence is computed in the environment chosen for it in the editor, in vacuum
+         or at sea level.

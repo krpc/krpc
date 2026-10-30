@@ -1,0 +1,2078 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Parts &#8212; kRPC v0.2.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'grpc/api/ksa/parts';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Resources" href="resources.html" />
+    <link rel="prev" title="Sequence" href="sequence.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.2.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../messages.html">Messages</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../clients.html" class="nav-link">Clients</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../grpc.html" class="nav-link">gRPC</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../ksa.html" class="nav-link">KSA API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Parts</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="parts">
+<h1>Parts<a class="headerlink" href="#parts" title="Link to this heading">#</a></h1>
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PartService</span></span><a class="headerlink" href="#krpc.ksa.PartService" title="Link to this definition">#</a></dt>
+<dd><p>A part of a vehicle. Obtained from <a class="reference internal" href="vehicle.html#krpc.ksa.VehicleService.GetParts" title="krpc.ksa.VehicleService.GetParts"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetParts</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A part keeps its object when the vehicle it belongs to changes, for example when a
+decoupler separates it. Throws an exception once the part no longer exists.</p>
+</div>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetName">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetName</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetNameRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetNameResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetName" title="Link to this definition">#</a></dt>
+<dd><p>The id of the part’s template.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetNameRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetNameResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">string</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetTitle">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTitle</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetTitleRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetTitleResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetTitle" title="Link to this definition">#</a></dt>
+<dd><p>The name of the part, as shown in the game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetTitleRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetTitleResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">string</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetVehicle">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetVehicle</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetVehicleRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetVehicleResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetVehicle" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle the part belongs to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetVehicleRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetVehicleResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="vehicle.html#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetParent">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetParent</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetParentRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetParentResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetParent" title="Link to this definition">#</a></dt>
+<dd><p>The part this part is attached to, or <code class="docutils literal notranslate"><span class="pre">null</span></code> for the root part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetParentRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetParentResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetChildren">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetChildren</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetChildrenRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetChildrenResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetChildren" title="Link to this definition">#</a></dt>
+<dd><p>The parts attached to this part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetChildrenRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetChildrenResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetSequence">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSequence</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetSequenceRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetSequenceResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetSequence" title="Link to this definition">#</a></dt>
+<dd><p>The number of the sequence that activates the part, or -1 if no sequence does.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetSequenceRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetSequenceResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">sint32</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetMass">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMass</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetMassRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetMassResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetMass" title="Link to this definition">#</a></dt>
+<dd><p>The mass of the part, including its propellant, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetMassRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetMassResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetDryMass">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDryMass</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetDryMassRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetDryMassResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetDryMass" title="Link to this definition">#</a></dt>
+<dd><p>The mass of the part without its propellant, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetDryMassRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetDryMassResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetResources">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetResources</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetResourcesRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetResourcesResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetResources" title="Link to this definition">#</a></dt>
+<dd><p>The resources the part holds, one for each substance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetResourcesRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetResourcesResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="resources.html#krpc.ksa.ResourceService" title="krpc.ksa.ResourceService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Resource</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetTanks">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTanks</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetTanksRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetTanksResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetTanks" title="Link to this definition">#</a></dt>
+<dd><p>The part’s propellant tanks. Empty if it has none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetTanksRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetTanksResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="resources.html#krpc.ksa.TankService" title="krpc.ksa.TankService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Tank</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetBatteries">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetBatteries</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetBatteriesRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetBatteriesResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetBatteries" title="Link to this definition">#</a></dt>
+<dd><p>The part’s batteries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetBatteriesRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetBatteriesResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="power.html#krpc.ksa.BatteryService" title="krpc.ksa.BatteryService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Battery</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetSolarPanels">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSolarPanels</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetSolarPanelsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetSolarPanelsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetSolarPanels" title="Link to this definition">#</a></dt>
+<dd><p>The part’s solar panels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetSolarPanelsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetSolarPanelsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="power.html#krpc.ksa.SolarPanelService" title="krpc.ksa.SolarPanelService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">SolarPanel</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetGenerators">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetGenerators</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetGeneratorsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetGeneratorsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetGenerators" title="Link to this definition">#</a></dt>
+<dd><p>The part’s generators.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetGeneratorsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetGeneratorsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="power.html#krpc.ksa.GeneratorService" title="krpc.ksa.GeneratorService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Generator</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetPowerConsumers">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPowerConsumers</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetPowerConsumersRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetPowerConsumersResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetPowerConsumers" title="Link to this definition">#</a></dt>
+<dd><p>The part’s power consumers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetPowerConsumersRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetPowerConsumersResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="power.html#krpc.ksa.PowerConsumerService" title="krpc.ksa.PowerConsumerService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">PowerConsumer</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetLights">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetLights</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetLightsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetLightsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetLights" title="Link to this definition">#</a></dt>
+<dd><p>The part’s lights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetLightsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetLightsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="power.html#krpc.ksa.LightService" title="krpc.ksa.LightService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Light</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetDeployables">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDeployables</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetDeployablesRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetDeployablesResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetDeployables" title="Link to this definition">#</a></dt>
+<dd><p>The part’s deployable sections. A part can have several, such as the doors of a
+service module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetDeployablesRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetDeployablesResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="#krpc.ksa.DeployableService" title="krpc.ksa.DeployableService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Deployable</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetMagneticScoops">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMagneticScoops</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetMagneticScoopsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetMagneticScoopsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetMagneticScoops" title="Link to this definition">#</a></dt>
+<dd><p>The part’s magnetic scoops. Empty if it has none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetMagneticScoopsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetMagneticScoopsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="#krpc.ksa.MagneticScoopService" title="krpc.ksa.MagneticScoopService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MagneticScoop</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.Position">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Position</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.PositionRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.PositionResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.Position" title="Link to this definition">#</a></dt>
+<dd><p>The position of the part’s origin, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.PositionRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference_frame</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>): The reference frame of the position.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.PositionResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="../messages.html#krpc.ksa.Tuple_double_double_double" title="krpc.ksa.Tuple_double_double_double"><code class="xref grpc grpc-message docutils literal notranslate"><span class="pre">Tuple_double_double_double</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.Velocity">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Velocity</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.VelocityRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.VelocityResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.Velocity" title="Link to this definition">#</a></dt>
+<dd><p>The velocity of the part’s origin, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.VelocityRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference_frame</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>): The reference frame of the velocity.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.VelocityResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="../messages.html#krpc.ksa.Tuple_double_double_double" title="krpc.ksa.Tuple_double_double_double"><code class="xref grpc grpc-message docutils literal notranslate"><span class="pre">Tuple_double_double_double</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.Rotation">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Rotation</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.RotationRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.RotationResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.Rotation" title="Link to this definition">#</a></dt>
+<dd><p>The rotation of the part’s axes, relative to the given frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.RotationRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference_frame</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>): The reference frame of the rotation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.RotationResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="../messages.html#krpc.ksa.Tuple_double_double_double_double" title="krpc.ksa.Tuple_double_double_double_double"><code class="xref grpc grpc-message docutils literal notranslate"><span class="pre">Tuple_double_double_double_double</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetEngine">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetEngine</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetEngineRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetEngineResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetEngine" title="Link to this definition">#</a></dt>
+<dd><p>The part’s engine, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetEngineRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetEngineResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.EngineService" title="krpc.ksa.EngineService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Engine</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetGimbals">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetGimbals</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetGimbalsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetGimbalsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetGimbals" title="Link to this definition">#</a></dt>
+<dd><p>The part’s gimbals. An engine part can have several, each steering one nozzle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetGimbalsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetGimbalsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="#krpc.ksa.GimbalService" title="krpc.ksa.GimbalService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Gimbal</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetRCS">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetRCS</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetRCSRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetRCSResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetRCS" title="Link to this definition">#</a></dt>
+<dd><p>The part’s RCS thrusters, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetRCSRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetRCSResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.RCSService" title="krpc.ksa.RCSService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">RCS</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetDecoupler">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDecoupler</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetDecouplerRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetDecouplerResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetDecoupler" title="Link to this definition">#</a></dt>
+<dd><p>The part’s decoupler, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetDecouplerRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetDecouplerResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.DecouplerService" title="krpc.ksa.DecouplerService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Decoupler</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetParachute">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetParachute</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetParachuteRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetParachuteResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetParachute" title="Link to this definition">#</a></dt>
+<dd><p>The part’s parachute, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetParachuteRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetParachuteResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.ParachuteService" title="krpc.ksa.ParachuteService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Parachute</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetDockingPort">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDockingPort</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetDockingPortRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetDockingPortResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetDockingPort" title="Link to this definition">#</a></dt>
+<dd><p>The part’s docking port, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it has none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetDockingPortRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetDockingPortResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.DockingPortService" title="krpc.ksa.DockingPortService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">DockingPort</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetSeats">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSeats</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetSeatsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetSeatsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetSeats" title="Link to this definition">#</a></dt>
+<dd><p>The part’s crew seats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetSeatsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetSeatsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="crew.html#krpc.ksa.SeatService" title="krpc.ksa.SeatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Seat</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.PartService.GetCrew">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCrew</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetCrewRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Part.GetCrewResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.PartService.GetCrew" title="Link to this definition">#</a></dt>
+<dd><p>The kittens in the part’s seats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Part.GetCrewRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Part.GetCrewResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="crew.html#krpc.ksa.KittenService" title="krpc.ksa.KittenService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Kitten</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.EngineService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">EngineService</span></span><a class="headerlink" href="#krpc.ksa.EngineService" title="Link to this definition">#</a></dt>
+<dd><p>An engine. Obtained from <a class="reference internal" href="#krpc.ksa.PartService.GetEngine" title="krpc.ksa.PartService.GetEngine"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">PartService.GetEngine</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An active engine fires when the vehicle’s engines are on, at the vehicle’s throttle.
+See <a class="reference internal" href="control.html#krpc.ksa.ControlService.GetEngineOn" title="krpc.ksa.ControlService.GetEngineOn"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">ControlService.GetEngineOn</span></code></a> and <a class="reference internal" href="control.html#krpc.ksa.ControlService.GetThrottle" title="krpc.ksa.ControlService.GetThrottle"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">ControlService.GetThrottle</span></code></a>.</p>
+</div>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.EngineService.GetPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.EngineService.GetPart" title="Link to this definition">#</a></dt>
+<dd><p>The part the engine is in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Engine.GetPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.EngineService" title="krpc.ksa.EngineService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Engine</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Engine.GetPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.EngineService.GetGimbals">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetGimbals</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetGimbalsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetGimbalsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.EngineService.GetGimbals" title="Link to this definition">#</a></dt>
+<dd><p>The gimbals that steer the engine’s nozzles. Empty if the engine has none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Engine.GetGimbalsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.EngineService" title="krpc.ksa.EngineService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Engine</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Engine.GetGimbalsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="#krpc.ksa.GimbalService" title="krpc.ksa.GimbalService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Gimbal</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.EngineService.GetActive">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetActive</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetActiveRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetActiveResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.EngineService.GetActive" title="Link to this definition">#</a></dt>
+<dd><p>Whether the engine is active, as when its sequence is activated. Setting it returns
+once the change has applied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Engine.GetActiveRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.EngineService" title="krpc.ksa.EngineService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Engine</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Engine.GetActiveResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.EngineService.SetActive">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SetActive</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.SetActiveRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.SetActiveResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.EngineService.SetActive" title="Link to this definition">#</a></dt>
+<dd><p>Whether the engine is active, as when its sequence is activated. Setting it returns
+once the change has applied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Engine.SetActiveRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.EngineService" title="krpc.ksa.EngineService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Engine</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Engine.SetActiveResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.EngineService.GetHasPropellant">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetHasPropellant</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetHasPropellantRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetHasPropellantResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.EngineService.GetHasPropellant" title="Link to this definition">#</a></dt>
+<dd><p>Whether the engine has propellant to burn.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Engine.GetHasPropellantRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.EngineService" title="krpc.ksa.EngineService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Engine</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Engine.GetHasPropellantResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.EngineService.GetMinimumThrottle">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMinimumThrottle</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetMinimumThrottleRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetMinimumThrottleResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.EngineService.GetMinimumThrottle" title="Link to this definition">#</a></dt>
+<dd><p>The lowest throttle the engine runs at, between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Engine.GetMinimumThrottleRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.EngineService" title="krpc.ksa.EngineService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Engine</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Engine.GetMinimumThrottleResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.EngineService.GetPropellants">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPropellants</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetPropellantsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetPropellantsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.EngineService.GetPropellants" title="Link to this definition">#</a></dt>
+<dd><p>The names of the substances the engine burns. See <a class="reference internal" href="resources.html#krpc.ksa.ResourceService.GetName" title="krpc.ksa.ResourceService.GetName"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">ResourceService.GetName</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Engine.GetPropellantsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.EngineService" title="krpc.ksa.EngineService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Engine</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Engine.GetPropellantsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span> <span class="pre">string</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.EngineService.GetThrust">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetThrust</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetThrustRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetThrustResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.EngineService.GetThrust" title="Link to this definition">#</a></dt>
+<dd><p>The thrust of the engine at its current throttle and the current atmospheric
+pressure, in Newtons. Zero when it is not firing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Engine.GetThrustRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.EngineService" title="krpc.ksa.EngineService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Engine</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Engine.GetThrustResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.EngineService.GetAvailableThrust">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetAvailableThrust</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetAvailableThrustRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetAvailableThrustResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.EngineService.GetAvailableThrust" title="Link to this definition">#</a></dt>
+<dd><p>The thrust of the engine at full throttle and the current atmospheric pressure, in
+Newtons. Zero when it is inactive or has no propellant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Engine.GetAvailableThrustRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.EngineService" title="krpc.ksa.EngineService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Engine</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Engine.GetAvailableThrustResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.EngineService.GetSpecificImpulse">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSpecificImpulse</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetSpecificImpulseRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Engine.GetSpecificImpulseResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.EngineService.GetSpecificImpulse" title="Link to this definition">#</a></dt>
+<dd><p>The specific impulse of the engine at the current atmospheric pressure, in seconds.
+Zero when it is inactive or has no propellant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Engine.GetSpecificImpulseRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.EngineService" title="krpc.ksa.EngineService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Engine</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Engine.GetSpecificImpulseResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.GimbalService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GimbalService</span></span><a class="headerlink" href="#krpc.ksa.GimbalService" title="Link to this definition">#</a></dt>
+<dd><p>A gimbal that steers an engine nozzle. Obtained from <a class="reference internal" href="#krpc.ksa.PartService.GetGimbals" title="krpc.ksa.PartService.GetGimbals"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">PartService.GetGimbals</span></code></a> or
+<a class="reference internal" href="#krpc.ksa.EngineService.GetGimbals" title="krpc.ksa.EngineService.GetGimbals"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">EngineService.GetGimbals</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A gimbal turns about the y and z axes of its mount, which <a class="reference internal" href="#krpc.ksa.GimbalService.Rotation" title="krpc.ksa.GimbalService.Rotation"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">GimbalService.Rotation</span></code></a> gives.
+The flight computer steers it while an engine it belongs to is <a class="reference internal" href="#krpc.ksa.GimbalService.GetActive" title="krpc.ksa.GimbalService.GetActive"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">GimbalService.GetActive</span></code></a>.</p>
+</div>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.GimbalService.GetPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.GetPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.GetPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.GimbalService.GetPart" title="Link to this definition">#</a></dt>
+<dd><p>The part the gimbal is in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Gimbal.GetPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.GimbalService" title="krpc.ksa.GimbalService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Gimbal</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Gimbal.GetPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.GimbalService.GetAngleY">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetAngleY</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.GetAngleYRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.GetAngleYResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.GimbalService.GetAngleY" title="Link to this definition">#</a></dt>
+<dd><p>The angle of the gimbal about its y axis, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Gimbal.GetAngleYRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.GimbalService" title="krpc.ksa.GimbalService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Gimbal</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Gimbal.GetAngleYResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.GimbalService.GetAngleZ">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetAngleZ</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.GetAngleZRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.GetAngleZResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.GimbalService.GetAngleZ" title="Link to this definition">#</a></dt>
+<dd><p>The angle of the gimbal about its z axis, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Gimbal.GetAngleZRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.GimbalService" title="krpc.ksa.GimbalService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Gimbal</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Gimbal.GetAngleZResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.GimbalService.GetMaxAngleY">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMaxAngleY</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.GetMaxAngleYRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.GetMaxAngleYResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.GimbalService.GetMaxAngleY" title="Link to this definition">#</a></dt>
+<dd><p>The largest angle of the gimbal about its y axis, in degrees. Zero if it does not
+turn about that axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Gimbal.GetMaxAngleYRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.GimbalService" title="krpc.ksa.GimbalService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Gimbal</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Gimbal.GetMaxAngleYResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.GimbalService.GetMaxAngleZ">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMaxAngleZ</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.GetMaxAngleZRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.GetMaxAngleZResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.GimbalService.GetMaxAngleZ" title="Link to this definition">#</a></dt>
+<dd><p>The largest angle of the gimbal about its z axis, in degrees. Zero if it does not
+turn about that axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Gimbal.GetMaxAngleZRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.GimbalService" title="krpc.ksa.GimbalService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Gimbal</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Gimbal.GetMaxAngleZResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.GimbalService.GetActive">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetActive</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.GetActiveRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.GetActiveResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.GimbalService.GetActive" title="Link to this definition">#</a></dt>
+<dd><p>Whether an engine the gimbal steers is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Gimbal.GetActiveRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.GimbalService" title="krpc.ksa.GimbalService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Gimbal</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Gimbal.GetActiveResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.GimbalService.Rotation">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Rotation</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.RotationRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Gimbal.RotationResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.GimbalService.Rotation" title="Link to this definition">#</a></dt>
+<dd><p>The rotation of the gimbal’s mount, whose y and z axes the gimbal turns about.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Gimbal.RotationRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.GimbalService" title="krpc.ksa.GimbalService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Gimbal</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference_frame</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>): The reference frame of the rotation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Gimbal.RotationResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="../messages.html#krpc.ksa.Tuple_double_double_double_double" title="krpc.ksa.Tuple_double_double_double_double"><code class="xref grpc grpc-message docutils literal notranslate"><span class="pre">Tuple_double_double_double_double</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.RCSService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">RCSService</span></span><a class="headerlink" href="#krpc.ksa.RCSService" title="Link to this definition">#</a></dt>
+<dd><p>The RCS thrusters of a part. Obtained from <a class="reference internal" href="#krpc.ksa.PartService.GetRCS" title="krpc.ksa.PartService.GetRCS"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">PartService.GetRCS</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Active thrusters fire when the vehicle’s RCS is on. See <a class="reference internal" href="control.html#krpc.ksa.ControlService.GetRCS" title="krpc.ksa.ControlService.GetRCS"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">ControlService.GetRCS</span></code></a>.</p>
+</div>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.RCSService.GetPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">RCS.GetPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">RCS.GetPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.RCSService.GetPart" title="Link to this definition">#</a></dt>
+<dd><p>The part the thrusters are in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">RCS.GetPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.RCSService" title="krpc.ksa.RCSService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">RCS</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">RCS.GetPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.RCSService.GetActive">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetActive</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">RCS.GetActiveRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">RCS.GetActiveResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.RCSService.GetActive" title="Link to this definition">#</a></dt>
+<dd><p>Whether the thrusters are active. Setting it returns once the change has applied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">RCS.GetActiveRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.RCSService" title="krpc.ksa.RCSService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">RCS</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">RCS.GetActiveResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.RCSService.SetActive">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SetActive</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">RCS.SetActiveRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">RCS.SetActiveResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.RCSService.SetActive" title="Link to this definition">#</a></dt>
+<dd><p>Whether the thrusters are active. Setting it returns once the change has applied.</p>
+<dl class="field-list simple">
+<dt class="field-odd">RCS.SetActiveRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.RCSService" title="krpc.ksa.RCSService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">RCS</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">RCS.SetActiveResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.DecouplerService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">DecouplerService</span></span><a class="headerlink" href="#krpc.ksa.DecouplerService" title="Link to this definition">#</a></dt>
+<dd><p>A decoupler. Obtained from <a class="reference internal" href="#krpc.ksa.PartService.GetDecoupler" title="krpc.ksa.PartService.GetDecoupler"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">PartService.GetDecoupler</span></code></a>.</p>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.DecouplerService.GetPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Decoupler.GetPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Decoupler.GetPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.DecouplerService.GetPart" title="Link to this definition">#</a></dt>
+<dd><p>The part the decoupler is in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Decoupler.GetPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.DecouplerService" title="krpc.ksa.DecouplerService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Decoupler</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Decoupler.GetPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.DecouplerService.GetEnabled">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetEnabled</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Decoupler.GetEnabledRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Decoupler.GetEnabledResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.DecouplerService.GetEnabled" title="Link to this definition">#</a></dt>
+<dd><p>Whether the decoupler can fire.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Decoupler.GetEnabledRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.DecouplerService" title="krpc.ksa.DecouplerService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Decoupler</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Decoupler.GetEnabledResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.DecouplerService.GetDecoupled">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDecoupled</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Decoupler.GetDecoupledRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Decoupler.GetDecoupledResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.DecouplerService.GetDecoupled" title="Link to this definition">#</a></dt>
+<dd><p>Whether the decoupler has fired, or is attached to nothing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Decoupler.GetDecoupledRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.DecouplerService" title="krpc.ksa.DecouplerService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Decoupler</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Decoupler.GetDecoupledResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.DecouplerService.Decouple">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Decouple</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Decoupler.DecoupleRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Decoupler.DecoupleResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.DecouplerService.Decouple" title="Link to this definition">#</a></dt>
+<dd><p>Fire the decoupler, separating the vehicle into two. Returns once it has fired.
+Throws an exception if the decoupler is disabled or <a class="reference internal" href="#krpc.ksa.DecouplerService.GetDecoupled" title="krpc.ksa.DecouplerService.GetDecoupled"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">DecouplerService.GetDecoupled</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Decoupler.DecoupleRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.DecouplerService" title="krpc.ksa.DecouplerService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Decoupler</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Decoupler.DecoupleResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="vehicle.html#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>): The vehicles that separated from this one.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">ParachuteService</span></span><a class="headerlink" href="#krpc.ksa.ParachuteService" title="Link to this definition">#</a></dt>
+<dd><p>A parachute. Obtained from <a class="reference internal" href="#krpc.ksa.PartService.GetParachute" title="krpc.ksa.PartService.GetParachute"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">PartService.GetParachute</span></code></a>.</p>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteService.GetPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.GetPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.GetPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.ParachuteService.GetPart" title="Link to this definition">#</a></dt>
+<dd><p>The part the parachute is in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parachute.GetPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.ParachuteService" title="krpc.ksa.ParachuteService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Parachute</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parachute.GetPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteService.GetState">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetState</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.GetStateRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.GetStateResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.ParachuteService.GetState" title="Link to this definition">#</a></dt>
+<dd><p>The state of the parachute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parachute.GetStateRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.ParachuteService" title="krpc.ksa.ParachuteService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Parachute</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parachute.GetStateResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.ParachuteState" title="krpc.ksa.ParachuteState"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">ParachuteState</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteService.GetFill">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetFill</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.GetFillRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.GetFillResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.ParachuteService.GetFill" title="Link to this definition">#</a></dt>
+<dd><p>How far the canopy is open, from 0 to 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parachute.GetFillRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.ParachuteService" title="krpc.ksa.ParachuteService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Parachute</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parachute.GetFillResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteService.GetDeployAltitude">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDeployAltitude</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.GetDeployAltitudeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.GetDeployAltitudeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.ParachuteService.GetDeployAltitude" title="Link to this definition">#</a></dt>
+<dd><p>The height above the terrain at which an armed parachute deploys, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parachute.GetDeployAltitudeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.ParachuteService" title="krpc.ksa.ParachuteService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Parachute</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parachute.GetDeployAltitudeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteService.GetCanCut">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCanCut</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.GetCanCutRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.GetCanCutResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.ParachuteService.GetCanCut" title="Link to this definition">#</a></dt>
+<dd><p>Whether the parachute can be cut away. Main parachutes cannot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parachute.GetCanCutRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.ParachuteService" title="krpc.ksa.ParachuteService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Parachute</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parachute.GetCanCutResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteService.Deploy">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Deploy</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.DeployRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.DeployResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.ParachuteService.Deploy" title="Link to this definition">#</a></dt>
+<dd><p>Arm the parachute, so that it deploys at <a class="reference internal" href="#krpc.ksa.ParachuteService.GetDeployAltitude" title="krpc.ksa.ParachuteService.GetDeployAltitude"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">ParachuteService.GetDeployAltitude</span></code></a>. Returns once
+it is armed. Throws an exception if it is not stowed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parachute.DeployRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.ParachuteService" title="krpc.ksa.ParachuteService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Parachute</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parachute.DeployResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteService.Cut">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Cut</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.CutRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Parachute.CutResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.ParachuteService.Cut" title="Link to this definition">#</a></dt>
+<dd><p>Cut the parachute away. Returns once it is cut. Throws an exception if it cannot
+be cut. See <a class="reference internal" href="#krpc.ksa.ParachuteService.GetCanCut" title="krpc.ksa.ParachuteService.GetCanCut"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">ParachuteService.GetCanCut</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parachute.CutRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.ParachuteService" title="krpc.ksa.ParachuteService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Parachute</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Parachute.CutResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc enum">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteState">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">ParachuteState</span></span><a class="headerlink" href="#krpc.ksa.ParachuteState" title="Link to this definition">#</a></dt>
+<dd><p>The state of a parachute. See <a class="reference internal" href="#krpc.ksa.ParachuteService.GetState" title="krpc.ksa.ParachuteService.GetState"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">ParachuteService.GetState</span></code></a>.</p>
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteState.PARACHUTE_STATE_STOWED">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PARACHUTE_STATE_STOWED</span></span><a class="headerlink" href="#krpc.ksa.ParachuteState.PARACHUTE_STATE_STOWED" title="Link to this definition">#</a></dt>
+<dd><p>Packed away.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteState.PARACHUTE_STATE_ARMED">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PARACHUTE_STATE_ARMED</span></span><a class="headerlink" href="#krpc.ksa.ParachuteState.PARACHUTE_STATE_ARMED" title="Link to this definition">#</a></dt>
+<dd><p>Waiting to deploy at <a class="reference internal" href="#krpc.ksa.ParachuteService.GetDeployAltitude" title="krpc.ksa.ParachuteService.GetDeployAltitude"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">ParachuteService.GetDeployAltitude</span></code></a>.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteState.PARACHUTE_STATE_LINE_STRETCH">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PARACHUTE_STATE_LINE_STRETCH</span></span><a class="headerlink" href="#krpc.ksa.ParachuteState.PARACHUTE_STATE_LINE_STRETCH" title="Link to this definition">#</a></dt>
+<dd><p>Leaving the pack.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteState.PARACHUTE_STATE_REEFED">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PARACHUTE_STATE_REEFED</span></span><a class="headerlink" href="#krpc.ksa.ParachuteState.PARACHUTE_STATE_REEFED" title="Link to this definition">#</a></dt>
+<dd><p>Partly open, to limit the opening load.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteState.PARACHUTE_STATE_DISREEFING">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PARACHUTE_STATE_DISREEFING</span></span><a class="headerlink" href="#krpc.ksa.ParachuteState.PARACHUTE_STATE_DISREEFING" title="Link to this definition">#</a></dt>
+<dd><p>Opening from reefed to full.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteState.PARACHUTE_STATE_FULL">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PARACHUTE_STATE_FULL</span></span><a class="headerlink" href="#krpc.ksa.ParachuteState.PARACHUTE_STATE_FULL" title="Link to this definition">#</a></dt>
+<dd><p>Fully open.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteState.PARACHUTE_STATE_CUT">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PARACHUTE_STATE_CUT</span></span><a class="headerlink" href="#krpc.ksa.ParachuteState.PARACHUTE_STATE_CUT" title="Link to this definition">#</a></dt>
+<dd><p>Cut away.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteState.PARACHUTE_STATE_RIPPED">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PARACHUTE_STATE_RIPPED</span></span><a class="headerlink" href="#krpc.ksa.ParachuteState.PARACHUTE_STATE_RIPPED" title="Link to this definition">#</a></dt>
+<dd><p>Torn by too much dynamic pressure.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.ParachuteState.PARACHUTE_STATE_SEVERED_LINES">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PARACHUTE_STATE_SEVERED_LINES</span></span><a class="headerlink" href="#krpc.ksa.ParachuteState.PARACHUTE_STATE_SEVERED_LINES" title="Link to this definition">#</a></dt>
+<dd><p>Lost after its lines broke under too much load.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.DockingPortService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">DockingPortService</span></span><a class="headerlink" href="#krpc.ksa.DockingPortService" title="Link to this definition">#</a></dt>
+<dd><p>A docking port. Obtained from <a class="reference internal" href="#krpc.ksa.PartService.GetDockingPort" title="krpc.ksa.PartService.GetDockingPort"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">PartService.GetDockingPort</span></code></a>.</p>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.DockingPortService.GetPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">DockingPort.GetPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">DockingPort.GetPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.DockingPortService.GetPart" title="Link to this definition">#</a></dt>
+<dd><p>The part the docking port is in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">DockingPort.GetPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.DockingPortService" title="krpc.ksa.DockingPortService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">DockingPort</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">DockingPort.GetPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.DockingPortService.GetDocked">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDocked</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">DockingPort.GetDockedRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">DockingPort.GetDockedResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.DockingPortService.GetDocked" title="Link to this definition">#</a></dt>
+<dd><p>Whether the port is docked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">DockingPort.GetDockedRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.DockingPortService" title="krpc.ksa.DockingPortService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">DockingPort</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">DockingPort.GetDockedResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.DockingPortService.GetDockedPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDockedPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">DockingPort.GetDockedPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">DockingPort.GetDockedPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.DockingPortService.GetDockedPart" title="Link to this definition">#</a></dt>
+<dd><p>The part the port is docked to, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it is not docked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">DockingPort.GetDockedPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.DockingPortService" title="krpc.ksa.DockingPortService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">DockingPort</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">DockingPort.GetDockedPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.DockingPortService.Undock">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Undock</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">DockingPort.UndockRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">DockingPort.UndockResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.DockingPortService.Undock" title="Link to this definition">#</a></dt>
+<dd><p>Undock the port, separating the vehicle into two. Returns once it has undocked.
+Throws an exception if the port is not docked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">DockingPort.UndockRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.DockingPortService" title="krpc.ksa.DockingPortService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">DockingPort</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">DockingPort.UndockResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="vehicle.html#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>): The new vehicles.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Docking and undocking replace the vehicles involved. See <a class="reference internal" href="vehicle.html#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.DeployableService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">DeployableService</span></span><a class="headerlink" href="#krpc.ksa.DeployableService" title="Link to this definition">#</a></dt>
+<dd><p>A part that deploys and retracts, such as a landing leg, a solar panel or a service
+module door. Obtained from <a class="reference internal" href="#krpc.ksa.PartService.GetDeployables" title="krpc.ksa.PartService.GetDeployables"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">PartService.GetDeployables</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Deploying or retracting a part moves its symmetric copies with it, as the part’s menu
+in the game does.</p>
+</div>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.DeployableService.GetPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Deployable.GetPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Deployable.GetPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.DeployableService.GetPart" title="Link to this definition">#</a></dt>
+<dd><p>The part the deployable is in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Deployable.GetPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.DeployableService" title="krpc.ksa.DeployableService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Deployable</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Deployable.GetPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.DeployableService.GetState">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetState</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Deployable.GetStateRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Deployable.GetStateResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.DeployableService.GetState" title="Link to this definition">#</a></dt>
+<dd><p>The state of the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Deployable.GetStateRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.DeployableService" title="krpc.ksa.DeployableService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Deployable</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Deployable.GetStateResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.DeployableState" title="krpc.ksa.DeployableState"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">DeployableState</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.DeployableService.Deploy">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Deploy</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Deployable.DeployRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Deployable.DeployResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.DeployableService.Deploy" title="Link to this definition">#</a></dt>
+<dd><p>Deploy the part. Returns once it has started to move.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Deployable.DeployRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.DeployableService" title="krpc.ksa.DeployableService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Deployable</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Deployable.DeployResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the part is broken.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.DeployableService.Retract">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Retract</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Deployable.RetractRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Deployable.RetractResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.DeployableService.Retract" title="Link to this definition">#</a></dt>
+<dd><p>Retract the part. Returns once it has started to move.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Deployable.RetractRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.DeployableService" title="krpc.ksa.DeployableService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Deployable</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Deployable.RetractResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the part is broken.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc enum">
+<dt class="sig sig-object grpc" id="krpc.ksa.DeployableState">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">DeployableState</span></span><a class="headerlink" href="#krpc.ksa.DeployableState" title="Link to this definition">#</a></dt>
+<dd><p>The state of a deployable part. See <a class="reference internal" href="#krpc.ksa.DeployableService.GetState" title="krpc.ksa.DeployableService.GetState"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">DeployableService.GetState</span></code></a>.</p>
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.DeployableState.DEPLOYABLE_STATE_DEPLOYED">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">DEPLOYABLE_STATE_DEPLOYED</span></span><a class="headerlink" href="#krpc.ksa.DeployableState.DEPLOYABLE_STATE_DEPLOYED" title="Link to this definition">#</a></dt>
+<dd><p>Fully deployed.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.DeployableState.DEPLOYABLE_STATE_RETRACTED">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">DEPLOYABLE_STATE_RETRACTED</span></span><a class="headerlink" href="#krpc.ksa.DeployableState.DEPLOYABLE_STATE_RETRACTED" title="Link to this definition">#</a></dt>
+<dd><p>Fully retracted.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.DeployableState.DEPLOYABLE_STATE_DEPLOYING">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">DEPLOYABLE_STATE_DEPLOYING</span></span><a class="headerlink" href="#krpc.ksa.DeployableState.DEPLOYABLE_STATE_DEPLOYING" title="Link to this definition">#</a></dt>
+<dd><p>Moving toward deployed.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.DeployableState.DEPLOYABLE_STATE_RETRACTING">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">DEPLOYABLE_STATE_RETRACTING</span></span><a class="headerlink" href="#krpc.ksa.DeployableState.DEPLOYABLE_STATE_RETRACTING" title="Link to this definition">#</a></dt>
+<dd><p>Moving toward retracted.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.DeployableState.DEPLOYABLE_STATE_BROKEN">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">DEPLOYABLE_STATE_BROKEN</span></span><a class="headerlink" href="#krpc.ksa.DeployableState.DEPLOYABLE_STATE_BROKEN" title="Link to this definition">#</a></dt>
+<dd><p>Broken, so it can no longer move.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.MagneticScoopService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">MagneticScoopService</span></span><a class="headerlink" href="#krpc.ksa.MagneticScoopService" title="Link to this definition">#</a></dt>
+<dd><p>A magnetic scoop, which collects gas from space into the vehicle’s tanks. Obtained from
+<a class="reference internal" href="#krpc.ksa.PartService.GetMagneticScoops" title="krpc.ksa.PartService.GetMagneticScoops"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">PartService.GetMagneticScoops</span></code></a>.</p>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MagneticScoopService.GetPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MagneticScoop.GetPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MagneticScoop.GetPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MagneticScoopService.GetPart" title="Link to this definition">#</a></dt>
+<dd><p>The part the scoop is in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">MagneticScoop.GetPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MagneticScoopService" title="krpc.ksa.MagneticScoopService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MagneticScoop</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">MagneticScoop.GetPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MagneticScoopService.GetActive">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetActive</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MagneticScoop.GetActiveRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MagneticScoop.GetActiveResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MagneticScoopService.GetActive" title="Link to this definition">#</a></dt>
+<dd><p>Whether the scoop is switched on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">MagneticScoop.GetActiveRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MagneticScoopService" title="krpc.ksa.MagneticScoopService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MagneticScoop</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">MagneticScoop.GetActiveResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MagneticScoopService.SetActive">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SetActive</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MagneticScoop.SetActiveRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MagneticScoop.SetActiveResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MagneticScoopService.SetActive" title="Link to this definition">#</a></dt>
+<dd><p>Whether the scoop is switched on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">MagneticScoop.SetActiveRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MagneticScoopService" title="krpc.ksa.MagneticScoopService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MagneticScoop</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">MagneticScoop.SetActiveResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MagneticScoopService.GetSubstance">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSubstance</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MagneticScoop.GetSubstanceRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MagneticScoop.GetSubstanceResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MagneticScoopService.GetSubstance" title="Link to this definition">#</a></dt>
+<dd><p>The name of the substance the scoop collects. See <a class="reference internal" href="resources.html#krpc.ksa.ResourceService.GetName" title="krpc.ksa.ResourceService.GetName"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">ResourceService.GetName</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">MagneticScoop.GetSubstanceRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MagneticScoopService" title="krpc.ksa.MagneticScoopService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MagneticScoop</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">MagneticScoop.GetSubstanceResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">string</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.MagneticScoopService.GetCollectionRate">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCollectionRate</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MagneticScoop.GetCollectionRateRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">MagneticScoop.GetCollectionRateResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.MagneticScoopService.GetCollectionRate" title="Link to this definition">#</a></dt>
+<dd><p>The rate the scoop collects gas at, in kilograms per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">MagneticScoop.GetCollectionRateRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.MagneticScoopService" title="krpc.ksa.MagneticScoopService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MagneticScoop</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">MagneticScoop.GetCollectionRateResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="sequence.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Sequence</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="resources.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Resources</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/grpc/api/ksa/parts.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,519 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Drawing
+=======
+
+
+.. class:: Drawing
+
+   Draws lines, shapes and text in the scene, each placed in a reference frame.
+
+   .. note::
+
+      The objects are drawn every frame until removed, and are removed when the client that
+      added them disconnects. Lines are drawn at the game's fixed gizmo width.
+
+   .. function:: static Line add_line(Client& connection, std::tuple<double, double, double> start, std::tuple<double, double, double> end, ReferenceFrame reference_frame, bool visible = true)
+
+      Draw a line between two positions.
+
+      :Parameters:
+
+       * **start** -- The position of the start of the line, in meters.
+       * **end** -- The position of the end of the line, in meters.
+       * **reference_frame** -- The reference frame of the positions.
+       * **visible** -- Whether the line is visible.
+
+   
+
+   .. function:: static Line add_direction(Client& connection, std::tuple<double, double, double> direction, ReferenceFrame reference_frame, float length = 1e+01f, bool visible = true)
+
+      Draw a line from the origin of a reference frame in a direction.
+
+      :Parameters:
+
+       * **direction** -- The direction of the line.
+       * **reference_frame** -- The reference frame of the direction.
+       * **length** -- The length of the line, in meters.
+       * **visible** -- Whether the line is visible.
+
+   
+
+   .. function:: static Polyline add_polyline(Client& connection, std::vector<std::tuple<double, double, double>> vertices, ReferenceFrame reference_frame, bool closed = false, bool visible = true)
+
+      Draw a line through a list of positions.
+
+      :Parameters:
+
+       * **vertices** -- The positions the line passes through, in meters.
+       * **reference_frame** -- The reference frame of the positions.
+       * **closed** -- Whether the line joins the last position back to the first.
+       * **visible** -- Whether the line is visible.
+
+   
+
+   .. function:: static Circle add_circle(Client& connection, std::tuple<double, double, double> center, std::tuple<double, double, double> normal, float radius, ReferenceFrame reference_frame, bool visible = true)
+
+      Draw a circle.
+
+      :Parameters:
+
+       * **center** -- The position of the center of the circle, in meters.
+       * **normal** -- The direction normal to the plane of the circle.
+       * **radius** -- The radius of the circle, in meters.
+       * **reference_frame** -- The reference frame of the position and direction.
+       * **visible** -- Whether the circle is visible.
+
+   
+
+   .. function:: static Arc add_arc(Client& connection, std::tuple<double, double, double> center, std::tuple<double, double, double> normal, std::tuple<double, double, double> start_direction, float angle, float radius, ReferenceFrame reference_frame, bool visible = true)
+
+      Draw an arc of a circle.
+
+      :Parameters:
+
+       * **center** -- The position of the center of the arc's circle, in meters.
+       * **normal** -- The direction normal to the plane of the arc.
+       * **start_direction** -- The direction from the center to the start of the arc.
+       * **angle** -- The angle the arc turns through, counterclockwise about the normal, in radians.
+       * **radius** -- The radius of the arc, in meters.
+       * **reference_frame** -- The reference frame of the position and directions.
+       * **visible** -- Whether the arc is visible.
+
+   
+
+   .. function:: static Box add_box(Client& connection, std::tuple<double, double, double> center, std::tuple<double, double, double> size, std::tuple<double, double, double, double> rotation, ReferenceFrame reference_frame, bool visible = true)
+
+      Draw the edges of a box.
+
+      :Parameters:
+
+       * **center** -- The position of the center of the box, in meters.
+       * **size** -- The lengths of the box's edges along its x, y and z axes, in meters.
+       * **rotation** -- The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+       * **reference_frame** -- The reference frame of the position and rotation.
+       * **visible** -- Whether the box is visible.
+
+   
+
+   .. function:: static Sphere add_sphere(Client& connection, std::tuple<double, double, double> center, float radius, ReferenceFrame reference_frame, bool visible = true)
+
+      Draw a solid sphere.
+
+      :Parameters:
+
+       * **center** -- The position of the center of the sphere, in meters.
+       * **radius** -- The radius of the sphere, in meters.
+       * **reference_frame** -- The reference frame of the position.
+       * **visible** -- Whether the sphere is visible.
+
+   
+
+   .. function:: static Text add_text(Client& connection, std::string text, std::tuple<double, double, double> position, ReferenceFrame reference_frame, float size = 16.0f, bool visible = true)
+
+      Draw text over the scene, centered on a position.
+
+      :Parameters:
+
+       * **text** -- The text.
+       * **position** -- The position of the center of the text, in meters.
+       * **reference_frame** -- The reference frame of the position.
+       * **size** -- The height of the font, in pixels.
+       * **visible** -- Whether the text is visible.
+
+   
+
+   .. function:: static void clear(Client& connection, bool client_only = false)
+
+      Remove the drawing objects.
+
+      :Parameters:
+
+       * **client_only** -- Whether to remove only the objects added by the calling client.
+
+   
+
+
+
+.. class:: Line
+
+   A line. Created using :func:`Drawing::add_line` or :func:`Drawing::add_direction`.
+
+   .. function:: std::tuple<double, double, double> start()
+   .. function:: void set_start(std::tuple<double, double, double> value)
+
+      The start position of the line, in meters.
+
+   
+
+   .. function:: std::tuple<double, double, double> end()
+   .. function:: void set_end(std::tuple<double, double, double> value)
+
+      The end position of the line, in meters.
+
+   
+
+   .. function:: ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: void remove()
+
+      Remove the object.
+
+
+   
+
+
+
+.. class:: Polyline
+
+   A line through a list of points. Created using :func:`Drawing::add_polyline`.
+
+   .. function:: std::vector<std::tuple<double, double, double>> vertices()
+   .. function:: void set_vertices(std::vector<std::tuple<double, double, double>> value)
+
+      The points the line passes through, in meters.
+
+   
+
+   .. function:: bool closed()
+   .. function:: void set_closed(bool value)
+
+      Whether the line joins the last point back to the first.
+
+   
+
+   .. function:: ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: void remove()
+
+      Remove the object.
+
+
+   
+
+
+
+.. class:: Circle
+
+   A circle. Created using :func:`Drawing::add_circle`.
+
+   .. function:: std::tuple<double, double, double> center()
+   .. function:: void set_center(std::tuple<double, double, double> value)
+
+      The position of the center of the circle, in meters.
+
+   
+
+   .. function:: std::tuple<double, double, double> normal()
+   .. function:: void set_normal(std::tuple<double, double, double> value)
+
+      The direction normal to the plane of the circle, as a unit vector.
+
+   
+
+   .. function:: float radius()
+   .. function:: void set_radius(float value)
+
+      The radius of the circle, in meters.
+
+   
+
+   .. function:: ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: void remove()
+
+      Remove the object.
+
+
+   
+
+
+
+.. class:: Arc
+
+   An arc of a circle. Created using :func:`Drawing::add_arc`.
+
+   .. function:: std::tuple<double, double, double> center()
+   .. function:: void set_center(std::tuple<double, double, double> value)
+
+      The position of the center of the arc's circle, in meters.
+
+   
+
+   .. function:: std::tuple<double, double, double> normal()
+   .. function:: void set_normal(std::tuple<double, double, double> value)
+
+      The direction normal to the plane of the arc, as a unit vector.
+
+   
+
+   .. function:: std::tuple<double, double, double> start_direction()
+   .. function:: void set_start_direction(std::tuple<double, double, double> value)
+
+      The direction from the center to the start of the arc, as a unit vector.
+
+   
+
+      .. note::
+
+         The part of the direction along :func:`Arc::normal` is ignored.
+
+   .. function:: float angle()
+   .. function:: void set_angle(float value)
+
+      The angle the arc turns through, counterclockwise about :func:`Arc::normal`, in radians.
+
+   
+
+   .. function:: float radius()
+   .. function:: void set_radius(float value)
+
+      The radius of the arc, in meters.
+
+   
+
+   .. function:: ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: void remove()
+
+      Remove the object.
+
+
+   
+
+
+
+.. class:: Box
+
+   The edges of a box. Created using :func:`Drawing::add_box`.
+
+   .. function:: std::tuple<double, double, double> center()
+   .. function:: void set_center(std::tuple<double, double, double> value)
+
+      The position of the center of the box, in meters.
+
+   
+
+   .. function:: std::tuple<double, double, double> size()
+   .. function:: void set_size(std::tuple<double, double, double> value)
+
+      The lengths of the box's edges along its x, y and z axes, in meters.
+
+   
+
+   .. function:: std::tuple<double, double, double, double> rotation()
+   .. function:: void set_rotation(std::tuple<double, double, double, double> value)
+
+      The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+
+   
+
+   .. function:: ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: void remove()
+
+      Remove the object.
+
+
+   
+
+
+
+.. class:: Sphere
+
+   A solid sphere. Created using :func:`Drawing::add_sphere`.
+
+   .. function:: std::tuple<double, double, double> center()
+   .. function:: void set_center(std::tuple<double, double, double> value)
+
+      The position of the center of the sphere, in meters.
+
+   
+
+   .. function:: float radius()
+   .. function:: void set_radius(float value)
+
+      The radius of the sphere, in meters.
+
+   
+
+   .. function:: ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: void remove()
+
+      Remove the object.
+
+
+   
+
+
+
+.. class:: Text
+
+   Text drawn over the scene, centered on a position. Created using :func:`Drawing::add_text`.
+
+   .. note::
+
+      The text is hidden with the game's UI.
+
+   .. function:: std::string content()
+   .. function:: void set_content(std::string value)
+
+      The text.
+
+   
+
+   .. function:: std::tuple<double, double, double> position()
+   .. function:: void set_position(std::tuple<double, double, double> value)
+
+      The position of the center of the text, in meters.
+
+   
+
+   .. function:: float size()
+   .. function:: void set_size(float value)
+
+      The height of the font, in pixels.
+
+   
+
+   .. function:: ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: StdLib::ColorRGB color()
+   .. function:: void set_color(StdLib::ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: void remove()
+
+      Remove the object.

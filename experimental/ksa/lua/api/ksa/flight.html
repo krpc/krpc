@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Flight &#8212; kRPC v0.1.0 documentation</title>
+    <title>Flight &#8212; kRPC v0.2.0 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1ea62e31" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -53,7 +53,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.0" />
+  <meta name="docsearch:version" content="0.2.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -166,6 +166,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../developer-guide.html">
     Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
   </a>
 </li>
 
@@ -298,6 +305,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -357,13 +371,14 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../python/client.html">Python Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
@@ -371,18 +386,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../csharp/client.html">C# Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
@@ -390,18 +410,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../cpp/client.html">C++ Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
@@ -409,18 +434,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../cnano/client.html">C-nano Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
@@ -428,18 +458,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../java/client.html">Java Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
@@ -447,18 +482,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../client.html">Lua Client</a></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
 <li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
@@ -466,8 +506,39 @@
 <li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
 </ul>
 </details></li>
 </ul>
@@ -650,6 +721,20 @@ shortly after.</p>
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="KSA.KSA.Flight.biome">
+<span class="sig-name descname"><span class="pre">biome</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#KSA.KSA.Flight.biome" title="Link to this definition">#</a></dt>
+<dd><p>The biome below the vehicle, or <code class="docutils literal notranslate"><span class="pre">nil</span></code> if the body has no biomes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>string or <code class="docutils literal notranslate"><span class="pre">Types.none</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="KSA.KSA.Flight.speed">
 <span class="sig-name descname"><span class="pre">speed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KSA.KSA.Flight.speed" title="Link to this definition">#</a></dt>
 <dd><p>The speed of the vehicle relative to the surface, in meters per second.</p>
@@ -779,6 +864,37 @@ A value between -180° and +180°.</p>
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="KSA.KSA.Flight.dose_rate">
+<span class="sig-name descname"><span class="pre">dose_rate</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KSA.KSA.Flight.dose_rate" title="Link to this definition">#</a></dt>
+<dd><p>The radiation dose rate at the vehicle, in sieverts per second. Includes any solar
+particle event under way.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="KSA.KSA.Flight.orbit_average_dose_rate">
+<span class="sig-name descname"><span class="pre">orbit_average_dose_rate</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KSA.KSA.Flight.orbit_average_dose_rate" title="Link to this definition">#</a></dt>
+<dd><p>The radiation dose rate averaged over the vehicle’s orbit, in sieverts per second.
+Includes any solar particle event under way. Not a number if the body has no
+magnetosphere, or the orbit dips below the surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="KSA.KSA.Flight.g_force">
 <span class="sig-name descname"><span class="pre">g_force</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#KSA.KSA.Flight.g_force" title="Link to this definition">#</a></dt>
 <dd><p>The acceleration of the vehicle, excluding gravity, in multiples of standard
@@ -821,6 +937,50 @@ the right of the velocity.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="KSA.Flight.prograde">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">prograde</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Flight.prograde" title="Link to this definition">#</a></dt>
+<dd><p>The unit vector of the vehicle’s velocity relative to the surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the direction.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="KSA.Flight.normal">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Flight.normal" title="Link to this definition">#</a></dt>
+<dd><p>The unit vector normal to the plane of the vehicle’s position and its velocity
+relative to the surface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the direction.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="KSA.Flight.radial">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">radial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#KSA.Flight.radial" title="Link to this definition">#</a></dt>
+<dd><p>The unit vector pointing radially outward, perpendicular to <a class="reference internal" href="#KSA.Flight.prograde" title="KSA.Flight.prograde"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Flight.prograde()</span></code></a>
+and <a class="reference internal" href="#KSA.Flight.normal" title="KSA.Flight.normal"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">KSA.Flight.normal()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#KSA.ReferenceFrame" title="KSA.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KSA.ReferenceFrame</span></code></a></span>) – The reference frame of the direction.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>

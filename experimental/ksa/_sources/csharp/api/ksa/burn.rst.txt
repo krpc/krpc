@@ -24,31 +24,37 @@ Burn
 
       :Game Scenes: All
 
-   .. property:: double Prograde { get; set; }
+   .. property:: float TimeTo { get; }
+
+      The time until :prop:`Burn.UT`, in seconds. Negative once that time has passed.
+
+      :Game Scenes: All
+
+   .. property:: float Prograde { get; set; }
 
       The change in velocity in the prograde direction, in meters per second.
 
       :Game Scenes: All
 
-   .. property:: double Normal { get; set; }
+   .. property:: float Normal { get; set; }
 
       The change in velocity along the orbit normal, in meters per second.
 
       :Game Scenes: All
 
-   .. property:: double Radial { get; set; }
+   .. property:: float Radial { get; set; }
 
       The change in velocity radially outward, in meters per second.
 
       :Game Scenes: All
 
-   .. property:: double DeltaV { get; }
+   .. property:: float DeltaV { get; }
 
       The magnitude of the change in velocity, in meters per second.
 
       :Game Scenes: All
 
-   .. property:: double RemainingDeltaV { get; }
+   .. property:: float RemainingDeltaV { get; }
 
       The change in velocity still to burn, in meters per second. Less than
       :prop:`Burn.DeltaV` once the vehicle has started the burn.
@@ -68,7 +74,7 @@ Burn
 
       :Game Scenes: All
 
-   .. property:: double BurnTime { get; }
+   .. property:: float BurnTime { get; }
 
       The time the remaining burn takes with the active engines, in seconds. Not a number
       for a burn other than the next one, and until the flight computer has timed it.
@@ -86,6 +92,34 @@ Burn
 
          The game predicts it in the solver step after the burn changes, so it reflects a
          change to the burn one update later.
+
+   .. property:: float OrbitAverageDoseRate { get; }
+
+      The radiation dose rate averaged over the orbit after the burn, in sieverts per
+      second. Not a number if the body has no magnetosphere, or the orbit dips below the
+      surface.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; }
+
+      The reference frame with its origin at the position of the burn, and axes along
+      the orbit at the time of the burn. The x axis points prograde, the y axis along the
+      orbit normal and the z axis radially outward, perpendicular to the x axis. The
+      frame does not move or rotate relative to the body being orbited.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+
+      The position of the burn, in meters, relative to where the body being orbited is
+      now.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the position.
+
+      :Game Scenes: All
 
    .. function:: System.Tuple<double,double,double> Direction(ReferenceFrame referenceFrame)
 

@@ -1,0 +1,527 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Drawing
+=======
+
+
+.. type:: public class Drawing
+
+   Draws lines, shapes and text in the scene, each placed in a reference frame.
+
+   .. note::
+
+      The objects are drawn every frame until removed, and are removed when the client that
+      added them disconnects. Lines are drawn at the game's fixed gizmo width.
+
+   .. method:: static Line addLine(Connection connection, org.javatuples.Triplet<Double,Double,Double> start, org.javatuples.Triplet<Double,Double,Double> end, ReferenceFrame referenceFrame, boolean visible)
+
+      Draw a line between two positions.
+
+      :param org.javatuples.Triplet<Double,Double,Double> start: The position of the start of the line, in meters.
+      :param org.javatuples.Triplet<Double,Double,Double> end: The position of the end of the line, in meters.
+      :param ReferenceFrame referenceFrame: The reference frame of the positions.
+      :param boolean visible: Whether the line is visible.
+   
+
+   .. method:: static Line addDirection(Connection connection, org.javatuples.Triplet<Double,Double,Double> direction, ReferenceFrame referenceFrame, float length, boolean visible)
+
+      Draw a line from the origin of a reference frame in a direction.
+
+      :param org.javatuples.Triplet<Double,Double,Double> direction: The direction of the line.
+      :param ReferenceFrame referenceFrame: The reference frame of the direction.
+      :param float length: The length of the line, in meters.
+      :param boolean visible: Whether the line is visible.
+   
+
+   .. method:: static Polyline addPolyline(Connection connection, java.util.List<org.javatuples.Triplet<Double,Double,Double>> vertices, ReferenceFrame referenceFrame, boolean closed, boolean visible)
+
+      Draw a line through a list of positions.
+
+      :param java.util.List<org.javatuples.Triplet<Double,Double,Double>> vertices: The positions the line passes through, in meters.
+      :param ReferenceFrame referenceFrame: The reference frame of the positions.
+      :param boolean closed: Whether the line joins the last position back to the first.
+      :param boolean visible: Whether the line is visible.
+   
+
+   .. method:: static Circle addCircle(Connection connection, org.javatuples.Triplet<Double,Double,Double> center, org.javatuples.Triplet<Double,Double,Double> normal, float radius, ReferenceFrame referenceFrame, boolean visible)
+
+      Draw a circle.
+
+      :param org.javatuples.Triplet<Double,Double,Double> center: The position of the center of the circle, in meters.
+      :param org.javatuples.Triplet<Double,Double,Double> normal: The direction normal to the plane of the circle.
+      :param float radius: The radius of the circle, in meters.
+      :param ReferenceFrame referenceFrame: The reference frame of the position and direction.
+      :param boolean visible: Whether the circle is visible.
+   
+
+   .. method:: static Arc addArc(Connection connection, org.javatuples.Triplet<Double,Double,Double> center, org.javatuples.Triplet<Double,Double,Double> normal, org.javatuples.Triplet<Double,Double,Double> startDirection, float angle, float radius, ReferenceFrame referenceFrame, boolean visible)
+
+      Draw an arc of a circle.
+
+      :param org.javatuples.Triplet<Double,Double,Double> center: The position of the center of the arc's circle, in meters.
+      :param org.javatuples.Triplet<Double,Double,Double> normal: The direction normal to the plane of the arc.
+      :param org.javatuples.Triplet<Double,Double,Double> startDirection: The direction from the center to the start of the arc.
+      :param float angle: The angle the arc turns through, counterclockwise about the normal, in radians.
+      :param float radius: The radius of the arc, in meters.
+      :param ReferenceFrame referenceFrame: The reference frame of the position and directions.
+      :param boolean visible: Whether the arc is visible.
+   
+
+   .. method:: static Box addBox(Connection connection, org.javatuples.Triplet<Double,Double,Double> center, org.javatuples.Triplet<Double,Double,Double> size, org.javatuples.Quartet<Double,Double,Double,Double> rotation, ReferenceFrame referenceFrame, boolean visible)
+
+      Draw the edges of a box.
+
+      :param org.javatuples.Triplet<Double,Double,Double> center: The position of the center of the box, in meters.
+      :param org.javatuples.Triplet<Double,Double,Double> size: The lengths of the box's edges along its x, y and z axes, in meters.
+      :param org.javatuples.Quartet<Double,Double,Double,Double> rotation: The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+      :param ReferenceFrame referenceFrame: The reference frame of the position and rotation.
+      :param boolean visible: Whether the box is visible.
+   
+
+   .. method:: static Sphere addSphere(Connection connection, org.javatuples.Triplet<Double,Double,Double> center, float radius, ReferenceFrame referenceFrame, boolean visible)
+
+      Draw a solid sphere.
+
+      :param org.javatuples.Triplet<Double,Double,Double> center: The position of the center of the sphere, in meters.
+      :param float radius: The radius of the sphere, in meters.
+      :param ReferenceFrame referenceFrame: The reference frame of the position.
+      :param boolean visible: Whether the sphere is visible.
+   
+
+   .. method:: static Text addText(Connection connection, String text, org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame referenceFrame, float size, boolean visible)
+
+      Draw text over the scene, centered on a position.
+
+      :param String text: The text.
+      :param org.javatuples.Triplet<Double,Double,Double> position: The position of the center of the text, in meters.
+      :param ReferenceFrame referenceFrame: The reference frame of the position.
+      :param float size: The height of the font, in pixels.
+      :param boolean visible: Whether the text is visible.
+   
+
+   .. method:: static void clear(Connection connection, boolean clientOnly)
+
+      Remove the drawing objects.
+
+      :param boolean clientOnly: Whether to remove only the objects added by the calling client.
+   
+
+
+
+.. type:: public class Line
+
+   A line. Created using :meth:`Drawing.addLine(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, ReferenceFrame, boolean)` or :meth:`Drawing.addDirection(org.javatuples.Triplet<Double,Double,Double>, ReferenceFrame, float, boolean)`.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getStart()
+
+   .. method:: void setStart(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The start position of the line, in meters.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getEnd()
+
+   .. method:: void setEnd(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The end position of the line, in meters.
+
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the object is visible.
+
+   
+
+   .. method:: StdLib.ColorRGB getColor()
+
+   .. method:: void setColor(StdLib.ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. method:: void remove()
+
+      Remove the object.
+
+   
+
+
+
+.. type:: public class Polyline
+
+   A line through a list of points. Created using :meth:`Drawing.addPolyline(java.util.List<org.javatuples.Triplet<Double,Double,Double>>, ReferenceFrame, boolean, boolean)`.
+
+   .. method:: java.util.List<org.javatuples.Triplet<Double,Double,Double>> getVertices()
+
+   .. method:: void setVertices(java.util.List<org.javatuples.Triplet<Double,Double,Double>> value)
+
+      The points the line passes through, in meters.
+
+   
+
+   .. method:: boolean getClosed()
+
+   .. method:: void setClosed(boolean value)
+
+      Whether the line joins the last point back to the first.
+
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the object is visible.
+
+   
+
+   .. method:: StdLib.ColorRGB getColor()
+
+   .. method:: void setColor(StdLib.ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. method:: void remove()
+
+      Remove the object.
+
+   
+
+
+
+.. type:: public class Circle
+
+   A circle. Created using :meth:`Drawing.addCircle(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, float, ReferenceFrame, boolean)`.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getCenter()
+
+   .. method:: void setCenter(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The position of the center of the circle, in meters.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getNormal()
+
+   .. method:: void setNormal(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The direction normal to the plane of the circle, as a unit vector.
+
+   
+
+   .. method:: float getRadius()
+
+   .. method:: void setRadius(float value)
+
+      The radius of the circle, in meters.
+
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the object is visible.
+
+   
+
+   .. method:: StdLib.ColorRGB getColor()
+
+   .. method:: void setColor(StdLib.ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. method:: void remove()
+
+      Remove the object.
+
+   
+
+
+
+.. type:: public class Arc
+
+   An arc of a circle. Created using :meth:`Drawing.addArc(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, float, float, ReferenceFrame, boolean)`.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getCenter()
+
+   .. method:: void setCenter(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The position of the center of the arc's circle, in meters.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getNormal()
+
+   .. method:: void setNormal(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The direction normal to the plane of the arc, as a unit vector.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getStartDirection()
+
+   .. method:: void setStartDirection(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The direction from the center to the start of the arc, as a unit vector.
+
+   
+
+      .. note::
+
+         The part of the direction along :meth:`Arc.getNormal()` is ignored.
+
+   .. method:: float getAngle()
+
+   .. method:: void setAngle(float value)
+
+      The angle the arc turns through, counterclockwise about :meth:`Arc.getNormal()`, in radians.
+
+   
+
+   .. method:: float getRadius()
+
+   .. method:: void setRadius(float value)
+
+      The radius of the arc, in meters.
+
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the object is visible.
+
+   
+
+   .. method:: StdLib.ColorRGB getColor()
+
+   .. method:: void setColor(StdLib.ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. method:: void remove()
+
+      Remove the object.
+
+   
+
+
+
+.. type:: public class Box
+
+   The edges of a box. Created using :meth:`Drawing.addBox(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Quartet<Double,Double,Double,Double>, ReferenceFrame, boolean)`.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getCenter()
+
+   .. method:: void setCenter(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The position of the center of the box, in meters.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getSize()
+
+   .. method:: void setSize(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The lengths of the box's edges along its x, y and z axes, in meters.
+
+   
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> getRotation()
+
+   .. method:: void setRotation(org.javatuples.Quartet<Double,Double,Double,Double> value)
+
+      The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the object is visible.
+
+   
+
+   .. method:: StdLib.ColorRGB getColor()
+
+   .. method:: void setColor(StdLib.ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. method:: void remove()
+
+      Remove the object.
+
+   
+
+
+
+.. type:: public class Sphere
+
+   A solid sphere. Created using :meth:`Drawing.addSphere(org.javatuples.Triplet<Double,Double,Double>, float, ReferenceFrame, boolean)`.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getCenter()
+
+   .. method:: void setCenter(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The position of the center of the sphere, in meters.
+
+   
+
+   .. method:: float getRadius()
+
+   .. method:: void setRadius(float value)
+
+      The radius of the sphere, in meters.
+
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the object is visible.
+
+   
+
+   .. method:: StdLib.ColorRGB getColor()
+
+   .. method:: void setColor(StdLib.ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. method:: void remove()
+
+      Remove the object.
+
+   
+
+
+
+.. type:: public class Text
+
+   Text drawn over the scene, centered on a position. Created using :meth:`Drawing.addText(String, org.javatuples.Triplet<Double,Double,Double>, ReferenceFrame, float, boolean)`.
+
+   .. note::
+
+      The text is hidden with the game's UI.
+
+   .. method:: String getContent()
+
+   .. method:: void setContent(String value)
+
+      The text.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getPosition()
+
+   .. method:: void setPosition(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The position of the center of the text, in meters.
+
+   
+
+   .. method:: float getSize()
+
+   .. method:: void setSize(float value)
+
+      The height of the font, in pixels.
+
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(ReferenceFrame value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the object is visible.
+
+   
+
+   .. method:: StdLib.ColorRGB getColor()
+
+   .. method:: void setColor(StdLib.ColorRGB value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. method:: void remove()
+
+      Remove the object.

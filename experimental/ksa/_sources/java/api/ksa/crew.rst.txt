@@ -1,0 +1,253 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Crew
+====
+
+
+.. type:: public class Kitten
+
+   A kitten in the agency's roster. Obtained from :meth:`getKittens()`,
+   :meth:`Vehicle.getCrew()` or :meth:`Seat.getKitten()`.
+
+   .. method:: String getName()
+
+
+      The kitten's name, which is unique in the roster.
+
+   
+
+   .. method:: int getRosterIndex()
+
+
+      The kitten's position in the agency's roster, from 0. See :meth:`getKittens()`.
+
+   
+
+   .. method:: Vehicle getVehicle()
+
+
+      The vehicle the kitten is in, or ``null`` if it is not in a seat.
+
+   
+
+   .. method:: Seat getSeat()
+
+
+      The seat the kitten is in, or ``null`` if it is not in a seat.
+
+   
+
+   .. method:: boolean getKilledInAction()
+
+
+      Whether the kitten has been killed in action.
+
+   
+
+   .. method:: int getMissionCount()
+
+
+      The number of missions the kitten has flown, including the current one.
+
+   
+
+   .. method:: float getMissionTime()
+
+
+      The time the kitten has spent on missions, including the current one, in seconds.
+
+   
+
+   .. method:: float getDistanceTraveled()
+
+
+      The distance the kitten has traveled on missions, in meters.
+
+   
+
+   .. method:: float getFastestSpeed()
+
+
+      The kitten's highest speed on a mission, in meters per second.
+
+   
+
+   .. method:: float getAcuteDose()
+
+
+      The kitten's acute radiation dose, in sieverts. It heals over time, and causes
+      radiation sickness from 1 sievert and death from 4 sieverts.
+
+   
+
+   .. method:: float getLifetimeDose()
+
+
+      The kitten's lifetime radiation dose, in sieverts. The kitten retires after a
+      mission that takes it past 0.6 sieverts.
+
+   
+
+   .. method:: float getDoseRate()
+
+
+      The radiation dose rate the kitten receives, in sieverts per second. The vehicle's
+      shielding reduces it in a seat, and on EVA the kitten is unshielded. Zero when the
+      kitten is not on a mission.
+
+   
+
+   .. method:: boolean getRadiationSickness()
+
+
+      Whether the kitten has radiation sickness, which keeps it from flying.
+
+   
+
+   .. method:: float getTimeUntilFitToFly()
+
+
+      The time until the kitten has recovered from radiation sickness and can fly, resting
+      at home, in seconds. Zero if the kitten does not have radiation sickness.
+
+   
+
+   .. method:: float getRecoveryTime()
+
+
+      The time until the kitten's acute radiation dose has healed below 1 millisievert,
+      resting at home, in seconds.
+
+   
+
+   .. method:: boolean getRetired()
+
+
+      Whether the kitten has retired, having reached its lifetime radiation dose limit.
+
+   
+
+   .. method:: boolean getOnEva()
+
+
+      Whether the kitten is on EVA.
+
+   
+
+   .. method:: void goOnEva()
+
+      Leave the kitten's vehicle through its EVA hatch, and return once the kitten is on
+      EVA. The kitten becomes the controlled kitten, see :meth:`getActiveKitten()`.
+
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
+
+   .. method:: Vehicle board()
+
+      Board the nearest vehicle with a free seat, and return once the kitten is in the
+      seat. The vehicle becomes the controlled vehicle.
+
+      :returns: The vehicle the kitten boarded.
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
+         within one meter.
+
+   .. method:: LocomotionMode getLocomotionMode()
+
+
+      How the kitten on EVA is moving. Throws an exception if the kitten is not on EVA.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
+
+      The position of the kitten, in meters. For a kitten in a seat, the position of the
+      seat's part. Throws an exception if the kitten is neither in a seat nor on EVA.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the position.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> velocity(ReferenceFrame referenceFrame)
+
+      The velocity of the kitten, in meters per second. For a kitten in a seat, the
+      velocity of the seat's part. Throws an exception if the kitten is neither in a seat
+      nor on EVA.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the velocity.
+   
+
+
+
+.. type:: public enum LocomotionMode
+
+   How a kitten on EVA is moving. See :meth:`Kitten.getLocomotionMode()`.
+
+
+   .. field:: public LocomotionMode MMU
+
+      Flying with the maneuvering unit, away from any surface.
+
+
+   .. field:: public LocomotionMode GROUNDED
+
+      Standing or walking on a surface.
+
+
+   .. field:: public LocomotionMode AIRBORNE
+
+      In the air above a surface, such as during a jump.
+
+
+   .. field:: public LocomotionMode TUMBLING
+
+      Tumbling after a fall or an impact.
+
+
+   .. field:: public LocomotionMode RIGHTING
+
+      Getting back up after tumbling.
+
+
+   .. field:: public LocomotionMode LADDER
+
+      Holding a ladder or grab rail.
+
+
+   .. field:: public LocomotionMode SWIMMING
+
+      Swimming in an ocean.
+
+
+
+.. type:: public class Seat
+
+   A crew seat. Obtained from :meth:`Part.getSeats()`.
+
+   .. method:: Part getPart()
+
+
+      The part the seat is in.
+
+   
+
+   .. method:: Kitten getKitten()
+
+   .. method:: void setKitten(Kitten value)
+
+      Returns the kitten in the seat, or ``null`` if the seat is empty, and sets the
+      kitten in the seat. Setting ``null`` empties the seat.
+
+   
+
+      .. note::
+
+         A kitten in another seat of the vehicle moves to this one. Throws an exception if
+         the kitten is killed in action, on EVA, or in another vehicle.

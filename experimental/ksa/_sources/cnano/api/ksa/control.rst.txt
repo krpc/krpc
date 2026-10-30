@@ -8,8 +8,14 @@ Control
 
 .. type:: krpc_KSA_Control_t
 
-   The controls of a vehicle: engines, stabilization and sequences.
+   The controls of a vehicle: engines, manual inputs, stabilization and sequences.
    Obtained from :func:`krpc_KSA_Vehicle_Control`.
+
+   .. note::
+
+      The rotation and translation inputs act as held keys. Each is on or off, with no
+      partial strength. A held rotation input overrides the auto-pilot on its axis. The game
+      releases the inputs when its window gains or loses focus, or the active vehicle changes.
 
    .. function:: krpc_error_t krpc_KSA_Control_Throttle(krpc_connection_t connection, float * returnValue, krpc_KSA_Control_t instance)
    .. function:: krpc_error_t krpc_KSA_Control_set_Throttle(krpc_connection_t connection, krpc_KSA_Control_t instance, float value)
@@ -31,6 +37,55 @@ Control
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_KSA_Control_Pitch(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Control_t instance)
+   .. function:: krpc_error_t krpc_KSA_Control_set_Pitch(krpc_connection_t connection, krpc_KSA_Control_t instance, int32_t value)
+
+      The pitch input: 1 for pitch up, -1 for pitch down, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Control_Yaw(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Control_t instance)
+   .. function:: krpc_error_t krpc_KSA_Control_set_Yaw(krpc_connection_t connection, krpc_KSA_Control_t instance, int32_t value)
+
+      The yaw input: 1 for yaw right, -1 for yaw left, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Control_Roll(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Control_t instance)
+   .. function:: krpc_error_t krpc_KSA_Control_set_Roll(krpc_connection_t connection, krpc_KSA_Control_t instance, int32_t value)
+
+      The roll input: 1 for roll right, -1 for roll left, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Control_Forward(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Control_t instance)
+   .. function:: krpc_error_t krpc_KSA_Control_set_Forward(krpc_connection_t connection, krpc_KSA_Control_t instance, int32_t value)
+
+      The forward translation input: 1 for forward, -1 for backward, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Control_Right(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Control_t instance)
+   .. function:: krpc_error_t krpc_KSA_Control_set_Right(krpc_connection_t connection, krpc_KSA_Control_t instance, int32_t value)
+
+      The right translation input: 1 for right, -1 for left, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Control_Up(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Control_t instance)
+   .. function:: krpc_error_t krpc_KSA_Control_set_Up(krpc_connection_t connection, krpc_KSA_Control_t instance, int32_t value)
+
+      The up translation input: 1 for up, -1 for down, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Control_Pulse(krpc_connection_t connection, bool * returnValue, krpc_KSA_Control_t instance)
+   .. function:: krpc_error_t krpc_KSA_Control_set_Pulse(krpc_connection_t connection, krpc_KSA_Control_t instance, bool value)
+
+      Whether the rotation and translation inputs fire the thrusters in short pulses.
+
+      :Game Scenes: Flight
+
    .. function:: krpc_error_t krpc_KSA_Control_Stabilization(krpc_connection_t connection, bool * returnValue, krpc_KSA_Control_t instance)
    .. function:: krpc_error_t krpc_KSA_Control_set_Stabilization(krpc_connection_t connection, krpc_KSA_Control_t instance, bool value)
 
@@ -48,6 +103,13 @@ Control
 
       Whether the flight computer may use the reaction control thrusters for attitude
       control.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_KSA_Control_Lights(krpc_connection_t connection, bool * returnValue, krpc_KSA_Control_t instance)
+   .. function:: krpc_error_t krpc_KSA_Control_set_Lights(krpc_connection_t connection, krpc_KSA_Control_t instance, bool value)
+
+      Whether the vehicle's lights are switched on, as the lights key does.
 
       :Game Scenes: Flight
 

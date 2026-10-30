@@ -13,9 +13,10 @@ Orbit
 
    .. note::
 
-      A vehicle's orbit follows the vehicle as its trajectory changes. A predicted orbit, from
-      :func:`Orbit::next_orbit` or :func:`Burn::orbit`, is the prediction at the time it
-      was obtained.
+      An orbit follows the game's prediction as the trajectory changes. A predicted orbit, from
+      :func:`Orbit::next_orbit` or :func:`Burn::orbit`, is a position in the vehicle's or the
+      burn's predicted trajectory, and throws an exception while the trajectory is too short to
+      reach it.
 
    .. function:: Body body()
 
@@ -54,6 +55,13 @@ Orbit
 
    
 
+   .. function:: double semi_minor_axis()
+
+      The semi-minor axis of the orbit, in meters. Not a number for a parabolic or
+      hyperbolic orbit.
+
+   
+
    .. function:: double speed()
 
       The current orbital speed, in meters per second.
@@ -69,6 +77,19 @@ Orbit
    .. function:: double period()
 
       The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+   
+
+   .. function:: double mean_motion()
+
+      The mean angular motion of the orbit, in radians per second.
+
+   
+
+   .. function:: double specific_energy()
+
+      The specific orbital energy, the sum of the kinetic and potential energy per unit
+      mass, in joules per kilogram. Negative for an elliptical orbit.
 
    
 
@@ -123,6 +144,12 @@ Orbit
 
       The current `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_,
       in radians.
+
+   
+
+   .. function:: double eccentric_anomaly()
+
+      The current `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_, in radians. For a hyperbolic orbit, this is the hyperbolic anomaly.
 
    
 
@@ -182,6 +209,68 @@ Orbit
        * **reference_frame** -- The reference frame of the velocity.
 
    
+
+   .. function:: double relative_inclination(Orbit orbit)
+
+      The inclination of the orbit relative to another orbit, in radians.
+
+      :Parameters:
+
+       * **orbit** -- The other orbit.
+
+   
+
+   .. function:: double true_anomaly_at_an(Orbit orbit)
+
+      The true anomaly of the ascending node with another orbit, in radians.
+
+      :Parameters:
+
+       * **orbit** -- The other orbit.
+
+   
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. function:: double true_anomaly_at_dn(Orbit orbit)
+
+      The true anomaly of the descending node with another orbit, in radians.
+
+      :Parameters:
+
+       * **orbit** -- The other orbit.
+
+   
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. function:: double time_of_closest_approach()
+
+      The universal time of the closest approach on this orbit to the vehicle's target,
+      in seconds. Not a number if there is none.
+
+   
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
+
+   .. function:: double distance_at_closest_approach()
+
+      The distance at the closest approach on this orbit to the vehicle's target, in
+      meters. Not a number if there is none.
+
+   
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
 
    .. function:: double start_ut()
 

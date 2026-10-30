@@ -51,13 +51,13 @@ Parts
 
       :Game Scenes: All
 
-   .. property:: double Mass { get; }
+   .. property:: float Mass { get; }
 
       The mass of the part, including its propellant, in kilograms.
 
       :Game Scenes: All
 
-   .. property:: double DryMass { get; }
+   .. property:: float DryMass { get; }
 
       The mass of the part without its propellant, in kilograms.
 
@@ -69,6 +69,55 @@ Parts
 
       :Game Scenes: All
 
+   .. property:: System.Collections.Generic.IList<Tank> Tanks { get; }
+
+      The part's propellant tanks. Empty if it has none.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Battery> Batteries { get; }
+
+      The part's batteries.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<SolarPanel> SolarPanels { get; }
+
+      The part's solar panels.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Generator> Generators { get; }
+
+      The part's generators.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<PowerConsumer> PowerConsumers { get; }
+
+      The part's power consumers.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Light> Lights { get; }
+
+      The part's lights.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Deployable> Deployables { get; }
+
+      The part's deployable sections. A part can have several, such as the doors of a
+      service module.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<MagneticScoop> MagneticScoops { get; }
+
+      The part's magnetic scoops. Empty if it has none.
+
+      :Game Scenes: All
+
    .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
 
       The position of the part's origin, in meters.
@@ -76,6 +125,16 @@ Parts
       :parameters:
 
        * **referenceFrame** -- The reference frame of the position.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+
+      The velocity of the part's origin, in meters per second.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the velocity.
 
       :Game Scenes: All
 
@@ -92,6 +151,12 @@ Parts
    .. property:: Engine Engine { get; }
 
       The part's engine, or ``null`` if it has none.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Gimbal> Gimbals { get; }
+
+      The part's gimbals. An engine part can have several, each steering one nozzle.
 
       :Game Scenes: All
 
@@ -119,6 +184,18 @@ Parts
 
       :Game Scenes: All
 
+   .. property:: System.Collections.Generic.IList<Seat> Seats { get; }
+
+      The part's crew seats.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Kitten> Crew { get; }
+
+      The kittens in the part's seats.
+
+      :Game Scenes: All
+
 
 
 .. class:: Engine
@@ -136,6 +213,12 @@ Parts
 
       :Game Scenes: All
 
+   .. property:: System.Collections.Generic.IList<Gimbal> Gimbals { get; }
+
+      The gimbals that steer the engine's nozzles. Empty if the engine has none.
+
+      :Game Scenes: All
+
    .. property:: bool Active { get; set; }
 
       Whether the engine is active, as when its sequence is activated. Setting it returns
@@ -149,24 +232,96 @@ Parts
 
       :Game Scenes: All
 
-   .. property:: double Thrust { get; }
+   .. property:: float MinimumThrottle { get; }
+
+      The lowest throttle the engine runs at, between 0 and 1.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<string> Propellants { get; }
+
+      The names of the substances the engine burns. See :prop:`Resource.Name`.
+
+      :Game Scenes: All
+
+   .. property:: float Thrust { get; }
 
       The thrust of the engine at its current throttle and the current atmospheric
       pressure, in Newtons. Zero when it is not firing.
 
       :Game Scenes: All
 
-   .. property:: double AvailableThrust { get; }
+   .. property:: float AvailableThrust { get; }
 
       The thrust of the engine at full throttle and the current atmospheric pressure, in
       Newtons. Zero when it is inactive or has no propellant.
 
       :Game Scenes: All
 
-   .. property:: double SpecificImpulse { get; }
+   .. property:: float SpecificImpulse { get; }
 
       The specific impulse of the engine at the current atmospheric pressure, in seconds.
       Zero when it is inactive or has no propellant.
+
+      :Game Scenes: All
+
+
+
+.. class:: Gimbal
+
+   A gimbal that steers an engine nozzle. Obtained from :prop:`Part.Gimbals` or
+   :prop:`Engine.Gimbals`.
+
+   .. note::
+
+      A gimbal turns about the y and z axes of its mount, which :meth:`Gimbal.Rotation` gives.
+      The flight computer steers it while an engine it belongs to is :prop:`Gimbal.Active`.
+
+   .. property:: Part Part { get; }
+
+      The part the gimbal is in.
+
+      :Game Scenes: All
+
+   .. property:: float AngleY { get; }
+
+      The angle of the gimbal about its y axis, in degrees.
+
+      :Game Scenes: All
+
+   .. property:: float AngleZ { get; }
+
+      The angle of the gimbal about its z axis, in degrees.
+
+      :Game Scenes: All
+
+   .. property:: float MaxAngleY { get; }
+
+      The largest angle of the gimbal about its y axis, in degrees. Zero if it does not
+      turn about that axis.
+
+      :Game Scenes: All
+
+   .. property:: float MaxAngleZ { get; }
+
+      The largest angle of the gimbal about its z axis, in degrees. Zero if it does not
+      turn about that axis.
+
+      :Game Scenes: All
+
+   .. property:: bool Active { get; }
+
+      Whether an engine the gimbal steers is active.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double,double> Rotation(ReferenceFrame referenceFrame)
+
+      The rotation of the gimbal's mount, whose y and z axes the gimbal turns about.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the rotation.
 
       :Game Scenes: All
 
@@ -216,12 +371,13 @@ Parts
 
       :Game Scenes: All
 
-   .. function:: void Decouple()
+   .. function:: System.Collections.Generic.IList<Vehicle> Decouple()
 
       Fire the decoupler, separating the vehicle into two. Returns once it has fired.
       Throws an exception if the decoupler is disabled or :prop:`Decoupler.Decoupled`.
 
 
+      :returns: The vehicles that separated from this one.
       :Game Scenes: All
 
 
@@ -351,10 +507,47 @@ Parts
 
       :Game Scenes: All
 
-   .. function:: void Undock()
+   .. function:: System.Collections.Generic.IList<Vehicle> Undock()
 
       Undock the port, separating the vehicle into two. Returns once it has undocked.
       Throws an exception if the port is not docked.
+
+
+      :returns: The new vehicles.
+      :Game Scenes: All
+
+
+      .. note::
+
+         Docking and undocking replace the vehicles involved. See :type:`Vehicle`.
+
+
+
+.. class:: Deployable
+
+   A part that deploys and retracts, such as a landing leg, a solar panel or a service
+   module door. Obtained from :prop:`Part.Deployables`.
+
+   .. note::
+
+      Deploying or retracting a part moves its symmetric copies with it, as the part's menu
+      in the game does.
+
+   .. property:: Part Part { get; }
+
+      The part the deployable is in.
+
+      :Game Scenes: All
+
+   .. property:: DeployableState State { get; }
+
+      The state of the part.
+
+      :Game Scenes: All
+
+   .. function:: void Deploy()
+
+      Deploy the part. Returns once it has started to move.
 
 
       :Game Scenes: All
@@ -362,4 +555,78 @@ Parts
 
       .. note::
 
-         Docking and undocking replace the vehicles involved. See :type:`Vehicle`.
+         Throws an exception if the part is broken.
+
+   .. function:: void Retract()
+
+      Retract the part. Returns once it has started to move.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the part is broken.
+
+
+
+.. enum:: DeployableState
+
+   The state of a deployable part. See :prop:`Deployable.State`.
+
+
+   .. enumerator:: Deployed
+
+      Fully deployed.
+
+
+   .. enumerator:: Retracted
+
+      Fully retracted.
+
+
+   .. enumerator:: Deploying
+
+      Moving toward deployed.
+
+
+   .. enumerator:: Retracting
+
+      Moving toward retracted.
+
+
+   .. enumerator:: Broken
+
+      Broken, so it can no longer move.
+
+
+
+.. class:: MagneticScoop
+
+   A magnetic scoop, which collects gas from space into the vehicle's tanks. Obtained from
+   :prop:`Part.MagneticScoops`.
+
+   .. property:: Part Part { get; }
+
+      The part the scoop is in.
+
+      :Game Scenes: All
+
+   .. property:: bool Active { get; set; }
+
+      Whether the scoop is switched on.
+
+      :Game Scenes: All
+
+   .. property:: string Substance { get; }
+
+      The name of the substance the scoop collects. See :prop:`Resource.Name`.
+
+      :Game Scenes: All
+
+   .. property:: float CollectionRate { get; }
+
+      The rate the scoop collects gas at, in kilograms per second.
+
+      :Game Scenes: All

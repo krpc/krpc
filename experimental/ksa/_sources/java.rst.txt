@@ -1,8 +1,47 @@
 Java
 ====
 
-.. toctree::
-   :maxdepth: 2
+This page covers using the kRPC Java client with the ``KSA`` service. The
+`kRPC Java client guide <https://krpc.github.io/krpc/0.7.0/java/client.html>`_ covers the client in full.
 
-   java/client
+.. note::
+
+   kRPC for KSA is experimental, and the client package does not yet include the ``KSA``
+   service stubs. You add them from the release archive, as below, until a later release makes
+   this easier.
+
+Installing
+----------
+
+Put the kRPC Java client jar 0.7.0, and its protobuf and javatuples dependencies, on
+the classpath. Add ``java/krpc/client/services/KSA.java`` from the ``stubs`` folder of
+the release archive to the sources.
+
+The `kRPC Java client guide <https://krpc.github.io/krpc/0.7.0/java/client.html>`_ covers other ways to
+install the client.
+
+Connecting to the Server
+------------------------
+
+The service is ``KSA.newInstance(connection)``:
+
+.. code-block:: java
+
+   import krpc.client.Connection;
+   import krpc.client.services.KSA;
+
+   try (Connection connection = Connection.newInstance("Example")) {
+     KSA ksa = KSA.newInstance(connection);
+     System.out.println(ksa.getActiveVehicle().getName());
+   }
+
+The `kRPC Java client guide <https://krpc.github.io/krpc/0.7.0/java/client.html>`_ covers connecting, streams, events
+and the client's other features.
+
+API Reference
+-------------
+
+.. toctree::
+   :maxdepth: 1
+
    java/api/ksa

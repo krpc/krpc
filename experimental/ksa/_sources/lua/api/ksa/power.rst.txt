@@ -1,0 +1,174 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KSA
+
+Power
+=====
+
+
+.. class:: Battery
+
+   A battery, which stores electrical energy. Obtained from :attr:`KSA.Part.batteries`.
+
+   .. attribute:: part: KSA.Part
+
+      The part the battery is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: stored_energy: number
+
+      The energy stored in the battery, in joules.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: energy_capacity: number
+
+      The energy the battery can store, in joules.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+
+
+.. class:: SolarPanel
+
+   A solar panel, which turns sunlight into electrical power. Obtained from :attr:`KSA.Part.solar_panels`.
+
+   .. attribute:: part: KSA.Part
+
+      The part the solar panel is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: active: boolean
+
+      Whether the solar panel can produce power, because it is deployed or does not deploy.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: power: number
+
+      The power the solar panel produces, in watts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: sun_angle: number
+
+      The angle between the solar panel's face and the direction to the sun, in degrees.
+      Zero when the panel faces the sun.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: occluded: boolean
+
+      Whether a body blocks the sunlight to the solar panel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: deployable: KSA.Deployable
+
+      The deployable section that opens the solar panel, or ``nil`` for a panel that
+      does not deploy.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Deployable` or ``Types.none``
+
+
+
+.. class:: Generator
+
+   A generator, which produces electrical power. Obtained from :attr:`KSA.Part.generators`.
+
+   .. note::
+
+      A generator runs while its :attr:`KSA.Generator.engine` is active, and produces power in
+      proportion to the engine's throttle.
+
+   .. attribute:: part: KSA.Part
+
+      The part the generator is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: engine: KSA.Engine
+
+      The engine that drives the generator, or ``nil`` if it has none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Engine` or ``Types.none``
+
+   .. attribute:: active: boolean
+
+      Whether the generator is producing power.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: power: number
+
+      The power the generator produces, in watts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+
+
+.. class:: PowerConsumer
+
+   A power consumer, which uses electrical power, such as a light. Obtained from
+   :attr:`KSA.Part.power_consumers`.
+
+   .. attribute:: part: KSA.Part
+
+      The part the power consumer is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: active: boolean
+
+      Whether the part is using power.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: power: number
+
+      The power the part uses, in watts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+
+
+.. class:: Light
+
+   A light. Obtained from :attr:`KSA.Part.lights`.
+
+   .. note::
+
+      The vehicle's lights switch on and off together, see :attr:`KSA.Control.lights`.
+      Cabin lights are always on.
+
+   .. attribute:: part: KSA.Part
+
+      The part the light is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: active: boolean
+
+      Whether the light is on.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean

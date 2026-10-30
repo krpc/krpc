@@ -1,0 +1,414 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Orbit
+=====
+
+.. grpc:service:: OrbitService
+
+   An orbit. Obtained from :grpc:rpc:`VehicleService.GetOrbit <krpc.ksa.VehicleService.GetOrbit>`, :grpc:rpc:`BodyService.GetOrbit <krpc.ksa.BodyService.GetOrbit>`,
+   :grpc:rpc:`BurnService.GetOrbit <krpc.ksa.BurnService.GetOrbit>` or :grpc:rpc:`OrbitService.GetNextOrbit <krpc.ksa.OrbitService.GetNextOrbit>`.
+
+   .. note::
+
+      An orbit follows the game's prediction as the trajectory changes. A predicted orbit, from
+      :grpc:rpc:`OrbitService.GetNextOrbit <krpc.ksa.OrbitService.GetNextOrbit>` or :grpc:rpc:`BurnService.GetOrbit <krpc.ksa.BurnService.GetOrbit>`, is a position in the vehicle's or the
+      burn's predicted trajectory, and throws an exception while the trajectory is too short to
+      reach it.
+
+   .. grpc:rpc:: GetBody (Orbit.GetBodyRequest) returns (Orbit.GetBodyResponse)
+
+      The body being orbited.
+
+      :Orbit.GetBodyRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetBodyResponse: ``value`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+   .. grpc:rpc:: GetApoapsis (Orbit.GetApoapsisRequest) returns (Orbit.GetApoapsisResponse)
+
+      The apoapsis of the orbit, in meters, from the center of the body being orbited.
+      Not a number for a parabolic or hyperbolic orbit.
+
+      :Orbit.GetApoapsisRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetApoapsisResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetPeriapsis (Orbit.GetPeriapsisRequest) returns (Orbit.GetPeriapsisResponse)
+
+      The periapsis of the orbit, in meters, from the center of the body being orbited.
+
+      :Orbit.GetPeriapsisRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetPeriapsisResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetApoapsisAltitude (Orbit.GetApoapsisAltitudeRequest) returns (Orbit.GetApoapsisAltitudeResponse)
+
+      The apoapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+      :Orbit.GetApoapsisAltitudeRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetApoapsisAltitudeResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetPeriapsisAltitude (Orbit.GetPeriapsisAltitudeRequest) returns (Orbit.GetPeriapsisAltitudeResponse)
+
+      The periapsis of the orbit, in meters, above the mean radius of the body being orbited.
+
+      :Orbit.GetPeriapsisAltitudeRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetPeriapsisAltitudeResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetSemiMajorAxis (Orbit.GetSemiMajorAxisRequest) returns (Orbit.GetSemiMajorAxisResponse)
+
+      The semi-major axis of the orbit, in meters. Negative for a hyperbolic orbit.
+
+      :Orbit.GetSemiMajorAxisRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetSemiMajorAxisResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetSemiMinorAxis (Orbit.GetSemiMinorAxisRequest) returns (Orbit.GetSemiMinorAxisResponse)
+
+      The semi-minor axis of the orbit, in meters. Not a number for a parabolic or
+      hyperbolic orbit.
+
+      :Orbit.GetSemiMinorAxisRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetSemiMinorAxisResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetSpeed (Orbit.GetSpeedRequest) returns (Orbit.GetSpeedResponse)
+
+      The current orbital speed, in meters per second.
+
+      :Orbit.GetSpeedRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetSpeedResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetRadius (Orbit.GetRadiusRequest) returns (Orbit.GetRadiusResponse)
+
+      The current distance from the center of the body being orbited, in meters.
+
+      :Orbit.GetRadiusRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetRadiusResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetPeriod (Orbit.GetPeriodRequest) returns (Orbit.GetPeriodResponse)
+
+      The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+      :Orbit.GetPeriodRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetPeriodResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetMeanMotion (Orbit.GetMeanMotionRequest) returns (Orbit.GetMeanMotionResponse)
+
+      The mean angular motion of the orbit, in radians per second.
+
+      :Orbit.GetMeanMotionRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetMeanMotionResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetSpecificEnergy (Orbit.GetSpecificEnergyRequest) returns (Orbit.GetSpecificEnergyResponse)
+
+      The specific orbital energy, the sum of the kinetic and potential energy per unit
+      mass, in joules per kilogram. Negative for an elliptical orbit.
+
+      :Orbit.GetSpecificEnergyRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetSpecificEnergyResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetTimeToApoapsis (Orbit.GetTimeToApoapsisRequest) returns (Orbit.GetTimeToApoapsisResponse)
+
+      The time until the next apoapsis, in seconds. Not a number for a parabolic or
+      hyperbolic orbit.
+
+      :Orbit.GetTimeToApoapsisRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetTimeToApoapsisResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetTimeToPeriapsis (Orbit.GetTimeToPeriapsisRequest) returns (Orbit.GetTimeToPeriapsisResponse)
+
+      The time until the next periapsis, in seconds. Negative once a parabolic or
+      hyperbolic orbit has passed it.
+
+      :Orbit.GetTimeToPeriapsisRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetTimeToPeriapsisResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetEccentricity (Orbit.GetEccentricityRequest) returns (Orbit.GetEccentricityResponse)
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+      :Orbit.GetEccentricityRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetEccentricityResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetInclination (Orbit.GetInclinationRequest) returns (Orbit.GetInclinationResponse)
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit, in radians, against the equator of the body being orbited.
+
+      :Orbit.GetInclinationRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetInclinationResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetLongitudeOfAscendingNode (Orbit.GetLongitudeOfAscendingNodeRequest) returns (Orbit.GetLongitudeOfAscendingNodeResponse)
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+      :Orbit.GetLongitudeOfAscendingNodeRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetLongitudeOfAscendingNodeResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetArgumentOfPeriapsis (Orbit.GetArgumentOfPeriapsisRequest) returns (Orbit.GetArgumentOfPeriapsisResponse)
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+      :Orbit.GetArgumentOfPeriapsisRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetArgumentOfPeriapsisResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetTrueAnomaly (Orbit.GetTrueAnomalyRequest) returns (Orbit.GetTrueAnomalyResponse)
+
+      The current `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_,
+      in radians.
+
+      :Orbit.GetTrueAnomalyRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetTrueAnomalyResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetMeanAnomaly (Orbit.GetMeanAnomalyRequest) returns (Orbit.GetMeanAnomalyResponse)
+
+      The current `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_,
+      in radians.
+
+      :Orbit.GetMeanAnomalyRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetMeanAnomalyResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetEccentricAnomaly (Orbit.GetEccentricAnomalyRequest) returns (Orbit.GetEccentricAnomalyResponse)
+
+      The current `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_, in radians. For a hyperbolic orbit, this is the hyperbolic anomaly.
+
+      :Orbit.GetEccentricAnomalyRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetEccentricAnomalyResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: TrueAnomalyAtUT (Orbit.TrueAnomalyAtUTRequest) returns (Orbit.TrueAnomalyAtUTResponse)
+
+      The true anomaly at the given time, in radians.
+
+      :Orbit.TrueAnomalyAtUTRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+         * ``ut`` (``double``): Universal time, in seconds.
+
+      :Orbit.TrueAnomalyAtUTResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: UTAtTrueAnomaly (Orbit.UTAtTrueAnomalyRequest) returns (Orbit.UTAtTrueAnomalyResponse)
+
+      The next universal time, from now, at which the orbit reaches the given true
+      anomaly, in seconds. Not a number if it never does, such as beyond the asymptote of
+      a hyperbolic orbit.
+
+      :Orbit.UTAtTrueAnomalyRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+         * ``true_anomaly`` (``double``): True anomaly, in radians.
+
+      :Orbit.UTAtTrueAnomalyResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: RadiusAt (Orbit.RadiusAtRequest) returns (Orbit.RadiusAtResponse)
+
+      The distance from the center of the body being orbited at the given time, in
+      meters.
+
+      :Orbit.RadiusAtRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+         * ``ut`` (``double``): Universal time, in seconds.
+
+      :Orbit.RadiusAtResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: PositionAt (Orbit.PositionAtRequest) returns (Orbit.PositionAtResponse)
+
+      The position on the orbit at the given time, in meters, relative to where the body
+      being orbited is now.
+
+      :Orbit.PositionAtRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+         * ``ut`` (``double``): Universal time, in seconds.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+
+      :Orbit.PositionAtResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: VelocityAt (Orbit.VelocityAtRequest) returns (Orbit.VelocityAtResponse)
+
+      The orbital velocity at the given time, in meters per second, relative to the body
+      being orbited and along the axes of the given frame.
+
+      :Orbit.VelocityAtRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+         * ``ut`` (``double``): Universal time, in seconds.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the velocity.
+
+      :Orbit.VelocityAtResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: RelativeInclination (Orbit.RelativeInclinationRequest) returns (Orbit.RelativeInclinationResponse)
+
+      The inclination of the orbit relative to another orbit, in radians.
+
+      :Orbit.RelativeInclinationRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+         * ``orbit`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`): The other orbit.
+
+      :Orbit.RelativeInclinationResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: TrueAnomalyAtAN (Orbit.TrueAnomalyAtANRequest) returns (Orbit.TrueAnomalyAtANResponse)
+
+      The true anomaly of the ascending node with another orbit, in radians.
+
+      :Orbit.TrueAnomalyAtANRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+         * ``orbit`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`): The other orbit.
+
+      :Orbit.TrueAnomalyAtANResponse: ``value`` (``double``)
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. grpc:rpc:: TrueAnomalyAtDN (Orbit.TrueAnomalyAtDNRequest) returns (Orbit.TrueAnomalyAtDNResponse)
+
+      The true anomaly of the descending node with another orbit, in radians.
+
+      :Orbit.TrueAnomalyAtDNRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+         * ``orbit`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`): The other orbit.
+
+      :Orbit.TrueAnomalyAtDNResponse: ``value`` (``double``)
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. grpc:rpc:: GetTimeOfClosestApproach (Orbit.GetTimeOfClosestApproachRequest) returns (Orbit.GetTimeOfClosestApproachResponse)
+
+      The universal time of the closest approach on this orbit to the vehicle's target,
+      in seconds. Not a number if there is none.
+
+      :Orbit.GetTimeOfClosestApproachRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetTimeOfClosestApproachResponse: ``value`` (``double``)
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
+
+   .. grpc:rpc:: GetDistanceAtClosestApproach (Orbit.GetDistanceAtClosestApproachRequest) returns (Orbit.GetDistanceAtClosestApproachResponse)
+
+      The distance at the closest approach on this orbit to the vehicle's target, in
+      meters. Not a number if there is none.
+
+      :Orbit.GetDistanceAtClosestApproachRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetDistanceAtClosestApproachResponse: ``value`` (``double``)
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
+
+   .. grpc:rpc:: GetStartUT (Orbit.GetStartUTRequest) returns (Orbit.GetStartUTResponse)
+
+      The universal time at which this orbit starts, in seconds. Not a number for the
+      orbit of a body.
+
+      :Orbit.GetStartUTRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetStartUTResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetEndUT (Orbit.GetEndUTRequest) returns (Orbit.GetEndUTResponse)
+
+      The universal time at which this orbit ends, in seconds. Infinite for an orbit that
+      does not end, such as the orbit of a body.
+
+      :Orbit.GetEndUTRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetEndUTResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetEndTransition (Orbit.GetEndTransitionRequest) returns (Orbit.GetEndTransitionResponse)
+
+      How the orbit ends.
+
+      :Orbit.GetEndTransitionRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetEndTransitionResponse: ``value`` (:grpc:enum:`OrbitTransition <krpc.ksa.OrbitTransition>`)
+
+   .. grpc:rpc:: GetTimeToSOIChange (Orbit.GetTimeToSOIChangeRequest) returns (Orbit.GetTimeToSOIChangeResponse)
+
+      The time until the orbit enters or leaves a sphere of influence, in seconds. Not a
+      number if it does neither.
+
+      :Orbit.GetTimeToSOIChangeRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetTimeToSOIChangeResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetNextOrbit (Orbit.GetNextOrbitRequest) returns (Orbit.GetNextOrbitResponse)
+
+      The orbit that follows this one after it enters or leaves a sphere of influence, or
+      ``null`` if there is none.
+
+      :Orbit.GetNextOrbitRequest:
+         * ``this`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      :Orbit.GetNextOrbitResponse: ``value`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+.. grpc:enum:: OrbitTransition
+
+   How an orbit ends. See :grpc:rpc:`OrbitService.GetEndTransition <krpc.ksa.OrbitService.GetEndTransition>`.
+
+   .. grpc:value:: ORBIT_TRANSITION_NONE
+
+      The orbit does not end.
+
+   .. grpc:value:: ORBIT_TRANSITION_ENCOUNTER
+
+      The orbit enters the sphere of influence of another body.
+
+   .. grpc:value:: ORBIT_TRANSITION_ESCAPE
+
+      The orbit leaves the sphere of influence of the body being orbited.
+
+   .. grpc:value:: ORBIT_TRANSITION_IMPACT
+
+      The orbit hits the surface of the body being orbited.
+
+   .. grpc:value:: ORBIT_TRANSITION_BURN
+
+      The orbit ends at a planned burn.

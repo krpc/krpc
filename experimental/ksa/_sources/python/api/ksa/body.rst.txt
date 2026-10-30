@@ -18,6 +18,14 @@ Body
       :rtype: str
    
 
+   .. attribute:: is_star
+
+      Whether the body is a star.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
    .. attribute:: mass
 
       The mass of the body, in kilograms.
@@ -46,6 +54,76 @@ Body
 
       The radius of the top of the atmosphere, in meters. Zero for a body with no
       atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: has_atmosphere
+
+      Whether the body has an atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: sea_level_pressure
+
+      The atmospheric pressure at the body's mean radius, in pascals. Zero for a body
+      with no atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: sea_level_density
+
+      The density of the atmosphere at the body's mean radius, in kilograms per cubic
+      meter. Zero for a body with no atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: scale_height
+
+      The height over which the atmospheric pressure falls by a factor of ``e``, in
+      meters. Zero for a body with no atmosphere.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. method:: pressure_at(altitude)
+
+      The atmospheric pressure at an altitude, in pascals. Zero for a body with no
+      atmosphere.
+
+      :param float altitude: Altitude above the body's mean radius, in meters.
+      :rtype: float
+   
+
+   .. method:: density_at(altitude)
+
+      The density of the atmosphere at an altitude, in kilograms per cubic meter. Zero
+      for a body with no atmosphere.
+
+      :param float altitude: Altitude above the body's mean radius, in meters.
+      :rtype: float
+   
+
+   .. attribute:: has_ocean
+
+      Whether the body has an ocean.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: ocean_density
+
+      The density of the ocean, in kilograms per cubic meter. Zero for a body with no
+      ocean.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -142,6 +220,23 @@ Body
       :rtype: list(str)
    
 
+   .. attribute:: biomes
+
+      The names of the body's biomes. Empty for a body with no biomes.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+   
+
+   .. method:: biome_at(latitude, longitude)
+
+      The biome at a point on the body, or ``None`` if the body has no biomes.
+
+      :param float latitude: Latitude, in degrees.
+      :param float longitude: Longitude, in degrees.
+      :rtype: str or None
+   
+
    .. attribute:: reference_frame
 
       The reference frame fixed to the body, with its origin at the body's center. The
@@ -204,3 +299,30 @@ Body
       :param float longitude: Longitude, in degrees.
       :param ReferenceFrame reference_frame: The reference frame of the position.
       :rtype: tuple(float, float, float)
+   
+
+   .. method:: latitude_at_position(position, reference_frame)
+
+      The latitude of a position, in degrees.
+
+      :param tuple position: Position, in meters.
+      :param ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: float
+   
+
+   .. method:: longitude_at_position(position, reference_frame)
+
+      The longitude of a position, in degrees.
+
+      :param tuple position: Position, in meters.
+      :param ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: float
+   
+
+   .. method:: altitude_at_position(position, reference_frame)
+
+      The altitude of a position above the body's mean radius, in meters.
+
+      :param tuple position: Position, in meters.
+      :param ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: float

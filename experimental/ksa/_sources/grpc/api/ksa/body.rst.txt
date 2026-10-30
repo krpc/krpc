@@ -1,0 +1,377 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Body
+====
+
+.. grpc:service:: BodyService
+
+   A planet, moon or star. See :grpc:rpc:`KSAService.GetBodies <krpc.ksa.KSAService.GetBodies>`.
+
+   .. grpc:rpc:: GetName (Body.GetNameRequest) returns (Body.GetNameResponse)
+
+      The name of the body.
+
+      :Body.GetNameRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetNameResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: GetIsStar (Body.GetIsStarRequest) returns (Body.GetIsStarResponse)
+
+      Whether the body is a star.
+
+      :Body.GetIsStarRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetIsStarResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetMass (Body.GetMassRequest) returns (Body.GetMassResponse)
+
+      The mass of the body, in kilograms.
+
+      :Body.GetMassRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetMassResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetGravitationalParameter (Body.GetGravitationalParameterRequest) returns (Body.GetGravitationalParameterResponse)
+
+      The standard gravitational parameter of the body, in cubic meters per second squared.
+
+      :Body.GetGravitationalParameterRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetGravitationalParameterResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetRadius (Body.GetRadiusRequest) returns (Body.GetRadiusResponse)
+
+      The radius of the body, in meters.
+
+      :Body.GetRadiusRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetRadiusResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetAtmosphereRadius (Body.GetAtmosphereRadiusRequest) returns (Body.GetAtmosphereRadiusResponse)
+
+      The radius of the top of the atmosphere, in meters. Zero for a body with no
+      atmosphere.
+
+      :Body.GetAtmosphereRadiusRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetAtmosphereRadiusResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetHasAtmosphere (Body.GetHasAtmosphereRequest) returns (Body.GetHasAtmosphereResponse)
+
+      Whether the body has an atmosphere.
+
+      :Body.GetHasAtmosphereRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetHasAtmosphereResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetSeaLevelPressure (Body.GetSeaLevelPressureRequest) returns (Body.GetSeaLevelPressureResponse)
+
+      The atmospheric pressure at the body's mean radius, in pascals. Zero for a body
+      with no atmosphere.
+
+      :Body.GetSeaLevelPressureRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetSeaLevelPressureResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSeaLevelDensity (Body.GetSeaLevelDensityRequest) returns (Body.GetSeaLevelDensityResponse)
+
+      The density of the atmosphere at the body's mean radius, in kilograms per cubic
+      meter. Zero for a body with no atmosphere.
+
+      :Body.GetSeaLevelDensityRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetSeaLevelDensityResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetScaleHeight (Body.GetScaleHeightRequest) returns (Body.GetScaleHeightResponse)
+
+      The height over which the atmospheric pressure falls by a factor of ``e``, in
+      meters. Zero for a body with no atmosphere.
+
+      :Body.GetScaleHeightRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetScaleHeightResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: PressureAt (Body.PressureAtRequest) returns (Body.PressureAtResponse)
+
+      The atmospheric pressure at an altitude, in pascals. Zero for a body with no
+      atmosphere.
+
+      :Body.PressureAtRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``altitude`` (``double``): Altitude above the body's mean radius, in meters.
+
+      :Body.PressureAtResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: DensityAt (Body.DensityAtRequest) returns (Body.DensityAtResponse)
+
+      The density of the atmosphere at an altitude, in kilograms per cubic meter. Zero
+      for a body with no atmosphere.
+
+      :Body.DensityAtRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``altitude`` (``double``): Altitude above the body's mean radius, in meters.
+
+      :Body.DensityAtResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetHasOcean (Body.GetHasOceanRequest) returns (Body.GetHasOceanResponse)
+
+      Whether the body has an ocean.
+
+      :Body.GetHasOceanRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetHasOceanResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetOceanDensity (Body.GetOceanDensityRequest) returns (Body.GetOceanDensityResponse)
+
+      The density of the ocean, in kilograms per cubic meter. Zero for a body with no
+      ocean.
+
+      :Body.GetOceanDensityRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetOceanDensityResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSurfaceGravity (Body.GetSurfaceGravityRequest) returns (Body.GetSurfaceGravityResponse)
+
+      The acceleration due to gravity at the body's mean radius, in meters per second
+      squared.
+
+      :Body.GetSurfaceGravityRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetSurfaceGravityResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetRotationalSpeed (Body.GetRotationalSpeedRequest) returns (Body.GetRotationalSpeedResponse)
+
+      The rate at which the body rotates about its axis, in radians per second.
+
+      :Body.GetRotationalSpeedRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetRotationalSpeedResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetRotationalPeriod (Body.GetRotationalPeriodRequest) returns (Body.GetRotationalPeriodResponse)
+
+      The time the body takes to rotate once about its axis, relative to the stars, in
+      seconds. Infinite for a body that does not rotate.
+
+      :Body.GetRotationalPeriodRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetRotationalPeriodResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSphereOfInfluence (Body.GetSphereOfInfluenceRequest) returns (Body.GetSphereOfInfluenceResponse)
+
+      The radius of the body's sphere of influence, in meters. Not a number for a body
+      that orbits nothing.
+
+      :Body.GetSphereOfInfluenceRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetSphereOfInfluenceResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetParent (Body.GetParentRequest) returns (Body.GetParentResponse)
+
+      The body this body orbits, or ``null`` if it orbits nothing.
+
+      :Body.GetParentRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetParentResponse: ``value`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+   .. grpc:rpc:: GetSatellites (Body.GetSatellitesRequest) returns (Body.GetSatellitesResponse)
+
+      The bodies that orbit this body.
+
+      :Body.GetSatellitesRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetSatellitesResponse: ``value`` (``repeated`` :grpc:service:`Body <krpc.ksa.BodyService>`)
+
+   .. grpc:rpc:: GetOrbit (Body.GetOrbitRequest) returns (Body.GetOrbitResponse)
+
+      The orbit of the body, or ``null`` if it orbits nothing.
+
+      :Body.GetOrbitRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetOrbitResponse: ``value`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+   .. grpc:rpc:: SurfaceHeight (Body.SurfaceHeightRequest) returns (Body.SurfaceHeightResponse)
+
+      The height of the terrain or the sea surface, whichever is higher, at a point on
+      the body, in meters above the body's mean radius.
+
+      :Body.SurfaceHeightRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``latitude`` (``double``): Latitude, in degrees.
+         * ``longitude`` (``double``): Longitude, in degrees.
+
+      :Body.SurfaceHeightResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: BedrockHeight (Body.BedrockHeightRequest) returns (Body.BedrockHeightResponse)
+
+      The height of the terrain at a point on the body, in meters above the body's mean
+      radius. Below the sea, this is the height of the sea floor.
+
+      :Body.BedrockHeightRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``latitude`` (``double``): Latitude, in degrees.
+         * ``longitude`` (``double``): Longitude, in degrees.
+
+      :Body.BedrockHeightResponse: ``value`` (``double``)
+
+      .. note::
+
+         Zero for a body with no terrain, such as a gas giant.
+
+   .. grpc:rpc:: GetLaunchSites (Body.GetLaunchSitesRequest) returns (Body.GetLaunchSitesResponse)
+
+      The names of the launch sites on the body. See :grpc:rpc:`KSAService.LaunchVehicle <krpc.ksa.KSAService.LaunchVehicle>`.
+
+      :Body.GetLaunchSitesRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetLaunchSitesResponse: ``value`` (``repeated string``)
+
+   .. grpc:rpc:: GetBiomes (Body.GetBiomesRequest) returns (Body.GetBiomesResponse)
+
+      The names of the body's biomes. Empty for a body with no biomes.
+
+      :Body.GetBiomesRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetBiomesResponse: ``value`` (``repeated string``)
+
+   .. grpc:rpc:: BiomeAt (Body.BiomeAtRequest) returns (Body.BiomeAtResponse)
+
+      The biome at a point on the body, or ``null`` if the body has no biomes.
+
+      :Body.BiomeAtRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``latitude`` (``double``): Latitude, in degrees.
+         * ``longitude`` (``double``): Longitude, in degrees.
+
+      :Body.BiomeAtResponse: ``value`` (``optional string``)
+
+   .. grpc:rpc:: GetReferenceFrame (Body.GetReferenceFrameRequest) returns (Body.GetReferenceFrameResponse)
+
+      The reference frame fixed to the body, with its origin at the body's center. The
+      z axis points to the north pole, the x axis to latitude and longitude zero, and the
+      y axis to latitude zero and longitude 90 degrees east. The frame rotates with the
+      body.
+
+      :Body.GetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: GetNonRotatingReferenceFrame (Body.GetNonRotatingReferenceFrameRequest) returns (Body.GetNonRotatingReferenceFrameResponse)
+
+      The reference frame with its origin at the body's center that does not rotate. The
+      z axis points to the north pole, and the x and y axes are fixed relative to the
+      stars.
+
+      :Body.GetNonRotatingReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+
+      :Body.GetNonRotatingReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: Position (Body.PositionRequest) returns (Body.PositionResponse)
+
+      The position of the center of the body, in meters.
+
+      :Body.PositionRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+
+      :Body.PositionResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: Velocity (Body.VelocityRequest) returns (Body.VelocityResponse)
+
+      The velocity of the body, in meters per second.
+
+      :Body.VelocityRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the velocity.
+
+      :Body.VelocityResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: Rotation (Body.RotationRequest) returns (Body.RotationResponse)
+
+      The rotation of :grpc:rpc:`BodyService.GetReferenceFrame <krpc.ksa.BodyService.GetReferenceFrame>` relative to the given frame.
+
+      :Body.RotationRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the rotation.
+
+      :Body.RotationResponse: ``value`` (:grpc:message:`Tuple_double_double_double_double <krpc.ksa.Tuple_double_double_double_double>`)
+
+   .. grpc:rpc:: AngularVelocity (Body.AngularVelocityRequest) returns (Body.AngularVelocityResponse)
+
+      The angular velocity of the body, in radians per second. The vector points along
+      the axis of rotation, and its length is the rate of rotation.
+
+      :Body.AngularVelocityRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the angular velocity.
+
+      :Body.AngularVelocityResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: SurfacePosition (Body.SurfacePositionRequest) returns (Body.SurfacePositionResponse)
+
+      The position of a point on the surface, at the body's mean radius, in meters.
+
+      :Body.SurfacePositionRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``latitude`` (``double``): Latitude, in degrees.
+         * ``longitude`` (``double``): Longitude, in degrees.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+
+      :Body.SurfacePositionResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: LatitudeAtPosition (Body.LatitudeAtPositionRequest) returns (Body.LatitudeAtPositionResponse)
+
+      The latitude of a position, in degrees.
+
+      :Body.LatitudeAtPositionRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``position`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): Position, in meters.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+
+      :Body.LatitudeAtPositionResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: LongitudeAtPosition (Body.LongitudeAtPositionRequest) returns (Body.LongitudeAtPositionResponse)
+
+      The longitude of a position, in degrees.
+
+      :Body.LongitudeAtPositionRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``position`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): Position, in meters.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+
+      :Body.LongitudeAtPositionResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: AltitudeAtPosition (Body.AltitudeAtPositionRequest) returns (Body.AltitudeAtPositionResponse)
+
+      The altitude of a position above the body's mean radius, in meters.
+
+      :Body.AltitudeAtPositionRequest:
+         * ``this`` (:grpc:service:`Body <krpc.ksa.BodyService>`)
+         * ``position`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): Position, in meters.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+
+      :Body.AltitudeAtPositionResponse: ``value`` (``double``)

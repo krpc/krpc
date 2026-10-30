@@ -51,13 +51,13 @@ Parts
 
    
 
-   .. function:: double mass()
+   .. function:: float mass()
 
       The mass of the part, including its propellant, in kilograms.
 
    
 
-   .. function:: double dry_mass()
+   .. function:: float dry_mass()
 
       The mass of the part without its propellant, in kilograms.
 
@@ -69,6 +69,55 @@ Parts
 
    
 
+   .. function:: std::vector<Tank> tanks()
+
+      The part's propellant tanks. Empty if it has none.
+
+   
+
+   .. function:: std::vector<Battery> batteries()
+
+      The part's batteries.
+
+   
+
+   .. function:: std::vector<SolarPanel> solar_panels()
+
+      The part's solar panels.
+
+   
+
+   .. function:: std::vector<Generator> generators()
+
+      The part's generators.
+
+   
+
+   .. function:: std::vector<PowerConsumer> power_consumers()
+
+      The part's power consumers.
+
+   
+
+   .. function:: std::vector<Light> lights()
+
+      The part's lights.
+
+   
+
+   .. function:: std::vector<Deployable> deployables()
+
+      The part's deployable sections. A part can have several, such as the doors of a
+      service module.
+
+   
+
+   .. function:: std::vector<MagneticScoop> magnetic_scoops()
+
+      The part's magnetic scoops. Empty if it has none.
+
+   
+
    .. function:: std::tuple<double, double, double> position(ReferenceFrame reference_frame)
 
       The position of the part's origin, in meters.
@@ -76,6 +125,16 @@ Parts
       :Parameters:
 
        * **reference_frame** -- The reference frame of the position.
+
+   
+
+   .. function:: std::tuple<double, double, double> velocity(ReferenceFrame reference_frame)
+
+      The velocity of the part's origin, in meters per second.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the velocity.
 
    
 
@@ -92,6 +151,12 @@ Parts
    .. function:: std::optional<Engine> engine()
 
       The part's engine, or ``NULL`` if it has none.
+
+   
+
+   .. function:: std::vector<Gimbal> gimbals()
+
+      The part's gimbals. An engine part can have several, each steering one nozzle.
 
    
 
@@ -119,6 +184,18 @@ Parts
 
    
 
+   .. function:: std::vector<Seat> seats()
+
+      The part's crew seats.
+
+   
+
+   .. function:: std::vector<Kitten> crew()
+
+      The kittens in the part's seats.
+
+   
+
 
 
 .. class:: Engine
@@ -136,6 +213,12 @@ Parts
 
    
 
+   .. function:: std::vector<Gimbal> gimbals()
+
+      The gimbals that steer the engine's nozzles. Empty if the engine has none.
+
+   
+
    .. function:: bool active()
    .. function:: void set_active(bool value)
 
@@ -150,24 +233,96 @@ Parts
 
    
 
-   .. function:: double thrust()
+   .. function:: float minimum_throttle()
+
+      The lowest throttle the engine runs at, between 0 and 1.
+
+   
+
+   .. function:: std::vector<std::string> propellants()
+
+      The names of the substances the engine burns. See :func:`Resource::name`.
+
+   
+
+   .. function:: float thrust()
 
       The thrust of the engine at its current throttle and the current atmospheric
       pressure, in Newtons. Zero when it is not firing.
 
    
 
-   .. function:: double available_thrust()
+   .. function:: float available_thrust()
 
       The thrust of the engine at full throttle and the current atmospheric pressure, in
       Newtons. Zero when it is inactive or has no propellant.
 
    
 
-   .. function:: double specific_impulse()
+   .. function:: float specific_impulse()
 
       The specific impulse of the engine at the current atmospheric pressure, in seconds.
       Zero when it is inactive or has no propellant.
+
+   
+
+
+
+.. class:: Gimbal
+
+   A gimbal that steers an engine nozzle. Obtained from :func:`Part::gimbals` or
+   :func:`Engine::gimbals`.
+
+   .. note::
+
+      A gimbal turns about the y and z axes of its mount, which :func:`Gimbal::rotation` gives.
+      The flight computer steers it while an engine it belongs to is :func:`Gimbal::active`.
+
+   .. function:: Part part()
+
+      The part the gimbal is in.
+
+   
+
+   .. function:: float angle_y()
+
+      The angle of the gimbal about its y axis, in degrees.
+
+   
+
+   .. function:: float angle_z()
+
+      The angle of the gimbal about its z axis, in degrees.
+
+   
+
+   .. function:: float max_angle_y()
+
+      The largest angle of the gimbal about its y axis, in degrees. Zero if it does not
+      turn about that axis.
+
+   
+
+   .. function:: float max_angle_z()
+
+      The largest angle of the gimbal about its z axis, in degrees. Zero if it does not
+      turn about that axis.
+
+   
+
+   .. function:: bool active()
+
+      Whether an engine the gimbal steers is active.
+
+   
+
+   .. function:: std::tuple<double, double, double, double> rotation(ReferenceFrame reference_frame)
+
+      The rotation of the gimbal's mount, whose y and z axes the gimbal turns about.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame of the rotation.
 
    
 
@@ -218,12 +373,13 @@ Parts
 
    
 
-   .. function:: void decouple()
+   .. function:: std::vector<Vehicle> decouple()
 
       Fire the decoupler, separating the vehicle into two. Returns once it has fired.
       Throws an exception if the decoupler is disabled or :func:`Decoupler::decoupled`.
 
 
+      :returns: The vehicles that separated from this one.
    
 
 
@@ -354,14 +510,123 @@ Parts
 
    
 
-   .. function:: void undock()
+   .. function:: std::vector<Vehicle> undock()
 
       Undock the port, separating the vehicle into two. Returns once it has undocked.
       Throws an exception if the port is not docked.
+
+
+      :returns: The new vehicles.
+   
+
+      .. note::
+
+         Docking and undocking replace the vehicles involved. See :class:`Vehicle`.
+
+
+
+.. class:: Deployable
+
+   A part that deploys and retracts, such as a landing leg, a solar panel or a service
+   module door. Obtained from :func:`Part::deployables`.
+
+   .. note::
+
+      Deploying or retracting a part moves its symmetric copies with it, as the part's menu
+      in the game does.
+
+   .. function:: Part part()
+
+      The part the deployable is in.
+
+   
+
+   .. function:: DeployableState state()
+
+      The state of the part.
+
+   
+
+   .. function:: void deploy()
+
+      Deploy the part. Returns once it has started to move.
 
 
    
 
       .. note::
 
-         Docking and undocking replace the vehicles involved. See :class:`Vehicle`.
+         Throws an exception if the part is broken.
+
+   .. function:: void retract()
+
+      Retract the part. Returns once it has started to move.
+
+
+   
+
+      .. note::
+
+         Throws an exception if the part is broken.
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: DeployableState
+
+   The state of a deployable part. See :func:`Deployable::state`.
+
+
+   .. enumerator:: deployed
+
+      Fully deployed.
+
+
+   .. enumerator:: retracted
+
+      Fully retracted.
+
+
+   .. enumerator:: deploying
+
+      Moving toward deployed.
+
+
+   .. enumerator:: retracting
+
+      Moving toward retracted.
+
+
+   .. enumerator:: broken
+
+      Broken, so it can no longer move.
+
+
+
+.. class:: MagneticScoop
+
+   A magnetic scoop, which collects gas from space into the vehicle's tanks. Obtained from
+   :func:`Part::magnetic_scoops`.
+
+   .. function:: Part part()
+
+      The part the scoop is in.
+
+   
+
+   .. function:: bool active()
+   .. function:: void set_active(bool value)
+
+      Whether the scoop is switched on.
+
+   
+
+   .. function:: std::string substance()
+
+      The name of the substance the scoop collects. See :func:`Resource::name`.
+
+   
+
+   .. function:: float collection_rate()
+
+      The rate the scoop collects gas at, in kilograms per second.

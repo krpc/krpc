@@ -3,13 +3,17 @@ Object Lifetime
 
 Many procedures return an object: a vehicle, a part, a burn, an orbit. Each identifies
 something in the game, and every call made through it reads that game state. This script
-fires the lowest decoupler of the active vehicle, then finds the part it separated:
+fires the lowest decoupler of the active vehicle, which returns the vehicles it separated, then
+finds the part it separated:
 
 .. literalinclude:: /scripts/user-guide/object-lifetime/Decouple.py
    :language: python
    :start-after: [docs]
    :end-before: [/docs]
    :dedent:
+
+A call through an object whose game object is gone raises ``KRPC.ObjectDestroyedException``,
+and the server frees the object.
 
 Vehicles
 --------

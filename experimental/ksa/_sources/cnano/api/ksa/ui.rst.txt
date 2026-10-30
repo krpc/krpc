@@ -1,0 +1,667 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+UI
+==
+
+
+.. type:: krpc_KSA_UI_t
+
+   Adds windows of buttons, text fields and other widgets to the game's UI.
+
+   .. note::
+
+      The windows are removed when the client that added them disconnects. For messages on
+      the screen, see :func:`krpc_KSA_ShowMessage`.
+
+   .. function:: krpc_error_t krpc_KSA_UI_AddWindow(krpc_connection_t connection, krpc_KSA_Window_t * returnValue, const char * title, bool visible)
+
+      Add a window, with no widgets.
+
+      :Parameters:
+
+       * **title** -- The text in the title bar.
+       * **visible** -- Whether the window is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_UI_Clear(krpc_connection_t connection, bool clientOnly)
+
+      Remove the windows.
+
+      :Parameters:
+
+       * **clientOnly** -- Whether to remove only the windows added by the calling client.
+
+   
+
+
+
+.. type:: krpc_KSA_Window_t
+
+   A window, holding widgets one per line. Created using :func:`krpc_KSA_UI_AddWindow`.
+
+   .. note::
+
+      The window fits its widgets until its size is set. Closing the window makes it
+      invisible. The window is hidden with the game's UI.
+
+   .. function:: krpc_error_t krpc_KSA_Window_Title(krpc_connection_t connection, char * * returnValue, krpc_KSA_Window_t instance)
+   .. function:: krpc_error_t krpc_KSA_Window_set_Title(krpc_connection_t connection, krpc_KSA_Window_t instance, const char * value)
+
+      The text in the title bar.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Window_Position(krpc_connection_t connection, krpc_tuple_float_float_t * returnValue, krpc_KSA_Window_t instance)
+   .. function:: krpc_error_t krpc_KSA_Window_set_Position(krpc_connection_t connection, krpc_KSA_Window_t instance, const krpc_tuple_float_float_t * value)
+
+      The position of the top left corner of the window, from the top left corner of the
+      game window, in pixels.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Window_Size(krpc_connection_t connection, krpc_tuple_float_float_t * returnValue, krpc_KSA_Window_t instance)
+   .. function:: krpc_error_t krpc_KSA_Window_set_Size(krpc_connection_t connection, krpc_KSA_Window_t instance, const krpc_tuple_float_float_t * value)
+
+      The width and height of the window, in pixels.
+
+   
+
+      .. note::
+
+         Throws an exception if the width or height is not positive.
+
+   .. function:: krpc_error_t krpc_KSA_Window_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Window_t instance)
+   .. function:: krpc_error_t krpc_KSA_Window_set_Visible(krpc_connection_t connection, krpc_KSA_Window_t instance, bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Window_Enabled(krpc_connection_t connection, bool * returnValue, krpc_KSA_Window_t instance)
+   .. function:: krpc_error_t krpc_KSA_Window_set_Enabled(krpc_connection_t connection, krpc_KSA_Window_t instance, bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Window_AddLabel(krpc_connection_t connection, krpc_KSA_Label_t * returnValue, krpc_KSA_Window_t instance, const char * content, bool visible)
+
+      Add a label.
+
+      :Parameters:
+
+       * **content** -- The text of the label.
+       * **visible** -- Whether the label is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Window_AddButton(krpc_connection_t connection, krpc_KSA_Button_t * returnValue, krpc_KSA_Window_t instance, const char * content, bool visible)
+
+      Add a button.
+
+      :Parameters:
+
+       * **content** -- The text on the button.
+       * **visible** -- Whether the button is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Window_AddInputField(krpc_connection_t connection, krpc_KSA_InputField_t * returnValue, krpc_KSA_Window_t instance, const char * label, bool visible)
+
+      Add a text input field, empty.
+
+      :Parameters:
+
+       * **label** -- The text shown next to the field.
+       * **visible** -- Whether the field is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Window_AddSlider(krpc_connection_t connection, krpc_KSA_Slider_t * returnValue, krpc_KSA_Window_t instance, const char * label, float minimum, float maximum, bool visible)
+
+      Add a slider, at its minimum value.
+
+      :Parameters:
+
+       * **label** -- The text shown next to the slider.
+       * **minimum** -- The minimum value.
+       * **maximum** -- The maximum value.
+       * **visible** -- Whether the slider is visible.
+
+   
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. function:: krpc_error_t krpc_KSA_Window_AddToggle(krpc_connection_t connection, krpc_KSA_Toggle_t * returnValue, krpc_KSA_Window_t instance, const char * content, bool visible)
+
+      Add a toggle, unchecked.
+
+      :Parameters:
+
+       * **content** -- The text shown next to the toggle.
+       * **visible** -- Whether the toggle is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Window_AddDropdown(krpc_connection_t connection, krpc_KSA_Dropdown_t * returnValue, krpc_KSA_Window_t instance, const krpc_list_string_t * options, const char * label, bool visible)
+
+      Add a dropdown, with no option selected.
+
+      :Parameters:
+
+       * **options** -- The options to choose from.
+       * **label** -- The text shown next to the dropdown.
+       * **visible** -- Whether the dropdown is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Window_AddSeparator(krpc_connection_t connection, krpc_KSA_Separator_t * returnValue, krpc_KSA_Window_t instance, bool visible)
+
+      Add a horizontal line.
+
+      :Parameters:
+
+       * **visible** -- Whether the line is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Window_AddRow(krpc_connection_t connection, krpc_KSA_Row_t * returnValue, krpc_KSA_Window_t instance, bool visible)
+
+      Add a row, which lays out its widgets from left to right.
+
+      :Parameters:
+
+       * **visible** -- Whether the row is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Window_Remove(krpc_connection_t connection, krpc_KSA_Window_t instance)
+
+      Remove the widget.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Row_t
+
+   A row of widgets, laid out from left to right. Added to a window or a row.
+
+   .. function:: krpc_error_t krpc_KSA_Row_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Row_t instance)
+   .. function:: krpc_error_t krpc_KSA_Row_set_Visible(krpc_connection_t connection, krpc_KSA_Row_t instance, bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Row_Enabled(krpc_connection_t connection, bool * returnValue, krpc_KSA_Row_t instance)
+   .. function:: krpc_error_t krpc_KSA_Row_set_Enabled(krpc_connection_t connection, krpc_KSA_Row_t instance, bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Row_AddLabel(krpc_connection_t connection, krpc_KSA_Label_t * returnValue, krpc_KSA_Row_t instance, const char * content, bool visible)
+
+      Add a label.
+
+      :Parameters:
+
+       * **content** -- The text of the label.
+       * **visible** -- Whether the label is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Row_AddButton(krpc_connection_t connection, krpc_KSA_Button_t * returnValue, krpc_KSA_Row_t instance, const char * content, bool visible)
+
+      Add a button.
+
+      :Parameters:
+
+       * **content** -- The text on the button.
+       * **visible** -- Whether the button is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Row_AddInputField(krpc_connection_t connection, krpc_KSA_InputField_t * returnValue, krpc_KSA_Row_t instance, const char * label, bool visible)
+
+      Add a text input field, empty.
+
+      :Parameters:
+
+       * **label** -- The text shown next to the field.
+       * **visible** -- Whether the field is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Row_AddSlider(krpc_connection_t connection, krpc_KSA_Slider_t * returnValue, krpc_KSA_Row_t instance, const char * label, float minimum, float maximum, bool visible)
+
+      Add a slider, at its minimum value.
+
+      :Parameters:
+
+       * **label** -- The text shown next to the slider.
+       * **minimum** -- The minimum value.
+       * **maximum** -- The maximum value.
+       * **visible** -- Whether the slider is visible.
+
+   
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. function:: krpc_error_t krpc_KSA_Row_AddToggle(krpc_connection_t connection, krpc_KSA_Toggle_t * returnValue, krpc_KSA_Row_t instance, const char * content, bool visible)
+
+      Add a toggle, unchecked.
+
+      :Parameters:
+
+       * **content** -- The text shown next to the toggle.
+       * **visible** -- Whether the toggle is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Row_AddDropdown(krpc_connection_t connection, krpc_KSA_Dropdown_t * returnValue, krpc_KSA_Row_t instance, const krpc_list_string_t * options, const char * label, bool visible)
+
+      Add a dropdown, with no option selected.
+
+      :Parameters:
+
+       * **options** -- The options to choose from.
+       * **label** -- The text shown next to the dropdown.
+       * **visible** -- Whether the dropdown is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Row_AddSeparator(krpc_connection_t connection, krpc_KSA_Separator_t * returnValue, krpc_KSA_Row_t instance, bool visible)
+
+      Add a horizontal line.
+
+      :Parameters:
+
+       * **visible** -- Whether the line is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Row_AddRow(krpc_connection_t connection, krpc_KSA_Row_t * returnValue, krpc_KSA_Row_t instance, bool visible)
+
+      Add a row, which lays out its widgets from left to right.
+
+      :Parameters:
+
+       * **visible** -- Whether the row is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Row_Remove(krpc_connection_t connection, krpc_KSA_Row_t instance)
+
+      Remove the widget.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Label_t
+
+   A line of text. Added to a window or a row.
+
+   .. function:: krpc_error_t krpc_KSA_Label_Content(krpc_connection_t connection, char * * returnValue, krpc_KSA_Label_t instance)
+   .. function:: krpc_error_t krpc_KSA_Label_set_Content(krpc_connection_t connection, krpc_KSA_Label_t instance, const char * value)
+
+      The text of the label.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Label_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Label_t instance)
+   .. function:: krpc_error_t krpc_KSA_Label_set_Visible(krpc_connection_t connection, krpc_KSA_Label_t instance, bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Label_Enabled(krpc_connection_t connection, bool * returnValue, krpc_KSA_Label_t instance)
+   .. function:: krpc_error_t krpc_KSA_Label_set_Enabled(krpc_connection_t connection, krpc_KSA_Label_t instance, bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Label_Remove(krpc_connection_t connection, krpc_KSA_Label_t instance)
+
+      Remove the widget.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Button_t
+
+   A button. Added to a window or a row.
+
+   .. function:: krpc_error_t krpc_KSA_Button_Content(krpc_connection_t connection, char * * returnValue, krpc_KSA_Button_t instance)
+   .. function:: krpc_error_t krpc_KSA_Button_set_Content(krpc_connection_t connection, krpc_KSA_Button_t instance, const char * value)
+
+      The text on the button.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Button_Clicked(krpc_connection_t connection, bool * returnValue, krpc_KSA_Button_t instance)
+   .. function:: krpc_error_t krpc_KSA_Button_set_Clicked(krpc_connection_t connection, krpc_KSA_Button_t instance, bool value)
+
+      Whether the button has been clicked.
+
+   
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``.
+
+   .. function:: krpc_error_t krpc_KSA_Button_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Button_t instance)
+   .. function:: krpc_error_t krpc_KSA_Button_set_Visible(krpc_connection_t connection, krpc_KSA_Button_t instance, bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Button_Enabled(krpc_connection_t connection, bool * returnValue, krpc_KSA_Button_t instance)
+   .. function:: krpc_error_t krpc_KSA_Button_set_Enabled(krpc_connection_t connection, krpc_KSA_Button_t instance, bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Button_Remove(krpc_connection_t connection, krpc_KSA_Button_t instance)
+
+      Remove the widget.
+
+
+   
+
+
+
+.. type:: krpc_KSA_InputField_t
+
+   A single line text input field. Added to a window or a row.
+
+   .. note::
+
+      While the field is being edited, the game clears the rotation and translation inputs
+      of the controlled vehicle each frame.
+
+   .. function:: krpc_error_t krpc_KSA_InputField_Label(krpc_connection_t connection, char * * returnValue, krpc_KSA_InputField_t instance)
+   .. function:: krpc_error_t krpc_KSA_InputField_set_Label(krpc_connection_t connection, krpc_KSA_InputField_t instance, const char * value)
+
+      The text shown next to the field.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_InputField_Value(krpc_connection_t connection, char * * returnValue, krpc_KSA_InputField_t instance)
+   .. function:: krpc_error_t krpc_KSA_InputField_set_Value(krpc_connection_t connection, krpc_KSA_InputField_t instance, const char * value)
+
+      The text in the field.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_InputField_Changed(krpc_connection_t connection, bool * returnValue, krpc_KSA_InputField_t instance)
+   .. function:: krpc_error_t krpc_KSA_InputField_set_Changed(krpc_connection_t connection, krpc_KSA_InputField_t instance, bool value)
+
+      Whether the text has been edited.
+
+   
+
+      .. note::
+
+         An edit sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :func:`krpc_KSA_InputField_Value` leaves it unchanged.
+
+   .. function:: krpc_error_t krpc_KSA_InputField_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_InputField_t instance)
+   .. function:: krpc_error_t krpc_KSA_InputField_set_Visible(krpc_connection_t connection, krpc_KSA_InputField_t instance, bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_InputField_Enabled(krpc_connection_t connection, bool * returnValue, krpc_KSA_InputField_t instance)
+   .. function:: krpc_error_t krpc_KSA_InputField_set_Enabled(krpc_connection_t connection, krpc_KSA_InputField_t instance, bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_InputField_Remove(krpc_connection_t connection, krpc_KSA_InputField_t instance)
+
+      Remove the widget.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Slider_t
+
+   A horizontal slider. Added to a window or a row.
+
+   .. function:: krpc_error_t krpc_KSA_Slider_Label(krpc_connection_t connection, char * * returnValue, krpc_KSA_Slider_t instance)
+   .. function:: krpc_error_t krpc_KSA_Slider_set_Label(krpc_connection_t connection, krpc_KSA_Slider_t instance, const char * value)
+
+      The text shown next to the slider.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Slider_Value(krpc_connection_t connection, float * returnValue, krpc_KSA_Slider_t instance)
+   .. function:: krpc_error_t krpc_KSA_Slider_set_Value(krpc_connection_t connection, krpc_KSA_Slider_t instance, float value)
+
+      The value of the slider, clamped to its range.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Slider_Minimum(krpc_connection_t connection, float * returnValue, krpc_KSA_Slider_t instance)
+   .. function:: krpc_error_t krpc_KSA_Slider_set_Minimum(krpc_connection_t connection, krpc_KSA_Slider_t instance, float value)
+
+      The minimum value.
+
+   
+
+      .. note::
+
+         Throws an exception if set to a value not less than the maximum.
+
+   .. function:: krpc_error_t krpc_KSA_Slider_Maximum(krpc_connection_t connection, float * returnValue, krpc_KSA_Slider_t instance)
+   .. function:: krpc_error_t krpc_KSA_Slider_set_Maximum(krpc_connection_t connection, krpc_KSA_Slider_t instance, float value)
+
+      The maximum value.
+
+   
+
+      .. note::
+
+         Throws an exception if set to a value not greater than the minimum.
+
+   .. function:: krpc_error_t krpc_KSA_Slider_Changed(krpc_connection_t connection, bool * returnValue, krpc_KSA_Slider_t instance)
+   .. function:: krpc_error_t krpc_KSA_Slider_set_Changed(krpc_connection_t connection, krpc_KSA_Slider_t instance, bool value)
+
+      Whether the value has been changed by dragging the slider.
+
+   
+
+      .. note::
+
+         A change sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :func:`krpc_KSA_Slider_Value` leaves it unchanged.
+
+   .. function:: krpc_error_t krpc_KSA_Slider_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Slider_t instance)
+   .. function:: krpc_error_t krpc_KSA_Slider_set_Visible(krpc_connection_t connection, krpc_KSA_Slider_t instance, bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Slider_Enabled(krpc_connection_t connection, bool * returnValue, krpc_KSA_Slider_t instance)
+   .. function:: krpc_error_t krpc_KSA_Slider_set_Enabled(krpc_connection_t connection, krpc_KSA_Slider_t instance, bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Slider_Remove(krpc_connection_t connection, krpc_KSA_Slider_t instance)
+
+      Remove the widget.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Toggle_t
+
+   A check box with a label. Added to a window or a row.
+
+   .. function:: krpc_error_t krpc_KSA_Toggle_Content(krpc_connection_t connection, char * * returnValue, krpc_KSA_Toggle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Toggle_set_Content(krpc_connection_t connection, krpc_KSA_Toggle_t instance, const char * value)
+
+      The text shown next to the toggle.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Toggle_Checked(krpc_connection_t connection, bool * returnValue, krpc_KSA_Toggle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Toggle_set_Checked(krpc_connection_t connection, krpc_KSA_Toggle_t instance, bool value)
+
+      Whether the toggle is checked.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Toggle_Changed(krpc_connection_t connection, bool * returnValue, krpc_KSA_Toggle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Toggle_set_Changed(krpc_connection_t connection, krpc_KSA_Toggle_t instance, bool value)
+
+      Whether the toggle has been clicked.
+
+   
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :func:`krpc_KSA_Toggle_Checked` leaves it unchanged.
+
+   .. function:: krpc_error_t krpc_KSA_Toggle_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Toggle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Toggle_set_Visible(krpc_connection_t connection, krpc_KSA_Toggle_t instance, bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Toggle_Enabled(krpc_connection_t connection, bool * returnValue, krpc_KSA_Toggle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Toggle_set_Enabled(krpc_connection_t connection, krpc_KSA_Toggle_t instance, bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Toggle_Remove(krpc_connection_t connection, krpc_KSA_Toggle_t instance)
+
+      Remove the widget.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Dropdown_t
+
+   A dropdown list of options. Added to a window or a row.
+
+   .. function:: krpc_error_t krpc_KSA_Dropdown_Label(krpc_connection_t connection, char * * returnValue, krpc_KSA_Dropdown_t instance)
+   .. function:: krpc_error_t krpc_KSA_Dropdown_set_Label(krpc_connection_t connection, krpc_KSA_Dropdown_t instance, const char * value)
+
+      The text shown next to the dropdown.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Dropdown_Options(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_KSA_Dropdown_t instance)
+   .. function:: krpc_error_t krpc_KSA_Dropdown_set_Options(krpc_connection_t connection, krpc_KSA_Dropdown_t instance, const krpc_list_string_t * value)
+
+      The options to choose from.
+
+   
+
+      .. note::
+
+         Setting the options clears the selection if the selected index is no longer in
+         the list.
+
+   .. function:: krpc_error_t krpc_KSA_Dropdown_SelectedIndex(krpc_connection_t connection, int32_t * returnValue, krpc_KSA_Dropdown_t instance)
+   .. function:: krpc_error_t krpc_KSA_Dropdown_set_SelectedIndex(krpc_connection_t connection, krpc_KSA_Dropdown_t instance, int32_t value)
+
+      The index of the selected option, or -1 for none.
+
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. function:: krpc_error_t krpc_KSA_Dropdown_Changed(krpc_connection_t connection, bool * returnValue, krpc_KSA_Dropdown_t instance)
+   .. function:: krpc_error_t krpc_KSA_Dropdown_set_Changed(krpc_connection_t connection, krpc_KSA_Dropdown_t instance, bool value)
+
+      Whether an option has been chosen from the list.
+
+   
+
+      .. note::
+
+         A choice sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :func:`krpc_KSA_Dropdown_SelectedIndex` leaves it unchanged.
+
+   .. function:: krpc_error_t krpc_KSA_Dropdown_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Dropdown_t instance)
+   .. function:: krpc_error_t krpc_KSA_Dropdown_set_Visible(krpc_connection_t connection, krpc_KSA_Dropdown_t instance, bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Dropdown_Enabled(krpc_connection_t connection, bool * returnValue, krpc_KSA_Dropdown_t instance)
+   .. function:: krpc_error_t krpc_KSA_Dropdown_set_Enabled(krpc_connection_t connection, krpc_KSA_Dropdown_t instance, bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Dropdown_Remove(krpc_connection_t connection, krpc_KSA_Dropdown_t instance)
+
+      Remove the widget.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Separator_t
+
+   A horizontal line between widgets. Added to a window or a row.
+
+   .. function:: krpc_error_t krpc_KSA_Separator_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Separator_t instance)
+   .. function:: krpc_error_t krpc_KSA_Separator_set_Visible(krpc_connection_t connection, krpc_KSA_Separator_t instance, bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Separator_Enabled(krpc_connection_t connection, bool * returnValue, krpc_KSA_Separator_t instance)
+   .. function:: krpc_error_t krpc_KSA_Separator_set_Enabled(krpc_connection_t connection, krpc_KSA_Separator_t instance, bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Separator_Remove(krpc_connection_t connection, krpc_KSA_Separator_t instance)
+
+      Remove the widget.

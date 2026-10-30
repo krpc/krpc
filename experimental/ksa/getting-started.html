@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Getting Started &#8212; kRPC v0.1.0 documentation</title>
+    <title>Getting Started &#8212; kRPC v0.2.0 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=1ea62e31" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9c64f2e8" />
   
   <!-- So that users can add custom icons -->
   <script defer src="_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="_static/documentation_options.js?v=01f34227"></script>
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
@@ -53,7 +53,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.0" />
+  <meta name="docsearch:version" content="0.2.0" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -166,6 +166,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="developer-guide.html">
     Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="changelog.html">
+    Changelog
   </a>
 </li>
 
@@ -298,6 +305,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="changelog.html">
+    Changelog
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -419,39 +433,51 @@ the game.</p>
 <h2>The Server Mod<a class="headerlink" href="#the-server-mod" title="Link to this heading">#</a></h2>
 <section id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h3>
-<p>The server is a code mod, which runs in the game through StarMap, the KSA code mod loader:</p>
+<p>The server is a code mod, which runs in the game through StarMap, the KSA code mod loader.
+The simplest way to install it is with the <a class="reference external" href="https://github.com/KSAModding/Borea">Borea</a> mod
+manager. Borea installs StarMap and the mod, and launches the game through StarMap.</p>
+<p>To install the mod by hand:</p>
 <ol class="arabic">
 <li><p>Install <a class="reference external" href="https://github.com/StarMapLoader/StarMap/releases">StarMap</a>
 0.4.8.</p></li>
-<li><p>Copy the <code class="docutils literal notranslate"><span class="pre">kRPC.KSA</span></code> folder from the release archive into the KSA mods folder,
+<li><p>Copy the <code class="docutils literal notranslate"><span class="pre">kRPC</span></code> folder from the release archive into the KSA mods folder,
 <code class="docutils literal notranslate"><span class="pre">&lt;Documents&gt;/My</span> <span class="pre">Games/Kitten</span> <span class="pre">Space</span> <span class="pre">Agency/mods</span></code>.</p></li>
 <li><p>Enable the mod in <code class="docutils literal notranslate"><span class="pre">&lt;Documents&gt;/My</span> <span class="pre">Games/Kitten</span> <span class="pre">Space</span> <span class="pre">Agency/manifest.toml</span></code>:</p>
 <div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="k">[[mods]]</span>
-<span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"kRPC.KSA"</span>
+<span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"kRPC"</span>
 <span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
 </pre></div>
 </div>
 </li>
 <li><p>Launch the game through StarMap.</p></li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Version 0.1.0 named the mod <code class="docutils literal notranslate"><span class="pre">kRPC.KSA</span></code>. To upgrade from it, delete the <code class="docutils literal notranslate"><span class="pre">mods/kRPC.KSA</span></code>
+folder, and change its <code class="docutils literal notranslate"><span class="pre">manifest.toml</span></code> entry to <code class="docutils literal notranslate"><span class="pre">id</span> <span class="pre">=</span> <span class="pre">&quot;kRPC&quot;</span></code>.</p>
+</div>
 <p>The server starts once the game has loaded its mods. It listens on <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code>, with RPC
 port 50000 and stream port 50001, and accepts every connection.</p>
 </section>
+<section id="game-versions">
+<h3>Game Versions<a class="headerlink" href="#game-versions" title="Link to this heading">#</a></h3>
+<p>kRPC for KSA 0.2.0 is built for KSA 2026.10.25.5707, and may run on other versions. If the mod
+detects that the game version is not supported, a pop-up warns you, and lists the RPCs that use
+game code missing from it. Those RPCs throw an exception when called. Other RPCs may still
+behave differently, as the check finds only missing code. <strong>Don’t show again for this version</strong>
+hides the pop-up until the game updates.</p>
+</section>
 <section id="configuration">
 <h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h3>
-<p>The settings are in <code class="docutils literal notranslate"><span class="pre">kRPC.KSA/settings.toml</span></code>:</p>
-<div class="highlight-toml notranslate"><div class="highlight"><pre><span></span><span class="n">auto_start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
-<span class="n">auto_accept_connections</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
-
-<span class="k">[[servers]]</span>
-<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Default Server"</span>
-<span class="n">protocol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"ProtocolBuffersOverTCP"</span>
-<span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"127.0.0.1"</span>
-<span class="n">rpc_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50000</span>
-<span class="n">stream_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50001</span>
-</pre></div>
-</div>
-<p>Set <code class="docutils literal notranslate"><span class="pre">address</span></code> to <code class="docutils literal notranslate"><span class="pre">0.0.0.0</span></code> to accept connections from other machines.</p>
+<p>The <strong>kRPC</strong> menu in the game’s menu bar opens the server window and the server info window,
+and starts and stops the server. The server window shows each server’s address and connected
+clients, and edits its protocol, address and ports. <strong>Advanced settings</strong> at the bottom of the
+window holds the connection and rate control settings. The kRPC documentation describes the
+<a class="reference external" href="https://krpc.github.io/krpc/0.7.0/internals.html#server-performance-settings">rate control settings</a> in
+more detail.</p>
+<p>Set the address to <strong>Any</strong> to accept connections from other machines.</p>
+<p>The window saves its settings to <code class="docutils literal notranslate"><span class="pre">kRPC/settings.toml</span></code> in the mods folder. Installing the
+mod again restores the default settings.</p>
 </section>
 </section>
 <section id="the-python-client">
@@ -474,8 +500,7 @@ port 50000 and stream port 50001, and accepts every connection.</p>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Active vehicle: </span><span class="si">{</span><span class="n">vehicle</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">vehicle</span><span class="o">.</span><span class="n">situation</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The client builds the <code class="docutils literal notranslate"><span class="pre">KSA</span></code> service from the definitions the server sends when it connects,
-so the service is <code class="docutils literal notranslate"><span class="pre">conn.ksa</span></code>. The complete script, <a class="reference download internal" download="" href="_downloads/f7eba7b66edf197369eabe9a162536bd/telemetry.py"><code class="xref download docutils literal notranslate"><span class="pre">telemetry.py</span></code></a>, goes on to print the vehicle’s altitude, apoapsis and attitude once a
+<p>The complete script, <a class="reference download internal" download="" href="_downloads/f7eba7b66edf197369eabe9a162536bd/telemetry.py"><code class="xref download docutils literal notranslate"><span class="pre">telemetry.py</span></code></a>, goes on to print the vehicle’s altitude, apoapsis and attitude once a
 second.</p>
 </section>
 </section>
@@ -484,10 +509,11 @@ second.</p>
 <ul class="simple">
 <li><p>The <a class="reference internal" href="tutorials.html"><span class="doc">Tutorials</span></a> walk through complete scripts, from <a class="reference internal" href="tutorials/launch-into-orbit.html"><span class="doc">Launching into Orbit</span></a>
 to planning and executing burns.</p></li>
-<li><p>The <a class="reference internal" href="user-guide.html"><span class="doc">User Guides</span></a> describe how the server and the game behave. <a class="reference internal" href="user-guide/server-side-functions.html"><span class="doc">Server side
-functions</span></a> run your code inside the game, for events and
-streams computed there.</p></li>
-<li><p>The <a class="reference internal" href="clients.html"><span class="doc">Clients</span></a> pages cover each client language, and the API reference.</p></li>
+<li><p>The <a class="reference internal" href="user-guide.html"><span class="doc">User Guides</span></a> describe how the server and the game behave, from reference frames to
+the auto-pilot. They cover running code in the game using <a class="reference internal" href="user-guide/server-side-functions.html"><span class="doc">server side functions</span></a>, the <a class="reference internal" href="user-guide/timing.html"><span class="doc">timing</span></a> of calls, and
+the <a class="reference internal" href="user-guide/object-lifetime.html"><span class="doc">lifetime</span></a> of the objects the server returns.</p></li>
+<li><p>The <a class="reference internal" href="clients.html"><span class="doc">Clients</span></a> pages cover installing and using each client language, with its API
+reference.</p></li>
 </ul>
 </section>
 </section>
@@ -541,6 +567,7 @@ streams computed there.</p></li>
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-server-mod">The Server Mod</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#game-versions">Game Versions</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
 </ul>
 </li>

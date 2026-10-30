@@ -54,7 +54,7 @@ Auto-Pilot
          Setting :value:`AutoPilotMode.Attitude` targets the vehicle's current pitch,
          heading and roll. Setting :value:`AutoPilotMode.Other` throws an exception.
 
-   .. property:: double TargetPitch { get; set; }
+   .. property:: float TargetPitch { get; set; }
 
       The target pitch, in degrees, between -90° and +90°.
 
@@ -66,7 +66,7 @@ Auto-Pilot
          Setting it sets :prop:`AutoPilot.Mode` to :value:`AutoPilotMode.Attitude`.
          Returns NaN in any other mode.
 
-   .. property:: double TargetHeading { get; set; }
+   .. property:: float TargetHeading { get; set; }
 
       The target heading, in degrees, between 0° and 360°.
 
@@ -78,7 +78,7 @@ Auto-Pilot
          Setting it sets :prop:`AutoPilot.Mode` to :value:`AutoPilotMode.Attitude`.
          Returns NaN in any other mode.
 
-   .. property:: double TargetRoll { get; set; }
+   .. property:: float TargetRoll { get; set; }
 
       The target roll, in degrees. NaN when the auto-pilot does not control roll.
 
@@ -91,7 +91,7 @@ Auto-Pilot
          Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
          :value:`AutoPilotMode.Attitude`.
 
-   .. function:: void TargetPitchAndHeading(double pitch, double heading)
+   .. function:: void TargetPitchAndHeading(float pitch, float heading)
 
       Set the target pitch and heading, and the mode to
       :value:`AutoPilotMode.Attitude`.
@@ -117,14 +117,14 @@ Auto-Pilot
 
       :Game Scenes: Flight
 
-   .. property:: double Error { get; }
+   .. property:: float Error { get; }
 
       The angle between the direction the vehicle points in and the target direction,
       in degrees. NaN when the auto-pilot is not engaged.
 
       :Game Scenes: Flight
 
-   .. property:: double RollError { get; }
+   .. property:: float RollError { get; }
 
       The angle between the vehicle's roll and the target roll, in degrees.
       NaN when the auto-pilot is not engaged.

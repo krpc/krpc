@@ -1,0 +1,519 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Drawing
+=======
+
+
+.. type:: krpc_KSA_Drawing_t
+
+   Draws lines, shapes and text in the scene, each placed in a reference frame.
+
+   .. note::
+
+      The objects are drawn every frame until removed, and are removed when the client that
+      added them disconnects. Lines are drawn at the game's fixed gizmo width.
+
+   .. function:: krpc_error_t krpc_KSA_Drawing_AddLine(krpc_connection_t connection, krpc_KSA_Line_t * returnValue, const krpc_tuple_double_double_double_t * start, const krpc_tuple_double_double_double_t * end, krpc_KSA_ReferenceFrame_t referenceFrame, bool visible)
+
+      Draw a line between two positions.
+
+      :Parameters:
+
+       * **start** -- The position of the start of the line, in meters.
+       * **end** -- The position of the end of the line, in meters.
+       * **referenceFrame** -- The reference frame of the positions.
+       * **visible** -- Whether the line is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Drawing_AddDirection(krpc_connection_t connection, krpc_KSA_Line_t * returnValue, const krpc_tuple_double_double_double_t * direction, krpc_KSA_ReferenceFrame_t referenceFrame, float length, bool visible)
+
+      Draw a line from the origin of a reference frame in a direction.
+
+      :Parameters:
+
+       * **direction** -- The direction of the line.
+       * **referenceFrame** -- The reference frame of the direction.
+       * **length** -- The length of the line, in meters.
+       * **visible** -- Whether the line is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Drawing_AddPolyline(krpc_connection_t connection, krpc_KSA_Polyline_t * returnValue, const krpc_list_tuple_double_double_double_t * vertices, krpc_KSA_ReferenceFrame_t referenceFrame, bool closed, bool visible)
+
+      Draw a line through a list of positions.
+
+      :Parameters:
+
+       * **vertices** -- The positions the line passes through, in meters.
+       * **referenceFrame** -- The reference frame of the positions.
+       * **closed** -- Whether the line joins the last position back to the first.
+       * **visible** -- Whether the line is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Drawing_AddCircle(krpc_connection_t connection, krpc_KSA_Circle_t * returnValue, const krpc_tuple_double_double_double_t * center, const krpc_tuple_double_double_double_t * normal, float radius, krpc_KSA_ReferenceFrame_t referenceFrame, bool visible)
+
+      Draw a circle.
+
+      :Parameters:
+
+       * **center** -- The position of the center of the circle, in meters.
+       * **normal** -- The direction normal to the plane of the circle.
+       * **radius** -- The radius of the circle, in meters.
+       * **referenceFrame** -- The reference frame of the position and direction.
+       * **visible** -- Whether the circle is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Drawing_AddArc(krpc_connection_t connection, krpc_KSA_Arc_t * returnValue, const krpc_tuple_double_double_double_t * center, const krpc_tuple_double_double_double_t * normal, const krpc_tuple_double_double_double_t * startDirection, float angle, float radius, krpc_KSA_ReferenceFrame_t referenceFrame, bool visible)
+
+      Draw an arc of a circle.
+
+      :Parameters:
+
+       * **center** -- The position of the center of the arc's circle, in meters.
+       * **normal** -- The direction normal to the plane of the arc.
+       * **startDirection** -- The direction from the center to the start of the arc.
+       * **angle** -- The angle the arc turns through, counterclockwise about the normal, in radians.
+       * **radius** -- The radius of the arc, in meters.
+       * **referenceFrame** -- The reference frame of the position and directions.
+       * **visible** -- Whether the arc is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Drawing_AddBox(krpc_connection_t connection, krpc_KSA_Box_t * returnValue, const krpc_tuple_double_double_double_t * center, const krpc_tuple_double_double_double_t * size, const krpc_tuple_double_double_double_double_t * rotation, krpc_KSA_ReferenceFrame_t referenceFrame, bool visible)
+
+      Draw the edges of a box.
+
+      :Parameters:
+
+       * **center** -- The position of the center of the box, in meters.
+       * **size** -- The lengths of the box's edges along its x, y and z axes, in meters.
+       * **rotation** -- The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+       * **referenceFrame** -- The reference frame of the position and rotation.
+       * **visible** -- Whether the box is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Drawing_AddSphere(krpc_connection_t connection, krpc_KSA_Sphere_t * returnValue, const krpc_tuple_double_double_double_t * center, float radius, krpc_KSA_ReferenceFrame_t referenceFrame, bool visible)
+
+      Draw a solid sphere.
+
+      :Parameters:
+
+       * **center** -- The position of the center of the sphere, in meters.
+       * **radius** -- The radius of the sphere, in meters.
+       * **referenceFrame** -- The reference frame of the position.
+       * **visible** -- Whether the sphere is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Drawing_AddText(krpc_connection_t connection, krpc_KSA_Text_t * returnValue, const char * text, const krpc_tuple_double_double_double_t * position, krpc_KSA_ReferenceFrame_t referenceFrame, float size, bool visible)
+
+      Draw text over the scene, centered on a position.
+
+      :Parameters:
+
+       * **text** -- The text.
+       * **position** -- The position of the center of the text, in meters.
+       * **referenceFrame** -- The reference frame of the position.
+       * **size** -- The height of the font, in pixels.
+       * **visible** -- Whether the text is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Drawing_Clear(krpc_connection_t connection, bool clientOnly)
+
+      Remove the drawing objects.
+
+      :Parameters:
+
+       * **clientOnly** -- Whether to remove only the objects added by the calling client.
+
+   
+
+
+
+.. type:: krpc_KSA_Line_t
+
+   A line. Created using :func:`krpc_KSA_Drawing_AddLine` or :func:`krpc_KSA_Drawing_AddDirection`.
+
+   .. function:: krpc_error_t krpc_KSA_Line_Start(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Line_t instance)
+   .. function:: krpc_error_t krpc_KSA_Line_set_Start(krpc_connection_t connection, krpc_KSA_Line_t instance, const krpc_tuple_double_double_double_t * value)
+
+      The start position of the line, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Line_End(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Line_t instance)
+   .. function:: krpc_error_t krpc_KSA_Line_set_End(krpc_connection_t connection, krpc_KSA_Line_t instance, const krpc_tuple_double_double_double_t * value)
+
+      The end position of the line, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Line_ReferenceFrame(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_Line_t instance)
+   .. function:: krpc_error_t krpc_KSA_Line_set_ReferenceFrame(krpc_connection_t connection, krpc_KSA_Line_t instance, krpc_KSA_ReferenceFrame_t value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Line_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Line_t instance)
+   .. function:: krpc_error_t krpc_KSA_Line_set_Visible(krpc_connection_t connection, krpc_KSA_Line_t instance, bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Line_Color(krpc_connection_t connection, krpc_StdLib_ColorRGB_t * returnValue, krpc_KSA_Line_t instance)
+   .. function:: krpc_error_t krpc_KSA_Line_set_Color(krpc_connection_t connection, krpc_KSA_Line_t instance, const krpc_StdLib_ColorRGB_t * value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Line_Remove(krpc_connection_t connection, krpc_KSA_Line_t instance)
+
+      Remove the object.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Polyline_t
+
+   A line through a list of points. Created using :func:`krpc_KSA_Drawing_AddPolyline`.
+
+   .. function:: krpc_error_t krpc_KSA_Polyline_Vertices(krpc_connection_t connection, krpc_list_tuple_double_double_double_t * returnValue, krpc_KSA_Polyline_t instance)
+   .. function:: krpc_error_t krpc_KSA_Polyline_set_Vertices(krpc_connection_t connection, krpc_KSA_Polyline_t instance, const krpc_list_tuple_double_double_double_t * value)
+
+      The points the line passes through, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Polyline_Closed(krpc_connection_t connection, bool * returnValue, krpc_KSA_Polyline_t instance)
+   .. function:: krpc_error_t krpc_KSA_Polyline_set_Closed(krpc_connection_t connection, krpc_KSA_Polyline_t instance, bool value)
+
+      Whether the line joins the last point back to the first.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Polyline_ReferenceFrame(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_Polyline_t instance)
+   .. function:: krpc_error_t krpc_KSA_Polyline_set_ReferenceFrame(krpc_connection_t connection, krpc_KSA_Polyline_t instance, krpc_KSA_ReferenceFrame_t value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Polyline_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Polyline_t instance)
+   .. function:: krpc_error_t krpc_KSA_Polyline_set_Visible(krpc_connection_t connection, krpc_KSA_Polyline_t instance, bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Polyline_Color(krpc_connection_t connection, krpc_StdLib_ColorRGB_t * returnValue, krpc_KSA_Polyline_t instance)
+   .. function:: krpc_error_t krpc_KSA_Polyline_set_Color(krpc_connection_t connection, krpc_KSA_Polyline_t instance, const krpc_StdLib_ColorRGB_t * value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Polyline_Remove(krpc_connection_t connection, krpc_KSA_Polyline_t instance)
+
+      Remove the object.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Circle_t
+
+   A circle. Created using :func:`krpc_KSA_Drawing_AddCircle`.
+
+   .. function:: krpc_error_t krpc_KSA_Circle_Center(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Circle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Circle_set_Center(krpc_connection_t connection, krpc_KSA_Circle_t instance, const krpc_tuple_double_double_double_t * value)
+
+      The position of the center of the circle, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Circle_Normal(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Circle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Circle_set_Normal(krpc_connection_t connection, krpc_KSA_Circle_t instance, const krpc_tuple_double_double_double_t * value)
+
+      The direction normal to the plane of the circle, as a unit vector.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Circle_Radius(krpc_connection_t connection, float * returnValue, krpc_KSA_Circle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Circle_set_Radius(krpc_connection_t connection, krpc_KSA_Circle_t instance, float value)
+
+      The radius of the circle, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Circle_ReferenceFrame(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_Circle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Circle_set_ReferenceFrame(krpc_connection_t connection, krpc_KSA_Circle_t instance, krpc_KSA_ReferenceFrame_t value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Circle_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Circle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Circle_set_Visible(krpc_connection_t connection, krpc_KSA_Circle_t instance, bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Circle_Color(krpc_connection_t connection, krpc_StdLib_ColorRGB_t * returnValue, krpc_KSA_Circle_t instance)
+   .. function:: krpc_error_t krpc_KSA_Circle_set_Color(krpc_connection_t connection, krpc_KSA_Circle_t instance, const krpc_StdLib_ColorRGB_t * value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Circle_Remove(krpc_connection_t connection, krpc_KSA_Circle_t instance)
+
+      Remove the object.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Arc_t
+
+   An arc of a circle. Created using :func:`krpc_KSA_Drawing_AddArc`.
+
+   .. function:: krpc_error_t krpc_KSA_Arc_Center(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Arc_t instance)
+   .. function:: krpc_error_t krpc_KSA_Arc_set_Center(krpc_connection_t connection, krpc_KSA_Arc_t instance, const krpc_tuple_double_double_double_t * value)
+
+      The position of the center of the arc's circle, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Arc_Normal(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Arc_t instance)
+   .. function:: krpc_error_t krpc_KSA_Arc_set_Normal(krpc_connection_t connection, krpc_KSA_Arc_t instance, const krpc_tuple_double_double_double_t * value)
+
+      The direction normal to the plane of the arc, as a unit vector.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Arc_StartDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Arc_t instance)
+   .. function:: krpc_error_t krpc_KSA_Arc_set_StartDirection(krpc_connection_t connection, krpc_KSA_Arc_t instance, const krpc_tuple_double_double_double_t * value)
+
+      The direction from the center to the start of the arc, as a unit vector.
+
+   
+
+      .. note::
+
+         The part of the direction along :func:`krpc_KSA_Arc_Normal` is ignored.
+
+   .. function:: krpc_error_t krpc_KSA_Arc_Angle(krpc_connection_t connection, float * returnValue, krpc_KSA_Arc_t instance)
+   .. function:: krpc_error_t krpc_KSA_Arc_set_Angle(krpc_connection_t connection, krpc_KSA_Arc_t instance, float value)
+
+      The angle the arc turns through, counterclockwise about :func:`krpc_KSA_Arc_Normal`, in radians.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Arc_Radius(krpc_connection_t connection, float * returnValue, krpc_KSA_Arc_t instance)
+   .. function:: krpc_error_t krpc_KSA_Arc_set_Radius(krpc_connection_t connection, krpc_KSA_Arc_t instance, float value)
+
+      The radius of the arc, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Arc_ReferenceFrame(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_Arc_t instance)
+   .. function:: krpc_error_t krpc_KSA_Arc_set_ReferenceFrame(krpc_connection_t connection, krpc_KSA_Arc_t instance, krpc_KSA_ReferenceFrame_t value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Arc_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Arc_t instance)
+   .. function:: krpc_error_t krpc_KSA_Arc_set_Visible(krpc_connection_t connection, krpc_KSA_Arc_t instance, bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Arc_Color(krpc_connection_t connection, krpc_StdLib_ColorRGB_t * returnValue, krpc_KSA_Arc_t instance)
+   .. function:: krpc_error_t krpc_KSA_Arc_set_Color(krpc_connection_t connection, krpc_KSA_Arc_t instance, const krpc_StdLib_ColorRGB_t * value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Arc_Remove(krpc_connection_t connection, krpc_KSA_Arc_t instance)
+
+      Remove the object.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Box_t
+
+   The edges of a box. Created using :func:`krpc_KSA_Drawing_AddBox`.
+
+   .. function:: krpc_error_t krpc_KSA_Box_Center(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Box_t instance)
+   .. function:: krpc_error_t krpc_KSA_Box_set_Center(krpc_connection_t connection, krpc_KSA_Box_t instance, const krpc_tuple_double_double_double_t * value)
+
+      The position of the center of the box, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Box_Size(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Box_t instance)
+   .. function:: krpc_error_t krpc_KSA_Box_set_Size(krpc_connection_t connection, krpc_KSA_Box_t instance, const krpc_tuple_double_double_double_t * value)
+
+      The lengths of the box's edges along its x, y and z axes, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Box_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_KSA_Box_t instance)
+   .. function:: krpc_error_t krpc_KSA_Box_set_Rotation(krpc_connection_t connection, krpc_KSA_Box_t instance, const krpc_tuple_double_double_double_double_t * value)
+
+      The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Box_ReferenceFrame(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_Box_t instance)
+   .. function:: krpc_error_t krpc_KSA_Box_set_ReferenceFrame(krpc_connection_t connection, krpc_KSA_Box_t instance, krpc_KSA_ReferenceFrame_t value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Box_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Box_t instance)
+   .. function:: krpc_error_t krpc_KSA_Box_set_Visible(krpc_connection_t connection, krpc_KSA_Box_t instance, bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Box_Color(krpc_connection_t connection, krpc_StdLib_ColorRGB_t * returnValue, krpc_KSA_Box_t instance)
+   .. function:: krpc_error_t krpc_KSA_Box_set_Color(krpc_connection_t connection, krpc_KSA_Box_t instance, const krpc_StdLib_ColorRGB_t * value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Box_Remove(krpc_connection_t connection, krpc_KSA_Box_t instance)
+
+      Remove the object.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Sphere_t
+
+   A solid sphere. Created using :func:`krpc_KSA_Drawing_AddSphere`.
+
+   .. function:: krpc_error_t krpc_KSA_Sphere_Center(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Sphere_t instance)
+   .. function:: krpc_error_t krpc_KSA_Sphere_set_Center(krpc_connection_t connection, krpc_KSA_Sphere_t instance, const krpc_tuple_double_double_double_t * value)
+
+      The position of the center of the sphere, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sphere_Radius(krpc_connection_t connection, float * returnValue, krpc_KSA_Sphere_t instance)
+   .. function:: krpc_error_t krpc_KSA_Sphere_set_Radius(krpc_connection_t connection, krpc_KSA_Sphere_t instance, float value)
+
+      The radius of the sphere, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sphere_ReferenceFrame(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_Sphere_t instance)
+   .. function:: krpc_error_t krpc_KSA_Sphere_set_ReferenceFrame(krpc_connection_t connection, krpc_KSA_Sphere_t instance, krpc_KSA_ReferenceFrame_t value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sphere_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Sphere_t instance)
+   .. function:: krpc_error_t krpc_KSA_Sphere_set_Visible(krpc_connection_t connection, krpc_KSA_Sphere_t instance, bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sphere_Color(krpc_connection_t connection, krpc_StdLib_ColorRGB_t * returnValue, krpc_KSA_Sphere_t instance)
+   .. function:: krpc_error_t krpc_KSA_Sphere_set_Color(krpc_connection_t connection, krpc_KSA_Sphere_t instance, const krpc_StdLib_ColorRGB_t * value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Sphere_Remove(krpc_connection_t connection, krpc_KSA_Sphere_t instance)
+
+      Remove the object.
+
+
+   
+
+
+
+.. type:: krpc_KSA_Text_t
+
+   Text drawn over the scene, centered on a position. Created using :func:`krpc_KSA_Drawing_AddText`.
+
+   .. note::
+
+      The text is hidden with the game's UI.
+
+   .. function:: krpc_error_t krpc_KSA_Text_Content(krpc_connection_t connection, char * * returnValue, krpc_KSA_Text_t instance)
+   .. function:: krpc_error_t krpc_KSA_Text_set_Content(krpc_connection_t connection, krpc_KSA_Text_t instance, const char * value)
+
+      The text.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Text_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Text_t instance)
+   .. function:: krpc_error_t krpc_KSA_Text_set_Position(krpc_connection_t connection, krpc_KSA_Text_t instance, const krpc_tuple_double_double_double_t * value)
+
+      The position of the center of the text, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Text_Size(krpc_connection_t connection, float * returnValue, krpc_KSA_Text_t instance)
+   .. function:: krpc_error_t krpc_KSA_Text_set_Size(krpc_connection_t connection, krpc_KSA_Text_t instance, float value)
+
+      The height of the font, in pixels.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Text_ReferenceFrame(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_Text_t instance)
+   .. function:: krpc_error_t krpc_KSA_Text_set_ReferenceFrame(krpc_connection_t connection, krpc_KSA_Text_t instance, krpc_KSA_ReferenceFrame_t value)
+
+      The reference frame for the positions and directions of the object.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Text_Visible(krpc_connection_t connection, bool * returnValue, krpc_KSA_Text_t instance)
+   .. function:: krpc_error_t krpc_KSA_Text_set_Visible(krpc_connection_t connection, krpc_KSA_Text_t instance, bool value)
+
+      Whether the object is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Text_Color(krpc_connection_t connection, krpc_StdLib_ColorRGB_t * returnValue, krpc_KSA_Text_t instance)
+   .. function:: krpc_error_t krpc_KSA_Text_set_Color(krpc_connection_t connection, krpc_KSA_Text_t instance, const krpc_StdLib_ColorRGB_t * value)
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Text_Remove(krpc_connection_t connection, krpc_KSA_Text_t instance)
+
+      Remove the object.

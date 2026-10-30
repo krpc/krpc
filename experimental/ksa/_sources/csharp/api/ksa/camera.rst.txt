@@ -1,0 +1,119 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Camera
+======
+
+
+.. class:: Camera
+
+   The game's main camera. Obtained from :prop:`KSA.Camera <KSA.KSA.Camera>`.
+
+   .. property:: CameraMode Mode { get; set; }
+
+      The mode of the camera.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Setting :value:`CameraMode.IVA` while the camera is not focused on a vehicle
+         with a crew seat sets :value:`CameraMode.Orbit` instead, as the game does. A
+         change of mode releases the active vehicle's held rotation and translation inputs.
+
+   .. property:: float Azimuth { get; set; }
+
+      The angle of the camera around the focused object, in degrees. Throws an exception
+      in any mode other than orbit and map.
+
+      :Game Scenes: All
+
+   .. property:: float Elevation { get; set; }
+
+      The angle of the camera above the plane it orbits in, in degrees, between -90 and
+      90. Throws an exception in any mode other than orbit and map.
+
+      :Game Scenes: All
+
+   .. property:: float Distance { get; set; }
+
+      The distance from the camera to the focused object, in meters. Throws an exception
+      in any mode other than orbit and map.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The camera moves smoothly to a new distance, and stays at least the focused object's
+         radius from it in map mode, and half its radius in orbit mode.
+
+   .. property:: float FieldOfView { get; set; }
+
+      The camera's vertical field of view, in degrees, between 15 and 120.
+
+      :Game Scenes: All
+
+   .. property:: Vehicle FocusedVehicle { get; set; }
+
+      Returns the vehicle the camera is focused on, or ``null`` if it is focused on
+      something else, and sets the focus to a vehicle.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Setting the focus leaves the active vehicle as it is.
+
+   .. property:: Body FocusedBody { get; set; }
+
+      Returns the body the camera is focused on, or ``null`` if it is focused on
+      something else, and sets the focus to a body.
+
+      :Game Scenes: All
+
+   .. property:: Kitten FocusedKitten { get; set; }
+
+      Returns the kitten on EVA the camera is focused on, or ``null`` if it is focused
+      on something else, and sets the focus to a kitten on EVA.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA.
+
+
+
+.. enum:: CameraMode
+
+   The mode of the camera. See :prop:`Camera.Mode`.
+
+
+   .. enumerator:: Orbit
+
+      Orbits the focused object.
+
+
+   .. enumerator:: Free
+
+      Flies freely.
+
+
+   .. enumerator:: Map
+
+      The map view.
+
+
+   .. enumerator:: IVA
+
+      Inside the vehicle, from a crew seat.
+
+
+   .. enumerator:: Fixed
+
+      Fixed to a part of the vehicle, such as a docking port.

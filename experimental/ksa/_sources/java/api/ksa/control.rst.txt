@@ -8,8 +8,14 @@ Control
 
 .. type:: public class Control
 
-   The controls of a vehicle: engines, stabilization and sequences.
+   The controls of a vehicle: engines, manual inputs, stabilization and sequences.
    Obtained from :meth:`Vehicle.getControl()`.
+
+   .. note::
+
+      The rotation and translation inputs act as held keys. Each is on or off, with no
+      partial strength. A held rotation input overrides the auto-pilot on its axis. The game
+      releases the inputs when its window gains or loses focus, or the active vehicle changes.
 
    .. method:: float getThrottle()
 
@@ -33,6 +39,62 @@ Control
 
       :Game Scenes: Flight
 
+   .. method:: int getPitch()
+
+   .. method:: void setPitch(int value)
+
+      The pitch input: 1 for pitch up, -1 for pitch down, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. method:: int getYaw()
+
+   .. method:: void setYaw(int value)
+
+      The yaw input: 1 for yaw right, -1 for yaw left, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. method:: int getRoll()
+
+   .. method:: void setRoll(int value)
+
+      The roll input: 1 for roll right, -1 for roll left, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. method:: int getForward()
+
+   .. method:: void setForward(int value)
+
+      The forward translation input: 1 for forward, -1 for backward, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. method:: int getRight()
+
+   .. method:: void setRight(int value)
+
+      The right translation input: 1 for right, -1 for left, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. method:: int getUp()
+
+   .. method:: void setUp(int value)
+
+      The up translation input: 1 for up, -1 for down, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getPulse()
+
+   .. method:: void setPulse(boolean value)
+
+      Whether the rotation and translation inputs fire the thrusters in short pulses.
+
+      :Game Scenes: Flight
+
    .. method:: boolean getStabilization()
 
    .. method:: void setStabilization(boolean value)
@@ -52,6 +114,14 @@ Control
 
       Whether the flight computer may use the reaction control thrusters for attitude
       control.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getLights()
+
+   .. method:: void setLights(boolean value)
+
+      Whether the vehicle's lights are switched on, as the lights key does.
 
       :Game Scenes: Flight
 

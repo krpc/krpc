@@ -1,0 +1,243 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Crew
+====
+
+
+.. class:: Kitten
+
+   A kitten in the agency's roster. Obtained from :prop:`KSA.Kittens <KSA.KSA.Kittens>`,
+   :prop:`Vehicle.Crew` or :prop:`Seat.Kitten`.
+
+   .. property:: string Name { get; }
+
+      The kitten's name, which is unique in the roster.
+
+      :Game Scenes: All
+
+   .. property:: int RosterIndex { get; }
+
+      The kitten's position in the agency's roster, from 0. See :prop:`KSA.Kittens <KSA.KSA.Kittens>`.
+
+      :Game Scenes: All
+
+   .. property:: Vehicle Vehicle { get; }
+
+      The vehicle the kitten is in, or ``null`` if it is not in a seat.
+
+      :Game Scenes: All
+
+   .. property:: Seat Seat { get; }
+
+      The seat the kitten is in, or ``null`` if it is not in a seat.
+
+      :Game Scenes: All
+
+   .. property:: bool KilledInAction { get; }
+
+      Whether the kitten has been killed in action.
+
+      :Game Scenes: All
+
+   .. property:: int MissionCount { get; }
+
+      The number of missions the kitten has flown, including the current one.
+
+      :Game Scenes: All
+
+   .. property:: float MissionTime { get; }
+
+      The time the kitten has spent on missions, including the current one, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float DistanceTraveled { get; }
+
+      The distance the kitten has traveled on missions, in meters.
+
+      :Game Scenes: All
+
+   .. property:: float FastestSpeed { get; }
+
+      The kitten's highest speed on a mission, in meters per second.
+
+      :Game Scenes: All
+
+   .. property:: float AcuteDose { get; }
+
+      The kitten's acute radiation dose, in sieverts. It heals over time, and causes
+      radiation sickness from 1 sievert and death from 4 sieverts.
+
+      :Game Scenes: All
+
+   .. property:: float LifetimeDose { get; }
+
+      The kitten's lifetime radiation dose, in sieverts. The kitten retires after a
+      mission that takes it past 0.6 sieverts.
+
+      :Game Scenes: All
+
+   .. property:: float DoseRate { get; }
+
+      The radiation dose rate the kitten receives, in sieverts per second. The vehicle's
+      shielding reduces it in a seat, and on EVA the kitten is unshielded. Zero when the
+      kitten is not on a mission.
+
+      :Game Scenes: All
+
+   .. property:: bool RadiationSickness { get; }
+
+      Whether the kitten has radiation sickness, which keeps it from flying.
+
+      :Game Scenes: All
+
+   .. property:: float TimeUntilFitToFly { get; }
+
+      The time until the kitten has recovered from radiation sickness and can fly, resting
+      at home, in seconds. Zero if the kitten does not have radiation sickness.
+
+      :Game Scenes: All
+
+   .. property:: float RecoveryTime { get; }
+
+      The time until the kitten's acute radiation dose has healed below 1 millisievert,
+      resting at home, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: bool Retired { get; }
+
+      Whether the kitten has retired, having reached its lifetime radiation dose limit.
+
+      :Game Scenes: All
+
+   .. property:: bool OnEva { get; }
+
+      Whether the kitten is on EVA.
+
+      :Game Scenes: All
+
+   .. function:: void GoOnEva()
+
+      Leave the kitten's vehicle through its EVA hatch, and return once the kitten is on
+      EVA. The kitten becomes the controlled kitten, see :prop:`KSA.ActiveKitten <KSA.KSA.ActiveKitten>`.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
+
+   .. function:: Vehicle Board()
+
+      Board the nearest vehicle with a free seat, and return once the kitten is in the
+      seat. The vehicle becomes the controlled vehicle.
+
+
+      :returns: The vehicle the kitten boarded.
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
+         within one meter.
+
+   .. property:: LocomotionMode LocomotionMode { get; }
+
+      How the kitten on EVA is moving. Throws an exception if the kitten is not on EVA.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
+
+      The position of the kitten, in meters. For a kitten in a seat, the position of the
+      seat's part. Throws an exception if the kitten is neither in a seat nor on EVA.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the position.
+
+      :Game Scenes: All
+
+   .. function:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
+
+      The velocity of the kitten, in meters per second. For a kitten in a seat, the
+      velocity of the seat's part. Throws an exception if the kitten is neither in a seat
+      nor on EVA.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame of the velocity.
+
+      :Game Scenes: All
+
+
+
+.. enum:: LocomotionMode
+
+   How a kitten on EVA is moving. See :prop:`Kitten.LocomotionMode`.
+
+
+   .. enumerator:: MMU
+
+      Flying with the maneuvering unit, away from any surface.
+
+
+   .. enumerator:: Grounded
+
+      Standing or walking on a surface.
+
+
+   .. enumerator:: Airborne
+
+      In the air above a surface, such as during a jump.
+
+
+   .. enumerator:: Tumbling
+
+      Tumbling after a fall or an impact.
+
+
+   .. enumerator:: Righting
+
+      Getting back up after tumbling.
+
+
+   .. enumerator:: Ladder
+
+      Holding a ladder or grab rail.
+
+
+   .. enumerator:: Swimming
+
+      Swimming in an ocean.
+
+
+
+.. class:: Seat
+
+   A crew seat. Obtained from :prop:`Part.Seats`.
+
+   .. property:: Part Part { get; }
+
+      The part the seat is in.
+
+      :Game Scenes: All
+
+   .. property:: Kitten Kitten { get; set; }
+
+      Returns the kitten in the seat, or ``null`` if the seat is empty, and sets the
+      kitten in the seat. Setting ``null`` empties the seat.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         A kitten in another seat of the vehicle moves to this one. Throws an exception if
+         the kitten is killed in action, on EVA, or in another vehicle.

@@ -13,9 +13,10 @@ Orbit
 
    .. note::
 
-      A vehicle's orbit follows the vehicle as its trajectory changes. A predicted orbit, from
-      :attr:`Orbit.next_orbit` or :attr:`Burn.orbit`, is the prediction at the time it
-      was obtained.
+      An orbit follows the game's prediction as the trajectory changes. A predicted orbit, from
+      :attr:`Orbit.next_orbit` or :attr:`Burn.orbit`, is a position in the vehicle's or the
+      burn's predicted trajectory, and throws an exception while the trajectory is too short to
+      reach it.
 
    .. attribute:: body
 
@@ -66,6 +67,15 @@ Orbit
       :rtype: float
    
 
+   .. attribute:: semi_minor_axis
+
+      The semi-minor axis of the orbit, in meters. Not a number for a parabolic or
+      hyperbolic orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
    .. attribute:: speed
 
       The current orbital speed, in meters per second.
@@ -85,6 +95,23 @@ Orbit
    .. attribute:: period
 
       The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: mean_motion
+
+      The mean angular motion of the orbit, in radians per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: specific_energy
+
+      The specific orbital energy, the sum of the kinetic and potential energy per unit
+      mass, in joules per kilogram. Negative for an elliptical orbit.
 
       :Attribute: Read-only, cannot be set
       :rtype: float
@@ -160,6 +187,14 @@ Orbit
       :rtype: float
    
 
+   .. attribute:: eccentric_anomaly
+
+      The current `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_, in radians. For a hyperbolic orbit, this is the hyperbolic anomaly.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
    .. method:: true_anomaly_at_ut(ut)
 
       The true anomaly at the given time, in radians.
@@ -206,6 +241,66 @@ Orbit
       :param ReferenceFrame reference_frame: The reference frame of the velocity.
       :rtype: tuple(float, float, float)
    
+
+   .. method:: relative_inclination(orbit)
+
+      The inclination of the orbit relative to another orbit, in radians.
+
+      :param Orbit orbit: The other orbit.
+      :rtype: float
+   
+
+   .. method:: true_anomaly_at_an(orbit)
+
+      The true anomaly of the ascending node with another orbit, in radians.
+
+      :param Orbit orbit: The other orbit.
+      :rtype: float
+   
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. method:: true_anomaly_at_dn(orbit)
+
+      The true anomaly of the descending node with another orbit, in radians.
+
+      :param Orbit orbit: The other orbit.
+      :rtype: float
+   
+
+      .. note::
+
+         Throws an exception if the orbits are around different bodies.
+
+   .. attribute:: time_of_closest_approach
+
+      The universal time of the closest approach on this orbit to the vehicle's target,
+      in seconds. Not a number if there is none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
+
+   .. attribute:: distance_at_closest_approach
+
+      The distance at the closest approach on this orbit to the vehicle's target, in
+      meters. Not a number if there is none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         Only the vehicle's current orbit has a target. The game predicts the trajectory on a
+         worker thread, so a new target shows here shortly after it is set.
 
    .. attribute:: start_ut
 

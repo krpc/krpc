@@ -1,0 +1,178 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KSA
+
+Debug
+=====
+
+
+.. class:: Debug
+
+   Changes the state of the simulation directly, as the game's debug windows and console
+   commands do: teleporting a vehicle, setting its attitude, refilling its tanks.
+
+   .. staticmethod:: set_circular_orbit(vehicle, body, altitude)
+
+      Move a vehicle onto a circular orbit around a body, and return once it is there.
+
+      :param Vehicle vehicle: The vehicle.
+      :param Body body: The body to orbit.
+      :param float altitude: The altitude of the orbit above the mean radius, in meters.
+   
+
+      .. note::
+
+         Throws an exception if the game cannot compute the vehicle's trajectory on the
+         orbit.
+
+   .. staticmethod:: set_orbit(vehicle, body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node, argument_of_periapsis, mean_anomaly_at_epoch, epoch)
+
+      Move a vehicle onto the orbit with the given elements, and return once it is there.
+      The angles are those of :class:`Orbit`.
+
+      :param Vehicle vehicle: The vehicle.
+      :param Body body: The body to orbit.
+      :param float semi_major_axis: The semi-major axis, in meters.
+      :param float eccentricity: The eccentricity.
+      :param float inclination: The inclination, in radians.
+      :param float longitude_of_ascending_node: The longitude of the ascending node, in radians.
+      :param float argument_of_periapsis: The argument of periapsis, in radians.
+      :param float mean_anomaly_at_epoch: The mean anomaly at the epoch, in radians.
+      :param float epoch: The universal time of the epoch, in seconds.
+   
+
+      .. note::
+
+         Throws an exception if the game cannot compute the vehicle's trajectory on the
+         orbit.
+
+   .. staticmethod:: set_landed(vehicle, body, latitude, longitude)
+
+      Place a vehicle on the surface of a body, as the game's teleport window does, and
+      return once it is there.
+
+      :param Vehicle vehicle: The vehicle.
+      :param Body body: The body to land on.
+      :param float latitude: The latitude, in degrees.
+      :param float longitude: The longitude, in degrees.
+   
+
+      .. note::
+
+         Throws an exception if the body has no surface.
+
+   .. staticmethod:: set_position(vehicle, position, reference_frame)
+
+      Move a vehicle to the given position, keeping its velocity, and return once it is
+      there.
+
+      :param Vehicle vehicle: The vehicle.
+      :param tuple position: The position of the vehicle, in meters.
+      :param ReferenceFrame reference_frame: The reference frame of the position.
+   
+
+      .. note::
+
+         This is the inverse of :meth:`Vehicle.position`. The vehicle keeps orbiting
+         the same body.
+
+   .. staticmethod:: set_velocity(vehicle, velocity, reference_frame)
+
+      Set the velocity of a vehicle, keeping its position, and return once it is set.
+
+      :param Vehicle vehicle: The vehicle.
+      :param tuple velocity: The velocity of the vehicle, in meters per second.
+      :param ReferenceFrame reference_frame: The reference frame of the velocity.
+   
+
+      .. note::
+
+         This is the inverse of :meth:`Vehicle.velocity`. The vehicle keeps orbiting
+         the same body.
+
+   .. staticmethod:: set_rotation(vehicle, rotation, reference_frame)
+
+      Set the rotation of a vehicle, and return once it is set.
+
+      :param Vehicle vehicle: The vehicle.
+      :param tuple rotation: The rotation of the vehicle, as a quaternion of the form ``(x, y, z, w)``.
+      :param ReferenceFrame reference_frame: The reference frame of the rotation.
+   
+
+      .. note::
+
+         This is the inverse of :meth:`Vehicle.rotation`.
+
+   .. staticmethod:: set_angular_velocity(vehicle, angular_velocity, reference_frame)
+
+      Set the angular velocity of a vehicle, and return once it is set.
+
+      :param Vehicle vehicle: The vehicle.
+      :param tuple angular_velocity: The angular velocity, in radians per second. The vector points along the axis of rotation, and its length is the rate.
+      :param ReferenceFrame reference_frame: The reference frame of the angular velocity.
+   
+
+      .. note::
+
+         This is the inverse of :meth:`Vehicle.angular_velocity`.
+
+   .. staticmethod:: fill_resources(vehicle)
+
+      Fill the propellant, batteries and other consumables of a vehicle, as the game's
+      refill command does.
+
+      :param Vehicle vehicle: The vehicle.
+   
+
+   .. staticmethod:: empty_resources(vehicle)
+
+      Empty the propellant, batteries and other consumables of a vehicle, as the game's
+      empty command does.
+
+      :param Vehicle vehicle: The vehicle.
+   
+
+   .. staticmethod:: duplicate_vehicle(vehicle, name)
+
+      Create a copy of a vehicle beside it, as the game's duplicate command does, and
+      return once it is created.
+
+      :param Vehicle vehicle: The vehicle to copy.
+      :param str name: The name of the copy.
+      :returns: The copy.
+      :rtype: :class:`Vehicle`
+   
+
+      .. note::
+
+         Throws an exception if the name is in use.
+
+   .. staticmethod:: explode_vehicle(vehicle)
+
+      Destroy a vehicle in an explosion, as the game's explode command does, and return
+      once the vehicle is gone. Its crew are killed.
+
+      :param Vehicle vehicle: The vehicle.
+   
+
+   .. staticmethod:: show_velocity_arrows(visible)
+
+      Show or hide the game's debug arrows for the velocities of the vehicles.
+
+      :param bool visible: Whether to show the arrows.
+   
+
+   .. staticmethod:: run_command(command)
+
+      Run a command in the game's console, as typed in the console.
+
+      :param str command: The command and its arguments.
+      :returns: The console output of the command, one line per message.
+      :rtype: list(str)
+   
+
+      .. note::
+
+         Most commands write their messages to the game's log, not the returned output.
+         Throws an exception if the console has no such command, or the arguments are not
+         valid.

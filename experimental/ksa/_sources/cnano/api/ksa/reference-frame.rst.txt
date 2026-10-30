@@ -10,10 +10,36 @@ Reference Frame
 
    A reference frame, in which positions, directions, rotations and velocities are given.
    Obtained from the reference frame properties of :type:`krpc_KSA_Vehicle_t` and
-   :type:`krpc_KSA_Body_t`.
+   :type:`krpc_KSA_Body_t`, or created with :func:`krpc_KSA_ReferenceFrame_CreateRelative` and
+   :func:`krpc_KSA_ReferenceFrame_CreateHybrid`.
 
    .. note::
 
       Every reference frame is right-handed. Positions are in meters, velocities in meters
       per second, and angular velocities in radians per second. A rotation is a quaternion
       ``(x, y, z, w)``.
+
+   .. function:: krpc_error_t krpc_KSA_ReferenceFrame_CreateRelative(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_ReferenceFrame_t referenceFrame, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_double_t * rotation, const krpc_tuple_double_double_double_t * velocity, const krpc_tuple_double_double_double_t * angularVelocity)
+
+      Create a reference frame that is offset from a parent frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The parent reference frame.
+       * **position** -- The position of the origin in the parent frame, in meters. Defaults to ``(0, 0, 0)``.
+       * **rotation** -- The rotation of the frame relative to the parent frame. Defaults to ``(0, 0, 0, 1)``, no rotation.
+       * **velocity** -- The velocity of the origin in the parent frame, in meters per second. Defaults to ``(0, 0, 0)``.
+       * **angularVelocity** -- The angular velocity of the frame relative to the parent frame, in radians per second, in the axes of the parent frame. Defaults to ``(0, 0, 0)``.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_ReferenceFrame_CreateHybrid(krpc_connection_t connection, krpc_KSA_ReferenceFrame_t * returnValue, krpc_KSA_ReferenceFrame_t position, krpc_KSA_ReferenceFrame_t rotation, krpc_KSA_ReferenceFrame_t velocity, krpc_KSA_ReferenceFrame_t angularVelocity)
+
+      Create a reference frame that takes its components from other frames.
+
+      :Parameters:
+
+       * **position** -- The reference frame that gives the origin.
+       * **rotation** -- The reference frame that gives the axes. Defaults to *position*.
+       * **velocity** -- The reference frame that gives the velocity of the origin. Defaults to *position*.
+       * **angularVelocity** -- The reference frame that gives the angular velocity. Defaults to *position*.

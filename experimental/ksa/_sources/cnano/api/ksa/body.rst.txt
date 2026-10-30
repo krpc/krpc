@@ -16,6 +16,12 @@ Body
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Body_IsStar(krpc_connection_t connection, bool * returnValue, krpc_KSA_Body_t instance)
+
+      Whether the body is a star.
+
+   
+
    .. function:: krpc_error_t krpc_KSA_Body_Mass(krpc_connection_t connection, double * returnValue, krpc_KSA_Body_t instance)
 
       The mass of the body, in kilograms.
@@ -41,20 +47,82 @@ Body
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Body_SurfaceGravity(krpc_connection_t connection, double * returnValue, krpc_KSA_Body_t instance)
+   .. function:: krpc_error_t krpc_KSA_Body_HasAtmosphere(krpc_connection_t connection, bool * returnValue, krpc_KSA_Body_t instance)
+
+      Whether the body has an atmosphere.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_SeaLevelPressure(krpc_connection_t connection, float * returnValue, krpc_KSA_Body_t instance)
+
+      The atmospheric pressure at the body's mean radius, in pascals. Zero for a body
+      with no atmosphere.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_SeaLevelDensity(krpc_connection_t connection, float * returnValue, krpc_KSA_Body_t instance)
+
+      The density of the atmosphere at the body's mean radius, in kilograms per cubic
+      meter. Zero for a body with no atmosphere.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_ScaleHeight(krpc_connection_t connection, float * returnValue, krpc_KSA_Body_t instance)
+
+      The height over which the atmospheric pressure falls by a factor of ``e``, in
+      meters. Zero for a body with no atmosphere.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_PressureAt(krpc_connection_t connection, float * returnValue, krpc_KSA_Body_t instance, double altitude)
+
+      The atmospheric pressure at an altitude, in pascals. Zero for a body with no
+      atmosphere.
+
+      :Parameters:
+
+       * **altitude** -- Altitude above the body's mean radius, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_DensityAt(krpc_connection_t connection, float * returnValue, krpc_KSA_Body_t instance, double altitude)
+
+      The density of the atmosphere at an altitude, in kilograms per cubic meter. Zero
+      for a body with no atmosphere.
+
+      :Parameters:
+
+       * **altitude** -- Altitude above the body's mean radius, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_HasOcean(krpc_connection_t connection, bool * returnValue, krpc_KSA_Body_t instance)
+
+      Whether the body has an ocean.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_OceanDensity(krpc_connection_t connection, float * returnValue, krpc_KSA_Body_t instance)
+
+      The density of the ocean, in kilograms per cubic meter. Zero for a body with no
+      ocean.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_SurfaceGravity(krpc_connection_t connection, float * returnValue, krpc_KSA_Body_t instance)
 
       The acceleration due to gravity at the body's mean radius, in meters per second
       squared.
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Body_RotationalSpeed(krpc_connection_t connection, double * returnValue, krpc_KSA_Body_t instance)
+   .. function:: krpc_error_t krpc_KSA_Body_RotationalSpeed(krpc_connection_t connection, float * returnValue, krpc_KSA_Body_t instance)
 
       The rate at which the body rotates about its axis, in radians per second.
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Body_RotationalPeriod(krpc_connection_t connection, double * returnValue, krpc_KSA_Body_t instance)
+   .. function:: krpc_error_t krpc_KSA_Body_RotationalPeriod(krpc_connection_t connection, float * returnValue, krpc_KSA_Body_t instance)
 
       The time the body takes to rotate once about its axis, relative to the stars, in
       seconds. Infinite for a body that does not rotate.
@@ -117,6 +185,23 @@ Body
    .. function:: krpc_error_t krpc_KSA_Body_LaunchSites(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_KSA_Body_t instance)
 
       The names of the launch sites on the body. See :func:`krpc_KSA_LaunchVehicle`.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_Biomes(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_KSA_Body_t instance)
+
+      The names of the body's biomes. Empty for a body with no biomes.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_BiomeAt(krpc_connection_t connection, char * * returnValue, bool * returnValueIsNull, krpc_KSA_Body_t instance, double latitude, double longitude)
+
+      The biome at a point on the body, or ``nullptr`` if the body has no biomes.
+
+      :Parameters:
+
+       * **latitude** -- Latitude, in degrees.
+       * **longitude** -- Longitude, in degrees.
 
    
 
@@ -186,4 +271,37 @@ Body
 
        * **latitude** -- Latitude, in degrees.
        * **longitude** -- Longitude, in degrees.
+       * **referenceFrame** -- The reference frame of the position.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_LatitudeAtPosition(krpc_connection_t connection, double * returnValue, krpc_KSA_Body_t instance, const krpc_tuple_double_double_double_t * position, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The latitude of a position, in degrees.
+
+      :Parameters:
+
+       * **position** -- Position, in meters.
+       * **referenceFrame** -- The reference frame of the position.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_LongitudeAtPosition(krpc_connection_t connection, double * returnValue, krpc_KSA_Body_t instance, const krpc_tuple_double_double_double_t * position, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The longitude of a position, in degrees.
+
+      :Parameters:
+
+       * **position** -- Position, in meters.
+       * **referenceFrame** -- The reference frame of the position.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Body_AltitudeAtPosition(krpc_connection_t connection, double * returnValue, krpc_KSA_Body_t instance, const krpc_tuple_double_double_double_t * position, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The altitude of a position above the body's mean radius, in meters.
+
+      :Parameters:
+
+       * **position** -- Position, in meters.
        * **referenceFrame** -- The reference frame of the position.

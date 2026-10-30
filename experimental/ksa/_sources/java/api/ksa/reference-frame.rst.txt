@@ -10,10 +10,31 @@ Reference Frame
 
    A reference frame, in which positions, directions, rotations and velocities are given.
    Obtained from the reference frame properties of :type:`Vehicle` and
-   :type:`Body`.
+   :type:`Body`, or created with :meth:`ReferenceFrame.createRelative(ReferenceFrame, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Quartet<Double,Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>)` and
+   :meth:`ReferenceFrame.createHybrid(ReferenceFrame, ReferenceFrame, ReferenceFrame, ReferenceFrame)`.
 
    .. note::
 
       Every reference frame is right-handed. Positions are in meters, velocities in meters
       per second, and angular velocities in radians per second. A rotation is a quaternion
       ``(x, y, z, w)``.
+
+   .. method:: static ReferenceFrame createRelative(Connection connection, ReferenceFrame referenceFrame, org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Quartet<Double,Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> velocity, org.javatuples.Triplet<Double,Double,Double> angularVelocity)
+
+      Create a reference frame that is offset from a parent frame.
+
+      :param ReferenceFrame referenceFrame: The parent reference frame.
+      :param org.javatuples.Triplet<Double,Double,Double> position: The position of the origin in the parent frame, in meters. Defaults to ``(0, 0, 0)``.
+      :param org.javatuples.Quartet<Double,Double,Double,Double> rotation: The rotation of the frame relative to the parent frame. Defaults to ``(0, 0, 0, 1)``, no rotation.
+      :param org.javatuples.Triplet<Double,Double,Double> velocity: The velocity of the origin in the parent frame, in meters per second. Defaults to ``(0, 0, 0)``.
+      :param org.javatuples.Triplet<Double,Double,Double> angularVelocity: The angular velocity of the frame relative to the parent frame, in radians per second, in the axes of the parent frame. Defaults to ``(0, 0, 0)``.
+   
+
+   .. method:: static ReferenceFrame createHybrid(Connection connection, ReferenceFrame position, ReferenceFrame rotation, ReferenceFrame velocity, ReferenceFrame angularVelocity)
+
+      Create a reference frame that takes its components from other frames.
+
+      :param ReferenceFrame position: The reference frame that gives the origin.
+      :param ReferenceFrame rotation: The reference frame that gives the axes. Defaults to *position*.
+      :param ReferenceFrame velocity: The reference frame that gives the velocity of the origin. Defaults to *position*.
+      :param ReferenceFrame angularVelocity: The reference frame that gives the angular velocity. Defaults to *position*.

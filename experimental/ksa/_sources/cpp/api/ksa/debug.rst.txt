@@ -1,0 +1,215 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Debug
+=====
+
+
+.. class:: Debug
+
+   Changes the state of the simulation directly, as the game's debug windows and console
+   commands do: teleporting a vehicle, setting its attitude, refilling its tanks.
+
+   .. function:: static void set_circular_orbit(Client& connection, Vehicle vehicle, Body body, double altitude)
+
+      Move a vehicle onto a circular orbit around a body, and return once it is there.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle.
+       * **body** -- The body to orbit.
+       * **altitude** -- The altitude of the orbit above the mean radius, in meters.
+
+   
+
+      .. note::
+
+         Throws an exception if the game cannot compute the vehicle's trajectory on the
+         orbit.
+
+   .. function:: static void set_orbit(Client& connection, Vehicle vehicle, Body body, double semi_major_axis, double eccentricity, double inclination, double longitude_of_ascending_node, double argument_of_periapsis, double mean_anomaly_at_epoch, double epoch)
+
+      Move a vehicle onto the orbit with the given elements, and return once it is there.
+      The angles are those of :class:`Orbit`.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle.
+       * **body** -- The body to orbit.
+       * **semi_major_axis** -- The semi-major axis, in meters.
+       * **eccentricity** -- The eccentricity.
+       * **inclination** -- The inclination, in radians.
+       * **longitude_of_ascending_node** -- The longitude of the ascending node, in radians.
+       * **argument_of_periapsis** -- The argument of periapsis, in radians.
+       * **mean_anomaly_at_epoch** -- The mean anomaly at the epoch, in radians.
+       * **epoch** -- The universal time of the epoch, in seconds.
+
+   
+
+      .. note::
+
+         Throws an exception if the game cannot compute the vehicle's trajectory on the
+         orbit.
+
+   .. function:: static void set_landed(Client& connection, Vehicle vehicle, Body body, double latitude, double longitude)
+
+      Place a vehicle on the surface of a body, as the game's teleport window does, and
+      return once it is there.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle.
+       * **body** -- The body to land on.
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+
+   
+
+      .. note::
+
+         Throws an exception if the body has no surface.
+
+   .. function:: static void set_position(Client& connection, Vehicle vehicle, std::tuple<double, double, double> position, ReferenceFrame reference_frame)
+
+      Move a vehicle to the given position, keeping its velocity, and return once it is
+      there.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle.
+       * **position** -- The position of the vehicle, in meters.
+       * **reference_frame** -- The reference frame of the position.
+
+   
+
+      .. note::
+
+         This is the inverse of :func:`Vehicle::position`. The vehicle keeps orbiting
+         the same body.
+
+   .. function:: static void set_velocity(Client& connection, Vehicle vehicle, std::tuple<double, double, double> velocity, ReferenceFrame reference_frame)
+
+      Set the velocity of a vehicle, keeping its position, and return once it is set.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle.
+       * **velocity** -- The velocity of the vehicle, in meters per second.
+       * **reference_frame** -- The reference frame of the velocity.
+
+   
+
+      .. note::
+
+         This is the inverse of :func:`Vehicle::velocity`. The vehicle keeps orbiting
+         the same body.
+
+   .. function:: static void set_rotation(Client& connection, Vehicle vehicle, std::tuple<double, double, double, double> rotation, ReferenceFrame reference_frame)
+
+      Set the rotation of a vehicle, and return once it is set.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle.
+       * **rotation** -- The rotation of the vehicle, as a quaternion of the form ``(x, y, z, w)``.
+       * **reference_frame** -- The reference frame of the rotation.
+
+   
+
+      .. note::
+
+         This is the inverse of :func:`Vehicle::rotation`.
+
+   .. function:: static void set_angular_velocity(Client& connection, Vehicle vehicle, std::tuple<double, double, double> angular_velocity, ReferenceFrame reference_frame)
+
+      Set the angular velocity of a vehicle, and return once it is set.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle.
+       * **angular_velocity** -- The angular velocity, in radians per second. The vector points along the axis of rotation, and its length is the rate.
+       * **reference_frame** -- The reference frame of the angular velocity.
+
+   
+
+      .. note::
+
+         This is the inverse of :func:`Vehicle::angular_velocity`.
+
+   .. function:: static void fill_resources(Client& connection, Vehicle vehicle)
+
+      Fill the propellant, batteries and other consumables of a vehicle, as the game's
+      refill command does.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle.
+
+   
+
+   .. function:: static void empty_resources(Client& connection, Vehicle vehicle)
+
+      Empty the propellant, batteries and other consumables of a vehicle, as the game's
+      empty command does.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle.
+
+   
+
+   .. function:: static Vehicle duplicate_vehicle(Client& connection, Vehicle vehicle, std::string name)
+
+      Create a copy of a vehicle beside it, as the game's duplicate command does, and
+      return once it is created.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle to copy.
+       * **name** -- The name of the copy.
+
+      :returns: The copy.
+   
+
+      .. note::
+
+         Throws an exception if the name is in use.
+
+   .. function:: static void explode_vehicle(Client& connection, Vehicle vehicle)
+
+      Destroy a vehicle in an explosion, as the game's explode command does, and return
+      once the vehicle is gone. Its crew are killed.
+
+      :Parameters:
+
+       * **vehicle** -- The vehicle.
+
+   
+
+   .. function:: static void show_velocity_arrows(Client& connection, bool visible)
+
+      Show or hide the game's debug arrows for the velocities of the vehicles.
+
+      :Parameters:
+
+       * **visible** -- Whether to show the arrows.
+
+   
+
+   .. function:: static std::vector<std::string> run_command(Client& connection, std::string command)
+
+      Run a command in the game's console, as typed in the console.
+
+      :Parameters:
+
+       * **command** -- The command and its arguments.
+
+      :returns: The console output of the command, one line per message.
+   
+
+      .. note::
+
+         Most commands write their messages to the game's log, not the returned output.
+         Throws an exception if the console has no such command, or the arguments are not
+         valid.

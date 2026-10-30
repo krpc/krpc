@@ -1,0 +1,311 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Auto-Pilot
+==========
+
+.. grpc:service:: AutoPilotService
+
+   The vehicle's flight computer, which steers the vehicle with its reaction control
+   thrusters and engine gimbals. Obtained from :grpc:rpc:`VehicleService.GetAutoPilot <krpc.ksa.VehicleService.GetAutoPilot>`.
+
+   .. note::
+
+      The auto-pilot points the vehicle in the direction set by :grpc:rpc:`AutoPilotService.GetMode <krpc.ksa.AutoPilotService.GetMode>`, once
+      engaged. It is the game's own flight computer, so the game's flight computer
+      controls change the same settings.
+
+   .. grpc:rpc:: Engage (AutoPilot.EngageRequest) returns (AutoPilot.EngageResponse)
+
+      Engage the auto-pilot.
+
+      :AutoPilot.EngageRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+
+      :AutoPilot.EngageResponse: Empty
+
+   .. grpc:rpc:: Disengage (AutoPilot.DisengageRequest) returns (AutoPilot.DisengageResponse)
+
+      Disengage the auto-pilot.
+
+      :AutoPilot.DisengageRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+
+      :AutoPilot.DisengageResponse: Empty
+
+   .. grpc:rpc:: GetEngaged (AutoPilot.GetEngagedRequest) returns (AutoPilot.GetEngagedResponse)
+
+      Whether the auto-pilot is engaged.
+
+      :AutoPilot.GetEngagedRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+
+      :AutoPilot.GetEngagedResponse: ``value`` (``bool``)
+
+      .. note::
+
+         The same setting as :grpc:rpc:`ControlService.GetStabilization <krpc.ksa.ControlService.GetStabilization>`.
+
+   .. grpc:rpc:: GetMode (AutoPilot.GetModeRequest) returns (AutoPilot.GetModeResponse)
+
+      The direction the auto-pilot points the vehicle in.
+
+      :AutoPilot.GetModeRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+
+      :AutoPilot.GetModeResponse: ``value`` (:grpc:enum:`AutoPilotMode <krpc.ksa.AutoPilotMode>`)
+
+      .. note::
+
+         Setting :grpc:value:`AUTO_PILOT_MODE_ATTITUDE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_ATTITUDE>` targets the vehicle's current pitch,
+         heading and roll. Setting :grpc:value:`AUTO_PILOT_MODE_OTHER <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_OTHER>` throws an exception.
+
+   .. grpc:rpc:: SetMode (AutoPilot.SetModeRequest) returns (AutoPilot.SetModeResponse)
+
+      The direction the auto-pilot points the vehicle in.
+
+      :AutoPilot.SetModeRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+         * ``value`` (:grpc:enum:`AutoPilotMode <krpc.ksa.AutoPilotMode>`)
+
+      :AutoPilot.SetModeResponse: Empty
+
+      .. note::
+
+         Setting :grpc:value:`AUTO_PILOT_MODE_ATTITUDE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_ATTITUDE>` targets the vehicle's current pitch,
+         heading and roll. Setting :grpc:value:`AUTO_PILOT_MODE_OTHER <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_OTHER>` throws an exception.
+
+   .. grpc:rpc:: GetTargetPitch (AutoPilot.GetTargetPitchRequest) returns (AutoPilot.GetTargetPitchResponse)
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :AutoPilot.GetTargetPitchRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+
+      :AutoPilot.GetTargetPitchResponse: ``value`` (``float``)
+
+      .. note::
+
+         Setting it sets :grpc:rpc:`AutoPilotService.GetMode <krpc.ksa.AutoPilotService.GetMode>` to :grpc:value:`AUTO_PILOT_MODE_ATTITUDE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_ATTITUDE>`.
+         Returns NaN in any other mode.
+
+   .. grpc:rpc:: SetTargetPitch (AutoPilot.SetTargetPitchRequest) returns (AutoPilot.SetTargetPitchResponse)
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :AutoPilot.SetTargetPitchRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+         * ``value`` (``float``)
+
+      :AutoPilot.SetTargetPitchResponse: Empty
+
+      .. note::
+
+         Setting it sets :grpc:rpc:`AutoPilotService.GetMode <krpc.ksa.AutoPilotService.GetMode>` to :grpc:value:`AUTO_PILOT_MODE_ATTITUDE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_ATTITUDE>`.
+         Returns NaN in any other mode.
+
+   .. grpc:rpc:: GetTargetHeading (AutoPilot.GetTargetHeadingRequest) returns (AutoPilot.GetTargetHeadingResponse)
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :AutoPilot.GetTargetHeadingRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+
+      :AutoPilot.GetTargetHeadingResponse: ``value`` (``float``)
+
+      .. note::
+
+         Setting it sets :grpc:rpc:`AutoPilotService.GetMode <krpc.ksa.AutoPilotService.GetMode>` to :grpc:value:`AUTO_PILOT_MODE_ATTITUDE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_ATTITUDE>`.
+         Returns NaN in any other mode.
+
+   .. grpc:rpc:: SetTargetHeading (AutoPilot.SetTargetHeadingRequest) returns (AutoPilot.SetTargetHeadingResponse)
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :AutoPilot.SetTargetHeadingRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+         * ``value`` (``float``)
+
+      :AutoPilot.SetTargetHeadingResponse: Empty
+
+      .. note::
+
+         Setting it sets :grpc:rpc:`AutoPilotService.GetMode <krpc.ksa.AutoPilotService.GetMode>` to :grpc:value:`AUTO_PILOT_MODE_ATTITUDE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_ATTITUDE>`.
+         Returns NaN in any other mode.
+
+   .. grpc:rpc:: GetTargetRoll (AutoPilot.GetTargetRollRequest) returns (AutoPilot.GetTargetRollResponse)
+
+      The target roll, in degrees. NaN when the auto-pilot does not control roll.
+
+      :AutoPilot.GetTargetRollRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+
+      :AutoPilot.GetTargetRollResponse: ``value`` (``float``)
+
+      .. note::
+
+         Setting a number sets :grpc:rpc:`AutoPilotService.GetMode <krpc.ksa.AutoPilotService.GetMode>` to :grpc:value:`AUTO_PILOT_MODE_ATTITUDE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_ATTITUDE>`.
+         Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
+         :grpc:value:`AUTO_PILOT_MODE_ATTITUDE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_ATTITUDE>`.
+
+   .. grpc:rpc:: SetTargetRoll (AutoPilot.SetTargetRollRequest) returns (AutoPilot.SetTargetRollResponse)
+
+      The target roll, in degrees. NaN when the auto-pilot does not control roll.
+
+      :AutoPilot.SetTargetRollRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+         * ``value`` (``float``)
+
+      :AutoPilot.SetTargetRollResponse: Empty
+
+      .. note::
+
+         Setting a number sets :grpc:rpc:`AutoPilotService.GetMode <krpc.ksa.AutoPilotService.GetMode>` to :grpc:value:`AUTO_PILOT_MODE_ATTITUDE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_ATTITUDE>`.
+         Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
+         :grpc:value:`AUTO_PILOT_MODE_ATTITUDE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_ATTITUDE>`.
+
+   .. grpc:rpc:: TargetPitchAndHeading (AutoPilot.TargetPitchAndHeadingRequest) returns (AutoPilot.TargetPitchAndHeadingResponse)
+
+      Set the target pitch and heading, and the mode to
+      :grpc:value:`AUTO_PILOT_MODE_ATTITUDE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_ATTITUDE>`.
+
+      :AutoPilot.TargetPitchAndHeadingRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+         * ``pitch`` (``float``): Target pitch, in degrees, between -90° and +90°.
+         * ``heading`` (``float``): Target heading, in degrees, between 0° and 360°.
+
+      :AutoPilot.TargetPitchAndHeadingResponse: Empty
+
+   .. grpc:rpc:: TargetDirection (AutoPilot.TargetDirectionRequest) returns (AutoPilot.TargetDirectionResponse)
+
+      Point the vehicle in a direction, and set the mode to
+      :grpc:value:`AUTO_PILOT_MODE_ATTITUDE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_ATTITUDE>`. Sets :grpc:rpc:`AutoPilotService.GetTargetPitch <krpc.ksa.AutoPilotService.GetTargetPitch>` and
+      :grpc:rpc:`AutoPilotService.GetTargetHeading <krpc.ksa.AutoPilotService.GetTargetHeading>` to the direction at the time of the call, so the target
+      stays fixed relative to the surface.
+
+      :AutoPilot.TargetDirectionRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+         * ``direction`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The direction to point in.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the direction.
+
+      :AutoPilot.TargetDirectionResponse: Empty
+
+   .. grpc:rpc:: GetError (AutoPilot.GetErrorRequest) returns (AutoPilot.GetErrorResponse)
+
+      The angle between the direction the vehicle points in and the target direction,
+      in degrees. NaN when the auto-pilot is not engaged.
+
+      :AutoPilot.GetErrorRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+
+      :AutoPilot.GetErrorResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetRollError (AutoPilot.GetRollErrorRequest) returns (AutoPilot.GetRollErrorResponse)
+
+      The angle between the vehicle's roll and the target roll, in degrees.
+      NaN when the auto-pilot is not engaged.
+
+      :AutoPilot.GetRollErrorRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+
+      :AutoPilot.GetRollErrorResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: Wait (AutoPilot.WaitRequest) returns (AutoPilot.WaitResponse)
+
+      Wait until the vehicle points in the target direction, and has the target roll
+      if it has one. Returns when the errors are within twice the flight computer's
+      angle deadband, which defaults to 1°.
+      Throws an exception if the auto-pilot is not engaged.
+
+      :AutoPilot.WaitRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+
+      :AutoPilot.WaitResponse: Empty
+
+   .. grpc:rpc:: GetAutoBurn (AutoPilot.GetAutoBurnRequest) returns (AutoPilot.GetAutoBurnResponse)
+
+      Whether the flight computer executes the next burn in
+      :grpc:rpc:`VehicleService.GetBurns <krpc.ksa.VehicleService.GetBurns>`. It points the vehicle along the burn, fires the
+      engines at :grpc:rpc:`BurnService.GetIgnitionTime <krpc.ksa.BurnService.GetIgnitionTime>`, and stops once the burn is complete.
+
+      :AutoPilot.GetAutoBurnRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+
+      :AutoPilot.GetAutoBurnResponse: ``value`` (``bool``)
+
+      .. note::
+
+         The flight computer clears it when the burn completes, and removes the burn if
+         another follows it. The engines fire only at normal speed, so warp to shortly before
+         the burn with :grpc:rpc:`KSAService.WarpTo <krpc.ksa.KSAService.WarpTo>`. Setting it with no burn planned throws an
+         exception.
+
+   .. grpc:rpc:: SetAutoBurn (AutoPilot.SetAutoBurnRequest) returns (AutoPilot.SetAutoBurnResponse)
+
+      Whether the flight computer executes the next burn in
+      :grpc:rpc:`VehicleService.GetBurns <krpc.ksa.VehicleService.GetBurns>`. It points the vehicle along the burn, fires the
+      engines at :grpc:rpc:`BurnService.GetIgnitionTime <krpc.ksa.BurnService.GetIgnitionTime>`, and stops once the burn is complete.
+
+      :AutoPilot.SetAutoBurnRequest:
+         * ``this`` (:grpc:service:`AutoPilot <krpc.ksa.AutoPilotService>`)
+         * ``value`` (``bool``)
+
+      :AutoPilot.SetAutoBurnResponse: Empty
+
+      .. note::
+
+         The flight computer clears it when the burn completes, and removes the burn if
+         another follows it. The engines fire only at normal speed, so warp to shortly before
+         the burn with :grpc:rpc:`KSAService.WarpTo <krpc.ksa.KSAService.WarpTo>`. Setting it with no burn planned throws an
+         exception.
+
+.. grpc:enum:: AutoPilotMode
+
+   The direction the auto-pilot points the vehicle in.
+   See :grpc:rpc:`AutoPilotService.GetMode <krpc.ksa.AutoPilotService.GetMode>`.
+
+   .. grpc:value:: AUTO_PILOT_MODE_ATTITUDE
+
+      The pitch, heading and roll set by :grpc:rpc:`AutoPilotService.GetTargetPitch <krpc.ksa.AutoPilotService.GetTargetPitch>`,
+      :grpc:rpc:`AutoPilotService.GetTargetHeading <krpc.ksa.AutoPilotService.GetTargetHeading>` and :grpc:rpc:`AutoPilotService.GetTargetRoll <krpc.ksa.AutoPilotService.GetTargetRoll>`.
+
+   .. grpc:value:: AUTO_PILOT_MODE_HOLD
+
+      Holds the vehicle's rotation at zero, relative to the stars.
+
+   .. grpc:value:: AUTO_PILOT_MODE_PROGRADE
+
+      The direction of the vehicle's orbital velocity.
+
+   .. grpc:value:: AUTO_PILOT_MODE_RETROGRADE
+
+      The opposite of :grpc:value:`AUTO_PILOT_MODE_PROGRADE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_PROGRADE>`.
+
+   .. grpc:value:: AUTO_PILOT_MODE_NORMAL
+
+      Normal to the orbital plane, along the orbit's angular momentum.
+
+   .. grpc:value:: AUTO_PILOT_MODE_ANTI_NORMAL
+
+      The opposite of :grpc:value:`AUTO_PILOT_MODE_NORMAL <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_NORMAL>`.
+
+   .. grpc:value:: AUTO_PILOT_MODE_RADIAL_OUT
+
+      Away from the center of the body being orbited.
+
+   .. grpc:value:: AUTO_PILOT_MODE_RADIAL_IN
+
+      Toward the center of the body being orbited.
+
+   .. grpc:value:: AUTO_PILOT_MODE_SURFACE_PROGRADE
+
+      The direction of the vehicle's velocity relative to the surface.
+
+   .. grpc:value:: AUTO_PILOT_MODE_SURFACE_RETROGRADE
+
+      The opposite of :grpc:value:`AUTO_PILOT_MODE_SURFACE_PROGRADE <krpc.ksa.AutoPilotMode.AUTO_PILOT_MODE_SURFACE_PROGRADE>`.
+
+   .. grpc:value:: AUTO_PILOT_MODE_OTHER
+
+      A target set in the game, which the API does not cover.

@@ -1,0 +1,812 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Parts
+=====
+
+.. grpc:service:: PartService
+
+   A part of a vehicle. Obtained from :grpc:rpc:`VehicleService.GetParts <krpc.ksa.VehicleService.GetParts>`.
+
+   .. note::
+
+      A part keeps its object when the vehicle it belongs to changes, for example when a
+      decoupler separates it. Throws an exception once the part no longer exists.
+
+   .. grpc:rpc:: GetName (Part.GetNameRequest) returns (Part.GetNameResponse)
+
+      The id of the part's template.
+
+      :Part.GetNameRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetNameResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: GetTitle (Part.GetTitleRequest) returns (Part.GetTitleResponse)
+
+      The name of the part, as shown in the game.
+
+      :Part.GetTitleRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetTitleResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: GetVehicle (Part.GetVehicleRequest) returns (Part.GetVehicleResponse)
+
+      The vehicle the part belongs to.
+
+      :Part.GetVehicleRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetVehicleResponse: ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+   .. grpc:rpc:: GetParent (Part.GetParentRequest) returns (Part.GetParentResponse)
+
+      The part this part is attached to, or ``null`` for the root part.
+
+      :Part.GetParentRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetParentResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetChildren (Part.GetChildrenRequest) returns (Part.GetChildrenResponse)
+
+      The parts attached to this part.
+
+      :Part.GetChildrenRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetChildrenResponse: ``value`` (``repeated`` :grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetSequence (Part.GetSequenceRequest) returns (Part.GetSequenceResponse)
+
+      The number of the sequence that activates the part, or -1 if no sequence does.
+
+      :Part.GetSequenceRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetSequenceResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetMass (Part.GetMassRequest) returns (Part.GetMassResponse)
+
+      The mass of the part, including its propellant, in kilograms.
+
+      :Part.GetMassRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetMassResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetDryMass (Part.GetDryMassRequest) returns (Part.GetDryMassResponse)
+
+      The mass of the part without its propellant, in kilograms.
+
+      :Part.GetDryMassRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetDryMassResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetResources (Part.GetResourcesRequest) returns (Part.GetResourcesResponse)
+
+      The resources the part holds, one for each substance.
+
+      :Part.GetResourcesRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetResourcesResponse: ``value`` (``repeated`` :grpc:service:`Resource <krpc.ksa.ResourceService>`)
+
+   .. grpc:rpc:: GetTanks (Part.GetTanksRequest) returns (Part.GetTanksResponse)
+
+      The part's propellant tanks. Empty if it has none.
+
+      :Part.GetTanksRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetTanksResponse: ``value`` (``repeated`` :grpc:service:`Tank <krpc.ksa.TankService>`)
+
+   .. grpc:rpc:: GetBatteries (Part.GetBatteriesRequest) returns (Part.GetBatteriesResponse)
+
+      The part's batteries.
+
+      :Part.GetBatteriesRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetBatteriesResponse: ``value`` (``repeated`` :grpc:service:`Battery <krpc.ksa.BatteryService>`)
+
+   .. grpc:rpc:: GetSolarPanels (Part.GetSolarPanelsRequest) returns (Part.GetSolarPanelsResponse)
+
+      The part's solar panels.
+
+      :Part.GetSolarPanelsRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetSolarPanelsResponse: ``value`` (``repeated`` :grpc:service:`SolarPanel <krpc.ksa.SolarPanelService>`)
+
+   .. grpc:rpc:: GetGenerators (Part.GetGeneratorsRequest) returns (Part.GetGeneratorsResponse)
+
+      The part's generators.
+
+      :Part.GetGeneratorsRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetGeneratorsResponse: ``value`` (``repeated`` :grpc:service:`Generator <krpc.ksa.GeneratorService>`)
+
+   .. grpc:rpc:: GetPowerConsumers (Part.GetPowerConsumersRequest) returns (Part.GetPowerConsumersResponse)
+
+      The part's power consumers.
+
+      :Part.GetPowerConsumersRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetPowerConsumersResponse: ``value`` (``repeated`` :grpc:service:`PowerConsumer <krpc.ksa.PowerConsumerService>`)
+
+   .. grpc:rpc:: GetLights (Part.GetLightsRequest) returns (Part.GetLightsResponse)
+
+      The part's lights.
+
+      :Part.GetLightsRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetLightsResponse: ``value`` (``repeated`` :grpc:service:`Light <krpc.ksa.LightService>`)
+
+   .. grpc:rpc:: GetDeployables (Part.GetDeployablesRequest) returns (Part.GetDeployablesResponse)
+
+      The part's deployable sections. A part can have several, such as the doors of a
+      service module.
+
+      :Part.GetDeployablesRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetDeployablesResponse: ``value`` (``repeated`` :grpc:service:`Deployable <krpc.ksa.DeployableService>`)
+
+   .. grpc:rpc:: GetMagneticScoops (Part.GetMagneticScoopsRequest) returns (Part.GetMagneticScoopsResponse)
+
+      The part's magnetic scoops. Empty if it has none.
+
+      :Part.GetMagneticScoopsRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetMagneticScoopsResponse: ``value`` (``repeated`` :grpc:service:`MagneticScoop <krpc.ksa.MagneticScoopService>`)
+
+   .. grpc:rpc:: Position (Part.PositionRequest) returns (Part.PositionResponse)
+
+      The position of the part's origin, in meters.
+
+      :Part.PositionRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+
+      :Part.PositionResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: Velocity (Part.VelocityRequest) returns (Part.VelocityResponse)
+
+      The velocity of the part's origin, in meters per second.
+
+      :Part.VelocityRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the velocity.
+
+      :Part.VelocityResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: Rotation (Part.RotationRequest) returns (Part.RotationResponse)
+
+      The rotation of the part's axes, relative to the given frame.
+
+      :Part.RotationRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the rotation.
+
+      :Part.RotationResponse: ``value`` (:grpc:message:`Tuple_double_double_double_double <krpc.ksa.Tuple_double_double_double_double>`)
+
+   .. grpc:rpc:: GetEngine (Part.GetEngineRequest) returns (Part.GetEngineResponse)
+
+      The part's engine, or ``null`` if it has none.
+
+      :Part.GetEngineRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetEngineResponse: ``value`` (:grpc:service:`Engine <krpc.ksa.EngineService>`)
+
+   .. grpc:rpc:: GetGimbals (Part.GetGimbalsRequest) returns (Part.GetGimbalsResponse)
+
+      The part's gimbals. An engine part can have several, each steering one nozzle.
+
+      :Part.GetGimbalsRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetGimbalsResponse: ``value`` (``repeated`` :grpc:service:`Gimbal <krpc.ksa.GimbalService>`)
+
+   .. grpc:rpc:: GetRCS (Part.GetRCSRequest) returns (Part.GetRCSResponse)
+
+      The part's RCS thrusters, or ``null`` if it has none.
+
+      :Part.GetRCSRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetRCSResponse: ``value`` (:grpc:service:`RCS <krpc.ksa.RCSService>`)
+
+   .. grpc:rpc:: GetDecoupler (Part.GetDecouplerRequest) returns (Part.GetDecouplerResponse)
+
+      The part's decoupler, or ``null`` if it has none.
+
+      :Part.GetDecouplerRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetDecouplerResponse: ``value`` (:grpc:service:`Decoupler <krpc.ksa.DecouplerService>`)
+
+   .. grpc:rpc:: GetParachute (Part.GetParachuteRequest) returns (Part.GetParachuteResponse)
+
+      The part's parachute, or ``null`` if it has none.
+
+      :Part.GetParachuteRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetParachuteResponse: ``value`` (:grpc:service:`Parachute <krpc.ksa.ParachuteService>`)
+
+   .. grpc:rpc:: GetDockingPort (Part.GetDockingPortRequest) returns (Part.GetDockingPortResponse)
+
+      The part's docking port, or ``null`` if it has none.
+
+      :Part.GetDockingPortRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetDockingPortResponse: ``value`` (:grpc:service:`DockingPort <krpc.ksa.DockingPortService>`)
+
+   .. grpc:rpc:: GetSeats (Part.GetSeatsRequest) returns (Part.GetSeatsResponse)
+
+      The part's crew seats.
+
+      :Part.GetSeatsRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetSeatsResponse: ``value`` (``repeated`` :grpc:service:`Seat <krpc.ksa.SeatService>`)
+
+   .. grpc:rpc:: GetCrew (Part.GetCrewRequest) returns (Part.GetCrewResponse)
+
+      The kittens in the part's seats.
+
+      :Part.GetCrewRequest:
+         * ``this`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+      :Part.GetCrewResponse: ``value`` (``repeated`` :grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+.. grpc:service:: EngineService
+
+   An engine. Obtained from :grpc:rpc:`PartService.GetEngine <krpc.ksa.PartService.GetEngine>`.
+
+   .. note::
+
+      An active engine fires when the vehicle's engines are on, at the vehicle's throttle.
+      See :grpc:rpc:`ControlService.GetEngineOn <krpc.ksa.ControlService.GetEngineOn>` and :grpc:rpc:`ControlService.GetThrottle <krpc.ksa.ControlService.GetThrottle>`.
+
+   .. grpc:rpc:: GetPart (Engine.GetPartRequest) returns (Engine.GetPartResponse)
+
+      The part the engine is in.
+
+      :Engine.GetPartRequest:
+         * ``this`` (:grpc:service:`Engine <krpc.ksa.EngineService>`)
+
+      :Engine.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetGimbals (Engine.GetGimbalsRequest) returns (Engine.GetGimbalsResponse)
+
+      The gimbals that steer the engine's nozzles. Empty if the engine has none.
+
+      :Engine.GetGimbalsRequest:
+         * ``this`` (:grpc:service:`Engine <krpc.ksa.EngineService>`)
+
+      :Engine.GetGimbalsResponse: ``value`` (``repeated`` :grpc:service:`Gimbal <krpc.ksa.GimbalService>`)
+
+   .. grpc:rpc:: GetActive (Engine.GetActiveRequest) returns (Engine.GetActiveResponse)
+
+      Whether the engine is active, as when its sequence is activated. Setting it returns
+      once the change has applied.
+
+      :Engine.GetActiveRequest:
+         * ``this`` (:grpc:service:`Engine <krpc.ksa.EngineService>`)
+
+      :Engine.GetActiveResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetActive (Engine.SetActiveRequest) returns (Engine.SetActiveResponse)
+
+      Whether the engine is active, as when its sequence is activated. Setting it returns
+      once the change has applied.
+
+      :Engine.SetActiveRequest:
+         * ``this`` (:grpc:service:`Engine <krpc.ksa.EngineService>`)
+         * ``value`` (``bool``)
+
+      :Engine.SetActiveResponse: Empty
+
+   .. grpc:rpc:: GetHasPropellant (Engine.GetHasPropellantRequest) returns (Engine.GetHasPropellantResponse)
+
+      Whether the engine has propellant to burn.
+
+      :Engine.GetHasPropellantRequest:
+         * ``this`` (:grpc:service:`Engine <krpc.ksa.EngineService>`)
+
+      :Engine.GetHasPropellantResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetMinimumThrottle (Engine.GetMinimumThrottleRequest) returns (Engine.GetMinimumThrottleResponse)
+
+      The lowest throttle the engine runs at, between 0 and 1.
+
+      :Engine.GetMinimumThrottleRequest:
+         * ``this`` (:grpc:service:`Engine <krpc.ksa.EngineService>`)
+
+      :Engine.GetMinimumThrottleResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetPropellants (Engine.GetPropellantsRequest) returns (Engine.GetPropellantsResponse)
+
+      The names of the substances the engine burns. See :grpc:rpc:`ResourceService.GetName <krpc.ksa.ResourceService.GetName>`.
+
+      :Engine.GetPropellantsRequest:
+         * ``this`` (:grpc:service:`Engine <krpc.ksa.EngineService>`)
+
+      :Engine.GetPropellantsResponse: ``value`` (``repeated string``)
+
+   .. grpc:rpc:: GetThrust (Engine.GetThrustRequest) returns (Engine.GetThrustResponse)
+
+      The thrust of the engine at its current throttle and the current atmospheric
+      pressure, in Newtons. Zero when it is not firing.
+
+      :Engine.GetThrustRequest:
+         * ``this`` (:grpc:service:`Engine <krpc.ksa.EngineService>`)
+
+      :Engine.GetThrustResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetAvailableThrust (Engine.GetAvailableThrustRequest) returns (Engine.GetAvailableThrustResponse)
+
+      The thrust of the engine at full throttle and the current atmospheric pressure, in
+      Newtons. Zero when it is inactive or has no propellant.
+
+      :Engine.GetAvailableThrustRequest:
+         * ``this`` (:grpc:service:`Engine <krpc.ksa.EngineService>`)
+
+      :Engine.GetAvailableThrustResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSpecificImpulse (Engine.GetSpecificImpulseRequest) returns (Engine.GetSpecificImpulseResponse)
+
+      The specific impulse of the engine at the current atmospheric pressure, in seconds.
+      Zero when it is inactive or has no propellant.
+
+      :Engine.GetSpecificImpulseRequest:
+         * ``this`` (:grpc:service:`Engine <krpc.ksa.EngineService>`)
+
+      :Engine.GetSpecificImpulseResponse: ``value`` (``float``)
+
+.. grpc:service:: GimbalService
+
+   A gimbal that steers an engine nozzle. Obtained from :grpc:rpc:`PartService.GetGimbals <krpc.ksa.PartService.GetGimbals>` or
+   :grpc:rpc:`EngineService.GetGimbals <krpc.ksa.EngineService.GetGimbals>`.
+
+   .. note::
+
+      A gimbal turns about the y and z axes of its mount, which :grpc:rpc:`GimbalService.Rotation <krpc.ksa.GimbalService.Rotation>` gives.
+      The flight computer steers it while an engine it belongs to is :grpc:rpc:`GimbalService.GetActive <krpc.ksa.GimbalService.GetActive>`.
+
+   .. grpc:rpc:: GetPart (Gimbal.GetPartRequest) returns (Gimbal.GetPartResponse)
+
+      The part the gimbal is in.
+
+      :Gimbal.GetPartRequest:
+         * ``this`` (:grpc:service:`Gimbal <krpc.ksa.GimbalService>`)
+
+      :Gimbal.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetAngleY (Gimbal.GetAngleYRequest) returns (Gimbal.GetAngleYResponse)
+
+      The angle of the gimbal about its y axis, in degrees.
+
+      :Gimbal.GetAngleYRequest:
+         * ``this`` (:grpc:service:`Gimbal <krpc.ksa.GimbalService>`)
+
+      :Gimbal.GetAngleYResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetAngleZ (Gimbal.GetAngleZRequest) returns (Gimbal.GetAngleZResponse)
+
+      The angle of the gimbal about its z axis, in degrees.
+
+      :Gimbal.GetAngleZRequest:
+         * ``this`` (:grpc:service:`Gimbal <krpc.ksa.GimbalService>`)
+
+      :Gimbal.GetAngleZResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetMaxAngleY (Gimbal.GetMaxAngleYRequest) returns (Gimbal.GetMaxAngleYResponse)
+
+      The largest angle of the gimbal about its y axis, in degrees. Zero if it does not
+      turn about that axis.
+
+      :Gimbal.GetMaxAngleYRequest:
+         * ``this`` (:grpc:service:`Gimbal <krpc.ksa.GimbalService>`)
+
+      :Gimbal.GetMaxAngleYResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetMaxAngleZ (Gimbal.GetMaxAngleZRequest) returns (Gimbal.GetMaxAngleZResponse)
+
+      The largest angle of the gimbal about its z axis, in degrees. Zero if it does not
+      turn about that axis.
+
+      :Gimbal.GetMaxAngleZRequest:
+         * ``this`` (:grpc:service:`Gimbal <krpc.ksa.GimbalService>`)
+
+      :Gimbal.GetMaxAngleZResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetActive (Gimbal.GetActiveRequest) returns (Gimbal.GetActiveResponse)
+
+      Whether an engine the gimbal steers is active.
+
+      :Gimbal.GetActiveRequest:
+         * ``this`` (:grpc:service:`Gimbal <krpc.ksa.GimbalService>`)
+
+      :Gimbal.GetActiveResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: Rotation (Gimbal.RotationRequest) returns (Gimbal.RotationResponse)
+
+      The rotation of the gimbal's mount, whose y and z axes the gimbal turns about.
+
+      :Gimbal.RotationRequest:
+         * ``this`` (:grpc:service:`Gimbal <krpc.ksa.GimbalService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the rotation.
+
+      :Gimbal.RotationResponse: ``value`` (:grpc:message:`Tuple_double_double_double_double <krpc.ksa.Tuple_double_double_double_double>`)
+
+.. grpc:service:: RCSService
+
+   The RCS thrusters of a part. Obtained from :grpc:rpc:`PartService.GetRCS <krpc.ksa.PartService.GetRCS>`.
+
+   .. note::
+
+      Active thrusters fire when the vehicle's RCS is on. See :grpc:rpc:`ControlService.GetRCS <krpc.ksa.ControlService.GetRCS>`.
+
+   .. grpc:rpc:: GetPart (RCS.GetPartRequest) returns (RCS.GetPartResponse)
+
+      The part the thrusters are in.
+
+      :RCS.GetPartRequest:
+         * ``this`` (:grpc:service:`RCS <krpc.ksa.RCSService>`)
+
+      :RCS.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetActive (RCS.GetActiveRequest) returns (RCS.GetActiveResponse)
+
+      Whether the thrusters are active. Setting it returns once the change has applied.
+
+      :RCS.GetActiveRequest:
+         * ``this`` (:grpc:service:`RCS <krpc.ksa.RCSService>`)
+
+      :RCS.GetActiveResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetActive (RCS.SetActiveRequest) returns (RCS.SetActiveResponse)
+
+      Whether the thrusters are active. Setting it returns once the change has applied.
+
+      :RCS.SetActiveRequest:
+         * ``this`` (:grpc:service:`RCS <krpc.ksa.RCSService>`)
+         * ``value`` (``bool``)
+
+      :RCS.SetActiveResponse: Empty
+
+.. grpc:service:: DecouplerService
+
+   A decoupler. Obtained from :grpc:rpc:`PartService.GetDecoupler <krpc.ksa.PartService.GetDecoupler>`.
+
+   .. grpc:rpc:: GetPart (Decoupler.GetPartRequest) returns (Decoupler.GetPartResponse)
+
+      The part the decoupler is in.
+
+      :Decoupler.GetPartRequest:
+         * ``this`` (:grpc:service:`Decoupler <krpc.ksa.DecouplerService>`)
+
+      :Decoupler.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetEnabled (Decoupler.GetEnabledRequest) returns (Decoupler.GetEnabledResponse)
+
+      Whether the decoupler can fire.
+
+      :Decoupler.GetEnabledRequest:
+         * ``this`` (:grpc:service:`Decoupler <krpc.ksa.DecouplerService>`)
+
+      :Decoupler.GetEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetDecoupled (Decoupler.GetDecoupledRequest) returns (Decoupler.GetDecoupledResponse)
+
+      Whether the decoupler has fired, or is attached to nothing.
+
+      :Decoupler.GetDecoupledRequest:
+         * ``this`` (:grpc:service:`Decoupler <krpc.ksa.DecouplerService>`)
+
+      :Decoupler.GetDecoupledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: Decouple (Decoupler.DecoupleRequest) returns (Decoupler.DecoupleResponse)
+
+      Fire the decoupler, separating the vehicle into two. Returns once it has fired.
+      Throws an exception if the decoupler is disabled or :grpc:rpc:`DecouplerService.GetDecoupled <krpc.ksa.DecouplerService.GetDecoupled>`.
+
+      :Decoupler.DecoupleRequest:
+         * ``this`` (:grpc:service:`Decoupler <krpc.ksa.DecouplerService>`)
+
+      :Decoupler.DecoupleResponse: ``value`` (``repeated`` :grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicles that separated from this one.
+
+.. grpc:service:: ParachuteService
+
+   A parachute. Obtained from :grpc:rpc:`PartService.GetParachute <krpc.ksa.PartService.GetParachute>`.
+
+   .. grpc:rpc:: GetPart (Parachute.GetPartRequest) returns (Parachute.GetPartResponse)
+
+      The part the parachute is in.
+
+      :Parachute.GetPartRequest:
+         * ``this`` (:grpc:service:`Parachute <krpc.ksa.ParachuteService>`)
+
+      :Parachute.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetState (Parachute.GetStateRequest) returns (Parachute.GetStateResponse)
+
+      The state of the parachute.
+
+      :Parachute.GetStateRequest:
+         * ``this`` (:grpc:service:`Parachute <krpc.ksa.ParachuteService>`)
+
+      :Parachute.GetStateResponse: ``value`` (:grpc:enum:`ParachuteState <krpc.ksa.ParachuteState>`)
+
+   .. grpc:rpc:: GetFill (Parachute.GetFillRequest) returns (Parachute.GetFillResponse)
+
+      How far the canopy is open, from 0 to 1.
+
+      :Parachute.GetFillRequest:
+         * ``this`` (:grpc:service:`Parachute <krpc.ksa.ParachuteService>`)
+
+      :Parachute.GetFillResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetDeployAltitude (Parachute.GetDeployAltitudeRequest) returns (Parachute.GetDeployAltitudeResponse)
+
+      The height above the terrain at which an armed parachute deploys, in meters.
+
+      :Parachute.GetDeployAltitudeRequest:
+         * ``this`` (:grpc:service:`Parachute <krpc.ksa.ParachuteService>`)
+
+      :Parachute.GetDeployAltitudeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetCanCut (Parachute.GetCanCutRequest) returns (Parachute.GetCanCutResponse)
+
+      Whether the parachute can be cut away. Main parachutes cannot.
+
+      :Parachute.GetCanCutRequest:
+         * ``this`` (:grpc:service:`Parachute <krpc.ksa.ParachuteService>`)
+
+      :Parachute.GetCanCutResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: Deploy (Parachute.DeployRequest) returns (Parachute.DeployResponse)
+
+      Arm the parachute, so that it deploys at :grpc:rpc:`ParachuteService.GetDeployAltitude <krpc.ksa.ParachuteService.GetDeployAltitude>`. Returns once
+      it is armed. Throws an exception if it is not stowed.
+
+      :Parachute.DeployRequest:
+         * ``this`` (:grpc:service:`Parachute <krpc.ksa.ParachuteService>`)
+
+      :Parachute.DeployResponse: Empty
+
+   .. grpc:rpc:: Cut (Parachute.CutRequest) returns (Parachute.CutResponse)
+
+      Cut the parachute away. Returns once it is cut. Throws an exception if it cannot
+      be cut. See :grpc:rpc:`ParachuteService.GetCanCut <krpc.ksa.ParachuteService.GetCanCut>`.
+
+      :Parachute.CutRequest:
+         * ``this`` (:grpc:service:`Parachute <krpc.ksa.ParachuteService>`)
+
+      :Parachute.CutResponse: Empty
+
+.. grpc:enum:: ParachuteState
+
+   The state of a parachute. See :grpc:rpc:`ParachuteService.GetState <krpc.ksa.ParachuteService.GetState>`.
+
+   .. grpc:value:: PARACHUTE_STATE_STOWED
+
+      Packed away.
+
+   .. grpc:value:: PARACHUTE_STATE_ARMED
+
+      Waiting to deploy at :grpc:rpc:`ParachuteService.GetDeployAltitude <krpc.ksa.ParachuteService.GetDeployAltitude>`.
+
+   .. grpc:value:: PARACHUTE_STATE_LINE_STRETCH
+
+      Leaving the pack.
+
+   .. grpc:value:: PARACHUTE_STATE_REEFED
+
+      Partly open, to limit the opening load.
+
+   .. grpc:value:: PARACHUTE_STATE_DISREEFING
+
+      Opening from reefed to full.
+
+   .. grpc:value:: PARACHUTE_STATE_FULL
+
+      Fully open.
+
+   .. grpc:value:: PARACHUTE_STATE_CUT
+
+      Cut away.
+
+   .. grpc:value:: PARACHUTE_STATE_RIPPED
+
+      Torn by too much dynamic pressure.
+
+   .. grpc:value:: PARACHUTE_STATE_SEVERED_LINES
+
+      Lost after its lines broke under too much load.
+
+.. grpc:service:: DockingPortService
+
+   A docking port. Obtained from :grpc:rpc:`PartService.GetDockingPort <krpc.ksa.PartService.GetDockingPort>`.
+
+   .. grpc:rpc:: GetPart (DockingPort.GetPartRequest) returns (DockingPort.GetPartResponse)
+
+      The part the docking port is in.
+
+      :DockingPort.GetPartRequest:
+         * ``this`` (:grpc:service:`DockingPort <krpc.ksa.DockingPortService>`)
+
+      :DockingPort.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetDocked (DockingPort.GetDockedRequest) returns (DockingPort.GetDockedResponse)
+
+      Whether the port is docked.
+
+      :DockingPort.GetDockedRequest:
+         * ``this`` (:grpc:service:`DockingPort <krpc.ksa.DockingPortService>`)
+
+      :DockingPort.GetDockedResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetDockedPart (DockingPort.GetDockedPartRequest) returns (DockingPort.GetDockedPartResponse)
+
+      The part the port is docked to, or ``null`` if it is not docked.
+
+      :DockingPort.GetDockedPartRequest:
+         * ``this`` (:grpc:service:`DockingPort <krpc.ksa.DockingPortService>`)
+
+      :DockingPort.GetDockedPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: Undock (DockingPort.UndockRequest) returns (DockingPort.UndockResponse)
+
+      Undock the port, separating the vehicle into two. Returns once it has undocked.
+      Throws an exception if the port is not docked.
+
+      :DockingPort.UndockRequest:
+         * ``this`` (:grpc:service:`DockingPort <krpc.ksa.DockingPortService>`)
+
+      :DockingPort.UndockResponse: ``value`` (``repeated`` :grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The new vehicles.
+
+      .. note::
+
+         Docking and undocking replace the vehicles involved. See :grpc:service:`Vehicle <krpc.ksa.VehicleService>`.
+
+.. grpc:service:: DeployableService
+
+   A part that deploys and retracts, such as a landing leg, a solar panel or a service
+   module door. Obtained from :grpc:rpc:`PartService.GetDeployables <krpc.ksa.PartService.GetDeployables>`.
+
+   .. note::
+
+      Deploying or retracting a part moves its symmetric copies with it, as the part's menu
+      in the game does.
+
+   .. grpc:rpc:: GetPart (Deployable.GetPartRequest) returns (Deployable.GetPartResponse)
+
+      The part the deployable is in.
+
+      :Deployable.GetPartRequest:
+         * ``this`` (:grpc:service:`Deployable <krpc.ksa.DeployableService>`)
+
+      :Deployable.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetState (Deployable.GetStateRequest) returns (Deployable.GetStateResponse)
+
+      The state of the part.
+
+      :Deployable.GetStateRequest:
+         * ``this`` (:grpc:service:`Deployable <krpc.ksa.DeployableService>`)
+
+      :Deployable.GetStateResponse: ``value`` (:grpc:enum:`DeployableState <krpc.ksa.DeployableState>`)
+
+   .. grpc:rpc:: Deploy (Deployable.DeployRequest) returns (Deployable.DeployResponse)
+
+      Deploy the part. Returns once it has started to move.
+
+      :Deployable.DeployRequest:
+         * ``this`` (:grpc:service:`Deployable <krpc.ksa.DeployableService>`)
+
+      :Deployable.DeployResponse: Empty
+
+      .. note::
+
+         Throws an exception if the part is broken.
+
+   .. grpc:rpc:: Retract (Deployable.RetractRequest) returns (Deployable.RetractResponse)
+
+      Retract the part. Returns once it has started to move.
+
+      :Deployable.RetractRequest:
+         * ``this`` (:grpc:service:`Deployable <krpc.ksa.DeployableService>`)
+
+      :Deployable.RetractResponse: Empty
+
+      .. note::
+
+         Throws an exception if the part is broken.
+
+.. grpc:enum:: DeployableState
+
+   The state of a deployable part. See :grpc:rpc:`DeployableService.GetState <krpc.ksa.DeployableService.GetState>`.
+
+   .. grpc:value:: DEPLOYABLE_STATE_DEPLOYED
+
+      Fully deployed.
+
+   .. grpc:value:: DEPLOYABLE_STATE_RETRACTED
+
+      Fully retracted.
+
+   .. grpc:value:: DEPLOYABLE_STATE_DEPLOYING
+
+      Moving toward deployed.
+
+   .. grpc:value:: DEPLOYABLE_STATE_RETRACTING
+
+      Moving toward retracted.
+
+   .. grpc:value:: DEPLOYABLE_STATE_BROKEN
+
+      Broken, so it can no longer move.
+
+.. grpc:service:: MagneticScoopService
+
+   A magnetic scoop, which collects gas from space into the vehicle's tanks. Obtained from
+   :grpc:rpc:`PartService.GetMagneticScoops <krpc.ksa.PartService.GetMagneticScoops>`.
+
+   .. grpc:rpc:: GetPart (MagneticScoop.GetPartRequest) returns (MagneticScoop.GetPartResponse)
+
+      The part the scoop is in.
+
+      :MagneticScoop.GetPartRequest:
+         * ``this`` (:grpc:service:`MagneticScoop <krpc.ksa.MagneticScoopService>`)
+
+      :MagneticScoop.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetActive (MagneticScoop.GetActiveRequest) returns (MagneticScoop.GetActiveResponse)
+
+      Whether the scoop is switched on.
+
+      :MagneticScoop.GetActiveRequest:
+         * ``this`` (:grpc:service:`MagneticScoop <krpc.ksa.MagneticScoopService>`)
+
+      :MagneticScoop.GetActiveResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetActive (MagneticScoop.SetActiveRequest) returns (MagneticScoop.SetActiveResponse)
+
+      Whether the scoop is switched on.
+
+      :MagneticScoop.SetActiveRequest:
+         * ``this`` (:grpc:service:`MagneticScoop <krpc.ksa.MagneticScoopService>`)
+         * ``value`` (``bool``)
+
+      :MagneticScoop.SetActiveResponse: Empty
+
+   .. grpc:rpc:: GetSubstance (MagneticScoop.GetSubstanceRequest) returns (MagneticScoop.GetSubstanceResponse)
+
+      The name of the substance the scoop collects. See :grpc:rpc:`ResourceService.GetName <krpc.ksa.ResourceService.GetName>`.
+
+      :MagneticScoop.GetSubstanceRequest:
+         * ``this`` (:grpc:service:`MagneticScoop <krpc.ksa.MagneticScoopService>`)
+
+      :MagneticScoop.GetSubstanceResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: GetCollectionRate (MagneticScoop.GetCollectionRateRequest) returns (MagneticScoop.GetCollectionRateResponse)
+
+      The rate the scoop collects gas at, in kilograms per second.
+
+      :MagneticScoop.GetCollectionRateRequest:
+         * ``this`` (:grpc:service:`MagneticScoop <krpc.ksa.MagneticScoopService>`)
+
+      :MagneticScoop.GetCollectionRateResponse: ``value`` (``float``)

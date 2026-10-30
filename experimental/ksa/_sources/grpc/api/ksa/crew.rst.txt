@@ -1,0 +1,307 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Crew
+====
+
+.. grpc:service:: KittenService
+
+   A kitten in the agency's roster. Obtained from :grpc:rpc:`KSAService.GetKittens <krpc.ksa.KSAService.GetKittens>`,
+   :grpc:rpc:`VehicleService.GetCrew <krpc.ksa.VehicleService.GetCrew>` or :grpc:rpc:`SeatService.GetKitten <krpc.ksa.SeatService.GetKitten>`.
+
+   .. grpc:rpc:: GetName (Kitten.GetNameRequest) returns (Kitten.GetNameResponse)
+
+      The kitten's name, which is unique in the roster.
+
+      :Kitten.GetNameRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetNameResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: GetRosterIndex (Kitten.GetRosterIndexRequest) returns (Kitten.GetRosterIndexResponse)
+
+      The kitten's position in the agency's roster, from 0. See :grpc:rpc:`KSAService.GetKittens <krpc.ksa.KSAService.GetKittens>`.
+
+      :Kitten.GetRosterIndexRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetRosterIndexResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetVehicle (Kitten.GetVehicleRequest) returns (Kitten.GetVehicleResponse)
+
+      The vehicle the kitten is in, or ``null`` if it is not in a seat.
+
+      :Kitten.GetVehicleRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetVehicleResponse: ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`)
+
+   .. grpc:rpc:: GetSeat (Kitten.GetSeatRequest) returns (Kitten.GetSeatResponse)
+
+      The seat the kitten is in, or ``null`` if it is not in a seat.
+
+      :Kitten.GetSeatRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetSeatResponse: ``value`` (:grpc:service:`Seat <krpc.ksa.SeatService>`)
+
+   .. grpc:rpc:: GetKilledInAction (Kitten.GetKilledInActionRequest) returns (Kitten.GetKilledInActionResponse)
+
+      Whether the kitten has been killed in action.
+
+      :Kitten.GetKilledInActionRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetKilledInActionResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetMissionCount (Kitten.GetMissionCountRequest) returns (Kitten.GetMissionCountResponse)
+
+      The number of missions the kitten has flown, including the current one.
+
+      :Kitten.GetMissionCountRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetMissionCountResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: GetMissionTime (Kitten.GetMissionTimeRequest) returns (Kitten.GetMissionTimeResponse)
+
+      The time the kitten has spent on missions, including the current one, in seconds.
+
+      :Kitten.GetMissionTimeRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetMissionTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetDistanceTraveled (Kitten.GetDistanceTraveledRequest) returns (Kitten.GetDistanceTraveledResponse)
+
+      The distance the kitten has traveled on missions, in meters.
+
+      :Kitten.GetDistanceTraveledRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetDistanceTraveledResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetFastestSpeed (Kitten.GetFastestSpeedRequest) returns (Kitten.GetFastestSpeedResponse)
+
+      The kitten's highest speed on a mission, in meters per second.
+
+      :Kitten.GetFastestSpeedRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetFastestSpeedResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetAcuteDose (Kitten.GetAcuteDoseRequest) returns (Kitten.GetAcuteDoseResponse)
+
+      The kitten's acute radiation dose, in sieverts. It heals over time, and causes
+      radiation sickness from 1 sievert and death from 4 sieverts.
+
+      :Kitten.GetAcuteDoseRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetAcuteDoseResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetLifetimeDose (Kitten.GetLifetimeDoseRequest) returns (Kitten.GetLifetimeDoseResponse)
+
+      The kitten's lifetime radiation dose, in sieverts. The kitten retires after a
+      mission that takes it past 0.6 sieverts.
+
+      :Kitten.GetLifetimeDoseRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetLifetimeDoseResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetDoseRate (Kitten.GetDoseRateRequest) returns (Kitten.GetDoseRateResponse)
+
+      The radiation dose rate the kitten receives, in sieverts per second. The vehicle's
+      shielding reduces it in a seat, and on EVA the kitten is unshielded. Zero when the
+      kitten is not on a mission.
+
+      :Kitten.GetDoseRateRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetDoseRateResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetRadiationSickness (Kitten.GetRadiationSicknessRequest) returns (Kitten.GetRadiationSicknessResponse)
+
+      Whether the kitten has radiation sickness, which keeps it from flying.
+
+      :Kitten.GetRadiationSicknessRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetRadiationSicknessResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetTimeUntilFitToFly (Kitten.GetTimeUntilFitToFlyRequest) returns (Kitten.GetTimeUntilFitToFlyResponse)
+
+      The time until the kitten has recovered from radiation sickness and can fly, resting
+      at home, in seconds. Zero if the kitten does not have radiation sickness.
+
+      :Kitten.GetTimeUntilFitToFlyRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetTimeUntilFitToFlyResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetRecoveryTime (Kitten.GetRecoveryTimeRequest) returns (Kitten.GetRecoveryTimeResponse)
+
+      The time until the kitten's acute radiation dose has healed below 1 millisievert,
+      resting at home, in seconds.
+
+      :Kitten.GetRecoveryTimeRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetRecoveryTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetRetired (Kitten.GetRetiredRequest) returns (Kitten.GetRetiredResponse)
+
+      Whether the kitten has retired, having reached its lifetime radiation dose limit.
+
+      :Kitten.GetRetiredRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetRetiredResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetOnEva (Kitten.GetOnEvaRequest) returns (Kitten.GetOnEvaResponse)
+
+      Whether the kitten is on EVA.
+
+      :Kitten.GetOnEvaRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetOnEvaResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GoOnEva (Kitten.GoOnEvaRequest) returns (Kitten.GoOnEvaResponse)
+
+      Leave the kitten's vehicle through its EVA hatch, and return once the kitten is on
+      EVA. The kitten becomes the controlled kitten, see :grpc:rpc:`KSAService.GetActiveKitten <krpc.ksa.KSAService.GetActiveKitten>`.
+
+      :Kitten.GoOnEvaRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GoOnEvaResponse: Empty
+
+      .. note::
+
+         Throws an exception if the kitten is not in a seat, or the vehicle has no EVA hatch.
+
+   .. grpc:rpc:: Board (Kitten.BoardRequest) returns (Kitten.BoardResponse)
+
+      Board the nearest vehicle with a free seat, and return once the kitten is in the
+      seat. The vehicle becomes the controlled vehicle.
+
+      :Kitten.BoardRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.BoardResponse: ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle the kitten boarded.
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA, or no EVA hatch with a free seat is
+         within one meter.
+
+   .. grpc:rpc:: GetLocomotionMode (Kitten.GetLocomotionModeRequest) returns (Kitten.GetLocomotionModeResponse)
+
+      How the kitten on EVA is moving. Throws an exception if the kitten is not on EVA.
+
+      :Kitten.GetLocomotionModeRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Kitten.GetLocomotionModeResponse: ``value`` (:grpc:enum:`LocomotionMode <krpc.ksa.LocomotionMode>`)
+
+   .. grpc:rpc:: Position (Kitten.PositionRequest) returns (Kitten.PositionResponse)
+
+      The position of the kitten, in meters. For a kitten in a seat, the position of the
+      seat's part. Throws an exception if the kitten is neither in a seat nor on EVA.
+
+      :Kitten.PositionRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+
+      :Kitten.PositionResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: Velocity (Kitten.VelocityRequest) returns (Kitten.VelocityResponse)
+
+      The velocity of the kitten, in meters per second. For a kitten in a seat, the
+      velocity of the seat's part. Throws an exception if the kitten is neither in a seat
+      nor on EVA.
+
+      :Kitten.VelocityRequest:
+         * ``this`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the velocity.
+
+      :Kitten.VelocityResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+.. grpc:enum:: LocomotionMode
+
+   How a kitten on EVA is moving. See :grpc:rpc:`KittenService.GetLocomotionMode <krpc.ksa.KittenService.GetLocomotionMode>`.
+
+   .. grpc:value:: LOCOMOTION_MODE_MMU
+
+      Flying with the maneuvering unit, away from any surface.
+
+   .. grpc:value:: LOCOMOTION_MODE_GROUNDED
+
+      Standing or walking on a surface.
+
+   .. grpc:value:: LOCOMOTION_MODE_AIRBORNE
+
+      In the air above a surface, such as during a jump.
+
+   .. grpc:value:: LOCOMOTION_MODE_TUMBLING
+
+      Tumbling after a fall or an impact.
+
+   .. grpc:value:: LOCOMOTION_MODE_RIGHTING
+
+      Getting back up after tumbling.
+
+   .. grpc:value:: LOCOMOTION_MODE_LADDER
+
+      Holding a ladder or grab rail.
+
+   .. grpc:value:: LOCOMOTION_MODE_SWIMMING
+
+      Swimming in an ocean.
+
+.. grpc:service:: SeatService
+
+   A crew seat. Obtained from :grpc:rpc:`PartService.GetSeats <krpc.ksa.PartService.GetSeats>`.
+
+   .. grpc:rpc:: GetPart (Seat.GetPartRequest) returns (Seat.GetPartResponse)
+
+      The part the seat is in.
+
+      :Seat.GetPartRequest:
+         * ``this`` (:grpc:service:`Seat <krpc.ksa.SeatService>`)
+
+      :Seat.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetKitten (Seat.GetKittenRequest) returns (Seat.GetKittenResponse)
+
+      Returns the kitten in the seat, or ``null`` if the seat is empty, and sets the
+      kitten in the seat. Setting ``null`` empties the seat.
+
+      :Seat.GetKittenRequest:
+         * ``this`` (:grpc:service:`Seat <krpc.ksa.SeatService>`)
+
+      :Seat.GetKittenResponse: ``value`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      .. note::
+
+         A kitten in another seat of the vehicle moves to this one. Throws an exception if
+         the kitten is killed in action, on EVA, or in another vehicle.
+
+   .. grpc:rpc:: SetKitten (Seat.SetKittenRequest) returns (Seat.SetKittenResponse)
+
+      Returns the kitten in the seat, or ``null`` if the seat is empty, and sets the
+      kitten in the seat. Setting ``null`` empties the seat.
+
+      :Seat.SetKittenRequest:
+         * ``this`` (:grpc:service:`Seat <krpc.ksa.SeatService>`)
+         * ``value`` (:grpc:service:`Kitten <krpc.ksa.KittenService>`)
+
+      :Seat.SetKittenResponse: Empty
+
+      .. note::
+
+         A kitten in another seat of the vehicle moves to this one. Throws an exception if
+         the kitten is killed in action, on EVA, or in another vehicle.

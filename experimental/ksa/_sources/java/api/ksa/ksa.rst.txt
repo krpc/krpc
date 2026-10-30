@@ -14,18 +14,48 @@ KSA
 
    .. method:: void setActiveVehicle(Vehicle value)
 
-      The vehicle under the player's control.
+      The vehicle under the player's control, or ``null`` if the player controls a
+      kitten on EVA.
 
    
 
       .. note::
 
-         Setting it moves the camera to the vehicle, as the switch vehicle key does.
+         Setting it moves the camera to the vehicle, as the switch vehicle key does. See
+         :meth:`getActiveKitten()` for a kitten on EVA.
 
    .. method:: java.util.List<Vehicle> getVehicles()
 
 
       The vehicles in the current system, excluding kittens on EVA.
+
+   
+
+   .. method:: Kitten getActiveKitten()
+
+   .. method:: void setActiveKitten(Kitten value)
+
+      The kitten on EVA under the player's control, or ``null`` if the player
+      controls a vehicle.
+
+   
+
+      .. note::
+
+         Setting it moves the camera to the kitten. Throws an exception if the kitten is not
+         on EVA. See :meth:`getActiveVehicle()` for a vehicle.
+
+   .. method:: java.util.Map<String,Kitten> getKittens()
+
+
+      The kittens in the agency's roster, including those killed in action, keyed by name.
+
+   
+
+   .. method:: Camera getCamera()
+
+
+      The game's main camera.
 
    
 
@@ -43,9 +73,9 @@ KSA
 
    
 
-   .. method:: double getSimulationSpeed()
+   .. method:: float getSimulationSpeed()
 
-   .. method:: void setSimulationSpeed(double value)
+   .. method:: void setSimulationSpeed(float value)
 
       The simulation speed, as a multiple of real time. Zero when paused.
 
@@ -64,19 +94,74 @@ KSA
          Does nothing when the time is in the past. Returns early if the game stops the
          warp, for example when its menu pauses the game.
 
+   .. method:: java.util.Map<String,VehicleDesign> getVehicleDesigns()
+
+
+      The vehicle designs that can be launched, keyed by name.
+
+   
+
    .. method:: Vehicle launchVehicle(String name, String site)
 
       Launch a vehicle from a launch site, and make it the active vehicle. Returns once
       the vehicle is on the launch site.
 
-      :param String name: The name of the vehicle, one of the game's default vehicles or a vehicle saved by the player.
+      :param String name: The name of the vehicle design. See :meth:`getVehicleDesigns()`.
       :param String site: The name of the launch site. See :meth:`Body.getLaunchSites()`.
       :returns: The vehicle. Its name is the vehicle's name, with a number appended if another vehicle has that name.
    
 
       .. note::
 
-         Throws an exception if there is no such vehicle or launch site.
+         Throws an exception if there is no such vehicle or launch site, or the name is one
+         of the game's kittens.
+
+   .. method:: boolean saveExists(String name)
+
+      Whether a save with the given name exists.
+
+      :param String name: Name of the save.
+   
+
+   .. method:: void save(String name)
+
+      Save the game, replacing any save with the same name.
+
+      :param String name: Name of the save.
+   
+
+   .. method:: void load(String name)
+
+      Load a save, and return once it has loaded. The game is paused after loading.
+
+      :param String name: Name of the save.
+   
+
+      .. note::
+
+         Throws an exception if the save does not exist.
+
+   .. method:: String takeScreenshot(int scale, boolean ui)
+
+      Save a screenshot, as the screenshot key does, and return once the file is written.
+
+      :param int scale: The size of the image, as a multiple of the window size, from 1 to 8. The game reduces it to fit the graphics memory.
+      :param boolean ui: Whether to include the game's windows. The image is then the size of the window.
+      :returns: The path of the PNG file, in the game's screenshots folder.
+   
+
+      .. note::
+
+         Throws an exception in the vehicle editor, or if a screenshot is already being taken.
+
+   .. method:: void showMessage(String text, float duration, boolean warning)
+
+      Show a message in the middle of the screen.
+
+      :param String text: The message.
+      :param float duration: How long to show the message for, in seconds. The game shows a message for at least 2 seconds.
+      :param boolean warning: Whether to show the message in the warning color.
+   
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> transformPosition(org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame from, ReferenceFrame to)
 

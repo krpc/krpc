@@ -1,0 +1,44 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Reference Frame
+===============
+
+.. grpc:service:: ReferenceFrameService
+
+   A reference frame, in which positions, directions, rotations and velocities are given.
+   Obtained from the reference frame properties of :grpc:service:`Vehicle <krpc.ksa.VehicleService>` and
+   :grpc:service:`Body <krpc.ksa.BodyService>`, or created with :grpc:rpc:`ReferenceFrameService.CreateRelative <krpc.ksa.ReferenceFrameService.CreateRelative>` and
+   :grpc:rpc:`ReferenceFrameService.CreateHybrid <krpc.ksa.ReferenceFrameService.CreateHybrid>`.
+
+   .. note::
+
+      Every reference frame is right-handed. Positions are in meters, velocities in meters
+      per second, and angular velocities in radians per second. A rotation is a quaternion
+      ``(x, y, z, w)``.
+
+   .. grpc:rpc:: CreateRelative (ReferenceFrame.CreateRelativeRequest) returns (ReferenceFrame.CreateRelativeResponse)
+
+      Create a reference frame that is offset from a parent frame.
+
+      :ReferenceFrame.CreateRelativeRequest:
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The parent reference frame.
+         * ``position`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The position of the origin in the parent frame, in meters. Defaults to ``(0, 0, 0)``.
+         * ``rotation`` (:grpc:message:`Tuple_double_double_double_double <krpc.ksa.Tuple_double_double_double_double>`): The rotation of the frame relative to the parent frame. Defaults to ``(0, 0, 0, 1)``, no rotation.
+         * ``velocity`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The velocity of the origin in the parent frame, in meters per second. Defaults to ``(0, 0, 0)``.
+         * ``angular_velocity`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The angular velocity of the frame relative to the parent frame, in radians per second, in the axes of the parent frame. Defaults to ``(0, 0, 0)``.
+
+      :ReferenceFrame.CreateRelativeResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: CreateHybrid (ReferenceFrame.CreateHybridRequest) returns (ReferenceFrame.CreateHybridResponse)
+
+      Create a reference frame that takes its components from other frames.
+
+      :ReferenceFrame.CreateHybridRequest:
+         * ``position`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame that gives the origin.
+         * ``rotation`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame that gives the axes. Defaults to ``position``.
+         * ``velocity`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame that gives the velocity of the origin. Defaults to ``position``.
+         * ``angular_velocity`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame that gives the angular velocity. Defaults to ``position``.
+
+      :ReferenceFrame.CreateHybridResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)

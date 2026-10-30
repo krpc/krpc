@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Orbit &#8212; kRPC v0.2.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'grpc/api/ksa/orbit';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Control" href="control.html" />
+    <link rel="prev" title="Flight" href="flight.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.2.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../messages.html">Messages</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../clients.html" class="nav-link">Clients</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../grpc.html" class="nav-link">gRPC</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../ksa.html" class="nav-link">KSA API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Orbit</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="orbit">
+<h1>Orbit<a class="headerlink" href="#orbit" title="Link to this heading">#</a></h1>
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">OrbitService</span></span><a class="headerlink" href="#krpc.ksa.OrbitService" title="Link to this definition">#</a></dt>
+<dd><p>An orbit. Obtained from <a class="reference internal" href="vehicle.html#krpc.ksa.VehicleService.GetOrbit" title="krpc.ksa.VehicleService.GetOrbit"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetOrbit</span></code></a>, <a class="reference internal" href="body.html#krpc.ksa.BodyService.GetOrbit" title="krpc.ksa.BodyService.GetOrbit"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">BodyService.GetOrbit</span></code></a>,
+<a class="reference internal" href="burn.html#krpc.ksa.BurnService.GetOrbit" title="krpc.ksa.BurnService.GetOrbit"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">BurnService.GetOrbit</span></code></a> or <a class="reference internal" href="#krpc.ksa.OrbitService.GetNextOrbit" title="krpc.ksa.OrbitService.GetNextOrbit"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">OrbitService.GetNextOrbit</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An orbit follows the game’s prediction as the trajectory changes. A predicted orbit, from
+<a class="reference internal" href="#krpc.ksa.OrbitService.GetNextOrbit" title="krpc.ksa.OrbitService.GetNextOrbit"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">OrbitService.GetNextOrbit</span></code></a> or <a class="reference internal" href="burn.html#krpc.ksa.BurnService.GetOrbit" title="krpc.ksa.BurnService.GetOrbit"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">BurnService.GetOrbit</span></code></a>, is a position in the vehicle’s or the
+burn’s predicted trajectory, and throws an exception while the trajectory is too short to
+reach it.</p>
+</div>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetBody">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetBody</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetBodyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetBodyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetBody" title="Link to this definition">#</a></dt>
+<dd><p>The body being orbited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetBodyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetBodyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="body.html#krpc.ksa.BodyService" title="krpc.ksa.BodyService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Body</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetApoapsis">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetApoapsis</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetApoapsisRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetApoapsisResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetApoapsis" title="Link to this definition">#</a></dt>
+<dd><p>The apoapsis of the orbit, in meters, from the center of the body being orbited.
+Not a number for a parabolic or hyperbolic orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetApoapsisRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetApoapsisResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetPeriapsis">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPeriapsis</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetPeriapsisRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetPeriapsisResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetPeriapsis" title="Link to this definition">#</a></dt>
+<dd><p>The periapsis of the orbit, in meters, from the center of the body being orbited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetPeriapsisRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetPeriapsisResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetApoapsisAltitude">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetApoapsisAltitude</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetApoapsisAltitudeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetApoapsisAltitudeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetApoapsisAltitude" title="Link to this definition">#</a></dt>
+<dd><p>The apoapsis of the orbit, in meters, above the mean radius of the body being orbited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetApoapsisAltitudeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetApoapsisAltitudeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetPeriapsisAltitude">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPeriapsisAltitude</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetPeriapsisAltitudeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetPeriapsisAltitudeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetPeriapsisAltitude" title="Link to this definition">#</a></dt>
+<dd><p>The periapsis of the orbit, in meters, above the mean radius of the body being orbited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetPeriapsisAltitudeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetPeriapsisAltitudeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetSemiMajorAxis">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSemiMajorAxis</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetSemiMajorAxisRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetSemiMajorAxisResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetSemiMajorAxis" title="Link to this definition">#</a></dt>
+<dd><p>The semi-major axis of the orbit, in meters. Negative for a hyperbolic orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetSemiMajorAxisRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetSemiMajorAxisResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetSemiMinorAxis">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSemiMinorAxis</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetSemiMinorAxisRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetSemiMinorAxisResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetSemiMinorAxis" title="Link to this definition">#</a></dt>
+<dd><p>The semi-minor axis of the orbit, in meters. Not a number for a parabolic or
+hyperbolic orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetSemiMinorAxisRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetSemiMinorAxisResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetSpeed">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSpeed</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetSpeedRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetSpeedResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetSpeed" title="Link to this definition">#</a></dt>
+<dd><p>The current orbital speed, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetSpeedRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetSpeedResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetRadius">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetRadius</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetRadiusRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetRadiusResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetRadius" title="Link to this definition">#</a></dt>
+<dd><p>The current distance from the center of the body being orbited, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetRadiusRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetRadiusResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetPeriod">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPeriod</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetPeriodRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetPeriodResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetPeriod" title="Link to this definition">#</a></dt>
+<dd><p>The orbital period, in seconds. Not a number for a parabolic or hyperbolic orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetPeriodRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetPeriodResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetMeanMotion">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMeanMotion</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetMeanMotionRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetMeanMotionResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetMeanMotion" title="Link to this definition">#</a></dt>
+<dd><p>The mean angular motion of the orbit, in radians per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetMeanMotionRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetMeanMotionResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetSpecificEnergy">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSpecificEnergy</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetSpecificEnergyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetSpecificEnergyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetSpecificEnergy" title="Link to this definition">#</a></dt>
+<dd><p>The specific orbital energy, the sum of the kinetic and potential energy per unit
+mass, in joules per kilogram. Negative for an elliptical orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetSpecificEnergyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetSpecificEnergyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetTimeToApoapsis">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTimeToApoapsis</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetTimeToApoapsisRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetTimeToApoapsisResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetTimeToApoapsis" title="Link to this definition">#</a></dt>
+<dd><p>The time until the next apoapsis, in seconds. Not a number for a parabolic or
+hyperbolic orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetTimeToApoapsisRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetTimeToApoapsisResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetTimeToPeriapsis">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTimeToPeriapsis</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetTimeToPeriapsisRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetTimeToPeriapsisResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetTimeToPeriapsis" title="Link to this definition">#</a></dt>
+<dd><p>The time until the next periapsis, in seconds. Negative once a parabolic or
+hyperbolic orbit has passed it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetTimeToPeriapsisRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetTimeToPeriapsisResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetEccentricity">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetEccentricity</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetEccentricityRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetEccentricityResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetEccentricity" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Orbital_eccentricity">eccentricity</a>
+of the orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetEccentricityRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetEccentricityResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetInclination">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetInclination</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetInclinationRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetInclinationResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetInclination" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Orbital_inclination">inclination</a>
+of the orbit, in radians, against the equator of the body being orbited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetInclinationRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetInclinationResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetLongitudeOfAscendingNode">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetLongitudeOfAscendingNode</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetLongitudeOfAscendingNodeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetLongitudeOfAscendingNodeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetLongitudeOfAscendingNode" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node">longitude of the ascending node</a>, in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetLongitudeOfAscendingNodeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetLongitudeOfAscendingNodeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetArgumentOfPeriapsis">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetArgumentOfPeriapsis</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetArgumentOfPeriapsisRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetArgumentOfPeriapsisResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetArgumentOfPeriapsis" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Argument_of_periapsis">argument of periapsis</a>, in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetArgumentOfPeriapsisRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetArgumentOfPeriapsisResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetTrueAnomaly">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTrueAnomaly</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetTrueAnomalyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetTrueAnomalyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetTrueAnomaly" title="Link to this definition">#</a></dt>
+<dd><p>The current <a class="reference external" href="https://en.wikipedia.org/wiki/True_anomaly">true anomaly</a>,
+in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetTrueAnomalyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetTrueAnomalyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetMeanAnomaly">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMeanAnomaly</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetMeanAnomalyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetMeanAnomalyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetMeanAnomaly" title="Link to this definition">#</a></dt>
+<dd><p>The current <a class="reference external" href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly</a>,
+in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetMeanAnomalyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetMeanAnomalyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetEccentricAnomaly">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetEccentricAnomaly</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetEccentricAnomalyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetEccentricAnomalyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetEccentricAnomaly" title="Link to this definition">#</a></dt>
+<dd><p>The current <a class="reference external" href="https://en.wikipedia.org/wiki/Eccentric_anomaly">eccentric anomaly</a>, in radians. For a hyperbolic orbit, this is the hyperbolic anomaly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetEccentricAnomalyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetEccentricAnomalyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.TrueAnomalyAtUT">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">TrueAnomalyAtUT</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.TrueAnomalyAtUTRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.TrueAnomalyAtUTResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.TrueAnomalyAtUT" title="Link to this definition">#</a></dt>
+<dd><p>The true anomaly at the given time, in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.TrueAnomalyAtUTRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ut</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>): Universal time, in seconds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.TrueAnomalyAtUTResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.UTAtTrueAnomaly">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">UTAtTrueAnomaly</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.UTAtTrueAnomalyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.UTAtTrueAnomalyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.UTAtTrueAnomaly" title="Link to this definition">#</a></dt>
+<dd><p>The next universal time, from now, at which the orbit reaches the given true
+anomaly, in seconds. Not a number if it never does, such as beyond the asymptote of
+a hyperbolic orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.UTAtTrueAnomalyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">true_anomaly</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>): True anomaly, in radians.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.UTAtTrueAnomalyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.RadiusAt">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">RadiusAt</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.RadiusAtRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.RadiusAtResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.RadiusAt" title="Link to this definition">#</a></dt>
+<dd><p>The distance from the center of the body being orbited at the given time, in
+meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.RadiusAtRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ut</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>): Universal time, in seconds.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.RadiusAtResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.PositionAt">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PositionAt</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.PositionAtRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.PositionAtResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.PositionAt" title="Link to this definition">#</a></dt>
+<dd><p>The position on the orbit at the given time, in meters, relative to where the body
+being orbited is now.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.PositionAtRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ut</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>): Universal time, in seconds.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference_frame</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>): The reference frame of the position.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.PositionAtResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="../messages.html#krpc.ksa.Tuple_double_double_double" title="krpc.ksa.Tuple_double_double_double"><code class="xref grpc grpc-message docutils literal notranslate"><span class="pre">Tuple_double_double_double</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.VelocityAt">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">VelocityAt</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.VelocityAtRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.VelocityAtResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.VelocityAt" title="Link to this definition">#</a></dt>
+<dd><p>The orbital velocity at the given time, in meters per second, relative to the body
+being orbited and along the axes of the given frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.VelocityAtRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ut</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>): Universal time, in seconds.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference_frame</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>): The reference frame of the velocity.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.VelocityAtResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="../messages.html#krpc.ksa.Tuple_double_double_double" title="krpc.ksa.Tuple_double_double_double"><code class="xref grpc grpc-message docutils literal notranslate"><span class="pre">Tuple_double_double_double</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.RelativeInclination">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">RelativeInclination</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.RelativeInclinationRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.RelativeInclinationResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.RelativeInclination" title="Link to this definition">#</a></dt>
+<dd><p>The inclination of the orbit relative to another orbit, in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.RelativeInclinationRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">orbit</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>): The other orbit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.RelativeInclinationResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.TrueAnomalyAtAN">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">TrueAnomalyAtAN</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.TrueAnomalyAtANRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.TrueAnomalyAtANResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.TrueAnomalyAtAN" title="Link to this definition">#</a></dt>
+<dd><p>The true anomaly of the ascending node with another orbit, in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.TrueAnomalyAtANRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">orbit</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>): The other orbit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.TrueAnomalyAtANResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the orbits are around different bodies.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.TrueAnomalyAtDN">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">TrueAnomalyAtDN</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.TrueAnomalyAtDNRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.TrueAnomalyAtDNResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.TrueAnomalyAtDN" title="Link to this definition">#</a></dt>
+<dd><p>The true anomaly of the descending node with another orbit, in radians.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.TrueAnomalyAtDNRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">orbit</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>): The other orbit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.TrueAnomalyAtDNResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the orbits are around different bodies.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetTimeOfClosestApproach">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTimeOfClosestApproach</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetTimeOfClosestApproachRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetTimeOfClosestApproachResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetTimeOfClosestApproach" title="Link to this definition">#</a></dt>
+<dd><p>The universal time of the closest approach on this orbit to the vehicle’s target,
+in seconds. Not a number if there is none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetTimeOfClosestApproachRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetTimeOfClosestApproachResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the vehicle’s current orbit has a target. The game predicts the trajectory on a
+worker thread, so a new target shows here shortly after it is set.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetDistanceAtClosestApproach">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDistanceAtClosestApproach</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetDistanceAtClosestApproachRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetDistanceAtClosestApproachResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetDistanceAtClosestApproach" title="Link to this definition">#</a></dt>
+<dd><p>The distance at the closest approach on this orbit to the vehicle’s target, in
+meters. Not a number if there is none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetDistanceAtClosestApproachRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetDistanceAtClosestApproachResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the vehicle’s current orbit has a target. The game predicts the trajectory on a
+worker thread, so a new target shows here shortly after it is set.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetStartUT">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetStartUT</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetStartUTRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetStartUTResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetStartUT" title="Link to this definition">#</a></dt>
+<dd><p>The universal time at which this orbit starts, in seconds. Not a number for the
+orbit of a body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetStartUTRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetStartUTResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetEndUT">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetEndUT</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetEndUTRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetEndUTResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetEndUT" title="Link to this definition">#</a></dt>
+<dd><p>The universal time at which this orbit ends, in seconds. Infinite for an orbit that
+does not end, such as the orbit of a body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetEndUTRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetEndUTResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetEndTransition">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetEndTransition</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetEndTransitionRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetEndTransitionResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetEndTransition" title="Link to this definition">#</a></dt>
+<dd><p>How the orbit ends.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetEndTransitionRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetEndTransitionResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitTransition" title="krpc.ksa.OrbitTransition"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">OrbitTransition</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetTimeToSOIChange">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTimeToSOIChange</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetTimeToSOIChangeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetTimeToSOIChangeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetTimeToSOIChange" title="Link to this definition">#</a></dt>
+<dd><p>The time until the orbit enters or leaves a sphere of influence, in seconds. Not a
+number if it does neither.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetTimeToSOIChangeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetTimeToSOIChangeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitService.GetNextOrbit">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetNextOrbit</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetNextOrbitRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Orbit.GetNextOrbitResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.OrbitService.GetNextOrbit" title="Link to this definition">#</a></dt>
+<dd><p>The orbit that follows this one after it enters or leaves a sphere of influence, or
+<code class="docutils literal notranslate"><span class="pre">null</span></code> if there is none.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Orbit.GetNextOrbitRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Orbit.GetNextOrbitResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc enum">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitTransition">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">OrbitTransition</span></span><a class="headerlink" href="#krpc.ksa.OrbitTransition" title="Link to this definition">#</a></dt>
+<dd><p>How an orbit ends. See <a class="reference internal" href="#krpc.ksa.OrbitService.GetEndTransition" title="krpc.ksa.OrbitService.GetEndTransition"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">OrbitService.GetEndTransition</span></code></a>.</p>
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitTransition.ORBIT_TRANSITION_NONE">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">ORBIT_TRANSITION_NONE</span></span><a class="headerlink" href="#krpc.ksa.OrbitTransition.ORBIT_TRANSITION_NONE" title="Link to this definition">#</a></dt>
+<dd><p>The orbit does not end.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitTransition.ORBIT_TRANSITION_ENCOUNTER">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">ORBIT_TRANSITION_ENCOUNTER</span></span><a class="headerlink" href="#krpc.ksa.OrbitTransition.ORBIT_TRANSITION_ENCOUNTER" title="Link to this definition">#</a></dt>
+<dd><p>The orbit enters the sphere of influence of another body.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitTransition.ORBIT_TRANSITION_ESCAPE">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">ORBIT_TRANSITION_ESCAPE</span></span><a class="headerlink" href="#krpc.ksa.OrbitTransition.ORBIT_TRANSITION_ESCAPE" title="Link to this definition">#</a></dt>
+<dd><p>The orbit leaves the sphere of influence of the body being orbited.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitTransition.ORBIT_TRANSITION_IMPACT">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">ORBIT_TRANSITION_IMPACT</span></span><a class="headerlink" href="#krpc.ksa.OrbitTransition.ORBIT_TRANSITION_IMPACT" title="Link to this definition">#</a></dt>
+<dd><p>The orbit hits the surface of the body being orbited.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.OrbitTransition.ORBIT_TRANSITION_BURN">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">ORBIT_TRANSITION_BURN</span></span><a class="headerlink" href="#krpc.ksa.OrbitTransition.ORBIT_TRANSITION_BURN" title="Link to this definition">#</a></dt>
+<dd><p>The orbit ends at a planned burn.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="flight.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Flight</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="control.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Control</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/grpc/api/ksa/orbit.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

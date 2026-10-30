@@ -1,0 +1,204 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Burn
+====
+
+.. grpc:service:: BurnService
+
+   A planned burn, the game's equivalent of a maneuver node. Obtained from
+   :grpc:rpc:`VehicleService.GetBurns <krpc.ksa.VehicleService.GetBurns>` or :grpc:rpc:`VehicleService.AddBurn <krpc.ksa.VehicleService.AddBurn>`.
+
+   .. note::
+
+      The change in velocity is given along the vehicle's orbit at the time of the burn:
+      prograde, along the orbit normal, and radially outward. An object for a burn throws an
+      exception once the burn is removed. The flight computer removes a burn it completes
+      when another burn follows it, and keeps the last one.
+
+   .. grpc:rpc:: GetUT (Burn.GetUTRequest) returns (Burn.GetUTResponse)
+
+      The universal time of the burn, in seconds. The burn is centered on this time.
+
+      :Burn.GetUTRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.GetUTResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetTimeTo (Burn.GetTimeToRequest) returns (Burn.GetTimeToResponse)
+
+      The time until :grpc:rpc:`BurnService.GetUT <krpc.ksa.BurnService.GetUT>`, in seconds. Negative once that time has passed.
+
+      :Burn.GetTimeToRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.GetTimeToResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetPrograde (Burn.GetProgradeRequest) returns (Burn.GetProgradeResponse)
+
+      The change in velocity in the prograde direction, in meters per second.
+
+      :Burn.GetProgradeRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.GetProgradeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetPrograde (Burn.SetProgradeRequest) returns (Burn.SetProgradeResponse)
+
+      The change in velocity in the prograde direction, in meters per second.
+
+      :Burn.SetProgradeRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+         * ``value`` (``float``)
+
+      :Burn.SetProgradeResponse: Empty
+
+   .. grpc:rpc:: GetNormal (Burn.GetNormalRequest) returns (Burn.GetNormalResponse)
+
+      The change in velocity along the orbit normal, in meters per second.
+
+      :Burn.GetNormalRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.GetNormalResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetNormal (Burn.SetNormalRequest) returns (Burn.SetNormalResponse)
+
+      The change in velocity along the orbit normal, in meters per second.
+
+      :Burn.SetNormalRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+         * ``value`` (``float``)
+
+      :Burn.SetNormalResponse: Empty
+
+   .. grpc:rpc:: GetRadial (Burn.GetRadialRequest) returns (Burn.GetRadialResponse)
+
+      The change in velocity radially outward, in meters per second.
+
+      :Burn.GetRadialRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.GetRadialResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: SetRadial (Burn.SetRadialRequest) returns (Burn.SetRadialResponse)
+
+      The change in velocity radially outward, in meters per second.
+
+      :Burn.SetRadialRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+         * ``value`` (``float``)
+
+      :Burn.SetRadialResponse: Empty
+
+   .. grpc:rpc:: GetDeltaV (Burn.GetDeltaVRequest) returns (Burn.GetDeltaVResponse)
+
+      The magnitude of the change in velocity, in meters per second.
+
+      :Burn.GetDeltaVRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.GetDeltaVResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetRemainingDeltaV (Burn.GetRemainingDeltaVRequest) returns (Burn.GetRemainingDeltaVResponse)
+
+      The change in velocity still to burn, in meters per second. Less than
+      :grpc:rpc:`BurnService.GetDeltaV <krpc.ksa.BurnService.GetDeltaV>` once the vehicle has started the burn.
+
+      :Burn.GetRemainingDeltaVRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.GetRemainingDeltaVResponse: ``value`` (``float``)
+
+      .. note::
+
+         The flight computer tracks the progress of the next burn only. For later burns this
+         is :grpc:rpc:`BurnService.GetDeltaV <krpc.ksa.BurnService.GetDeltaV>`.
+
+   .. grpc:rpc:: GetIgnitionTime (Burn.GetIgnitionTimeRequest) returns (Burn.GetIgnitionTimeResponse)
+
+      The universal time at which to start the burn, in seconds. Not a number for a burn
+      other than the next one, and until the flight computer has timed it.
+
+      :Burn.GetIgnitionTimeRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.GetIgnitionTimeResponse: ``value`` (``double``)
+
+   .. grpc:rpc:: GetBurnTime (Burn.GetBurnTimeRequest) returns (Burn.GetBurnTimeResponse)
+
+      The time the remaining burn takes with the active engines, in seconds. Not a number
+      for a burn other than the next one, and until the flight computer has timed it.
+
+      :Burn.GetBurnTimeRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.GetBurnTimeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetOrbit (Burn.GetOrbitRequest) returns (Burn.GetOrbitResponse)
+
+      The orbit after the burn.
+
+      :Burn.GetOrbitRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.GetOrbitResponse: ``value`` (:grpc:service:`Orbit <krpc.ksa.OrbitService>`)
+
+      .. note::
+
+         The game predicts it in the solver step after the burn changes, so it reflects a
+         change to the burn one update later.
+
+   .. grpc:rpc:: GetOrbitAverageDoseRate (Burn.GetOrbitAverageDoseRateRequest) returns (Burn.GetOrbitAverageDoseRateResponse)
+
+      The radiation dose rate averaged over the orbit after the burn, in sieverts per
+      second. Not a number if the body has no magnetosphere, or the orbit dips below the
+      surface.
+
+      :Burn.GetOrbitAverageDoseRateRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.GetOrbitAverageDoseRateResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetReferenceFrame (Burn.GetReferenceFrameRequest) returns (Burn.GetReferenceFrameResponse)
+
+      The reference frame with its origin at the position of the burn, and axes along
+      the orbit at the time of the burn. The x axis points prograde, the y axis along the
+      orbit normal and the z axis radially outward, perpendicular to the x axis. The
+      frame does not move or rotate relative to the body being orbited.
+
+      :Burn.GetReferenceFrameRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.GetReferenceFrameResponse: ``value`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`)
+
+   .. grpc:rpc:: Position (Burn.PositionRequest) returns (Burn.PositionResponse)
+
+      The position of the burn, in meters, relative to where the body being orbited is
+      now.
+
+      :Burn.PositionRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+
+      :Burn.PositionResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: Direction (Burn.DirectionRequest) returns (Burn.DirectionResponse)
+
+      The direction of the change in velocity at the time of the burn, as a unit vector.
+
+      :Burn.DirectionRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the direction.
+
+      :Burn.DirectionResponse: ``value`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`)
+
+   .. grpc:rpc:: Remove (Burn.RemoveRequest) returns (Burn.RemoveResponse)
+
+      Remove the burn from the vehicle's burn plan.
+
+      :Burn.RemoveRequest:
+         * ``this`` (:grpc:service:`Burn <krpc.ksa.BurnService>`)
+
+      :Burn.RemoveResponse: Empty

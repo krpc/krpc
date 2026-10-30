@@ -1,0 +1,643 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+UI
+==
+
+
+.. class:: UI
+
+   Adds windows of buttons, text fields and other widgets to the game's UI.
+
+   .. note::
+
+      The windows are removed when the client that added them disconnects. For messages on
+      the screen, see :meth:`KSA.ShowMessage <KSA.KSA.ShowMessage>`.
+
+   .. function:: static Window AddWindow(IConnection connection, string title, bool visible = true)
+
+      Add a window, with no widgets.
+
+      :parameters:
+
+       * **title** -- The text in the title bar.
+       * **visible** -- Whether the window is visible.
+
+      :Game Scenes: All
+
+   .. function:: static void Clear(IConnection connection, bool clientOnly = false)
+
+      Remove the windows.
+
+      :parameters:
+
+       * **clientOnly** -- Whether to remove only the windows added by the calling client.
+
+      :Game Scenes: All
+
+
+
+.. class:: Window
+
+   A window, holding widgets one per line. Created using :meth:`UI.AddWindow`.
+
+   .. note::
+
+      The window fits its widgets until its size is set. Closing the window makes it
+      invisible. The window is hidden with the game's UI.
+
+   .. property:: string Title { get; set; }
+
+      The text in the title bar.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<float,float> Position { get; set; }
+
+      The position of the top left corner of the window, from the top left corner of the
+      game window, in pixels.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<float,float> Size { get; set; }
+
+      The width and height of the window, in pixels.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the width or height is not positive.
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the widget is visible.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Game Scenes: All
+
+   .. function:: Label AddLabel(string content, bool visible = true)
+
+      Add a label.
+
+      :parameters:
+
+       * **content** -- The text of the label.
+       * **visible** -- Whether the label is visible.
+
+      :Game Scenes: All
+
+   .. function:: Button AddButton(string content, bool visible = true)
+
+      Add a button.
+
+      :parameters:
+
+       * **content** -- The text on the button.
+       * **visible** -- Whether the button is visible.
+
+      :Game Scenes: All
+
+   .. function:: InputField AddInputField(string label = "", bool visible = true)
+
+      Add a text input field, empty.
+
+      :parameters:
+
+       * **label** -- The text shown next to the field.
+       * **visible** -- Whether the field is visible.
+
+      :Game Scenes: All
+
+   .. function:: Slider AddSlider(string label = "", float minimum = 0.0f, float maximum = 1.0f, bool visible = true)
+
+      Add a slider, at its minimum value.
+
+      :parameters:
+
+       * **label** -- The text shown next to the slider.
+       * **minimum** -- The minimum value.
+       * **maximum** -- The maximum value.
+       * **visible** -- Whether the slider is visible.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. function:: Toggle AddToggle(string content, bool visible = true)
+
+      Add a toggle, unchecked.
+
+      :parameters:
+
+       * **content** -- The text shown next to the toggle.
+       * **visible** -- Whether the toggle is visible.
+
+      :Game Scenes: All
+
+   .. function:: Dropdown AddDropdown(System.Collections.Generic.IList<string> options, string label = "", bool visible = true)
+
+      Add a dropdown, with no option selected.
+
+      :parameters:
+
+       * **options** -- The options to choose from.
+       * **label** -- The text shown next to the dropdown.
+       * **visible** -- Whether the dropdown is visible.
+
+      :Game Scenes: All
+
+   .. function:: Separator AddSeparator(bool visible = true)
+
+      Add a horizontal line.
+
+      :parameters:
+
+       * **visible** -- Whether the line is visible.
+
+      :Game Scenes: All
+
+   .. function:: Row AddRow(bool visible = true)
+
+      Add a row, which lays out its widgets from left to right.
+
+      :parameters:
+
+       * **visible** -- Whether the row is visible.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the widget.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Row
+
+   A row of widgets, laid out from left to right. Added to a window or a row.
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the widget is visible.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Game Scenes: All
+
+   .. function:: Label AddLabel(string content, bool visible = true)
+
+      Add a label.
+
+      :parameters:
+
+       * **content** -- The text of the label.
+       * **visible** -- Whether the label is visible.
+
+      :Game Scenes: All
+
+   .. function:: Button AddButton(string content, bool visible = true)
+
+      Add a button.
+
+      :parameters:
+
+       * **content** -- The text on the button.
+       * **visible** -- Whether the button is visible.
+
+      :Game Scenes: All
+
+   .. function:: InputField AddInputField(string label = "", bool visible = true)
+
+      Add a text input field, empty.
+
+      :parameters:
+
+       * **label** -- The text shown next to the field.
+       * **visible** -- Whether the field is visible.
+
+      :Game Scenes: All
+
+   .. function:: Slider AddSlider(string label = "", float minimum = 0.0f, float maximum = 1.0f, bool visible = true)
+
+      Add a slider, at its minimum value.
+
+      :parameters:
+
+       * **label** -- The text shown next to the slider.
+       * **minimum** -- The minimum value.
+       * **maximum** -- The maximum value.
+       * **visible** -- Whether the slider is visible.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. function:: Toggle AddToggle(string content, bool visible = true)
+
+      Add a toggle, unchecked.
+
+      :parameters:
+
+       * **content** -- The text shown next to the toggle.
+       * **visible** -- Whether the toggle is visible.
+
+      :Game Scenes: All
+
+   .. function:: Dropdown AddDropdown(System.Collections.Generic.IList<string> options, string label = "", bool visible = true)
+
+      Add a dropdown, with no option selected.
+
+      :parameters:
+
+       * **options** -- The options to choose from.
+       * **label** -- The text shown next to the dropdown.
+       * **visible** -- Whether the dropdown is visible.
+
+      :Game Scenes: All
+
+   .. function:: Separator AddSeparator(bool visible = true)
+
+      Add a horizontal line.
+
+      :parameters:
+
+       * **visible** -- Whether the line is visible.
+
+      :Game Scenes: All
+
+   .. function:: Row AddRow(bool visible = true)
+
+      Add a row, which lays out its widgets from left to right.
+
+      :parameters:
+
+       * **visible** -- Whether the row is visible.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the widget.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Label
+
+   A line of text. Added to a window or a row.
+
+   .. property:: string Content { get; set; }
+
+      The text of the label.
+
+      :Game Scenes: All
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the widget is visible.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the widget.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Button
+
+   A button. Added to a window or a row.
+
+   .. property:: string Content { get; set; }
+
+      The text on the button.
+
+      :Game Scenes: All
+
+   .. property:: bool Clicked { get; set; }
+
+      Whether the button has been clicked.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``.
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the widget is visible.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the widget.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: InputField
+
+   A single line text input field. Added to a window or a row.
+
+   .. note::
+
+      While the field is being edited, the game clears the rotation and translation inputs
+      of the controlled vehicle each frame.
+
+   .. property:: string Label { get; set; }
+
+      The text shown next to the field.
+
+      :Game Scenes: All
+
+   .. property:: string Value { get; set; }
+
+      The text in the field.
+
+      :Game Scenes: All
+
+   .. property:: bool Changed { get; set; }
+
+      Whether the text has been edited.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         An edit sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :prop:`InputField.Value` leaves it unchanged.
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the widget is visible.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the widget.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Slider
+
+   A horizontal slider. Added to a window or a row.
+
+   .. property:: string Label { get; set; }
+
+      The text shown next to the slider.
+
+      :Game Scenes: All
+
+   .. property:: float Value { get; set; }
+
+      The value of the slider, clamped to its range.
+
+      :Game Scenes: All
+
+   .. property:: float Minimum { get; set; }
+
+      The minimum value.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if set to a value not less than the maximum.
+
+   .. property:: float Maximum { get; set; }
+
+      The maximum value.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if set to a value not greater than the minimum.
+
+   .. property:: bool Changed { get; set; }
+
+      Whether the value has been changed by dragging the slider.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         A change sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :prop:`Slider.Value` leaves it unchanged.
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the widget is visible.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the widget.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Toggle
+
+   A check box with a label. Added to a window or a row.
+
+   .. property:: string Content { get; set; }
+
+      The text shown next to the toggle.
+
+      :Game Scenes: All
+
+   .. property:: bool Checked { get; set; }
+
+      Whether the toggle is checked.
+
+      :Game Scenes: All
+
+   .. property:: bool Changed { get; set; }
+
+      Whether the toggle has been clicked.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :prop:`Toggle.Checked` leaves it unchanged.
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the widget is visible.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the widget.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Dropdown
+
+   A dropdown list of options. Added to a window or a row.
+
+   .. property:: string Label { get; set; }
+
+      The text shown next to the dropdown.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<string> Options { get; set; }
+
+      The options to choose from.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Setting the options clears the selection if the selected index is no longer in
+         the list.
+
+   .. property:: int SelectedIndex { get; set; }
+
+      The index of the selected option, or -1 for none.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. property:: bool Changed { get; set; }
+
+      Whether an option has been chosen from the list.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         A choice sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :prop:`Dropdown.SelectedIndex` leaves it unchanged.
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the widget is visible.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the widget.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Separator
+
+   A horizontal line between widgets. Added to a window or a row.
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the widget is visible.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the widget.
+
+
+      :Game Scenes: All

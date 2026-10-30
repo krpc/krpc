@@ -76,6 +76,14 @@ Flight
       :rtype: float
       :Game Scenes: Flight
 
+   .. attribute:: biome
+
+      The biome below the vehicle, or ``None`` if the body has no biomes.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str or None
+      :Game Scenes: Flight
+
    .. attribute:: speed
 
       The speed of the vehicle relative to the surface, in meters per second.
@@ -151,6 +159,25 @@ Flight
       :rtype: float
       :Game Scenes: Flight
 
+   .. attribute:: dose_rate
+
+      The radiation dose rate at the vehicle, in sieverts per second. Includes any solar
+      particle event under way.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: orbit_average_dose_rate
+
+      The radiation dose rate averaged over the vehicle's orbit, in sieverts per second.
+      Includes any solar particle event under way. Not a number if the body has no
+      magnetosphere, or the orbit dips below the surface.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
    .. attribute:: g_force
 
       The acceleration of the vehicle, excluding gravity, in multiples of standard
@@ -178,4 +205,30 @@ Flight
 
       :Attribute: Read-only, cannot be set
       :rtype: float
+      :Game Scenes: Flight
+
+   .. method:: prograde(reference_frame)
+
+      The unit vector of the vehicle's velocity relative to the surface.
+
+      :param ReferenceFrame reference_frame: The reference frame of the direction.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. method:: normal(reference_frame)
+
+      The unit vector normal to the plane of the vehicle's position and its velocity
+      relative to the surface.
+
+      :param ReferenceFrame reference_frame: The reference frame of the direction.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. method:: radial(reference_frame)
+
+      The unit vector pointing radially outward, perpendicular to :meth:`Flight.prograde`
+      and :meth:`Flight.normal`.
+
+      :param ReferenceFrame reference_frame: The reference frame of the direction.
+      :rtype: tuple(float, float, float)
       :Game Scenes: Flight

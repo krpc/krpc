@@ -1,0 +1,644 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+UI
+==
+
+
+.. type:: public class UI
+
+   Adds windows of buttons, text fields and other widgets to the game's UI.
+
+   .. note::
+
+      The windows are removed when the client that added them disconnects. For messages on
+      the screen, see :meth:`showMessage(String, float, boolean)`.
+
+   .. method:: static Window addWindow(Connection connection, String title, boolean visible)
+
+      Add a window, with no widgets.
+
+      :param String title: The text in the title bar.
+      :param boolean visible: Whether the window is visible.
+   
+
+   .. method:: static void clear(Connection connection, boolean clientOnly)
+
+      Remove the windows.
+
+      :param boolean clientOnly: Whether to remove only the windows added by the calling client.
+   
+
+
+
+.. type:: public class Window
+
+   A window, holding widgets one per line. Created using :meth:`UI.addWindow(String, boolean)`.
+
+   .. note::
+
+      The window fits its widgets until its size is set. Closing the window makes it
+      invisible. The window is hidden with the game's UI.
+
+   .. method:: String getTitle()
+
+   .. method:: void setTitle(String value)
+
+      The text in the title bar.
+
+   
+
+   .. method:: org.javatuples.Pair<Float,Float> getPosition()
+
+   .. method:: void setPosition(org.javatuples.Pair<Float,Float> value)
+
+      The position of the top left corner of the window, from the top left corner of the
+      game window, in pixels.
+
+   
+
+   .. method:: org.javatuples.Pair<Float,Float> getSize()
+
+   .. method:: void setSize(org.javatuples.Pair<Float,Float> value)
+
+      The width and height of the window, in pixels.
+
+   
+
+      .. note::
+
+         Throws an exception if the width or height is not positive.
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the widget is visible.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. method:: Label addLabel(String content, boolean visible)
+
+      Add a label.
+
+      :param String content: The text of the label.
+      :param boolean visible: Whether the label is visible.
+   
+
+   .. method:: Button addButton(String content, boolean visible)
+
+      Add a button.
+
+      :param String content: The text on the button.
+      :param boolean visible: Whether the button is visible.
+   
+
+   .. method:: InputField addInputField(String label, boolean visible)
+
+      Add a text input field, empty.
+
+      :param String label: The text shown next to the field.
+      :param boolean visible: Whether the field is visible.
+   
+
+   .. method:: Slider addSlider(String label, float minimum, float maximum, boolean visible)
+
+      Add a slider, at its minimum value.
+
+      :param String label: The text shown next to the slider.
+      :param float minimum: The minimum value.
+      :param float maximum: The maximum value.
+      :param boolean visible: Whether the slider is visible.
+   
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. method:: Toggle addToggle(String content, boolean visible)
+
+      Add a toggle, unchecked.
+
+      :param String content: The text shown next to the toggle.
+      :param boolean visible: Whether the toggle is visible.
+   
+
+   .. method:: Dropdown addDropdown(java.util.List<String> options, String label, boolean visible)
+
+      Add a dropdown, with no option selected.
+
+      :param java.util.List<String> options: The options to choose from.
+      :param String label: The text shown next to the dropdown.
+      :param boolean visible: Whether the dropdown is visible.
+   
+
+   .. method:: Separator addSeparator(boolean visible)
+
+      Add a horizontal line.
+
+      :param boolean visible: Whether the line is visible.
+   
+
+   .. method:: Row addRow(boolean visible)
+
+      Add a row, which lays out its widgets from left to right.
+
+      :param boolean visible: Whether the row is visible.
+   
+
+   .. method:: void remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. type:: public class Row
+
+   A row of widgets, laid out from left to right. Added to a window or a row.
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the widget is visible.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. method:: Label addLabel(String content, boolean visible)
+
+      Add a label.
+
+      :param String content: The text of the label.
+      :param boolean visible: Whether the label is visible.
+   
+
+   .. method:: Button addButton(String content, boolean visible)
+
+      Add a button.
+
+      :param String content: The text on the button.
+      :param boolean visible: Whether the button is visible.
+   
+
+   .. method:: InputField addInputField(String label, boolean visible)
+
+      Add a text input field, empty.
+
+      :param String label: The text shown next to the field.
+      :param boolean visible: Whether the field is visible.
+   
+
+   .. method:: Slider addSlider(String label, float minimum, float maximum, boolean visible)
+
+      Add a slider, at its minimum value.
+
+      :param String label: The text shown next to the slider.
+      :param float minimum: The minimum value.
+      :param float maximum: The maximum value.
+      :param boolean visible: Whether the slider is visible.
+   
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. method:: Toggle addToggle(String content, boolean visible)
+
+      Add a toggle, unchecked.
+
+      :param String content: The text shown next to the toggle.
+      :param boolean visible: Whether the toggle is visible.
+   
+
+   .. method:: Dropdown addDropdown(java.util.List<String> options, String label, boolean visible)
+
+      Add a dropdown, with no option selected.
+
+      :param java.util.List<String> options: The options to choose from.
+      :param String label: The text shown next to the dropdown.
+      :param boolean visible: Whether the dropdown is visible.
+   
+
+   .. method:: Separator addSeparator(boolean visible)
+
+      Add a horizontal line.
+
+      :param boolean visible: Whether the line is visible.
+   
+
+   .. method:: Row addRow(boolean visible)
+
+      Add a row, which lays out its widgets from left to right.
+
+      :param boolean visible: Whether the row is visible.
+   
+
+   .. method:: void remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. type:: public class Label
+
+   A line of text. Added to a window or a row.
+
+   .. method:: String getContent()
+
+   .. method:: void setContent(String value)
+
+      The text of the label.
+
+   
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the widget is visible.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. method:: void remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. type:: public class Button
+
+   A button. Added to a window or a row.
+
+   .. method:: String getContent()
+
+   .. method:: void setContent(String value)
+
+      The text on the button.
+
+   
+
+   .. method:: boolean getClicked()
+
+   .. method:: void setClicked(boolean value)
+
+      Whether the button has been clicked.
+
+   
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``.
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the widget is visible.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. method:: void remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. type:: public class InputField
+
+   A single line text input field. Added to a window or a row.
+
+   .. note::
+
+      While the field is being edited, the game clears the rotation and translation inputs
+      of the controlled vehicle each frame.
+
+   .. method:: String getLabel()
+
+   .. method:: void setLabel(String value)
+
+      The text shown next to the field.
+
+   
+
+   .. method:: String getValue()
+
+   .. method:: void setValue(String value)
+
+      The text in the field.
+
+   
+
+   .. method:: boolean getChanged()
+
+   .. method:: void setChanged(boolean value)
+
+      Whether the text has been edited.
+
+   
+
+      .. note::
+
+         An edit sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :meth:`InputField.getValue()` leaves it unchanged.
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the widget is visible.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. method:: void remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. type:: public class Slider
+
+   A horizontal slider. Added to a window or a row.
+
+   .. method:: String getLabel()
+
+   .. method:: void setLabel(String value)
+
+      The text shown next to the slider.
+
+   
+
+   .. method:: float getValue()
+
+   .. method:: void setValue(float value)
+
+      The value of the slider, clamped to its range.
+
+   
+
+   .. method:: float getMinimum()
+
+   .. method:: void setMinimum(float value)
+
+      The minimum value.
+
+   
+
+      .. note::
+
+         Throws an exception if set to a value not less than the maximum.
+
+   .. method:: float getMaximum()
+
+   .. method:: void setMaximum(float value)
+
+      The maximum value.
+
+   
+
+      .. note::
+
+         Throws an exception if set to a value not greater than the minimum.
+
+   .. method:: boolean getChanged()
+
+   .. method:: void setChanged(boolean value)
+
+      Whether the value has been changed by dragging the slider.
+
+   
+
+      .. note::
+
+         A change sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :meth:`Slider.getValue()` leaves it unchanged.
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the widget is visible.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. method:: void remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. type:: public class Toggle
+
+   A check box with a label. Added to a window or a row.
+
+   .. method:: String getContent()
+
+   .. method:: void setContent(String value)
+
+      The text shown next to the toggle.
+
+   
+
+   .. method:: boolean getChecked()
+
+   .. method:: void setChecked(boolean value)
+
+      Whether the toggle is checked.
+
+   
+
+   .. method:: boolean getChanged()
+
+   .. method:: void setChanged(boolean value)
+
+      Whether the toggle has been clicked.
+
+   
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :meth:`Toggle.getChecked()` leaves it unchanged.
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the widget is visible.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. method:: void remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. type:: public class Dropdown
+
+   A dropdown list of options. Added to a window or a row.
+
+   .. method:: String getLabel()
+
+   .. method:: void setLabel(String value)
+
+      The text shown next to the dropdown.
+
+   
+
+   .. method:: java.util.List<String> getOptions()
+
+   .. method:: void setOptions(java.util.List<String> value)
+
+      The options to choose from.
+
+   
+
+      .. note::
+
+         Setting the options clears the selection if the selected index is no longer in
+         the list.
+
+   .. method:: int getSelectedIndex()
+
+   .. method:: void setSelectedIndex(int value)
+
+      The index of the selected option, or -1 for none.
+
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. method:: boolean getChanged()
+
+   .. method:: void setChanged(boolean value)
+
+      Whether an option has been chosen from the list.
+
+   
+
+      .. note::
+
+         A choice sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :meth:`Dropdown.getSelectedIndex()` leaves it unchanged.
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the widget is visible.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. method:: void remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. type:: public class Separator
+
+   A horizontal line between widgets. Added to a window or a row.
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the widget is visible.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. method:: void remove()
+
+      Remove the widget.

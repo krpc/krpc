@@ -1,0 +1,201 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Power
+=====
+
+.. grpc:service:: BatteryService
+
+   A battery, which stores electrical energy. Obtained from :grpc:rpc:`PartService.GetBatteries <krpc.ksa.PartService.GetBatteries>`.
+
+   .. grpc:rpc:: GetPart (Battery.GetPartRequest) returns (Battery.GetPartResponse)
+
+      The part the battery is in.
+
+      :Battery.GetPartRequest:
+         * ``this`` (:grpc:service:`Battery <krpc.ksa.BatteryService>`)
+
+      :Battery.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetStoredEnergy (Battery.GetStoredEnergyRequest) returns (Battery.GetStoredEnergyResponse)
+
+      The energy stored in the battery, in joules.
+
+      :Battery.GetStoredEnergyRequest:
+         * ``this`` (:grpc:service:`Battery <krpc.ksa.BatteryService>`)
+
+      :Battery.GetStoredEnergyResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetEnergyCapacity (Battery.GetEnergyCapacityRequest) returns (Battery.GetEnergyCapacityResponse)
+
+      The energy the battery can store, in joules.
+
+      :Battery.GetEnergyCapacityRequest:
+         * ``this`` (:grpc:service:`Battery <krpc.ksa.BatteryService>`)
+
+      :Battery.GetEnergyCapacityResponse: ``value`` (``float``)
+
+.. grpc:service:: SolarPanelService
+
+   A solar panel, which turns sunlight into electrical power. Obtained from :grpc:rpc:`PartService.GetSolarPanels <krpc.ksa.PartService.GetSolarPanels>`.
+
+   .. grpc:rpc:: GetPart (SolarPanel.GetPartRequest) returns (SolarPanel.GetPartResponse)
+
+      The part the solar panel is in.
+
+      :SolarPanel.GetPartRequest:
+         * ``this`` (:grpc:service:`SolarPanel <krpc.ksa.SolarPanelService>`)
+
+      :SolarPanel.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetActive (SolarPanel.GetActiveRequest) returns (SolarPanel.GetActiveResponse)
+
+      Whether the solar panel can produce power, because it is deployed or does not deploy.
+
+      :SolarPanel.GetActiveRequest:
+         * ``this`` (:grpc:service:`SolarPanel <krpc.ksa.SolarPanelService>`)
+
+      :SolarPanel.GetActiveResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetPower (SolarPanel.GetPowerRequest) returns (SolarPanel.GetPowerResponse)
+
+      The power the solar panel produces, in watts.
+
+      :SolarPanel.GetPowerRequest:
+         * ``this`` (:grpc:service:`SolarPanel <krpc.ksa.SolarPanelService>`)
+
+      :SolarPanel.GetPowerResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetSunAngle (SolarPanel.GetSunAngleRequest) returns (SolarPanel.GetSunAngleResponse)
+
+      The angle between the solar panel's face and the direction to the sun, in degrees.
+      Zero when the panel faces the sun.
+
+      :SolarPanel.GetSunAngleRequest:
+         * ``this`` (:grpc:service:`SolarPanel <krpc.ksa.SolarPanelService>`)
+
+      :SolarPanel.GetSunAngleResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetOccluded (SolarPanel.GetOccludedRequest) returns (SolarPanel.GetOccludedResponse)
+
+      Whether a body blocks the sunlight to the solar panel.
+
+      :SolarPanel.GetOccludedRequest:
+         * ``this`` (:grpc:service:`SolarPanel <krpc.ksa.SolarPanelService>`)
+
+      :SolarPanel.GetOccludedResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetDeployable (SolarPanel.GetDeployableRequest) returns (SolarPanel.GetDeployableResponse)
+
+      The deployable section that opens the solar panel, or ``null`` for a panel that
+      does not deploy.
+
+      :SolarPanel.GetDeployableRequest:
+         * ``this`` (:grpc:service:`SolarPanel <krpc.ksa.SolarPanelService>`)
+
+      :SolarPanel.GetDeployableResponse: ``value`` (:grpc:service:`Deployable <krpc.ksa.DeployableService>`)
+
+.. grpc:service:: GeneratorService
+
+   A generator, which produces electrical power. Obtained from :grpc:rpc:`PartService.GetGenerators <krpc.ksa.PartService.GetGenerators>`.
+
+   .. note::
+
+      A generator runs while its :grpc:rpc:`GeneratorService.GetEngine <krpc.ksa.GeneratorService.GetEngine>` is active, and produces power in
+      proportion to the engine's throttle.
+
+   .. grpc:rpc:: GetPart (Generator.GetPartRequest) returns (Generator.GetPartResponse)
+
+      The part the generator is in.
+
+      :Generator.GetPartRequest:
+         * ``this`` (:grpc:service:`Generator <krpc.ksa.GeneratorService>`)
+
+      :Generator.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetEngine (Generator.GetEngineRequest) returns (Generator.GetEngineResponse)
+
+      The engine that drives the generator, or ``null`` if it has none.
+
+      :Generator.GetEngineRequest:
+         * ``this`` (:grpc:service:`Generator <krpc.ksa.GeneratorService>`)
+
+      :Generator.GetEngineResponse: ``value`` (:grpc:service:`Engine <krpc.ksa.EngineService>`)
+
+   .. grpc:rpc:: GetActive (Generator.GetActiveRequest) returns (Generator.GetActiveResponse)
+
+      Whether the generator is producing power.
+
+      :Generator.GetActiveRequest:
+         * ``this`` (:grpc:service:`Generator <krpc.ksa.GeneratorService>`)
+
+      :Generator.GetActiveResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetPower (Generator.GetPowerRequest) returns (Generator.GetPowerResponse)
+
+      The power the generator produces, in watts.
+
+      :Generator.GetPowerRequest:
+         * ``this`` (:grpc:service:`Generator <krpc.ksa.GeneratorService>`)
+
+      :Generator.GetPowerResponse: ``value`` (``float``)
+
+.. grpc:service:: PowerConsumerService
+
+   A power consumer, which uses electrical power, such as a light. Obtained from
+   :grpc:rpc:`PartService.GetPowerConsumers <krpc.ksa.PartService.GetPowerConsumers>`.
+
+   .. grpc:rpc:: GetPart (PowerConsumer.GetPartRequest) returns (PowerConsumer.GetPartResponse)
+
+      The part the power consumer is in.
+
+      :PowerConsumer.GetPartRequest:
+         * ``this`` (:grpc:service:`PowerConsumer <krpc.ksa.PowerConsumerService>`)
+
+      :PowerConsumer.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetActive (PowerConsumer.GetActiveRequest) returns (PowerConsumer.GetActiveResponse)
+
+      Whether the part is using power.
+
+      :PowerConsumer.GetActiveRequest:
+         * ``this`` (:grpc:service:`PowerConsumer <krpc.ksa.PowerConsumerService>`)
+
+      :PowerConsumer.GetActiveResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: GetPower (PowerConsumer.GetPowerRequest) returns (PowerConsumer.GetPowerResponse)
+
+      The power the part uses, in watts.
+
+      :PowerConsumer.GetPowerRequest:
+         * ``this`` (:grpc:service:`PowerConsumer <krpc.ksa.PowerConsumerService>`)
+
+      :PowerConsumer.GetPowerResponse: ``value`` (``float``)
+
+.. grpc:service:: LightService
+
+   A light. Obtained from :grpc:rpc:`PartService.GetLights <krpc.ksa.PartService.GetLights>`.
+
+   .. note::
+
+      The vehicle's lights switch on and off together, see :grpc:rpc:`ControlService.GetLights <krpc.ksa.ControlService.GetLights>`.
+      Cabin lights are always on.
+
+   .. grpc:rpc:: GetPart (Light.GetPartRequest) returns (Light.GetPartResponse)
+
+      The part the light is in.
+
+      :Light.GetPartRequest:
+         * ``this`` (:grpc:service:`Light <krpc.ksa.LightService>`)
+
+      :Light.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetActive (Light.GetActiveRequest) returns (Light.GetActiveResponse)
+
+      Whether the light is on.
+
+      :Light.GetActiveRequest:
+         * ``this`` (:grpc:service:`Light <krpc.ksa.LightService>`)
+
+      :Light.GetActiveResponse: ``value`` (``bool``)

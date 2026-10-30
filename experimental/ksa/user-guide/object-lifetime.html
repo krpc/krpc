@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Object Lifetime &#8212; kRPC v0.1.0 documentation</title>
+    <title>Object Lifetime &#8212; kRPC v0.2.0 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1ea62e31" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=9c64f2e8" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
@@ -53,7 +53,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.0" />
+  <meta name="docsearch:version" content="0.2.0" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -166,6 +166,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../developer-guide.html">
     Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
   </a>
 </li>
 
@@ -298,6 +305,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -359,6 +373,7 @@
 <li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
 <li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Object Lifetime</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autopilot.html">Auto-Pilot</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ui.html">User Interfaces</a></li>
 <li class="toctree-l1"><a class="reference internal" href="server-side-functions.html">Server Side Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="timing.html">Timing</a></li>
 </ul>
@@ -425,15 +440,19 @@
 <h1>Object Lifetime<a class="headerlink" href="#object-lifetime" title="Link to this heading">#</a></h1>
 <p>Many procedures return an object: a vehicle, a part, a burn, an orbit. Each identifies
 something in the game, and every call made through it reads that game state. This script
-fires the lowest decoupler of the active vehicle, then finds the part it separated:</p>
+fires the lowest decoupler of the active vehicle, which returns the vehicles it separated, then
+finds the part it separated:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">decouplers</span> <span class="o">=</span> <span class="p">[</span><span class="n">part</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">vehicle</span><span class="o">.</span><span class="n">parts</span> <span class="k">if</span> <span class="n">part</span><span class="o">.</span><span class="n">decoupler</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
 <span class="n">lowest</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">decouplers</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">part</span><span class="p">:</span> <span class="n">part</span><span class="o">.</span><span class="n">sequence</span><span class="p">)</span>
 <span class="n">engine</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">part</span> <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">vehicle</span><span class="o">.</span><span class="n">parts</span> <span class="k">if</span> <span class="n">part</span><span class="o">.</span><span class="n">title</span> <span class="o">==</span> <span class="s2">"LR91 Sea"</span><span class="p">)</span>
-<span class="n">lowest</span><span class="o">.</span><span class="n">decoupler</span><span class="o">.</span><span class="n">decouple</span><span class="p">()</span>
+<span class="n">separated</span> <span class="o">=</span> <span class="n">lowest</span><span class="o">.</span><span class="n">decoupler</span><span class="o">.</span><span class="n">decouple</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">vehicle</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">vehicle</span><span class="o">.</span><span class="n">parts</span><span class="p">)</span><span class="si">}</span><span class="s2"> parts"</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"The LR91 Sea is now part of </span><span class="si">{</span><span class="n">engine</span><span class="o">.</span><span class="n">vehicle</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Separated: </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">other</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">separated</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>A call through an object whose game object is gone raises <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code>,
+and the server frees the object.</p>
 <section id="vehicles">
 <h2>Vehicles<a class="headerlink" href="#vehicles" title="Link to this heading">#</a></h2>
 <p>A vehicle object holds the game’s vehicle, as a KSA vehicle has no permanent id. Renaming the

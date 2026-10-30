@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>KSA &#8212; kRPC v0.1.0 documentation</title>
+    <title>KSA &#8212; kRPC v0.2.0 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1ea62e31" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -53,7 +53,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.0" />
+  <meta name="docsearch:version" content="0.2.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -166,6 +166,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../developer-guide.html">
     Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
   </a>
 </li>
 
@@ -298,6 +305,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -357,13 +371,14 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../python/client.html">Python Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
@@ -371,18 +386,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../client.html">C# Client</a></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
@@ -390,18 +410,23 @@
 <li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../cpp/client.html">C++ Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
@@ -409,18 +434,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../cnano/client.html">C-nano Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
@@ -428,18 +458,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../java/client.html">Java Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
@@ -447,18 +482,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../lua/client.html">Lua Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
@@ -466,8 +506,39 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
 </ul>
 </details></li>
 </ul>
@@ -545,7 +616,8 @@
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.KSA.ActiveVehicle">
 <a class="reference internal" href="vehicle.html#class-KRPC.Client.Services.KSA.Vehicle" title="class: KRPC.Client.Services.KSA.Vehicle"><span class="pre">Vehicle</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ActiveVehicle</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.KSA.ActiveVehicle" title="Link to this definition">#</a></dt>
-<dd><p>The vehicle under the player’s control.</p>
+<dd><p>The vehicle under the player’s control, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if the player controls a
+kitten on EVA.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -553,7 +625,8 @@
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Setting it moves the camera to the vehicle, as the switch vehicle key does.</p>
+<p>Setting it moves the camera to the vehicle, as the switch vehicle key does. See
+<a class="reference internal" href="#property-KRPC.Client.Services.KSA.KSA.ActiveKitten" title="property: KRPC.Client.Services.KSA.KSA.ActiveKitten"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">KSA.ActiveKitten</span></code></a> for a kitten on EVA.</p>
 </div>
 </dd></dl>
 
@@ -561,6 +634,45 @@
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.KSA.Vehicles">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IList-1" title="type: msdn ~&gt; System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="vehicle.html#class-KRPC.Client.Services.KSA.Vehicle" title="class: KRPC.Client.Services.KSA.Vehicle"><span class="pre">Vehicle</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Vehicles</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.KSA.Vehicles" title="Link to this definition">#</a></dt>
 <dd><p>The vehicles in the current system, excluding kittens on EVA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.KSA.ActiveKitten">
+<a class="reference internal" href="crew.html#class-KRPC.Client.Services.KSA.Kitten" title="class: KRPC.Client.Services.KSA.Kitten"><span class="pre">Kitten</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ActiveKitten</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.KSA.ActiveKitten" title="Link to this definition">#</a></dt>
+<dd><p>The kitten on EVA under the player’s control, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if the player
+controls a vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Setting it moves the camera to the kitten. Throws an exception if the kitten is not
+on EVA. See <a class="reference internal" href="#property-KRPC.Client.Services.KSA.KSA.ActiveVehicle" title="property: KRPC.Client.Services.KSA.KSA.ActiveVehicle"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">KSA.ActiveVehicle</span></code></a> for a vehicle.</p>
+</div>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.KSA.Kittens">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IDictionary-2" title="type: msdn ~&gt; System.Collections.Generic.IDictionary"><span class="pre">IDictionary</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="crew.html#class-KRPC.Client.Services.KSA.Kitten" title="class: KRPC.Client.Services.KSA.Kitten"><span class="pre">Kitten</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Kittens</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.KSA.Kittens" title="Link to this definition">#</a></dt>
+<dd><p>The kittens in the agency’s roster, including those killed in action, keyed by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.KSA.Camera">
+<a class="reference internal" href="camera.html#class-KRPC.Client.Services.KSA.Camera" title="class: KRPC.Client.Services.KSA.Camera"><span class="pre">Camera</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Camera</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.KSA.Camera" title="Link to this definition">#</a></dt>
+<dd><p>The game’s main camera.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -592,7 +704,7 @@
 
 <dl class="cs property">
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.KSA.SimulationSpeed">
-<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Double" title="type: msdn ~&gt; System.Double"><span class="pre">double</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SimulationSpeed</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.KSA.SimulationSpeed" title="Link to this definition">#</a></dt>
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SimulationSpeed</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span><span class="w"> </span><span class="k"><span class="pre">set</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.KSA.SimulationSpeed" title="Link to this definition">#</a></dt>
 <dd><p>The simulation speed, as a multiple of real time. Zero when paused.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
@@ -623,6 +735,17 @@ warp, for example when its menu pauses the game.</p>
 </div>
 </dd></dl>
 
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KSA.KSA.VehicleDesigns">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Collections.Generic.IDictionary-2" title="type: msdn ~&gt; System.Collections.Generic.IDictionary"><span class="pre">IDictionary</span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="vehicle.html#class-KRPC.Client.Services.KSA.VehicleDesign" title="class: KRPC.Client.Services.KSA.VehicleDesign"><span class="pre">VehicleDesign</span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">VehicleDesigns</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KSA.KSA.VehicleDesigns" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle designs that can be launched, keyed by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.KSA.KSA.LaunchVehicle">
 <span id="function-KRPC.Client.Services.KSA.KSA.LaunchVehicle(string,string)"></span><a class="reference internal" href="vehicle.html#class-KRPC.Client.Services.KSA.Vehicle" title="class: KRPC.Client.Services.KSA.Vehicle"><span class="pre">Vehicle</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">LaunchVehicle</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">site</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KSA.KSA.LaunchVehicle" title="Link to this definition">#</a></dt>
@@ -631,7 +754,7 @@ the vehicle is on the launch site.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> – The name of the vehicle, one of the game’s default vehicles or a vehicle saved by the player.</p></li>
+<li><p><strong>name</strong> – The name of the vehicle design. See <a class="reference internal" href="#property-KRPC.Client.Services.KSA.KSA.VehicleDesigns" title="property: KRPC.Client.Services.KSA.KSA.VehicleDesigns"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">KSA.VehicleDesigns</span></code></a>.</p></li>
 <li><p><strong>site</strong> – The name of the launch site. See <a class="reference internal" href="body.html#property-KRPC.Client.Services.KSA.Body.LaunchSites" title="property: KRPC.Client.Services.KSA.Body.LaunchSites"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">Body.LaunchSites</span></code></a>.</p></li>
 </ul>
 </dd>
@@ -644,8 +767,103 @@ the vehicle is on the launch site.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Throws an exception if there is no such vehicle or launch site.</p>
+<p>Throws an exception if there is no such vehicle or launch site, or the name is one
+of the game’s kittens.</p>
 </div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KSA.KSA.SaveExists">
+<span id="function-KRPC.Client.Services.KSA.KSA.SaveExists(string)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">SaveExists</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KSA.KSA.SaveExists" title="Link to this definition">#</a></dt>
+<dd><p>Whether a save with the given name exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of the save.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KSA.KSA.Save">
+<span id="function-KRPC.Client.Services.KSA.KSA.Save(string)"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Save</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KSA.KSA.Save" title="Link to this definition">#</a></dt>
+<dd><p>Save the game, replacing any save with the same name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of the save.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KSA.KSA.Load">
+<span id="function-KRPC.Client.Services.KSA.KSA.Load(string)"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Load</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KSA.KSA.Load" title="Link to this definition">#</a></dt>
+<dd><p>Load a save, and return once it has loaded. The game is paused after loading.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of the save.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the save does not exist.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KSA.KSA.TakeScreenshot">
+<span id="function-KRPC.Client.Services.KSA.KSA.TakeScreenshot(int,bool)"></span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TakeScreenshot</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="n"><span class="pre">scale</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="n"><span class="pre">ui</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KSA.KSA.TakeScreenshot" title="Link to this definition">#</a></dt>
+<dd><p>Save a screenshot, as the screenshot key does, and return once the file is written.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scale</strong> – The size of the image, as a multiple of the window size, from 1 to 8. The game reduces it to fit the graphics memory.</p></li>
+<li><p><strong>ui</strong> – Whether to include the game’s windows. The image is then the size of the window.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The path of the PNG file, in the game’s screenshots folder.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception in the vehicle editor, or if a screenshot is already being taken.</p>
+</div>
+</dd></dl>
+
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KSA.KSA.ShowMessage">
+<span id="function-KRPC.Client.Services.KSA.KSA.ShowMessage(string,float,bool)"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">ShowMessage</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">text</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="n"><span class="pre">duration</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5.0f</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="n"><span class="pre">warning</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">false</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KSA.KSA.ShowMessage" title="Link to this definition">#</a></dt>
+<dd><p>Show a message in the middle of the screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> – The message.</p></li>
+<li><p><strong>duration</strong> – How long to show the message for, in seconds. The game shows a message for at least 2 seconds.</p></li>
+<li><p><strong>warning</strong> – Whether to show the message in the warning color.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cs function">

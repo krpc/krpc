@@ -12,13 +12,15 @@ Provides functionality to interact with Kitten Space Agency.
 .. function:: krpc_error_t krpc_KSA_ActiveVehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t * returnValue)
 .. function:: krpc_error_t krpc_KSA_set_ActiveVehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t value)
 
-   The vehicle under the player's control.
+   The vehicle under the player's control, or ``nullptr`` if the player controls a
+   kitten on EVA.
 
    
 
    .. note::
 
-      Setting it moves the camera to the vehicle, as the switch vehicle key does.
+      Setting it moves the camera to the vehicle, as the switch vehicle key does. See
+      :func:`krpc_KSA_ActiveKitten` for a kitten on EVA.
 
 
 
@@ -26,6 +28,40 @@ Provides functionality to interact with Kitten Space Agency.
 .. function:: krpc_error_t krpc_KSA_Vehicles(krpc_connection_t connection, krpc_list_object_t * returnValue)
 
    The vehicles in the current system, excluding kittens on EVA.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_ActiveKitten(krpc_connection_t connection, krpc_KSA_Kitten_t * returnValue)
+.. function:: krpc_error_t krpc_KSA_set_ActiveKitten(krpc_connection_t connection, krpc_KSA_Kitten_t value)
+
+   The kitten on EVA under the player's control, or ``nullptr`` if the player
+   controls a vehicle.
+
+   
+
+   .. note::
+
+      Setting it moves the camera to the kitten. Throws an exception if the kitten is not
+      on EVA. See :func:`krpc_KSA_ActiveVehicle` for a vehicle.
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_Kittens(krpc_connection_t connection, krpc_dictionary_string_object_t * returnValue)
+
+   The kittens in the agency's roster, including those killed in action, keyed by name.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_Camera(krpc_connection_t connection, krpc_KSA_Camera_t * returnValue)
+
+   The game's main camera.
 
    
 
@@ -50,8 +86,8 @@ Provides functionality to interact with Kitten Space Agency.
 
 
 
-.. function:: krpc_error_t krpc_KSA_SimulationSpeed(krpc_connection_t connection, double * returnValue)
-.. function:: krpc_error_t krpc_KSA_set_SimulationSpeed(krpc_connection_t connection, double value)
+.. function:: krpc_error_t krpc_KSA_SimulationSpeed(krpc_connection_t connection, float * returnValue)
+.. function:: krpc_error_t krpc_KSA_set_SimulationSpeed(krpc_connection_t connection, float value)
 
    The simulation speed, as a multiple of real time. Zero when paused.
 
@@ -79,6 +115,15 @@ Provides functionality to interact with Kitten Space Agency.
 
 
 
+.. function:: krpc_error_t krpc_KSA_VehicleDesigns(krpc_connection_t connection, krpc_dictionary_string_object_t * returnValue)
+
+   The vehicle designs that can be launched, keyed by name.
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_KSA_LaunchVehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t * returnValue, const char * name, const char * site)
 
    Launch a vehicle from a launch site, and make it the active vehicle. Returns once
@@ -86,7 +131,7 @@ Provides functionality to interact with Kitten Space Agency.
 
    :Parameters:
 
-    * **name** -- The name of the vehicle, one of the game's default vehicles or a vehicle saved by the player.
+    * **name** -- The name of the vehicle design. See :func:`krpc_KSA_VehicleDesigns`.
     * **site** -- The name of the launch site. See :func:`krpc_KSA_Body_LaunchSites`.
 
    :returns: The vehicle. Its name is the vehicle's name, with a number appended if another vehicle has that name.
@@ -94,7 +139,85 @@ Provides functionality to interact with Kitten Space Agency.
 
    .. note::
 
-      Throws an exception if there is no such vehicle or launch site.
+      Throws an exception if there is no such vehicle or launch site, or the name is one
+      of the game's kittens.
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_SaveExists(krpc_connection_t connection, bool * returnValue, const char * name)
+
+   Whether a save with the given name exists.
+
+   :Parameters:
+
+    * **name** -- Name of the save.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_Save(krpc_connection_t connection, const char * name)
+
+   Save the game, replacing any save with the same name.
+
+   :Parameters:
+
+    * **name** -- Name of the save.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_Load(krpc_connection_t connection, const char * name)
+
+   Load a save, and return once it has loaded. The game is paused after loading.
+
+   :Parameters:
+
+    * **name** -- Name of the save.
+
+   
+
+   .. note::
+
+      Throws an exception if the save does not exist.
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_TakeScreenshot(krpc_connection_t connection, char * * returnValue, int32_t scale, bool ui)
+
+   Save a screenshot, as the screenshot key does, and return once the file is written.
+
+   :Parameters:
+
+    * **scale** -- The size of the image, as a multiple of the window size, from 1 to 8. The game reduces it to fit the graphics memory.
+    * **ui** -- Whether to include the game's windows. The image is then the size of the window.
+
+   :returns: The path of the PNG file, in the game's screenshots folder.
+   
+
+   .. note::
+
+      Throws an exception in the vehicle editor, or if a screenshot is already being taken.
+
+
+
+
+.. function:: krpc_error_t krpc_KSA_ShowMessage(krpc_connection_t connection, const char * text, float duration, bool warning)
+
+   Show a message in the middle of the screen.
+
+   :Parameters:
+
+    * **text** -- The message.
+    * **duration** -- How long to show the message for, in seconds. The game shows a message for at least 2 seconds.
+    * **warning** -- Whether to show the message in the warning color.
+
+   
 
 
 

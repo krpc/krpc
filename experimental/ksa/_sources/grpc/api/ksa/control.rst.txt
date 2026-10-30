@@ -1,0 +1,287 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Control
+=======
+
+.. grpc:service:: ControlService
+
+   The controls of a vehicle: engines, manual inputs, stabilization and sequences.
+   Obtained from :grpc:rpc:`VehicleService.GetControl <krpc.ksa.VehicleService.GetControl>`.
+
+   .. note::
+
+      The rotation and translation inputs act as held keys. Each is on or off, with no
+      partial strength. A held rotation input overrides the auto-pilot on its axis. The game
+      releases the inputs when its window gains or loses focus, or the active vehicle changes.
+
+   .. grpc:rpc:: GetThrottle (Control.GetThrottleRequest) returns (Control.GetThrottleResponse)
+
+      The manual throttle. A value between 0 and 1.
+
+      :Control.GetThrottleRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetThrottleResponse: ``value`` (``float``)
+
+      .. note::
+
+         The game raises a value below the vehicle's minimum throttle to the minimum.
+         The engines fire only while :grpc:rpc:`ControlService.GetEngineOn <krpc.ksa.ControlService.GetEngineOn>` is set.
+
+   .. grpc:rpc:: SetThrottle (Control.SetThrottleRequest) returns (Control.SetThrottleResponse)
+
+      The manual throttle. A value between 0 and 1.
+
+      :Control.SetThrottleRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+         * ``value`` (``float``)
+
+      :Control.SetThrottleResponse: Empty
+
+      .. note::
+
+         The game raises a value below the vehicle's minimum throttle to the minimum.
+         The engines fire only while :grpc:rpc:`ControlService.GetEngineOn <krpc.ksa.ControlService.GetEngineOn>` is set.
+
+   .. grpc:rpc:: GetEngineOn (Control.GetEngineOnRequest) returns (Control.GetEngineOnResponse)
+
+      Whether the engines are ignited.
+
+      :Control.GetEngineOnRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetEngineOnResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetEngineOn (Control.SetEngineOnRequest) returns (Control.SetEngineOnResponse)
+
+      Whether the engines are ignited.
+
+      :Control.SetEngineOnRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+         * ``value`` (``bool``)
+
+      :Control.SetEngineOnResponse: Empty
+
+   .. grpc:rpc:: GetPitch (Control.GetPitchRequest) returns (Control.GetPitchResponse)
+
+      The pitch input: 1 for pitch up, -1 for pitch down, 0 for neither.
+
+      :Control.GetPitchRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetPitchResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: SetPitch (Control.SetPitchRequest) returns (Control.SetPitchResponse)
+
+      The pitch input: 1 for pitch up, -1 for pitch down, 0 for neither.
+
+      :Control.SetPitchRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+         * ``value`` (``sint32``)
+
+      :Control.SetPitchResponse: Empty
+
+   .. grpc:rpc:: GetYaw (Control.GetYawRequest) returns (Control.GetYawResponse)
+
+      The yaw input: 1 for yaw right, -1 for yaw left, 0 for neither.
+
+      :Control.GetYawRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetYawResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: SetYaw (Control.SetYawRequest) returns (Control.SetYawResponse)
+
+      The yaw input: 1 for yaw right, -1 for yaw left, 0 for neither.
+
+      :Control.SetYawRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+         * ``value`` (``sint32``)
+
+      :Control.SetYawResponse: Empty
+
+   .. grpc:rpc:: GetRoll (Control.GetRollRequest) returns (Control.GetRollResponse)
+
+      The roll input: 1 for roll right, -1 for roll left, 0 for neither.
+
+      :Control.GetRollRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetRollResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: SetRoll (Control.SetRollRequest) returns (Control.SetRollResponse)
+
+      The roll input: 1 for roll right, -1 for roll left, 0 for neither.
+
+      :Control.SetRollRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+         * ``value`` (``sint32``)
+
+      :Control.SetRollResponse: Empty
+
+   .. grpc:rpc:: GetForward (Control.GetForwardRequest) returns (Control.GetForwardResponse)
+
+      The forward translation input: 1 for forward, -1 for backward, 0 for neither.
+
+      :Control.GetForwardRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetForwardResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: SetForward (Control.SetForwardRequest) returns (Control.SetForwardResponse)
+
+      The forward translation input: 1 for forward, -1 for backward, 0 for neither.
+
+      :Control.SetForwardRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+         * ``value`` (``sint32``)
+
+      :Control.SetForwardResponse: Empty
+
+   .. grpc:rpc:: GetRight (Control.GetRightRequest) returns (Control.GetRightResponse)
+
+      The right translation input: 1 for right, -1 for left, 0 for neither.
+
+      :Control.GetRightRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetRightResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: SetRight (Control.SetRightRequest) returns (Control.SetRightResponse)
+
+      The right translation input: 1 for right, -1 for left, 0 for neither.
+
+      :Control.SetRightRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+         * ``value`` (``sint32``)
+
+      :Control.SetRightResponse: Empty
+
+   .. grpc:rpc:: GetUp (Control.GetUpRequest) returns (Control.GetUpResponse)
+
+      The up translation input: 1 for up, -1 for down, 0 for neither.
+
+      :Control.GetUpRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetUpResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: SetUp (Control.SetUpRequest) returns (Control.SetUpResponse)
+
+      The up translation input: 1 for up, -1 for down, 0 for neither.
+
+      :Control.SetUpRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+         * ``value`` (``sint32``)
+
+      :Control.SetUpResponse: Empty
+
+   .. grpc:rpc:: GetPulse (Control.GetPulseRequest) returns (Control.GetPulseResponse)
+
+      Whether the rotation and translation inputs fire the thrusters in short pulses.
+
+      :Control.GetPulseRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetPulseResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetPulse (Control.SetPulseRequest) returns (Control.SetPulseResponse)
+
+      Whether the rotation and translation inputs fire the thrusters in short pulses.
+
+      :Control.SetPulseRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+         * ``value`` (``bool``)
+
+      :Control.SetPulseResponse: Empty
+
+   .. grpc:rpc:: GetStabilization (Control.GetStabilizationRequest) returns (Control.GetStabilizationResponse)
+
+      Whether the flight computer is controlling the vehicle's attitude.
+
+      :Control.GetStabilizationRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetStabilizationResponse: ``value`` (``bool``)
+
+      .. note::
+
+         Setting it to ``true`` holds the current attitude.
+
+   .. grpc:rpc:: SetStabilization (Control.SetStabilizationRequest) returns (Control.SetStabilizationResponse)
+
+      Whether the flight computer is controlling the vehicle's attitude.
+
+      :Control.SetStabilizationRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+         * ``value`` (``bool``)
+
+      :Control.SetStabilizationResponse: Empty
+
+      .. note::
+
+         Setting it to ``true`` holds the current attitude.
+
+   .. grpc:rpc:: GetRCS (Control.GetRCSRequest) returns (Control.GetRCSResponse)
+
+      Whether the flight computer may use the reaction control thrusters for attitude
+      control.
+
+      :Control.GetRCSRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetRCSResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetRCS (Control.SetRCSRequest) returns (Control.SetRCSResponse)
+
+      Whether the flight computer may use the reaction control thrusters for attitude
+      control.
+
+      :Control.SetRCSRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+         * ``value`` (``bool``)
+
+      :Control.SetRCSResponse: Empty
+
+   .. grpc:rpc:: GetLights (Control.GetLightsRequest) returns (Control.GetLightsResponse)
+
+      Whether the vehicle's lights are switched on, as the lights key does.
+
+      :Control.GetLightsRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetLightsResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetLights (Control.SetLightsRequest) returns (Control.SetLightsResponse)
+
+      Whether the vehicle's lights are switched on, as the lights key does.
+
+      :Control.SetLightsRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+         * ``value`` (``bool``)
+
+      :Control.SetLightsResponse: Empty
+
+   .. grpc:rpc:: GetActiveSequence (Control.GetActiveSequenceRequest) returns (Control.GetActiveSequenceResponse)
+
+      The number of the most recently activated sequence.
+
+      :Control.GetActiveSequenceRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.GetActiveSequenceResponse: ``value`` (``sint32``)
+
+   .. grpc:rpc:: ActivateNextSequence (Control.ActivateNextSequenceRequest) returns (Control.ActivateNextSequenceResponse)
+
+      Activates the next sequence, as the staging key does.
+
+      :Control.ActivateNextSequenceRequest:
+         * ``this`` (:grpc:service:`Control <krpc.ksa.ControlService>`)
+
+      :Control.ActivateNextSequenceResponse: ``value`` (``repeated`` :grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicles that separated from this one.
+
+      .. note::
+
+         Throws an exception if the vehicle is not the :grpc:rpc:`KSAService.GetActiveVehicle <krpc.ksa.KSAService.GetActiveVehicle>`.

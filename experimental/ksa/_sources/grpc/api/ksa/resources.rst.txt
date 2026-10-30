@@ -1,0 +1,221 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Resources
+=========
+
+.. grpc:service:: ResourceService
+
+   A substance held in tanks, such as a propellant, in a part or across a whole vehicle.
+   Obtained from :grpc:rpc:`PartService.GetResources <krpc.ksa.PartService.GetResources>` or :grpc:rpc:`VehicleService.GetResources <krpc.ksa.VehicleService.GetResources>`.
+
+   .. grpc:rpc:: GetName (Resource.GetNameRequest) returns (Resource.GetNameResponse)
+
+      The name of the substance.
+
+      :Resource.GetNameRequest:
+         * ``this`` (:grpc:service:`Resource <krpc.ksa.ResourceService>`)
+
+      :Resource.GetNameResponse: ``value`` (``string``)
+
+   .. grpc:rpc:: GetAmount (Resource.GetAmountRequest) returns (Resource.GetAmountResponse)
+
+      The mass of the substance held, in kilograms.
+
+      :Resource.GetAmountRequest:
+         * ``this`` (:grpc:service:`Resource <krpc.ksa.ResourceService>`)
+
+      :Resource.GetAmountResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetMax (Resource.GetMaxRequest) returns (Resource.GetMaxResponse)
+
+      The mass of the substance the tanks can hold, in kilograms.
+
+      :Resource.GetMaxRequest:
+         * ``this`` (:grpc:service:`Resource <krpc.ksa.ResourceService>`)
+
+      :Resource.GetMaxResponse: ``value`` (``float``)
+
+.. grpc:service:: TankService
+
+   A propellant tank. Obtained from :grpc:rpc:`PartService.GetTanks <krpc.ksa.PartService.GetTanks>` or :grpc:rpc:`VehicleService.GetTanks <krpc.ksa.VehicleService.GetTanks>`.
+
+   .. grpc:rpc:: GetPart (Tank.GetPartRequest) returns (Tank.GetPartResponse)
+
+      The part the tank is in.
+
+      :Tank.GetPartRequest:
+         * ``this`` (:grpc:service:`Tank <krpc.ksa.TankService>`)
+
+      :Tank.GetPartResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetVolume (Tank.GetVolumeRequest) returns (Tank.GetVolumeResponse)
+
+      The volume of the tank, in cubic meters.
+
+      :Tank.GetVolumeRequest:
+         * ``this`` (:grpc:service:`Tank <krpc.ksa.TankService>`)
+
+      :Tank.GetVolumeResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetRatedPressure (Tank.GetRatedPressureRequest) returns (Tank.GetRatedPressureResponse)
+
+      The pressure the tank stores gas at, in pascals. Zero if the tank cannot store gas.
+
+      :Tank.GetRatedPressureRequest:
+         * ``this`` (:grpc:service:`Tank <krpc.ksa.TankService>`)
+
+      :Tank.GetRatedPressureResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetFilledFraction (Tank.GetFilledFractionRequest) returns (Tank.GetFilledFractionResponse)
+
+      The fraction of the tank's volume that is filled, between 0 and 1.
+
+      :Tank.GetFilledFractionRequest:
+         * ``this`` (:grpc:service:`Tank <krpc.ksa.TankService>`)
+
+      :Tank.GetFilledFractionResponse: ``value`` (``float``)
+
+   .. grpc:rpc:: GetPropellantUseEnabled (Tank.GetPropellantUseEnabledRequest) returns (Tank.GetPropellantUseEnabledResponse)
+
+      Whether engines can draw propellant from the tank.
+
+      :Tank.GetPropellantUseEnabledRequest:
+         * ``this`` (:grpc:service:`Tank <krpc.ksa.TankService>`)
+
+      :Tank.GetPropellantUseEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetPropellantUseEnabled (Tank.SetPropellantUseEnabledRequest) returns (Tank.SetPropellantUseEnabledResponse)
+
+      Whether engines can draw propellant from the tank.
+
+      :Tank.SetPropellantUseEnabledRequest:
+         * ``this`` (:grpc:service:`Tank <krpc.ksa.TankService>`)
+         * ``value`` (``bool``)
+
+      :Tank.SetPropellantUseEnabledResponse: Empty
+
+   .. grpc:rpc:: GetTransferMode (Tank.GetTransferModeRequest) returns (Tank.GetTransferModeResponse)
+
+      The direction the tank transfers propellant in.
+
+      :Tank.GetTransferModeRequest:
+         * ``this`` (:grpc:service:`Tank <krpc.ksa.TankService>`)
+
+      :Tank.GetTransferModeResponse: ``value`` (:grpc:enum:`TankTransferMode <krpc.ksa.TankTransferMode>`)
+
+      .. note::
+
+         Propellant flows from tanks transferring out to tanks of the same vehicle transferring
+         in, and the transfer draws battery power. Setting a transfer throws an exception if
+         the running version of KSA does not support it.
+
+   .. grpc:rpc:: SetTransferMode (Tank.SetTransferModeRequest) returns (Tank.SetTransferModeResponse)
+
+      The direction the tank transfers propellant in.
+
+      :Tank.SetTransferModeRequest:
+         * ``this`` (:grpc:service:`Tank <krpc.ksa.TankService>`)
+         * ``value`` (:grpc:enum:`TankTransferMode <krpc.ksa.TankTransferMode>`)
+
+      :Tank.SetTransferModeResponse: Empty
+
+      .. note::
+
+         Propellant flows from tanks transferring out to tanks of the same vehicle transferring
+         in, and the transfer draws battery power. Setting a transfer throws an exception if
+         the running version of KSA does not support it.
+
+.. grpc:enum:: TankTransferMode
+
+   The direction a tank transfers propellant in. See :grpc:rpc:`TankService.GetTransferMode <krpc.ksa.TankService.GetTransferMode>`.
+
+   .. grpc:value:: TANK_TRANSFER_MODE_NONE
+
+      No transfer.
+
+   .. grpc:value:: TANK_TRANSFER_MODE_IN
+
+      Into the tank, from tanks transferring out.
+
+   .. grpc:value:: TANK_TRANSFER_MODE_OUT
+
+      Out of the tank, to tanks transferring in.
+
+.. grpc:service:: FuelLinkService
+
+   A fuel line between two parts of a vehicle, which lets propellant flow between them.
+   Obtained from :grpc:rpc:`VehicleService.GetFuelLinks <krpc.ksa.VehicleService.GetFuelLinks>`.
+
+   .. grpc:rpc:: GetPartA (FuelLink.GetPartARequest) returns (FuelLink.GetPartAResponse)
+
+      One of the parts the link joins.
+
+      :FuelLink.GetPartARequest:
+         * ``this`` (:grpc:service:`FuelLink <krpc.ksa.FuelLinkService>`)
+
+      :FuelLink.GetPartAResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetPartB (FuelLink.GetPartBRequest) returns (FuelLink.GetPartBResponse)
+
+      The other part the link joins.
+
+      :FuelLink.GetPartBRequest:
+         * ``this`` (:grpc:service:`FuelLink <krpc.ksa.FuelLinkService>`)
+
+      :FuelLink.GetPartBResponse: ``value`` (:grpc:service:`Part <krpc.ksa.PartService>`)
+
+   .. grpc:rpc:: GetFlow (FuelLink.GetFlowRequest) returns (FuelLink.GetFlowResponse)
+
+      The direction propellant flows through the link.
+
+      :FuelLink.GetFlowRequest:
+         * ``this`` (:grpc:service:`FuelLink <krpc.ksa.FuelLinkService>`)
+
+      :FuelLink.GetFlowResponse: ``value`` (:grpc:enum:`FuelLinkFlow <krpc.ksa.FuelLinkFlow>`)
+
+   .. grpc:rpc:: SetFlow (FuelLink.SetFlowRequest) returns (FuelLink.SetFlowResponse)
+
+      The direction propellant flows through the link.
+
+      :FuelLink.SetFlowRequest:
+         * ``this`` (:grpc:service:`FuelLink <krpc.ksa.FuelLinkService>`)
+         * ``value`` (:grpc:enum:`FuelLinkFlow <krpc.ksa.FuelLinkFlow>`)
+
+      :FuelLink.SetFlowResponse: Empty
+
+   .. grpc:rpc:: GetEnabled (FuelLink.GetEnabledRequest) returns (FuelLink.GetEnabledResponse)
+
+      Whether propellant can flow through the link.
+
+      :FuelLink.GetEnabledRequest:
+         * ``this`` (:grpc:service:`FuelLink <krpc.ksa.FuelLinkService>`)
+
+      :FuelLink.GetEnabledResponse: ``value`` (``bool``)
+
+   .. grpc:rpc:: SetEnabled (FuelLink.SetEnabledRequest) returns (FuelLink.SetEnabledResponse)
+
+      Whether propellant can flow through the link.
+
+      :FuelLink.SetEnabledRequest:
+         * ``this`` (:grpc:service:`FuelLink <krpc.ksa.FuelLinkService>`)
+         * ``value`` (``bool``)
+
+      :FuelLink.SetEnabledResponse: Empty
+
+.. grpc:enum:: FuelLinkFlow
+
+   The direction propellant flows through a fuel link. See :grpc:rpc:`FuelLinkService.GetFlow <krpc.ksa.FuelLinkService.GetFlow>`.
+
+   .. grpc:value:: FUEL_LINK_FLOW_A_TO_B
+
+      From :grpc:rpc:`FuelLinkService.GetPartA <krpc.ksa.FuelLinkService.GetPartA>` to :grpc:rpc:`FuelLinkService.GetPartB <krpc.ksa.FuelLinkService.GetPartB>`.
+
+   .. grpc:value:: FUEL_LINK_FLOW_B_TO_A
+
+      From :grpc:rpc:`FuelLinkService.GetPartB <krpc.ksa.FuelLinkService.GetPartB>` to :grpc:rpc:`FuelLinkService.GetPartA <krpc.ksa.FuelLinkService.GetPartA>`.
+
+   .. grpc:value:: FUEL_LINK_FLOW_BOTH
+
+      Either way.

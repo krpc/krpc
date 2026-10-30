@@ -1,0 +1,123 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Camera
+======
+
+
+.. type:: krpc_KSA_Camera_t
+
+   The game's main camera. Obtained from :func:`krpc_KSA_Camera`.
+
+   .. function:: krpc_error_t krpc_KSA_Camera_Mode(krpc_connection_t connection, krpc_KSA_CameraMode_t * returnValue, krpc_KSA_Camera_t instance)
+   .. function:: krpc_error_t krpc_KSA_Camera_set_Mode(krpc_connection_t connection, krpc_KSA_Camera_t instance, krpc_KSA_CameraMode_t value)
+
+      The mode of the camera.
+
+   
+
+      .. note::
+
+         Setting :macro:`KRPC_KSA_CAMERAMODE_IVA` while the camera is not focused on a vehicle
+         with a crew seat sets :macro:`KRPC_KSA_CAMERAMODE_ORBIT` instead, as the game does. A
+         change of mode releases the active vehicle's held rotation and translation inputs.
+
+   .. function:: krpc_error_t krpc_KSA_Camera_Azimuth(krpc_connection_t connection, float * returnValue, krpc_KSA_Camera_t instance)
+   .. function:: krpc_error_t krpc_KSA_Camera_set_Azimuth(krpc_connection_t connection, krpc_KSA_Camera_t instance, float value)
+
+      The angle of the camera around the focused object, in degrees. Throws an exception
+      in any mode other than orbit and map.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Camera_Elevation(krpc_connection_t connection, float * returnValue, krpc_KSA_Camera_t instance)
+   .. function:: krpc_error_t krpc_KSA_Camera_set_Elevation(krpc_connection_t connection, krpc_KSA_Camera_t instance, float value)
+
+      The angle of the camera above the plane it orbits in, in degrees, between -90 and
+      90. Throws an exception in any mode other than orbit and map.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Camera_Distance(krpc_connection_t connection, float * returnValue, krpc_KSA_Camera_t instance)
+   .. function:: krpc_error_t krpc_KSA_Camera_set_Distance(krpc_connection_t connection, krpc_KSA_Camera_t instance, float value)
+
+      The distance from the camera to the focused object, in meters. Throws an exception
+      in any mode other than orbit and map.
+
+   
+
+      .. note::
+
+         The camera moves smoothly to a new distance, and stays at least the focused object's
+         radius from it in map mode, and half its radius in orbit mode.
+
+   .. function:: krpc_error_t krpc_KSA_Camera_FieldOfView(krpc_connection_t connection, float * returnValue, krpc_KSA_Camera_t instance)
+   .. function:: krpc_error_t krpc_KSA_Camera_set_FieldOfView(krpc_connection_t connection, krpc_KSA_Camera_t instance, float value)
+
+      The camera's vertical field of view, in degrees, between 15 and 120.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Camera_FocusedVehicle(krpc_connection_t connection, krpc_KSA_Vehicle_t * returnValue, krpc_KSA_Camera_t instance)
+   .. function:: krpc_error_t krpc_KSA_Camera_set_FocusedVehicle(krpc_connection_t connection, krpc_KSA_Camera_t instance, krpc_KSA_Vehicle_t value)
+
+      Returns the vehicle the camera is focused on, or ``nullptr`` if it is focused on
+      something else, and sets the focus to a vehicle.
+
+   
+
+      .. note::
+
+         Setting the focus leaves the active vehicle as it is.
+
+   .. function:: krpc_error_t krpc_KSA_Camera_FocusedBody(krpc_connection_t connection, krpc_KSA_Body_t * returnValue, krpc_KSA_Camera_t instance)
+   .. function:: krpc_error_t krpc_KSA_Camera_set_FocusedBody(krpc_connection_t connection, krpc_KSA_Camera_t instance, krpc_KSA_Body_t value)
+
+      Returns the body the camera is focused on, or ``nullptr`` if it is focused on
+      something else, and sets the focus to a body.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Camera_FocusedKitten(krpc_connection_t connection, krpc_KSA_Kitten_t * returnValue, krpc_KSA_Camera_t instance)
+   .. function:: krpc_error_t krpc_KSA_Camera_set_FocusedKitten(krpc_connection_t connection, krpc_KSA_Camera_t instance, krpc_KSA_Kitten_t value)
+
+      Returns the kitten on EVA the camera is focused on, or ``nullptr`` if it is focused
+      on something else, and sets the focus to a kitten on EVA.
+
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA.
+
+
+
+.. type:: krpc_KSA_CameraMode_t
+
+   The mode of the camera. See :func:`krpc_KSA_Camera_Mode`.
+
+
+   .. macro:: KRPC_KSA_CAMERAMODE_ORBIT
+
+      Orbits the focused object.
+
+
+   .. macro:: KRPC_KSA_CAMERAMODE_FREE
+
+      Flies freely.
+
+
+   .. macro:: KRPC_KSA_CAMERAMODE_MAP
+
+      The map view.
+
+
+   .. macro:: KRPC_KSA_CAMERAMODE_IVA
+
+      Inside the vehicle, from a crew seat.
+
+
+   .. macro:: KRPC_KSA_CAMERAMODE_FIXED
+
+      Fixed to a part of the vehicle, such as a docking port.

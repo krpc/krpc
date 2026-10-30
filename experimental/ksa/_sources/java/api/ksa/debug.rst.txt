@@ -1,0 +1,176 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KSA
+
+Debug
+=====
+
+
+.. type:: public class Debug
+
+   Changes the state of the simulation directly, as the game's debug windows and console
+   commands do: teleporting a vehicle, setting its attitude, refilling its tanks.
+
+   .. method:: static void setCircularOrbit(Connection connection, Vehicle vehicle, Body body, double altitude)
+
+      Move a vehicle onto a circular orbit around a body, and return once it is there.
+
+      :param Vehicle vehicle: The vehicle.
+      :param Body body: The body to orbit.
+      :param double altitude: The altitude of the orbit above the mean radius, in meters.
+   
+
+      .. note::
+
+         Throws an exception if the game cannot compute the vehicle's trajectory on the
+         orbit.
+
+   .. method:: static void setOrbit(Connection connection, Vehicle vehicle, Body body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+
+      Move a vehicle onto the orbit with the given elements, and return once it is there.
+      The angles are those of :type:`Orbit`.
+
+      :param Vehicle vehicle: The vehicle.
+      :param Body body: The body to orbit.
+      :param double semiMajorAxis: The semi-major axis, in meters.
+      :param double eccentricity: The eccentricity.
+      :param double inclination: The inclination, in radians.
+      :param double longitudeOfAscendingNode: The longitude of the ascending node, in radians.
+      :param double argumentOfPeriapsis: The argument of periapsis, in radians.
+      :param double meanAnomalyAtEpoch: The mean anomaly at the epoch, in radians.
+      :param double epoch: The universal time of the epoch, in seconds.
+   
+
+      .. note::
+
+         Throws an exception if the game cannot compute the vehicle's trajectory on the
+         orbit.
+
+   .. method:: static void setLanded(Connection connection, Vehicle vehicle, Body body, double latitude, double longitude)
+
+      Place a vehicle on the surface of a body, as the game's teleport window does, and
+      return once it is there.
+
+      :param Vehicle vehicle: The vehicle.
+      :param Body body: The body to land on.
+      :param double latitude: The latitude, in degrees.
+      :param double longitude: The longitude, in degrees.
+   
+
+      .. note::
+
+         Throws an exception if the body has no surface.
+
+   .. method:: static void setPosition(Connection connection, Vehicle vehicle, org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame referenceFrame)
+
+      Move a vehicle to the given position, keeping its velocity, and return once it is
+      there.
+
+      :param Vehicle vehicle: The vehicle.
+      :param org.javatuples.Triplet<Double,Double,Double> position: The position of the vehicle, in meters.
+      :param ReferenceFrame referenceFrame: The reference frame of the position.
+   
+
+      .. note::
+
+         This is the inverse of :meth:`Vehicle.position(ReferenceFrame)`. The vehicle keeps orbiting
+         the same body.
+
+   .. method:: static void setVelocity(Connection connection, Vehicle vehicle, org.javatuples.Triplet<Double,Double,Double> velocity, ReferenceFrame referenceFrame)
+
+      Set the velocity of a vehicle, keeping its position, and return once it is set.
+
+      :param Vehicle vehicle: The vehicle.
+      :param org.javatuples.Triplet<Double,Double,Double> velocity: The velocity of the vehicle, in meters per second.
+      :param ReferenceFrame referenceFrame: The reference frame of the velocity.
+   
+
+      .. note::
+
+         This is the inverse of :meth:`Vehicle.velocity(ReferenceFrame)`. The vehicle keeps orbiting
+         the same body.
+
+   .. method:: static void setRotation(Connection connection, Vehicle vehicle, org.javatuples.Quartet<Double,Double,Double,Double> rotation, ReferenceFrame referenceFrame)
+
+      Set the rotation of a vehicle, and return once it is set.
+
+      :param Vehicle vehicle: The vehicle.
+      :param org.javatuples.Quartet<Double,Double,Double,Double> rotation: The rotation of the vehicle, as a quaternion of the form ``(x, y, z, w)``.
+      :param ReferenceFrame referenceFrame: The reference frame of the rotation.
+   
+
+      .. note::
+
+         This is the inverse of :meth:`Vehicle.rotation(ReferenceFrame)`.
+
+   .. method:: static void setAngularVelocity(Connection connection, Vehicle vehicle, org.javatuples.Triplet<Double,Double,Double> angularVelocity, ReferenceFrame referenceFrame)
+
+      Set the angular velocity of a vehicle, and return once it is set.
+
+      :param Vehicle vehicle: The vehicle.
+      :param org.javatuples.Triplet<Double,Double,Double> angularVelocity: The angular velocity, in radians per second. The vector points along the axis of rotation, and its length is the rate.
+      :param ReferenceFrame referenceFrame: The reference frame of the angular velocity.
+   
+
+      .. note::
+
+         This is the inverse of :meth:`Vehicle.angularVelocity(ReferenceFrame)`.
+
+   .. method:: static void fillResources(Connection connection, Vehicle vehicle)
+
+      Fill the propellant, batteries and other consumables of a vehicle, as the game's
+      refill command does.
+
+      :param Vehicle vehicle: The vehicle.
+   
+
+   .. method:: static void emptyResources(Connection connection, Vehicle vehicle)
+
+      Empty the propellant, batteries and other consumables of a vehicle, as the game's
+      empty command does.
+
+      :param Vehicle vehicle: The vehicle.
+   
+
+   .. method:: static Vehicle duplicateVehicle(Connection connection, Vehicle vehicle, String name)
+
+      Create a copy of a vehicle beside it, as the game's duplicate command does, and
+      return once it is created.
+
+      :param Vehicle vehicle: The vehicle to copy.
+      :param String name: The name of the copy.
+      :returns: The copy.
+   
+
+      .. note::
+
+         Throws an exception if the name is in use.
+
+   .. method:: static void explodeVehicle(Connection connection, Vehicle vehicle)
+
+      Destroy a vehicle in an explosion, as the game's explode command does, and return
+      once the vehicle is gone. Its crew are killed.
+
+      :param Vehicle vehicle: The vehicle.
+   
+
+   .. method:: static void showVelocityArrows(Connection connection, boolean visible)
+
+      Show or hide the game's debug arrows for the velocities of the vehicles.
+
+      :param boolean visible: Whether to show the arrows.
+   
+
+   .. method:: static java.util.List<String> runCommand(Connection connection, String command)
+
+      Run a command in the game's console, as typed in the console.
+
+      :param String command: The command and its arguments.
+      :returns: The console output of the command, one line per message.
+   
+
+      .. note::
+
+         Most commands write their messages to the game's log, not the returned output.
+         Throws an exception if the console has no such command, or the arguments are not
+         valid.

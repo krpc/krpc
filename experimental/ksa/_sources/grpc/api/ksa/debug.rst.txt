@@ -1,0 +1,199 @@
+.. default-domain:: grpc
+.. highlight:: protobuf
+.. grpc:package:: krpc.ksa
+
+Debug
+=====
+
+.. grpc:service:: DebugService
+
+   Changes the state of the simulation directly, as the game's debug windows and console
+   commands do: teleporting a vehicle, setting its attitude, refilling its tanks.
+
+   .. grpc:rpc:: SetCircularOrbit (Debug.SetCircularOrbitRequest) returns (Debug.SetCircularOrbitResponse)
+
+      Move a vehicle onto a circular orbit around a body, and return once it is there.
+
+      :Debug.SetCircularOrbitRequest:
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+         * ``body`` (:grpc:service:`Body <krpc.ksa.BodyService>`): The body to orbit.
+         * ``altitude`` (``double``): The altitude of the orbit above the mean radius, in meters.
+
+      :Debug.SetCircularOrbitResponse: Empty
+
+      .. note::
+
+         Throws an exception if the game cannot compute the vehicle's trajectory on the
+         orbit.
+
+   .. grpc:rpc:: SetOrbit (Debug.SetOrbitRequest) returns (Debug.SetOrbitResponse)
+
+      Move a vehicle onto the orbit with the given elements, and return once it is there.
+      The angles are those of :grpc:service:`Orbit <krpc.ksa.OrbitService>`.
+
+      :Debug.SetOrbitRequest:
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+         * ``body`` (:grpc:service:`Body <krpc.ksa.BodyService>`): The body to orbit.
+         * ``semi_major_axis`` (``double``): The semi-major axis, in meters.
+         * ``eccentricity`` (``double``): The eccentricity.
+         * ``inclination`` (``double``): The inclination, in radians.
+         * ``longitude_of_ascending_node`` (``double``): The longitude of the ascending node, in radians.
+         * ``argument_of_periapsis`` (``double``): The argument of periapsis, in radians.
+         * ``mean_anomaly_at_epoch`` (``double``): The mean anomaly at the epoch, in radians.
+         * ``epoch`` (``double``): The universal time of the epoch, in seconds.
+
+      :Debug.SetOrbitResponse: Empty
+
+      .. note::
+
+         Throws an exception if the game cannot compute the vehicle's trajectory on the
+         orbit.
+
+   .. grpc:rpc:: SetLanded (Debug.SetLandedRequest) returns (Debug.SetLandedResponse)
+
+      Place a vehicle on the surface of a body, as the game's teleport window does, and
+      return once it is there.
+
+      :Debug.SetLandedRequest:
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+         * ``body`` (:grpc:service:`Body <krpc.ksa.BodyService>`): The body to land on.
+         * ``latitude`` (``double``): The latitude, in degrees.
+         * ``longitude`` (``double``): The longitude, in degrees.
+
+      :Debug.SetLandedResponse: Empty
+
+      .. note::
+
+         Throws an exception if the body has no surface.
+
+   .. grpc:rpc:: SetPosition (Debug.SetPositionRequest) returns (Debug.SetPositionResponse)
+
+      Move a vehicle to the given position, keeping its velocity, and return once it is
+      there.
+
+      :Debug.SetPositionRequest:
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+         * ``position`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The position of the vehicle, in meters.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the position.
+
+      :Debug.SetPositionResponse: Empty
+
+      .. note::
+
+         This is the inverse of :grpc:rpc:`VehicleService.Position <krpc.ksa.VehicleService.Position>`. The vehicle keeps orbiting
+         the same body.
+
+   .. grpc:rpc:: SetVelocity (Debug.SetVelocityRequest) returns (Debug.SetVelocityResponse)
+
+      Set the velocity of a vehicle, keeping its position, and return once it is set.
+
+      :Debug.SetVelocityRequest:
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+         * ``velocity`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The velocity of the vehicle, in meters per second.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the velocity.
+
+      :Debug.SetVelocityResponse: Empty
+
+      .. note::
+
+         This is the inverse of :grpc:rpc:`VehicleService.Velocity <krpc.ksa.VehicleService.Velocity>`. The vehicle keeps orbiting
+         the same body.
+
+   .. grpc:rpc:: SetRotation (Debug.SetRotationRequest) returns (Debug.SetRotationResponse)
+
+      Set the rotation of a vehicle, and return once it is set.
+
+      :Debug.SetRotationRequest:
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+         * ``rotation`` (:grpc:message:`Tuple_double_double_double_double <krpc.ksa.Tuple_double_double_double_double>`): The rotation of the vehicle, as a quaternion of the form ``(x, y, z, w)``.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the rotation.
+
+      :Debug.SetRotationResponse: Empty
+
+      .. note::
+
+         This is the inverse of :grpc:rpc:`VehicleService.Rotation <krpc.ksa.VehicleService.Rotation>`.
+
+   .. grpc:rpc:: SetAngularVelocity (Debug.SetAngularVelocityRequest) returns (Debug.SetAngularVelocityResponse)
+
+      Set the angular velocity of a vehicle, and return once it is set.
+
+      :Debug.SetAngularVelocityRequest:
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+         * ``angular_velocity`` (:grpc:message:`Tuple_double_double_double <krpc.ksa.Tuple_double_double_double>`): The angular velocity, in radians per second. The vector points along the axis of rotation, and its length is the rate.
+         * ``reference_frame`` (:grpc:service:`ReferenceFrame <krpc.ksa.ReferenceFrameService>`): The reference frame of the angular velocity.
+
+      :Debug.SetAngularVelocityResponse: Empty
+
+      .. note::
+
+         This is the inverse of :grpc:rpc:`VehicleService.AngularVelocity <krpc.ksa.VehicleService.AngularVelocity>`.
+
+   .. grpc:rpc:: FillResources (Debug.FillResourcesRequest) returns (Debug.FillResourcesResponse)
+
+      Fill the propellant, batteries and other consumables of a vehicle, as the game's
+      refill command does.
+
+      :Debug.FillResourcesRequest:
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+
+      :Debug.FillResourcesResponse: Empty
+
+   .. grpc:rpc:: EmptyResources (Debug.EmptyResourcesRequest) returns (Debug.EmptyResourcesResponse)
+
+      Empty the propellant, batteries and other consumables of a vehicle, as the game's
+      empty command does.
+
+      :Debug.EmptyResourcesRequest:
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+
+      :Debug.EmptyResourcesResponse: Empty
+
+   .. grpc:rpc:: DuplicateVehicle (Debug.DuplicateVehicleRequest) returns (Debug.DuplicateVehicleResponse)
+
+      Create a copy of a vehicle beside it, as the game's duplicate command does, and
+      return once it is created.
+
+      :Debug.DuplicateVehicleRequest:
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle to copy.
+         * ``name`` (``string``): The name of the copy.
+
+      :Debug.DuplicateVehicleResponse: ``value`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The copy.
+
+      .. note::
+
+         Throws an exception if the name is in use.
+
+   .. grpc:rpc:: ExplodeVehicle (Debug.ExplodeVehicleRequest) returns (Debug.ExplodeVehicleResponse)
+
+      Destroy a vehicle in an explosion, as the game's explode command does, and return
+      once the vehicle is gone. Its crew are killed.
+
+      :Debug.ExplodeVehicleRequest:
+         * ``vehicle`` (:grpc:service:`Vehicle <krpc.ksa.VehicleService>`): The vehicle.
+
+      :Debug.ExplodeVehicleResponse: Empty
+
+   .. grpc:rpc:: ShowVelocityArrows (Debug.ShowVelocityArrowsRequest) returns (Debug.ShowVelocityArrowsResponse)
+
+      Show or hide the game's debug arrows for the velocities of the vehicles.
+
+      :Debug.ShowVelocityArrowsRequest:
+         * ``visible`` (``bool``): Whether to show the arrows.
+
+      :Debug.ShowVelocityArrowsResponse: Empty
+
+   .. grpc:rpc:: RunCommand (Debug.RunCommandRequest) returns (Debug.RunCommandResponse)
+
+      Run a command in the game's console, as typed in the console.
+
+      :Debug.RunCommandRequest:
+         * ``command`` (``string``): The command and its arguments.
+
+      :Debug.RunCommandResponse: ``value`` (``repeated string``): The console output of the command, one line per message.
+
+      .. note::
+
+         Most commands write their messages to the game's log, not the returned output.
+         Throws an exception if the console has no such command, or the arguments are not
+         valid.

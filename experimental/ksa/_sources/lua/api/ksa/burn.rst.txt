@@ -25,6 +25,13 @@ Burn
       :Attribute: Read-only, cannot be set
       :rtype: number
 
+   .. attribute:: time_to: number
+
+      The time until :attr:`KSA.Burn.ut`, in seconds. Negative once that time has passed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
    .. attribute:: prograde: number
 
       The change in velocity in the prograde direction, in meters per second.
@@ -93,6 +100,33 @@ Burn
 
          The game predicts it in the solver step after the burn changes, so it reflects a
          change to the burn one update later.
+
+   .. attribute:: orbit_average_dose_rate: number
+
+      The radiation dose rate averaged over the orbit after the burn, in sieverts per
+      second. Not a number if the body has no magnetosphere, or the orbit dips below the
+      surface.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: reference_frame: KSA.ReferenceFrame
+
+      The reference frame with its origin at the position of the burn, and axes along
+      the orbit at the time of the burn. The x axis points prograde, the y axis along the
+      orbit normal and the z axis radially outward, perpendicular to the x axis. The
+      frame does not move or rotate relative to the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.ReferenceFrame`
+
+   .. method:: position(reference_frame)
+
+      The position of the burn, in meters, relative to where the body being orbited is
+      now.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: Tuple
 
    .. method:: direction(reference_frame)
 

@@ -1,0 +1,154 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Power
+=====
+
+
+.. type:: krpc_KSA_Battery_t
+
+   A battery, which stores electrical energy. Obtained from :func:`krpc_KSA_Part_Batteries`.
+
+   .. function:: krpc_error_t krpc_KSA_Battery_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Battery_t instance)
+
+      The part the battery is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Battery_StoredEnergy(krpc_connection_t connection, float * returnValue, krpc_KSA_Battery_t instance)
+
+      The energy stored in the battery, in joules.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Battery_EnergyCapacity(krpc_connection_t connection, float * returnValue, krpc_KSA_Battery_t instance)
+
+      The energy the battery can store, in joules.
+
+   
+
+
+
+.. type:: krpc_KSA_SolarPanel_t
+
+   A solar panel, which turns sunlight into electrical power. Obtained from :func:`krpc_KSA_Part_SolarPanels`.
+
+   .. function:: krpc_error_t krpc_KSA_SolarPanel_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_SolarPanel_t instance)
+
+      The part the solar panel is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_SolarPanel_Active(krpc_connection_t connection, bool * returnValue, krpc_KSA_SolarPanel_t instance)
+
+      Whether the solar panel can produce power, because it is deployed or does not deploy.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_SolarPanel_Power(krpc_connection_t connection, float * returnValue, krpc_KSA_SolarPanel_t instance)
+
+      The power the solar panel produces, in watts.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_SolarPanel_SunAngle(krpc_connection_t connection, float * returnValue, krpc_KSA_SolarPanel_t instance)
+
+      The angle between the solar panel's face and the direction to the sun, in degrees.
+      Zero when the panel faces the sun.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_SolarPanel_Occluded(krpc_connection_t connection, bool * returnValue, krpc_KSA_SolarPanel_t instance)
+
+      Whether a body blocks the sunlight to the solar panel.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_SolarPanel_Deployable(krpc_connection_t connection, krpc_KSA_Deployable_t * returnValue, krpc_KSA_SolarPanel_t instance)
+
+      The deployable section that opens the solar panel, or ``nullptr`` for a panel that
+      does not deploy.
+
+   
+
+
+
+.. type:: krpc_KSA_Generator_t
+
+   A generator, which produces electrical power. Obtained from :func:`krpc_KSA_Part_Generators`.
+
+   .. note::
+
+      A generator runs while its :func:`krpc_KSA_Generator_Engine` is active, and produces power in
+      proportion to the engine's throttle.
+
+   .. function:: krpc_error_t krpc_KSA_Generator_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Generator_t instance)
+
+      The part the generator is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Generator_Engine(krpc_connection_t connection, krpc_KSA_Engine_t * returnValue, krpc_KSA_Generator_t instance)
+
+      The engine that drives the generator, or ``nullptr`` if it has none.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Generator_Active(krpc_connection_t connection, bool * returnValue, krpc_KSA_Generator_t instance)
+
+      Whether the generator is producing power.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Generator_Power(krpc_connection_t connection, float * returnValue, krpc_KSA_Generator_t instance)
+
+      The power the generator produces, in watts.
+
+   
+
+
+
+.. type:: krpc_KSA_PowerConsumer_t
+
+   A power consumer, which uses electrical power, such as a light. Obtained from
+   :func:`krpc_KSA_Part_PowerConsumers`.
+
+   .. function:: krpc_error_t krpc_KSA_PowerConsumer_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_PowerConsumer_t instance)
+
+      The part the power consumer is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_PowerConsumer_Active(krpc_connection_t connection, bool * returnValue, krpc_KSA_PowerConsumer_t instance)
+
+      Whether the part is using power.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_PowerConsumer_Power(krpc_connection_t connection, float * returnValue, krpc_KSA_PowerConsumer_t instance)
+
+      The power the part uses, in watts.
+
+   
+
+
+
+.. type:: krpc_KSA_Light_t
+
+   A light. Obtained from :func:`krpc_KSA_Part_Lights`.
+
+   .. note::
+
+      The vehicle's lights switch on and off together, see :func:`krpc_KSA_Control_Lights`.
+      Cabin lights are always on.
+
+   .. function:: krpc_error_t krpc_KSA_Light_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Light_t instance)
+
+      The part the light is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Light_Active(krpc_connection_t connection, bool * returnValue, krpc_KSA_Light_t instance)
+
+      Whether the light is on.

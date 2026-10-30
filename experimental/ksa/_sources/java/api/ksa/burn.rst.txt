@@ -9,7 +9,7 @@ Burn
 .. type:: public class Burn
 
    A planned burn, the game's equivalent of a maneuver node. Obtained from
-   :meth:`Vehicle.getBurns()` or :meth:`Vehicle.addBurn(double, double, double, double)`.
+   :meth:`Vehicle.getBurns()` or :meth:`Vehicle.addBurn(double, float, float, float)`.
 
    .. note::
 
@@ -25,38 +25,45 @@ Burn
 
    
 
-   .. method:: double getPrograde()
+   .. method:: float getTimeTo()
 
-   .. method:: void setPrograde(double value)
+
+      The time until :meth:`Burn.getUT()`, in seconds. Negative once that time has passed.
+
+   
+
+   .. method:: float getPrograde()
+
+   .. method:: void setPrograde(float value)
 
       The change in velocity in the prograde direction, in meters per second.
 
    
 
-   .. method:: double getNormal()
+   .. method:: float getNormal()
 
-   .. method:: void setNormal(double value)
+   .. method:: void setNormal(float value)
 
       The change in velocity along the orbit normal, in meters per second.
 
    
 
-   .. method:: double getRadial()
+   .. method:: float getRadial()
 
-   .. method:: void setRadial(double value)
+   .. method:: void setRadial(float value)
 
       The change in velocity radially outward, in meters per second.
 
    
 
-   .. method:: double getDeltaV()
+   .. method:: float getDeltaV()
 
 
       The magnitude of the change in velocity, in meters per second.
 
    
 
-   .. method:: double getRemainingDeltaV()
+   .. method:: float getRemainingDeltaV()
 
 
       The change in velocity still to burn, in meters per second. Less than
@@ -77,7 +84,7 @@ Burn
 
    
 
-   .. method:: double getBurnTime()
+   .. method:: float getBurnTime()
 
 
       The time the remaining burn takes with the active engines, in seconds. Not a number
@@ -96,6 +103,33 @@ Burn
 
          The game predicts it in the solver step after the burn changes, so it reflects a
          change to the burn one update later.
+
+   .. method:: float getOrbitAverageDoseRate()
+
+
+      The radiation dose rate averaged over the orbit after the burn, in sieverts per
+      second. Not a number if the body has no magnetosphere, or the orbit dips below the
+      surface.
+
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+
+      The reference frame with its origin at the position of the burn, and axes along
+      the orbit at the time of the burn. The x axis points prograde, the y axis along the
+      orbit normal and the z axis radially outward, perpendicular to the x axis. The
+      frame does not move or rotate relative to the body being orbited.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
+
+      The position of the burn, in meters, relative to where the body being orbited is
+      now.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the position.
+   
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> direction(ReferenceFrame referenceFrame)
 

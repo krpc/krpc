@@ -17,14 +17,136 @@ Resources
 
       :Game Scenes: All
 
-   .. property:: double Amount { get; }
+   .. property:: float Amount { get; }
 
       The mass of the substance held, in kilograms.
 
       :Game Scenes: All
 
-   .. property:: double Max { get; }
+   .. property:: float Max { get; }
 
       The mass of the substance the tanks can hold, in kilograms.
 
       :Game Scenes: All
+
+
+
+.. class:: Tank
+
+   A propellant tank. Obtained from :prop:`Part.Tanks` or :prop:`Vehicle.Tanks`.
+
+   .. property:: Part Part { get; }
+
+      The part the tank is in.
+
+      :Game Scenes: All
+
+   .. property:: float Volume { get; }
+
+      The volume of the tank, in cubic meters.
+
+      :Game Scenes: All
+
+   .. property:: float RatedPressure { get; }
+
+      The pressure the tank stores gas at, in pascals. Zero if the tank cannot store gas.
+
+      :Game Scenes: All
+
+   .. property:: float FilledFraction { get; }
+
+      The fraction of the tank's volume that is filled, between 0 and 1.
+
+      :Game Scenes: All
+
+   .. property:: bool PropellantUseEnabled { get; set; }
+
+      Whether engines can draw propellant from the tank.
+
+      :Game Scenes: All
+
+   .. property:: TankTransferMode TransferMode { get; set; }
+
+      The direction the tank transfers propellant in.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Propellant flows from tanks transferring out to tanks of the same vehicle transferring
+         in, and the transfer draws battery power. Setting a transfer throws an exception if
+         the running version of KSA does not support it.
+
+
+
+.. enum:: TankTransferMode
+
+   The direction a tank transfers propellant in. See :prop:`Tank.TransferMode`.
+
+
+   .. enumerator:: None
+
+      No transfer.
+
+
+   .. enumerator:: In
+
+      Into the tank, from tanks transferring out.
+
+
+   .. enumerator:: Out
+
+      Out of the tank, to tanks transferring in.
+
+
+
+.. class:: FuelLink
+
+   A fuel line between two parts of a vehicle, which lets propellant flow between them.
+   Obtained from :prop:`Vehicle.FuelLinks`.
+
+   .. property:: Part PartA { get; }
+
+      One of the parts the link joins.
+
+      :Game Scenes: All
+
+   .. property:: Part PartB { get; }
+
+      The other part the link joins.
+
+      :Game Scenes: All
+
+   .. property:: FuelLinkFlow Flow { get; set; }
+
+      The direction propellant flows through the link.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether propellant can flow through the link.
+
+      :Game Scenes: All
+
+
+
+.. enum:: FuelLinkFlow
+
+   The direction propellant flows through a fuel link. See :prop:`FuelLink.Flow`.
+
+
+   .. enumerator:: AToB
+
+      From :prop:`FuelLink.PartA` to :prop:`FuelLink.PartB`.
+
+
+   .. enumerator:: BToA
+
+      From :prop:`FuelLink.PartB` to :prop:`FuelLink.PartA`.
+
+
+   .. enumerator:: Both
+
+      Either way.

@@ -78,11 +78,75 @@ Parts
       :Attribute: Read-only, cannot be set
       :rtype: List
 
+   .. attribute:: tanks: List
+
+      The part's propellant tanks. Empty if it has none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: batteries: List
+
+      The part's batteries.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: solar_panels: List
+
+      The part's solar panels.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: generators: List
+
+      The part's generators.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: power_consumers: List
+
+      The part's power consumers.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: lights: List
+
+      The part's lights.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: deployables: List
+
+      The part's deployable sections. A part can have several, such as the doors of a
+      service module.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: magnetic_scoops: List
+
+      The part's magnetic scoops. Empty if it has none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
    .. method:: position(reference_frame)
 
       The position of the part's origin, in meters.
 
       :param KSA.ReferenceFrame reference_frame: The reference frame of the position.
+      :rtype: Tuple
+
+   .. method:: velocity(reference_frame)
+
+      The velocity of the part's origin, in meters per second.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the velocity.
       :rtype: Tuple
 
    .. method:: rotation(reference_frame)
@@ -98,6 +162,13 @@ Parts
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`KSA.Engine` or ``Types.none``
+
+   .. attribute:: gimbals: List
+
+      The part's gimbals. An engine part can have several, each steering one nozzle.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
 
    .. attribute:: rcs: KSA.RCS
 
@@ -127,6 +198,20 @@ Parts
       :Attribute: Read-only, cannot be set
       :rtype: :class:`KSA.DockingPort` or ``Types.none``
 
+   .. attribute:: seats: List
+
+      The part's crew seats.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: crew: List
+
+      The kittens in the part's seats.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
 
 
 .. class:: Engine
@@ -145,6 +230,13 @@ Parts
       :Attribute: Read-only, cannot be set
       :rtype: :class:`KSA.Part`
 
+   .. attribute:: gimbals: List
+
+      The gimbals that steer the engine's nozzles. Empty if the engine has none.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
    .. attribute:: active: boolean
 
       Whether the engine is active, as when its sequence is activated. Setting it returns
@@ -159,6 +251,20 @@ Parts
 
       :Attribute: Read-only, cannot be set
       :rtype: boolean
+
+   .. attribute:: minimum_throttle: number
+
+      The lowest throttle the engine runs at, between 0 and 1.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: propellants: List
+
+      The names of the substances the engine burns. See :attr:`KSA.Resource.name`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
 
    .. attribute:: thrust: number
 
@@ -183,6 +289,69 @@ Parts
 
       :Attribute: Read-only, cannot be set
       :rtype: number
+
+
+
+.. class:: Gimbal
+
+   A gimbal that steers an engine nozzle. Obtained from :attr:`KSA.Part.gimbals` or
+   :attr:`KSA.Engine.gimbals`.
+
+   .. note::
+
+      A gimbal turns about the y and z axes of its mount, which :meth:`KSA.Gimbal.rotation` gives.
+      The flight computer steers it while an engine it belongs to is :attr:`KSA.Gimbal.active`.
+
+   .. attribute:: part: KSA.Part
+
+      The part the gimbal is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: angle_y: number
+
+      The angle of the gimbal about its y axis, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: angle_z: number
+
+      The angle of the gimbal about its z axis, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: max_angle_y: number
+
+      The largest angle of the gimbal about its y axis, in degrees. Zero if it does not
+      turn about that axis.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: max_angle_z: number
+
+      The largest angle of the gimbal about its z axis, in degrees. Zero if it does not
+      turn about that axis.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: active: boolean
+
+      Whether an engine the gimbal steers is active.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. method:: rotation(reference_frame)
+
+      The rotation of the gimbal's mount, whose y and z axes the gimbal turns about.
+
+      :param KSA.ReferenceFrame reference_frame: The reference frame of the rotation.
+      :rtype: Tuple
 
 
 
@@ -239,6 +408,9 @@ Parts
 
       Fire the decoupler, separating the vehicle into two. Returns once it has fired.
       Throws an exception if the decoupler is disabled or :attr:`KSA.Decoupler.decoupled`.
+
+      :returns: The vehicles that separated from this one.
+      :rtype: List
 
 
 
@@ -374,7 +546,119 @@ Parts
       Undock the port, separating the vehicle into two. Returns once it has undocked.
       Throws an exception if the port is not docked.
 
+      :returns: The new vehicles.
+      :rtype: List
 
       .. note::
 
          Docking and undocking replace the vehicles involved. See :class:`KSA.Vehicle`.
+
+
+
+.. class:: Deployable
+
+   A part that deploys and retracts, such as a landing leg, a solar panel or a service
+   module door. Obtained from :attr:`KSA.Part.deployables`.
+
+   .. note::
+
+      Deploying or retracting a part moves its symmetric copies with it, as the part's menu
+      in the game does.
+
+   .. attribute:: part: KSA.Part
+
+      The part the deployable is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: state: KSA.DeployableState
+
+      The state of the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.DeployableState`
+
+   .. method:: deploy()
+
+      Deploy the part. Returns once it has started to move.
+
+
+      .. note::
+
+         Throws an exception if the part is broken.
+
+   .. method:: retract()
+
+      Retract the part. Returns once it has started to move.
+
+
+      .. note::
+
+         Throws an exception if the part is broken.
+
+
+
+.. class:: DeployableState
+
+   The state of a deployable part. See :attr:`KSA.Deployable.state`.
+
+
+   .. data:: deployed
+
+      Fully deployed.
+
+
+   .. data:: retracted
+
+      Fully retracted.
+
+
+   .. data:: deploying
+
+      Moving toward deployed.
+
+
+   .. data:: retracting
+
+      Moving toward retracted.
+
+
+   .. data:: broken
+
+      Broken, so it can no longer move.
+
+
+
+.. class:: MagneticScoop
+
+   A magnetic scoop, which collects gas from space into the vehicle's tanks. Obtained from
+   :attr:`KSA.Part.magnetic_scoops`.
+
+   .. attribute:: part: KSA.Part
+
+      The part the scoop is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`KSA.Part`
+
+   .. attribute:: active: boolean
+
+      Whether the scoop is switched on.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: substance: string
+
+      The name of the substance the scoop collects. See :attr:`KSA.Resource.name`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string
+
+   .. attribute:: collection_rate: number
+
+      The rate the scoop collects gas at, in kilograms per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number

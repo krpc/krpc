@@ -18,14 +18,151 @@ Resources
 
    
 
-   .. method:: double getAmount()
+   .. method:: float getAmount()
 
 
       The mass of the substance held, in kilograms.
 
    
 
-   .. method:: double getMax()
+   .. method:: float getMax()
 
 
       The mass of the substance the tanks can hold, in kilograms.
+
+   
+
+
+
+.. type:: public class Tank
+
+   A propellant tank. Obtained from :meth:`Part.getTanks()` or :meth:`Vehicle.getTanks()`.
+
+   .. method:: Part getPart()
+
+
+      The part the tank is in.
+
+   
+
+   .. method:: float getVolume()
+
+
+      The volume of the tank, in cubic meters.
+
+   
+
+   .. method:: float getRatedPressure()
+
+
+      The pressure the tank stores gas at, in pascals. Zero if the tank cannot store gas.
+
+   
+
+   .. method:: float getFilledFraction()
+
+
+      The fraction of the tank's volume that is filled, between 0 and 1.
+
+   
+
+   .. method:: boolean getPropellantUseEnabled()
+
+   .. method:: void setPropellantUseEnabled(boolean value)
+
+      Whether engines can draw propellant from the tank.
+
+   
+
+   .. method:: TankTransferMode getTransferMode()
+
+   .. method:: void setTransferMode(TankTransferMode value)
+
+      The direction the tank transfers propellant in.
+
+   
+
+      .. note::
+
+         Propellant flows from tanks transferring out to tanks of the same vehicle transferring
+         in, and the transfer draws battery power. Setting a transfer throws an exception if
+         the running version of KSA does not support it.
+
+
+
+.. type:: public enum TankTransferMode
+
+   The direction a tank transfers propellant in. See :meth:`Tank.getTransferMode()`.
+
+
+   .. field:: public TankTransferMode NONE
+
+      No transfer.
+
+
+   .. field:: public TankTransferMode IN
+
+      Into the tank, from tanks transferring out.
+
+
+   .. field:: public TankTransferMode OUT
+
+      Out of the tank, to tanks transferring in.
+
+
+
+.. type:: public class FuelLink
+
+   A fuel line between two parts of a vehicle, which lets propellant flow between them.
+   Obtained from :meth:`Vehicle.getFuelLinks()`.
+
+   .. method:: Part getPartA()
+
+
+      One of the parts the link joins.
+
+   
+
+   .. method:: Part getPartB()
+
+
+      The other part the link joins.
+
+   
+
+   .. method:: FuelLinkFlow getFlow()
+
+   .. method:: void setFlow(FuelLinkFlow value)
+
+      The direction propellant flows through the link.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether propellant can flow through the link.
+
+   
+
+
+
+.. type:: public enum FuelLinkFlow
+
+   The direction propellant flows through a fuel link. See :meth:`FuelLink.getFlow()`.
+
+
+   .. field:: public FuelLinkFlow A_TO_B
+
+      From :meth:`FuelLink.getPartA()` to :meth:`FuelLink.getPartB()`.
+
+
+   .. field:: public FuelLinkFlow B_TO_A
+
+      From :meth:`FuelLink.getPartB()` to :meth:`FuelLink.getPartA()`.
+
+
+   .. field:: public FuelLinkFlow BOTH
+
+      Either way.

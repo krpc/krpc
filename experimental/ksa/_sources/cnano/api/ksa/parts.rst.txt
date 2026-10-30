@@ -51,13 +51,13 @@ Parts
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Part_Mass(krpc_connection_t connection, double * returnValue, krpc_KSA_Part_t instance)
+   .. function:: krpc_error_t krpc_KSA_Part_Mass(krpc_connection_t connection, float * returnValue, krpc_KSA_Part_t instance)
 
       The mass of the part, including its propellant, in kilograms.
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Part_DryMass(krpc_connection_t connection, double * returnValue, krpc_KSA_Part_t instance)
+   .. function:: krpc_error_t krpc_KSA_Part_DryMass(krpc_connection_t connection, float * returnValue, krpc_KSA_Part_t instance)
 
       The mass of the part without its propellant, in kilograms.
 
@@ -69,6 +69,55 @@ Parts
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Part_Tanks(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's propellant tanks. Empty if it has none.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Batteries(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's batteries.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_SolarPanels(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's solar panels.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Generators(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's generators.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_PowerConsumers(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's power consumers.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Lights(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's lights.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Deployables(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's deployable sections. A part can have several, such as the doors of a
+      service module.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_MagneticScoops(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's magnetic scoops. Empty if it has none.
+
+   
+
    .. function:: krpc_error_t krpc_KSA_Part_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Part_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
 
       The position of the part's origin, in meters.
@@ -76,6 +125,16 @@ Parts
       :Parameters:
 
        * **referenceFrame** -- The reference frame of the position.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * returnValue, krpc_KSA_Part_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The velocity of the part's origin, in meters per second.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the velocity.
 
    
 
@@ -92,6 +151,12 @@ Parts
    .. function:: krpc_error_t krpc_KSA_Part_Engine(krpc_connection_t connection, krpc_KSA_Engine_t * returnValue, krpc_KSA_Part_t instance)
 
       The part's engine, or ``nullptr`` if it has none.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Gimbals(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's gimbals. An engine part can have several, each steering one nozzle.
 
    
 
@@ -119,6 +184,18 @@ Parts
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Part_Seats(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The part's crew seats.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Part_Crew(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Part_t instance)
+
+      The kittens in the part's seats.
+
+   
+
 
 
 .. type:: krpc_KSA_Engine_t
@@ -136,6 +213,12 @@ Parts
 
    
 
+   .. function:: krpc_error_t krpc_KSA_Engine_Gimbals(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Engine_t instance)
+
+      The gimbals that steer the engine's nozzles. Empty if the engine has none.
+
+   
+
    .. function:: krpc_error_t krpc_KSA_Engine_Active(krpc_connection_t connection, bool * returnValue, krpc_KSA_Engine_t instance)
    .. function:: krpc_error_t krpc_KSA_Engine_set_Active(krpc_connection_t connection, krpc_KSA_Engine_t instance, bool value)
 
@@ -150,24 +233,96 @@ Parts
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Engine_Thrust(krpc_connection_t connection, double * returnValue, krpc_KSA_Engine_t instance)
+   .. function:: krpc_error_t krpc_KSA_Engine_MinimumThrottle(krpc_connection_t connection, float * returnValue, krpc_KSA_Engine_t instance)
+
+      The lowest throttle the engine runs at, between 0 and 1.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_Propellants(krpc_connection_t connection, krpc_list_string_t * returnValue, krpc_KSA_Engine_t instance)
+
+      The names of the substances the engine burns. See :func:`krpc_KSA_Resource_Name`.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Engine_Thrust(krpc_connection_t connection, float * returnValue, krpc_KSA_Engine_t instance)
 
       The thrust of the engine at its current throttle and the current atmospheric
       pressure, in Newtons. Zero when it is not firing.
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Engine_AvailableThrust(krpc_connection_t connection, double * returnValue, krpc_KSA_Engine_t instance)
+   .. function:: krpc_error_t krpc_KSA_Engine_AvailableThrust(krpc_connection_t connection, float * returnValue, krpc_KSA_Engine_t instance)
 
       The thrust of the engine at full throttle and the current atmospheric pressure, in
       Newtons. Zero when it is inactive or has no propellant.
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Engine_SpecificImpulse(krpc_connection_t connection, double * returnValue, krpc_KSA_Engine_t instance)
+   .. function:: krpc_error_t krpc_KSA_Engine_SpecificImpulse(krpc_connection_t connection, float * returnValue, krpc_KSA_Engine_t instance)
 
       The specific impulse of the engine at the current atmospheric pressure, in seconds.
       Zero when it is inactive or has no propellant.
+
+   
+
+
+
+.. type:: krpc_KSA_Gimbal_t
+
+   A gimbal that steers an engine nozzle. Obtained from :func:`krpc_KSA_Part_Gimbals` or
+   :func:`krpc_KSA_Engine_Gimbals`.
+
+   .. note::
+
+      A gimbal turns about the y and z axes of its mount, which :func:`krpc_KSA_Gimbal_Rotation` gives.
+      The flight computer steers it while an engine it belongs to is :func:`krpc_KSA_Gimbal_Active`.
+
+   .. function:: krpc_error_t krpc_KSA_Gimbal_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Gimbal_t instance)
+
+      The part the gimbal is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Gimbal_AngleY(krpc_connection_t connection, float * returnValue, krpc_KSA_Gimbal_t instance)
+
+      The angle of the gimbal about its y axis, in degrees.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Gimbal_AngleZ(krpc_connection_t connection, float * returnValue, krpc_KSA_Gimbal_t instance)
+
+      The angle of the gimbal about its z axis, in degrees.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Gimbal_MaxAngleY(krpc_connection_t connection, float * returnValue, krpc_KSA_Gimbal_t instance)
+
+      The largest angle of the gimbal about its y axis, in degrees. Zero if it does not
+      turn about that axis.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Gimbal_MaxAngleZ(krpc_connection_t connection, float * returnValue, krpc_KSA_Gimbal_t instance)
+
+      The largest angle of the gimbal about its z axis, in degrees. Zero if it does not
+      turn about that axis.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Gimbal_Active(krpc_connection_t connection, bool * returnValue, krpc_KSA_Gimbal_t instance)
+
+      Whether an engine the gimbal steers is active.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Gimbal_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * returnValue, krpc_KSA_Gimbal_t instance, krpc_KSA_ReferenceFrame_t referenceFrame)
+
+      The rotation of the gimbal's mount, whose y and z axes the gimbal turns about.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame of the rotation.
 
    
 
@@ -218,12 +373,13 @@ Parts
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Decoupler_Decouple(krpc_connection_t connection, krpc_KSA_Decoupler_t instance)
+   .. function:: krpc_error_t krpc_KSA_Decoupler_Decouple(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_Decoupler_t instance)
 
       Fire the decoupler, separating the vehicle into two. Returns once it has fired.
       Throws an exception if the decoupler is disabled or :func:`krpc_KSA_Decoupler_Decoupled`.
 
 
+      :returns: The vehicles that separated from this one.
    
 
 
@@ -353,14 +509,122 @@ Parts
 
    
 
-   .. function:: krpc_error_t krpc_KSA_DockingPort_Undock(krpc_connection_t connection, krpc_KSA_DockingPort_t instance)
+   .. function:: krpc_error_t krpc_KSA_DockingPort_Undock(krpc_connection_t connection, krpc_list_object_t * returnValue, krpc_KSA_DockingPort_t instance)
 
       Undock the port, separating the vehicle into two. Returns once it has undocked.
       Throws an exception if the port is not docked.
+
+
+      :returns: The new vehicles.
+   
+
+      .. note::
+
+         Docking and undocking replace the vehicles involved. See :type:`krpc_KSA_Vehicle_t`.
+
+
+
+.. type:: krpc_KSA_Deployable_t
+
+   A part that deploys and retracts, such as a landing leg, a solar panel or a service
+   module door. Obtained from :func:`krpc_KSA_Part_Deployables`.
+
+   .. note::
+
+      Deploying or retracting a part moves its symmetric copies with it, as the part's menu
+      in the game does.
+
+   .. function:: krpc_error_t krpc_KSA_Deployable_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Deployable_t instance)
+
+      The part the deployable is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Deployable_State(krpc_connection_t connection, krpc_KSA_DeployableState_t * returnValue, krpc_KSA_Deployable_t instance)
+
+      The state of the part.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Deployable_Deploy(krpc_connection_t connection, krpc_KSA_Deployable_t instance)
+
+      Deploy the part. Returns once it has started to move.
 
 
    
 
       .. note::
 
-         Docking and undocking replace the vehicles involved. See :type:`krpc_KSA_Vehicle_t`.
+         Throws an exception if the part is broken.
+
+   .. function:: krpc_error_t krpc_KSA_Deployable_Retract(krpc_connection_t connection, krpc_KSA_Deployable_t instance)
+
+      Retract the part. Returns once it has started to move.
+
+
+   
+
+      .. note::
+
+         Throws an exception if the part is broken.
+
+
+
+.. type:: krpc_KSA_DeployableState_t
+
+   The state of a deployable part. See :func:`krpc_KSA_Deployable_State`.
+
+
+   .. macro:: KRPC_KSA_DEPLOYABLESTATE_DEPLOYED
+
+      Fully deployed.
+
+
+   .. macro:: KRPC_KSA_DEPLOYABLESTATE_RETRACTED
+
+      Fully retracted.
+
+
+   .. macro:: KRPC_KSA_DEPLOYABLESTATE_DEPLOYING
+
+      Moving toward deployed.
+
+
+   .. macro:: KRPC_KSA_DEPLOYABLESTATE_RETRACTING
+
+      Moving toward retracted.
+
+
+   .. macro:: KRPC_KSA_DEPLOYABLESTATE_BROKEN
+
+      Broken, so it can no longer move.
+
+
+
+.. type:: krpc_KSA_MagneticScoop_t
+
+   A magnetic scoop, which collects gas from space into the vehicle's tanks. Obtained from
+   :func:`krpc_KSA_Part_MagneticScoops`.
+
+   .. function:: krpc_error_t krpc_KSA_MagneticScoop_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_MagneticScoop_t instance)
+
+      The part the scoop is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_MagneticScoop_Active(krpc_connection_t connection, bool * returnValue, krpc_KSA_MagneticScoop_t instance)
+   .. function:: krpc_error_t krpc_KSA_MagneticScoop_set_Active(krpc_connection_t connection, krpc_KSA_MagneticScoop_t instance, bool value)
+
+      Whether the scoop is switched on.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_MagneticScoop_Substance(krpc_connection_t connection, char * * returnValue, krpc_KSA_MagneticScoop_t instance)
+
+      The name of the substance the scoop collects. See :func:`krpc_KSA_Resource_Name`.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_MagneticScoop_CollectionRate(krpc_connection_t connection, float * returnValue, krpc_KSA_MagneticScoop_t instance)
+
+      The rate the scoop collects gas at, in kilograms per second.

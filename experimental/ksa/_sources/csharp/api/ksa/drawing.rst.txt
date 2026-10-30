@@ -1,0 +1,482 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Drawing
+=======
+
+
+.. class:: Drawing
+
+   Draws lines, shapes and text in the scene, each placed in a reference frame.
+
+   .. note::
+
+      The objects are drawn every frame until removed, and are removed when the client that
+      added them disconnects. Lines are drawn at the game's fixed gizmo width.
+
+   .. function:: static Line AddLine(IConnection connection, System.Tuple<double,double,double> start, System.Tuple<double,double,double> end, ReferenceFrame referenceFrame, bool visible = true)
+
+      Draw a line between two positions.
+
+      :parameters:
+
+       * **start** -- The position of the start of the line, in meters.
+       * **end** -- The position of the end of the line, in meters.
+       * **referenceFrame** -- The reference frame of the positions.
+       * **visible** -- Whether the line is visible.
+
+      :Game Scenes: All
+
+   .. function:: static Line AddDirection(IConnection connection, System.Tuple<double,double,double> direction, ReferenceFrame referenceFrame, float length = 1e+01f, bool visible = true)
+
+      Draw a line from the origin of a reference frame in a direction.
+
+      :parameters:
+
+       * **direction** -- The direction of the line.
+       * **referenceFrame** -- The reference frame of the direction.
+       * **length** -- The length of the line, in meters.
+       * **visible** -- Whether the line is visible.
+
+      :Game Scenes: All
+
+   .. function:: static Polyline AddPolyline(IConnection connection, System.Collections.Generic.IList<System.Tuple<double,double,double>> vertices, ReferenceFrame referenceFrame, bool closed = false, bool visible = true)
+
+      Draw a line through a list of positions.
+
+      :parameters:
+
+       * **vertices** -- The positions the line passes through, in meters.
+       * **referenceFrame** -- The reference frame of the positions.
+       * **closed** -- Whether the line joins the last position back to the first.
+       * **visible** -- Whether the line is visible.
+
+      :Game Scenes: All
+
+   .. function:: static Circle AddCircle(IConnection connection, System.Tuple<double,double,double> center, System.Tuple<double,double,double> normal, float radius, ReferenceFrame referenceFrame, bool visible = true)
+
+      Draw a circle.
+
+      :parameters:
+
+       * **center** -- The position of the center of the circle, in meters.
+       * **normal** -- The direction normal to the plane of the circle.
+       * **radius** -- The radius of the circle, in meters.
+       * **referenceFrame** -- The reference frame of the position and direction.
+       * **visible** -- Whether the circle is visible.
+
+      :Game Scenes: All
+
+   .. function:: static Arc AddArc(IConnection connection, System.Tuple<double,double,double> center, System.Tuple<double,double,double> normal, System.Tuple<double,double,double> startDirection, float angle, float radius, ReferenceFrame referenceFrame, bool visible = true)
+
+      Draw an arc of a circle.
+
+      :parameters:
+
+       * **center** -- The position of the center of the arc's circle, in meters.
+       * **normal** -- The direction normal to the plane of the arc.
+       * **startDirection** -- The direction from the center to the start of the arc.
+       * **angle** -- The angle the arc turns through, counterclockwise about the normal, in radians.
+       * **radius** -- The radius of the arc, in meters.
+       * **referenceFrame** -- The reference frame of the position and directions.
+       * **visible** -- Whether the arc is visible.
+
+      :Game Scenes: All
+
+   .. function:: static Box AddBox(IConnection connection, System.Tuple<double,double,double> center, System.Tuple<double,double,double> size, System.Tuple<double,double,double,double> rotation, ReferenceFrame referenceFrame, bool visible = true)
+
+      Draw the edges of a box.
+
+      :parameters:
+
+       * **center** -- The position of the center of the box, in meters.
+       * **size** -- The lengths of the box's edges along its x, y and z axes, in meters.
+       * **rotation** -- The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+       * **referenceFrame** -- The reference frame of the position and rotation.
+       * **visible** -- Whether the box is visible.
+
+      :Game Scenes: All
+
+   .. function:: static Sphere AddSphere(IConnection connection, System.Tuple<double,double,double> center, float radius, ReferenceFrame referenceFrame, bool visible = true)
+
+      Draw a solid sphere.
+
+      :parameters:
+
+       * **center** -- The position of the center of the sphere, in meters.
+       * **radius** -- The radius of the sphere, in meters.
+       * **referenceFrame** -- The reference frame of the position.
+       * **visible** -- Whether the sphere is visible.
+
+      :Game Scenes: All
+
+   .. function:: static Text AddText(IConnection connection, string text, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame, float size = 16.0f, bool visible = true)
+
+      Draw text over the scene, centered on a position.
+
+      :parameters:
+
+       * **text** -- The text.
+       * **position** -- The position of the center of the text, in meters.
+       * **referenceFrame** -- The reference frame of the position.
+       * **size** -- The height of the font, in pixels.
+       * **visible** -- Whether the text is visible.
+
+      :Game Scenes: All
+
+   .. function:: static void Clear(IConnection connection, bool clientOnly = false)
+
+      Remove the drawing objects.
+
+      :parameters:
+
+       * **clientOnly** -- Whether to remove only the objects added by the calling client.
+
+      :Game Scenes: All
+
+
+
+.. class:: Line
+
+   A line. Created using :meth:`Drawing.AddLine` or :meth:`Drawing.AddDirection`.
+
+   .. property:: System.Tuple<double,double,double> Start { get; set; }
+
+      The start position of the line, in meters.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> End { get; set; }
+
+      The end position of the line, in meters.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; set; }
+
+      The reference frame for the positions and directions of the object.
+
+      :Game Scenes: All
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: All
+
+   .. property:: StdLib.ColorRGB Color { get; set; }
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Polyline
+
+   A line through a list of points. Created using :meth:`Drawing.AddPolyline`.
+
+   .. property:: System.Collections.Generic.IList<System.Tuple<double,double,double>> Vertices { get; set; }
+
+      The points the line passes through, in meters.
+
+      :Game Scenes: All
+
+   .. property:: bool Closed { get; set; }
+
+      Whether the line joins the last point back to the first.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; set; }
+
+      The reference frame for the positions and directions of the object.
+
+      :Game Scenes: All
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: All
+
+   .. property:: StdLib.ColorRGB Color { get; set; }
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Circle
+
+   A circle. Created using :meth:`Drawing.AddCircle`.
+
+   .. property:: System.Tuple<double,double,double> Center { get; set; }
+
+      The position of the center of the circle, in meters.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> Normal { get; set; }
+
+      The direction normal to the plane of the circle, as a unit vector.
+
+      :Game Scenes: All
+
+   .. property:: float Radius { get; set; }
+
+      The radius of the circle, in meters.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; set; }
+
+      The reference frame for the positions and directions of the object.
+
+      :Game Scenes: All
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: All
+
+   .. property:: StdLib.ColorRGB Color { get; set; }
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Arc
+
+   An arc of a circle. Created using :meth:`Drawing.AddArc`.
+
+   .. property:: System.Tuple<double,double,double> Center { get; set; }
+
+      The position of the center of the arc's circle, in meters.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> Normal { get; set; }
+
+      The direction normal to the plane of the arc, as a unit vector.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> StartDirection { get; set; }
+
+      The direction from the center to the start of the arc, as a unit vector.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The part of the direction along :prop:`Arc.Normal` is ignored.
+
+   .. property:: float Angle { get; set; }
+
+      The angle the arc turns through, counterclockwise about :prop:`Arc.Normal`, in radians.
+
+      :Game Scenes: All
+
+   .. property:: float Radius { get; set; }
+
+      The radius of the arc, in meters.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; set; }
+
+      The reference frame for the positions and directions of the object.
+
+      :Game Scenes: All
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: All
+
+   .. property:: StdLib.ColorRGB Color { get; set; }
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Box
+
+   The edges of a box. Created using :meth:`Drawing.AddBox`.
+
+   .. property:: System.Tuple<double,double,double> Center { get; set; }
+
+      The position of the center of the box, in meters.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> Size { get; set; }
+
+      The lengths of the box's edges along its x, y and z axes, in meters.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double,double> Rotation { get; set; }
+
+      The rotation of the box's axes, as a quaternion of the form ``(x, y, z, w)``.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; set; }
+
+      The reference frame for the positions and directions of the object.
+
+      :Game Scenes: All
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: All
+
+   .. property:: StdLib.ColorRGB Color { get; set; }
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Sphere
+
+   A solid sphere. Created using :meth:`Drawing.AddSphere`.
+
+   .. property:: System.Tuple<double,double,double> Center { get; set; }
+
+      The position of the center of the sphere, in meters.
+
+      :Game Scenes: All
+
+   .. property:: float Radius { get; set; }
+
+      The radius of the sphere, in meters.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; set; }
+
+      The reference frame for the positions and directions of the object.
+
+      :Game Scenes: All
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: All
+
+   .. property:: StdLib.ColorRGB Color { get; set; }
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: All
+
+
+
+.. class:: Text
+
+   Text drawn over the scene, centered on a position. Created using :meth:`Drawing.AddText`.
+
+   .. note::
+
+      The text is hidden with the game's UI.
+
+   .. property:: string Content { get; set; }
+
+      The text.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double,double> Position { get; set; }
+
+      The position of the center of the text, in meters.
+
+      :Game Scenes: All
+
+   .. property:: float Size { get; set; }
+
+      The height of the font, in pixels.
+
+      :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; set; }
+
+      The reference frame for the positions and directions of the object.
+
+      :Game Scenes: All
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: All
+
+   .. property:: StdLib.ColorRGB Color { get; set; }
+
+      The color of the object, as an RGB triple with components from 0 to 1.
+
+      :Game Scenes: All
+
+   .. function:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: All

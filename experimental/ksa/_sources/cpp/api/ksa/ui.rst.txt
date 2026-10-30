@@ -1,0 +1,667 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+UI
+==
+
+
+.. class:: UI
+
+   Adds windows of buttons, text fields and other widgets to the game's UI.
+
+   .. note::
+
+      The windows are removed when the client that added them disconnects. For messages on
+      the screen, see :func:`show_message`.
+
+   .. function:: static Window add_window(Client& connection, std::string title, bool visible = true)
+
+      Add a window, with no widgets.
+
+      :Parameters:
+
+       * **title** -- The text in the title bar.
+       * **visible** -- Whether the window is visible.
+
+   
+
+   .. function:: static void clear(Client& connection, bool client_only = false)
+
+      Remove the windows.
+
+      :Parameters:
+
+       * **client_only** -- Whether to remove only the windows added by the calling client.
+
+   
+
+
+
+.. class:: Window
+
+   A window, holding widgets one per line. Created using :func:`UI::add_window`.
+
+   .. note::
+
+      The window fits its widgets until its size is set. Closing the window makes it
+      invisible. The window is hidden with the game's UI.
+
+   .. function:: std::string title()
+   .. function:: void set_title(std::string value)
+
+      The text in the title bar.
+
+   
+
+   .. function:: std::tuple<float, float> position()
+   .. function:: void set_position(std::tuple<float, float> value)
+
+      The position of the top left corner of the window, from the top left corner of the
+      game window, in pixels.
+
+   
+
+   .. function:: std::tuple<float, float> size()
+   .. function:: void set_size(std::tuple<float, float> value)
+
+      The width and height of the window, in pixels.
+
+   
+
+      .. note::
+
+         Throws an exception if the width or height is not positive.
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: Label add_label(std::string content, bool visible = true)
+
+      Add a label.
+
+      :Parameters:
+
+       * **content** -- The text of the label.
+       * **visible** -- Whether the label is visible.
+
+   
+
+   .. function:: Button add_button(std::string content, bool visible = true)
+
+      Add a button.
+
+      :Parameters:
+
+       * **content** -- The text on the button.
+       * **visible** -- Whether the button is visible.
+
+   
+
+   .. function:: InputField add_input_field(std::string label = "", bool visible = true)
+
+      Add a text input field, empty.
+
+      :Parameters:
+
+       * **label** -- The text shown next to the field.
+       * **visible** -- Whether the field is visible.
+
+   
+
+   .. function:: Slider add_slider(std::string label = "", float minimum = 0.0f, float maximum = 1.0f, bool visible = true)
+
+      Add a slider, at its minimum value.
+
+      :Parameters:
+
+       * **label** -- The text shown next to the slider.
+       * **minimum** -- The minimum value.
+       * **maximum** -- The maximum value.
+       * **visible** -- Whether the slider is visible.
+
+   
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. function:: Toggle add_toggle(std::string content, bool visible = true)
+
+      Add a toggle, unchecked.
+
+      :Parameters:
+
+       * **content** -- The text shown next to the toggle.
+       * **visible** -- Whether the toggle is visible.
+
+   
+
+   .. function:: Dropdown add_dropdown(std::vector<std::string> options, std::string label = "", bool visible = true)
+
+      Add a dropdown, with no option selected.
+
+      :Parameters:
+
+       * **options** -- The options to choose from.
+       * **label** -- The text shown next to the dropdown.
+       * **visible** -- Whether the dropdown is visible.
+
+   
+
+   .. function:: Separator add_separator(bool visible = true)
+
+      Add a horizontal line.
+
+      :Parameters:
+
+       * **visible** -- Whether the line is visible.
+
+   
+
+   .. function:: Row add_row(bool visible = true)
+
+      Add a row, which lays out its widgets from left to right.
+
+      :Parameters:
+
+       * **visible** -- Whether the row is visible.
+
+   
+
+   .. function:: void remove()
+
+      Remove the widget.
+
+
+   
+
+
+
+.. class:: Row
+
+   A row of widgets, laid out from left to right. Added to a window or a row.
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: Label add_label(std::string content, bool visible = true)
+
+      Add a label.
+
+      :Parameters:
+
+       * **content** -- The text of the label.
+       * **visible** -- Whether the label is visible.
+
+   
+
+   .. function:: Button add_button(std::string content, bool visible = true)
+
+      Add a button.
+
+      :Parameters:
+
+       * **content** -- The text on the button.
+       * **visible** -- Whether the button is visible.
+
+   
+
+   .. function:: InputField add_input_field(std::string label = "", bool visible = true)
+
+      Add a text input field, empty.
+
+      :Parameters:
+
+       * **label** -- The text shown next to the field.
+       * **visible** -- Whether the field is visible.
+
+   
+
+   .. function:: Slider add_slider(std::string label = "", float minimum = 0.0f, float maximum = 1.0f, bool visible = true)
+
+      Add a slider, at its minimum value.
+
+      :Parameters:
+
+       * **label** -- The text shown next to the slider.
+       * **minimum** -- The minimum value.
+       * **maximum** -- The maximum value.
+       * **visible** -- Whether the slider is visible.
+
+   
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. function:: Toggle add_toggle(std::string content, bool visible = true)
+
+      Add a toggle, unchecked.
+
+      :Parameters:
+
+       * **content** -- The text shown next to the toggle.
+       * **visible** -- Whether the toggle is visible.
+
+   
+
+   .. function:: Dropdown add_dropdown(std::vector<std::string> options, std::string label = "", bool visible = true)
+
+      Add a dropdown, with no option selected.
+
+      :Parameters:
+
+       * **options** -- The options to choose from.
+       * **label** -- The text shown next to the dropdown.
+       * **visible** -- Whether the dropdown is visible.
+
+   
+
+   .. function:: Separator add_separator(bool visible = true)
+
+      Add a horizontal line.
+
+      :Parameters:
+
+       * **visible** -- Whether the line is visible.
+
+   
+
+   .. function:: Row add_row(bool visible = true)
+
+      Add a row, which lays out its widgets from left to right.
+
+      :Parameters:
+
+       * **visible** -- Whether the row is visible.
+
+   
+
+   .. function:: void remove()
+
+      Remove the widget.
+
+
+   
+
+
+
+.. class:: Label
+
+   A line of text. Added to a window or a row.
+
+   .. function:: std::string content()
+   .. function:: void set_content(std::string value)
+
+      The text of the label.
+
+   
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: void remove()
+
+      Remove the widget.
+
+
+   
+
+
+
+.. class:: Button
+
+   A button. Added to a window or a row.
+
+   .. function:: std::string content()
+   .. function:: void set_content(std::string value)
+
+      The text on the button.
+
+   
+
+   .. function:: bool clicked()
+   .. function:: void set_clicked(bool value)
+
+      Whether the button has been clicked.
+
+   
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``.
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: void remove()
+
+      Remove the widget.
+
+
+   
+
+
+
+.. class:: InputField
+
+   A single line text input field. Added to a window or a row.
+
+   .. note::
+
+      While the field is being edited, the game clears the rotation and translation inputs
+      of the controlled vehicle each frame.
+
+   .. function:: std::string label()
+   .. function:: void set_label(std::string value)
+
+      The text shown next to the field.
+
+   
+
+   .. function:: std::string value()
+   .. function:: void set_value(std::string value)
+
+      The text in the field.
+
+   
+
+   .. function:: bool changed()
+   .. function:: void set_changed(bool value)
+
+      Whether the text has been edited.
+
+   
+
+      .. note::
+
+         An edit sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :func:`InputField::value` leaves it unchanged.
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: void remove()
+
+      Remove the widget.
+
+
+   
+
+
+
+.. class:: Slider
+
+   A horizontal slider. Added to a window or a row.
+
+   .. function:: std::string label()
+   .. function:: void set_label(std::string value)
+
+      The text shown next to the slider.
+
+   
+
+   .. function:: float value()
+   .. function:: void set_value(float value)
+
+      The value of the slider, clamped to its range.
+
+   
+
+   .. function:: float minimum()
+   .. function:: void set_minimum(float value)
+
+      The minimum value.
+
+   
+
+      .. note::
+
+         Throws an exception if set to a value not less than the maximum.
+
+   .. function:: float maximum()
+   .. function:: void set_maximum(float value)
+
+      The maximum value.
+
+   
+
+      .. note::
+
+         Throws an exception if set to a value not greater than the minimum.
+
+   .. function:: bool changed()
+   .. function:: void set_changed(bool value)
+
+      Whether the value has been changed by dragging the slider.
+
+   
+
+      .. note::
+
+         A change sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :func:`Slider::value` leaves it unchanged.
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: void remove()
+
+      Remove the widget.
+
+
+   
+
+
+
+.. class:: Toggle
+
+   A check box with a label. Added to a window or a row.
+
+   .. function:: std::string content()
+   .. function:: void set_content(std::string value)
+
+      The text shown next to the toggle.
+
+   
+
+   .. function:: bool checked()
+   .. function:: void set_checked(bool value)
+
+      Whether the toggle is checked.
+
+   
+
+   .. function:: bool changed()
+   .. function:: void set_changed(bool value)
+
+      Whether the toggle has been clicked.
+
+   
+
+      .. note::
+
+         A click sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :func:`Toggle::checked` leaves it unchanged.
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: void remove()
+
+      Remove the widget.
+
+
+   
+
+
+
+.. class:: Dropdown
+
+   A dropdown list of options. Added to a window or a row.
+
+   .. function:: std::string label()
+   .. function:: void set_label(std::string value)
+
+      The text shown next to the dropdown.
+
+   
+
+   .. function:: std::vector<std::string> options()
+   .. function:: void set_options(std::vector<std::string> value)
+
+      The options to choose from.
+
+   
+
+      .. note::
+
+         Setting the options clears the selection if the selected index is no longer in
+         the list.
+
+   .. function:: int32_t selected_index()
+   .. function:: void set_selected_index(int32_t value)
+
+      The index of the selected option, or -1 for none.
+
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. function:: bool changed()
+   .. function:: void set_changed(bool value)
+
+      Whether an option has been chosen from the list.
+
+   
+
+      .. note::
+
+         A choice sets this to ``true``, and it stays ``true`` until set to
+         ``false``. Setting :func:`Dropdown::selected_index` leaves it unchanged.
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: void remove()
+
+      Remove the widget.
+
+
+   
+
+
+
+.. class:: Separator
+
+   A horizontal line between widgets. Added to a window or a row.
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the widget is visible.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+   
+
+   .. function:: void remove()
+
+      Remove the widget.

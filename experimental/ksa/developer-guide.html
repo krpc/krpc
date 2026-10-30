@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Developer Guide &#8212; kRPC v0.1.0 documentation</title>
+    <title>Developer Guide &#8212; kRPC v0.2.0 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=1ea62e31" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=9c64f2e8" />
   
   <!-- So that users can add custom icons -->
   <script defer src="_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="_static/documentation_options.js?v=01f34227"></script>
+    <script src="_static/documentation_options.js?v=938c9ccc"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
@@ -48,11 +48,12 @@
     <script src="_static/external-links.js?v=e8892020"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Reference Frame" href="lua/api/ksa/reference-frame.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Messages" href="grpc/api/messages.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.0" />
+  <meta name="docsearch:version" content="0.2.0" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -165,6 +166,13 @@
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#" aria-current="page">
     Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="changelog.html">
+    Changelog
   </a>
 </li>
 
@@ -297,6 +305,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="changelog.html">
+    Changelog
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -415,11 +430,16 @@
 <p>kRPC for KSA lives in the <code class="docutils literal notranslate"><span class="pre">experimental/ksa</span></code> folder of the <a class="reference external" href="https://github.com/krpc/krpc/tree/main/experimental/ksa">kRPC repository</a>. Its scripts build the mod, the
 client stubs and this documentation, and run the tests in the game. They need Python 3, the
 .NET 10 SDK, <code class="docutils literal notranslate"><span class="pre">zip</span></code>, and KSA installed in <code class="docutils literal notranslate"><span class="pre">KSA_DIR</span></code>, which defaults to <code class="docutils literal notranslate"><span class="pre">../KSA</span></code> beside the
-repository.</p>
+repository. Set <code class="docutils literal notranslate"><span class="pre">KSA_DIR</span></code> to build and test against another install.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These scripts are temporary. kRPC for KSA will move to the Bazel build that the rest of the
+repository uses.</p>
+</div>
 <section id="building">
 <h2>Building<a class="headerlink" href="#building" title="Link to this heading">#</a></h2>
 <p>Build the mod and the client stubs:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>experimental/ksa/build.sh<span class="w">            </span><span class="c1"># build into bin/kRPC.KSA</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>experimental/ksa/build.sh<span class="w">            </span><span class="c1"># build into bin/kRPC</span>
 experimental/ksa/build.sh<span class="w"> </span>--install<span class="w">  </span><span class="c1"># also install it into the KSA mods folder</span>
 </pre></div>
 </div>
@@ -438,7 +458,7 @@ experimental/ksa/test.sh<span class="w"> </span>--no-launch<span class="w">     
 </div>
 <p>The harness launches KSA through StarMap when no server is running, and quits it at the end.
 Each test class starts from a save of the game’s start state. The <code class="docutils literal notranslate"><span class="pre">TestingTools</span></code> service,
-installed only for the tests, saves, loads and quits the game.</p>
+installed only for the tests, registers test vehicles and quits the game.</p>
 </section>
 <section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h2>
@@ -453,8 +473,9 @@ the members, and lists every one of them.</p>
 <section id="releasing">
 <h2>Releasing<a class="headerlink" href="#releasing" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">release.sh</span></code> builds the release archive into <code class="docutils literal notranslate"><span class="pre">bin/release</span></code>, with its checksum. The archive
-holds one folder, with a readme and the licenses, the <code class="docutils literal notranslate"><span class="pre">kRPC.KSA</span></code> mod folder, the client stubs
-and the example scripts.</p>
+holds the <code class="docutils literal notranslate"><span class="pre">kRPC</span></code> mod folder, the client stubs, the example scripts, a readme and the
+licenses. The mod folder sits at the top, with its own copy of the licenses, so that the Borea
+mod manager installs it.</p>
 </section>
 </section>
 
@@ -469,13 +490,22 @@ and the example scripts.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="lua/api/ksa/reference-frame.html"
+       href="grpc/api/messages.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Reference Frame</p>
+        <p class="prev-next-title">Messages</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="changelog.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Changelog</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>

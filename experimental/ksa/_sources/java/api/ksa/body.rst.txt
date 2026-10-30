@@ -17,6 +17,13 @@ Body
 
    
 
+   .. method:: boolean getIsStar()
+
+
+      Whether the body is a star.
+
+   
+
    .. method:: double getMass()
 
 
@@ -46,7 +53,69 @@ Body
 
    
 
-   .. method:: double getSurfaceGravity()
+   .. method:: boolean getHasAtmosphere()
+
+
+      Whether the body has an atmosphere.
+
+   
+
+   .. method:: float getSeaLevelPressure()
+
+
+      The atmospheric pressure at the body's mean radius, in pascals. Zero for a body
+      with no atmosphere.
+
+   
+
+   .. method:: float getSeaLevelDensity()
+
+
+      The density of the atmosphere at the body's mean radius, in kilograms per cubic
+      meter. Zero for a body with no atmosphere.
+
+   
+
+   .. method:: float getScaleHeight()
+
+
+      The height over which the atmospheric pressure falls by a factor of ``e``, in
+      meters. Zero for a body with no atmosphere.
+
+   
+
+   .. method:: float pressureAt(double altitude)
+
+      The atmospheric pressure at an altitude, in pascals. Zero for a body with no
+      atmosphere.
+
+      :param double altitude: Altitude above the body's mean radius, in meters.
+   
+
+   .. method:: float densityAt(double altitude)
+
+      The density of the atmosphere at an altitude, in kilograms per cubic meter. Zero
+      for a body with no atmosphere.
+
+      :param double altitude: Altitude above the body's mean radius, in meters.
+   
+
+   .. method:: boolean getHasOcean()
+
+
+      Whether the body has an ocean.
+
+   
+
+   .. method:: float getOceanDensity()
+
+
+      The density of the ocean, in kilograms per cubic meter. Zero for a body with no
+      ocean.
+
+   
+
+   .. method:: float getSurfaceGravity()
 
 
       The acceleration due to gravity at the body's mean radius, in meters per second
@@ -54,14 +123,14 @@ Body
 
    
 
-   .. method:: double getRotationalSpeed()
+   .. method:: float getRotationalSpeed()
 
 
       The rate at which the body rotates about its axis, in radians per second.
 
    
 
-   .. method:: double getRotationalPeriod()
+   .. method:: float getRotationalPeriod()
 
 
       The time the body takes to rotate once about its axis, relative to the stars, in
@@ -127,6 +196,21 @@ Body
 
    
 
+   .. method:: java.util.List<String> getBiomes()
+
+
+      The names of the body's biomes. Empty for a body with no biomes.
+
+   
+
+   .. method:: String biomeAt(double latitude, double longitude)
+
+      The biome at a point on the body, or ``null`` if the body has no biomes.
+
+      :param double latitude: Latitude, in degrees.
+      :param double longitude: Longitude, in degrees.
+   
+
    .. method:: ReferenceFrame getReferenceFrame()
 
 
@@ -181,4 +265,28 @@ Body
 
       :param double latitude: Latitude, in degrees.
       :param double longitude: Longitude, in degrees.
+      :param ReferenceFrame referenceFrame: The reference frame of the position.
+   
+
+   .. method:: double latitudeAtPosition(org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame referenceFrame)
+
+      The latitude of a position, in degrees.
+
+      :param org.javatuples.Triplet<Double,Double,Double> position: Position, in meters.
+      :param ReferenceFrame referenceFrame: The reference frame of the position.
+   
+
+   .. method:: double longitudeAtPosition(org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame referenceFrame)
+
+      The longitude of a position, in degrees.
+
+      :param org.javatuples.Triplet<Double,Double,Double> position: Position, in meters.
+      :param ReferenceFrame referenceFrame: The reference frame of the position.
+   
+
+   .. method:: double altitudeAtPosition(org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame referenceFrame)
+
+      The altitude of a position above the body's mean radius, in meters.
+
+      :param org.javatuples.Triplet<Double,Double,Double> position: Position, in meters.
       :param ReferenceFrame referenceFrame: The reference frame of the position.

@@ -16,6 +16,12 @@ Body
 
       :Game Scenes: All
 
+   .. property:: bool IsStar { get; }
+
+      Whether the body is a star.
+
+      :Game Scenes: All
+
    .. property:: double Mass { get; }
 
       The mass of the body, in kilograms.
@@ -41,20 +47,82 @@ Body
 
       :Game Scenes: All
 
-   .. property:: double SurfaceGravity { get; }
+   .. property:: bool HasAtmosphere { get; }
+
+      Whether the body has an atmosphere.
+
+      :Game Scenes: All
+
+   .. property:: float SeaLevelPressure { get; }
+
+      The atmospheric pressure at the body's mean radius, in pascals. Zero for a body
+      with no atmosphere.
+
+      :Game Scenes: All
+
+   .. property:: float SeaLevelDensity { get; }
+
+      The density of the atmosphere at the body's mean radius, in kilograms per cubic
+      meter. Zero for a body with no atmosphere.
+
+      :Game Scenes: All
+
+   .. property:: float ScaleHeight { get; }
+
+      The height over which the atmospheric pressure falls by a factor of ``e``, in
+      meters. Zero for a body with no atmosphere.
+
+      :Game Scenes: All
+
+   .. function:: float PressureAt(double altitude)
+
+      The atmospheric pressure at an altitude, in pascals. Zero for a body with no
+      atmosphere.
+
+      :parameters:
+
+       * **altitude** -- Altitude above the body's mean radius, in meters.
+
+      :Game Scenes: All
+
+   .. function:: float DensityAt(double altitude)
+
+      The density of the atmosphere at an altitude, in kilograms per cubic meter. Zero
+      for a body with no atmosphere.
+
+      :parameters:
+
+       * **altitude** -- Altitude above the body's mean radius, in meters.
+
+      :Game Scenes: All
+
+   .. property:: bool HasOcean { get; }
+
+      Whether the body has an ocean.
+
+      :Game Scenes: All
+
+   .. property:: float OceanDensity { get; }
+
+      The density of the ocean, in kilograms per cubic meter. Zero for a body with no
+      ocean.
+
+      :Game Scenes: All
+
+   .. property:: float SurfaceGravity { get; }
 
       The acceleration due to gravity at the body's mean radius, in meters per second
       squared.
 
       :Game Scenes: All
 
-   .. property:: double RotationalSpeed { get; }
+   .. property:: float RotationalSpeed { get; }
 
       The rate at which the body rotates about its axis, in radians per second.
 
       :Game Scenes: All
 
-   .. property:: double RotationalPeriod { get; }
+   .. property:: float RotationalPeriod { get; }
 
       The time the body takes to rotate once about its axis, relative to the stars, in
       seconds. Infinite for a body that does not rotate.
@@ -118,6 +186,23 @@ Body
    .. property:: System.Collections.Generic.IList<string> LaunchSites { get; }
 
       The names of the launch sites on the body. See :meth:`KSA.LaunchVehicle <KSA.KSA.LaunchVehicle>`.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<string> Biomes { get; }
+
+      The names of the body's biomes. Empty for a body with no biomes.
+
+      :Game Scenes: All
+
+   .. function:: string BiomeAt(double latitude, double longitude)
+
+      The biome at a point on the body, or ``null`` if the body has no biomes.
+
+      :parameters:
+
+       * **latitude** -- Latitude, in degrees.
+       * **longitude** -- Longitude, in degrees.
 
       :Game Scenes: All
 
@@ -187,6 +272,39 @@ Body
 
        * **latitude** -- Latitude, in degrees.
        * **longitude** -- Longitude, in degrees.
+       * **referenceFrame** -- The reference frame of the position.
+
+      :Game Scenes: All
+
+   .. function:: double LatitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      The latitude of a position, in degrees.
+
+      :parameters:
+
+       * **position** -- Position, in meters.
+       * **referenceFrame** -- The reference frame of the position.
+
+      :Game Scenes: All
+
+   .. function:: double LongitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      The longitude of a position, in degrees.
+
+      :parameters:
+
+       * **position** -- Position, in meters.
+       * **referenceFrame** -- The reference frame of the position.
+
+      :Game Scenes: All
+
+   .. function:: double AltitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      The altitude of a position above the body's mean radius, in meters.
+
+      :parameters:
+
+       * **position** -- Position, in meters.
        * **referenceFrame** -- The reference frame of the position.
 
       :Game Scenes: All

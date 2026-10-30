@@ -1,0 +1,154 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Power
+=====
+
+
+.. class:: Battery
+
+   A battery, which stores electrical energy. Obtained from :func:`Part::batteries`.
+
+   .. function:: Part part()
+
+      The part the battery is in.
+
+   
+
+   .. function:: float stored_energy()
+
+      The energy stored in the battery, in joules.
+
+   
+
+   .. function:: float energy_capacity()
+
+      The energy the battery can store, in joules.
+
+   
+
+
+
+.. class:: SolarPanel
+
+   A solar panel, which turns sunlight into electrical power. Obtained from :func:`Part::solar_panels`.
+
+   .. function:: Part part()
+
+      The part the solar panel is in.
+
+   
+
+   .. function:: bool active()
+
+      Whether the solar panel can produce power, because it is deployed or does not deploy.
+
+   
+
+   .. function:: float power()
+
+      The power the solar panel produces, in watts.
+
+   
+
+   .. function:: float sun_angle()
+
+      The angle between the solar panel's face and the direction to the sun, in degrees.
+      Zero when the panel faces the sun.
+
+   
+
+   .. function:: bool occluded()
+
+      Whether a body blocks the sunlight to the solar panel.
+
+   
+
+   .. function:: std::optional<Deployable> deployable()
+
+      The deployable section that opens the solar panel, or ``NULL`` for a panel that
+      does not deploy.
+
+   
+
+
+
+.. class:: Generator
+
+   A generator, which produces electrical power. Obtained from :func:`Part::generators`.
+
+   .. note::
+
+      A generator runs while its :func:`Generator::engine` is active, and produces power in
+      proportion to the engine's throttle.
+
+   .. function:: Part part()
+
+      The part the generator is in.
+
+   
+
+   .. function:: std::optional<Engine> engine()
+
+      The engine that drives the generator, or ``NULL`` if it has none.
+
+   
+
+   .. function:: bool active()
+
+      Whether the generator is producing power.
+
+   
+
+   .. function:: float power()
+
+      The power the generator produces, in watts.
+
+   
+
+
+
+.. class:: PowerConsumer
+
+   A power consumer, which uses electrical power, such as a light. Obtained from
+   :func:`Part::power_consumers`.
+
+   .. function:: Part part()
+
+      The part the power consumer is in.
+
+   
+
+   .. function:: bool active()
+
+      Whether the part is using power.
+
+   
+
+   .. function:: float power()
+
+      The power the part uses, in watts.
+
+   
+
+
+
+.. class:: Light
+
+   A light. Obtained from :func:`Part::lights`.
+
+   .. note::
+
+      The vehicle's lights switch on and off together, see :func:`Control::lights`.
+      Cabin lights are always on.
+
+   .. function:: Part part()
+
+      The part the light is in.
+
+   
+
+   .. function:: bool active()
+
+      Whether the light is on.

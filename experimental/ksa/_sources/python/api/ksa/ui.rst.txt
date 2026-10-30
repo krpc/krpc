@@ -1,0 +1,661 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KSA
+
+UI
+==
+
+
+.. class:: UI
+
+   Adds windows of buttons, text fields and other widgets to the game's UI.
+
+   .. note::
+
+      The windows are removed when the client that added them disconnects. For messages on
+      the screen, see :meth:`show_message`.
+
+   .. staticmethod:: add_window(title, [visible = True])
+
+      Add a window, with no widgets.
+
+      :param str title: The text in the title bar.
+      :param bool visible: Whether the window is visible.
+      :rtype: :class:`Window`
+   
+
+   .. staticmethod:: clear([client_only = False])
+
+      Remove the windows.
+
+      :param bool client_only: Whether to remove only the windows added by the calling client.
+   
+
+
+
+.. class:: Window
+
+   A window, holding widgets one per line. Created using :meth:`UI.add_window`.
+
+   .. note::
+
+      The window fits its widgets until its size is set. Closing the window makes it
+      invisible. The window is hidden with the game's UI.
+
+   .. attribute:: title
+
+      The text in the title bar.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: position
+
+      The position of the top left corner of the window, from the top left corner of the
+      game window, in pixels.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float)
+   
+
+   .. attribute:: size
+
+      The width and height of the window, in pixels.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float)
+   
+
+      .. note::
+
+         Throws an exception if the width or height is not positive.
+
+   .. attribute:: visible
+
+      Whether the widget is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: enabled
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: add_label(content, [visible = True])
+
+      Add a label.
+
+      :param str content: The text of the label.
+      :param bool visible: Whether the label is visible.
+      :rtype: :class:`Label`
+   
+
+   .. method:: add_button(content, [visible = True])
+
+      Add a button.
+
+      :param str content: The text on the button.
+      :param bool visible: Whether the button is visible.
+      :rtype: :class:`Button`
+   
+
+   .. method:: add_input_field([label = ''], [visible = True])
+
+      Add a text input field, empty.
+
+      :param str label: The text shown next to the field.
+      :param bool visible: Whether the field is visible.
+      :rtype: :class:`InputField`
+   
+
+   .. method:: add_slider([label = ''], [minimum = 0.0], [maximum = 1.0], [visible = True])
+
+      Add a slider, at its minimum value.
+
+      :param str label: The text shown next to the slider.
+      :param float minimum: The minimum value.
+      :param float maximum: The maximum value.
+      :param bool visible: Whether the slider is visible.
+      :rtype: :class:`Slider`
+   
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. method:: add_toggle(content, [visible = True])
+
+      Add a toggle, unchecked.
+
+      :param str content: The text shown next to the toggle.
+      :param bool visible: Whether the toggle is visible.
+      :rtype: :class:`Toggle`
+   
+
+   .. method:: add_dropdown(options, [label = ''], [visible = True])
+
+      Add a dropdown, with no option selected.
+
+      :param list options: The options to choose from.
+      :param str label: The text shown next to the dropdown.
+      :param bool visible: Whether the dropdown is visible.
+      :rtype: :class:`Dropdown`
+   
+
+   .. method:: add_separator([visible = True])
+
+      Add a horizontal line.
+
+      :param bool visible: Whether the line is visible.
+      :rtype: :class:`Separator`
+   
+
+   .. method:: add_row([visible = True])
+
+      Add a row, which lays out its widgets from left to right.
+
+      :param bool visible: Whether the row is visible.
+      :rtype: :class:`Row`
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Row
+
+   A row of widgets, laid out from left to right. Added to a window or a row.
+
+   .. attribute:: visible
+
+      Whether the widget is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: enabled
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: add_label(content, [visible = True])
+
+      Add a label.
+
+      :param str content: The text of the label.
+      :param bool visible: Whether the label is visible.
+      :rtype: :class:`Label`
+   
+
+   .. method:: add_button(content, [visible = True])
+
+      Add a button.
+
+      :param str content: The text on the button.
+      :param bool visible: Whether the button is visible.
+      :rtype: :class:`Button`
+   
+
+   .. method:: add_input_field([label = ''], [visible = True])
+
+      Add a text input field, empty.
+
+      :param str label: The text shown next to the field.
+      :param bool visible: Whether the field is visible.
+      :rtype: :class:`InputField`
+   
+
+   .. method:: add_slider([label = ''], [minimum = 0.0], [maximum = 1.0], [visible = True])
+
+      Add a slider, at its minimum value.
+
+      :param str label: The text shown next to the slider.
+      :param float minimum: The minimum value.
+      :param float maximum: The maximum value.
+      :param bool visible: Whether the slider is visible.
+      :rtype: :class:`Slider`
+   
+
+      .. note::
+
+         Throws an exception if the minimum is not less than the maximum.
+
+   .. method:: add_toggle(content, [visible = True])
+
+      Add a toggle, unchecked.
+
+      :param str content: The text shown next to the toggle.
+      :param bool visible: Whether the toggle is visible.
+      :rtype: :class:`Toggle`
+   
+
+   .. method:: add_dropdown(options, [label = ''], [visible = True])
+
+      Add a dropdown, with no option selected.
+
+      :param list options: The options to choose from.
+      :param str label: The text shown next to the dropdown.
+      :param bool visible: Whether the dropdown is visible.
+      :rtype: :class:`Dropdown`
+   
+
+   .. method:: add_separator([visible = True])
+
+      Add a horizontal line.
+
+      :param bool visible: Whether the line is visible.
+      :rtype: :class:`Separator`
+   
+
+   .. method:: add_row([visible = True])
+
+      Add a row, which lays out its widgets from left to right.
+
+      :param bool visible: Whether the row is visible.
+      :rtype: :class:`Row`
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Label
+
+   A line of text. Added to a window or a row.
+
+   .. attribute:: content
+
+      The text of the label.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: visible
+
+      Whether the widget is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: enabled
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Button
+
+   A button. Added to a window or a row.
+
+   .. attribute:: content
+
+      The text on the button.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: clicked
+
+      Whether the button has been clicked.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+      .. note::
+
+         A click sets this to ``True``, and it stays ``True`` until set to
+         ``False``.
+
+   .. attribute:: visible
+
+      Whether the widget is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: enabled
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: InputField
+
+   A single line text input field. Added to a window or a row.
+
+   .. note::
+
+      While the field is being edited, the game clears the rotation and translation inputs
+      of the controlled vehicle each frame.
+
+   .. attribute:: label
+
+      The text shown next to the field.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: value
+
+      The text in the field.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: changed
+
+      Whether the text has been edited.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+      .. note::
+
+         An edit sets this to ``True``, and it stays ``True`` until set to
+         ``False``. Setting :attr:`InputField.value` leaves it unchanged.
+
+   .. attribute:: visible
+
+      Whether the widget is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: enabled
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Slider
+
+   A horizontal slider. Added to a window or a row.
+
+   .. attribute:: label
+
+      The text shown next to the slider.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: value
+
+      The value of the slider, clamped to its range.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: minimum
+
+      The minimum value.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+      .. note::
+
+         Throws an exception if set to a value not less than the maximum.
+
+   .. attribute:: maximum
+
+      The maximum value.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+      .. note::
+
+         Throws an exception if set to a value not greater than the minimum.
+
+   .. attribute:: changed
+
+      Whether the value has been changed by dragging the slider.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+      .. note::
+
+         A change sets this to ``True``, and it stays ``True`` until set to
+         ``False``. Setting :attr:`Slider.value` leaves it unchanged.
+
+   .. attribute:: visible
+
+      Whether the widget is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: enabled
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Toggle
+
+   A check box with a label. Added to a window or a row.
+
+   .. attribute:: content
+
+      The text shown next to the toggle.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: checked
+
+      Whether the toggle is checked.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: changed
+
+      Whether the toggle has been clicked.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+      .. note::
+
+         A click sets this to ``True``, and it stays ``True`` until set to
+         ``False``. Setting :attr:`Toggle.checked` leaves it unchanged.
+
+   .. attribute:: visible
+
+      Whether the widget is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: enabled
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Dropdown
+
+   A dropdown list of options. Added to a window or a row.
+
+   .. attribute:: label
+
+      The text shown next to the dropdown.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: options
+
+      The options to choose from.
+
+      :Attribute: Can be read or written
+      :rtype: list(str)
+   
+
+      .. note::
+
+         Setting the options clears the selection if the selected index is no longer in
+         the list.
+
+   .. attribute:: selected_index
+
+      The index of the selected option, or -1 for none.
+
+      :Attribute: Can be read or written
+      :rtype: int
+   
+
+      .. note::
+
+         Throws an exception if the index is out of range.
+
+   .. attribute:: changed
+
+      Whether an option has been chosen from the list.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+      .. note::
+
+         A choice sets this to ``True``, and it stays ``True`` until set to
+         ``False``. Setting :attr:`Dropdown.selected_index` leaves it unchanged.
+
+   .. attribute:: visible
+
+      Whether the widget is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: enabled
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: remove()
+
+      Remove the widget.
+
+   
+
+
+
+.. class:: Separator
+
+   A horizontal line between widgets. Added to a window or a row.
+
+   .. attribute:: visible
+
+      Whether the widget is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: enabled
+
+      Whether the widget responds to input. A disabled widget is drawn dimmed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: remove()
+
+      Remove the widget.

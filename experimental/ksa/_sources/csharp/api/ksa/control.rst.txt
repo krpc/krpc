@@ -8,8 +8,14 @@ Control
 
 .. class:: Control
 
-   The controls of a vehicle: engines, stabilization and sequences.
+   The controls of a vehicle: engines, manual inputs, stabilization and sequences.
    Obtained from :prop:`Vehicle.Control`.
+
+   .. note::
+
+      The rotation and translation inputs act as held keys. Each is on or off, with no
+      partial strength. A held rotation input overrides the auto-pilot on its axis. The game
+      releases the inputs when its window gains or loses focus, or the active vehicle changes.
 
    .. property:: float Throttle { get; set; }
 
@@ -29,6 +35,48 @@ Control
 
       :Game Scenes: Flight
 
+   .. property:: int Pitch { get; set; }
+
+      The pitch input: 1 for pitch up, -1 for pitch down, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. property:: int Yaw { get; set; }
+
+      The yaw input: 1 for yaw right, -1 for yaw left, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. property:: int Roll { get; set; }
+
+      The roll input: 1 for roll right, -1 for roll left, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. property:: int Forward { get; set; }
+
+      The forward translation input: 1 for forward, -1 for backward, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. property:: int Right { get; set; }
+
+      The right translation input: 1 for right, -1 for left, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. property:: int Up { get; set; }
+
+      The up translation input: 1 for up, -1 for down, 0 for neither.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Pulse { get; set; }
+
+      Whether the rotation and translation inputs fire the thrusters in short pulses.
+
+      :Game Scenes: Flight
+
    .. property:: bool Stabilization { get; set; }
 
       Whether the flight computer is controlling the vehicle's attitude.
@@ -44,6 +92,12 @@ Control
 
       Whether the flight computer may use the reaction control thrusters for attitude
       control.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Lights { get; set; }
+
+      Whether the vehicle's lights are switched on, as the lights key does.
 
       :Game Scenes: Flight
 

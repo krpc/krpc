@@ -55,8 +55,8 @@ Auto-Pilot
          Setting :enumerator:`AutoPilotMode::attitude` targets the vehicle's current pitch,
          heading and roll. Setting :enumerator:`AutoPilotMode::other` throws an exception.
 
-   .. function:: double target_pitch()
-   .. function:: void set_target_pitch(double value)
+   .. function:: float target_pitch()
+   .. function:: void set_target_pitch(float value)
 
       The target pitch, in degrees, between -90° and +90°.
 
@@ -68,8 +68,8 @@ Auto-Pilot
          Setting it sets :func:`AutoPilot::mode` to :enumerator:`AutoPilotMode::attitude`.
          Returns NaN in any other mode.
 
-   .. function:: double target_heading()
-   .. function:: void set_target_heading(double value)
+   .. function:: float target_heading()
+   .. function:: void set_target_heading(float value)
 
       The target heading, in degrees, between 0° and 360°.
 
@@ -81,8 +81,8 @@ Auto-Pilot
          Setting it sets :func:`AutoPilot::mode` to :enumerator:`AutoPilotMode::attitude`.
          Returns NaN in any other mode.
 
-   .. function:: double target_roll()
-   .. function:: void set_target_roll(double value)
+   .. function:: float target_roll()
+   .. function:: void set_target_roll(float value)
 
       The target roll, in degrees. NaN when the auto-pilot does not control roll.
 
@@ -95,7 +95,7 @@ Auto-Pilot
          Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
          :enumerator:`AutoPilotMode::attitude`.
 
-   .. function:: void target_pitch_and_heading(double pitch, double heading)
+   .. function:: void target_pitch_and_heading(float pitch, float heading)
 
       Set the target pitch and heading, and the mode to
       :enumerator:`AutoPilotMode::attitude`.
@@ -121,14 +121,14 @@ Auto-Pilot
 
       :Game Scenes: Flight
 
-   .. function:: double error()
+   .. function:: float error()
 
       The angle between the direction the vehicle points in and the target direction,
       in degrees. NaN when the auto-pilot is not engaged.
 
       :Game Scenes: Flight
 
-   .. function:: double roll_error()
+   .. function:: float roll_error()
 
       The angle between the vehicle's roll and the target roll, in degrees.
       NaN when the auto-pilot is not engaged.

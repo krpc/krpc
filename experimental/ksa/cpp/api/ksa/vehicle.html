@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Vehicle &#8212; kRPC v0.1.0 documentation</title>
+    <title>Vehicle &#8212; kRPC v0.2.0 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=1ea62e31" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
-    <script src="../../../_static/documentation_options.js?v=01f34227"></script>
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -53,7 +53,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.1.0" />
+  <meta name="docsearch:version" content="0.2.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -166,6 +166,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../developer-guide.html">
     Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
   </a>
 </li>
 
@@ -298,6 +305,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -357,13 +371,14 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../python/client.html">Python Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
@@ -371,18 +386,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../csharp/client.html">C# Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
@@ -390,18 +410,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../../client.html">C++ Client</a></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
 <li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
@@ -409,18 +434,23 @@
 <li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../cnano/client.html">C-nano Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
@@ -428,18 +458,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../java/client.html">Java Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
@@ -447,18 +482,23 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../lua/client.html">Lua Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
@@ -466,8 +506,39 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
 </ul>
 </details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../grpc/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../grpc/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../grpc/api/messages.html">Messages</a></li>
 </ul>
 </details></li>
 </ul>
@@ -560,9 +631,51 @@ throws an exception afterwards.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle7destroyEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle7destroyEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle7destroyEv"></span><span id="krpc::services::KSA::Vehicle::destroy"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">destroy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle7destroyEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Destroy the vehicle, killing its crew, as abandoning the vehicle does. Returns once
+the vehicle is gone.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the vehicle is the active vehicle, the game hands control to a nearby vehicle.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle11can_recoverEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle11can_recoverEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle11can_recoverEv"></span><span id="krpc::services::KSA::Vehicle::can_recover"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">can_recover</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle11can_recoverEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the vehicle can be recovered: at rest on the surface of the home planet.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle7recoverEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle7recoverEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle7recoverEv"></span><span id="krpc::services::KSA::Vehicle::recover"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">recover</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle7recoverEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Recover the vehicle, ending its crew’s missions, as the game’s recover button does.
+Returns once the vehicle is gone.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the vehicle cannot be recovered, see <a class="reference internal" href="#_CPPv4N4krpc8services3KSA7Vehicle11can_recoverEv" title="krpc::services::KSA::Vehicle::can_recover"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vehicle::can_recover()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle9situationEv">
 <span id="_CPPv3N4krpc8services3KSA7Vehicle9situationEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle9situationEv"></span><span id="krpc::services::KSA::Vehicle::situation"></span><a class="reference internal" href="#_CPPv4N4krpc8services3KSA9SituationE" title="krpc::services::KSA::Situation"><span class="n"><span class="pre">Situation</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">situation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle9situationEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The situation of the vehicle.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle8on_railsEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle8on_railsEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle8on_railsEv"></span><span id="krpc::services::KSA::Vehicle::on_rails"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_rails</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle8on_railsEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the game moves the vehicle without simulating the forces on it: along its
+orbit, or held on the surface. True in the freefall, landed, floating and bottomed
+situations.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle9is_debrisEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle9is_debrisEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle9is_debrisEv"></span><span id="krpc::services::KSA::Vehicle::is_debris"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_debris</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle9is_debrisEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the vehicle is debris, such as a spent stage.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -591,7 +704,7 @@ throws an exception afterwards.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle6thrustEv">
-<span id="_CPPv3N4krpc8services3KSA7Vehicle6thrustEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle6thrustEv"></span><span id="krpc::services::KSA::Vehicle::thrust"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thrust</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle6thrustEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services3KSA7Vehicle6thrustEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle6thrustEv"></span><span id="krpc::services::KSA::Vehicle::thrust"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">thrust</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle6thrustEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The thrust of the engines at their current throttle and the current atmospheric
 pressure, in Newtons.</p>
 </dd></dl>
@@ -605,9 +718,38 @@ current atmospheric pressure, in Newtons.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle16specific_impulseEv">
-<span id="_CPPv3N4krpc8services3KSA7Vehicle16specific_impulseEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle16specific_impulseEv"></span><span id="krpc::services::KSA::Vehicle::specific_impulse"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">specific_impulse</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle16specific_impulseEv" title="Link to this definition">#</a><br /></dt>
+<span id="_CPPv3N4krpc8services3KSA7Vehicle16specific_impulseEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle16specific_impulseEv"></span><span id="krpc::services::KSA::Vehicle::specific_impulse"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">specific_impulse</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle16specific_impulseEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The combined specific impulse of the active engines that have propellant, at the
 current atmospheric pressure, in seconds. Zero when no engine is active.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle11peak_g_loadEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle11peak_g_loadEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle11peak_g_loadEv"></span><span id="krpc::services::KSA::Vehicle::peak_g_load"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">peak_g_load</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle11peak_g_loadEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The highest smoothed g-load on the vehicle during the last physics step, as a
+multiple of standard gravity. Zero while the vehicle is <a class="reference internal" href="#_CPPv4N4krpc8services3KSA7Vehicle8on_railsEv" title="krpc::services::KSA::Vehicle::on_rails"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vehicle::on_rails()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle10max_g_loadEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle10max_g_loadEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle10max_g_loadEv"></span><span id="krpc::services::KSA::Vehicle::max_g_load"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_g_load</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle10max_g_loadEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The g-load the vehicle can take before it breaks up, as a multiple of standard
+gravity. Zero while the vehicle is <a class="reference internal" href="#_CPPv4N4krpc8services3KSA7Vehicle8on_railsEv" title="krpc::services::KSA::Vehicle::on_rails"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vehicle::on_rails()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle21peak_dynamic_pressureEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle21peak_dynamic_pressureEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle21peak_dynamic_pressureEv"></span><span id="krpc::services::KSA::Vehicle::peak_dynamic_pressure"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">peak_dynamic_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle21peak_dynamic_pressureEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The highest dynamic pressure on the vehicle during the last physics step, in
+pascals. In the sea, this is the dynamic pressure of the water. Zero while the
+vehicle is <a class="reference internal" href="#_CPPv4N4krpc8services3KSA7Vehicle8on_railsEv" title="krpc::services::KSA::Vehicle::on_rails"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vehicle::on_rails()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle20max_dynamic_pressureEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle20max_dynamic_pressureEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle20max_dynamic_pressureEv"></span><span id="krpc::services::KSA::Vehicle::max_dynamic_pressure"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_dynamic_pressure</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle20max_dynamic_pressureEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The dynamic pressure the vehicle can take before it breaks up, in pascals. Zero
+while the vehicle is <a class="reference internal" href="#_CPPv4N4krpc8services3KSA7Vehicle8on_railsEv" title="krpc::services::KSA::Vehicle::on_rails"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vehicle::on_rails()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -620,6 +762,140 @@ current atmospheric pressure, in seconds. Zero when no engine is active.</p>
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle9root_partEv">
 <span id="_CPPv3N4krpc8services3KSA7Vehicle9root_partEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle9root_partEv"></span><span id="krpc::services::KSA::Vehicle::root_part"></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services3KSA4PartE" title="krpc::services::KSA::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">root_part</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle9root_partEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The vehicle’s root part, which the other parts are attached to.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle15parts_with_nameENSt6stringE">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle15parts_with_nameENSt6stringE"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle15parts_with_nameENSt6stringE"></span><span id="krpc::services::KSA::Vehicle::parts_with_name__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services3KSA4PartE" title="krpc::services::KSA::Part"><span class="n"><span class="pre">Part</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">parts_with_name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle15parts_with_nameENSt6stringE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s parts with the given template id. See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services3KSA4Part4nameEv" title="krpc::services::KSA::Part::name"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::name()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – The template id.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle5seatsEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle5seatsEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle5seatsEv"></span><span id="krpc::services::KSA::Vehicle::seats"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="crew.html#_CPPv4N4krpc8services3KSA4SeatE" title="krpc::services::KSA::Seat"><span class="n"><span class="pre">Seat</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">seats</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle5seatsEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s crew seats.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle4crewEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle4crewEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle4crewEv"></span><span id="krpc::services::KSA::Vehicle::crew"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="crew.html#_CPPv4N4krpc8services3KSA6KittenE" title="krpc::services::KSA::Kitten"><span class="n"><span class="pre">Kitten</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">crew</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle4crewEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The kittens in the vehicle’s seats.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle13crew_capacityEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle13crew_capacityEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle13crew_capacityEv"></span><span id="krpc::services::KSA::Vehicle::crew_capacity"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">crew_capacity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle13crew_capacityEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of crew seats in the vehicle.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle7enginesEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle7enginesEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle7enginesEv"></span><span id="krpc::services::KSA::Vehicle::engines"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services3KSA6EngineE" title="krpc::services::KSA::Engine"><span class="n"><span class="pre">Engine</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">engines</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle7enginesEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s engines.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle3rcsEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle3rcsEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle3rcsEv"></span><span id="krpc::services::KSA::Vehicle::rcs"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services3KSA3RCSE" title="krpc::services::KSA::RCS"><span class="n"><span class="pre">RCS</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rcs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle3rcsEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s RCS thrusters.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle10decouplersEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle10decouplersEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle10decouplersEv"></span><span id="krpc::services::KSA::Vehicle::decouplers"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services3KSA9DecouplerE" title="krpc::services::KSA::Decoupler"><span class="n"><span class="pre">Decoupler</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">decouplers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle10decouplersEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s decouplers.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle10parachutesEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle10parachutesEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle10parachutesEv"></span><span id="krpc::services::KSA::Vehicle::parachutes"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services3KSA9ParachuteE" title="krpc::services::KSA::Parachute"><span class="n"><span class="pre">Parachute</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">parachutes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle10parachutesEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s parachutes.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle5tanksEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle5tanksEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle5tanksEv"></span><span id="krpc::services::KSA::Vehicle::tanks"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="resources.html#_CPPv4N4krpc8services3KSA4TankE" title="krpc::services::KSA::Tank"><span class="n"><span class="pre">Tank</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tanks</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle5tanksEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s propellant tanks.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle9batteriesEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle9batteriesEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle9batteriesEv"></span><span id="krpc::services::KSA::Vehicle::batteries"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="power.html#_CPPv4N4krpc8services3KSA7BatteryE" title="krpc::services::KSA::Battery"><span class="n"><span class="pre">Battery</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">batteries</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle9batteriesEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s batteries.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle12solar_panelsEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle12solar_panelsEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle12solar_panelsEv"></span><span id="krpc::services::KSA::Vehicle::solar_panels"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="power.html#_CPPv4N4krpc8services3KSA10SolarPanelE" title="krpc::services::KSA::SolarPanel"><span class="n"><span class="pre">SolarPanel</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solar_panels</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle12solar_panelsEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s solar panels.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle10generatorsEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle10generatorsEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle10generatorsEv"></span><span id="krpc::services::KSA::Vehicle::generators"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="power.html#_CPPv4N4krpc8services3KSA9GeneratorE" title="krpc::services::KSA::Generator"><span class="n"><span class="pre">Generator</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">generators</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle10generatorsEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s generators.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle15power_consumersEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle15power_consumersEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle15power_consumersEv"></span><span id="krpc::services::KSA::Vehicle::power_consumers"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="power.html#_CPPv4N4krpc8services3KSA13PowerConsumerE" title="krpc::services::KSA::PowerConsumer"><span class="n"><span class="pre">PowerConsumer</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">power_consumers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle15power_consumersEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s power consumers.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle13stored_energyEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle13stored_energyEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle13stored_energyEv"></span><span id="krpc::services::KSA::Vehicle::stored_energy"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stored_energy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle13stored_energyEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The energy stored in the vehicle’s batteries, in joules.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle15energy_capacityEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle15energy_capacityEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle15energy_capacityEv"></span><span id="krpc::services::KSA::Vehicle::energy_capacity"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">energy_capacity</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle15energy_capacityEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The energy the vehicle’s batteries can store, in joules.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle9net_powerEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle9net_powerEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle9net_powerEv"></span><span id="krpc::services::KSA::Vehicle::net_power"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">net_power</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle9net_powerEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The power produced by the vehicle’s solar panels and generators, less the power its
+parts use, in watts.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle6lightsEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle6lightsEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle6lightsEv"></span><span id="krpc::services::KSA::Vehicle::lights"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="power.html#_CPPv4N4krpc8services3KSA5LightE" title="krpc::services::KSA::Light"><span class="n"><span class="pre">Light</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lights</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle6lightsEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s lights.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle11deployablesEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle11deployablesEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle11deployablesEv"></span><span id="krpc::services::KSA::Vehicle::deployables"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services3KSA10DeployableE" title="krpc::services::KSA::Deployable"><span class="n"><span class="pre">Deployable</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deployables</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle11deployablesEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s deployable sections.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle15magnetic_scoopsEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle15magnetic_scoopsEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle15magnetic_scoopsEv"></span><span id="krpc::services::KSA::Vehicle::magnetic_scoops"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services3KSA13MagneticScoopE" title="krpc::services::KSA::MagneticScoop"><span class="n"><span class="pre">MagneticScoop</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">magnetic_scoops</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle15magnetic_scoopsEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s magnetic scoops.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle10fuel_linksEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle10fuel_linksEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle10fuel_linksEv"></span><span id="krpc::services::KSA::Vehicle::fuel_links"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="resources.html#_CPPv4N4krpc8services3KSA8FuelLinkE" title="krpc::services::KSA::FuelLink"><span class="n"><span class="pre">FuelLink</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fuel_links</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle10fuel_linksEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s fuel links.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle13docking_portsEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle13docking_portsEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle13docking_portsEv"></span><span id="krpc::services::KSA::Vehicle::docking_ports"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services3KSA11DockingPortE" title="krpc::services::KSA::DockingPort"><span class="n"><span class="pre">DockingPort</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">docking_ports</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle13docking_portsEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vehicle’s docking ports.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -669,14 +945,27 @@ and <code class="docutils literal notranslate"><span class="pre">NULL</span></co
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle11target_partEv">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle11target_partEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle11target_partEv"></span><span id="krpc::services::KSA::Vehicle::target_part"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services3KSA4PartE" title="krpc::services::KSA::Part"><span class="n"><span class="pre">Part</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">target_part</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle11target_partEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle15set_target_partENSt8optionalI4PartEE">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle15set_target_partENSt8optionalI4PartEE"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle15set_target_partENSt8optionalI4PartEE"></span><span id="krpc::services::KSA::Vehicle::set_target_part__std::optional:Part:"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_target_part</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">optional</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services3KSA4PartE" title="krpc::services::KSA::Part"><span class="n"><span class="pre">Part</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle15set_target_partENSt8optionalI4PartEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The part targeted by this vehicle, on the vehicle in <a class="reference internal" href="#_CPPv4N4krpc8services3KSA7Vehicle14target_vehicleEv" title="krpc::services::KSA::Vehicle::target_vehicle"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vehicle::target_vehicle()</span></code></a>,
+or <code class="docutils literal notranslate"><span class="pre">NULL</span></code>. Setting it targets the part and its vehicle, and <code class="docutils literal notranslate"><span class="pre">NULL</span></code> clears
+the target.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle5burnsEv">
 <span id="_CPPv3N4krpc8services3KSA7Vehicle5burnsEv"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle5burnsEv"></span><span id="krpc::services::KSA::Vehicle::burns"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="burn.html#_CPPv4N4krpc8services3KSA4BurnE" title="krpc::services::KSA::Burn"><span class="n"><span class="pre">Burn</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">burns</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle5burnsEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The vehicle’s planned burns, in time order.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle8add_burnEdddd">
-<span id="_CPPv3N4krpc8services3KSA7Vehicle8add_burnEdddd"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle8add_burnEdddd"></span><span id="krpc::services::KSA::Vehicle::add_burn__double.double.double.double"></span><a class="reference internal" href="burn.html#_CPPv4N4krpc8services3KSA4BurnE" title="krpc::services::KSA::Burn"><span class="n"><span class="pre">Burn</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_burn</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ut</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prograde</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">normal</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radial</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle8add_burnEdddd" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA7Vehicle8add_burnEdfff">
+<span id="_CPPv3N4krpc8services3KSA7Vehicle8add_burnEdfff"></span><span id="_CPPv2N4krpc8services3KSA7Vehicle8add_burnEdfff"></span><span id="krpc::services::KSA::Vehicle::add_burn__double.float.float.float"></span><a class="reference internal" href="burn.html#_CPPv4N4krpc8services3KSA4BurnE" title="krpc::services::KSA::Burn"><span class="n"><span class="pre">Burn</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_burn</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ut</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prograde</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0f</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">normal</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0f</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radial</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0f</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA7Vehicle8add_burnEdfff" title="Link to this definition">#</a><br /></dt>
 <dd><p>Plan a burn, and add it to the vehicle’s burn plan.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -883,6 +1172,58 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services3KSA7Vehicle9situa
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA9Situation8bottomedE">
 <span id="_CPPv3N4krpc8services3KSA9Situation8bottomedE"></span><span id="_CPPv2N4krpc8services3KSA9Situation8bottomedE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bottomed</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA9Situation8bottomedE" title="Link to this definition">#</a><br /></dt>
 <dd><p>At rest on terrain and in the ocean.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA13VehicleDesignE">
+<span id="_CPPv3N4krpc8services3KSA13VehicleDesignE"></span><span id="_CPPv2N4krpc8services3KSA13VehicleDesignE"></span><span id="krpc::services::KSA::VehicleDesign"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">VehicleDesign</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA13VehicleDesignE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A vehicle design that can be launched: one of the game’s default vehicles, or a vehicle
+saved by the player in the editor. Obtained from <a class="reference internal" href="ksa.html#_CPPv4N4krpc8services3KSA15vehicle_designsEv" title="krpc::services::KSA::vehicle_designs"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">vehicle_designs()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mass and delta-v are those the editor shows for the design.</p>
+</div>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA13VehicleDesign4nameEv">
+<span id="_CPPv3N4krpc8services3KSA13VehicleDesign4nameEv"></span><span id="_CPPv2N4krpc8services3KSA13VehicleDesign4nameEv"></span><span id="krpc::services::KSA::VehicleDesign::name"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA13VehicleDesign4nameEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The name of the design, as passed to <a class="reference internal" href="ksa.html#_CPPv4N4krpc8services3KSA14launch_vehicleENSt6stringENSt6stringE" title="krpc::services::KSA::launch_vehicle"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">launch_vehicle()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA13VehicleDesign10is_defaultEv">
+<span id="_CPPv3N4krpc8services3KSA13VehicleDesign10is_defaultEv"></span><span id="_CPPv2N4krpc8services3KSA13VehicleDesign10is_defaultEv"></span><span id="krpc::services::KSA::VehicleDesign::is_default"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_default</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA13VehicleDesign10is_defaultEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the design is one of the game’s default vehicles.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA13VehicleDesign10part_countEv">
+<span id="_CPPv3N4krpc8services3KSA13VehicleDesign10part_countEv"></span><span id="_CPPv2N4krpc8services3KSA13VehicleDesign10part_countEv"></span><span id="krpc::services::KSA::VehicleDesign::part_count"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">part_count</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA13VehicleDesign10part_countEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of parts in the design.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA13VehicleDesign4massEv">
+<span id="_CPPv3N4krpc8services3KSA13VehicleDesign4massEv"></span><span id="_CPPv2N4krpc8services3KSA13VehicleDesign4massEv"></span><span id="krpc::services::KSA::VehicleDesign::mass"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA13VehicleDesign4massEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The total mass of the design, including propellant, in kilograms.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA13VehicleDesign8dry_massEv">
+<span id="_CPPv3N4krpc8services3KSA13VehicleDesign8dry_massEv"></span><span id="_CPPv2N4krpc8services3KSA13VehicleDesign8dry_massEv"></span><span id="krpc::services::KSA::VehicleDesign::dry_mass"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dry_mass</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA13VehicleDesign8dry_massEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The mass of the design without propellant, in kilograms.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services3KSA13VehicleDesign7delta_vEv">
+<span id="_CPPv3N4krpc8services3KSA13VehicleDesign7delta_vEv"></span><span id="_CPPv2N4krpc8services3KSA13VehicleDesign7delta_vEv"></span><span id="krpc::services::KSA::VehicleDesign::delta_v"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delta_v</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services3KSA13VehicleDesign7delta_vEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The change in velocity of all the design’s sequences, in meters per second.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each sequence is computed in the environment chosen for it in the editor, in vacuum
+or at sea level.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

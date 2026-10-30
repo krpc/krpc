@@ -1,0 +1,224 @@
+.. default-domain:: cs
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KSA
+
+Debug
+=====
+
+
+.. class:: Debug
+
+   Changes the state of the simulation directly, as the game's debug windows and console
+   commands do: teleporting a vehicle, setting its attitude, refilling its tanks.
+
+   .. function:: static void SetCircularOrbit(IConnection connection, Vehicle vehicle, Body body, double altitude)
+
+      Move a vehicle onto a circular orbit around a body, and return once it is there.
+
+      :parameters:
+
+       * **vehicle** -- The vehicle.
+       * **body** -- The body to orbit.
+       * **altitude** -- The altitude of the orbit above the mean radius, in meters.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the game cannot compute the vehicle's trajectory on the
+         orbit.
+
+   .. function:: static void SetOrbit(IConnection connection, Vehicle vehicle, Body body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+
+      Move a vehicle onto the orbit with the given elements, and return once it is there.
+      The angles are those of :type:`Orbit`.
+
+      :parameters:
+
+       * **vehicle** -- The vehicle.
+       * **body** -- The body to orbit.
+       * **semiMajorAxis** -- The semi-major axis, in meters.
+       * **eccentricity** -- The eccentricity.
+       * **inclination** -- The inclination, in radians.
+       * **longitudeOfAscendingNode** -- The longitude of the ascending node, in radians.
+       * **argumentOfPeriapsis** -- The argument of periapsis, in radians.
+       * **meanAnomalyAtEpoch** -- The mean anomaly at the epoch, in radians.
+       * **epoch** -- The universal time of the epoch, in seconds.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the game cannot compute the vehicle's trajectory on the
+         orbit.
+
+   .. function:: static void SetLanded(IConnection connection, Vehicle vehicle, Body body, double latitude, double longitude)
+
+      Place a vehicle on the surface of a body, as the game's teleport window does, and
+      return once it is there.
+
+      :parameters:
+
+       * **vehicle** -- The vehicle.
+       * **body** -- The body to land on.
+       * **latitude** -- The latitude, in degrees.
+       * **longitude** -- The longitude, in degrees.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the body has no surface.
+
+   .. function:: static void SetPosition(IConnection connection, Vehicle vehicle, System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
+
+      Move a vehicle to the given position, keeping its velocity, and return once it is
+      there.
+
+      :parameters:
+
+       * **vehicle** -- The vehicle.
+       * **position** -- The position of the vehicle, in meters.
+       * **referenceFrame** -- The reference frame of the position.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the inverse of :meth:`Vehicle.Position`. The vehicle keeps orbiting
+         the same body.
+
+   .. function:: static void SetVelocity(IConnection connection, Vehicle vehicle, System.Tuple<double,double,double> velocity, ReferenceFrame referenceFrame)
+
+      Set the velocity of a vehicle, keeping its position, and return once it is set.
+
+      :parameters:
+
+       * **vehicle** -- The vehicle.
+       * **velocity** -- The velocity of the vehicle, in meters per second.
+       * **referenceFrame** -- The reference frame of the velocity.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the inverse of :meth:`Vehicle.Velocity`. The vehicle keeps orbiting
+         the same body.
+
+   .. function:: static void SetRotation(IConnection connection, Vehicle vehicle, System.Tuple<double,double,double,double> rotation, ReferenceFrame referenceFrame)
+
+      Set the rotation of a vehicle, and return once it is set.
+
+      :parameters:
+
+       * **vehicle** -- The vehicle.
+       * **rotation** -- The rotation of the vehicle, as a quaternion of the form ``(x, y, z, w)``.
+       * **referenceFrame** -- The reference frame of the rotation.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the inverse of :meth:`Vehicle.Rotation`.
+
+   .. function:: static void SetAngularVelocity(IConnection connection, Vehicle vehicle, System.Tuple<double,double,double> angularVelocity, ReferenceFrame referenceFrame)
+
+      Set the angular velocity of a vehicle, and return once it is set.
+
+      :parameters:
+
+       * **vehicle** -- The vehicle.
+       * **angularVelocity** -- The angular velocity, in radians per second. The vector points along the axis of rotation, and its length is the rate.
+       * **referenceFrame** -- The reference frame of the angular velocity.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the inverse of :meth:`Vehicle.AngularVelocity`.
+
+   .. function:: static void FillResources(IConnection connection, Vehicle vehicle)
+
+      Fill the propellant, batteries and other consumables of a vehicle, as the game's
+      refill command does.
+
+      :parameters:
+
+       * **vehicle** -- The vehicle.
+
+      :Game Scenes: All
+
+   .. function:: static void EmptyResources(IConnection connection, Vehicle vehicle)
+
+      Empty the propellant, batteries and other consumables of a vehicle, as the game's
+      empty command does.
+
+      :parameters:
+
+       * **vehicle** -- The vehicle.
+
+      :Game Scenes: All
+
+   .. function:: static Vehicle DuplicateVehicle(IConnection connection, Vehicle vehicle, string name)
+
+      Create a copy of a vehicle beside it, as the game's duplicate command does, and
+      return once it is created.
+
+      :parameters:
+
+       * **vehicle** -- The vehicle to copy.
+       * **name** -- The name of the copy.
+
+      :returns: The copy.
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the name is in use.
+
+   .. function:: static void ExplodeVehicle(IConnection connection, Vehicle vehicle)
+
+      Destroy a vehicle in an explosion, as the game's explode command does, and return
+      once the vehicle is gone. Its crew are killed.
+
+      :parameters:
+
+       * **vehicle** -- The vehicle.
+
+      :Game Scenes: All
+
+   .. function:: static void ShowVelocityArrows(IConnection connection, bool visible)
+
+      Show or hide the game's debug arrows for the velocities of the vehicles.
+
+      :parameters:
+
+       * **visible** -- Whether to show the arrows.
+
+      :Game Scenes: All
+
+   .. function:: static System.Collections.Generic.IList<string> RunCommand(IConnection connection, string command)
+
+      Run a command in the game's console, as typed in the console.
+
+      :parameters:
+
+       * **command** -- The command and its arguments.
+
+      :returns: The console output of the command, one line per message.
+      :Game Scenes: All
+
+
+      .. note::
+
+         Most commands write their messages to the game's log, not the returned output.
+         Throws an exception if the console has no such command, or the arguments are not
+         valid.

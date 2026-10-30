@@ -57,14 +57,14 @@ Parts
 
    
 
-   .. method:: double getMass()
+   .. method:: float getMass()
 
 
       The mass of the part, including its propellant, in kilograms.
 
    
 
-   .. method:: double getDryMass()
+   .. method:: float getDryMass()
 
 
       The mass of the part without its propellant, in kilograms.
@@ -78,11 +78,75 @@ Parts
 
    
 
+   .. method:: java.util.List<Tank> getTanks()
+
+
+      The part's propellant tanks. Empty if it has none.
+
+   
+
+   .. method:: java.util.List<Battery> getBatteries()
+
+
+      The part's batteries.
+
+   
+
+   .. method:: java.util.List<SolarPanel> getSolarPanels()
+
+
+      The part's solar panels.
+
+   
+
+   .. method:: java.util.List<Generator> getGenerators()
+
+
+      The part's generators.
+
+   
+
+   .. method:: java.util.List<PowerConsumer> getPowerConsumers()
+
+
+      The part's power consumers.
+
+   
+
+   .. method:: java.util.List<Light> getLights()
+
+
+      The part's lights.
+
+   
+
+   .. method:: java.util.List<Deployable> getDeployables()
+
+
+      The part's deployable sections. A part can have several, such as the doors of a
+      service module.
+
+   
+
+   .. method:: java.util.List<MagneticScoop> getMagneticScoops()
+
+
+      The part's magnetic scoops. Empty if it has none.
+
+   
+
    .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
 
       The position of the part's origin, in meters.
 
       :param ReferenceFrame referenceFrame: The reference frame of the position.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> velocity(ReferenceFrame referenceFrame)
+
+      The velocity of the part's origin, in meters per second.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the velocity.
    
 
    .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
@@ -96,6 +160,13 @@ Parts
 
 
       The part's engine, or ``null`` if it has none.
+
+   
+
+   .. method:: java.util.List<Gimbal> getGimbals()
+
+
+      The part's gimbals. An engine part can have several, each steering one nozzle.
 
    
 
@@ -127,6 +198,20 @@ Parts
 
    
 
+   .. method:: java.util.List<Seat> getSeats()
+
+
+      The part's crew seats.
+
+   
+
+   .. method:: java.util.List<Kitten> getCrew()
+
+
+      The kittens in the part's seats.
+
+   
+
 
 
 .. type:: public class Engine
@@ -142,6 +227,13 @@ Parts
 
 
       The part the engine is in.
+
+   
+
+   .. method:: java.util.List<Gimbal> getGimbals()
+
+
+      The gimbals that steer the engine's nozzles. Empty if the engine has none.
 
    
 
@@ -161,7 +253,21 @@ Parts
 
    
 
-   .. method:: double getThrust()
+   .. method:: float getMinimumThrottle()
+
+
+      The lowest throttle the engine runs at, between 0 and 1.
+
+   
+
+   .. method:: java.util.List<String> getPropellants()
+
+
+      The names of the substances the engine burns. See :meth:`Resource.getName()`.
+
+   
+
+   .. method:: float getThrust()
 
 
       The thrust of the engine at its current throttle and the current atmospheric
@@ -169,7 +275,7 @@ Parts
 
    
 
-   .. method:: double getAvailableThrust()
+   .. method:: float getAvailableThrust()
 
 
       The thrust of the engine at full throttle and the current atmospheric pressure, in
@@ -177,12 +283,75 @@ Parts
 
    
 
-   .. method:: double getSpecificImpulse()
+   .. method:: float getSpecificImpulse()
 
 
       The specific impulse of the engine at the current atmospheric pressure, in seconds.
       Zero when it is inactive or has no propellant.
 
+   
+
+
+
+.. type:: public class Gimbal
+
+   A gimbal that steers an engine nozzle. Obtained from :meth:`Part.getGimbals()` or
+   :meth:`Engine.getGimbals()`.
+
+   .. note::
+
+      A gimbal turns about the y and z axes of its mount, which :meth:`Gimbal.rotation(ReferenceFrame)` gives.
+      The flight computer steers it while an engine it belongs to is :meth:`Gimbal.getActive()`.
+
+   .. method:: Part getPart()
+
+
+      The part the gimbal is in.
+
+   
+
+   .. method:: float getAngleY()
+
+
+      The angle of the gimbal about its y axis, in degrees.
+
+   
+
+   .. method:: float getAngleZ()
+
+
+      The angle of the gimbal about its z axis, in degrees.
+
+   
+
+   .. method:: float getMaxAngleY()
+
+
+      The largest angle of the gimbal about its y axis, in degrees. Zero if it does not
+      turn about that axis.
+
+   
+
+   .. method:: float getMaxAngleZ()
+
+
+      The largest angle of the gimbal about its z axis, in degrees. Zero if it does not
+      turn about that axis.
+
+   
+
+   .. method:: boolean getActive()
+
+
+      Whether an engine the gimbal steers is active.
+
+   
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
+
+      The rotation of the gimbal's mount, whose y and z axes the gimbal turns about.
+
+      :param ReferenceFrame referenceFrame: The reference frame of the rotation.
    
 
 
@@ -237,11 +406,12 @@ Parts
 
    
 
-   .. method:: void decouple()
+   .. method:: java.util.List<Vehicle> decouple()
 
       Fire the decoupler, separating the vehicle into two. Returns once it has fired.
       Throws an exception if the decoupler is disabled or :meth:`Decoupler.getDecoupled()`.
 
+      :returns: The vehicles that separated from this one.
    
 
 
@@ -377,13 +547,125 @@ Parts
 
    
 
-   .. method:: void undock()
+   .. method:: java.util.List<Vehicle> undock()
 
       Undock the port, separating the vehicle into two. Returns once it has undocked.
       Throws an exception if the port is not docked.
 
+      :returns: The new vehicles.
    
 
       .. note::
 
          Docking and undocking replace the vehicles involved. See :type:`Vehicle`.
+
+
+
+.. type:: public class Deployable
+
+   A part that deploys and retracts, such as a landing leg, a solar panel or a service
+   module door. Obtained from :meth:`Part.getDeployables()`.
+
+   .. note::
+
+      Deploying or retracting a part moves its symmetric copies with it, as the part's menu
+      in the game does.
+
+   .. method:: Part getPart()
+
+
+      The part the deployable is in.
+
+   
+
+   .. method:: DeployableState getState()
+
+
+      The state of the part.
+
+   
+
+   .. method:: void deploy()
+
+      Deploy the part. Returns once it has started to move.
+
+   
+
+      .. note::
+
+         Throws an exception if the part is broken.
+
+   .. method:: void retract()
+
+      Retract the part. Returns once it has started to move.
+
+   
+
+      .. note::
+
+         Throws an exception if the part is broken.
+
+
+
+.. type:: public enum DeployableState
+
+   The state of a deployable part. See :meth:`Deployable.getState()`.
+
+
+   .. field:: public DeployableState DEPLOYED
+
+      Fully deployed.
+
+
+   .. field:: public DeployableState RETRACTED
+
+      Fully retracted.
+
+
+   .. field:: public DeployableState DEPLOYING
+
+      Moving toward deployed.
+
+
+   .. field:: public DeployableState RETRACTING
+
+      Moving toward retracted.
+
+
+   .. field:: public DeployableState BROKEN
+
+      Broken, so it can no longer move.
+
+
+
+.. type:: public class MagneticScoop
+
+   A magnetic scoop, which collects gas from space into the vehicle's tanks. Obtained from
+   :meth:`Part.getMagneticScoops()`.
+
+   .. method:: Part getPart()
+
+
+      The part the scoop is in.
+
+   
+
+   .. method:: boolean getActive()
+
+   .. method:: void setActive(boolean value)
+
+      Whether the scoop is switched on.
+
+   
+
+   .. method:: String getSubstance()
+
+
+      The name of the substance the scoop collects. See :meth:`Resource.getName()`.
+
+   
+
+   .. method:: float getCollectionRate()
+
+
+      The rate the scoop collects gas at, in kilograms per second.

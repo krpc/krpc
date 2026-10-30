@@ -16,6 +16,12 @@ Body
 
    
 
+   .. function:: bool is_star()
+
+      Whether the body is a star.
+
+   
+
    .. function:: double mass()
 
       The mass of the body, in kilograms.
@@ -41,20 +47,82 @@ Body
 
    
 
-   .. function:: double surface_gravity()
+   .. function:: bool has_atmosphere()
+
+      Whether the body has an atmosphere.
+
+   
+
+   .. function:: float sea_level_pressure()
+
+      The atmospheric pressure at the body's mean radius, in pascals. Zero for a body
+      with no atmosphere.
+
+   
+
+   .. function:: float sea_level_density()
+
+      The density of the atmosphere at the body's mean radius, in kilograms per cubic
+      meter. Zero for a body with no atmosphere.
+
+   
+
+   .. function:: float scale_height()
+
+      The height over which the atmospheric pressure falls by a factor of ``e``, in
+      meters. Zero for a body with no atmosphere.
+
+   
+
+   .. function:: float pressure_at(double altitude)
+
+      The atmospheric pressure at an altitude, in pascals. Zero for a body with no
+      atmosphere.
+
+      :Parameters:
+
+       * **altitude** -- Altitude above the body's mean radius, in meters.
+
+   
+
+   .. function:: float density_at(double altitude)
+
+      The density of the atmosphere at an altitude, in kilograms per cubic meter. Zero
+      for a body with no atmosphere.
+
+      :Parameters:
+
+       * **altitude** -- Altitude above the body's mean radius, in meters.
+
+   
+
+   .. function:: bool has_ocean()
+
+      Whether the body has an ocean.
+
+   
+
+   .. function:: float ocean_density()
+
+      The density of the ocean, in kilograms per cubic meter. Zero for a body with no
+      ocean.
+
+   
+
+   .. function:: float surface_gravity()
 
       The acceleration due to gravity at the body's mean radius, in meters per second
       squared.
 
    
 
-   .. function:: double rotational_speed()
+   .. function:: float rotational_speed()
 
       The rate at which the body rotates about its axis, in radians per second.
 
    
 
-   .. function:: double rotational_period()
+   .. function:: float rotational_period()
 
       The time the body takes to rotate once about its axis, relative to the stars, in
       seconds. Infinite for a body that does not rotate.
@@ -117,6 +185,23 @@ Body
    .. function:: std::vector<std::string> launch_sites()
 
       The names of the launch sites on the body. See :func:`launch_vehicle`.
+
+   
+
+   .. function:: std::vector<std::string> biomes()
+
+      The names of the body's biomes. Empty for a body with no biomes.
+
+   
+
+   .. function:: std::optional<std::string> biome_at(double latitude, double longitude)
+
+      The biome at a point on the body, or ``NULL`` if the body has no biomes.
+
+      :Parameters:
+
+       * **latitude** -- Latitude, in degrees.
+       * **longitude** -- Longitude, in degrees.
 
    
 
@@ -186,4 +271,37 @@ Body
 
        * **latitude** -- Latitude, in degrees.
        * **longitude** -- Longitude, in degrees.
+       * **reference_frame** -- The reference frame of the position.
+
+   
+
+   .. function:: double latitude_at_position(std::tuple<double, double, double> position, ReferenceFrame reference_frame)
+
+      The latitude of a position, in degrees.
+
+      :Parameters:
+
+       * **position** -- Position, in meters.
+       * **reference_frame** -- The reference frame of the position.
+
+   
+
+   .. function:: double longitude_at_position(std::tuple<double, double, double> position, ReferenceFrame reference_frame)
+
+      The longitude of a position, in degrees.
+
+      :Parameters:
+
+       * **position** -- Position, in meters.
+       * **reference_frame** -- The reference frame of the position.
+
+   
+
+   .. function:: double altitude_at_position(std::tuple<double, double, double> position, ReferenceFrame reference_frame)
+
+      The altitude of a position above the body's mean radius, in meters.
+
+      :Parameters:
+
+       * **position** -- Position, in meters.
        * **reference_frame** -- The reference frame of the position.

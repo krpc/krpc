@@ -55,8 +55,8 @@ Auto-Pilot
          Setting :macro:`KRPC_KSA_AUTOPILOTMODE_ATTITUDE` targets the vehicle's current pitch,
          heading and roll. Setting :macro:`KRPC_KSA_AUTOPILOTMODE_OTHER` throws an exception.
 
-   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetPitch(krpc_connection_t connection, double * returnValue, krpc_KSA_AutoPilot_t instance)
-   .. function:: krpc_error_t krpc_KSA_AutoPilot_set_TargetPitch(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, double value)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetPitch(krpc_connection_t connection, float * returnValue, krpc_KSA_AutoPilot_t instance)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_set_TargetPitch(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, float value)
 
       The target pitch, in degrees, between -90° and +90°.
 
@@ -68,8 +68,8 @@ Auto-Pilot
          Setting it sets :func:`krpc_KSA_AutoPilot_Mode` to :macro:`KRPC_KSA_AUTOPILOTMODE_ATTITUDE`.
          Returns NaN in any other mode.
 
-   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetHeading(krpc_connection_t connection, double * returnValue, krpc_KSA_AutoPilot_t instance)
-   .. function:: krpc_error_t krpc_KSA_AutoPilot_set_TargetHeading(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, double value)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetHeading(krpc_connection_t connection, float * returnValue, krpc_KSA_AutoPilot_t instance)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_set_TargetHeading(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, float value)
 
       The target heading, in degrees, between 0° and 360°.
 
@@ -81,8 +81,8 @@ Auto-Pilot
          Setting it sets :func:`krpc_KSA_AutoPilot_Mode` to :macro:`KRPC_KSA_AUTOPILOTMODE_ATTITUDE`.
          Returns NaN in any other mode.
 
-   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetRoll(krpc_connection_t connection, double * returnValue, krpc_KSA_AutoPilot_t instance)
-   .. function:: krpc_error_t krpc_KSA_AutoPilot_set_TargetRoll(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, double value)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetRoll(krpc_connection_t connection, float * returnValue, krpc_KSA_AutoPilot_t instance)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_set_TargetRoll(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, float value)
 
       The target roll, in degrees. NaN when the auto-pilot does not control roll.
 
@@ -95,7 +95,7 @@ Auto-Pilot
          Setting NaN leaves roll free, in every mode. Returns NaN in modes other than
          :macro:`KRPC_KSA_AUTOPILOTMODE_ATTITUDE`.
 
-   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetPitchAndHeading(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, double pitch, double heading)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_TargetPitchAndHeading(krpc_connection_t connection, krpc_KSA_AutoPilot_t instance, float pitch, float heading)
 
       Set the target pitch and heading, and the mode to
       :macro:`KRPC_KSA_AUTOPILOTMODE_ATTITUDE`.
@@ -121,14 +121,14 @@ Auto-Pilot
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_KSA_AutoPilot_Error(krpc_connection_t connection, double * returnValue, krpc_KSA_AutoPilot_t instance)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_Error(krpc_connection_t connection, float * returnValue, krpc_KSA_AutoPilot_t instance)
 
       The angle between the direction the vehicle points in and the target direction,
       in degrees. NaN when the auto-pilot is not engaged.
 
       :Game Scenes: Flight
 
-   .. function:: krpc_error_t krpc_KSA_AutoPilot_RollError(krpc_connection_t connection, double * returnValue, krpc_KSA_AutoPilot_t instance)
+   .. function:: krpc_error_t krpc_KSA_AutoPilot_RollError(krpc_connection_t connection, float * returnValue, krpc_KSA_AutoPilot_t instance)
 
       The angle between the vehicle's roll and the target roll, in degrees.
       NaN when the auto-pilot is not engaged.

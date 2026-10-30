@@ -17,12 +17,139 @@ Resources
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Resource_Amount(krpc_connection_t connection, double * returnValue, krpc_KSA_Resource_t instance)
+   .. function:: krpc_error_t krpc_KSA_Resource_Amount(krpc_connection_t connection, float * returnValue, krpc_KSA_Resource_t instance)
 
       The mass of the substance held, in kilograms.
 
    
 
-   .. function:: krpc_error_t krpc_KSA_Resource_Max(krpc_connection_t connection, double * returnValue, krpc_KSA_Resource_t instance)
+   .. function:: krpc_error_t krpc_KSA_Resource_Max(krpc_connection_t connection, float * returnValue, krpc_KSA_Resource_t instance)
 
       The mass of the substance the tanks can hold, in kilograms.
+
+   
+
+
+
+.. type:: krpc_KSA_Tank_t
+
+   A propellant tank. Obtained from :func:`krpc_KSA_Part_Tanks` or :func:`krpc_KSA_Vehicle_Tanks`.
+
+   .. function:: krpc_error_t krpc_KSA_Tank_Part(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_Tank_t instance)
+
+      The part the tank is in.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Tank_Volume(krpc_connection_t connection, float * returnValue, krpc_KSA_Tank_t instance)
+
+      The volume of the tank, in cubic meters.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Tank_RatedPressure(krpc_connection_t connection, float * returnValue, krpc_KSA_Tank_t instance)
+
+      The pressure the tank stores gas at, in pascals. Zero if the tank cannot store gas.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Tank_FilledFraction(krpc_connection_t connection, float * returnValue, krpc_KSA_Tank_t instance)
+
+      The fraction of the tank's volume that is filled, between 0 and 1.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Tank_PropellantUseEnabled(krpc_connection_t connection, bool * returnValue, krpc_KSA_Tank_t instance)
+   .. function:: krpc_error_t krpc_KSA_Tank_set_PropellantUseEnabled(krpc_connection_t connection, krpc_KSA_Tank_t instance, bool value)
+
+      Whether engines can draw propellant from the tank.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_Tank_TransferMode(krpc_connection_t connection, krpc_KSA_TankTransferMode_t * returnValue, krpc_KSA_Tank_t instance)
+   .. function:: krpc_error_t krpc_KSA_Tank_set_TransferMode(krpc_connection_t connection, krpc_KSA_Tank_t instance, krpc_KSA_TankTransferMode_t value)
+
+      The direction the tank transfers propellant in.
+
+   
+
+      .. note::
+
+         Propellant flows from tanks transferring out to tanks of the same vehicle transferring
+         in, and the transfer draws battery power. Setting a transfer throws an exception if
+         the running version of KSA does not support it.
+
+
+
+.. type:: krpc_KSA_TankTransferMode_t
+
+   The direction a tank transfers propellant in. See :func:`krpc_KSA_Tank_TransferMode`.
+
+
+   .. macro:: KRPC_KSA_TANKTRANSFERMODE_NONE
+
+      No transfer.
+
+
+   .. macro:: KRPC_KSA_TANKTRANSFERMODE_IN
+
+      Into the tank, from tanks transferring out.
+
+
+   .. macro:: KRPC_KSA_TANKTRANSFERMODE_OUT
+
+      Out of the tank, to tanks transferring in.
+
+
+
+.. type:: krpc_KSA_FuelLink_t
+
+   A fuel line between two parts of a vehicle, which lets propellant flow between them.
+   Obtained from :func:`krpc_KSA_Vehicle_FuelLinks`.
+
+   .. function:: krpc_error_t krpc_KSA_FuelLink_PartA(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_FuelLink_t instance)
+
+      One of the parts the link joins.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_FuelLink_PartB(krpc_connection_t connection, krpc_KSA_Part_t * returnValue, krpc_KSA_FuelLink_t instance)
+
+      The other part the link joins.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_FuelLink_Flow(krpc_connection_t connection, krpc_KSA_FuelLinkFlow_t * returnValue, krpc_KSA_FuelLink_t instance)
+   .. function:: krpc_error_t krpc_KSA_FuelLink_set_Flow(krpc_connection_t connection, krpc_KSA_FuelLink_t instance, krpc_KSA_FuelLinkFlow_t value)
+
+      The direction propellant flows through the link.
+
+   
+
+   .. function:: krpc_error_t krpc_KSA_FuelLink_Enabled(krpc_connection_t connection, bool * returnValue, krpc_KSA_FuelLink_t instance)
+   .. function:: krpc_error_t krpc_KSA_FuelLink_set_Enabled(krpc_connection_t connection, krpc_KSA_FuelLink_t instance, bool value)
+
+      Whether propellant can flow through the link.
+
+   
+
+
+
+.. type:: krpc_KSA_FuelLinkFlow_t
+
+   The direction propellant flows through a fuel link. See :func:`krpc_KSA_FuelLink_Flow`.
+
+
+   .. macro:: KRPC_KSA_FUELLINKFLOW_ATOB
+
+      From :func:`krpc_KSA_FuelLink_PartA` to :func:`krpc_KSA_FuelLink_PartB`.
+
+
+   .. macro:: KRPC_KSA_FUELLINKFLOW_BTOA
+
+      From :func:`krpc_KSA_FuelLink_PartB` to :func:`krpc_KSA_FuelLink_PartA`.
+
+
+   .. macro:: KRPC_KSA_FUELLINKFLOW_BOTH
+
+      Either way.

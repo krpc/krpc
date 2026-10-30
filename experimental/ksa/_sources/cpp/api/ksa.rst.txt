@@ -13,6 +13,8 @@ KSA API
    ksa/sequence
    ksa/parts
    ksa/resources
+   ksa/power
+   ksa/crew
    ksa/body
    ksa/flight
    ksa/orbit
@@ -20,3 +22,7 @@ KSA API
    ksa/auto-pilot
    ksa/burn
    ksa/reference-frame
+   ksa/camera
+   ksa/drawing
+   ksa/ui
+   ksa/debug

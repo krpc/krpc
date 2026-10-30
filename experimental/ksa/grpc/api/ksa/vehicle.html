@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Vehicle &#8212; kRPC v0.2.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=9c64f2e8" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../../../_static/documentation_options.js?v=938c9ccc"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'grpc/api/ksa/vehicle';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Sequence" href="sequence.html" />
+    <link rel="prev" title="KSA" href="ksa.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.2.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc/tree/main/experimental/ksa" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../python/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../python/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../csharp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../csharp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cpp/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cpp/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cnano/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cnano/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../java/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../java/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../lua/api/ksa.html">KSA API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ksa.html">KSA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/vehicle.html">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../lua/api/ksa/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+</ul>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../../grpc.html">gRPC</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../ksa.html">KSA API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ksa.html">KSA</a></li>
+<li class="toctree-l3 current active"><a aria-current="page" class="current reference internal" href="#">Vehicle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sequence.html">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="power.html">Power</a></li>
+<li class="toctree-l3"><a class="reference internal" href="crew.html">Crew</a></li>
+<li class="toctree-l3"><a class="reference internal" href="body.html">Body</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l3"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auto-pilot.html">Auto-Pilot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="burn.html">Burn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference-frame.html">Reference Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drawing.html">Drawing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ui.html">UI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="debug.html">Debug</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../messages.html">Messages</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../clients.html" class="nav-link">Clients</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../../../grpc.html" class="nav-link">gRPC</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../ksa.html" class="nav-link">KSA API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Vehicle</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="vehicle">
+<h1>Vehicle<a class="headerlink" href="#vehicle" title="Link to this heading">#</a></h1>
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">VehicleService</span></span><a class="headerlink" href="#krpc.ksa.VehicleService" title="Link to this definition">#</a></dt>
+<dd><p>A vehicle in the current system. Obtained from <a class="reference internal" href="ksa.html#krpc.ksa.KSAService.GetActiveVehicle" title="krpc.ksa.KSAService.GetActiveVehicle"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">KSAService.GetActiveVehicle</span></code></a>
+or <a class="reference internal" href="ksa.html#krpc.ksa.KSAService.GetVehicles" title="krpc.ksa.KSAService.GetVehicles"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">KSAService.GetVehicles</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Docking and undocking replace the vehicles involved, so an object for one of them
+throws an exception afterwards.</p>
+</div>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetName">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetName</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetNameRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetNameResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetName" title="Link to this definition">#</a></dt>
+<dd><p>The name of the vehicle, which is unique in the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetNameRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetNameResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">string</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.SetName">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SetName</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.SetNameRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.SetNameResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.SetName" title="Link to this definition">#</a></dt>
+<dd><p>The name of the vehicle, which is unique in the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.SetNameRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">string</span></code>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.SetNameResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.Destroy">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Destroy</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.DestroyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.DestroyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.Destroy" title="Link to this definition">#</a></dt>
+<dd><p>Destroy the vehicle, killing its crew, as abandoning the vehicle does. Returns once
+the vehicle is gone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.DestroyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.DestroyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the vehicle is the active vehicle, the game hands control to a nearby vehicle.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetCanRecover">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCanRecover</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetCanRecoverRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetCanRecoverResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetCanRecover" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle can be recovered: at rest on the surface of the home planet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetCanRecoverRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetCanRecoverResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.Recover">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Recover</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.RecoverRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.RecoverResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.Recover" title="Link to this definition">#</a></dt>
+<dd><p>Recover the vehicle, ending its crew’s missions, as the game’s recover button does.
+Returns once the vehicle is gone.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.RecoverRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.RecoverResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the vehicle cannot be recovered, see <a class="reference internal" href="#krpc.ksa.VehicleService.GetCanRecover" title="krpc.ksa.VehicleService.GetCanRecover"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetCanRecover</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetSituation">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSituation</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetSituationRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetSituationResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetSituation" title="Link to this definition">#</a></dt>
+<dd><p>The situation of the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetSituationRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetSituationResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.Situation" title="krpc.ksa.Situation"><code class="xref grpc grpc-enum docutils literal notranslate"><span class="pre">Situation</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetOnRails">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetOnRails</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetOnRailsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetOnRailsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetOnRails" title="Link to this definition">#</a></dt>
+<dd><p>Whether the game moves the vehicle without simulating the forces on it: along its
+orbit, or held on the surface. True in the freefall, landed, floating and bottomed
+situations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetOnRailsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetOnRailsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetIsDebris">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetIsDebris</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetIsDebrisRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetIsDebrisResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetIsDebris" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle is debris, such as a spent stage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetIsDebrisRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetIsDebrisResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetHasLaunched">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetHasLaunched</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetHasLaunchedRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetHasLaunchedResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetHasLaunched" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vehicle has launched.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetHasLaunchedRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetHasLaunchedResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetLaunchTime">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetLaunchTime</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetLaunchTimeRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetLaunchTimeResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetLaunchTime" title="Link to this definition">#</a></dt>
+<dd><p>The universal time the vehicle was created, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetLaunchTimeRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetLaunchTimeResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetMass">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMass</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetMassRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetMassResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetMass" title="Link to this definition">#</a></dt>
+<dd><p>The total mass of the vehicle, including propellant, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetMassRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetMassResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetPropellantMass">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPropellantMass</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetPropellantMassRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetPropellantMassResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetPropellantMass" title="Link to this definition">#</a></dt>
+<dd><p>The mass of the propellant in the vehicle, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetPropellantMassRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetPropellantMassResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetThrust">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetThrust</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetThrustRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetThrustResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetThrust" title="Link to this definition">#</a></dt>
+<dd><p>The thrust of the engines at their current throttle and the current atmospheric
+pressure, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetThrustRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetThrustResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetAvailableThrust">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetAvailableThrust</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetAvailableThrustRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetAvailableThrustResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetAvailableThrust" title="Link to this definition">#</a></dt>
+<dd><p>The thrust of the active engines that have propellant, at full throttle and the
+current atmospheric pressure, in Newtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetAvailableThrustRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetAvailableThrustResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetSpecificImpulse">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSpecificImpulse</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetSpecificImpulseRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetSpecificImpulseResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetSpecificImpulse" title="Link to this definition">#</a></dt>
+<dd><p>The combined specific impulse of the active engines that have propellant, at the
+current atmospheric pressure, in seconds. Zero when no engine is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetSpecificImpulseRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetSpecificImpulseResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetPeakGLoad">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPeakGLoad</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetPeakGLoadRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetPeakGLoadResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetPeakGLoad" title="Link to this definition">#</a></dt>
+<dd><p>The highest smoothed g-load on the vehicle during the last physics step, as a
+multiple of standard gravity. Zero while the vehicle is <a class="reference internal" href="#krpc.ksa.VehicleService.GetOnRails" title="krpc.ksa.VehicleService.GetOnRails"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetOnRails</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetPeakGLoadRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetPeakGLoadResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetMaxGLoad">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMaxGLoad</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetMaxGLoadRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetMaxGLoadResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetMaxGLoad" title="Link to this definition">#</a></dt>
+<dd><p>The g-load the vehicle can take before it breaks up, as a multiple of standard
+gravity. Zero while the vehicle is <a class="reference internal" href="#krpc.ksa.VehicleService.GetOnRails" title="krpc.ksa.VehicleService.GetOnRails"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetOnRails</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetMaxGLoadRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetMaxGLoadResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetPeakDynamicPressure">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPeakDynamicPressure</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetPeakDynamicPressureRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetPeakDynamicPressureResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetPeakDynamicPressure" title="Link to this definition">#</a></dt>
+<dd><p>The highest dynamic pressure on the vehicle during the last physics step, in
+pascals. In the sea, this is the dynamic pressure of the water. Zero while the
+vehicle is <a class="reference internal" href="#krpc.ksa.VehicleService.GetOnRails" title="krpc.ksa.VehicleService.GetOnRails"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetOnRails</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetPeakDynamicPressureRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetPeakDynamicPressureResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetMaxDynamicPressure">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMaxDynamicPressure</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetMaxDynamicPressureRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetMaxDynamicPressureResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetMaxDynamicPressure" title="Link to this definition">#</a></dt>
+<dd><p>The dynamic pressure the vehicle can take before it breaks up, in pascals. Zero
+while the vehicle is <a class="reference internal" href="#krpc.ksa.VehicleService.GetOnRails" title="krpc.ksa.VehicleService.GetOnRails"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetOnRails</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetMaxDynamicPressureRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetMaxDynamicPressureResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetParts">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetParts</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetPartsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetPartsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetParts" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s parts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetPartsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetPartsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="parts.html#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetRootPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetRootPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetRootPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetRootPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetRootPart" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s root part, which the other parts are attached to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetRootPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetRootPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="parts.html#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.PartsWithName">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">PartsWithName</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.PartsWithNameRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.PartsWithNameResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.PartsWithName" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s parts with the given template id. See <a class="reference internal" href="parts.html#krpc.ksa.PartService.GetName" title="krpc.ksa.PartService.GetName"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">PartService.GetName</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.PartsWithNameRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> (<code class="docutils literal notranslate"><span class="pre">string</span></code>): The template id.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.PartsWithNameResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="parts.html#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetSeats">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSeats</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetSeatsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetSeatsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetSeats" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s crew seats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetSeatsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetSeatsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="crew.html#krpc.ksa.SeatService" title="krpc.ksa.SeatService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Seat</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetCrew">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCrew</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetCrewRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetCrewResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetCrew" title="Link to this definition">#</a></dt>
+<dd><p>The kittens in the vehicle’s seats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetCrewRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetCrewResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="crew.html#krpc.ksa.KittenService" title="krpc.ksa.KittenService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Kitten</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetCrewCapacity">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetCrewCapacity</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetCrewCapacityRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetCrewCapacityResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetCrewCapacity" title="Link to this definition">#</a></dt>
+<dd><p>The number of crew seats in the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetCrewCapacityRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetCrewCapacityResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">sint32</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetEngines">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetEngines</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetEnginesRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetEnginesResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetEngines" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s engines.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetEnginesRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetEnginesResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="parts.html#krpc.ksa.EngineService" title="krpc.ksa.EngineService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Engine</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetRCS">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetRCS</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetRCSRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetRCSResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetRCS" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s RCS thrusters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetRCSRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetRCSResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="parts.html#krpc.ksa.RCSService" title="krpc.ksa.RCSService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">RCS</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetDecouplers">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDecouplers</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetDecouplersRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetDecouplersResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetDecouplers" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s decouplers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetDecouplersRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetDecouplersResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="parts.html#krpc.ksa.DecouplerService" title="krpc.ksa.DecouplerService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Decoupler</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetParachutes">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetParachutes</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetParachutesRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetParachutesResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetParachutes" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s parachutes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetParachutesRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetParachutesResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="parts.html#krpc.ksa.ParachuteService" title="krpc.ksa.ParachuteService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Parachute</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetTanks">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTanks</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetTanksRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetTanksResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetTanks" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s propellant tanks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetTanksRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetTanksResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="resources.html#krpc.ksa.TankService" title="krpc.ksa.TankService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Tank</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetBatteries">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetBatteries</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetBatteriesRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetBatteriesResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetBatteries" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s batteries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetBatteriesRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetBatteriesResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="power.html#krpc.ksa.BatteryService" title="krpc.ksa.BatteryService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Battery</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetSolarPanels">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSolarPanels</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetSolarPanelsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetSolarPanelsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetSolarPanels" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s solar panels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetSolarPanelsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetSolarPanelsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="power.html#krpc.ksa.SolarPanelService" title="krpc.ksa.SolarPanelService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">SolarPanel</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetGenerators">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetGenerators</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetGeneratorsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetGeneratorsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetGenerators" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s generators.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetGeneratorsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetGeneratorsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="power.html#krpc.ksa.GeneratorService" title="krpc.ksa.GeneratorService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Generator</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetPowerConsumers">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPowerConsumers</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetPowerConsumersRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetPowerConsumersResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetPowerConsumers" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s power consumers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetPowerConsumersRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetPowerConsumersResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="power.html#krpc.ksa.PowerConsumerService" title="krpc.ksa.PowerConsumerService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">PowerConsumer</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetStoredEnergy">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetStoredEnergy</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetStoredEnergyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetStoredEnergyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetStoredEnergy" title="Link to this definition">#</a></dt>
+<dd><p>The energy stored in the vehicle’s batteries, in joules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetStoredEnergyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetStoredEnergyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetEnergyCapacity">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetEnergyCapacity</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetEnergyCapacityRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetEnergyCapacityResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetEnergyCapacity" title="Link to this definition">#</a></dt>
+<dd><p>The energy the vehicle’s batteries can store, in joules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetEnergyCapacityRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetEnergyCapacityResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetNetPower">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetNetPower</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetNetPowerRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetNetPowerResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetNetPower" title="Link to this definition">#</a></dt>
+<dd><p>The power produced by the vehicle’s solar panels and generators, less the power its
+parts use, in watts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetNetPowerRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetNetPowerResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetLights">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetLights</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetLightsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetLightsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetLights" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s lights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetLightsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetLightsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="power.html#krpc.ksa.LightService" title="krpc.ksa.LightService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Light</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetDeployables">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDeployables</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetDeployablesRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetDeployablesResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetDeployables" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s deployable sections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetDeployablesRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetDeployablesResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="parts.html#krpc.ksa.DeployableService" title="krpc.ksa.DeployableService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Deployable</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetMagneticScoops">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMagneticScoops</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetMagneticScoopsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetMagneticScoopsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetMagneticScoops" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s magnetic scoops.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetMagneticScoopsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetMagneticScoopsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="parts.html#krpc.ksa.MagneticScoopService" title="krpc.ksa.MagneticScoopService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">MagneticScoop</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetFuelLinks">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetFuelLinks</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetFuelLinksRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetFuelLinksResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetFuelLinks" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s fuel links.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetFuelLinksRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetFuelLinksResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="resources.html#krpc.ksa.FuelLinkService" title="krpc.ksa.FuelLinkService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">FuelLink</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetDockingPorts">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDockingPorts</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetDockingPortsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetDockingPortsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetDockingPorts" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s docking ports.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetDockingPortsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetDockingPortsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="parts.html#krpc.ksa.DockingPortService" title="krpc.ksa.DockingPortService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">DockingPort</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetResources">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetResources</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetResourcesRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetResourcesResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetResources" title="Link to this definition">#</a></dt>
+<dd><p>The resources the vehicle holds, one for each substance, totaled over its parts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetResourcesRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetResourcesResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="resources.html#krpc.ksa.ResourceService" title="krpc.ksa.ResourceService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Resource</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetDeltaV">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDeltaV</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetDeltaVRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetDeltaVResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetDeltaV" title="Link to this definition">#</a></dt>
+<dd><p>The change in velocity of all the vehicle’s sequences, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetDeltaVRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetDeltaVResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetSequences">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSequences</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetSequencesRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetSequencesResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetSequences" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s sequences, in activation order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetSequencesRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetSequencesResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="sequence.html#krpc.ksa.SequenceService" title="krpc.ksa.SequenceService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Sequence</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetTargetVehicle">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTargetVehicle</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetTargetVehicleRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetTargetVehicleResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetTargetVehicle" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle targeted by this vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it replaces the
+target, and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetTargetVehicleRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetTargetVehicleResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.SetTargetVehicle">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SetTargetVehicle</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.SetTargetVehicleRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.SetTargetVehicleResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.SetTargetVehicle" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle targeted by this vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it replaces the
+target, and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.SetTargetVehicleRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.SetTargetVehicleResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetTargetBody">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTargetBody</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetTargetBodyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetTargetBodyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetTargetBody" title="Link to this definition">#</a></dt>
+<dd><p>The body targeted by this vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it replaces the target,
+and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetTargetBodyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetTargetBodyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="body.html#krpc.ksa.BodyService" title="krpc.ksa.BodyService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Body</span></code></a>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Setting a body that orbits nothing, such as the star, throws an exception.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.SetTargetBody">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SetTargetBody</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.SetTargetBodyRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.SetTargetBodyResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.SetTargetBody" title="Link to this definition">#</a></dt>
+<dd><p>The body targeted by this vehicle, or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it replaces the target,
+and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.SetTargetBodyRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="body.html#krpc.ksa.BodyService" title="krpc.ksa.BodyService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Body</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.SetTargetBodyResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Setting a body that orbits nothing, such as the star, throws an exception.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetTargetPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetTargetPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetTargetPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetTargetPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetTargetPart" title="Link to this definition">#</a></dt>
+<dd><p>The part targeted by this vehicle, on the vehicle in <a class="reference internal" href="#krpc.ksa.VehicleService.GetTargetVehicle" title="krpc.ksa.VehicleService.GetTargetVehicle"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetTargetVehicle</span></code></a>,
+or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it targets the part and its vehicle, and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears
+the target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetTargetPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetTargetPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="parts.html#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.SetTargetPart">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SetTargetPart</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.SetTargetPartRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.SetTargetPartResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.SetTargetPart" title="Link to this definition">#</a></dt>
+<dd><p>The part targeted by this vehicle, on the vehicle in <a class="reference internal" href="#krpc.ksa.VehicleService.GetTargetVehicle" title="krpc.ksa.VehicleService.GetTargetVehicle"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetTargetVehicle</span></code></a>,
+or <code class="docutils literal notranslate"><span class="pre">null</span></code>. Setting it targets the part and its vehicle, and <code class="docutils literal notranslate"><span class="pre">null</span></code> clears
+the target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.SetTargetPartRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="parts.html#krpc.ksa.PartService" title="krpc.ksa.PartService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Part</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.SetTargetPartResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetBurns">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetBurns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetBurnsRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetBurnsResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetBurns" title="Link to this definition">#</a></dt>
+<dd><p>The vehicle’s planned burns, in time order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetBurnsRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetBurnsResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">repeated</span></code> <a class="reference internal" href="burn.html#krpc.ksa.BurnService" title="krpc.ksa.BurnService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Burn</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.AddBurn">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">AddBurn</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.AddBurnRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.AddBurnResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.AddBurn" title="Link to this definition">#</a></dt>
+<dd><p>Plan a burn, and add it to the vehicle’s burn plan.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.AddBurnRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ut</span></code> (<code class="docutils literal notranslate"><span class="pre">double</span></code>): Universal time of the burn, in seconds.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prograde</span></code> (<code class="docutils literal notranslate"><span class="pre">optional</span> <span class="pre">float</span></code>): Change in velocity in the prograde direction, in meters per second. Defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">normal</span></code> (<code class="docutils literal notranslate"><span class="pre">optional</span> <span class="pre">float</span></code>): Change in velocity along the orbit normal, in meters per second. Defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">radial</span></code> (<code class="docutils literal notranslate"><span class="pre">optional</span> <span class="pre">float</span></code>): Change in velocity radially outward, in meters per second. Defaults to <code class="docutils literal notranslate"><span class="pre">0.0</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.AddBurnResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="burn.html#krpc.ksa.BurnService" title="krpc.ksa.BurnService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Burn</span></code></a>): The burn.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Returns once the flight computer has timed the burn, if it is the next one. Throws
+an exception if the time is in the past, or beyond the vehicle’s predicted
+trajectory.</p>
+</div>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetOrbit">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetOrbit</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetOrbitRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetOrbitResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetOrbit" title="Link to this definition">#</a></dt>
+<dd><p>The current orbit of the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetOrbitRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetOrbitResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="orbit.html#krpc.ksa.OrbitService" title="krpc.ksa.OrbitService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Orbit</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetFlight">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetFlight</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetFlightRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetFlightResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetFlight" title="Link to this definition">#</a></dt>
+<dd><p>Flight telemetry for the vehicle, relative to the surface of the body it orbits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetFlightRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetFlightResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="flight.html#krpc.ksa.FlightService" title="krpc.ksa.FlightService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Flight</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetControl">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetControl</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetControlRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetControlResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetControl" title="Link to this definition">#</a></dt>
+<dd><p>The controls of the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetControlRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetControlResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="control.html#krpc.ksa.ControlService" title="krpc.ksa.ControlService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Control</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetAutoPilot">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetAutoPilot</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetAutoPilotRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetAutoPilotResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetAutoPilot" title="Link to this definition">#</a></dt>
+<dd><p>The auto-pilot of the vehicle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetAutoPilotRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetAutoPilotResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="auto-pilot.html#krpc.ksa.AutoPilotService" title="krpc.ksa.AutoPilotService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">AutoPilot</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetReferenceFrame">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetReferenceFrame</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetReferenceFrameRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetReferenceFrameResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame fixed to the vehicle, with its origin at the vehicle’s position.
+The x axis points forward, the y axis to the right and the z axis down, relative to
+the vehicle’s control point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetReferenceFrameRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetReferenceFrameResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetSurfaceReferenceFrame">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetSurfaceReferenceFrame</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetSurfaceReferenceFrameRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetSurfaceReferenceFrameResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetSurfaceReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame with its origin at the vehicle’s position, and axes aligned with
+the surface below it. The x axis points east, the y axis north and the z axis up.
+The frame rotates with the body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetSurfaceReferenceFrameRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetSurfaceReferenceFrameResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.GetOrbitalReferenceFrame">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetOrbitalReferenceFrame</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetOrbitalReferenceFrameRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.GetOrbitalReferenceFrameResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.GetOrbitalReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame with its origin at the vehicle’s position, and axes aligned with
+its orbit. The x axis points prograde, the y axis along the orbit normal and the z
+axis radially outward, perpendicular to the x axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.GetOrbitalReferenceFrameRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.GetOrbitalReferenceFrameResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.Position">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Position</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.PositionRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.PositionResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.Position" title="Link to this definition">#</a></dt>
+<dd><p>The position of the vehicle, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.PositionRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference_frame</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>): The reference frame of the position.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.PositionResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="../messages.html#krpc.ksa.Tuple_double_double_double" title="krpc.ksa.Tuple_double_double_double"><code class="xref grpc grpc-message docutils literal notranslate"><span class="pre">Tuple_double_double_double</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.Velocity">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Velocity</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.VelocityRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.VelocityResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.Velocity" title="Link to this definition">#</a></dt>
+<dd><p>The velocity of the vehicle, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.VelocityRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference_frame</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>): The reference frame of the velocity.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.VelocityResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="../messages.html#krpc.ksa.Tuple_double_double_double" title="krpc.ksa.Tuple_double_double_double"><code class="xref grpc grpc-message docutils literal notranslate"><span class="pre">Tuple_double_double_double</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.Direction">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Direction</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.DirectionRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.DirectionResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.Direction" title="Link to this definition">#</a></dt>
+<dd><p>The unit vector in which the vehicle points, the x axis of
+<a class="reference internal" href="#krpc.ksa.VehicleService.GetReferenceFrame" title="krpc.ksa.VehicleService.GetReferenceFrame"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetReferenceFrame</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.DirectionRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference_frame</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>): The reference frame of the direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.DirectionResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="../messages.html#krpc.ksa.Tuple_double_double_double" title="krpc.ksa.Tuple_double_double_double"><code class="xref grpc grpc-message docutils literal notranslate"><span class="pre">Tuple_double_double_double</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.Rotation">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Rotation</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.RotationRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.RotationResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.Rotation" title="Link to this definition">#</a></dt>
+<dd><p>The rotation of <a class="reference internal" href="#krpc.ksa.VehicleService.GetReferenceFrame" title="krpc.ksa.VehicleService.GetReferenceFrame"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetReferenceFrame</span></code></a> relative to the given frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.RotationRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference_frame</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>): The reference frame of the rotation.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.RotationResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="../messages.html#krpc.ksa.Tuple_double_double_double_double" title="krpc.ksa.Tuple_double_double_double_double"><code class="xref grpc grpc-message docutils literal notranslate"><span class="pre">Tuple_double_double_double_double</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleService.AngularVelocity">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">AngularVelocity</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.AngularVelocityRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">Vehicle.AngularVelocityResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleService.AngularVelocity" title="Link to this definition">#</a></dt>
+<dd><p>The angular velocity of the vehicle, in radians per second. The vector points along
+the axis of rotation, and its length is the rate of rotation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Vehicle.AngularVelocityRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleService" title="krpc.ksa.VehicleService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">Vehicle</span></code></a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reference_frame</span></code> (<a class="reference internal" href="reference-frame.html#krpc.ksa.ReferenceFrameService" title="krpc.ksa.ReferenceFrameService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a>): The reference frame of the angular velocity.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Vehicle.AngularVelocityResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<a class="reference internal" href="../messages.html#krpc.ksa.Tuple_double_double_double" title="krpc.ksa.Tuple_double_double_double"><code class="xref grpc grpc-message docutils literal notranslate"><span class="pre">Tuple_double_double_double</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc enum">
+<dt class="sig sig-object grpc" id="krpc.ksa.Situation">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">Situation</span></span><a class="headerlink" href="#krpc.ksa.Situation" title="Link to this definition">#</a></dt>
+<dd><p>The situation of a vehicle: its contact with the surface, and whether the game is
+simulating it with physics or propagating it along its orbit.
+See <a class="reference internal" href="#krpc.ksa.VehicleService.GetSituation" title="krpc.ksa.VehicleService.GetSituation"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">VehicleService.GetSituation</span></code></a>.</p>
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.Situation.SITUATION_MANEUVERING">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SITUATION_MANEUVERING</span></span><a class="headerlink" href="#krpc.ksa.Situation.SITUATION_MANEUVERING" title="Link to this definition">#</a></dt>
+<dd><p>No surface contact, simulated with physics.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.Situation.SITUATION_FREEFALL">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SITUATION_FREEFALL</span></span><a class="headerlink" href="#krpc.ksa.Situation.SITUATION_FREEFALL" title="Link to this definition">#</a></dt>
+<dd><p>No surface contact, on rails.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.Situation.SITUATION_ROLLING">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SITUATION_ROLLING</span></span><a class="headerlink" href="#krpc.ksa.Situation.SITUATION_ROLLING" title="Link to this definition">#</a></dt>
+<dd><p>On terrain, simulated with physics.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.Situation.SITUATION_LANDED">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SITUATION_LANDED</span></span><a class="headerlink" href="#krpc.ksa.Situation.SITUATION_LANDED" title="Link to this definition">#</a></dt>
+<dd><p>At rest on terrain.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.Situation.SITUATION_SAILING">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SITUATION_SAILING</span></span><a class="headerlink" href="#krpc.ksa.Situation.SITUATION_SAILING" title="Link to this definition">#</a></dt>
+<dd><p>In the ocean, simulated with physics.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.Situation.SITUATION_FLOATING">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SITUATION_FLOATING</span></span><a class="headerlink" href="#krpc.ksa.Situation.SITUATION_FLOATING" title="Link to this definition">#</a></dt>
+<dd><p>At rest in the ocean.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.Situation.SITUATION_DRAGGING">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SITUATION_DRAGGING</span></span><a class="headerlink" href="#krpc.ksa.Situation.SITUATION_DRAGGING" title="Link to this definition">#</a></dt>
+<dd><p>On terrain and in the ocean, simulated with physics.</p>
+</dd></dl>
+
+<dl class="grpc value">
+<dt class="sig sig-object grpc" id="krpc.ksa.Situation.SITUATION_BOTTOMED">
+<span class="k"><span class="pre">value</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">SITUATION_BOTTOMED</span></span><a class="headerlink" href="#krpc.ksa.Situation.SITUATION_BOTTOMED" title="Link to this definition">#</a></dt>
+<dd><p>At rest on terrain and in the ocean.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="grpc service">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleDesignService">
+<span class="k"><span class="pre">service</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">VehicleDesignService</span></span><a class="headerlink" href="#krpc.ksa.VehicleDesignService" title="Link to this definition">#</a></dt>
+<dd><p>A vehicle design that can be launched: one of the game’s default vehicles, or a vehicle
+saved by the player in the editor. Obtained from <a class="reference internal" href="ksa.html#krpc.ksa.KSAService.GetVehicleDesigns" title="krpc.ksa.KSAService.GetVehicleDesigns"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">KSAService.GetVehicleDesigns</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The mass and delta-v are those the editor shows for the design.</p>
+</div>
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleDesignService.GetName">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetName</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">VehicleDesign.GetNameRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">VehicleDesign.GetNameResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleDesignService.GetName" title="Link to this definition">#</a></dt>
+<dd><p>The name of the design, as passed to <a class="reference internal" href="ksa.html#krpc.ksa.KSAService.LaunchVehicle" title="krpc.ksa.KSAService.LaunchVehicle"><code class="xref grpc grpc-rpc docutils literal notranslate"><span class="pre">KSAService.LaunchVehicle</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">VehicleDesign.GetNameRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleDesignService" title="krpc.ksa.VehicleDesignService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">VehicleDesign</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">VehicleDesign.GetNameResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">string</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleDesignService.GetIsDefault">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetIsDefault</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">VehicleDesign.GetIsDefaultRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">VehicleDesign.GetIsDefaultResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleDesignService.GetIsDefault" title="Link to this definition">#</a></dt>
+<dd><p>Whether the design is one of the game’s default vehicles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">VehicleDesign.GetIsDefaultRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleDesignService" title="krpc.ksa.VehicleDesignService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">VehicleDesign</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">VehicleDesign.GetIsDefaultResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleDesignService.GetPartCount">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetPartCount</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">VehicleDesign.GetPartCountRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">VehicleDesign.GetPartCountResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleDesignService.GetPartCount" title="Link to this definition">#</a></dt>
+<dd><p>The number of parts in the design.</p>
+<dl class="field-list simple">
+<dt class="field-odd">VehicleDesign.GetPartCountRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleDesignService" title="krpc.ksa.VehicleDesignService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">VehicleDesign</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">VehicleDesign.GetPartCountResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">sint32</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleDesignService.GetMass">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetMass</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">VehicleDesign.GetMassRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">VehicleDesign.GetMassResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleDesignService.GetMass" title="Link to this definition">#</a></dt>
+<dd><p>The total mass of the design, including propellant, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">VehicleDesign.GetMassRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleDesignService" title="krpc.ksa.VehicleDesignService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">VehicleDesign</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">VehicleDesign.GetMassResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleDesignService.GetDryMass">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDryMass</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">VehicleDesign.GetDryMassRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">VehicleDesign.GetDryMassResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleDesignService.GetDryMass" title="Link to this definition">#</a></dt>
+<dd><p>The mass of the design without propellant, in kilograms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">VehicleDesign.GetDryMassRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleDesignService" title="krpc.ksa.VehicleDesignService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">VehicleDesign</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">VehicleDesign.GetDryMassResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="grpc rpc">
+<dt class="sig sig-object grpc" id="krpc.ksa.VehicleDesignService.GetDeltaV">
+<span class="k"><span class="pre">rpc</span></span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetDeltaV</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">VehicleDesign.GetDeltaVRequest</span></span><span class="p"><span class="pre">)</span></span><span class="w"> </span><span class="k"><span class="pre">returns</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="n"><span class="pre">VehicleDesign.GetDeltaVResponse</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#krpc.ksa.VehicleDesignService.GetDeltaV" title="Link to this definition">#</a></dt>
+<dd><p>The change in velocity of all the design’s sequences, in meters per second.</p>
+<dl class="field-list simple">
+<dt class="field-odd">VehicleDesign.GetDeltaVRequest<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">this</span></code> (<a class="reference internal" href="#krpc.ksa.VehicleDesignService" title="krpc.ksa.VehicleDesignService"><code class="xref grpc grpc-service docutils literal notranslate"><span class="pre">VehicleDesign</span></code></a>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">VehicleDesign.GetDeltaVResponse<span class="colon">:</span></dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">value</span></code> (<code class="docutils literal notranslate"><span class="pre">float</span></code>)</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each sequence is computed in the environment chosen for it in the editor, in vacuum
+or at sea level.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="ksa.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">KSA</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="sequence.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Sequence</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/grpc/api/ksa/vehicle.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026 kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

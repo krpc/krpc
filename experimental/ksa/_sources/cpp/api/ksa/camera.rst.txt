@@ -1,0 +1,124 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KSA
+
+Camera
+======
+
+
+.. class:: Camera
+
+   The game's main camera. Obtained from :func:`camera`.
+
+   .. function:: CameraMode mode()
+   .. function:: void set_mode(CameraMode value)
+
+      The mode of the camera.
+
+   
+
+      .. note::
+
+         Setting :enumerator:`CameraMode::iva` while the camera is not focused on a vehicle
+         with a crew seat sets :enumerator:`CameraMode::orbit` instead, as the game does. A
+         change of mode releases the active vehicle's held rotation and translation inputs.
+
+   .. function:: float azimuth()
+   .. function:: void set_azimuth(float value)
+
+      The angle of the camera around the focused object, in degrees. Throws an exception
+      in any mode other than orbit and map.
+
+   
+
+   .. function:: float elevation()
+   .. function:: void set_elevation(float value)
+
+      The angle of the camera above the plane it orbits in, in degrees, between -90 and
+      90. Throws an exception in any mode other than orbit and map.
+
+   
+
+   .. function:: float distance()
+   .. function:: void set_distance(float value)
+
+      The distance from the camera to the focused object, in meters. Throws an exception
+      in any mode other than orbit and map.
+
+   
+
+      .. note::
+
+         The camera moves smoothly to a new distance, and stays at least the focused object's
+         radius from it in map mode, and half its radius in orbit mode.
+
+   .. function:: float field_of_view()
+   .. function:: void set_field_of_view(float value)
+
+      The camera's vertical field of view, in degrees, between 15 and 120.
+
+   
+
+   .. function:: std::optional<Vehicle> focused_vehicle()
+   .. function:: void set_focused_vehicle(std::optional<Vehicle> value)
+
+      Returns the vehicle the camera is focused on, or ``NULL`` if it is focused on
+      something else, and sets the focus to a vehicle.
+
+   
+
+      .. note::
+
+         Setting the focus leaves the active vehicle as it is.
+
+   .. function:: std::optional<Body> focused_body()
+   .. function:: void set_focused_body(std::optional<Body> value)
+
+      Returns the body the camera is focused on, or ``NULL`` if it is focused on
+      something else, and sets the focus to a body.
+
+   
+
+   .. function:: std::optional<Kitten> focused_kitten()
+   .. function:: void set_focused_kitten(std::optional<Kitten> value)
+
+      Returns the kitten on EVA the camera is focused on, or ``NULL`` if it is focused
+      on something else, and sets the focus to a kitten on EVA.
+
+   
+
+      .. note::
+
+         Throws an exception if the kitten is not on EVA.
+
+
+
+.. namespace:: krpc::services::KSA
+.. enum-struct:: CameraMode
+
+   The mode of the camera. See :func:`Camera::mode`.
+
+
+   .. enumerator:: orbit
+
+      Orbits the focused object.
+
+
+   .. enumerator:: free
+
+      Flies freely.
+
+
+   .. enumerator:: map
+
+      The map view.
+
+
+   .. enumerator:: iva
+
+      Inside the vehicle, from a crew seat.
+
+
+   .. enumerator:: fixed
+
+      Fixed to a part of the vehicle, such as a docking port.
