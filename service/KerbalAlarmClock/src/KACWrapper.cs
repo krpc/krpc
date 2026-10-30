@@ -1,3 +1,6 @@
+// From Kerbal Alarm Clock (https://github.com/TriggerAu/KerbalAlarmClock), released under
+// the MIT license. Copyright (c) 2014, David Tregoning
+
 #pragma warning disable 1591
 #pragma warning disable 1572
 #pragma warning disable 1573

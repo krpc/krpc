@@ -803,6 +803,7 @@ namespace KRPC.Debug
             if (active != null && !active.packed) {
                 if (active.LandedOrSplashed)
                     return;
+                // The damping is from HyperEdit (GPLv3, https://github.com/Ezriilc/HyperEdit), Lander.cs
                 active.ChangeWorldVelocity ((active.srf_velocity + active.upAxis) * -0.5);
             }
             // Give up if the vessel never settles

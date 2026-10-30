@@ -1,10 +1,8 @@
 This license (LGPL v3) applies to all parts of kRPC except for the following:
 
-  - service/SpaceCenter/* is under the GPLv3 license.
+  - protobuf/* is under the MIT license.
 
-  - service/SpaceCenter/src/ExtensionMethods/StockAerodynamics.cs
-    is adapted from the KSP Trajectories mod (https://github.com/neuoy/KSPTrajectories)
-    released under the MIT License (MIT) by Youen Toupin, aka neuoy
+  - service/SpaceCenter/* is under the GPLv3 license.
 
   - service/Debug/* is under the GPLv3 license.
 
@@ -12,16 +10,33 @@ This license (LGPL v3) applies to all parts of kRPC except for the following:
 
   - tools/ServiceDefinitions/* is under the GPLv3 license.
 
-  - protobuf/* is under the MIT license.
+  - experimental/ksa/release/ holds the license files of the kRPC for KSA release,
+    which cover the third-party binaries it ships.
+
+Code adapted from other projects:
+
+  - service/SpaceCenter/src/Services/CelestialBody.cs: the surface raycast is adapted
+    from kOS (https://github.com/KSP-KOS/KOS), released under the GPLv3.
+
+  - service/SpaceCenter/src/Services/SpaceCenter.cs: the time warp control is adapted
+    from MechJeb2 (https://github.com/MuMech/MechJeb2), released under the GPLv3.
+
+  - service/SpaceCenter/src/ExtensionMethods/StockAerodynamics.cs is adapted from
+    the KSP Trajectories mod (https://github.com/neuoy/KSPTrajectories), released
+    under the MIT License (MIT) by Youen Toupin, aka neuoy
+
+  - service/Debug/src/Debug.cs: the landing velocity damping is from HyperEdit
+    (https://github.com/Ezriilc/HyperEdit), released under the GPLv3.
+
+  - service/KerbalAlarmClock/src/KACWrapper.cs is from Kerbal Alarm Clock
+    (https://github.com/TriggerAu/KerbalAlarmClock), released under the MIT License (MIT)
+    by David Tregoning
 
   - client/python/krpc/decoder.py contains code from Google's protobuf project.
     See tools/build/protobuf/LICENSE.Google.Protobuf
 
   - tools/TestingTools/src/AutoLoadGame.cs and AutoSwitchVessel.cs are adapted
     from the AutoLoadGame plugin, released under the MIT License (MIT) by Allis Tauri
-
-  - experimental/ksa/release/ holds the license files of the kRPC for KSA release,
-    which cover the third-party binaries it ships.
 
 Copyright 2015-2026 kRPC Org
 
