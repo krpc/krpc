@@ -31,6 +31,26 @@ namespace KRPC.KSA.Utils
         }
 
         /// <summary>
+        /// A direction normalized to a unit vector. Throws an exception if it is zero.
+        /// </summary>
+        public static double3 ToUnitVector (Tuple<double, double, double> vector, string name)
+        {
+            var result = ToVector (vector);
+            if (!(result.LengthSquared () > 0))
+                throw new ArgumentException ("The direction is zero", name);
+            return result.Normalized ();
+        }
+
+        /// <summary>
+        /// A unit vector perpendicular to a unit vector.
+        /// </summary>
+        public static double3 Perpendicular (double3 vector)
+        {
+            var axis = Math.Abs (vector.X) < 0.9 ? double3.UnitX : double3.UnitY;
+            return double3.Cross (vector, axis).Normalized ();
+        }
+
+        /// <summary>
         /// The vehicle's angular velocity in the ecliptic frame. The game gives the rates in
         /// the vehicle's body frame.
         /// </summary>

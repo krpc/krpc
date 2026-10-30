@@ -1,0 +1,16 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('KSA') }}
+{% import domain.macros as macros with context %}
+
+Drawing
+=======
+
+{{ macros.class(services['KSA'].classes['Drawing']) }}
+{{ macros.class(services['KSA'].classes['Line']) }}
+{{ macros.class(services['KSA'].classes['Polyline']) }}
+{{ macros.class(services['KSA'].classes['Circle']) }}
+{{ macros.class(services['KSA'].classes['Arc']) }}
+{{ macros.class(services['KSA'].classes['Box']) }}
+{{ macros.class(services['KSA'].classes['Sphere']) }}
+{{ macros.class(services['KSA'].classes['Text']) }}
