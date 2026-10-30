@@ -8,6 +8,6 @@ This package provides the connection API and the generated service stubs.
 
 ## Documentation
 
- * [Python client documentation](https://krpc.github.io/krpc/latest/python/client.html)
+ * [Python client documentation](https://krpc.github.io/krpc/latest/python.html)
  * [kRPC documentation](https://krpc.github.io/krpc)
  * [Source and issue tracker](https://github.com/krpc/krpc)

@@ -383,8 +383,8 @@ cc_binary_multiple(
     srcs = glob(
         ["src/scripts/**/*.c"],
         exclude = [
-            "src/scripts/cnano/client/ConnectingLocal.c",
-            "src/scripts/cnano/client/ConnectingTcp.c",
+            "src/scripts/cnano/ConnectingLocal.c",
+            "src/scripts/cnano/ConnectingTcp.c",
         ],
     ),
     deps = ["//client/cnano:krpc_cnano"],
@@ -392,13 +392,13 @@ cc_binary_multiple(
 
 cc_binary_multiple(
     name = "compile-scripts-cnano-tcpip",
-    srcs = ["src/scripts/cnano/client/ConnectingTcp.c"],
+    srcs = ["src/scripts/cnano/ConnectingTcp.c"],
     deps = ["//client/cnano:krpc_cnano_tcpip"],
 )
 
 cc_binary_multiple(
     name = "compile-scripts-cnano-localsocket",
-    srcs = ["src/scripts/cnano/client/ConnectingLocal.c"],
+    srcs = ["src/scripts/cnano/ConnectingLocal.c"],
     deps = ["//client/cnano:krpc_cnano_localsocket"],
 )
 

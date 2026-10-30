@@ -119,8 +119,7 @@ Going further...
 
 * For some more interesting examples of what you can do with kRPC, check out the
   :doc:`tutorials <tutorials>`.
-* Client libraries are available for other languages too, including :doc:`C# <csharp/client>`,
-  :doc:`C++ <cpp/client>`, :doc:`C <cnano/client>`, :doc:`Java <java/client>` and
-  :doc:`Lua <lua/client>`.
+* Client libraries are available for other languages too, including :doc:`C# <csharp>`,
+  :doc:`C++ <cpp>`, :doc:`C <cnano>`, :doc:`Java <java>` and :doc:`Lua <lua>`.
 * It is also possible to :doc:`communicate with the server manually <communication-protocols>` from
   any language you like.
