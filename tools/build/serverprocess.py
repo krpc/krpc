@@ -76,12 +76,15 @@ def socket_directory():
 
 
 def start(command, **kwargs):
-    """Start a process with its stdout and stderr merged onto a readable pipe."""
+    """Start a process with its stdout and stderr merged onto a readable pipe. A byte that
+    does not decode is replaced, as an error would end the thread draining the pipe."""
     return subprocess.Popen(
         command,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
+        encoding="utf-8",
+        errors="replace",
         bufsize=1,
         **kwargs,
     )
