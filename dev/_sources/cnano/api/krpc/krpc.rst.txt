@@ -41,7 +41,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 .. function:: krpc_error_t krpc_KRPC_Clients(krpc_connection_t connection, krpc_list_KRPC_ClientInfo_t * returnValue)
 
-   The RPC clients that are currently connected to the server.
+   The clients that are currently connected to the server.
 
    
 

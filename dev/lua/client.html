@@ -1123,7 +1123,7 @@ connect to a server running on the local machine:</p>
 <span class="nb">print</span><span class="p">(</span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="nf">get_status</span><span class="p">().</span><span class="nv">version</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This function also accepts arguments that specify what address and port numbers
+<p>This function also accepts arguments that specify what address and port
 to connect to. For example:</p>
 <div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">'Remote example'</span><span class="p">,</span><span class="w"> </span><span class="s1">'my.domain.name'</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span>
@@ -1157,7 +1157,7 @@ behaves when a game is loaded or what it identifies is destroyed.</p>
 <h2>Reference<a class="headerlink" href="#reference" title="Link to this heading">#</a></h2>
 <dl class="lua function" id="module-krpc">
 <dt class="sig sig-object lua" id="krpc.connect">
-<span class="property"> </span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">name=''</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">address='127.0.0.1'</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">rpc_port=50000</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
+<span class="property"> </span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">name=''</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">address='127.0.0.1'</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">port=50000</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">handshake_timeout=5</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
 <dd><p>This function creates a connection to a kRPC server. It returns a
 <a class="reference internal" href="#krpc.Client" title="krpc.Client"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">krpc.Client</span></code></a> object, through which the server can be communicated
 with.</p>
@@ -1170,7 +1170,13 @@ connection dialog on the in-game server window.</p></li>
 <li><p><strong>address</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The address of the server to connect to. Can either be
 a hostname or an IP address in dotted decimal
 notation. Defaults to ‘127.0.0.1’.</p></li>
-<li><p><strong>rpc_port</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The port number of the RPC Server. Defaults to 50000.</p></li>
+<li><p><strong>port</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The port number of the server. Defaults to 50000.</p></li>
+<li><p><strong>handshake_timeout</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – How many seconds to wait for the server to
+accept the connection before giving up.
+Defaults to 5. <code class="docutils literal notranslate"><span class="pre">false</span></code> waits
+indefinitely, such as for a server that
+asks the player to approve each
+connection.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1178,7 +1184,7 @@ notation. Defaults to ‘127.0.0.1’.</p></li>
 
 <dl class="lua function">
 <dt class="sig sig-object lua" id="krpc.krpc.connect_local">
-<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">name</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">rpc_path</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.krpc.connect_local" title="Link to this definition">#</a></dt>
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">name</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">path</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">handshake_timeout=5</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.krpc.connect_local" title="Link to this definition">#</a></dt>
 <dd><p>This function connects to a kRPC server running on the same machine, over a
 unix domain socket rather than TCP/IP. It returns a <a class="reference internal" href="#krpc.Client" title="krpc.Client"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Client</span></code></a> object,
 just as <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> does, and the connection behaves identically
@@ -1196,10 +1202,11 @@ and macOS.</p>
 <li><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – A descriptive name for the connection. This is passed to
 the server and appears, for example, in the client
 connection dialog on the in-game server window.</p></li>
-<li><p><strong>rpc_path</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The path of the socket the RPC Server is listening
-on. This should match the RPC socket path shown in
-the in-game server window. Defaults to the path the
+<li><p><strong>path</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The path of the socket the server is listening on.
+This should match the socket path shown in the
+in-game server window. Defaults to the path the
 server uses unless it was configured with another.</p></li>
+<li><p><strong>handshake_timeout</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – As for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1231,7 +1238,7 @@ server. Instances of this class should be obtained by calling
 <dl class="lua method">
 <dt class="sig sig-object lua" id="krpc.Client.close">
 <span class="property"> </span><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Client.close" title="Link to this definition">#</a></dt>
-<dd><p>Closes the connection to the server.</p>
+<dd><p>Tells the server the connection is closing, then closes it.</p>
 </dd></dl>
 
 <dl class="lua attribute">

@@ -19,48 +19,39 @@ Sending and Receiving Messages
 ------------------------------
 
 Identical to :doc:`tcpip`: messages are encoded according to the protobuf binary format, and are
-prefixed with their size in bytes encoded as a Protocol Buffers varint.
+prefixed with their size in bytes encoded as a Protocol Buffers varint. Every message is a
+``Message``.
 
-Connecting to the RPC Server
-----------------------------
+Connecting to the Server
+------------------------
 
 The handshake is identical to :doc:`tcpip`, differing only in how the connection is opened:
 
-1. Open a unix domain socket to the path the RPC server is listening on. The server window shows
-   the path, which by default is ``krpc/rpc`` inside the directory named by the
-   ``XDG_RUNTIME_DIR`` environment variable, or by ``LOCALAPPDATA`` on Windows. See
-   `Default Socket Paths`_ for the whole rule.
+1. Open a unix domain socket to the path the server is listening on. The server window shows the
+   path, which by default is ``krpc.sock`` inside the directory named by the ``XDG_RUNTIME_DIR``
+   environment variable, or by ``LOCALAPPDATA`` on Windows. See `Default Socket Path`_ for the
+   whole rule.
 
-2. Send a ``ConnectionRequest`` message with its ``type`` field set to ``ConnectionRequest.RPC``
-   and its ``protocol_version`` field set to 1, exactly as for TCP/IP.
+2. Send a ``Message`` holding a ``connection_request``, with its ``protocol_version`` field set to
+   2, exactly as for TCP/IP.
 
-3. Receive a ``ConnectionResponse`` message, check that ``status`` is ``ConnectionResponse.OK``
-   and ``protocol_version`` is 1, and keep the 16-byte ``client_identifier`` for the stream
-   connection.
+3. Receive a ``Message`` holding the server's ``connection_response``, and check that its
+   ``status`` field is ``ConnectionResponse.OK`` and its ``protocol_version`` is 2.
 
-Connecting to the Stream Server
--------------------------------
+Ending the connection is also identical to :doc:`tcpip`.
 
-As for :doc:`tcpip`, open a second connection, this time to the stream server's socket path
-(``krpc/stream`` by default), and send a ``ConnectionRequest`` with its ``type`` field set to
-``ConnectionRequest.STREAM``, its ``protocol_version`` field set to 1, and its
-``client_identifier`` field set to the value received above.
+Default Socket Path
+-------------------
 
-Connecting to the stream server is optional. If the client doesn't require stream functionality,
-there is no need to connect.
+The server and its clients each compute the default path for themselves. They meet only by
+following the same rule:
 
-Default Socket Paths
---------------------
-
-The server and its clients each compute the default paths for themselves. They meet only by
-following the same rule. For a socket named ``rpc`` or ``stream``:
-
-1. If ``XDG_RUNTIME_DIR`` is set and not empty, the path is ``krpc/<name>`` inside it. On Windows
+1. If ``XDG_RUNTIME_DIR`` is set and not empty, the path is ``krpc.sock`` inside it. On Windows
    ``LOCALAPPDATA`` is read instead, as there is no runtime directory there.
 
-2. Otherwise the path is ``krpc-<user>/<name>`` inside ``/tmp``, where ``<user>`` is the name of
+2. Otherwise the path is ``krpc-<user>.sock`` inside ``/tmp``, where ``<user>`` is the name of
    the account running the process. ``/tmp`` is fixed, as ``TMPDIR`` is set per process and would
-   move the directory for the server or the client alone. Windows always names a directory in
+   move the socket for the server or the client alone. Windows always names a directory in
    ``LOCALAPPDATA``, and so never reaches this step.
 
 The user name comes from the account database, as ``USER`` is unset in a process started without a
@@ -81,12 +72,12 @@ A stale file is indistinguishable from a live one, so the server connects to the
 refuses to start if the connection succeeds. A path holding a file with content is left alone.
 
 The permissions on the socket and on the directory holding it control access to the server.
-``XDG_RUNTIME_DIR`` and ``LOCALAPPDATA`` are private to the account they belong to, so sockets
-placed there are reachable only by that user.
+``XDG_RUNTIME_DIR`` and ``LOCALAPPDATA`` are private to the account they belong to, so a socket
+placed there is reachable only by that user.
 
-The ``/tmp`` fallback is created with whatever the process ``umask`` allows, which can leave the
-socket open to the user's group. Set ``XDG_RUNTIME_DIR`` or configure the paths where that
-matters.
+The ``/tmp`` fallback socket sits directly in ``/tmp``. Its permissions follow the process ``umask``,
+which can leave the socket open to the user's group. Set ``XDG_RUNTIME_DIR`` or configure the path
+where that matters.
 
 Invoking Remote Procedures
 --------------------------
@@ -96,9 +87,9 @@ See :doc:`messages`.
 Examples
 --------
 
-The following Python code connects to the RPC server over a local socket using the name "Jeb", then
-invokes the ``KRPC.GetStatus`` RPC and prints the server version number from the response. The
-message encoding is identical to the TCP/IP protocol; only the socket differs.
+The following Python code connects to the server over a local socket using the name "Jeb", then
+invokes the ``KRPC.GetStatus`` RPC. It prints the server version number from the response, and
+ends the connection. The message encoding is identical to the TCP/IP protocol; only the socket differs.
 
 It is written for the POSIX socket API, so it runs on Linux and macOS. The protocol is the same on
 Windows, where the address family is reached through winsock, as Python's socket module does not

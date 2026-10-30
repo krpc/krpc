@@ -27,7 +27,7 @@ Getting Started
 
 To connect to a server, create a :type:`Connection` object. All interaction with the server is done
 via this object. When constructed without any arguments, it will connect to the local machine on the
-default port numbers. You can specify different connection settings, and also a descriptive name for
+default port. You can specify different connection settings, and also a descriptive name for
 the connection, as follows:
 
 .. literalinclude:: /scripts/csharp/client/Connecting.cs
@@ -35,6 +35,12 @@ the connection, as follows:
 The :type:`Connection` object needs to be disposed of correctly when finished with, so that the
 network connection it manages can be released. This can be done with a ``using`` block (as in the
 example above) or by calling :meth:`Connection.Dispose` directly.
+
+.. note::
+
+   A server with "Auto-accept new clients" turned off answers only once the player approves the
+   connection, and the client gives up after 5 seconds by default. Pass ``handshakeTimeout: Timeout.InfiniteTimeSpan`` to wait
+   for the player.
 
 Calling Remote Procedures
 -------------------------
@@ -143,6 +149,10 @@ This code creates a stream, acquires a lock on the streams condition variable (b
 statement) and then repeatedly checks the value of ``Abort``. It leaves the loop when it changes to
 true.
 
+While a thread holds the lock, the value of the stream changes only when the condition variable is
+notified. A check of the value and the wait that follows it therefore see the same updates. A
+wait returns for a value newer than the last one the thread read, with or without the lock.
+
 The body of the loop calls ``Wait`` on the stream, which causes the program to block until the value
 changes. This prevents the loop from 'spinning' and so it does not consume processing resources
 whilst waiting.
@@ -163,8 +173,9 @@ A callback added to a stream that already has a value is called with that value 
 
 .. note::
 
-   The callback function may be called from a different thread than the one that created the
-   stream. Any changes to shared state must therefore be protected with appropriate
+   Callbacks run on the client's callback thread, one at a time, and may make remote
+   procedure calls. A callback must not wait on a stream, as the same thread wakes the
+   stream's waiters. Any changes to shared state must be protected with appropriate
    synchronization.
 
 Stream Endings
@@ -382,7 +393,7 @@ Client API Reference
    A connection to the kRPC server. All interaction with kRPC is performed via an instance of this
    class.
 
-   .. function:: Connection(string name = "", System.Net.IPAddress address = null, int rpcPort = 50000, int streamPort = 50001, System.TimeSpan timeout = default)
+   .. function:: Connection(string name = "", System.Net.IPAddress address = null, int port = 50000, System.TimeSpan timeout = default, System.TimeSpan? handshakeTimeout = null, System.TimeSpan? stallTimeout = null)
 
       Connect to a kRPC server.
 
@@ -391,17 +402,26 @@ Client API Reference
        * **name** -- A descriptive name for the connection. This is passed to the server and appears
          in the in-game server window.
        * **address** -- The address of the server to connect to. Defaults to 127.0.0.1.
-       * **rpc_port** -- The port number of the RPC Server. Defaults to 50000. This should match the
-         RPC port number of the server you want to connect to.
-       * **stream_port** -- The port number of the Stream Server. Defaults to 50001. This should
-         match the stream port number of the server you want to connect to.
+       * **port** -- The port number of the server. Defaults to 50000. This should match the
+         port number of the server you want to connect to.
        * **timeout** -- How long to wait for a connection before giving up. Defaults to zero,
          which waits indefinitely. A network that drops a connection attempt rather than refusing
          it otherwise leaves the client waiting.
+       * **handshakeTimeout** -- How long to wait for the server to accept the connection before
+         giving up. Defaults to 5 seconds. ``Timeout.InfiniteTimeSpan`` waits indefinitely, such
+         as for a server that asks the player to approve each connection.
+       * **stallTimeout** -- How long a message from the server can go without a new byte, once it
+         has started to arrive, before the connection fails. Defaults to 30 seconds.
+         ``Timeout.InfiniteTimeSpan`` waits indefinitely.
 
-   .. function:: static Connection ConnectLocal(string name = "", string rpcPath = "", string streamPath = "")
+      Throws a ``ConnectionException`` if the server refuses the connection. Its ``Status``
+      property holds the status the server gave, such as ``Denied``. An exception thrown when the
+      server ends the connection holds the reason in its ``Reason`` property, such as
+      ``ServerStopped``.
 
-      Connect to a kRPC server running on the same machine, over unix domain sockets rather than
+   .. function:: static Connection ConnectLocal(string name = "", string path = "", System.TimeSpan? handshakeTimeout = null, System.TimeSpan? stallTimeout = null)
+
+      Connect to a kRPC server running on the same machine, over a unix domain socket rather than
       TCP/IP. The connection behaves identically once established. Unix domain sockets are
       available on Linux, macOS, and Windows 10 1803 and Windows Server 2019 or later.
 
@@ -409,12 +429,11 @@ Client API Reference
 
        * **name** -- A descriptive name for the connection. This is passed to the server and appears
          in the in-game server window.
-       * **rpcPath** -- The path of the socket the RPC Server is listening on. This should match the
-         RPC socket path shown in the in-game server window. Leave empty for the path the server
-         uses unless it was configured with another.
-       * **streamPath** -- The path of the socket the Stream Server is listening on. This should
-         match the stream socket path shown in the in-game server window. Defaults as ``rpcPath``
-         does. Pass ``null`` to connect without stream support.
+       * **path** -- The path of the socket the server is listening on. This should match the
+         socket path shown in the in-game server window. Leave empty for the path the server uses
+         unless it was configured with another.
+       * **handshakeTimeout** -- As for the constructor.
+       * **stallTimeout** -- As for the constructor.
 
    .. function:: Stream<ReturnType> AddStream<ReturnType>(LambdaExpression expression)
 
@@ -486,7 +505,7 @@ Client API Reference
 
    .. function:: void Dispose()
 
-      Closes the connection and frees the resources associated with it.
+      Tells the server the connection is ending, then closes it and frees its resources.
 
 .. class:: RemoteObject
 
@@ -550,8 +569,9 @@ Client API Reference
 
       .. note::
 
-         The callback function may be called from a different thread than the one that created the
-         stream. Any changes to shared state must therefore be protected with appropriate
+         Callbacks run on the client's callback thread, one at a time, and may make remote
+         procedure calls. A callback must not wait on a stream, as the same thread wakes the
+         stream's waiters. Any changes to shared state must be protected with appropriate
          synchronization.
 
    .. function:: void RemoveCallback(int tag)

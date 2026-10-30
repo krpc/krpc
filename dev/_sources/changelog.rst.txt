@@ -18,11 +18,32 @@ Core
 * :breaking:`Breaking` Refuse a service whose parameter defaults to a value its enumeration does not declare (:issue:`1192`)
 * Close a WebSockets connection whose frame is too large to buffer, which threw ``OverflowException`` (:issue:`1193`)
 * Update a stream when its value changes between 0.0 and -0.0, or a collection it returns changes in place (:issue:`1199`)
+* Connections
+
+  * :breaking:`Breaking` Carry each client on one connection, as protocol version 2, where every message is a ``Message``. Clients from earlier releases cannot connect (:issue:`1219`)
+  * Add an id to each request, which the server copies onto its response (:issue:`1219`)
+  * End a connection with a ``Disconnect`` message giving the reason (:issue:`1219`)
+  * Refuse a connection the player denies with the status ``DENIED`` (:issue:`1219`)
+  * Start a new session on a ``ConnectionRequest`` sent during a session, on every transport (:issue:`1219`)
+  * Accept the stream RPCs over serial IO, which returned an error, with no flow control for their updates (:issue:`1219`)
+  * End a connection whose message stalls partway, after 3 seconds over serial IO and 30 seconds otherwise (:issue:`1219`)
+  * Name a client in log lines by its address and the start of its identifier (:issue:`1219`)
+  * Log each request at the debug level as one line naming its calls and their errors, and stop logging each stream update (:issue:`1219`)
+  * Move the default local socket to ``krpc.sock`` in ``XDG_RUNTIME_DIR`` or ``LOCALAPPDATA``, or to ``/tmp/krpc-<user>.sock`` (:issue:`1219`)
+
 * Exceptions
 
   * Report the .NET exception each kRPC exception stands for, as ``mapped_type`` in ``KRPC.Exception`` (:issue:`1172`)
   * Allow a ``<see cref>`` in service documentation to link to an exception, including a .NET exception that a kRPC exception maps (:issue:`1185`)
 
+
+
+Server
+^^^^^^
+
+* :breaking:`Breaking` Listen on one port or socket path per server, removing the stream port and stream path settings (:issue:`1219`)
+* :breaking:`Breaking` Reset each existing server's settings to their defaults, so a TCP/IP and a WebSockets server both use port 50000 until one is changed (:issue:`1219`)
+* :breaking:`Breaking` Turn on "Auto-accept new clients" for new installs. An existing settings file keeps its value (:issue:`1219`)
 
 
 SpaceCenter service
@@ -42,6 +63,12 @@ SpaceCenter service
 C-nano client
 ^^^^^^^^^^^^^
 
+* :breaking:`Breaking` Connect with protocol version 2 (:issue:`1219`)
+* :breaking:`Breaking` Remove ``KRPC_SINGLE_CONNECTION``, as every mechanism opens one connection (:issue:`1219`)
+* :breaking:`Breaking` Return ``KRPC_ERROR_CONNECTION_REFUSED`` from ``krpc_connect`` when the server denies the connection or does not support the client's protocol version (:issue:`1219`)
+* :breaking:`Breaking` Return ``KRPC_ERROR_CONNECTION_FAILED`` from ``krpc_connect`` when the server's response cannot be read (:issue:`1219`)
+* Add ``krpc_disconnect``, which sends the server a disconnect message before closing the connection (:issue:`1219`)
+* Skip messages an earlier session left on a serial line while connecting (:issue:`1219`)
 * Name the references in service documentation by their C names (:issue:`1185`)
 * Document every parameter of a service function, with the value returned under ``returnValue`` (:issue:`1185`)
 * Fix the documentation of the services that Doxygen warns about, such as code holding an ``@`` (:issue:`1185`)
@@ -50,6 +77,25 @@ C-nano client
 C# client
 ^^^^^^^^^
 
+* Connections
+
+  * :breaking:`Breaking` Connect over one connection, removing the ``streamPort`` and ``streamPath`` parameters of the ``Connection`` constructor and ``Connection.ConnectLocal``. A server from before 0.8 refuses the connection (:issue:`1219`)
+  * :breaking:`Breaking` Rename the ``rpcPort`` and ``rpcPath`` parameters of the ``Connection`` constructor and ``Connection.ConnectLocal`` to ``port`` and ``path`` (:issue:`1219`)
+  * :breaking:`Breaking` Give up after 5 seconds if the server does not accept the connection. Pass a ``handshakeTimeout`` of ``Timeout.InfiniteTimeSpan`` to wait for the player to approve it (:issue:`1219`)
+  * Add ``handshakeTimeout`` and ``stallTimeout`` parameters to the ``Connection`` constructor and ``Connection.ConnectLocal`` (:issue:`1219`)
+  * Send calls from several threads without waiting for each other's responses (:issue:`1219`)
+  * Tell the server when the connection is disposed (:issue:`1219`)
+  * Add ``Status`` and ``Reason`` to ``ConnectionException`` for a refused or ended connection (:issue:`1219`)
+  * :breaking:`Breaking` Throw ``ConnectionException`` when the server cannot be reached, with the ``SocketException`` as its inner exception (:issue:`1219`)
+  * Keep a thread interrupt pending across ``Dispose``, which closes the connection in full (:issue:`1219`)
+
+* Streams and events
+
+  * :breaking:`Breaking` Throw ``StreamRemovedException`` when reading or waiting on a removed stream or event (:issue:`1219`)
+  * :breaking:`Breaking` Wait with no deadline in ``Stream.Wait`` and ``Event.Wait`` by default, or for an infinite timeout, and throw ``ArgumentOutOfRangeException`` for a negative or NaN one (:issue:`1219`)
+  * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
+
+* :breaking:`Breaking` Regenerate service stubs generated before 0.7.0, which can miss the first update of a stream or event they return (:issue:`1219`)
 * Fix the links in service documentation, which named no type or member (:issue:`1185`)
 * Fix a nullable enum return value, which threw ``InvalidCastException`` (:issue:`1194`)
 * Exceptions
@@ -60,6 +106,22 @@ C# client
 
 C++ client
 ^^^^^^^^^^
+
+* Connections
+
+  * :breaking:`Breaking` Connect over one connection, removing the ``stream_port`` and ``stream_path`` parameters of ``connect`` and ``connect_local``. A server from before 0.8 refuses the connection (:issue:`1219`)
+  * :breaking:`Breaking` Give up after 5 seconds if the server does not accept the connection. Pass a ``handshake_timeout`` of zero to wait for the player to approve it (:issue:`1219`)
+  * Add ``handshake_timeout`` and ``stall_timeout`` parameters to ``connect`` and ``connect_local`` (:issue:`1219`)
+  * Send calls from several threads without waiting for each other's responses (:issue:`1219`)
+  * Tell the server when the last client is released (:issue:`1219`)
+  * Add ``status`` and ``reason`` to ``ConnectionError`` for a refused or ended connection (:issue:`1219`)
+  * :breaking:`Breaking` Throw ``ConnectionError`` when the server cannot be reached, nesting the error from the socket (:issue:`1219`)
+
+* Streams and events
+
+  * :breaking:`Breaking` Remove a stream or event from the server when its last copy is destroyed (:issue:`1219`)
+  * :breaking:`Breaking` Remove ``Client::remove_stream`` and the ``Stream`` constructor taking a stream id. Remove a stream through its stream object (:issue:`1219`)
+  * :breaking:`Breaking` Wait with no deadline in ``Stream::wait`` and ``Event::wait`` by default, or for an infinite timeout, and throw ``std::invalid_argument`` for a negative or NaN one (:issue:`1219`)
 
 * Fix the documentation of the services that Doxygen warns about, such as parameter names that do not match (:issue:`1185`)
 * Throw ``EncodingError`` when decoding a tuple of the wrong length, which crashed (:issue:`1194`)
@@ -73,6 +135,22 @@ C++ client
 Java client
 ^^^^^^^^^^^
 
+* Connections
+
+  * :breaking:`Breaking` Connect over one connection, removing the stream port and stream path parameters of ``Connection.newInstance`` and ``Connection.newLocalInstance``. A server from before 0.8 refuses the connection (:issue:`1219`)
+  * :breaking:`Breaking` Give up after 5 seconds if the server does not accept the connection. Pass a handshake timeout of ``Duration.ZERO`` to wait for the player to approve it (:issue:`1219`)
+  * Add overloads of ``Connection.newInstance`` and ``Connection.newLocalInstance`` taking a handshake timeout and a stall timeout (:issue:`1219`)
+  * Send calls from several threads without waiting for each other's responses (:issue:`1219`)
+  * Tell the server when the connection closes (:issue:`1219`)
+  * Fix an interrupted call closing the connection (:issue:`1219`)
+  * Add ``getStatus`` and ``getReason`` to ``ConnectionException`` for a refused or ended connection (:issue:`1219`)
+  * Throw ``ConnectionException`` when the server cannot be reached or its host name does not resolve (:issue:`1219`)
+
+* Streams and events
+
+  * :breaking:`Breaking` Throw ``IllegalArgumentException`` from ``waitForUpdateWithTimeout`` and ``waitForWithTimeout`` for a negative or NaN timeout, and wait with no deadline for an infinite one (:issue:`1219`)
+  * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
+
 * Fix the links to members in the javadoc of the services, which named no method (:issue:`1185`)
 * Fix the javadoc of the services that ``javadoc`` rejects, such as lists and setters with a ``@return`` tag (:issue:`1185`)
 * Exceptions
@@ -81,8 +159,33 @@ Java client
 
 
 
+Lua client
+^^^^^^^^^^
+
+* :breaking:`Breaking` Connect with protocol version 2, and fail to connect to a server from before 0.8 (:issue:`1219`)
+* Add a ``handshake_timeout`` parameter to ``connect`` and ``connect_local`` (:issue:`1219`)
+* Tell the server when the connection closes (:issue:`1219`)
+
+
 Python client
 ^^^^^^^^^^^^^
+
+* Connections
+
+  * :breaking:`Breaking` Connect over one connection, removing the ``stream_port`` and ``stream_path`` parameters of ``connect`` and ``connect_local``. A server from before 0.8 refuses the connection (:issue:`1219`)
+  * :breaking:`Breaking` Rename the ``rpc_port`` and ``rpc_path`` parameters of ``connect`` and ``connect_local`` to ``port`` and ``path`` (:issue:`1219`)
+  * :breaking:`Breaking` Give up after 5 seconds if the server does not accept the connection. Pass ``handshake_timeout=None`` to wait for the player to approve it (:issue:`1219`)
+  * Add ``handshake_timeout`` and ``stall_timeout`` parameters to ``connect`` and ``connect_local`` (:issue:`1219`)
+  * Send calls from several threads without waiting for each other's responses (:issue:`1219`)
+  * Fix later calls reading the wrong response after a call is interrupted by an exception (:issue:`1219`)
+  * Tell the server when the connection closes (:issue:`1219`)
+  * Add ``status`` and ``reason`` to ``ConnectionError`` for a refused or ended connection (:issue:`1219`)
+  * :breaking:`Breaking` Raise ``ConnectionError`` when the server cannot be reached, with the ``OSError`` as its cause (:issue:`1219`)
+
+* Streams and events
+
+  * :breaking:`Breaking` Raise ``ValueError`` from ``Stream.wait`` and ``Event.wait`` for a negative or NaN timeout, and wait with no deadline for an infinite one (:issue:`1219`)
+  * Keep a stream running when a value fails to decode, dropping the value (:issue:`1219`)
 
 * Link the references in service docstrings with Sphinx roles (:issue:`1185`)
 * Fix the lists and parameter references in service docstrings, which were invalid reStructuredText (:issue:`1185`)

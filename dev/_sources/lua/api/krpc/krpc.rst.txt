@@ -41,7 +41,7 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 .. attribute:: clients: List
 
-   The RPC clients that are currently connected to the server.
+   The clients that are currently connected to the server.
 
    :Attribute: Read-only, cannot be set
    :rtype: List

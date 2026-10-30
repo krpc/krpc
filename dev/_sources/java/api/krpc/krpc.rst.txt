@@ -35,7 +35,7 @@ KRPC
    .. method:: java.util.List<ClientInfo> getClients()
 
 
-      The RPC clients that are currently connected to the server.
+      The clients that are currently connected to the server.
 
    
 

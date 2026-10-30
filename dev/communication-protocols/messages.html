@@ -499,19 +499,189 @@
 file (<a class="extlink-github-blob reference external" href="https://github.com/krpc/krpc/blob/main/protobuf/krpc.proto">schema/krpc.proto</a>)
 that defines the structure of these messages. It also contains versions of this file for Python, C#,
 C++, Java and Lua, compiled using <a class="reference external" href="https://github.com/google/protobuf">Google’s protocol buffers compiler</a>.</p>
+<section id="messages">
+<span id="communication-protocol-message"></span><h2>Messages<a class="headerlink" href="#messages" title="Link to this heading">#</a></h2>
+<p>Every message sent to or from the server is a <code class="docutils literal notranslate"><span class="pre">Message</span></code>, which holds one of the following:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Message</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">oneof</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Request</span><span class="w"> </span><span class="na">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Response</span><span class="w"> </span><span class="na">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">StreamUpdate</span><span class="w"> </span><span class="na">stream_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ConnectionRequest</span><span class="w"> </span><span class="na">connection_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">    </span><span class="n">ConnectionResponse</span><span class="w"> </span><span class="na">connection_response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Disconnect</span><span class="w"> </span><span class="na">disconnect</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A client sends <code class="docutils literal notranslate"><span class="pre">request</span></code>, <code class="docutils literal notranslate"><span class="pre">connection_request</span></code> and <code class="docutils literal notranslate"><span class="pre">disconnect</span></code> messages, and the server sends
+<code class="docutils literal notranslate"><span class="pre">response</span></code>, <code class="docutils literal notranslate"><span class="pre">stream_update</span></code>, <code class="docutils literal notranslate"><span class="pre">connection_response</span></code> and <code class="docutils literal notranslate"><span class="pre">disconnect</span></code> messages. A connection
+carries all of them, including the stream updates for the client’s streams. Each transport frames
+the messages in its own way, as its page describes.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">Message</span></code> holding a case the receiver does not know is skipped, once the connection has been
+established. A newer server can add cases this way. A case received in the wrong direction is a
+protocol error, and ends the connection.</p>
+<section id="connecting">
+<span id="communication-protocol-handshake"></span><h3>Connecting<a class="headerlink" href="#connecting" title="Link to this heading">#</a></h3>
+<p>A client connects by sending a <code class="docutils literal notranslate"><span class="pre">connection_request</span></code> as its first <code class="docutils literal notranslate"><span class="pre">Message</span></code>, and reading the
+server’s <code class="docutils literal notranslate"><span class="pre">connection_response</span></code>:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">ConnectionRequest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">reserved</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">client_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">protocol_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">ConnectionResponse</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="na">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">enum</span><span class="w"> </span><span class="n">Status</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">reserved</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">    </span><span class="na">OK</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="na">MALFORMED_MESSAGE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="na">TIMEOUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">    </span><span class="na">WRONG_PROTOCOL_VERSION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">    </span><span class="na">DENIED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bytes</span><span class="w"> </span><span class="na">client_identifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">protocol_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Set <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> to 2. The <code class="docutils literal notranslate"><span class="pre">client_name</span></code> field can be set to the name of the client to
+display on the in-game UI. The server answers with one of the following statuses:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Status</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">OK</span></code></p></td>
+<td><p>The connection is established.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MALFORMED_MESSAGE</span></code></p></td>
+<td><p>The first message failed to parse, or was not a <code class="docutils literal notranslate"><span class="pre">connection_request</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">TIMEOUT</span></code></p></td>
+<td><p>No complete first message arrived within 3 seconds, or the first message stalled partway.
+Over serial IO only the stall applies. The stall limit is given under
+<a class="reference internal" href="#communication-protocol-disconnect"><span class="std std-ref">Ending a Connection</span></a>. Over WebSockets the 3 seconds include the
+upgrade, and the server closes a connection without a response if the upgrade has not
+completed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">WRONG_PROTOCOL_VERSION</span></code></p></td>
+<td><p>The server does not support the protocol version. See <a class="reference internal" href="../communication-protocols.html#communication-protocol-version"><span class="std std-ref">Protocol Version</span></a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DENIED</span></code></p></td>
+<td><p>The player, or a mod, denied the connection. A client does not retry it.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">message</span></code> field describes a refusal. When the connection is established, <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code>
+holds the version the server accepted, and <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> holds 16 bytes identifying the
+client. The identifier is the one <code class="docutils literal notranslate"><span class="pre">KRPC.GetClientID</span></code> returns, and the server’s log names a client
+by its first 4 bytes, in hex.</p>
+<p>The server writes nothing while the player decides whether to accept a connection. A client waits
+for the <code class="docutils literal notranslate"><span class="pre">connection_response</span></code> for up to its handshake timeout, and sends nothing else until it
+arrives.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">connection_request</span></code> sent during a session starts a new session on the same connection. The
+server reads it once the call before it has completed, ends the current session, and asks for the
+new one to be approved. A new session gets a new client identifier, and its request ids start
+again from 1.</p>
+</section>
+<section id="ending-a-connection">
+<span id="communication-protocol-disconnect"></span><h3>Ending a Connection<a class="headerlink" href="#ending-a-connection" title="Link to this heading">#</a></h3>
+<p>Either side ends a connection by sending a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code>, then closing the connection:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Disconnect</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Reason</span><span class="w"> </span><span class="na">reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">enum</span><span class="w"> </span><span class="n">Reason</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">CLOSED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="na">SERVER_STOPPED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="na">REMOVED</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">    </span><span class="na">MALFORMED_MESSAGE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">    </span><span class="na">PROTOCOL_ERROR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">    </span><span class="na">TIMEOUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The reasons are:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Reason</p></th>
+<th class="head"><p>Sent when</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">CLOSED</span></code></p></td>
+<td><p>The client closes the connection.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SERVER_STOPPED</span></code></p></td>
+<td><p>The server stops.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">REMOVED</span></code></p></td>
+<td><p>The player removes the client from the server window.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MALFORMED_MESSAGE</span></code></p></td>
+<td><p>A message fails to parse, or a request fails to read.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PROTOCOL_ERROR</span></code></p></td>
+<td><p>A message arrives that the receiver did not expect, or a response has an id that matches no
+waiting or abandoned request.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">TIMEOUT</span></code></p></td>
+<td><p>A partial message stalls.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The reason and the <code class="docutils literal notranslate"><span class="pre">message</span></code> field are informational. A program that crashes sends no
+<code class="docutils literal notranslate"><span class="pre">disconnect</span></code>, so both sides also handle a connection that ends without one.</p>
+<p>Over a socket, closing it with unread data can discard a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code> still in flight. The
+sender of a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code> therefore closes its write side first. It discards what arrives until
+the other side closes, for up to a second, then closes the socket. A client that receives a
+<code class="docutils literal notranslate"><span class="pre">disconnect</span></code> closes at once. The server closes its write side, and closes once the client does,
+for up to a second. The following Python code ends a connection over TCP/IP this way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># End the connection with a disconnect, then close the write side</span>
+<span class="n">disconnect</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Disconnect</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="n">KRPC</span><span class="o">.</span><span class="n">Disconnect</span><span class="o">.</span><span class="n">CLOSED</span><span class="p">)</span>
+<span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span><span class="n">disconnect</span><span class="o">=</span><span class="n">disconnect</span><span class="p">))</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_WR</span><span class="p">)</span>
+
+<span class="c1"># Discard anything still arriving until the server closes its side, for up to a second</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="k">while</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">):</span>
+        <span class="k">pass</span>
+<span class="k">except</span> <span class="ne">TimeoutError</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Over WebSockets the close frame takes the place of closing the write side.</p>
+<p>A message that stops arriving partway ends the connection with the reason <code class="docutils literal notranslate"><span class="pre">TIMEOUT</span></code>. The limit
+is 3 seconds without a new byte on a serial port, and 30 seconds over the other transports. No
+limit applies between messages, so an idle connection stays open.</p>
+</section>
+</section>
 <section id="invoking-remote-procedures">
 <h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
 <p>Remote procedures are arranged into groups called <em>services</em>. These act as a single-level
 namespacing to keep things organized. Each service has a unique name used to identify it, and within
 a service <a class="reference internal" href="#communication-protocol-procedure-names"><span class="std std-ref">each procedure has a unique name</span></a>.</p>
-<p>Remote procedures are invoked by sending a request message to the RPC server, and waiting for a
+<p>Remote procedures are invoked by sending a request message to the server, and waiting for a
 response message.</p>
 <p>The request message contains one or more procedure calls to run, which include the names of the
 procedures and the values of their arguments. The response message contains the value(s) returned by
 the procedure(s) and any errors that were encountered.</p>
-<p>Requests are processed in order of receipt. The next request from a client will not be processed
-until the previous one completes execution and it’s response has been received by the client. When
-there are multiple client connections, requests are processed in round-robin order.</p>
+<p>Each request carries an <code class="docutils literal notranslate"><span class="pre">id</span></code>, which the server copies onto the response to it. A client matches a
+response to its request by this id. The clients number the requests of a session from 1. An id is
+nonzero, and unique among the requests waiting for a response. A client discards the response to
+a request it has abandoned, such as an interrupted call.</p>
+<p>Requests are processed in order of receipt. The server reads the next request from a client once the
+previous one has completed and its response has been written. When there are multiple clients,
+requests are processed in round-robin order.</p>
 <p>Within a single request, the procedure calls are also processed in order of receipt. The results
 list in the response is also ordered so that the results match the calls.</p>
 <section id="anatomy-of-a-request">
@@ -519,6 +689,7 @@ list in the response is also ordered so that the results match the calls.</p>
 <p>A request is sent to the server using a <code class="docutils literal notranslate"><span class="pre">Request</span></code> Protocol Buffer message with the following
 format:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Request</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="na">calls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -537,8 +708,8 @@ format:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>A request message contains one or more procedure calls. This allows efficient batching of multiple
-calls in a single message, if desired.</p>
+<p>A request message contains an id, and one or more procedure calls. This allows efficient batching
+of multiple calls in a single message, if desired.</p>
 <p>The fields of a procedure call are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">service</span></code> - The name of the service in which the remote procedure is defined.</p></li>
@@ -572,6 +743,7 @@ argument values.</p>
 <p>A response is sent to the client using a <code class="docutils literal notranslate"><span class="pre">Response</span></code> Protocol Buffer message with the following
 format:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Response</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="w">  </span><span class="n">Error</span><span class="w"> </span><span class="na">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">ProcedureResult</span><span class="w"> </span><span class="na">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
@@ -590,17 +762,17 @@ format:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>A response message contains one or more results, corresponding to the procedure calls made in the
-associated request message.</p>
+<p>A response message contains the id of the request it answers, and one or more results,
+corresponding to the procedure calls made in that request.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">value</span></code> field of a procedure result message contains the value of the return value of the
 remote procedure, if any, encoded in protocol buffer format. See
 <a class="reference internal" href="#communication-protocol-protobuf-encoding"><span class="std std-ref">Protocol Buffer Encoding</span></a> for details on how to decode the return value.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field indicates that the return value is null. When it is set, the <code class="docutils literal notranslate"><span class="pre">value</span></code> field
 is unset and must be ignored. This is only permitted for procedures whose return value is nullable.</p>
-<p>If an error occurs processing a request message, the <code class="docutils literal notranslate"><span class="pre">error</span></code> field in the response message will
-contain a description of the error. If an individual procedure call encounters an error, the
-<code class="docutils literal notranslate"><span class="pre">error</span></code> field in the corresponding procedure result message will contain a description of the
-error.</p>
+<p>If the request as a whole fails, such as one naming an object the server no longer has, the
+<code class="docutils literal notranslate"><span class="pre">error</span></code> field in the response message will contain a description of the error. If an individual
+procedure call encounters an error, the <code class="docutils literal notranslate"><span class="pre">error</span></code> field in the corresponding procedure result
+message will contain a description of the error.</p>
 <p>The fields of an error message are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">service</span></code> - If the error was caused by an exception, this is the name of the service in which the
@@ -614,19 +786,21 @@ the exception.</p></li>
 <section id="example-rpc-invocation">
 <h3>Example RPC invocation<a class="headerlink" href="#example-rpc-invocation" title="Link to this heading">#</a></h3>
 <p>The following Python code invokes the <code class="docutils literal notranslate"><span class="pre">GetStatus</span></code> procedure from the <a class="reference internal" href="#communication-protocol-krpc-service"><span class="std std-ref">KRPC service</span></a> using an already established connection to the server (the
-<code class="docutils literal notranslate"><span class="pre">rpc_conn</span></code> variable).</p>
+<code class="docutils literal notranslate"><span class="pre">conn</span></code> variable).</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">krpc.schema.KRPC</span></code> package contains the various Protocol Buffer message formats compiled to
 python code using the Protocol Buffer compiler. The <code class="docutils literal notranslate"><span class="pre">send_message</span></code> and <code class="docutils literal notranslate"><span class="pre">recv_message</span></code> are helper
 functions used to send/receive messages from the server.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">call</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ProcedureCall</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Invoke the KRPC.GetStatus RPC, in a request with the id 1</span>
+<span class="n">message</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">()</span>
+<span class="n">message</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">call</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">calls</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
 <span class="n">call</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="s2">"KRPC"</span>
 <span class="n">call</span><span class="o">.</span><span class="n">procedure</span> <span class="o">=</span> <span class="s2">"GetStatus"</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Request</span><span class="p">()</span>
-<span class="n">request</span><span class="o">.</span><span class="n">calls</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">call</span><span class="p">])</span>
-<span class="n">send_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+<span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
-<span class="c1"># Receive the response</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span>
+<span class="c1"># Receive the response, which carries the id of the request it answers</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span><span class="o">.</span><span class="n">response</span>
+<span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="mi">1</span>
 
 <span class="c1"># Check for an error in the response</span>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">"error"</span><span class="p">):</span>
@@ -683,18 +857,23 @@ client that created it disconnects from the server. Streams are local to each cl
 way to share a stream between clients.</p>
 <p>The RPC for each stream is invoked every <a class="reference external" href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html">fixed update</a> and the return values
 for all of these RPCs are collected together into a stream update message. This is then sent to the
-client over its stream server connection. If the value returned by a streams RPC does not change
-since the last update that was sent, its value is omitted from the update message in order to
-minimize network traffic. A client can also control the rate of the stream, by specifying a target
-number of Hertz with <a class="reference internal" href="#communication-protocol-set-stream-rate"><span class="std std-ref">SetStreamRate</span></a>. The server computes a time delay
+client on its connection, in a <code class="docutils literal notranslate"><span class="pre">Message</span></code> holding <code class="docutils literal notranslate"><span class="pre">stream_update</span></code>. If the value returned by a
+streams RPC does not change since the last update that was sent, its value is omitted from the
+update message in order to minimize network traffic. A client can also control the rate of the
+stream, by specifying a target number of Hertz with <a class="reference internal" href="#communication-protocol-set-stream-rate"><span class="std std-ref">SetStreamRate</span></a>. The server computes a time delay
 from the target rate, and only updates the stream if at least that time has passed since the last
 time the stream was updated.</p>
-<p>The first result travels on the stream connection and the <code class="docutils literal notranslate"><span class="pre">AddStream</span></code> response on the RPC
-connection, so the result can arrive first. The same holds for every response carrying an <code class="docutils literal notranslate"><span class="pre">Event</span></code>
-message. A client keeps the results for an identifier higher than any it has been given, and applies
-them once the response carrying that identifier arrives. The server issues identifiers in increasing
-order, so a client notes each identifier in the order the responses arrive. A result for a lower
-identifier with no stream on the client is for a stream that has ended, and is dropped.</p>
+<p>Responses and stream updates travel on the one connection, in order, which guarantees the
+following:</p>
+<ol class="arabic simple">
+<li><p>The first update for a stream follows the response to the call that added it.</p></li>
+<li><p>No update for a stream follows the response to the call that removed it.</p></li>
+<li><p>A response follows every update the server wrote before it.</p></li>
+</ol>
+<p>A client registers a stream when it reads the response that added it, before it reads the next
+message. A result for a stream the client has no record of is for a stream it removed, and is
+dropped. The first guarantee does not hold for a request batching a call that adds a stream with a
+call that takes more than one update to complete.</p>
 <section id="anatomy-of-a-stream-update">
 <h3>Anatomy of a Stream Update<a class="headerlink" href="#anatomy-of-a-stream-update" title="Link to this heading">#</a></h3>
 <p>Stream updates are sent to the client using a <code class="docutils literal notranslate"><span class="pre">StreamUpdate</span></code> Protocol Buffer message with the
@@ -778,13 +957,11 @@ returns a Protocol Buffer message with the format:</p>
 <span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">stream_rpc_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">18</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">time_per_stream_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">19</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">protocol_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
-<span class="p">}</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">version</span></code> field contains the version string of the server. The
-<code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> field contains the protocol version of the connection, which is 0
-for a client that sent none. The remaining fields contain performance information
-about the server.</p>
+<code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> field contains the protocol version of the connection. The remaining
+fields contain performance information about the server.</p>
 </section>
 <section id="getservices">
 <span id="communication-protocol-get-services"></span><h3>GetServices<a class="headerlink" href="#getservices" title="Link to this heading">#</a></h3>
@@ -856,8 +1033,7 @@ the identifier of the stream and the rate, as a <code class="docutils literal no
 stream on every fixed update. While the game is paused with the server setting “Pause the server
 when the game pauses” turned off, the server updates once per rendered frame.</p>
 <p>Setting the rate of a stream that has already ended does nothing. An identifier the server never
-issued raises <code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException</span></code>. A client with no stream server connection gets an
-<code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code>.</p>
+issued raises <code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException</span></code>.</p>
 </section>
 <section id="removestream">
 <span id="communication-protocol-remove-stream"></span><h3>RemoveStream<a class="headerlink" href="#removestream" title="Link to this heading">#</a></h3>
@@ -867,8 +1043,7 @@ calling <a class="reference internal" href="#communication-protocol-add-stream">
 <a class="reference internal" href="#communication-protocol-add-function-stream"><span class="std std-ref">AddFunctionStream</span></a>, or the stream identifier in an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message.
 See <a class="reference internal" href="#communication-protocol-streams"><span class="std std-ref">Streams</span></a> for more information on working with streams.</p>
 <p>Removing a stream that has already ended does nothing. An identifier the server never issued raises
-<code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException</span></code>. A client with no stream server connection gets an
-<code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException</span></code>.</p>
 </section>
 </section>
 <section id="service-description-message">
@@ -1319,6 +1494,11 @@ represent null on the wire.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#messages">Messages</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting">Connecting</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ending-a-connection">Ending a Connection</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#invoking-remote-procedures">Invoking Remote Procedures</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anatomy-of-a-request">Anatomy of a Request</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anatomy-of-a-response">Anatomy of a Response</a></li>

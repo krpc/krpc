@@ -8,6 +8,128 @@ that defines the structure of these messages. It also contains versions of this 
 C++, Java and Lua, compiled using `Google's protocol buffers compiler
 <https://github.com/google/protobuf>`_.
 
+.. _communication-protocol-message:
+
+Messages
+--------
+
+Every message sent to or from the server is a ``Message``, which holds one of the following:
+
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Message {
+   :end-before: message Disconnect {
+
+A client sends ``request``, ``connection_request`` and ``disconnect`` messages, and the server sends
+``response``, ``stream_update``, ``connection_response`` and ``disconnect`` messages. A connection
+carries all of them, including the stream updates for the client's streams. Each transport frames
+the messages in its own way, as its page describes.
+
+A ``Message`` holding a case the receiver does not know is skipped, once the connection has been
+established. A newer server can add cases this way. A case received in the wrong direction is a
+protocol error, and ends the connection.
+
+.. _communication-protocol-handshake:
+
+Connecting
+^^^^^^^^^^
+
+A client connects by sending a ``connection_request`` as its first ``Message``, and reading the
+server's ``connection_response``:
+
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message ConnectionRequest {
+   :end-before: // Messages for calling remote procedures
+
+Set ``protocol_version`` to 2. The ``client_name`` field can be set to the name of the client to
+display on the in-game UI. The server answers with one of the following statuses:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Status
+     - Meaning
+   * - ``OK``
+     - The connection is established.
+   * - ``MALFORMED_MESSAGE``
+     - The first message failed to parse, or was not a ``connection_request``.
+   * - ``TIMEOUT``
+     - No complete first message arrived within 3 seconds, or the first message stalled partway.
+       Over serial IO only the stall applies. The stall limit is given under
+       :ref:`communication-protocol-disconnect`. Over WebSockets the 3 seconds include the
+       upgrade, and the server closes a connection without a response if the upgrade has not
+       completed.
+   * - ``WRONG_PROTOCOL_VERSION``
+     - The server does not support the protocol version. See :ref:`communication-protocol-version`.
+   * - ``DENIED``
+     - The player, or a mod, denied the connection. A client does not retry it.
+
+The ``message`` field describes a refusal. When the connection is established, ``protocol_version``
+holds the version the server accepted, and ``client_identifier`` holds 16 bytes identifying the
+client. The identifier is the one ``KRPC.GetClientID`` returns, and the server's log names a client
+by its first 4 bytes, in hex.
+
+The server writes nothing while the player decides whether to accept a connection. A client waits
+for the ``connection_response`` for up to its handshake timeout, and sends nothing else until it
+arrives.
+
+A ``connection_request`` sent during a session starts a new session on the same connection. The
+server reads it once the call before it has completed, ends the current session, and asks for the
+new one to be approved. A new session gets a new client identifier, and its request ids start
+again from 1.
+
+.. _communication-protocol-disconnect:
+
+Ending a Connection
+^^^^^^^^^^^^^^^^^^^
+
+Either side ends a connection by sending a ``disconnect``, then closing the connection:
+
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Disconnect {
+   :end-before: // Messages for connecting to the server
+
+The reasons are:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Reason
+     - Sent when
+   * - ``CLOSED``
+     - The client closes the connection.
+   * - ``SERVER_STOPPED``
+     - The server stops.
+   * - ``REMOVED``
+     - The player removes the client from the server window.
+   * - ``MALFORMED_MESSAGE``
+     - A message fails to parse, or a request fails to read.
+   * - ``PROTOCOL_ERROR``
+     - A message arrives that the receiver did not expect, or a response has an id that matches no
+       waiting or abandoned request.
+   * - ``TIMEOUT``
+     - A partial message stalls.
+
+The reason and the ``message`` field are informational. A program that crashes sends no
+``disconnect``, so both sides also handle a connection that ends without one.
+
+Over a socket, closing it with unread data can discard a ``disconnect`` still in flight. The
+sender of a ``disconnect`` therefore closes its write side first. It discards what arrives until
+the other side closes, for up to a second, then closes the socket. A client that receives a
+``disconnect`` closes at once. The server closes its write side, and closes once the client does,
+for up to a second. The following Python code ends a connection over TCP/IP this way:
+
+.. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
+   :start-at: # End the connection
+
+Over WebSockets the close frame takes the place of closing the write side.
+
+A message that stops arriving partway ends the connection with the reason ``TIMEOUT``. The limit
+is 3 seconds without a new byte on a serial port, and 30 seconds over the other transports. No
+limit applies between messages, so an idle connection stays open.
+
 Invoking Remote Procedures
 --------------------------
 
@@ -15,16 +137,21 @@ Remote procedures are arranged into groups called *services*. These act as a sin
 namespacing to keep things organized. Each service has a unique name used to identify it, and within
 a service :ref:`each procedure has a unique name <communication-protocol-procedure-names>`.
 
-Remote procedures are invoked by sending a request message to the RPC server, and waiting for a
+Remote procedures are invoked by sending a request message to the server, and waiting for a
 response message.
 
 The request message contains one or more procedure calls to run, which include the names of the
 procedures and the values of their arguments. The response message contains the value(s) returned by
 the procedure(s) and any errors that were encountered.
 
-Requests are processed in order of receipt. The next request from a client will not be processed
-until the previous one completes execution and it's response has been received by the client. When
-there are multiple client connections, requests are processed in round-robin order.
+Each request carries an ``id``, which the server copies onto the response to it. A client matches a
+response to its request by this id. The clients number the requests of a session from 1. An id is
+nonzero, and unique among the requests waiting for a response. A client discards the response to
+a request it has abandoned, such as an interrupted call.
+
+Requests are processed in order of receipt. The server reads the next request from a client once the
+previous one has completed and its response has been written. When there are multiple clients,
+requests are processed in round-robin order.
 
 Within a single request, the procedure calls are also processed in order of receipt. The results
 list in the response is also ordered so that the results match the calls.
@@ -42,8 +169,8 @@ format:
    :start-at: message Request {
    :end-before: message Response {
 
-A request message contains one or more procedure calls. This allows efficient batching of multiple
-calls in a single message, if desired.
+A request message contains an id, and one or more procedure calls. This allows efficient batching
+of multiple calls in a single message, if desired.
 
 The fields of a procedure call are:
 
@@ -91,8 +218,8 @@ format:
    :start-at: message Response {
    :end-before: // Messages for receiving stream updates
 
-A response message contains one or more results, corresponding to the procedure calls made in the
-associated request message.
+A response message contains the id of the request it answers, and one or more results,
+corresponding to the procedure calls made in that request.
 
 The ``value`` field of a procedure result message contains the value of the return value of the
 remote procedure, if any, encoded in protocol buffer format. See
@@ -101,10 +228,10 @@ remote procedure, if any, encoded in protocol buffer format. See
 The ``is_null`` field indicates that the return value is null. When it is set, the ``value`` field
 is unset and must be ignored. This is only permitted for procedures whose return value is nullable.
 
-If an error occurs processing a request message, the ``error`` field in the response message will
-contain a description of the error. If an individual procedure call encounters an error, the
-``error`` field in the corresponding procedure result message will contain a description of the
-error.
+If the request as a whole fails, such as one naming an object the server no longer has, the
+``error`` field in the response message will contain a description of the error. If an individual
+procedure call encounters an error, the ``error`` field in the corresponding procedure result
+message will contain a description of the error.
 
 The fields of an error message are:
 
@@ -123,14 +250,15 @@ Example RPC invocation
 
 The following Python code invokes the ``GetStatus`` procedure from the :ref:`KRPC service
 <communication-protocol-krpc-service>` using an already established connection to the server (the
-``rpc_conn`` variable).
+``conn`` variable).
 
 The ``krpc.schema.KRPC`` package contains the various Protocol Buffer message formats compiled to
 python code using the Protocol Buffer compiler. The ``send_message`` and ``recv_message`` are helper
 functions used to send/receive messages from the server.
 
 .. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
-   :start-at: call = KRPC.ProcedureCall()
+   :start-at: # Invoke the KRPC.GetStatus RPC
+   :end-before: # End the connection
 
 .. _communication-protocol-protobuf-encoding:
 
@@ -180,19 +308,24 @@ way to share a stream between clients.
 The RPC for each stream is invoked every `fixed update
 <https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html>`_ and the return values
 for all of these RPCs are collected together into a stream update message. This is then sent to the
-client over its stream server connection. If the value returned by a streams RPC does not change
-since the last update that was sent, its value is omitted from the update message in order to
-minimize network traffic. A client can also control the rate of the stream, by specifying a target
-number of Hertz with :ref:`communication-protocol-set-stream-rate`. The server computes a time delay
+client on its connection, in a ``Message`` holding ``stream_update``. If the value returned by a
+streams RPC does not change since the last update that was sent, its value is omitted from the
+update message in order to minimize network traffic. A client can also control the rate of the
+stream, by specifying a target number of Hertz with :ref:`communication-protocol-set-stream-rate`. The server computes a time delay
 from the target rate, and only updates the stream if at least that time has passed since the last
 time the stream was updated.
 
-The first result travels on the stream connection and the ``AddStream`` response on the RPC
-connection, so the result can arrive first. The same holds for every response carrying an ``Event``
-message. A client keeps the results for an identifier higher than any it has been given, and applies
-them once the response carrying that identifier arrives. The server issues identifiers in increasing
-order, so a client notes each identifier in the order the responses arrive. A result for a lower
-identifier with no stream on the client is for a stream that has ended, and is dropped.
+Responses and stream updates travel on the one connection, in order, which guarantees the
+following:
+
+1. The first update for a stream follows the response to the call that added it.
+2. No update for a stream follows the response to the call that removed it.
+3. A response follows every update the server wrote before it.
+
+A client registers a stream when it reads the response that added it, before it reads the next
+message. A result for a stream the client has no record of is for a stream it removed, and is
+dropped. The first guarantee does not hold for a request batching a call that adds a stream with a
+call that takes more than one update to complete.
 
 Anatomy of a Stream Update
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -272,12 +405,11 @@ returns a Protocol Buffer message with the format:
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
    :start-at: message Status {
-   :end-before: // Multiplexed request messages
+   :end-at: uint32 protocol_version = 20;
 
 The ``version`` field contains the version string of the server. The
-``protocol_version`` field contains the protocol version of the connection, which is 0
-for a client that sent none. The remaining fields contain performance information
-about the server.
+``protocol_version`` field contains the protocol version of the connection. The remaining
+fields contain performance information about the server.
 
 .. _communication-protocol-get-services:
 
@@ -377,8 +509,7 @@ stream on every fixed update. While the game is paused with the server setting "
 when the game pauses" turned off, the server updates once per rendered frame.
 
 Setting the rate of a stream that has already ended does nothing. An identifier the server never
-issued raises ``KRPC.ArgumentException``. A client with no stream server connection gets an
-``InvalidOperationException``.
+issued raises ``KRPC.ArgumentException``.
 
 .. _communication-protocol-remove-stream:
 
@@ -392,8 +523,7 @@ calling :ref:`communication-protocol-add-stream` or
 See :ref:`communication-protocol-streams` for more information on working with streams.
 
 Removing a stream that has already ended does nothing. An identifier the server never issued raises
-``KRPC.ArgumentException``. A client with no stream server connection gets an
-``InvalidOperationException``.
+``KRPC.ArgumentException``.
 
 .. _communication-protocol-service-description-message:
 

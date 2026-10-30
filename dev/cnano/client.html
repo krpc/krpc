@@ -1214,18 +1214,13 @@ These build a program linking the library for the same transport, and on Windows
 against winsock.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_LOCALSOCKET</span></code> – Specifies that the library should be built to
 communicate over a unix domain socket, with a server running on the same machine. The
-connection is opened with the path of the server’s RPC socket in place of a serial port
+connection is opened with the path of the server’s socket in place of a serial port
 name. A serial port is the usual choice on the platforms providing both, so this is
 specified rather than auto-detected. Use <code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_LOCALSOCKET=ON</span></code> for a
 CMake build and the <code class="docutils literal notranslate"><span class="pre">localsocket</span></code> feature for a vcpkg install, so that a program linking
 the library is built for the same transport.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> – Allows you to provide your own implementation for the
 communication mechanism.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_SINGLE_CONNECTION</span></code> – Only meaningful alongside <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code>. A serial
-port carries the RPC and stream connections over one link, so each message is wrapped in a
-multiplexed message naming the connection it belongs to. Define this when a custom
-communication mechanism opens a connection to each server, as a socket does, and sends
-messages unwrapped.</p></li>
 </ul>
 </li>
 <li><p>Memory allocation</p>
@@ -1306,13 +1301,14 @@ for its version and prints it out:</p>
 <span class="w">  </span><span class="n">krpc_schema_Status</span><span class="w"> </span><span class="n">status</span><span class="p">;</span>
 <span class="w">  </span><span class="n">krpc_KRPC_GetStatus</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
 <span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"Connected to kRPC server version %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">.</span><span class="n">version</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_disconnect</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The <a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> function is used to open a connection to a server. It takes as its first
-argument a connection object into which the connection information is written. This is passed to
-subsequent calls to interact with the server. The second argument is a name for the connection
-(displayed in game) and the third is the name of the serial port to connect over.</p>
+<p>The <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> function opens the serial port named by its second argument, and writes the
+connection into its first. This is passed to subsequent calls to interact with the server.
+<a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> then starts a session, with a name for the connection that is displayed in
+game. <a class="reference internal" href="#c.krpc_disconnect" title="krpc_disconnect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_disconnect()</span></code></a> ends the session and closes the connection.</p>
 </section>
 <section id="arduino">
 <h3>Arduino<a class="headerlink" href="#arduino" title="Link to this heading">#</a></h3>
@@ -1330,8 +1326,13 @@ port interface:</p>
 <span class="w">  </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Serial</span><span class="p">;</span>
 <span class="w">  </span><span class="c1">// Open the serial port connection</span>
 <span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
-<span class="w">  </span><span class="c1">// Set up communication with the server</span>
-<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Arduino Example"</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// Set up communication with the server, retrying while part of an earlier session's message</span>
+<span class="w">  </span><span class="c1">// is on the line</span>
+<span class="w">  </span><span class="n">krpc_error_t</span><span class="w"> </span><span class="n">error</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Arduino Example"</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">KRPC_ERROR_CONNECTION_FAILED</span><span class="p">)</span>
+<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="mi">3500</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
 
 <span class="w">  </span><span class="c1">// Indicate successful connection by lighting the on-board LED</span>
 <span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
@@ -1402,7 +1403,7 @@ calling this function opens the serial port named by <em>arg</em> using the Wind
 <code class="docutils literal notranslate"><span class="pre">krpc_open(&amp;conn,</span> <span class="pre">&quot;COM1&quot;)</span></code>.</p>
 <p>When the library is built using <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code> calling this function connects to the
 server over TCP/IP. <em>arg</em> is a pointer to a <code class="docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code> holding the address of
-the machine running the server and the port its RPC server listens on. The address may be a host
+the machine running the server and the port it listens on. The address may be a host
 name or an address literal, and each endpoint it resolves to is tried in turn. For example:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
 <span class="n">krpc_connection_config_t</span><span class="w"> </span><span class="n">config</span><span class="p">;</span>
@@ -1453,6 +1454,20 @@ server and appears in the in-game server window.</p></li>
 </ul>
 </dd>
 </dl>
+<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_REFUSED</span></code>, and closes the connection, if the server
+denies it or does not support the client’s protocol version.</p>
+<p>On a serial port, a client that has reset can find messages from its earlier session on the
+line, which this skips. Part of a message from that session can garble the connection request
+or its response. Either way this returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_FAILED</span></code> and leaves the
+port open. Wait more than 3 seconds, so that the server drops the partial message, then call
+this again.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_disconnect">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_disconnect</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_disconnect" title="Link to this definition">#</a><br /></dt>
+<dd><p>Tell the server the connection is ending, then close the communication handle. On a serial port
+this is how the server learns the session has ended.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -1511,6 +1526,19 @@ server and appears in the in-game server window.</p></li>
 <dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_DECODING_FAILED">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_DECODING_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_DECODING_FAILED" title="Link to this definition">#</a><br /></dt>
 <dd><p>The decoder failed to interpret a result sent by the server.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_BUFFER_TOO_SMALL">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_BUFFER_TOO_SMALL</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_BUFFER_TOO_SMALL" title="Link to this definition">#</a><br /></dt>
+<dd><p>A value did not fit in the buffer given to hold it.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_CONNECTION_REFUSED">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_CONNECTION_REFUSED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_CONNECTION_REFUSED" title="Link to this definition">#</a><br /></dt>
+<dd><p>The server denied the connection, or does not support the client’s protocol
+version.</p>
 </dd></dl>
 
 </dd></dl>

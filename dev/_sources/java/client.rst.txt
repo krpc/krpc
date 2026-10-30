@@ -34,10 +34,16 @@ Connecting to the Server
 
 To connect to a server, call :meth:`Connection.newInstance()` which returns a connection object. All
 interaction with the server is done via this object. When constructed without any arguments, it will
-connect to the local machine on the default port numbers. You can specify different connection
+connect to the local machine on the default port. You can specify different connection
 settings, and also a descriptive name for the connection, as follows:
 
 .. literalinclude:: /scripts/java/client/Connecting.java
+
+.. note::
+
+   A server with "Auto-accept new clients" turned off answers only once the player approves the
+   connection, and the client gives up after 5 seconds by default. Pass a ``handshakeTimeout`` of ``Duration.ZERO`` to wait
+   for the player.
 
 Calling Remote Procedures
 -------------------------
@@ -138,6 +144,10 @@ This code creates a stream, acquires a lock on the streams condition variable (b
 ``synchronized`` block) and then repeatedly checks the value of ``getAbort``. It leaves the loop
 when it changes to true.
 
+While a thread holds the lock, the value of the stream changes only when the condition variable is
+notified. A check of the value and the wait that follows it therefore see the same updates. A
+wait returns for a value newer than the last one the thread read, with or without the lock.
+
 The body of the loop calls ``waitForUpdate`` on the stream, which causes the program to block until
 the value changes. This prevents the loop from 'spinning' and so it does not consume processing
 resources whilst waiting.
@@ -158,8 +168,9 @@ A callback added to a stream that already has a value is called with that value 
 
 .. note::
 
-   The callback function may be called from a different thread than the one that created the
-   stream. Any changes to shared state must therefore be protected with appropriate
+   Callbacks run on the client's callback thread, one at a time, and may make remote
+   procedure calls. A callback must not wait on a stream, as the same thread wakes the
+   stream's waiters. Any changes to shared state must be protected with appropriate
    synchronization.
 
 Stream Endings
@@ -233,11 +244,15 @@ Client API Reference
    .. method:: static Connection newInstance()
    .. method:: static Connection newInstance(String name)
    .. method:: static Connection newInstance(String name, String address)
-   .. method:: static Connection newInstance(String name, String address, int rpcPort, int streamPort)
+   .. method:: static Connection newInstance(String name, String address, int port)
    .. method:: static Connection newInstance(String name, java.net.InetAddress address)
-   .. method:: static Connection newInstance(String name, java.net.InetAddress address, int rpcPort, int streamPort)
-   .. method:: static Connection newInstance(String name, String address, int rpcPort, int streamPort, java.time.Duration timeout)
-   .. method:: static Connection newInstance(String name, java.net.InetAddress address, int rpcPort, int streamPort, java.time.Duration timeout)
+   .. method:: static Connection newInstance(String name, java.net.InetAddress address, int port)
+   .. method:: static Connection newInstance(String name, String address, int port, java.time.Duration timeout)
+   .. method:: static Connection newInstance(String name, java.net.InetAddress address, int port, java.time.Duration timeout)
+   .. method:: static Connection newInstance(String name, String address, int port, java.time.Duration timeout, java.time.Duration handshakeTimeout)
+   .. method:: static Connection newInstance(String name, java.net.InetAddress address, int port, java.time.Duration timeout, java.time.Duration handshakeTimeout)
+   .. method:: static Connection newInstance(String name, String address, int port, java.time.Duration timeout, java.time.Duration handshakeTimeout, java.time.Duration stallTimeout)
+   .. method:: static Connection newInstance(String name, java.net.InetAddress address, int port, java.time.Duration timeout, java.time.Duration handshakeTimeout, java.time.Duration stallTimeout)
 
       Create a connection to the server, using the given connection details.
 
@@ -246,20 +261,34 @@ Client API Reference
       :param String address: The address of the server to connect to. Can either be a hostname, an
                              IP address as a string or a :ref:`java.net.InetAddress`
                              object. Defaults to 127.0.0.1.
-      :param int rpc_port: The port number of the RPC Server. Defaults to 50000. This should match
-                           the RPC port number of the server you want to connect to.
-      :param int stream_port: The port number of the Stream Server. Defaults to 50001. This should
-                              match the stream port number of the server you want to connect to.
+      :param int port: The port number of the server. Defaults to 50000. This should match the
+                       port number of the server you want to connect to.
       :param java.time.Duration timeout: How long to wait for a connection before giving up.
                                          Defaults to zero, which waits indefinitely. A network
                                          that drops a connection attempt rather than refusing it
                                          otherwise leaves the client waiting.
+      :param java.time.Duration handshakeTimeout: How long to wait for the server to accept the
+                                                  connection before giving up. Defaults to 5
+                                                  seconds. Zero waits indefinitely, such as for a
+                                                  server that asks the player to approve each
+                                                  connection.
+      :param java.time.Duration stallTimeout: How long a message from the server can go without a
+                                              new byte, once it has started to arrive, before the
+                                              connection fails. Defaults to 30 seconds. Zero
+                                              waits indefinitely.
+
+      Throws a ``ConnectionException`` if the server refuses the connection. Its ``getStatus``
+      method returns the status the server gave, such as ``DENIED``. An exception thrown when the
+      server ends the connection returns the reason from its ``getReason`` method, such as
+      ``SERVER_STOPPED``.
 
    .. method:: static Connection newLocalInstance()
    .. method:: static Connection newLocalInstance(String name)
-   .. method:: static Connection newLocalInstance(String name, String rpcPath, String streamPath)
+   .. method:: static Connection newLocalInstance(String name, String path)
+   .. method:: static Connection newLocalInstance(String name, String path, java.time.Duration handshakeTimeout)
+   .. method:: static Connection newLocalInstance(String name, String path, java.time.Duration handshakeTimeout, java.time.Duration stallTimeout)
 
-      Create a connection to a server running on the same machine, over unix domain sockets rather
+      Create a connection to a server running on the same machine, over a unix domain socket rather
       than TCP/IP. The connection behaves identically once established.
 
       Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows
@@ -267,11 +296,10 @@ Client API Reference
 
       :param String name: A descriptive name for the connection. This is passed to the server and
                           appears in the in-game server window.
-      :param String rpcPath: The path of the socket the RPC Server is listening on. This should
-                             match the RPC socket path shown in the in-game server window.
-      :param String streamPath: The path of the socket the Stream Server is listening on. This
-                                should match the stream socket path shown in the in-game server
-                                window.
+      :param String path: The path of the socket the server is listening on. This should match
+                          the socket path shown in the in-game server window.
+      :param java.time.Duration handshakeTimeout: As for ``newInstance``.
+      :param java.time.Duration stallTimeout: As for ``newInstance``.
 
    .. method:: Stream<T> addStream(Class<?> clazz, String method, Object... args)
 
@@ -320,7 +348,7 @@ Client API Reference
 
    .. method:: void close()
 
-      Close the connection.
+      Tells the server the connection is closing, then closes it.
 
 .. type:: class Stream<T>
 
@@ -369,8 +397,9 @@ Client API Reference
 
       .. note::
 
-         The callback function may be called from a different thread than the one that created the
-         stream. Any changes to shared state must therefore be protected with appropriate
+         Callbacks run on the client's callback thread, one at a time, and may make remote
+         procedure calls. A callback must not wait on a stream, as the same thread wakes the
+         stream's waiters. Any changes to shared state must be protected with appropriate
          synchronization.
 
    .. method:: void removeCallback(int tag)

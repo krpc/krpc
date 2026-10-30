@@ -28,61 +28,24 @@ To receive a message from the server, do the reverse:
 3. Receive message size bytes of message data.
 4. Decode the message data.
 
-Connecting to the RPC Server
-----------------------------
+Every message is a ``Message``. See :ref:`communication-protocol-message`.
 
-A client invokes remote procedures by communicating with the *RPC server*. To establish a
-connection, a client must do the following:
+Connecting to the Server
+------------------------
 
-1. Open a TCP socket to the server on its RPC port (which defaults to 50000).
+To establish a connection, a client must do the following:
 
-2. Send a ``ConnectionRequest`` message to the server. This message is defined as:
+1. Open a TCP socket to the server on its port (which defaults to 50000).
 
-   .. literalinclude:: /communication-protocols/krpc.proto
-      :language: protobuf
-      :start-at: message ConnectionRequest {
-      :end-before: message ConnectionResponse {
+2. Send a ``Message`` holding a ``connection_request``, with its ``protocol_version`` field set to
+   2. See :ref:`communication-protocol-handshake`.
 
-   The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``protocol_version``
-   field to 1. The ``client_name`` field can be set to the name of the client to display on the
-   in-game UI. The ``client_identifier`` should be left blank.
+3. Receive a ``Message`` holding the server's ``connection_response``, and check that its
+   ``status`` field is ``ConnectionResponse.OK`` and its ``protocol_version`` is 2. If not, the
+   ``message`` field contains a description of what went wrong.
 
-3. Receive a `ConnectionResponse` message from the server. This message is defined as:
-
-   .. literalinclude:: /communication-protocols/krpc.proto
-      :language: protobuf
-      :start-at: message ConnectionResponse {
-      :end-before: // Messages for calling remote procedures
-
-   If the ``status`` field is set to ``ConnectionResponse.OK`` then the connection was
-   successful. If not, the ``message`` field contains a description of what went wrong.
-
-   The ``protocol_version`` field contains the version of the protocol the server accepted. A
-   server from before kRPC 0.7 leaves it as 0. See :ref:`communication-protocol-version`.
-
-   When the connection is successful, the ``client_identifier`` contains a unique 16-byte
-   identifier for the client. This is required when connecting to the stream server (described
-   below).
-
-Connecting to the Stream Server
--------------------------------
-
-Clients can receive :ref:`communication-protocol-streams` from the *stream server*. To establish a
-connection, a client must first connect to the RPC server (as above) then do the following:
-
-1. Open a TCP socket to the server on its stream port (which defaults to 50001).
-
-2. Send a `ConnectionRequest` message, with its `type` field set to `ConnectionRequest.STREAM`,
-   its `protocol_version` field set to 1, and its `client_identifier` field set to the value
-   received in the `client_identifier` field of the `ConnectionResponse` message received when
-   connecting to the RPC server earlier.
-
-3. Receive a `ConnectionResponse` message, similarly to the RPC server, and check that the value of
-   the `status` field is `ConnectionResponse.OK`. If not, then the connection was not successful,
-   and the `message` field contains a description of what went wrong.
-
-Connecting to the stream server is optional. If the client doesn't require stream functionality,
-there is no need to connect.
+The connection then carries the client's requests and their responses, and the updates for its
+:ref:`communication-protocol-streams`. To end it, see :ref:`communication-protocol-disconnect`.
 
 Invoking Remote Procedures
 --------------------------
@@ -92,10 +55,9 @@ See :doc:`messages`.
 Examples
 --------
 
-The following Python code connects to the RPC server at address 127.0.0.1 and port 50000 using the
-name "Jeb". Next, it connects to the stream server on port 50001. It then invokes the
-``KRPC.GetStatus`` RPC, receives and decodes the result and prints out the server version number
-from the response.
+The following Python code connects to the server at address 127.0.0.1 and port 50000 using the
+name "Jeb". It then invokes the ``KRPC.GetStatus`` RPC, receives and decodes the result and prints
+out the server version number from the response. Finally it ends the connection.
 
 To send and receive messages to the server, they need to be encoded and decoded from their binary
 format:
@@ -104,13 +66,13 @@ format:
   Protocol Buffer varint encoded integers.
 * ``send_message`` encodes a message, sends the length of the message to the server as a Protocol
   Buffer varint encoded integer, and then sends the message data.
-* ``recv_message`` receives the size of the message, decodes it, receives the message data, and
-  decodes it.
+* ``recv_message`` receives the size of a message, decodes it, receives the message data, and
+  decodes it as a ``Message``.
 
 .. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
    :language: python
 
-The following example demonstrates how to set up and receive data from the server over a stream:
+The following example adds a stream, then receives its updates on the same connection:
 
 .. literalinclude:: /scripts/communication-protocols/tcpip/Stream.py
    :language: python

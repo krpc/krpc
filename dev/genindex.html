@@ -11469,9 +11469,9 @@
 </li>
       <li><a href="cpp/client.html#_CPPv4I00EN4krpc9Condition10wait_untilENSt9cv_statusERKNSt6chrono10time_pointI5Clock8DurationEE">krpc::Condition::wait_until (C++ function)</a>
 </li>
-      <li><a href="cpp/client.html#_CPPv4N4krpc7connectERKNSt6stringERKNSt6stringEjjNSt6chrono12millisecondsE">krpc::connect (C++ function)</a>
+      <li><a href="cpp/client.html#_CPPv4N4krpc7connectERKNSt6stringERKNSt6stringEjNSt6chrono12millisecondsENSt6chrono12millisecondsENSt6chrono12millisecondsE">krpc::connect (C++ function)</a>
 </li>
-      <li><a href="cpp/client.html#_CPPv4N4krpc13connect_localERKNSt6stringERKNSt6stringERKNSt6stringE">krpc::connect_local (C++ function)</a>
+      <li><a href="cpp/client.html#_CPPv4N4krpc13connect_localERKNSt6stringERKNSt6stringENSt6chrono12millisecondsENSt6chrono12millisecondsE">krpc::connect_local (C++ function)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc5EventE">krpc::Event (C++ class)</a>
 </li>
@@ -14865,10 +14865,10 @@
 </li>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter8GameMode7missionE">krpc::services::SpaceCenter::GameMode::mission (C++ enumerator)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter8GameMode15mission_builderE">krpc::services::SpaceCenter::GameMode::mission_builder (C++ enumerator)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter8GameMode7sandboxE">krpc::services::SpaceCenter::GameMode::sandbox (C++ enumerator)</a>
 </li>
       <li><a href="cpp/api/space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenter8GameMode8scenarioE">krpc::services::SpaceCenter::GameMode::scenario (C++ enumerator)</a>
@@ -17619,6 +17619,8 @@
 </li>
       <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_UpgradeFacilities">krpc_Debug_UpgradeFacilities (C function)</a>
 </li>
+      <li><a href="cnano/client.html#c.krpc_disconnect">krpc_disconnect (C function)</a>
+</li>
       <li><a href="cnano/api/docking-camera/docking-camera.html#c.krpc_DockingCamera_Available">krpc_DockingCamera_Available (C function)</a>
 </li>
       <li><a href="cnano/api/docking-camera/docking-camera.html#c.krpc_DockingCamera_Camera">krpc_DockingCamera_Camera (C function)</a>
@@ -18303,7 +18305,11 @@
 </li>
       <li><a href="cnano/client.html#c.krpc_error_t">krpc_error_t (C type)</a>
 </li>
+      <li><a href="cnano/client.html#c.krpc_error_t.KRPC_ERROR_BUFFER_TOO_SMALL">krpc_error_t.KRPC_ERROR_BUFFER_TOO_SMALL (C macro)</a>
+</li>
       <li><a href="cnano/client.html#c.krpc_error_t.KRPC_ERROR_CONNECTION_FAILED">krpc_error_t.KRPC_ERROR_CONNECTION_FAILED (C macro)</a>
+</li>
+      <li><a href="cnano/client.html#c.krpc_error_t.KRPC_ERROR_CONNECTION_REFUSED">krpc_error_t.KRPC_ERROR_CONNECTION_REFUSED (C macro)</a>
 </li>
       <li><a href="cnano/client.html#c.krpc_error_t.KRPC_ERROR_DECODING_FAILED">krpc_error_t.KRPC_ERROR_DECODING_FAILED (C macro)</a>
 </li>
@@ -24425,23 +24431,35 @@
 </li>
       <li><a href="java/client.html#krpc.client.Connection.newInstance(String, java.net.InetAddress)">newInstance(String, java.net.InetAddress) (Java method)</a>
 </li>
-      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, java.net.InetAddress, int, int)">newInstance(String, java.net.InetAddress, int, int) (Java method)</a>
+      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, java.net.InetAddress, int)">newInstance(String, java.net.InetAddress, int) (Java method)</a>
 </li>
-      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, java.net.InetAddress, int, int, java.time.Duration)">newInstance(String, java.net.InetAddress, int, int, java.time.Duration) (Java method)</a>
+      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, java.net.InetAddress, int, java.time.Duration)">newInstance(String, java.net.InetAddress, int, java.time.Duration) (Java method)</a>
+</li>
+      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, java.net.InetAddress, int, java.time.Duration, java.time.Duration)">newInstance(String, java.net.InetAddress, int, java.time.Duration, java.time.Duration) (Java method)</a>
+</li>
+      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, java.net.InetAddress, int, java.time.Duration, java.time.Duration, java.time.Duration)">newInstance(String, java.net.InetAddress, int, java.time.Duration, java.time.Duration, java.time.Duration) (Java method)</a>
 </li>
       <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String)">newInstance(String, String) (Java method)</a>
 </li>
-      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String, int, int)">newInstance(String, String, int, int) (Java method)</a>
+      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String, int)">newInstance(String, String, int) (Java method)</a>
 </li>
-      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String, int, int, java.time.Duration)">newInstance(String, String, int, int, java.time.Duration) (Java method)</a>
+      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String, int, java.time.Duration)">newInstance(String, String, int, java.time.Duration) (Java method)</a>
+</li>
+      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String, int, java.time.Duration, java.time.Duration)">newInstance(String, String, int, java.time.Duration, java.time.Duration) (Java method)</a>
+</li>
+      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String, int, java.time.Duration, java.time.Duration, java.time.Duration)">newInstance(String, String, int, java.time.Duration, java.time.Duration, java.time.Duration) (Java method)</a>
 </li>
       <li><a href="java/client.html#krpc.client.Connection.newLocalInstance()">newLocalInstance() (Java method)</a>
 </li>
-      <li><a href="java/client.html#krpc.client.Connection.newLocalInstance(String)">newLocalInstance(String) (Java method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="java/client.html#krpc.client.Connection.newLocalInstance(String, String, String)">newLocalInstance(String, String, String) (Java method)</a>
+      <li><a href="java/client.html#krpc.client.Connection.newLocalInstance(String)">newLocalInstance(String) (Java method)</a>
+</li>
+      <li><a href="java/client.html#krpc.client.Connection.newLocalInstance(String, String)">newLocalInstance(String, String) (Java method)</a>
+</li>
+      <li><a href="java/client.html#krpc.client.Connection.newLocalInstance(String, String, java.time.Duration)">newLocalInstance(String, String, java.time.Duration) (Java method)</a>
+</li>
+      <li><a href="java/client.html#krpc.client.Connection.newLocalInstance(String, String, java.time.Duration, java.time.Duration)">newLocalInstance(String, String, java.time.Duration, java.time.Duration) (Java method)</a>
 </li>
       <li><a href="lua/api/space-center/camera.html#SpaceCenter.Camera.next_camera">next_camera() (Camera method)</a>, <a href="python/api/space-center/camera.html#SpaceCenter.Camera.next_camera">[1]</a>
 </li>

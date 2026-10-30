@@ -41,7 +41,7 @@ KRPC
 
    .. function:: std::vector<ClientInfo> clients()
 
-      The RPC clients that are currently connected to the server.
+      The clients that are currently connected to the server.
 
    
 

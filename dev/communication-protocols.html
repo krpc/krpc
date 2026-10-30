@@ -523,12 +523,16 @@ version it uses, and the server replies with the version it accepted:</p>
 <td><p>0.7</p></td>
 <td><p>0 and 1</p></td>
 </tr>
+<tr class="row-even"><td><p>2</p></td>
+<td><p>0.8</p></td>
+<td><p>2</p></td>
+</tr>
 </tbody>
 </table>
 </div>
-<p>A client that sends no version is from before kRPC 0.7. The server serves it as version 1, and logs
-a warning. The server rejects any other version with the status <code class="docutils literal notranslate"><span class="pre">WRONG_PROTOCOL_VERSION</span></code>, or
-over WebSockets with HTTP status 400.</p>
+<p>Version 2 puts every message in a <a class="reference internal" href="communication-protocols/messages.html#communication-protocol-message"><span class="std std-ref">Message</span></a>, on every
+transport. A client from an earlier release fails to connect. The server refuses a
+<code class="docutils literal notranslate"><span class="pre">connection_request</span></code> with a version other than 2 with the status <code class="docutils literal notranslate"><span class="pre">WRONG_PROTOCOL_VERSION</span></code>.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>

@@ -1114,7 +1114,7 @@ should not be used with the client library. It is a modified version to work wit
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
 <p>To connect to a server, create a <a class="reference internal" href="#class-Connection" title="class: Connection"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Connection</span></code></a> object. All interaction with the server is done
 via this object. When constructed without any arguments, it will connect to the local machine on the
-default port numbers. You can specify different connection settings, and also a descriptive name for
+default port. You can specify different connection settings, and also a descriptive name for
 the connection, as follows:</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
 <span class="k">using</span><span class="w"> </span><span class="nn">System.Net</span><span class="p">;</span>
@@ -1126,8 +1126,7 @@ the connection, as follows:</p>
 <span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="p">(</span>
 <span class="w">                   </span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="s">"My Example Program"</span><span class="p">,</span>
 <span class="w">                   </span><span class="n">address</span><span class="p">:</span><span class="w"> </span><span class="n">IPAddress</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="s">"192.168.0.10"</span><span class="p">),</span>
-<span class="w">                   </span><span class="n">rpcPort</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
-<span class="w">                   </span><span class="n">streamPort</span><span class="p">:</span><span class="w"> </span><span class="mi">1001</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                   </span><span class="n">port</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">KRPC</span><span class="p">();</span>
 <span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">krpc</span><span class="p">.</span><span class="n">GetStatus</span><span class="p">().</span><span class="n">Version</span><span class="p">);</span>
 <span class="w">        </span><span class="p">}</span>
@@ -1138,6 +1137,12 @@ the connection, as follows:</p>
 <p>The <a class="reference internal" href="#class-Connection" title="class: Connection"><code class="xref cs cs-type docutils literal notranslate"><span class="pre">Connection</span></code></a> object needs to be disposed of correctly when finished with, so that the
 network connection it manages can be released. This can be done with a <code class="docutils literal notranslate"><span class="pre">using</span></code> block (as in the
 example above) or by calling <a class="reference internal" href="#function-Connection.Dispose" title="function: Connection.Dispose"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">Connection.Dispose</span></code></a> directly.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A server with “Auto-accept new clients” turned off answers only once the player approves the
+connection, and the client gives up after 5 seconds by default. Pass <code class="docutils literal notranslate"><span class="pre">handshakeTimeout:</span> <span class="pre">Timeout.InfiniteTimeSpan</span></code> to wait
+for the player.</p>
+</div>
 </section>
 <section id="calling-remote-procedures">
 <h2>Calling Remote Procedures<a class="headerlink" href="#calling-remote-procedures" title="Link to this heading">#</a></h2>
@@ -1298,6 +1303,9 @@ stream changes.</p>
 <p>This code creates a stream, acquires a lock on the streams condition variable (by using a <code class="docutils literal notranslate"><span class="pre">lock</span></code>
 statement) and then repeatedly checks the value of <code class="docutils literal notranslate"><span class="pre">Abort</span></code>. It leaves the loop when it changes to
 true.</p>
+<p>While a thread holds the lock, the value of the stream changes only when the condition variable is
+notified. A check of the value and the wait that follows it therefore see the same updates. A
+wait returns for a value newer than the last one the thread read, with or without the lock.</p>
 <p>The body of the loop calls <code class="docutils literal notranslate"><span class="pre">Wait</span></code> on the stream, which causes the program to block until the value
 changes. This prevents the loop from ‘spinning’ and so it does not consume processing resources
 whilst waiting.</p>
@@ -1339,8 +1347,9 @@ should return nothing.</p>
 <p>A callback added to a stream that already has a value is called with that value straight away.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The callback function may be called from a different thread than the one that created the
-stream. Any changes to shared state must therefore be protected with appropriate
+<p>Callbacks run on the client’s callback thread, one at a time, and may make remote
+procedure calls. A callback must not wait on a stream, as the same thread wakes the
+stream’s waiters. Any changes to shared state must be protected with appropriate
 synchronization.</p>
 </div>
 </section>
@@ -1650,7 +1659,7 @@ the same on every update. An <code class="docutils literal notranslate"><span cl
 class.</p>
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-Connection.Connection">
-<span id="function-Connection.Connection(string,System.Net.IPAddress,int,int,System.TimeSpan)"></span><span class="sig-name descname"><span class="pre">Connection</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&quot;&quot;</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Net.IPAddress" title="type: msdn ~&gt; System.Net.IPAddress"><span class="pre">IPAddress</span></a><span class="w"> </span><span class="n"><span class="pre">address</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="n"><span class="pre">rpcPort</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50000</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="n"><span class="pre">streamPort</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50001</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.TimeSpan" title="type: msdn ~&gt; System.TimeSpan"><span class="pre">TimeSpan</span></a><span class="w"> </span><span class="n"><span class="pre">timeout</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">default</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.Connection" title="Link to this definition">#</a></dt>
+<span id="function-Connection.Connection(string,System.Net.IPAddress,int,System.TimeSpan,System.TimeSpan?,System.TimeSpan?)"></span><span class="sig-name descname"><span class="pre">Connection</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&quot;&quot;</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Net.IPAddress" title="type: msdn ~&gt; System.Net.IPAddress"><span class="pre">IPAddress</span></a><span class="w"> </span><span class="n"><span class="pre">address</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Int32" title="type: msdn ~&gt; System.Int32"><span class="pre">int</span></a><span class="w"> </span><span class="n"><span class="pre">port</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50000</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.TimeSpan" title="type: msdn ~&gt; System.TimeSpan"><span class="pre">TimeSpan</span></a><span class="w"> </span><span class="n"><span class="pre">timeout</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">default</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.TimeSpan" title="type: msdn ~&gt; System.TimeSpan"><span class="pre">TimeSpan</span></a><span class="p"><span class="pre">?</span></span><span class="w"> </span><span class="n"><span class="pre">handshakeTimeout</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.TimeSpan" title="type: msdn ~&gt; System.TimeSpan"><span class="pre">TimeSpan</span></a><span class="p"><span class="pre">?</span></span><span class="w"> </span><span class="n"><span class="pre">stallTimeout</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.Connection" title="Link to this definition">#</a></dt>
 <dd><p>Connect to a kRPC server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1658,22 +1667,30 @@ class.</p>
 <li><p><strong>name</strong> – A descriptive name for the connection. This is passed to the server and appears
 in the in-game server window.</p></li>
 <li><p><strong>address</strong> – The address of the server to connect to. Defaults to 127.0.0.1.</p></li>
-<li><p><strong>rpc_port</strong> – The port number of the RPC Server. Defaults to 50000. This should match the
-RPC port number of the server you want to connect to.</p></li>
-<li><p><strong>stream_port</strong> – The port number of the Stream Server. Defaults to 50001. This should
-match the stream port number of the server you want to connect to.</p></li>
+<li><p><strong>port</strong> – The port number of the server. Defaults to 50000. This should match the
+port number of the server you want to connect to.</p></li>
 <li><p><strong>timeout</strong> – How long to wait for a connection before giving up. Defaults to zero,
 which waits indefinitely. A network that drops a connection attempt rather than refusing
 it otherwise leaves the client waiting.</p></li>
+<li><p><strong>handshakeTimeout</strong> – How long to wait for the server to accept the connection before
+giving up. Defaults to 5 seconds. <code class="docutils literal notranslate"><span class="pre">Timeout.InfiniteTimeSpan</span></code> waits indefinitely, such
+as for a server that asks the player to approve each connection.</p></li>
+<li><p><strong>stallTimeout</strong> – How long a message from the server can go without a new byte, once it
+has started to arrive, before the connection fails. Defaults to 30 seconds.
+<code class="docutils literal notranslate"><span class="pre">Timeout.InfiniteTimeSpan</span></code> waits indefinitely.</p></li>
 </ul>
 </dd>
 </dl>
+<p>Throws a <code class="docutils literal notranslate"><span class="pre">ConnectionException</span></code> if the server refuses the connection. Its <code class="docutils literal notranslate"><span class="pre">Status</span></code>
+property holds the status the server gave, such as <code class="docutils literal notranslate"><span class="pre">Denied</span></code>. An exception thrown when the
+server ends the connection holds the reason in its <code class="docutils literal notranslate"><span class="pre">Reason</span></code> property, such as
+<code class="docutils literal notranslate"><span class="pre">ServerStopped</span></code>.</p>
 </dd></dl>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-Connection.ConnectLocal">
-<span id="function-Connection.ConnectLocal(string,string,string)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-Connection" title="class: Connection"><span class="pre">Connection</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ConnectLocal</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&quot;&quot;</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">rpcPath</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&quot;&quot;</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">streamPath</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&quot;&quot;</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.ConnectLocal" title="Link to this definition">#</a></dt>
-<dd><p>Connect to a kRPC server running on the same machine, over unix domain sockets rather than
+<span id="function-Connection.ConnectLocal(string,string,System.TimeSpan?,System.TimeSpan?)"></span><span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><a class="reference internal" href="#class-Connection" title="class: Connection"><span class="pre">Connection</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ConnectLocal</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&quot;&quot;</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">&quot;&quot;</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.TimeSpan" title="type: msdn ~&gt; System.TimeSpan"><span class="pre">TimeSpan</span></a><span class="p"><span class="pre">?</span></span><span class="w"> </span><span class="n"><span class="pre">handshakeTimeout</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.TimeSpan" title="type: msdn ~&gt; System.TimeSpan"><span class="pre">TimeSpan</span></a><span class="p"><span class="pre">?</span></span><span class="w"> </span><span class="n"><span class="pre">stallTimeout</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">null</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.ConnectLocal" title="Link to this definition">#</a></dt>
+<dd><p>Connect to a kRPC server running on the same machine, over a unix domain socket rather than
 TCP/IP. The connection behaves identically once established. Unix domain sockets are
 available on Linux, macOS, and Windows 10 1803 and Windows Server 2019 or later.</p>
 <dl class="field-list simple">
@@ -1681,12 +1698,11 @@ available on Linux, macOS, and Windows 10 1803 and Windows Server 2019 or later.
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> – A descriptive name for the connection. This is passed to the server and appears
 in the in-game server window.</p></li>
-<li><p><strong>rpcPath</strong> – The path of the socket the RPC Server is listening on. This should match the
-RPC socket path shown in the in-game server window. Leave empty for the path the server
-uses unless it was configured with another.</p></li>
-<li><p><strong>streamPath</strong> – The path of the socket the Stream Server is listening on. This should
-match the stream socket path shown in the in-game server window. Defaults as <code class="docutils literal notranslate"><span class="pre">rpcPath</span></code>
-does. Pass <code class="docutils literal notranslate"><span class="pre">null</span></code> to connect without stream support.</p></li>
+<li><p><strong>path</strong> – The path of the socket the server is listening on. This should match the
+socket path shown in the in-game server window. Leave empty for the path the server uses
+unless it was configured with another.</p></li>
+<li><p><strong>handshakeTimeout</strong> – As for the constructor.</p></li>
+<li><p><strong>stallTimeout</strong> – As for the constructor.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1787,7 +1803,7 @@ expression API’s <code class="docutils literal notranslate"><span class="pre">
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-Connection.Dispose">
 <span id="function-Connection.Dispose()"></span><span class="pre">void</span><span class="w"> </span><span class="sig-name descname"><span class="pre">Dispose</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-Connection.Dispose" title="Link to this definition">#</a></dt>
-<dd><p>Closes the connection and frees the resources associated with it.</p>
+<dd><p>Tells the server the connection is ending, then closes it and frees its resources.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1864,8 +1880,9 @@ An error ends the stream and does not invoke the callback. Calling <code class="
 Returns a unique identifier for the callback which can be used to remove it.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The callback function may be called from a different thread than the one that created the
-stream. Any changes to shared state must therefore be protected with appropriate
+<p>Callbacks run on the client’s callback thread, one at a time, and may make remote
+procedure calls. A callback must not wait on a stream, as the same thread wakes the
+stream’s waiters. Any changes to shared state must be protected with appropriate
 synchronization.</p>
 </div>
 </dd></dl>

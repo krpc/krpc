@@ -1120,16 +1120,20 @@ it out:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This function also accepts arguments that specify what address and port numbers to connect to, and
+<p>This function also accepts arguments that specify what address and port to connect to, and
 an optional descriptive name for the connection which is displayed in the kRPC window in the
 game. For example:</p>
 <div class="highlight-py notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">"My Example Program"</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="s2">"192.168.1.10"</span><span class="p">,</span> <span class="n">rpc_port</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">stream_port</span><span class="o">=</span><span class="mi">1001</span>
-<span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"My Example Program"</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="s2">"192.168.1.10"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">get_status</span><span class="p">()</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A server with “Auto-accept new clients” turned off answers only once the player approves the
+connection, and the client gives up after 5 seconds by default. Pass <code class="docutils literal notranslate"><span class="pre">handshake_timeout=None</span></code> to wait
+for the player.</p>
 </div>
 </section>
 <section id="calling-remote-procedures">
@@ -1286,6 +1290,9 @@ stream changes.</p>
 <p>This code creates a stream, acquires a lock on the streams condition variable (using a <code class="docutils literal notranslate"><span class="pre">with</span></code>
 statement) and then repeatedly checks the value of <code class="docutils literal notranslate"><span class="pre">abort</span></code>. It leaves the loop when it changes to
 true.</p>
+<p>While a thread holds the lock, the value of the stream changes only when the condition variable is
+notified. A check of the value and the wait that follows it therefore see the same updates. A
+wait returns for a value newer than the last one the thread read, with or without the lock.</p>
 <p>The body of the loop calls <code class="docutils literal notranslate"><span class="pre">wait</span></code> on the stream, which causes the program to block until the value
 changes. This prevents the loop from ‘spinning’ and so it does not consume processing resources
 whilst waiting.</p>
@@ -1336,8 +1343,9 @@ should return nothing.</p>
 <p>A callback added to a stream that already has a value is called with that value straight away.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The callback function may be called from a different thread than the one that created the
-stream. Any changes to shared state must therefore be protected with appropriate
+<p>Callbacks run on the client’s callback thread, one at a time, and may make remote
+procedure calls. A callback must not wait on a stream, as the same thread wakes the
+stream’s waiters. Any changes to shared state must be protected with appropriate
 synchronization.</p>
 </div>
 </section>
@@ -1700,7 +1708,7 @@ makes no remote procedure call and uses no state variable, as its value is the s
 <h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="krpc.connect">
-<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">rpc_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stream_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50001</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">use_pregenerated_stubs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">use_pregenerated_stubs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">handshake_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stall_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
 <dd><p>This function creates a connection to a kRPC server. It returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>
 object, through which the server can be communicated with.</p>
 <dl class="field-list simple">
@@ -1710,10 +1718,8 @@ object, through which the server can be communicated with.</p>
 in the in-game server window.</p></li>
 <li><p><strong>address</strong> (<em>str</em>) – The address of the server to connect to. Can either be a hostname or an IP
 address in dotted decimal notation. Defaults to ‘127.0.0.1’.</p></li>
-<li><p><strong>rpc_port</strong> (<em>int</em>) – The port number of the RPC Server. Defaults to 50000. This should match the
-RPC port number of the server you want to connect to.</p></li>
-<li><p><strong>stream_port</strong> (<em>int</em>) – The port number of the Stream Server. Defaults to 50001. This should
-match the stream port number of the server you want to connect to.</p></li>
+<li><p><strong>port</strong> (<em>int</em>) – The port number of the server. Defaults to 50000. This should match the
+port number of the server you want to connect to.</p></li>
 <li><p><strong>use_pregenerated_stubs</strong> (<em>bool</em>) – Whether to use the pre-generated service stubs bundled with
 the client, which include type hints. If set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, or if the
 server provides a service with no bundled stub, the service is generated
@@ -1721,16 +1727,26 @@ dynamically at runtime. Defaults to <code class="docutils literal notranslate"><
 <li><p><strong>timeout</strong> (<em>float</em>) – How many seconds to wait for a connection before giving up. Defaults to
 <code class="docutils literal notranslate"><span class="pre">None</span></code>, which waits indefinitely. A network that drops a connection
 attempt rather than refusing it otherwise leaves the client waiting.</p></li>
+<li><p><strong>handshake_timeout</strong> (<em>float</em>) – How many seconds to wait for the server to accept the
+connection before giving up. Defaults to 5. <code class="docutils literal notranslate"><span class="pre">None</span></code> waits indefinitely,
+such as for a server that asks the player to approve each connection.</p></li>
+<li><p><strong>stall_timeout</strong> (<em>float</em>) – How many seconds a message from the server can go without a new
+byte, once it has started to arrive, before the connection fails.
+Defaults to 30. <code class="docutils literal notranslate"><span class="pre">None</span></code> waits indefinitely.</p></li>
 </ul>
 </dd>
 </dl>
+<p>Raises <code class="docutils literal notranslate"><span class="pre">krpc.error.ConnectionError</span></code> if the server refuses the connection. Its <code class="docutils literal notranslate"><span class="pre">status</span></code>
+attribute names the status the server gave, such as <code class="docutils literal notranslate"><span class="pre">&quot;DENIED&quot;</span></code>. An error raised when the
+server ends the connection names the reason in its <code class="docutils literal notranslate"><span class="pre">reason</span></code> attribute, such as
+<code class="docutils literal notranslate"><span class="pre">&quot;SERVER_STOPPED&quot;</span></code>.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="krpc.connect_local">
-<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">rpc_path</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stream_path</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">use_pregenerated_stubs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect_local" title="Link to this definition">#</a></dt>
-<dd><p>This function creates a connection to a kRPC server running on the same machine, over unix
-domain sockets rather than TCP/IP. It returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a> object, just as
+<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">use_pregenerated_stubs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">handshake_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stall_timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect_local" title="Link to this definition">#</a></dt>
+<dd><p>This function creates a connection to a kRPC server running on the same machine, over a unix
+domain socket rather than TCP/IP. It returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a> object, just as
 <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> does, and the connection behaves identically thereafter.</p>
 <p>Use this when the script runs on the same machine as the game and the server is configured to
 use the local socket protocol. A script that makes many calls in quick succession completes
@@ -1744,14 +1760,12 @@ client opens the socket through winsock itself.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – A descriptive name for the connection. This is passed to the server and appears
 in the in-game server window.</p></li>
-<li><p><strong>rpc_path</strong> (<em>str</em>) – The path of the socket the RPC server is listening on. This should match
-the RPC socket path shown in the in-game server window. Defaults to the
-path the server uses unless it was configured with another.</p></li>
-<li><p><strong>stream_path</strong> (<em>str</em>) – The path of the socket the Stream Server is listening on. This should
-match the stream socket path shown in the in-game server window.
-Defaults as <code class="docutils literal notranslate"><span class="pre">rpc_path</span></code> does. Pass <code class="docutils literal notranslate"><span class="pre">None</span></code> to connect without stream
-support.</p></li>
+<li><p><strong>path</strong> (<em>str</em>) – The path of the socket the server is listening on. This should match the
+socket path shown in the in-game server window. Defaults to the path the
+server uses unless it was configured with another.</p></li>
 <li><p><strong>use_pregenerated_stubs</strong> (<em>bool</em>) – As for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p></li>
+<li><p><strong>handshake_timeout</strong> (<em>float</em>) – As for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p></li>
+<li><p><strong>stall_timeout</strong> (<em>float</em>) – As for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1814,9 +1828,9 @@ server side equivalent. See <a class="reference internal" href="#python-client-c
 function can also be a Python function or lambda that takes no arguments, which is
 compiled with <a class="reference internal" href="#krpc.client.Client.compile" title="krpc.client.Client.compile"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compile()</span></code></a> on every call. Returns a
 <a class="reference internal" href="#krpc.event.Event" title="krpc.event.Event"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.event.Event</span></code></a> object.</p>
-<p>Raises <code class="docutils literal notranslate"><span class="pre">StreamError</span></code> without a stream connection, and for a compiled function with
-parameters. A function that does not evaluate to a boolean value raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>,
-and a value that is not a function raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
+<p>Raises <code class="docutils literal notranslate"><span class="pre">StreamError</span></code> for a compiled function with parameters. A function that does not
+evaluate to a boolean value raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>, and a value that is not a function
+raises <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1855,8 +1869,9 @@ the timeout in seconds for the operation.</p>
 <dd><p>Adds a callback function that is invoked whenever a stream update finishes processing.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The callback function may be called from a different thread than the one that created the
-stream. Any changes to shared state must therefore be protected with appropriate
+<p>Callbacks run on the client’s callback thread, one at a time, and may make remote
+procedure calls. A callback must not wait on a stream, as the same thread wakes the
+stream’s waiters. Any changes to shared state must be protected with appropriate
 synchronization.</p>
 </div>
 </dd></dl>
@@ -1878,7 +1893,7 @@ when constructing custom events. See <a class="reference internal" href="#python
 <dl class="py method">
 <dt class="sig sig-object py" id="krpc.client.Client.close">
 <span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.close" title="Link to this definition">#</a></dt>
-<dd><p>Closes the connection to the server.</p>
+<dd><p>Tells the server the connection is closing, then closes it.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1956,8 +1971,9 @@ the stream already has a value, the callback is invoked with it straight away.
 An error from the stream does not invoke the callback. Calling the stream raises it.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The callback function may be called from a different thread than the one that created the
-stream. Any changes to shared state must therefore be protected with appropriate
+<p>Callbacks run on the client’s callback thread, one at a time, and may make remote
+procedure calls. A callback must not wait on a stream, as the same thread wakes the
+stream’s waiters. Any changes to shared state must be protected with appropriate
 synchronization.</p>
 </div>
 </dd></dl>
