@@ -32,6 +32,8 @@ from pygments.token import Token
 MEDIA = Path(__file__).resolve().parent
 BUILD = MEDIA / "build"
 PUBLISHED = ["logo-mark.svg", "logo-on-light.svg", "logo-on-dark.svg"]
+# The icon for mod listings that take only a raster image, such as Borea
+PUBLISHED_PNG = ["logo-mark.png"]
 
 # Fonts: (file name, URL, member of a zip archive or None, sha256 of the font file)
 FONTS = {
@@ -627,6 +629,9 @@ def main():
         render_png(
             BUILD / name, (BUILD / name).with_suffix(".png"), *sizes.get(name, [])
         )
+    for name in PUBLISHED_PNG:
+        shutil.copy(BUILD / name, MEDIA / name)
+        print("wrote", name)
     if args.preview:
         sheet = args.preview.with_suffix(".svg")
         sheet.write_text(preview(word))

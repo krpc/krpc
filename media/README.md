@@ -17,7 +17,8 @@ The generated files, each as an SVG and a PNG:
 
 `build/` is not committed. The script also copies `logo-mark.svg`, `logo-on-light.svg` and
 `logo-on-dark.svg` into this directory, where they are committed for the README and the
-documentation.
+documentation. It copies `logo-mark.png` too, for mod listings that take only a raster image,
+such as Borea.
 
 `generate.sh` installs the Python dependencies into a virtualenv and runs `generate.py`. The script
 downloads the fonts into `build/fonts`, as Nasalization's license does not allow redistributing
