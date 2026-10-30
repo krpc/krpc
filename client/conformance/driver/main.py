@@ -55,6 +55,8 @@ def main() -> int:
     arguments = [
         os.path.join(root, "tests"),
         "--rootdir=" + root,
+        "-c",
+        os.path.join(root, "pytest.ini"),
         "-p",
         "driver.plugin",
         # The runfiles tree is read only
