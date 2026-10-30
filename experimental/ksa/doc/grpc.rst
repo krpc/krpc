@@ -139,3 +139,12 @@ The gRPC server provides procedures as unary calls:
 * **Errors are status codes.** An argument error is ``INVALID_ARGUMENT``, an invalid operation
   is ``FAILED_PRECONDITION`` and any other error is ``UNKNOWN``. The ``krpc-error-name`` and
   ``krpc-error-service`` trailers name the exception, as the other clients raise it.
+
+API Reference
+-------------
+
+.. toctree::
+   :maxdepth: 1
+
+   grpc/api/ksa
+   grpc/api/messages

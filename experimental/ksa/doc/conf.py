@@ -3,6 +3,9 @@
 # follow the kRPC documentation's.
 
 import os
+import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "_ext"))
 
 project = "kRPC"
 copyright = "2015-2026 kRPC Org"
@@ -17,6 +20,7 @@ extensions = [
     "sphinxcontrib.luadomain",
     "sphinx_csharp",
     "javasphinx",
+    "grpcdomain",
 ]
 suppress_warnings = ["design.fa-build"]
 
