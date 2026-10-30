@@ -802,6 +802,23 @@ namespace KRPC.SpaceCenter.AutoPilot
             Start ();
         }
 
+        /// <summary>
+        /// The vessel, and the client that engaged the auto-pilot if there is one, for log lines.
+        /// </summary>
+        internal string Label {
+            get {
+                string name;
+                try {
+                    name = "'" + vessel.Name + "'";
+                } catch (Exception) {
+                    // The vessel may be gone from the game
+                    name = vessel.Id.ToString ();
+                }
+                var label = "vessel " + name;
+                return engagedClient == null ? label : label + " for client " + engagedClient.Label ();
+            }
+        }
+
         public void Disengage ()
         {
             engaged = false;
