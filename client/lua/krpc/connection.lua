@@ -88,7 +88,8 @@ function Connection:receive_message_data(timeout)
   local size = 0
   local shift = 1
   local deadline
-  if timeout ~= nil then
+  -- An infinite timeout waits with none, as luasocket on Windows fails a wait of math.huge at once
+  if timeout ~= nil and timeout < math.huge then
     deadline = socket.gettime() + timeout
   end
   -- Each read waits for what is left of the timeout
@@ -108,7 +109,7 @@ function Connection:receive_message_data(timeout)
         error(Connection.MALFORMED_SIZE, 0)
       end
       local data = receive(size)
-      if timeout ~= nil then
+      if deadline ~= nil then
         self._socket:settimeout(nil, 't')
       end
       return data
