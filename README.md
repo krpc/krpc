@@ -28,6 +28,10 @@ Contributions to kRPC are very welcome. [Please refer to this guide.](Contributi
  * [Release guide](Release-Guide.md) for project maintainers to do releases.
  * See the #devchat channels on Discord for informal dev discussions
 
+## KSA
+
+kRPC for Kitten Space Agency (KSA) is in active development. See [experimental/ksa](experimental/ksa).
+
 ## KSP2
 
 kRPC was briefly planned for KSP2, but has now been abandoned. See https://github.com/krpc/krpc2
