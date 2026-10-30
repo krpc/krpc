@@ -15,7 +15,7 @@ from collections.abc import Callable, Iterable
 import serverprocess
 
 import krpc.schema.KRPC_pb2 as KRPC
-from driver import raw
+from driver import localsocket, raw
 from driver.framing import CLIENT_IDENTIFIER, PROTOCOL_VERSION, frame, receive_frame
 from driver.testee import Endpoint
 from driver.websocket import WebSocket
@@ -113,13 +113,11 @@ class ScriptedServer:
             # A socket file a crashed run left behind
             if os.path.exists(path):
                 os.remove(path)
-            self._listener = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            self._listener.bind(path)
+            self._listener = localsocket.listen(path)
         else:
             self._listener = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self._listener.bind(("127.0.0.1", 0))
             self.port = self._listener.getsockname()[1]
-        if self._listener is not None:
             self._listener.listen(1)
         self._script = script
         self._socket: socket.socket | SerialLine | WebSocket | None = None

@@ -9,7 +9,7 @@ import time
 
 import pytest
 import testee_pb2 as pb
-from driver import profile, protocol, section, should, untested, values
+from driver import localsocket, profile, protocol, section, should, untested, values
 from driver.framing import CLIENT_IDENTIFIER, PROTOCOL_VERSION, encode_size, frame
 from driver.scripted import ScriptedServer, definitions, is_call
 from driver.testee import (
@@ -382,10 +382,8 @@ def test_localsocket_path_too_long(client, server, scripted_dir):
     base = directory + os.sep
     # The longest path that fits, with its terminating NUL
     path = base + "p" * (SOCKET_PATH_SIZE - 1 - len(base))
-    listener = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    listener = localsocket.listen(path)
     try:
-        listener.bind(path)
-        listener.listen(1)
         listener.setblocking(False)
         endpoint = Endpoint("localsocket", path=path + "q" * 64)
         with pytest.raises(TesteeError) as info:

@@ -6,15 +6,15 @@ from __future__ import annotations
 import socket
 
 import krpc.schema.KRPC_pb2 as KRPC
+from driver import localsocket
 from driver.framing import PROTOCOL_VERSION, frame, receive_frame
 from driver.testee import REPLY_TIMEOUT, Endpoint
 
 
 def _open(endpoint: Endpoint) -> socket.socket:
     if endpoint.protocol == "localsocket":
-        sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        sock = localsocket.connect(endpoint.path)
         sock.settimeout(REPLY_TIMEOUT)
-        sock.connect(endpoint.path)
         return sock
     return socket.create_connection(
         (endpoint.address, endpoint.control_port), REPLY_TIMEOUT
