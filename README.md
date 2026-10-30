@@ -27,7 +27,6 @@ Contributions to kRPC are very welcome. [Please refer to this guide.](Contributi
  * [Development Guide](Development-Guide.md) for information on the project structure, compiling the code and the various tools.
  * [Release guide](Release-Guide.md) for project maintainers to do releases.
  * See the #devchat channels on Discord for informal dev discussions
- * [Forum development thread](https://forum.kerbalspaceprogram.com/topic/62902-18x-to-112x-krpc-remote-procedure-call-server-v051-2nd-march-2023/)
 
 ## KSP2
 

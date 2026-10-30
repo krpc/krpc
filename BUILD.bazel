@@ -20,8 +20,6 @@ readme_text = """Documentation: https://krpc.github.io/krpc
 
 Forum release thread: https://forum.kerbalspaceprogram.com/topic/130742-1125-krpc-control-the-game-using-c-c-java-lua-python-ruby-haskell-c-arduino-v060/
 
-Forum development thread: https://forum.kerbalspaceprogram.com/topic/62902-18x-to-112x-krpc-remote-procedure-call-server-v051-2nd-march-2023/
-
 """
 
 license_text = """This license (LGPL v3) applies to all parts of kRPC except for the following:
