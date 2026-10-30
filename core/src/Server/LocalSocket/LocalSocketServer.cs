@@ -295,20 +295,20 @@ namespace KRPC.Server.LocalSocket
 
                         // Deny the connection
                         if (args.Request.ShouldDeny) {
-                            Logger.WriteLine ("LocalSocketServer: client connection denied (" + client.Address + ")", Logger.Severity.Debug);
+                            Logger.WriteLine ("LocalSocketServer: connection from " + client.Label () + " denied", Logger.Severity.Debug);
                             DisconnectClient (client, true);
                         }
 
                         // Allow the connection
                         else if (args.Request.ShouldAllow) {
-                            Logger.WriteLine ("LocalSocketServer: client connection accepted (" + client.Address + ")", Logger.Severity.Debug);
+                            Logger.WriteLine ("LocalSocketServer: connection from " + client.Label () + " accepted", Logger.Severity.Debug);
                             clients.Add (client);
                             EventHandlerExtensions.Invoke (OnClientConnected, this, new ClientConnectedEventArgs<byte,byte> (client));
                         }
 
                         // Still pending, will either be denied or allowed on a subsequent call to Update
                         else {
-                            Logger.WriteLine ("LocalSocketServer: client connection still pending (" + client.Address + ")", Logger.Severity.Debug);
+                            Logger.WriteLine ("LocalSocketServer: connection from " + client.Label () + " still pending", Logger.Severity.Debug);
                             stillPendingClients.Add (client);
                         }
                     }
@@ -410,17 +410,14 @@ namespace KRPC.Server.LocalSocket
                     Logger.WriteLine ("LocalSocketServer.Listener: stopped", Logger.Severity.Debug);
                 }
             } catch (Exception e) {
-                Logger.WriteLine ("LocalSocketServer.Listener: caught exception, stopped", Logger.Severity.Error);
-                Logger.WriteLine (e.GetType ().Name);
-                Logger.WriteLine (e.Message);
-                Logger.WriteLine (e.StackTrace);
+                Logger.WriteLine ("LocalSocketServer.Listener: stopped after an exception: " + e, Logger.Severity.Error);
                 listener.Close ();
             }
         }
 
         void DisconnectClient (IClient<byte,byte> client, bool noEvent = false)
         {
-            var clientAddress = client.Address;
+            var label = client.Label ();
             try {
                 var stream = client.Stream;
                 closedClientsBytesRead += stream.BytesRead;
@@ -430,7 +427,7 @@ namespace KRPC.Server.LocalSocket
             client.Close ();
             if (!noEvent)
                 EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<byte,byte> (client));
-            Logger.WriteLine ("LocalSocketServer: client disconnected (" + clientAddress + ")");
+            Logger.WriteLine ("LocalSocketServer: connection from " + label + " closed", Logger.Severity.Debug);
         }
     }
 }

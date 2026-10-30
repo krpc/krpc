@@ -280,7 +280,7 @@ namespace KRPC.Server.SerialIO
 
         void DisconnectClient (IClient<byte, byte> _client, bool noEvent = false)
         {
-            var clientAddress = _client.Address;
+            var label = _client.Label ();
             try {
                 var stream = _client.Stream;
                 closedClientsBytesRead += stream.BytesRead;
@@ -290,7 +290,7 @@ namespace KRPC.Server.SerialIO
             _client.Close ();
             if (!noEvent)
                 EventHandlerExtensions.Invoke (OnClientDisconnected, this, new ClientDisconnectedEventArgs<byte, byte> (_client));
-            Logger.WriteLine ("SerialIO.Server: client disconnected (" + clientAddress + ")");
+            Logger.WriteLine ("SerialIO.Server: connection from " + label + " closed", Logger.Severity.Debug);
         }
     }
 }
