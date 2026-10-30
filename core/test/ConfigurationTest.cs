@@ -10,7 +10,7 @@ namespace KRPC.Test
         {
             var config = new Configuration ();
             Assert.AreEqual (true, config.MainWindowVisible);
-            Assert.AreEqual (false, config.AutoAcceptConnections);
+            Assert.AreEqual (true, config.AutoAcceptConnections);
         }
     }
 }

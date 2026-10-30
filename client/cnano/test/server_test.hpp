@@ -29,7 +29,7 @@ class server_test : public ::testing::Test {
 inline server_test::server_test() : conn(connect()) {}
 
 inline server_test::~server_test() {
-  if (KRPC_OK != krpc_close(conn)) exit(1);
+  if (KRPC_OK != krpc_disconnect(conn)) exit(1);
 }
 
 // The address the server the test harness started is listening on, in whatever form the
@@ -37,16 +37,16 @@ inline server_test::~server_test() {
 #ifdef KRPC_COMMUNICATION_TCP
 inline krpc_connection_config_t server_address() {
   // The port the test harness passes in, or the server's default when the binary is run directly
-  const char* port = std::getenv("RPC_PORT");
+  const char* port = std::getenv("KRPC_TEST_TCPIP_PORT");
   krpc_connection_config_t config;
   config.address = "127.0.0.1";
   config.port = port == nullptr ? 50000 : static_cast<uint16_t>(std::atoi(port));
   return config;
 }
 #elif defined(KRPC_COMMUNICATION_LOCALSOCKET)
-inline const char* server_address() { return std::getenv("RPC_PATH"); }
+inline const char* server_address() { return std::getenv("KRPC_TEST_LOCALSOCKET_PATH"); }
 #else
-inline const char* server_address() { return std::getenv("PORT"); }
+inline const char* server_address() { return std::getenv("KRPC_TEST_SERIALIO_PORT"); }
 #endif
 
 inline krpc_connection_t server_test::connect() {

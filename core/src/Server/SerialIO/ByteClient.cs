@@ -8,14 +8,14 @@ namespace KRPC.Server.SerialIO
         BufferedPort port;
         ByteStream stream;
 
-        public ByteClient (BufferedPort bufferedPort, byte[] buffer = null)
+        public ByteClient (BufferedPort bufferedPort)
         {
             if (bufferedPort == null)
                 throw new ArgumentNullException (nameof (bufferedPort));
             guid = Guid.NewGuid ();
             port = bufferedPort;
             Address = port.PortName;
-            stream = new ByteStream (port, buffer);
+            stream = new ByteStream (port);
         }
 
         public string Name {

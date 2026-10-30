@@ -19,11 +19,7 @@ namespace KRPC.Server
 
         public override void Write (byte[] buffer, int offset, int count)
         {
-            try {
-                innerStream.Write (buffer, offset, count);
-            } catch (ClientDisconnectedException e) {
-                throw new ObjectDisposedException ("Client disconnected", e);
-            }
+            innerStream.Write (buffer, offset, count);
         }
 
         public override bool CanRead {

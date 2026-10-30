@@ -38,16 +38,16 @@ namespace KRPC.Client.Test
             directory = Path.Combine (
                 SocketDirectory (), "krpc-" + Guid.NewGuid ().ToString ("N").Substring (0, 8));
             Directory.CreateDirectory (directory);
-            path = Path.Combine (directory, "rpc");
+            path = Path.Combine (directory, "krpc.sock");
             var socket = new Socket (
                 AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified);
             socket.Bind (new UnixEndPoint (path));
             return socket;
         }
 
-        protected override Connection Connect (string name)
+        protected override Connection Connect (string name, TimeSpan? stallTimeout = null)
         {
-            return Connection.ConnectLocal (name, path, path);
+            return Connection.ConnectLocal (name, path, stallTimeout: stallTimeout);
         }
 
         [TearDown]
@@ -60,7 +60,7 @@ namespace KRPC.Client.Test
         [Test]
         public void ConnectToAPathNothingIsListeningOn ()
         {
-            Assert.Throws<SocketException> (
+            Assert.Throws<ConnectionException> (
                 () => Connection.ConnectLocal (
                     "CSharpConnectionTestNoServer", path + "-does-not-exist", null));
         }

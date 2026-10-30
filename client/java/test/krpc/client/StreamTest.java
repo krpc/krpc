@@ -20,6 +20,7 @@ import krpc.client.services.TestService;
 import krpc.client.services.TestService.CustomException;
 import krpc.client.services.TestService.TestClass;
 import krpc.schema.KRPC.ProcedureResult;
+import krpc.schema.KRPC.StreamResult;
 import krpc.schema.KRPC.Type;
 import org.junit.Before;
 import org.junit.Test;
@@ -416,29 +417,44 @@ public class StreamTest {
   }
 
   @Test(timeout = 30000)
-  public void testResultBeforeTheAddReplyIsKept()
+  public void testRegisteredStreamKeepsItsLatestResultForItsFirstHandle()
       throws RPCException, StreamException {
     StreamManager manager = connection.streamManager;
-    // Ids the server has not issued, so no update arrives for them. One is noted but not
-    // registered, and one is not yet noted.
-    manager.noteIssued(2000000);
-    manager.update(2000000, uint32Result(42));
-    manager.update(2000001, uint32Result(43));
+    // An id the server has not issued, so no update arrives for it
+    manager.register(2000000);
+    manager.update(2000000, uint32Result(1));
+    manager.update(2000000, uint32Result(2));
     Type type = Type.newBuilder().setCode(Type.TypeCode.UINT32).build();
-    assertEquals(42, (int) manager.getStream(type, 2000000).getValue());
-    assertEquals(43, (int) manager.getStream(type, 2000001).getValue());
+    StreamImpl stream = manager.getStream(type, 2000000);
+    assertEquals(1, stream.getVersion());
+    assertEquals(2, (int) stream.getValue());
   }
 
   @Test(timeout = 30000)
-  public void testResultForAnEndedStreamIsDropped()
+  public void testRegisteredStreamKeepsAnEndingForItsFirstHandle()
       throws RPCException, StreamException {
-    Type type = Type.newBuilder().setCode(Type.TypeCode.UINT32).build();
     StreamManager manager = connection.streamManager;
-    manager.noteIssued(2000005);
-    manager.getStream(type, 2000005);
+    manager.register(2000001);
+    manager.update(2000001, errorResult());
+    manager.update(2000001, uint32Result(3));
+    Type type = Type.newBuilder().setCode(Type.TypeCode.UINT32).build();
+    StreamImpl ended = manager.getStream(type, 2000001);
+    assertThrows(RPCException.class, () -> ended.getValue());
+    assertFalse(manager.isRegistered(2000001));
+  }
+
+  @Test(timeout = 30000)
+  public void testResultForAnUnregisteredStreamIsDropped()
+      throws RPCException, StreamException {
+    StreamManager manager = connection.streamManager;
     manager.update(2000002, uint32Result(42));
-    StreamImpl ended = manager.getStream(type, 2000002);
-    assertFalse(ended.getUpdated());
+    assertFalse(manager.isRegistered(2000002));
+    Type type = Type.newBuilder().setCode(Type.TypeCode.UINT32).build();
+    assertFalse(manager.getStream(type, 2000002).getUpdated());
+  }
+
+  private static StreamResult errorUpdate(long id) {
+    return StreamResult.newBuilder().setId(id).setResult(errorResult()).build();
   }
 
   private static ProcedureResult uint32Result(int value) {
@@ -798,7 +814,7 @@ public class StreamTest {
   }
 
   @Test(timeout = 30000)
-  public void testValueThatFailsToDecodeEndsOnlyItsStream()
+  public void testValueThatFailsToDecodeIsDropped()
       throws RPCException, StreamException {
     Type type = Type.newBuilder().setCode(Type.TypeCode.UINT32).build();
     // Ids the server has not issued, so no update arrives for them
@@ -811,8 +827,8 @@ public class StreamTest {
     connection.streamManager.update(1000000, ProcedureResult.newBuilder().setValue(bad).build());
     ByteString good = ByteString.copyFrom(new byte[] {42});
     connection.streamManager.update(1000001, ProcedureResult.newBuilder().setValue(good).build());
-    assertEquals(1, ended.size());
-    assertThrows(EncodingException.class, () -> failing.getValue());
+    assertEquals(Collections.emptyList(), ended);
+    assertThrows(StreamException.class, () -> failing.getValue());
     assertEquals(42, (int) working.getValue());
   }
 
@@ -887,7 +903,7 @@ public class StreamTest {
         Thread.sleep(10);
       }
       // Stands in for the server closing the connection
-      conn.streamManager.channel.close();
+      conn.session.channel.close();
       waiter.join();
       assertEquals(1, errors.size());
       assertTrue(errors.get(0).getCause() instanceof ConnectionException);
@@ -911,49 +927,6 @@ public class StreamTest {
       conn.close();
       StreamException exn = assertThrows(StreamException.class, () -> stream.waitForUpdate());
       assertTrue(exn.getCause() instanceof ConnectionException);
-    }
-  }
-
-  @Test(timeout = 30000)
-  public void testKeptResultsAreTheLatestValueAndTheEnding()
-      throws RPCException, StreamException {
-    Type type = Type.newBuilder().setCode(Type.TypeCode.UINT32).build();
-    StreamManager manager = connection.streamManager;
-    // Ids the server has not issued, so no update arrives for them
-    manager.update(3000000, uint32Result(1));
-    manager.update(3000000, uint32Result(2));
-    assertEquals(2, (int) manager.getStream(type, 3000000).getValue());
-    manager.update(3000001, uint32Result(1));
-    manager.update(3000001, errorResult());
-    manager.update(3000001, uint32Result(3));
-    StreamImpl ended = manager.getStream(type, 3000001);
-    assertTrue(ended.getUpdated());
-    assertThrows(RPCException.class, () -> ended.getValue());
-  }
-
-  @Test(timeout = 30000)
-  public void testValueThatFailsToDecodeRemovesTheStreamOnTheServer()
-      throws IOException, RPCException, StreamException, InterruptedException {
-    Connection conn = TestUtils.connect();
-    try {
-      KRPC krpc = KRPC.newInstance(conn);
-      final int before = krpc.getStatus().getStreamRpcs();
-      Stream<Integer> stream = conn.addStream(
-          TestService.class, "counter", "StreamTest.testValueThatFailsToDecode", 1);
-      stream.get();
-      // A varint that never ends
-      ByteString bad = ByteString.copyFrom(new byte[] {-1});
-      conn.streamManager.update(
-          stream.stream.getId(), ProcedureResult.newBuilder().setValue(bad).build());
-      assertThrows(EncodingException.class, () -> stream.get());
-      long deadline = System.currentTimeMillis() + 10000;
-      while (krpc.getStatus().getStreamRpcs() > before
-          && System.currentTimeMillis() < deadline) {
-        Thread.sleep(10);
-      }
-      assertTrue(krpc.getStatus().getStreamRpcs() <= before);
-    } finally {
-      conn.close();
     }
   }
 
@@ -1193,34 +1166,26 @@ public class StreamTest {
     // An id the server has not issued, so no update arrives for it
     StreamImpl stream = manager.getStream(UINT32, 3000014);
     synchronized (stream.getCondition()) {
-      // Closed once the update thread has decoded the ending and before it applies it
-      StreamManager.Decoded decoded;
-      synchronized (manager.updateLock) {
-        decoded = manager.decode(stream, errorResult());
-      }
+      // The holder reads the ending only once it is announced, and the close keeps it
+      manager.update(Collections.singletonList(errorUpdate(3000014)));
+      assertThrows(StreamException.class, () -> stream.getValue());
       conn.close();
-      assertThrows(RPCException.class, () -> stream.getValue());
-      manager.apply(decoded);
       assertThrows(RPCException.class, () -> stream.getValue());
     }
   }
 
   @Test(timeout = 30000)
-  public void testRemoveKeepsServerEnding() throws RPCException {
+  public void testRemoveKeepsServerEnding() throws RPCException, InterruptedException {
     StreamManager manager = connection.streamManager;
     // An id the server has not issued, so no update arrives for it
     StreamImpl stream = manager.getStream(UINT32, 3000015);
     List<Exception> ended = Collections.synchronizedList(new ArrayList<Exception>());
     stream.addEndCallback(ended::add);
-    // Removed once the update thread has decoded the ending and before it applies it
-    StreamManager.Decoded decoded;
-    synchronized (manager.updateLock) {
-      decoded = manager.decode(stream, errorResult());
-    }
+    // Removed once the reader has ended the stream and before the dispatcher applies it
+    manager.update(Collections.singletonList(errorUpdate(3000015)));
     stream.remove();
     assertThrows(RPCException.class, () -> stream.getValue());
-    manager.apply(decoded);
-    assertEquals(1, ended.size());
+    awaitSize(ended, 1);
     assertTrue(ended.get(0) instanceof RPCException);
   }
 
@@ -1240,9 +1205,9 @@ public class StreamTest {
         });
         stream.addEndCallback(ended::add);
       }
-      // Called directly, as a close can also end the streams on the update thread, which reports
-      // the Error
-      Error thrown = assertThrows(Error.class, () -> manager.notifyClosed());
+      // Called directly, as a failed connection ends the streams on the dispatcher thread, which
+      // reports the Error
+      Error thrown = assertThrows(Error.class, () -> manager.notifyClosed(null));
       assertTrue(thrown == error);
       assertEquals(2, ended.size());
     } finally {
@@ -1278,7 +1243,7 @@ public class StreamTest {
   }
 
   @Test(timeout = 30000)
-  public void testStreamIdIsNotedWithoutStubs()
+  public void testStreamIsRegisteredWithoutStubs()
       throws IOException, RPCException {
     Connection conn = TestUtils.connect();
     try {
@@ -1288,7 +1253,7 @@ public class StreamTest {
       ProcedureResult result = conn.invoke(
           "TestService", "OnTimer", Encoder.encode(60000, uint32), Encoder.encode(1, uint32));
       long id = krpc.schema.KRPC.Event.parseFrom(result.getValue()).getStream().getId();
-      assertTrue(conn.streamManager.unregistered.contains(id));
+      assertTrue(conn.streamManager.isRegistered(id));
     } finally {
       conn.close();
     }
@@ -1365,7 +1330,7 @@ public class StreamTest {
       List<Throwable> errors = Collections.synchronizedList(new ArrayList<Throwable>());
       List<Thread> threads = waitWhileHoldingAnotherCondition(held, waited, errors);
       // Stands in for the server closing the connection
-      conn.streamManager.channel.close();
+      conn.session.channel.close();
       for (Thread thread : threads) {
         thread.join();
       }
@@ -1473,35 +1438,17 @@ public class StreamTest {
   }
 
   @Test(timeout = 30000)
-  public void testEventIdIsNotedWithStubs()
+  public void testEventIsRegisteredWithStubs()
       throws IOException, RPCException {
     Type uint32 = Type.newBuilder().setCode(Type.TypeCode.UINT32).build();
     ProcedureResult result = connection.invoke(
         "TestService", "OnTimer", Encoder.encode(60000, uint32), Encoder.encode(1, uint32));
     long id = krpc.schema.KRPC.Event.parseFrom(result.getValue()).getStream().getId();
-    assertTrue(connection.streamManager.unregistered.contains(id));
+    assertTrue(connection.streamManager.isRegistered(id));
   }
 
   @Test(timeout = 30000)
-  public void testRemovedIdIsForgotten()
-      throws RPCException {
-    StreamManager manager = connection.streamManager;
-    KRPC krpc = KRPC.newInstance(connection);
-    long id = krpc.addStream(connection.getCall(TestService.class, "int32ToString", 54)).getId();
-    manager.update(id, uint32Result(42));
-    assertTrue(manager.unregistered.contains(id));
-    assertTrue(manager.kept.containsKey(id));
-    Type uint64 = Type.newBuilder().setCode(Type.TypeCode.UINT64).build();
-    connection.invoke("KRPC", "RemoveStream", Encoder.encode(id, uint64));
-    assertFalse(manager.unregistered.contains(id));
-    assertFalse(manager.kept.containsKey(id));
-    // A result still in flight is dropped
-    manager.update(id, uint32Result(43));
-    assertFalse(manager.kept.containsKey(id));
-  }
-
-  @Test(timeout = 30000)
-  public void testStreamIdIsNotedWhenStubsDoNotLink()
+  public void testStreamIsRegisteredWhenStubsDoNotLink()
       throws IOException, RPCException {
     Connection conn = TestUtils.connect();
     try {
@@ -1516,7 +1463,7 @@ public class StreamTest {
       ProcedureResult result = conn.invoke(
           "TestService", "OnTimer", Encoder.encode(60000, uint32), Encoder.encode(1, uint32));
       long id = krpc.schema.KRPC.Event.parseFrom(result.getValue()).getStream().getId();
-      assertTrue(conn.streamManager.unregistered.contains(id));
+      assertTrue(conn.streamManager.isRegistered(id));
     } finally {
       conn.close();
     }

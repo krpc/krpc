@@ -499,12 +499,6 @@ class TestFunction(ServerTestCase, unittest.TestCase):
                 with self.assertRaisesRegex(StreamError, "takes parameters"):
                     add(function)
 
-    def test_event_without_a_stream_connection(self) -> None:
-        obj = self.conn.test_service.create_test_object("nostreamevent")
-        with mock.patch.object(self.conn, "_stream_connection", None):
-            with self.assertRaisesRegex(StreamError, "Not connected"):
-                self.conn.add_event(lambda: obj.int_property > 0)
-
     def test_plain_stream_of_a_function_procedure_rejected(self) -> None:
         expression = self.conn.krpc.Expression
         expr = expression.constant_int(1)

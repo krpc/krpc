@@ -33,10 +33,13 @@ version it uses, and the server replies with the version it accepted:
    * - 1
      - 0.7
      - 0 and 1
+   * - 2
+     - 0.8
+     - 2
 
-A client that sends no version is from before kRPC 0.7. The server serves it as version 1, and logs
-a warning. The server rejects any other version with the status ``WRONG_PROTOCOL_VERSION``, or
-over WebSockets with HTTP status 400.
+Version 2 puts every message in a :ref:`Message <communication-protocol-message>`, on every
+transport. A client from an earlier release fails to connect. The server refuses a
+``connection_request`` with a version other than 2 with the status ``WRONG_PROTOCOL_VERSION``.
 
 .. toctree::
    :hidden:

@@ -1,5 +1,27 @@
 ## [v0.8.0] - unreleased
 
+- Connections
+  - **Breaking:** Connect over one connection, removing the stream port and stream path
+    parameters of `Connection.newInstance` and `Connection.newLocalInstance`. A server from
+    before 0.8 refuses the connection (#1219)
+  - **Breaking:** Give up after 5 seconds if the server does not accept the connection. Pass a
+    handshake timeout of `Duration.ZERO` to wait for the player to approve it (#1219)
+  - Add overloads of `Connection.newInstance` and `Connection.newLocalInstance` taking a
+    handshake timeout and a stall timeout (#1219)
+  - Send calls from several threads without waiting for each other's responses (#1219)
+  - Tell the server when the connection closes (#1219)
+  - Fix an interrupted call closing the connection (#1219)
+  - Add `getStatus` and `getReason` to `ConnectionException` for a refused or ended
+    connection (#1219)
+  - Throw `ConnectionException` when the server cannot be reached or its host name does not
+    resolve (#1219)
+
+- Streams and events
+  - **Breaking:** Throw `IllegalArgumentException` from `waitForUpdateWithTimeout` and
+    `waitForWithTimeout` for a negative or NaN timeout, and wait with no deadline for an infinite
+    one (#1219)
+  - Keep a stream running when a value fails to decode, dropping the value (#1219)
+
 - Fix the links to members in the javadoc of the services, which named no method (#1185)
 - Fix the javadoc of the services that `javadoc` rejects, such as lists and setters with a
   `@return` tag (#1185)

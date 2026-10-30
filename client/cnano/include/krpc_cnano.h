@@ -32,10 +32,22 @@
 extern "C" {
 #endif
 
-/* Connect to a kRPC server using the given communication handle */
+/* Connect to a kRPC server using the given communication handle. Waits for the server to
+ * accept the connection. Returns KRPC_ERROR_CONNECTION_REFUSED, and closes the connection, if
+ * the server denies it or does not support the client's protocol version. Over TCP/IP or a
+ * local socket, any other failed connect also closes the connection. Over a serial port or a
+ * custom transport, a partial message from an earlier session on the line can garble the
+ * connection request or its response. In that case this returns KRPC_ERROR_CONNECTION_FAILED
+ * with the connection left open, and the program calls this again to retry. One connection is
+ * open at a time. */
 krpc_error_t krpc_connect(krpc_connection_t connection, const char* clientName);
 
-/* Make an RPC call. Returns a procedure result containing the return value, if any. */
+/* Tell the server the connection is ending, then close it. On a serial port this is how the
+ * server learns the session has ended. */
+krpc_error_t krpc_disconnect(krpc_connection_t connection);
+
+/* Make an RPC call. Returns a procedure result containing the return value, if any. Once the
+ * session has ended, returns KRPC_ERROR_CONNECTION_FAILED. */
 krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResult* result,
                          krpc_schema_ProcedureCall* call);
 

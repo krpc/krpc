@@ -14,6 +14,7 @@ namespace KRPC.Test
         Core core;
         bool blockingRecv;
         uint tickHoldTimeout;
+        PinnedUpdateTime updateTime;
         readonly List<ScriptedClient> clients = new List<ScriptedClient> ();
 
         [SetUp]
@@ -30,17 +31,19 @@ namespace KRPC.Test
             // client that is not ready costs it one poll. The number of updates a script
             // takes is then decided by the script and not by a clock
             config.BlockingRecv = false;
+            updateTime = new PinnedUpdateTime ();
         }
 
         [TearDown]
         public void TearDown ()
         {
             foreach (var client in clients)
-                core.RPCClientDisconnected (client);
+                core.ClientDisconnected (client);
             clients.Clear ();
             var config = Configuration.Instance;
             config.BlockingRecv = blockingRecv;
             config.TickHoldTimeout = tickHoldTimeout;
+            updateTime.Restore ();
         }
 
         ScriptedClient Connect (int pollsBeforeReady, params string[] procedures)
@@ -52,7 +55,7 @@ namespace KRPC.Test
                                 params string[] procedures)
         {
             var client = new ScriptedClient (pollsBeforeReady, pollsBeforeGone, procedures);
-            core.RPCClientConnected (client);
+            core.ClientConnected (client);
             clients.Add (client);
             return client;
         }
@@ -60,7 +63,7 @@ namespace KRPC.Test
         ScriptedClient Batched (params string[][] requests)
         {
             var client = ScriptedClient.Batched (0, 0, requests);
-            core.RPCClientConnected (client);
+            core.ClientConnected (client);
             clients.Add (client);
             return client;
         }

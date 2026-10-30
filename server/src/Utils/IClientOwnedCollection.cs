@@ -1,7 +1,7 @@
 namespace KRPC.Utils
 {
     /// <summary>
-    /// A collection of in-game state owned by RPC clients, which can release the state
+    /// A collection of in-game state owned by clients, which can release the state
     /// owned by clients that have disconnected.
     /// </summary>
     public interface IClientOwnedCollection

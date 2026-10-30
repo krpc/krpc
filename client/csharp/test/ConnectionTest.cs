@@ -21,21 +21,12 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        public void WrongRpcPort ()
+        public void WrongPort ()
         {
             SkipWithoutPorts ();
-            Assert.Throws<SocketException> (() => new Connection (
-                "CSharpClientTestWrongRPCPort",
-                rpcPort: UnusedPort (), streamPort: StreamPort, timeout: ConnectTimeout));
-        }
-
-        [Test]
-        public void WrongStreamPort ()
-        {
-            SkipWithoutPorts ();
-            Assert.Throws<SocketException> (() => new Connection (
-                "CSharpClientTestWrongStreamPort",
-                rpcPort: RPCPort, streamPort: UnusedPort (), timeout: ConnectTimeout));
+            Assert.Throws<ConnectionException> (() => new Connection (
+                "CSharpClientTestWrongPort",
+                port: UnusedPort (), timeout: ConnectTimeout));
         }
 
         /// <summary>
@@ -45,26 +36,8 @@ namespace KRPC.Client.Test
         /// </summary>
         static void SkipWithoutPorts ()
         {
-            if (RPCPath != null)
+            if (LocalSocketPath != null)
                 Assert.Ignore ("the server is listening on socket paths rather than on ports");
-        }
-
-        [Test]
-        public void WrongRPCServer ()
-        {
-            var exn = Assert.Throws<ConnectionException> (() => Connect (
-                          "CSharpClientTestWrongRPCServer", rpc: "stream", stream: "stream"));
-            Assert.AreEqual ("Connection request was for the rpc server, but this is the stream server. " +
-            "Did you connect to the wrong port number or socket path?", exn.Message);
-        }
-
-        [Test]
-        public void WrongStreamServer ()
-        {
-            var exn = Assert.Throws<ConnectionException> (() => Connect (
-                          "CSharpClientTestWrongStreamServer", rpc: "rpc", stream: "rpc"));
-            Assert.AreEqual ("Connection request was for the stream server, but this is the rpc server. " +
-            "Did you connect to the wrong port number or socket path?", exn.Message);
         }
 
         [Test]

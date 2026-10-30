@@ -85,11 +85,15 @@ namespace KRPC.Client
         /// <remarks>
         /// Returns straight away if the event has occurred since the previous wait on this
         /// event object. Throws the exception that ended the event, if it ends before or during
-        /// the wait.
+        /// the wait. Throws an exception if the timeout is negative or NaN.
         /// </remarks>
-        public bool Wait (double timeout = -1) {
+        public bool Wait (double timeout = double.PositiveInfinity) {
+            StreamImpl.CheckTimeout (timeout);
             var impl = stream.stream;
-            // A firing not yet seen is returned before the ending
+            // A remove or a close discards an unseen firing
+            if (impl.EndedByClient)
+                impl.ThrowIfEnded ();
+            // A firing not yet seen is returned before a server ending
             var last = seen;
             if (!impl.Wait (() => impl.Fired > last, timeout))
                 return false;

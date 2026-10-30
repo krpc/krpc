@@ -11,7 +11,6 @@ using System.Threading;
 using Google.Protobuf;
 using KRPC.Client.Attributes;
 using KRPC.Schema.KRPC;
-using Type = KRPC.Schema.KRPC.ConnectionRequest.Types.Type;
 
 namespace KRPC.Client
 {
@@ -20,19 +19,16 @@ namespace KRPC.Client
     /// </summary>
     public class Connection : IConnection, IDisposable
     {
-        const uint PROTOCOL_VERSION = 1;
+        const uint PROTOCOL_VERSION = 2;
 
-        object invokeLock = new object ();
-        Socket rpcSocket;
-        Socket streamSocket;
-        NetworkStream rpcStream;
-        CodedOutputStream codedRpcStream;
-        MessageReader rpcReader;
+        // The wait for the server to accept a connection when none is given
+        static readonly TimeSpan DefaultHandshakeTimeout = TimeSpan.FromSeconds (5);
 
-        // The request a call is sent as, and the parts it is built from. See BuildRequest.
-        readonly Request request = new Request ();
-        readonly ProcedureCall call = new ProcedureCall ();
-        readonly List<Argument> callArguments = new List<Argument> ();
+        readonly Session session;
+
+        internal Session Session {
+            get { return session; }
+        }
 
         // Building the KRPC.Type object that names a type costs a round trip. Every
         // function compiled on this connection shares the objects built for it
@@ -54,41 +50,74 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Connect to a kRPC server on the specified IP address and port numbers. If
-        /// streamPort is 0, does not connect to the stream server.
-        /// Passes an optional name to the server to identify the client (up to 32 bytes of UTF-8 encoded text).
-        /// If timeout is non-zero, gives up after waiting that long for a connection, rather
-        /// than waiting indefinitely.
+        /// Connect to a kRPC server over TCP/IP.
         /// </summary>
-        public Connection (string name = "", IPAddress address = null, int rpcPort = 50000, int streamPort = 50001, TimeSpan timeout = default (TimeSpan))
-            : this (name, Connect (address ?? IPAddress.Loopback, rpcPort, timeout),
-                    streamPort == 0 ? null
-                    : new Func<Socket> (() => Connect (address ?? IPAddress.Loopback, streamPort, timeout)))
+        /// <param name="name">A name for the client, up to 32 bytes of UTF-8 encoded text.</param>
+        /// <param name="address">The address of the server, the loopback address if null.</param>
+        /// <param name="port">The port of the server.</param>
+        /// <param name="timeout">How long to wait for a connection, or indefinitely if zero.</param>
+        /// <param name="handshakeTimeout">How long to wait for the server to accept the
+        /// connection, 5 seconds if null, or indefinitely if
+        /// <see cref="Timeout.InfiniteTimeSpan"/>, such as for a server that asks the player to
+        /// approve each connection.</param>
+        /// <param name="stallTimeout">How long a message from the server may go without a new byte
+        /// once it has started to arrive, 30 seconds if null, or indefinitely if
+        /// <see cref="Timeout.InfiniteTimeSpan"/>.</param>
+        public Connection (string name = "", IPAddress address = null, int port = 50000,
+                           TimeSpan timeout = default (TimeSpan), TimeSpan? handshakeTimeout = null,
+                           TimeSpan? stallTimeout = null)
+            : this (name, Connect (address ?? IPAddress.Loopback, port, timeout, handshakeTimeout, stallTimeout),
+                    handshakeTimeout, stallTimeout)
         {
         }
 
         /// <summary>
-        /// Connect to a kRPC server on the same machine, over unix domain sockets named by
-        /// the given paths rather than over TCP. An empty path stands for the one the server
-        /// uses unless it was configured with another. If streamPath is null, does not
-        /// connect to the stream server. The connection behaves identically once established.
-        /// Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and later.
+        /// Connect to a kRPC server on the same machine, over a unix domain socket named by the
+        /// given path rather than over TCP. An empty path stands for the one the server uses
+        /// unless it was configured with another. The connection behaves identically once
+        /// established. Unix domain sockets are available on Linux, macOS, and Windows 10 1803
+        /// and later. See the constructor for the handshake and stall timeouts.
         /// </summary>
-        public static Connection ConnectLocal (string name = "", string rpcPath = "", string streamPath = "")
+        public static Connection ConnectLocal (string name = "", string path = "", TimeSpan? handshakeTimeout = null,
+                                               TimeSpan? stallTimeout = null)
         {
-            return new Connection (
-                name, ConnectToPath (PathOrDefault (rpcPath, "rpc")),
-                streamPath == null ? null
-                : new Func<Socket> (() => ConnectToPath (PathOrDefault (streamPath, "stream"))));
+            CheckTimeouts (handshakeTimeout, stallTimeout);
+            return new Connection (name, ConnectToPath (PathOrDefault (path)), handshakeTimeout, stallTimeout);
         }
 
         /// <summary>
-        /// The path to connect to for a socket of the given name: the one asked for, or the
-        /// server's default where none was.
+        /// The path to connect to: the one asked for, or the server's default where none was.
         /// </summary>
-        static string PathOrDefault (string path, string name)
+        static string PathOrDefault (string path)
         {
-            return string.IsNullOrEmpty (path) ? DefaultPath (name) : path;
+            return string.IsNullOrEmpty (path) ? DefaultPath () : path;
+        }
+
+        /// <summary>
+        /// Throw ArgumentOutOfRangeException for a handshake or stall timeout that is neither
+        /// positive nor infinite.
+        /// </summary>
+        static void CheckTimeouts (TimeSpan? handshakeTimeout, TimeSpan? stallTimeout)
+        {
+            CheckTimeout (handshakeTimeout, nameof (handshakeTimeout));
+            CheckTimeout (stallTimeout, nameof (stallTimeout));
+        }
+
+        static void CheckTimeout (TimeSpan? timeout, string name)
+        {
+            if (timeout.HasValue && timeout.Value <= TimeSpan.Zero && timeout.Value != Timeout.InfiniteTimeSpan)
+                throw new ArgumentOutOfRangeException (name, timeout.Value, "The timeout must be positive or infinite");
+        }
+
+        static Socket Connect (IPAddress address, int port, TimeSpan timeout,
+                               TimeSpan? handshakeTimeout, TimeSpan? stallTimeout)
+        {
+            CheckTimeouts (handshakeTimeout, stallTimeout);
+            try {
+                return Connect (address, port, timeout);
+            } catch (SocketException exn) {
+                throw new ConnectionException ("Failed to connect to the server: " + exn.Message, exn);
+            }
         }
 
         static Socket Connect (IPAddress address, int port, TimeSpan timeout)
@@ -106,8 +135,8 @@ namespace KRPC.Client
                 }
                 socket.EndConnect (pending);
             }
-            // A call writes a request and then waits for its response, so there is never a
-            // second small write for Nagle's algorithm to hold the first one back for.
+            // A message is sent as soon as it is written, so waiting for more data to coalesce
+            // with can only add latency
             socket.NoDelay = true;
             return socket;
         }
@@ -115,84 +144,114 @@ namespace KRPC.Client
         static Socket ConnectToPath (string path)
         {
             var socket = new Socket (AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified);
-            socket.Connect (new UnixEndPoint (path));
+            try {
+                socket.Connect (new UnixEndPoint (path));
+            } catch (SocketException exn) {
+                socket.Close ();
+                throw new ConnectionException ("Failed to connect to the server: " + exn.Message, exn);
+            }
             return socket;
         }
 
         /// <summary>
-        /// A default path for a socket of the given name, matching the one the server uses
-        /// unless it was configured with another. The fallback names a fixed directory
-        /// rather than asking for the temporary one, which TMPDIR moves for the client
-        /// and not the server.
+        /// The default socket path, matching the one the server uses unless it was configured
+        /// with another. The fallback names a fixed directory rather than asking for the
+        /// temporary one, which TMPDIR moves for the client and not the server.
         /// </summary>
-        static string DefaultPath (string name)
+        static string DefaultPath ()
         {
             var windows = Environment.OSVersion.Platform == PlatformID.Win32NT;
             var directory = Environment.GetEnvironmentVariable (
                 windows ? "LOCALAPPDATA" : "XDG_RUNTIME_DIR");
             if (!string.IsNullOrEmpty (directory))
-                return System.IO.Path.Combine (directory, "krpc", name);
+                return System.IO.Path.Combine (directory, "krpc.sock");
             var temporary = windows ? System.IO.Path.GetTempPath () : "/tmp";
-            return System.IO.Path.Combine (temporary, "krpc-" + Environment.UserName, name);
+            return System.IO.Path.Combine (temporary, "krpc-" + Environment.UserName + ".sock");
         }
 
         /// <summary>
-        /// Perform the connection handshake over an already opened rpc socket. The
-        /// handshake is the same whatever carries it. The stream socket is opened only once
-        /// the rpc connection has been accepted, so that a rejected connection does not
-        /// leave a second one behind.
+        /// Perform the connection handshake over an already opened socket. The handshake is the
+        /// same whatever carries it.
         /// </summary>
-        Connection (string name, Socket rpc, Func<Socket> openStreamSocket)
+        Connection (string name, Socket socket, TimeSpan? handshakeTimeout, TimeSpan? stallTimeout)
         {
-            // Every request carries the one call, which is filled in for each of them.
-            request.Calls.Add (call);
+            var stream = new NetworkStream (socket);
+            var reader = new MessageReader (stream, socket);
+            var stall = stallTimeout ?? Session.DefaultStallTimeout;
+            try {
+                Handshake (name, stream, reader, handshakeTimeout ?? DefaultHandshakeTimeout);
+            } catch (System.Exception) {
+                socket.Close ();
+                throw;
+            }
+            session = new Session (socket, stream, reader, RemoveStreamRequest, stall);
+            StreamManager = new StreamManager (this, session.Dispatch);
+            session.Start (StreamManager);
+            Services.KRPC.Service.AddExceptionTypes (this);
+        }
 
-            rpcSocket = rpc;
-            rpcStream = new NetworkStream (rpcSocket);
-            codedRpcStream = new CodedOutputStream (rpcStream, true);
-            rpcReader = new MessageReader (rpcStream);
-            var connectionRequest = new ConnectionRequest ();
-            connectionRequest.Type = Type.Rpc;
-            connectionRequest.ClientName = name;
-            connectionRequest.ProtocolVersion = PROTOCOL_VERSION;
-            codedRpcStream.WriteLength (connectionRequest.CalculateSize ());
-            connectionRequest.WriteTo (codedRpcStream);
-            codedRpcStream.Flush ();
-            rpcReader.Read ();
-            var response = ConnectionResponse.Parser.ParseFrom (
-                rpcReader.Buffer, rpcReader.Offset, rpcReader.Size);
-            if (response.Status != ConnectionResponse.Types.Status.Ok)
-                throw new ConnectionException (response.Message);
+        /// <summary>
+        /// Send the connection request, and check the server's response to it.
+        /// </summary>
+        static void Handshake (string name, NetworkStream stream, MessageReader reader, TimeSpan timeout)
+        {
+            var output = new CodedOutputStream (stream, true);
+            var request = new Message {
+                ConnectionRequest = new ConnectionRequest { ClientName = name ?? string.Empty, ProtocolVersion = PROTOCOL_VERSION }
+            };
+            output.WriteLength (request.CalculateSize ());
+            request.WriteTo (output);
+            output.Flush ();
+            Message message;
+            try {
+                // The stall timeout applies from the next message
+                reader.Read (timeout, Timeout.InfiniteTimeSpan);
+                message = Message.Parser.ParseFrom (reader.Buffer, reader.Offset, reader.Size);
+            } catch (TimeoutException exn) {
+                throw new ConnectionException (
+                    "The server did not answer the connection request within " +
+                    timeout.TotalSeconds.ToString (CultureInfo.InvariantCulture) + " seconds", exn);
+            } catch (InvalidProtocolBufferException exn) {
+                throw new ConnectionException ("Failed to parse the server's response to the connection request", exn);
+            } catch (System.IO.InvalidDataException exn) {
+                throw new ConnectionException (
+                    "Failed to read the server's response to the connection request: " + exn.Message, exn);
+            } catch (System.Exception exn) when (exn is System.IO.IOException || exn is SocketException) {
+                throw new ConnectionException ("Connection failed: " + exn.Message, exn);
+            }
+            if (message.ContentCase == Message.ContentOneofCase.Disconnect) {
+                var text = "The server ended the connection (" + message.Disconnect.Reason + ")";
+                if (message.Disconnect.Message.Length > 0)
+                    text += ": " + message.Disconnect.Message;
+                throw new ConnectionException (text) { Reason = message.Disconnect.Reason };
+            }
+            if (message.ContentCase != Message.ContentOneofCase.ConnectionResponse)
+                throw new ConnectionException (
+                    "Expected a response to the connection request, got " +
+                    (message.ContentCase == Message.ContentOneofCase.None
+                     ? "a message of an unknown kind" : message.ContentCase.ToString ()));
+            var response = message.ConnectionResponse;
+            if (response.Status != ConnectionResponse.Types.Status.Ok) {
+                var text = "The server refused the connection (" + response.Status + ")";
+                if (response.Message.Length > 0)
+                    text += ": " + response.Message;
+                throw new ConnectionException (text) { Status = response.Status };
+            }
             if (response.ProtocolVersion != PROTOCOL_VERSION)
                 throw new ConnectionException (
                     "The server does not support protocol version " +
                     PROTOCOL_VERSION.ToString (CultureInfo.InvariantCulture) +
                     ". Use a client from the same kRPC release as the server.");
+        }
 
-            if (openStreamSocket != null) {
-                streamSocket = openStreamSocket ();
-                var streamStream = new NetworkStream (streamSocket);
-                connectionRequest = new ConnectionRequest ();
-                connectionRequest.Type = Type.Stream;
-                connectionRequest.ProtocolVersion = PROTOCOL_VERSION;
-                connectionRequest.ClientIdentifier = response.ClientIdentifier;
-                var codedStreamStream = new CodedOutputStream (streamStream, true);
-                codedStreamStream.WriteLength (connectionRequest.CalculateSize ());
-                connectionRequest.WriteTo (codedStreamStream);
-                codedStreamStream.Flush ();
-                // The reader that reads the reply goes on to read the stream updates that
-                // follow it. It may have taken the first of them along with the reply, so a
-                // second reader on the same socket would never see it.
-                var streamReader = new MessageReader (streamStream);
-                streamReader.Read ();
-                response = ConnectionResponse.Parser.ParseFrom (
-                    streamReader.Buffer, streamReader.Offset, streamReader.Size);
-                if (response.Status != ConnectionResponse.Types.Status.Ok)
-                    throw new ConnectionException (response.Message);
-                StreamManager = new StreamManager (this, streamReader, streamSocket.Close);
-            }
-
-            Services.KRPC.Service.AddExceptionTypes (this);
+        /// <summary>
+        /// A request to remove a stream on the server.
+        /// </summary>
+        Request RemoveStreamRequest (ulong id)
+        {
+            var request = new Request ();
+            request.Calls.Add (GetCall ("KRPC", "RemoveStream", new [] { Encoder.Encode (id, TypeSpec.For (typeof (ulong))) }));
+            return request;
         }
 
         /// <summary>
@@ -221,14 +280,22 @@ namespace KRPC.Client
         {
             if (!disposed) {
                 if (disposing) {
-                    rpcSocket.Close ();
-                    if (streamSocket != null)
-                        streamSocket.Close ();
-                    // Closing the sockets releases the read the update thread blocks in, so the
-                    // stream manager can then join the thread. The stream manager skips the join
-                    // on the update thread, or when this thread holds a stream's condition.
-                    if (StreamManager != null)
-                        StreamManager.Dispose ();
+                    Session.DeferPendingInterrupt ();
+                    try {
+                        // The dispatcher thread stops trying to take a condition this thread can
+                        // hold
+                        StreamManager.RequestClose ();
+                        session.Close ();
+                        // Streams end before the join, so a thread waiting on one is woken
+                        StreamManager.NotifyClosed (session.FailureCause);
+                        // Callbacks run on the dispatcher thread, so a connection disposed from
+                        // one does not join it. A callback can also wait for a condition this
+                        // thread holds, so the dispatcher thread then ends once this thread
+                        // releases it.
+                        session.Join (!StreamManager.HoldsACondition ());
+                    } finally {
+                        Session.RaiseDeferredInterrupt ();
+                    }
                 }
                 disposed = true;
             }
@@ -238,12 +305,6 @@ namespace KRPC.Client
         {
             if (disposed)
                 throw new ObjectDisposedException (GetType ().Name);
-        }
-
-        void CheckStreamServer ()
-        {
-            if (StreamManager == null)
-                throw new InvalidOperationException ("The connection has no stream server");
         }
 
         /// <summary>
@@ -258,7 +319,6 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (LambdaExpression expression)
         {
             CheckDisposed ();
-            CheckStreamServer ();
             if (ReferenceEquals (expression, null))
                 throw new ArgumentNullException (nameof (expression));
             if (expression.Parameters.Count > 0)
@@ -438,7 +498,6 @@ namespace KRPC.Client
         public Event AddEvent (Expression<Func<bool>> expression)
         {
             CheckDisposed ();
-            CheckStreamServer ();
             var compiled = FunctionCompiler.Compile (this, expression, expressionRemoteTypes, true);
             return Services.KRPC.ExtensionMethods.KRPC (this).AddEvent (compiled);
         }
@@ -449,7 +508,6 @@ namespace KRPC.Client
         public Event AddEvent (Services.KRPC.Expression function)
         {
             CheckDisposed ();
-            CheckStreamServer ();
             if (ReferenceEquals (function, null))
                 throw new ArgumentNullException (nameof (function));
             return Services.KRPC.ExtensionMethods.KRPC (this).AddEvent (function);
@@ -640,7 +698,6 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (Services.KRPC.Expression function)
         {
             CheckDisposed ();
-            CheckStreamServer ();
             if (ReferenceEquals (function, null))
                 throw new ArgumentNullException (nameof (function));
             return AddCheckedStream<TResult> (function, FunctionSpec<TResult> (function, true));
@@ -762,155 +819,7 @@ namespace KRPC.Client
         /// </summary>
         public ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments = null)
         {
-            return Invoke (service, procedure, arguments, StreamReturnType (service, procedure));
-        }
-
-        // The type returned by each procedure called through the overload without one, by
-        // service and then procedure. Null for a procedure that returns no stream or event.
-        readonly ConcurrentDictionary<string, ConcurrentDictionary<string, System.Type>> streamReturnTypes =
-            new ConcurrentDictionary<string, ConcurrentDictionary<string, System.Type>> ();
-        readonly object listingLock = new object ();
-        IDictionary<string, System.Type> listedReturnTypes;
-
-        /// <summary>
-        /// The type a procedure returns if it is a stream or an event, and null otherwise. Looked
-        /// up in the service's stubs, or in the server's list of services if the stubs are not
-        /// loaded. Stubs from an earlier version of the client pass no type.
-        /// </summary>
-        System.Type StreamReturnType (string service, string procedure)
-        {
-            if (StreamManager == null)
-                return null;
-            ConcurrentDictionary<string, System.Type> types;
-            if (!streamReturnTypes.TryGetValue (service, out types))
-                types = streamReturnTypes.GetOrAdd (service, new ConcurrentDictionary<string, System.Type> ());
-            System.Type type;
-            if (types.TryGetValue (procedure, out type))
-                return type;
-            bool found;
-            type = StubReturnType (service, procedure, out found);
-            if (!found) {
-                var listed = ListedReturnTypes ();
-                // Not stored, as the update thread does not fetch the list
-                if (listed == null)
-                    return null;
-                listed.TryGetValue (service + "." + procedure, out type);
-            }
-            types [procedure] = type;
-            return type;
-        }
-
-        /// <summary>
-        /// The return types the server lists, fetched once per connection. Null on the update
-        /// thread before they are fetched, as a call there can wait behind a callback.
-        /// </summary>
-        IDictionary<string, System.Type> ListedReturnTypes ()
-        {
-            lock (listingLock) {
-                if (listedReturnTypes == null) {
-                    if (StreamManager.OnUpdateThread)
-                        return null;
-                    listedReturnTypes = ListStreamReturnTypes ();
-                }
-                return listedReturnTypes;
-            }
-        }
-
-        /// <summary>
-        /// The procedures the server lists that return a stream or an event, by service and
-        /// procedure name, with the type each returns.
-        /// </summary>
-        internal IDictionary<string, System.Type> ListStreamReturnTypes ()
-        {
-            var types = new Dictionary<string, System.Type> ();
-            global::KRPC.Schema.KRPC.Services services;
-            try {
-                services = global::KRPC.Schema.KRPC.Services.Parser.ParseFrom (
-                    Invoke ("KRPC", "GetServices", null, typeof (global::KRPC.Schema.KRPC.Services)).Value);
-            } catch (System.Exception) {
-                // Best effort, as an id not noted keeps its early results only while it is
-                // above every noted id
-                return types;
-            }
-            foreach (var service in services.Services_) {
-                foreach (var procedure in service.Procedures) {
-                    if (procedure.ReturnType == null)
-                        continue;
-                    var code = procedure.ReturnType.Code;
-                    if (code == global::KRPC.Schema.KRPC.Type.Types.TypeCode.Stream)
-                        types [service.Name + "." + procedure.Name] = typeof (global::KRPC.Schema.KRPC.Stream);
-                    else if (code == global::KRPC.Schema.KRPC.Type.Types.TypeCode.Event)
-                        types [service.Name + "." + procedure.Name] = typeof (Event);
-                }
-            }
-            return types;
-        }
-
-        // The type returned by each procedure in the loaded stubs, by service and then procedure
-        static readonly ConcurrentDictionary<string, IDictionary<string, System.Type>> stubReturnTypes =
-            new ConcurrentDictionary<string, IDictionary<string, System.Type>> ();
-
-        /// <summary>
-        /// The type a procedure returns if it is a stream or an event, and null otherwise, from
-        /// the service's stubs. Found is false if the stubs are not loaded or lack the procedure.
-        /// </summary>
-        static System.Type StubReturnType (string service, string procedure, out bool found)
-        {
-            IDictionary<string, System.Type> types;
-            if (!stubReturnTypes.TryGetValue (service, out types)) {
-                types = FindStubReturnTypes (service);
-                if (types == null) {
-                    found = false;
-                    return null;
-                }
-                stubReturnTypes [service] = types;
-            }
-            System.Type type;
-            found = types.TryGetValue (procedure, out type);
-            // A property setter carries no attribute, and returns nothing
-            if (!found && (procedure.StartsWith ("set_", StringComparison.Ordinal) ||
-                           procedure.Contains ("_set_")))
-                found = true;
-            if (type == typeof (global::KRPC.Schema.KRPC.Stream) || type == typeof (Event))
-                return type;
-            return null;
-        }
-
-        /// <summary>
-        /// The type returned by each procedure of a service, read from the attributes of its
-        /// stubs. Null if the stubs are not loaded.
-        /// </summary>
-        static IDictionary<string, System.Type> FindStubReturnTypes (string service)
-        {
-            var ns = "KRPC.Client.Services." + service;
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies ()) {
-                if (assembly.GetType (ns + ".Service") == null)
-                    continue;
-                System.Type[] classes;
-                try {
-                    classes = assembly.GetTypes ();
-                } catch (ReflectionTypeLoadException exn) {
-                    classes = exn.Types;
-                }
-                var types = new Dictionary<string, System.Type> ();
-                const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance |
-                    BindingFlags.Static | BindingFlags.DeclaredOnly;
-                foreach (var cls in classes) {
-                    if (cls == null || cls.Namespace != ns)
-                        continue;
-                    foreach (var member in cls.GetMembers (flags)) {
-                        var attribute = (RPCAttribute)Attribute.GetCustomAttribute (member, typeof (RPCAttribute));
-                        if (attribute == null || attribute.Service != service)
-                            continue;
-                        var method = member as MethodInfo;
-                        var property = member as PropertyInfo;
-                        types [attribute.Procedure] =
-                            method != null ? method.ReturnType : property != null ? property.PropertyType : null;
-                    }
-                }
-                return types;
-            }
-            return null;
+            return Invoke (service, procedure, arguments, null);
         }
 
         /// <summary>
@@ -920,107 +829,18 @@ namespace KRPC.Client
         public ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments, System.Type returnType)
         {
             CheckDisposed ();
-            Response response;
-
-            lock (invokeLock) {
-                BuildRequest (service, procedure, arguments);
-                // Send request to server
-                codedRpcStream.WriteLength (request.CalculateSize ());
-                request.WriteTo (codedRpcStream);
-                codedRpcStream.Flush ();
-                // Receive response
-                rpcReader.Read ();
-                response = Response.Parser.ParseFrom (
-                    rpcReader.Buffer, rpcReader.Offset, rpcReader.Size);
-                NoteStreamId (response, returnType);
-                NoteStreamRemoved (service, procedure, arguments, response);
-            }
-
+            var request = new Request ();
+            request.Calls.Add (GetCall (service, procedure, arguments));
+            // The reader registers a stream or an event the call adds before it reads the
+            // stream's first update
+            var streamType = returnType == typeof (global::KRPC.Schema.KRPC.Stream) || returnType == typeof (Event)
+                ? returnType : null;
+            var response = session.Call (request, streamType);
             if (response.Error != null)
                 throw GetException(response.Error);
             if (response.Results[0].Error != null)
                 throw GetException (response.Results [0].Error);
             return response.Results[0];
-        }
-
-        /// <summary>
-        /// Note the id of a stream or event the server returned. Called in the order the
-        /// replies arrive, so the stream manager keeps the latest value and an ending sent for
-        /// the stream before it is registered.
-        /// </summary>
-        internal void NoteStreamId (Response response, System.Type returnType)
-        {
-            if (StreamManager == null || returnType == null)
-                return;
-            var isStream = returnType == typeof(global::KRPC.Schema.KRPC.Stream);
-            if (!isStream && returnType != typeof(Event))
-                return;
-            if (response.Error != null || response.Results.Count == 0)
-                return;
-            var result = response.Results [0];
-            if (result.Error != null || result.IsNull)
-                return;
-            global::KRPC.Schema.KRPC.Stream stream;
-            try {
-                stream = isStream
-                    ? global::KRPC.Schema.KRPC.Stream.Parser.ParseFrom (result.Value)
-                    : global::KRPC.Schema.KRPC.Event.Parser.ParseFrom (result.Value).Stream;
-            } catch (InvalidProtocolBufferException) {
-                // The call has succeeded, and its caller decodes the value
-                return;
-            }
-            if (stream != null)
-                StreamManager.NoteIssued (stream.Id);
-        }
-
-        /// <summary>
-        /// Stop keeping results for a stream id removed by a call to KRPC.RemoveStream, made
-        /// through any stub.
-        /// </summary>
-        void NoteStreamRemoved (string service, string procedure, IList<ByteString> arguments, Response response)
-        {
-            if (StreamManager == null || procedure != "RemoveStream" || service != "KRPC" ||
-                arguments == null || arguments.Count != 1 || arguments [0] == null)
-                return;
-            if (response.Error != null || response.Results.Count == 0 || response.Results [0].Error != null)
-                return;
-            ulong id;
-            try {
-                id = new CodedInputStream (arguments [0].ToByteArray ()).ReadUInt64 ();
-            } catch (InvalidProtocolBufferException) {
-                return;
-            }
-            StreamManager.NoteRemoved (id);
-        }
-
-        /// <summary>
-        /// Fill in the request that the next call is sent as.
-        /// </summary>
-        /// <remarks>
-        /// The request, the call it carries and the arguments of that call are kept from one
-        /// call to the next rather than built for each. A protobuf message allocates storage for
-        /// its fields as they are set, and the shape of a request never changes, so a call after
-        /// the first fills in storage it already has. They are guarded by the lock that already
-        /// serializes a call against the response it is waiting for.
-        /// </remarks>
-        void BuildRequest (string service, string procedure, IList<ByteString> values)
-        {
-            call.Service = service;
-            call.Procedure = procedure;
-            call.Arguments.Clear ();
-            if (values == null)
-                return;
-            for (var position = 0; position < values.Count; position++) {
-                while (callArguments.Count <= position)
-                    callArguments.Add (new Argument ());
-                var argument = callArguments [position];
-                argument.Position = (uint)position;
-                // A null encoding signals a null value, carried out-of-band by is_null with
-                // the value field left unset.
-                argument.IsNull = values [position] == null;
-                argument.Value = values [position] ?? ByteString.Empty;
-                call.Arguments.Add (argument);
-            }
         }
 
         internal static ProcedureCall GetCall (string service, string procedure, IList<ByteString> arguments = null)
@@ -1229,7 +1049,7 @@ namespace KRPC.Client
             return instanceExpr.Compile () ();
         }
 
-        // Read by the stream update thread while a service registers its exception types
+        // Read by the reader while a service registers its exception types
         readonly ConcurrentDictionary<string, System.Type> exceptionTypes =
             new ConcurrentDictionary<string, System.Type> ();
 

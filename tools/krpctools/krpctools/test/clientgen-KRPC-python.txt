@@ -5634,7 +5634,7 @@ class KRPC(_KRPCDefinitions):
     @property
     def clients(self) -> List[ClientInfo]:
         """
-        The RPC clients that are currently connected to the server.
+        The clients that are currently connected to the server.
         """
         return self._client._invoke(
             "KRPC",

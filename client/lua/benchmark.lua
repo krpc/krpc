@@ -133,12 +133,11 @@ end
 -- Connect over whichever transport the runner started the server with, named by socket path or
 -- by port. Both are measured, as the transport is part of what a call costs.
 local function connect()
-  local rpc_path = os.getenv('RPC_PATH')
-  if rpc_path ~= nil then
-    return krpc.connect_local('lua_client_benchmark', rpc_path)
+  local path = os.getenv('KRPC_TEST_LOCALSOCKET_PATH')
+  if path ~= nil then
+    return krpc.connect_local('lua_client_benchmark', path)
   end
-  return krpc.connect('lua_client_benchmark', 'localhost',
-                      port('RPC_PORT', 50000), port('STREAM_PORT', 50001))
+  return krpc.connect('lua_client_benchmark', 'localhost', port('KRPC_TEST_TCPIP_PORT', 50000))
 end
 
 local conn = connect()

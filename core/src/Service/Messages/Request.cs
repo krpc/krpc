@@ -5,6 +5,8 @@ namespace KRPC.Service.Messages
     #pragma warning disable 1591
     public class Request : IMessage
     {
+        public ulong Id { get; set; }
+
         public IList<ProcedureCall> Calls { get; private set; }
 
         public Request ()

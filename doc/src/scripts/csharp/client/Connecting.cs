@@ -8,8 +8,7 @@ class Program {
         using (var connection = new Connection(
                    name: "My Example Program",
                    address: IPAddress.Parse("192.168.0.10"),
-                   rpcPort: 1000,
-                   streamPort: 1001)) {
+                   port: 1000)) {
             var krpc = connection.KRPC();
             Console.WriteLine(krpc.GetStatus().Version);
         }

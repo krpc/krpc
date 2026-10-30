@@ -1,4 +1,5 @@
 local luaunit = require 'luaunit'
+local socket = require 'socket'
 local ServerTest = require 'krpc.test.servertest'
 local class = require 'pl.class'
 local seq = require 'pl.seq'
@@ -18,17 +19,27 @@ function TestClient:test_version()
   luaunit.assertStrMatches(status.version, '%d+.%d+.%d+')
 end
 
-function TestClient:test_wrong_rpc_port()
-  luaunit.assertError(
-    krpc.connect, 'LuaClientTestWrongRpcPort',
-    'localhost', self.get_rpc_port() ^ self.get_stream_port(), self.get_stream_port())
+-- A port nothing is listening on, from binding an ephemeral port and closing it
+local function unused_port()
+  local server = socket.tcp4()
+  assert(server:bind('127.0.0.1', 0))
+  local _, port = server:getsockname()
+  server:close()
+  return tonumber(port)
 end
 
-function TestClient:test_wrong_rpc_server()
-  luaunit.assertErrorMsgContains(
-    'Connection request was for the rpc server, but this is the stream server. ' ..
-    'Did you connect to the wrong port number or socket path?',
-    self.connect_to_stream_server, 'LuaClientTestWrongRpcServer')
+function TestClient:test_wrong_port()
+  luaunit.assertError(krpc.connect, 'LuaClientTestWrongPort', '127.0.0.1', unused_port())
+end
+
+function TestClient:test_protocol_version()
+  luaunit.assertEquals(2, self.conn.krpc:get_status().protocol_version)
+end
+
+function TestClient:test_calls_after_close_fail()
+  local conn = self.connect()
+  conn:close()
+  luaunit.assertErrorMsgContains('Connection closed', conn.krpc.get_status, conn.krpc)
 end
 
 function TestClient:test_value_parameters()

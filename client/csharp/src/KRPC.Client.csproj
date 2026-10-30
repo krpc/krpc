@@ -46,6 +46,7 @@
     <Compile Include="RPCException.cs" />
     <Compile Include="RemoteObject.cs" />
     <Compile Include="Stream.cs" />
+    <Compile Include="Session.cs" />
     <Compile Include="StreamImpl.cs" />
     <Compile Include="StreamManager.cs" />
     <Compile Include="TypeInfo.cs" />

@@ -26,9 +26,7 @@ namespace KRPC.Server
         /// </summary>
         public string Name { get; set; }
 
-        internal IServer<Request,Response> RPCServer { get; private set; }
-
-        internal IServer<NoMessage,StreamUpdate> StreamServer { get; private set; }
+        internal IServer<Request,Response> InnerServer { get; private set; }
 
         /// <summary>
         /// Event triggered when the server starts
@@ -56,41 +54,25 @@ namespace KRPC.Server
         public event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
 
         /// <summary>
-        /// Construct a server, from an RPC server and stream server instance.
+        /// Construct a server, from a message server instance.
         /// </summary>
-        public Server (Guid id, Protocol protocol, string name, IServer<Request,Response> rpcServer, IServer<NoMessage,StreamUpdate> streamServer)
+        public Server (Guid id, Protocol protocol, string name, IServer<Request,Response> innerServer)
         {
             Id = id;
             Protocol = protocol;
             Name = name;
-            RPCServer = rpcServer;
-            StreamServer = streamServer;
+            InnerServer = innerServer;
 
             // Tie events to underlying server
-            RPCServer.OnStarted += (s, e) => EventHandlerExtensions.Invoke (OnStarted, this);
-            RPCServer.OnStopped += (s, e) => EventHandlerExtensions.Invoke (OnStopped, this);
-            RPCServer.OnClientRequestingConnection += (s, e) => EventHandlerExtensions.Invoke (OnClientRequestingConnection, s, e);
-            RPCServer.OnClientConnected += (s, e) => EventHandlerExtensions.Invoke (OnClientConnected, s, new ClientConnectedEventArgs (e.Client));
-            RPCServer.OnClientDisconnected += (s, e) => EventHandlerExtensions.Invoke (OnClientDisconnected, s, new ClientDisconnectedEventArgs (e.Client));
+            InnerServer.OnStarted += (s, e) => EventHandlerExtensions.Invoke (OnStarted, this);
+            InnerServer.OnStopped += (s, e) => EventHandlerExtensions.Invoke (OnStopped, this);
+            InnerServer.OnClientRequestingConnection += (s, e) => EventHandlerExtensions.Invoke (OnClientRequestingConnection, s, e);
+            InnerServer.OnClientConnected += (s, e) => EventHandlerExtensions.Invoke (OnClientConnected, s, new ClientConnectedEventArgs (e.Client));
+            InnerServer.OnClientDisconnected += (s, e) => EventHandlerExtensions.Invoke (OnClientDisconnected, s, new ClientDisconnectedEventArgs (e.Client));
 
             // Add/remove clients from the scheduler
-            RPCServer.OnClientConnected += (s, e) => Core.Instance.RPCClientConnected (e.Client);
-            RPCServer.OnClientDisconnected += (s, e) => Core.Instance.RPCClientDisconnected (e.Client);
-
-            // Add/remove clients from the list of stream requests
-            StreamServer.OnClientConnected += (s, e) => Core.Instance.StreamClientConnected (e.Client);
-            StreamServer.OnClientDisconnected += (s, e) => Core.Instance.StreamClientDisconnected (e.Client);
-
-            // Validate stream client identifiers
-            StreamServer.OnClientRequestingConnection += (s, e) => {
-                if (RPCServer.Clients.Any (c => c.Guid == e.Client.Guid)) {
-                    Logger.WriteLine ("Accepting stream server connection (" + e.Client.Address + ")", Logger.Severity.Debug);
-                    e.Request.Allow ();
-                } else {
-                    Logger.WriteLine ("Denying stream server connection, invalid client id (" + e.Client.Address + ")", Logger.Severity.Debug);
-                    e.Request.Deny ();
-                }
-            };
+            InnerServer.OnClientConnected += (s, e) => Core.Instance.ClientConnected (e.Client);
+            InnerServer.OnClientDisconnected += (s, e) => Core.Instance.ClientDisconnected (e.Client);
         }
 
         /// <summary>
@@ -98,8 +80,7 @@ namespace KRPC.Server
         /// </summary>
         public void Start ()
         {
-            RPCServer.Start ();
-            StreamServer.Start ();
+            InnerServer.Start ();
             ClearStats ();
         }
 
@@ -108,8 +89,7 @@ namespace KRPC.Server
         /// </summary>
         public void Stop ()
         {
-            RPCServer.Stop ();
-            StreamServer.Stop ();
+            InnerServer.Stop ();
         }
 
         /// <summary>
@@ -117,33 +97,28 @@ namespace KRPC.Server
         /// </summary>
         public void Update ()
         {
-            RPCServer.Update ();
-            StreamServer.Update ();
+            InnerServer.Update ();
         }
 
         /// <summary>
         /// The servers address.
         /// </summary>
         public string Address {
-            get {
-                return
-                "RPC server: " + RPCServer.Address + Environment.NewLine +
-                "Stream server: " + StreamServer.Address;
-            }
+            get { return InnerServer.Address; }
         }
 
         /// <summary>
         /// Information about the server.
         /// </summary>
         public string Info {
-            get { return RPCServer.Info; }
+            get { return InnerServer.Info; }
         }
 
         /// <summary>
         /// Returns true if the server is running
         /// </summary>
         public bool Running {
-            get { return RPCServer.Running && StreamServer.Running; }
+            get { return InnerServer.Running; }
         }
 
         /// <summary>
@@ -151,21 +126,21 @@ namespace KRPC.Server
         /// not be connected to the server.
         /// </summary>
         public IEnumerable<IClient> Clients {
-            get { return RPCServer.Clients.Cast <IClient> (); }
+            get { return InnerServer.Clients.Cast <IClient> (); }
         }
 
         /// <summary>
         /// Get the total number of bytes read from the network.
         /// </summary>
         public ulong BytesRead {
-            get { return RPCServer.BytesRead + StreamServer.BytesRead; }
+            get { return InnerServer.BytesRead; }
         }
 
         /// <summary>
         /// Get the total number of bytes written to the network.
         /// </summary>
         public ulong BytesWritten {
-            get { return RPCServer.BytesWritten + StreamServer.BytesWritten; }
+            get { return InnerServer.BytesWritten; }
         }
 
         /// <summary>
@@ -173,8 +148,7 @@ namespace KRPC.Server
         /// </summary>
         public void ClearStats ()
         {
-            RPCServer.ClearStats ();
-            StreamServer.ClearStats ();
+            InnerServer.ClearStats ();
         }
     }
 }

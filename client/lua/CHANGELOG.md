@@ -1,3 +1,9 @@
+## [v0.8.0] - unreleased
+- **Breaking:** Connect with protocol version 2, and fail to connect to a server from before
+  0.8 (#1219)
+- Add a `handshake_timeout` parameter to `connect` and `connect_local` (#1219)
+- Tell the server when the connection closes (#1219)
+
 ## [v0.7.0]
 - **Breaking:** Support `Types.none` for any nullable type, including a structure field, list
   element, tuple item and dictionary value (#1017, #1091)

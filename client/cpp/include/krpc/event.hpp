@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <exception>
 #include <functional>
+#include <limits>
 #include <mutex>  // NOLINT(build/c++11)
 
 #include "krpc/condition.hpp"
@@ -29,11 +30,11 @@ class Event {
   void acquire();
   /** Unlock the condition's mutex, which every copy of the event object shares */
   void release();
-  /** Wait until the event occurs. Returns straight away if the event has occurred since the
-      last wait on this event object. If timeout >= 0, the operation times out after that many
-      seconds. Returns true if the event occurred, and false on a timeout. Throws the
-      exception that ended the event, if it ends before or during the wait. */
-  bool wait(double timeout = -1);
+  /** Wait until the event occurs, or for at most timeout seconds. Returns straight away if the
+      event has occurred since the last wait on this event object. Returns true if the event
+      occurred, and false on a timeout. Throws the exception that ended the event, if it ends
+      before or during the wait. Throws std::invalid_argument for a negative or NaN timeout. */
+  bool wait(double timeout = std::numeric_limits<double>::infinity());
   typedef std::function<void()> Callback;
   /**
    * Add a callback that is invoked whenever the event occurs. It is invoked straight away if

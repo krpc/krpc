@@ -1,5 +1,34 @@
 ## [v0.8.0] - unreleased
 
+- Connections
+  - **Breaking:** Connect over one connection, removing the `streamPort` and `streamPath`
+    parameters of the `Connection` constructor and `Connection.ConnectLocal`. A server from
+    before 0.8 refuses the connection (#1219)
+  - **Breaking:** Rename the `rpcPort` and `rpcPath` parameters of the `Connection` constructor
+    and `Connection.ConnectLocal` to `port` and `path` (#1219)
+  - **Breaking:** Give up after 5 seconds if the server does not accept the connection. Pass
+    a `handshakeTimeout` of `Timeout.InfiniteTimeSpan` to wait for the player to approve it
+    (#1219)
+  - Add `handshakeTimeout` and `stallTimeout` parameters to the `Connection` constructor and
+    `Connection.ConnectLocal` (#1219)
+  - Send calls from several threads without waiting for each other's responses (#1219)
+  - Tell the server when the connection is disposed (#1219)
+  - Add `Status` and `Reason` to `ConnectionException` for a refused or ended connection (#1219)
+  - **Breaking:** Throw `ConnectionException` when the server cannot be reached, with the
+    `SocketException` as its inner exception (#1219)
+  - Keep a thread interrupt pending across `Dispose`, which closes the connection in full
+    (#1219)
+
+- Streams and events
+  - **Breaking:** Throw `StreamRemovedException` when reading or waiting on a removed stream or
+    event (#1219)
+  - **Breaking:** Wait with no deadline in `Stream.Wait` and `Event.Wait` by default, or for
+    an infinite timeout, and throw `ArgumentOutOfRangeException` for a negative or NaN one
+    (#1219)
+  - Keep a stream running when a value fails to decode, dropping the value (#1219)
+
+- **Breaking:** Regenerate service stubs generated before 0.7.0, which can miss the first update
+  of a stream or event they return (#1219)
 - Fix the links in service documentation, which named no type or member (#1185)
 - Fix a nullable enum return value, which threw `InvalidCastException` (#1194)
 - Exceptions

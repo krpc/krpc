@@ -147,11 +147,17 @@ namespace KRPC.Client
         /// </summary>
         /// <remarks>
         /// Throws the exception that ended the stream, if it ends before or during the wait.
+        /// Throws an exception if the timeout is negative or NaN.
         /// </remarks>
-        public bool Wait (double timeout = -1) {
+        public bool Wait (double timeout = double.PositiveInfinity) {
+            StreamImpl.CheckTimeout (timeout);
             stream.ThrowIfEnded ();
-            var version = stream.Version;
-            return stream.Wait (() => stream.Version != version, timeout);
+            // An ending that arrived while this thread held the condition is read as an update
+            var pendingEnding = stream.Ended;
+            // Past the value this thread last read, which can be one not yet announced
+            var version = Math.Max (stream.AnnouncedVersion, stream.SeenVersion);
+            return stream.Wait (
+                () => stream.AnnouncedVersion > version || (pendingEnding && stream.EndingAnnounced), timeout);
         }
 
         /// <summary>

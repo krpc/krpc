@@ -29,16 +29,6 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        public void NoStreamServer ()
-        {
-            using (var connection = Connect ("CSharpClientTestNoStreamServer", stream: null)) {
-                var exn = Assert.Throws<InvalidOperationException> (
-                    () => connection.AddStream (() => connection.TestService ().FloatToString (3.14159f)));
-                Assert.AreEqual ("The connection has no stream server", exn.Message);
-            }
-        }
-
-        [Test]
         public void Property ()
         {
             Connection.TestService ().StringProperty = "foo";
@@ -265,41 +255,41 @@ namespace KRPC.Client.Test
 
             s1.Remove ();
             Assert.AreEqual ("0", s0.Get ());
-            Assert.Throws<InvalidOperationException> (() => s1.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s1.Get ());
 
             Wait ();
             Assert.AreEqual ("0", s0.Get ());
-            Assert.Throws<InvalidOperationException> (() => s1.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s1.Get ());
 
             var s2 = Connection.AddStream (() => Connection.TestService ().Int32ToString (2));
             Assert.AreEqual ("0", s0.Get ());
-            Assert.Throws<InvalidOperationException> (() => s1.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s1.Get ());
             Assert.AreEqual ("2", s2.Get ());
 
             Wait ();
             Assert.AreEqual ("0", s0.Get ());
-            Assert.Throws<InvalidOperationException> (() => s1.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s1.Get ());
             Assert.AreEqual ("2", s2.Get ());
 
             s0.Remove ();
-            Assert.Throws<InvalidOperationException> (() => s0.Get ());
-            Assert.Throws<InvalidOperationException> (() => s1.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s0.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s1.Get ());
             Assert.AreEqual ("2", s2.Get ());
 
             Wait ();
-            Assert.Throws<InvalidOperationException> (() => s0.Get ());
-            Assert.Throws<InvalidOperationException> (() => s1.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s0.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s1.Get ());
             Assert.AreEqual ("2", s2.Get ());
 
             s2.Remove ();
-            Assert.Throws<InvalidOperationException> (() => s0.Get ());
-            Assert.Throws<InvalidOperationException> (() => s1.Get ());
-            Assert.Throws<InvalidOperationException> (() => s2.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s0.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s1.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s2.Get ());
 
             Wait ();
-            Assert.Throws<InvalidOperationException> (() => s0.Get ());
-            Assert.Throws<InvalidOperationException> (() => s1.Get ());
-            Assert.Throws<InvalidOperationException> (() => s2.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s0.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s1.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s2.Get ());
         }
 
         [Test]
@@ -312,9 +302,9 @@ namespace KRPC.Client.Test
             Assert.AreEqual ("0", s.Get ());
 
             s.Remove ();
-            Assert.Throws<InvalidOperationException> (() => s.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s.Get ());
             s.Remove ();
-            Assert.Throws<InvalidOperationException> (() => s.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s.Get ());
         }
 
         [Test]
@@ -333,7 +323,7 @@ namespace KRPC.Client.Test
             thread.Start ();
             Assert.IsTrue (thread.Join (30000));
             Assert.AreEqual ("44", value);
-            Assert.Throws<InvalidOperationException> (() => s0.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s0.Get ());
             s1.Remove ();
         }
 
@@ -368,7 +358,7 @@ namespace KRPC.Client.Test
             Assert.Greater (s0.Get (), 0);
             Assert.Greater (s1.Get (), 0);
             s0.Remove ();
-            Assert.Throws<InvalidOperationException> (() => s0.Get ());
+            Assert.Throws<KRPC.Client.Services.KRPC.StreamRemovedException> (() => s0.Get ());
             lock (s1.Condition)
                 Assert.IsTrue (s1.Wait (10));
             s1.Remove ();
@@ -427,7 +417,7 @@ namespace KRPC.Client.Test
             adding.IsBackground = true;
             adding.Start ();
             Assert.IsTrue (running.WaitOne (10000));
-            // Stands in for the update thread, while the first call runs
+            // Stands in for the dispatcher thread, while the first call runs
             manager.Update (1000012, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x02) });
             manager.Update (1000012, new KRPC.Schema.KRPC.ProcedureResult {
                 Error = new KRPC.Schema.KRPC.Error { Description = "Ended" }
@@ -479,7 +469,7 @@ namespace KRPC.Client.Test
             var updater = new Thread (() => manager.Update (1000013, ValueResult (0x02)));
             updater.IsBackground = true;
             updater.Start ();
-            // The update thread queues the value, with no wait for the first call
+            // The dispatcher thread queues the value, with no wait for the first call
             Assert.IsTrue (updater.Join (5000));
             release.Set ();
             Assert.IsTrue (adder.Join (10000));
@@ -534,58 +524,6 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        public void ACloserHoldingTheConditionKeepsAServerEnding ()
-        {
-            var connection = Connect ("CSharpClientTest");
-            var manager = connection.StreamManager;
-            var stream = manager.GetStream (TypeSpec.For (typeof (uint)), 1000016);
-            var ending = new KRPC.Schema.KRPC.ProcedureResult {
-                Error = new KRPC.Schema.KRPC.Error { Description = "Ended by the server" }
-            };
-            lock (stream.Condition) {
-                var updater = new Thread (() => manager.Update (1000016, ending));
-                updater.IsBackground = true;
-                updater.Start ();
-                // Closed once the ending is decoded, while the updating thread waits for the
-                // condition the closing thread holds
-                var timer = Stopwatch.StartNew ();
-                while (manager.Registered (1000016) && timer.ElapsedMilliseconds < 10000)
-                    Thread.Sleep (1);
-                Assert.IsFalse (manager.Registered (1000016));
-                connection.Dispose ();
-                Assert.IsTrue (stream.Ended);
-                Assert.Throws<RPCException> (() => stream.ThrowIfEnded ());
-                Assert.IsTrue (updater.Join (10000));
-            }
-        }
-
-        [Test]
-        public void RemoveKeepsAServerEnding ()
-        {
-            var manager = Connection.StreamManager;
-            var stream = manager.GetStream (TypeSpec.For (typeof (uint)), 1000017);
-            var ending = new KRPC.Schema.KRPC.ProcedureResult {
-                Error = new KRPC.Schema.KRPC.Error { Description = "Ended by the server" }
-            };
-            Thread updater;
-            lock (stream.Condition) {
-                updater = new Thread (() => manager.Update (1000017, ending));
-                updater.IsBackground = true;
-                updater.Start ();
-                // Removed once the ending is decoded, while the updating thread waits for the
-                // condition the removing thread holds
-                var timer = Stopwatch.StartNew ();
-                while (manager.Registered (1000017) && timer.ElapsedMilliseconds < 10000)
-                    Thread.Sleep (1);
-                Assert.IsFalse (manager.Registered (1000017));
-                stream.Remove ();
-                Assert.IsTrue (stream.Ended);
-                Assert.Throws<RPCException> (() => stream.ThrowIfEnded ());
-            }
-            Assert.IsTrue (updater.Join (10000));
-        }
-
-        [Test]
         public void CloseFromACallback ()
         {
             var connection = Connect ("CSharpClientTest");
@@ -595,7 +533,7 @@ namespace KRPC.Client.Test
             var test = Thread.CurrentThread;
             var closed = new ManualResetEvent (false);
             x.AddCallback (value => {
-                // The first call runs on this thread, and the later ones on the update thread
+                // The first call runs on this thread, and the later ones on the dispatcher thread
                 if (Thread.CurrentThread != test) {
                     connection.Dispose ();
                     closed.Set ();
@@ -676,9 +614,7 @@ namespace KRPC.Client.Test
                 a.AddEndCallback (exn => ended.Set ());
                 var raised = HoldOneAndWaitOnAnother (a, b);
                 // Stands in for the server closing the connection
-                var field = typeof (Connection).GetField (
-                    "streamSocket", BindingFlags.NonPublic | BindingFlags.Instance);
-                ((Socket)field.GetValue (connection)).Shutdown (SocketShutdown.Both);
+                connection.Session.Socket.Shutdown (SocketShutdown.Both);
                 Assert.IsTrue (raised.WaitOne (10000));
                 Assert.IsTrue (ended.WaitOne (10000));
                 Assert.Throws<ConnectionException> (() => a.Get ());
@@ -763,7 +699,7 @@ namespace KRPC.Client.Test
                 if (!first)
                     return;
                 first = false;
-                // The update thread queues the update for this thread while the callback runs
+                // The dispatcher thread queues the update for this thread while the callback runs
                 lock (x.Condition)
                     x.Wait (5);
                 Thread.Sleep (100);
@@ -806,90 +742,64 @@ namespace KRPC.Client.Test
             }
         }
 
-        // The tests that note fake ids use their own connection, as a noted id raises the
-        // highest id the stream manager keeps results for
-
         [Test]
-        public void ResultBeforeTheAddReplyIsKept ()
+        public void ARegisteredStreamKeepsItsLatestResultForItsFirstHandle ()
         {
-            using (var connection = Connect ("CSharpClientTest")) {
-                var manager = connection.StreamManager;
-                var type = TypeSpec.For (typeof (uint));
-                manager.NoteIssued (1000003);
-                // One for an id noted but not registered, and one for an id not yet noted
-                manager.Update (1000003, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x2a) });
-                manager.Update (1000004, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x2b) });
-                Assert.AreEqual (42u, manager.GetStream (type, 1000003).Value);
-                Assert.AreEqual (43u, manager.GetStream (type, 1000004).Value);
-            }
+            var manager = Connection.StreamManager;
+            manager.Register (1000003);
+            manager.Update (1000003, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x01) });
+            manager.Update (1000003, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x02) });
+            var s = manager.GetStream (TypeSpec.For (typeof (uint)), 1000003);
+            Assert.AreEqual (1, s.Version);
+            Assert.AreEqual (2u, s.Value);
         }
 
         [Test]
-        public void KeptResultsAreBounded ()
+        public void ARegisteredStreamKeepsAnEndingForItsFirstHandle ()
         {
-            using (var connection = Connect ("CSharpClientTest")) {
-                var manager = connection.StreamManager;
-                var type = TypeSpec.For (typeof (uint));
-                // Only the latest value is kept
-                manager.NoteIssued (1000008);
-                manager.Update (1000008, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x01) });
-                manager.Update (1000008, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x02) });
-                var s = manager.GetStream (type, 1000008);
-                Assert.AreEqual (1, s.Version);
-                Assert.AreEqual (2u, s.Value);
-                // The value and the ending are applied, and a result after the ending is dropped
-                manager.NoteIssued (1000009);
-                manager.Update (1000009, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x03) });
-                manager.Update (1000009, new KRPC.Schema.KRPC.ProcedureResult {
-                    Error = new KRPC.Schema.KRPC.Error { Description = "Ended" }
-                });
-                manager.Update (1000009, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x04) });
-                var ended = manager.GetStream (type, 1000009);
-                Assert.AreEqual (1, ended.Version);
-                Assert.IsTrue (ended.Ended);
-                Assert.AreEqual ("Ended", Assert.Catch (() => { var unused = ended.Value; }).Message);
-            }
-        }
-
-        [Test]
-        public void ARemovedIdIsNotKept ()
-        {
-            using (var connection = Connect ("CSharpClientTest")) {
-                var manager = connection.StreamManager;
-                var call = Connection.GetCall (() => connection.TestService ().Int32ToString (52));
-                var added = connection.Invoke ("KRPC", "AddStream", new [] {
-                    Encoder.Encode (call, TypeSpec.For (typeof (KRPC.Schema.KRPC.ProcedureCall)))
-                }, typeof (KRPC.Schema.KRPC.Stream));
-                var id = KRPC.Schema.KRPC.Stream.Parser.ParseFrom (added.Value).Id;
-                Assert.IsTrue (manager.Keeps (id));
-                connection.Invoke ("KRPC", "RemoveStream", new [] { Encoder.Encode (id, TypeSpec.For (typeof (ulong))) });
-                Assert.IsFalse (manager.Keeps (id));
-                manager.Update (id, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x2a) });
-                Assert.IsFalse (manager.Keeps (id));
-            }
-        }
-
-        [Test]
-        public void AnEventWithNoStreamIsNotNoted ()
-        {
-            var response = new KRPC.Schema.KRPC.Response ();
-            response.Results.Add (new KRPC.Schema.KRPC.ProcedureResult {
-                Value = new KRPC.Schema.KRPC.Event ().ToByteString ()
+            var manager = Connection.StreamManager;
+            manager.Register (1000004);
+            manager.Update (1000004, new KRPC.Schema.KRPC.ProcedureResult {
+                Error = new KRPC.Schema.KRPC.Error { Description = "Ended" }
             });
-            Assert.DoesNotThrow (() => Connection.NoteStreamId (response, typeof (Event)));
+            manager.Update (1000004, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x04) });
+            var ended = manager.GetStream (TypeSpec.For (typeof (uint)), 1000004);
+            Assert.IsTrue (ended.Ended);
+            Assert.AreEqual ("Ended", Assert.Catch (() => { var unused = ended.Value; }).Message);
+            Assert.IsFalse (manager.Registered (1000004));
         }
 
         [Test]
-        public void ResultForAnEndedStreamIsDropped ()
+        public void AResultForAnUnregisteredStreamIsDropped ()
         {
-            using (var connection = Connect ("CSharpClientTest")) {
-                var manager = connection.StreamManager;
-                var type = TypeSpec.For (typeof (uint));
-                manager.NoteIssued (1000006);
-                manager.GetStream (type, 1000006);
-                manager.Update (1000005, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x2a) });
-                Assert.IsFalse (manager.GetStream (type, 1000005).Updated);
+            var manager = Connection.StreamManager;
+            manager.Update (1000005, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x2a) });
+            Assert.IsFalse (manager.Registered (1000005));
+            Assert.IsFalse (manager.GetStream (TypeSpec.For (typeof (uint)), 1000005).Updated);
+        }
+
+        [Test]
+        public void AServerEndingReachesAHolderOnceAnnounced ()
+        {
+            var manager = Connection.StreamManager;
+            var stream = manager.GetStream (TypeSpec.For (typeof (uint)), 1000016);
+            var ending = new KRPC.Schema.KRPC.StreamResult {
+                Id = 1000016,
+                Result = new KRPC.Schema.KRPC.ProcedureResult {
+                    Error = new KRPC.Schema.KRPC.Error { Description = "Ended by the server" }
+                }
+            };
+            lock (stream.Condition) {
+                // The reader ends the stream without taking its condition. The holder reads the
+                // ending once it is announced.
+                manager.Update (new [] { ending });
+                Assert.IsTrue (stream.Ended);
+                Assert.DoesNotThrow (() => stream.ThrowIfEnded ());
+                Assert.IsFalse (manager.Registered (1000016));
+                // A removal finds the stream already ended, and keeps the server's ending
+                stream.Remove ();
             }
+            Assert.Throws<RPCException> (() => stream.ThrowIfEnded ());
         }
 
         [Test]
@@ -1021,7 +931,7 @@ namespace KRPC.Client.Test
 
         [Test]
         public void TestCallbackThatThrows () {
-            // A callback that throws must not take the update thread down with it, which
+            // A callback that throws must not take the dispatcher thread down with it, which
             // would stop every stream on the connection. The timeout catches that, as the
             // wait below would otherwise never be satisfied.
             var stop = new ManualResetEvent (false);
@@ -1043,10 +953,10 @@ namespace KRPC.Client.Test
 
         [Test]
         public void TestRemoveWhileWaitingOnCondition () {
-            // The update thread must not hold the update lock while waiting for a stream's
+            // The dispatcher thread must not hold the update lock while waiting for a stream's
             // condition. A caller holding that condition, which is how waiting for an update
             // is documented to work, otherwise blocks forever on anything needing the update
-            // lock, and the update thread blocks on the condition, deadlocking both. Run on a
+            // lock, and the dispatcher thread blocks on the condition, deadlocking both. Run on a
             // thread so a regression fails here instead of hanging the suite.
             var done = new ManualResetEvent (false);
             var thread = new Thread (() => {
@@ -1055,7 +965,7 @@ namespace KRPC.Client.Test
                         "StreamTest.TestRemoveWhileWaitingOnCondition", 1));
                 lock (s.Condition) {
                     s.Wait ();
-                    // Let the update thread reach the next update and block on this condition
+                    // Let the dispatcher thread reach the next update and block on this condition
                     Thread.Sleep (200);
                     s.Remove ();
                 }
@@ -1076,8 +986,8 @@ namespace KRPC.Client.Test
             int callback2Tag = s.AddCallback ((int x) => Interlocked.Increment (ref called2));
             s.RemoveCallback (callback2Tag);
             lock (s.Condition) {
-                // The callbacks of an update run before the next update is stored, so after
-                // this one no update can still call the removed callback
+                // The dispatcher wakes waiters and runs callbacks in order, so after this wake
+                // no call of the removed callback from before its removal is still running
                 Assert.IsTrue (s.Wait (10));
                 Interlocked.Exchange (ref called1, 0);
                 Interlocked.Exchange (ref called2, 0);
@@ -1195,7 +1105,7 @@ namespace KRPC.Client.Test
             s.AddEndCallback (exn => ended.Add (exn));
             s.Remove ();
             Assert.AreEqual (1, ended.Count);
-            Assert.IsInstanceOf<InvalidOperationException> (ended [0]);
+            Assert.IsInstanceOf<KRPC.Client.Services.KRPC.StreamRemovedException> (ended [0]);
         }
 
         [Test]
@@ -1219,7 +1129,7 @@ namespace KRPC.Client.Test
             var ended = new List<Exception> ();
             s.AddEndCallback (exn => ended.Add (exn));
             Assert.AreEqual (1, ended.Count);
-            Assert.IsInstanceOf<InvalidOperationException> (ended [0]);
+            Assert.IsInstanceOf<KRPC.Client.Services.KRPC.StreamRemovedException> (ended [0]);
         }
 
         [Test]
@@ -1235,7 +1145,7 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        public void AValueThatFailsToDecodeEndsOnlyItsStream ()
+        public void AValueThatFailsToDecodeIsDropped ()
         {
             var manager = Connection.StreamManager;
             var type = TypeSpec.For (typeof (uint));
@@ -1247,65 +1157,9 @@ namespace KRPC.Client.Test
             // A varint that never ends
             manager.Update (1000001, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0xff) });
             manager.Update (1000002, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0x2a) });
-            Assert.AreEqual (1, ended.Count);
-            Assert.Throws<ArgumentException> (() => { var unused = failing.Value; });
+            CollectionAssert.IsEmpty (ended);
+            Assert.IsFalse (failing.Updated);
             Assert.AreEqual (42u, working.Value);
-        }
-
-        [Test]
-        public void AValueThatFailsToDecodeIsRemovedFromTheServer ()
-        {
-            var s = Connection.AddStream (
-                () => Connection.TestService ().Counter ("StreamTest.AValueThatFailsToDecode", 1));
-            s.Get ();
-            // A varint that never ends
-            Connection.StreamManager.Update (
-                s.stream.Id, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0xff) });
-            Assert.Throws<ArgumentException> (() => s.Get ());
-            // The removal is sent from another thread
-            Thread.Sleep (200);
-            // The server has stopped evaluating the stream, so only these calls count
-            var count = Connection.TestService ().Counter ("StreamTest.AValueThatFailsToDecode", 1);
-            Thread.Sleep (200);
-            Assert.AreEqual (count + 1, Connection.TestService ().Counter ("StreamTest.AValueThatFailsToDecode", 1));
-        }
-
-        [Test]
-        public void AKeptResultThatFailsToDecodeIsRemovedFromTheServer ()
-        {
-            using (var connection = Connect ("CSharpClientTest")) {
-                var manager = connection.StreamManager;
-                const string name = "StreamTest.AKeptResultThatFailsToDecode";
-                // The value stays the same, so the server sends it once
-                var call = Connection.GetCall (() => connection.TestService ().Counter (name, 1000000));
-                var added = connection.Invoke ("KRPC", "AddStream", new [] {
-                    Encoder.Encode (call, TypeSpec.For (typeof (KRPC.Schema.KRPC.ProcedureCall)))
-                }, typeof (KRPC.Schema.KRPC.Stream));
-                var id = KRPC.Schema.KRPC.Stream.Parser.ParseFrom (added.Value).Id;
-                Thread.Sleep (200);
-                // A varint that never ends, kept in place of the value from the server
-                manager.Update (id, new KRPC.Schema.KRPC.ProcedureResult { Value = ByteString.CopyFrom (0xff) });
-                // A stream whose value is an event over the stream with the kept result
-                var outer = manager.GetStream (TypeSpec.For (typeof (Event)), 1000011);
-                var evnt = new KRPC.Schema.KRPC.Event { Stream = new KRPC.Schema.KRPC.Stream { Id = id } };
-                // The removal is sent without the update lock, which a call can wait for
-                var invokeLock = typeof (Connection).GetField (
-                    "invokeLock", BindingFlags.NonPublic | BindingFlags.Instance).GetValue (connection);
-                lock (invokeLock) {
-                    var thread = new Thread (() => manager.Update (
-                        1000011, new KRPC.Schema.KRPC.ProcedureResult { Value = evnt.ToByteString () }));
-                    thread.IsBackground = true;
-                    thread.Start ();
-                    Assert.IsTrue (thread.Join (5000));
-                }
-                Assert.Throws<ArgumentException> (() => ((Event)outer.Value).Stream.Get ());
-                // The removal is sent from another thread
-                Thread.Sleep (200);
-                // The server has stopped evaluating the stream, so only these calls count
-                var count = connection.TestService ().Counter (name, 1);
-                Thread.Sleep (200);
-                Assert.AreEqual (count + 1, connection.TestService ().Counter (name, 1));
-            }
         }
 
         [Test]
@@ -1318,7 +1172,7 @@ namespace KRPC.Client.Test
                 lock (x.Condition) {
                     try {
                         x.Wait ();
-                    } catch (InvalidOperationException) {
+                    } catch (KRPC.Client.Services.KRPC.StreamRemovedException) {
                         raised.Set ();
                     }
                 }
@@ -1402,9 +1256,7 @@ namespace KRPC.Client.Test
                 thread.Start ();
                 Thread.Sleep (200);
                 // Stands in for the server closing the connection
-                var field = typeof (Connection).GetField (
-                    "streamSocket", BindingFlags.NonPublic | BindingFlags.Instance);
-                ((Socket)field.GetValue (connection)).Shutdown (SocketShutdown.Both);
+                connection.Session.Socket.Shutdown (SocketShutdown.Both);
                 Assert.IsTrue (raised.WaitOne (10000));
                 Assert.IsTrue (called.WaitOne (10000));
                 Assert.AreEqual (1, ended);

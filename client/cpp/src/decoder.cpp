@@ -136,9 +136,16 @@ uint32_t decode_size(const std::string& data) {
 }
 
 bool decode_size_prefix(const char* data, size_t length, uint32_t* size, size_t* prefix_length) {
+  // The longest prefix holds a 32-bit size
+  constexpr size_t max_prefix_length = 5;
+  if (length >= max_prefix_length && std::all_of(data, data + max_prefix_length, [](char byte) {
+        return (static_cast<uint8_t>(byte) & 0x80U) != 0;
+      }))
+    throw EncodingError("The size of a message has more than five bytes");
   uint64_t value = 0;
   size_t read = read_varint(data, length, &value);
   if (read == 0) return false;
+  if (value > UINT32_MAX) throw EncodingError("The size of a message has more than 32 bits");
   *size = static_cast<uint32_t>(value);
   *prefix_length = read;
   return true;

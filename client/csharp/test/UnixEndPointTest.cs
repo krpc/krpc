@@ -15,9 +15,9 @@ namespace KRPC.Client.Test
         [Test]
         public void Path ()
         {
-            var endPoint = new UnixEndPoint ("/tmp/krpc/rpc");
-            Assert.AreEqual ("/tmp/krpc/rpc", endPoint.Path);
-            Assert.AreEqual ("/tmp/krpc/rpc", endPoint.ToString ());
+            var endPoint = new UnixEndPoint ("/tmp/krpc.sock");
+            Assert.AreEqual ("/tmp/krpc.sock", endPoint.Path);
+            Assert.AreEqual ("/tmp/krpc.sock", endPoint.ToString ());
             Assert.AreEqual (AddressFamily.Unix, endPoint.AddressFamily);
         }
 

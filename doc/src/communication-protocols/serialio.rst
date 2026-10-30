@@ -10,8 +10,9 @@ port to interact with a kRPC server, for example an Arduino.
 
 .. note::
 
-   The serial IO protocol carries RPCs only. Streams and events are not available, and the stream
-   procedures, such as ``KRPC.AddStream`` and ``KRPC.RemoveStream``, return an error.
+   Streams and events are not supported over serial IO. The server accepts the stream and event
+   RPCs, but their updates have no flow control and can fill its write buffer, as described under
+   :ref:`communication-protocol-serialio-buffering`.
 
 Configuring the Server
 ----------------------
@@ -42,63 +43,53 @@ To receive a message from the server, do the reverse:
 3. Read message size bytes of message data from the serial port.
 4. Decode the message data.
 
-Unlike the TCP/IP and WebSockets protocols, all messages sent to the server after the initial
-connection handshake are wrapped in a ``MultiplexedRequest`` message, and all messages received
-from the server after the handshake are wrapped in a ``MultiplexedResponse`` message:
-
-.. literalinclude:: /communication-protocols/krpc.proto
-   :language: protobuf
-   :start-at: message MultiplexedRequest {
-   :end-at: StreamUpdate stream_update = 2;
-   :append: }
-
-The server leaves the ``stream_update`` field of a ``MultiplexedResponse`` unset.
+Every message is a ``Message``. See :ref:`communication-protocol-message`.
 
 Connecting to the Server
 ------------------------
 
-There is a single serial port connection for RPC calls. To establish a connection, a client must
-do the following:
+There is a single serial port connection. To establish a connection, a client must do the
+following:
 
 1. Open a connection to the serial port.
 
-2. Send a ``MultiplexedRequest`` message to the server with its ``connection_request`` field
-   populated. The ``ConnectionRequest`` message is defined as:
+2. Send a ``Message`` holding a ``connection_request``, with its ``protocol_version`` field set to
+   2. See :ref:`communication-protocol-handshake`.
 
-   .. literalinclude:: /communication-protocols/krpc.proto
-      :language: protobuf
-      :start-at: message ConnectionRequest {
-      :end-before: message ConnectionResponse {
+3. Receive a ``Message`` holding the server's ``connection_response``, and check that its
+   ``status`` field is ``ConnectionResponse.OK`` and its ``protocol_version`` is 2.
 
-   The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``protocol_version``
-   field to 1. The ``client_name`` field can be set to the name of the client to display on the
-   in-game UI. The ``client_identifier`` should be left blank.
+A serial line has no connect or disconnect. A client ends its session by sending a ``disconnect``,
+after which the server reads the next message as a ``connection_request``. A
+``connection_request`` sent during a session also starts a new one, as a client does when it
+resets.
 
-3. Receive a ``ConnectionResponse`` message from the server. This message is defined as:
+Resetting Clients
+-----------------
 
-   .. literalinclude:: /communication-protocols/krpc.proto
-      :language: protobuf
-      :start-at: message ConnectionResponse {
-      :end-before: // Messages for calling remote procedures
+A client that resets, such as an Arduino after a power cycle, can find the line in the state its
+earlier session left it in. The server ends a session whose message stalls for 3 seconds partway
+through, and drops the partial message. A client that may be resuming a line follows these rules,
+so that it can start a new session:
 
-   If the ``status`` field is set to ``ConnectionResponse.OK`` then the connection was successful.
-   If not, the ``message`` field contains a description of what went wrong.
+* It skips a ``response`` or ``stream_update`` while it waits for its ``connection_response``, as
+  those can be left over from the earlier session.
+* It treats a ``disconnect`` and the statuses ``MALFORMED_MESSAGE`` and ``TIMEOUT`` like no answer,
+  as each can follow a request that landed in a stale partial message. It stays silent until its
+  handshake timeout, which is more than 3 seconds, then sends the request again.
+* It never retries after ``DENIED`` or ``WRONG_PROTOCOL_VERSION``.
+* It keeps reading ``connection_response`` messages until the first ``response`` of the session.
+  Retries queue on the line while the server is not reading, such as during a scene load, and the
+  server answers each with a new session.
 
-   The ``protocol_version`` field contains the version of the protocol the server accepted. A
-   server from before kRPC 0.7 leaves it as 0. See :ref:`communication-protocol-version`.
-
-   The server waits up to 3 seconds for the complete connection request message to arrive after
-   its first bytes are received. If it does not arrive in time, the server responds with the
-   ``TIMEOUT`` status.
+A server with "Auto-accept new clients" turned off answers a connection request only once the player
+approves it. A client of such a server connects with no handshake timeout, so it recovers from a
+stale partial message only by a manual reset.
 
 Invoking Remote Procedures
 --------------------------
 
 See :doc:`messages`.
-
-To send a procedure call, wrap the ``Request`` message in a ``MultiplexedRequest`` and set its
-``request`` field. Receive the result as a ``MultiplexedResponse`` and read the ``Response`` from
-its ``response`` field.
 
 .. _communication-protocol-serialio-buffering:
 
@@ -113,10 +104,10 @@ in each direction, and the two directions behave differently when their buffer f
   server stops reading from the port until the game catches up. The data is kept, and the port
   carries it more slowly.
 
-* Data written by the game is buffered until the port has sent it. The game writes only responses,
-  so this buffer fills when a client sends requests faster than it reads their responses. The
-  server then drops the connection and stops. It can be started again from the in-game
-  configuration window.
+* Data written by the game is buffered until the port has sent it. Apart from the start and end
+  of each session, the game writes responses. This buffer fills when a client sends requests faster
+  than it reads their responses. The server then drops the connection and stops. It can be started
+  again from the in-game configuration window.
 
 To keep the write buffer from filling, read each response before sending the next request. A higher
 baud rate moves more data through the port.
@@ -126,7 +117,7 @@ Examples
 
 The following Python code connects to a server on serial port ``/dev/ttyUSB0`` using the name
 "Jeb". It then invokes the ``KRPC.GetStatus`` RPC, receives and decodes the result, and prints out
-the server version number from the response.
+the server version number from the response. Finally it ends the session with a ``disconnect``.
 
 .. literalinclude:: /scripts/communication-protocols/serialio/RPC.py
    :language: python

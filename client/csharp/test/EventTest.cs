@@ -361,7 +361,7 @@ namespace KRPC.Client.Test
             manager.Update (1000020, new KRPC.Schema.KRPC.ProcedureResult {
                 Value = Google.Protobuf.ByteString.CopyFrom (0x01)
             });
-            // Stands in for an update thread that copied the callback before its removal
+            // Stands in for a dispatcher thread that copied the callback before its removal
             stream.Call (callback, 1, true);
             var called = 0;
             stream.AddEventCallback (() => called++, 0);
@@ -377,7 +377,7 @@ namespace KRPC.Client.Test
                 lock (e.Condition) {
                     try {
                         e.Wait ();
-                    } catch (System.InvalidOperationException) {
+                    } catch (StreamRemovedException) {
                         raised.Set ();
                     }
                 }
@@ -428,34 +428,9 @@ namespace KRPC.Client.Test
                 thread.Start ();
                 Thread.Sleep (200);
                 // Stands in for the server closing the connection
-                var field = typeof (Connection).GetField (
-                    "streamSocket", BindingFlags.NonPublic | BindingFlags.Instance);
-                ((Socket)field.GetValue (connection)).Shutdown (SocketShutdown.Both);
+                connection.Session.Socket.Shutdown (SocketShutdown.Both);
                 Assert.True (raised.WaitOne (10000));
             }
-        }
-
-        [Test]
-        public void AnInvokeWithoutAReturnTypeNotesAnEventId ()
-        {
-            using (var connection = Connect ("CSharpClientTest")) {
-                var result = connection.Invoke ("TestService", "OnTimer", new [] {
-                    Encoder.Encode (100000u, TypeSpec.For (typeof (uint))),
-                    Encoder.Encode (1u, TypeSpec.For (typeof (uint)))
-                });
-                var id = KRPC.Schema.KRPC.Event.Parser.ParseFrom (result.Value).Stream.Id;
-                Assert.IsTrue (connection.StreamManager.Keeps (id));
-                connection.KRPC ().RemoveStream (id);
-            }
-        }
-
-        [Test]
-        public void TheListedReturnTypesAreStreamsAndEvents ()
-        {
-            var types = Connection.ListStreamReturnTypes ();
-            Assert.AreEqual (typeof (Event), types ["TestService.OnTimer"]);
-            Assert.AreEqual (typeof (KRPC.Schema.KRPC.Stream), types ["KRPC.AddStream"]);
-            Assert.IsFalse (types.ContainsKey ("TestService.FloatToString"));
         }
     }
 }

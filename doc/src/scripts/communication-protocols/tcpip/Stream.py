@@ -1,4 +1,3 @@
-import binascii
 import socket
 
 from google.protobuf.internal.decoder import _DecodeVarint
@@ -20,14 +19,14 @@ def decode_varint(data):
 
 
 def send_message(conn, msg):
-    """Send a message, prefixed with its size, to a TPC/IP socket"""
+    """Send a message, prefixed with its size, to a TCP/IP socket"""
     data = msg.SerializeToString()
     size = encode_varint(len(data))
     conn.sendall(size + data)
 
 
-def recv_message(conn, msg_type):
-    """Receive a message, prefixed with its size, from a TCP/IP socket"""
+def recv_message(conn):
+    """Receive a Message, prefixed with its size, from a TCP/IP socket"""
     # Receive the size of the message data
     data = b""
     while True:
@@ -38,78 +37,53 @@ def recv_message(conn, msg_type):
         except IndexError:
             pass
     # Receive the message data
-    data = conn.recv(size)
+    data = b""
+    while len(data) < size:
+        data += conn.recv(size - len(data))
     # Decode the message
-    msg = msg_type()
+    msg = KRPC.Message()
     msg.ParseFromString(data)
     return msg
 
 
-# Open a TCP/IP socket to the RPC server
-rpc_conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-rpc_conn.connect(("127.0.0.1", 50000))
+# Open a TCP/IP socket to the server
+conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+conn.connect(("127.0.0.1", 50000))
 
-# Send an RPC connection request
-request = KRPC.ConnectionRequest()
-request.type = KRPC.ConnectionRequest.RPC
-request.protocol_version = 1
-request.client_name = "Jeb"
-send_message(rpc_conn, request)
+# Send a connection request
+message = KRPC.Message()
+message.connection_request.protocol_version = 2
+message.connection_request.client_name = "Jeb"
+send_message(conn, message)
 
 # Receive the connection response
-response = recv_message(rpc_conn, KRPC.ConnectionResponse)
+response = recv_message(conn).connection_response
 
 # Check the connection was successful
 if response.status != KRPC.ConnectionResponse.OK:
     raise RuntimeError("Connection failed: " + response.message)
-if response.protocol_version != 1:
-    raise RuntimeError("The server does not support protocol version 1")
-print("Connected to RPC server")
-
-# Print out the clients identifier
-print(
-    "RPC client idenfitier = %s"
-    % binascii.hexlify(bytearray(response.client_identifier)).decode("utf8")
-)
-
-# Open a TCP/IP socket to the Stream server
-stream_conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-stream_conn.connect(("127.0.0.1", 50001))
-
-# Send a stream connection request, containing the clients identifier
-request = KRPC.ConnectionRequest()
-request.type = KRPC.ConnectionRequest.STREAM
-request.protocol_version = 1
-request.client_identifier = response.client_identifier
-send_message(stream_conn, request)
-
-# Receive the connection response
-response = recv_message(stream_conn, KRPC.ConnectionResponse)
-
-# Check the connection was successful
-if response.status != KRPC.ConnectionResponse.OK:
-    raise RuntimeError("Connection failed: " + response.message)
-print("Connected to stream server")
+if response.protocol_version != 2:
+    raise RuntimeError("The server does not support protocol version 2")
+print("Connected to the server")
 
 # Build a KRPC.GetStatus call to be streamed
 stream_call = KRPC.ProcedureCall()
 stream_call.service = "KRPC"
 stream_call.procedure = "GetStatus"
 
-# Call KRPC.AddStream to add the stream
-call = KRPC.ProcedureCall()
+# Call KRPC.AddStream to add the stream, in a request with the id 1
+message = KRPC.Message()
+message.request.id = 1
+call = message.request.calls.add()
 call.service = "KRPC"
 call.procedure = "AddStream"
-arg = KRPC.Argument()
-arg.position = 0
-arg.value = stream_call.SerializeToString()
-call.arguments.extend([arg])
-request = KRPC.Request()
-request.calls.extend([call])
-send_message(rpc_conn, request)
+call.arguments.add(position=0, value=stream_call.SerializeToString())
+send_message(conn, message)
 
-# Receive the response
-response = recv_message(rpc_conn, KRPC.Response)
+# Receive the response, which carries the id of the request it answers. The stream's first
+# update follows it.
+response = recv_message(conn).response
+assert response.id == 1
 
 # Check for an error in the response
 if response.HasField("error"):
@@ -124,9 +98,9 @@ if response.results[0].HasField("error"):
 stream = KRPC.Stream()
 stream.ParseFromString(response.results[0].value)
 
-# Repeatedly receive stream updates from the stream server
+# Repeatedly receive stream updates, which arrive on the same connection
 while True:
-    update = recv_message(stream_conn, KRPC.StreamUpdate)
+    update = recv_message(conn).stream_update
     assert len(update.results) == 1
     assert stream.id == update.results[0].id
     # Decode and print the return value

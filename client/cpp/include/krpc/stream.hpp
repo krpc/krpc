@@ -1,7 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include <exception>
 #include <functional>
+#include <limits>
 #include <map>
 #include <memory>
 #include <mutex>  // NOLINT(build/c++11)
@@ -27,7 +29,6 @@ class Stream {
  public:
   Stream();
   Stream(Client* client, const schema::ProcedureCall& call);
-  Stream(Client* client, uint64_t id);
   Stream(const Stream<T>& other);
   Stream(Stream<T>&& other) noexcept;
   Stream<T>& operator=(const Stream<T>& other);
@@ -50,10 +51,11 @@ class Stream {
   void acquire();
   /** Unlock the condition's mutex, which every copy of the stream object shares */
   void release();
-  /** Wait until the next stream update. If timeout >= 0, the operation times out after that
-      many seconds. Returns true if the stream updated, and false on a timeout. Throws the
-      exception that ended the stream, if it ends before or during the wait. */
-  bool wait(double timeout = -1);
+  /** Wait until the next stream update, or for at most timeout seconds. Returns true if the
+      stream updated, and false on a timeout. Throws the exception that ended the stream, if it
+      ends before or during the wait. Throws std::invalid_argument for a negative or NaN
+      timeout. */
+  bool wait(double timeout = std::numeric_limits<double>::infinity());
   typedef std::function<void(T)> Callback;
   /**
    * Add a callback that is invoked whenever the stream is updated. It is invoked straight
@@ -83,6 +85,8 @@ class Stream {
  private:
   friend class Event;
   friend struct function_stream_detail::function_streams;
+  /** The stream with an id the server gave, as an event message carries. */
+  Stream(Client* client, uint64_t id);
   /** A stream whose value is an error when null, for a template type that cannot hold a null. */
   Stream(Client* client, uint64_t id, bool null_is_an_error);
   std::shared_ptr<StreamImpl> impl;
@@ -231,10 +235,18 @@ inline void Stream<T>::release() {
 template <typename T>
 inline bool Stream<T>::wait(double timeout) {
   check_exists();
+  bool holder = impl->get_condition_mutex().held_by_this_thread();
   std::lock_guard<RecursiveMutex> held(impl->get_condition_mutex());
+  if (!holder && impl->has_ended()) impl->announce_ending();
   impl->throw_if_ended();
-  auto version = impl->get_version();
-  return impl->wait(timeout, [this, version] { return impl->get_version() != version; });
+  // An ending that arrived while this thread held the condition is read as an update
+  bool pending_ending = impl->has_ended();
+  // Past the value this thread last read, which can be one not yet announced
+  auto version = std::max(impl->get_announced_version(), impl->get_seen_version());
+  return impl->wait(timeout, [this, version, pending_ending] {
+    return impl->get_announced_version() > version ||
+           (pending_ending && impl->is_ending_announced());
+  });
 }
 
 template <typename T>

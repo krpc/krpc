@@ -234,21 +234,86 @@ function decoder.decode(data, typ)
   return protobuf.call(_decode, data, typ)
 end
 
--- The Response message, and the value of its one result when the given type is not nil and
--- the result carries a value
-local function _decode_response(data, typ)
-  local response = _decode_message('Response', data)
-  local result = response.results[1]
-  if typ == nil or response.error ~= nil or result.error ~= nil or result.is_null then
-    return response
+-- The Message, and the value of the one result of the response it holds when the given type is
+-- not nil and the result carries a value
+local function _decode_message_and_value(data, typ)
+  local ok, message = pcall(_decode_message, 'Message', data)
+  if not ok then
+    return nil
   end
-  return response, _decode(result.value, typ)
+  local response = message.response
+  if response == nil or response.error ~= nil then
+    return message
+  end
+  local result = response.results[1]
+  if result == nil then
+    return nil
+  end
+  if typ == nil or result.error ~= nil or result.is_null then
+    return message
+  end
+  return message, _decode(result.value, typ)
 end
 
---- Decode a Response message and the value of its result, with the client's protobuf state
---- swapped in once for both
-function decoder.decode_response(data, typ)
-  return protobuf.call(_decode_response, data, typ)
+--- Decode a Message and the value of the result of the response it holds, with the client's
+--- protobuf state swapped in once for both. A field of the Message that the data leaves out
+--- reads as nil, so a Message holding a case this client does not know has none of them set.
+--- Returns nil for a Message that fails to parse, or a response with no result.
+function decoder.decode_message_and_value(data, typ)
+  return protobuf.call(_decode_message_and_value, data, typ)
+end
+
+--- Whether the data holds whole protobuf fields, read at the top level only. lua-protobuf stops
+--- without an error at a field cut short, so a message that fails to parse reads as one with
+--- no field set.
+function decoder.well_formed(data)
+  local length = #data
+  local i = 1
+  local function varint()
+    local value = 0
+    local shift = 1
+    for _ = 1, 10 do
+      local byte = data:byte(i)
+      if byte == nil then
+        return nil
+      end
+      i = i + 1
+      value = value + (byte % 128) * shift
+      if byte < 128 then
+        return value
+      end
+      shift = shift * 128
+    end
+    return nil
+  end
+  while i <= length do
+    local tag = varint()
+    if tag == nil or tag < 8 then
+      return false
+    end
+    local wire_type = tag % 8
+    if wire_type == 0 then
+      if varint() == nil then
+        return false
+      end
+    elseif wire_type == 1 then
+      i = i + 8
+    elseif wire_type == 2 then
+      local size = varint()
+      if size == nil then
+        return false
+      end
+      i = i + size
+    elseif wire_type == 5 then
+      i = i + 4
+    else
+      return false
+    end
+    if i > length + 1 then
+      return false
+    end
+  end
+  return true
 end
 
 --- Decode a message of the named type in the krpc.schema package

@@ -6,7 +6,7 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import krpc.schema.KRPC_pb2 as KRPC
-from krpc.stream import Stream
+from krpc.stream import Stream, wait_deadline
 
 if TYPE_CHECKING:
     from krpc.client import Client
@@ -36,9 +36,12 @@ class Event:
         specifying the timeout in seconds for the operation. Returns true if the
         event fired, and false on a timeout. Raises the error that ended the event,
         if it ends before or during the wait."""
+        deadline = wait_deadline(timeout)
         stream = self._stream._stream
+        # A remove or a close discards an unseen firing
+        if stream.ended_by_client:
+            stream.raise_if_ended()
         seen = self._seen
-        deadline = None if timeout is None else time.monotonic() + timeout
         while stream.fired <= seen:
             stream.raise_if_ended()
             if deadline is None:
@@ -55,7 +58,8 @@ class Event:
         """Add a callback that is invoked whenever the event fires. It is invoked
         straight away if the event has fired since the last wait on this event object,
         and the event's callbacks have not been invoked for that firing. A callback
-        added after the event has ended is not invoked for an earlier firing. An error
+        added after the event is removed or its connection closes is not invoked for an
+        earlier firing. An error
         from the event does not invoke the callback."""
         with self._stream.condition:
             seen = self._seen

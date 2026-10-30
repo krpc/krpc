@@ -1,4 +1,14 @@
 ## [v0.8.0] - unreleased
+- **Breaking:** Connect with protocol version 2 (#1219)
+- **Breaking:** Remove `KRPC_SINGLE_CONNECTION`, as every mechanism opens one connection
+  (#1219)
+- **Breaking:** Return `KRPC_ERROR_CONNECTION_REFUSED` from `krpc_connect` when the server
+  denies the connection or does not support the client's protocol version (#1219)
+- **Breaking:** Return `KRPC_ERROR_CONNECTION_FAILED` from `krpc_connect` when the server's
+  response cannot be read (#1219)
+- Add `krpc_disconnect`, which sends the server a disconnect message before closing the
+  connection (#1219)
+- Skip messages an earlier session left on a serial line while connecting (#1219)
 - Name the references in service documentation by their C names (#1185)
 - Document every parameter of a service function, with the value returned under
   `returnValue` (#1185)

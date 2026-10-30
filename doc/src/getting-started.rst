@@ -47,15 +47,17 @@ The server is configured by clicking edit on the window displayed in-game:
    from the local machine, select 'localhost' (the default). To allow connections over a network,
    either select the local IP address of your machine, or choose 'Manual' and enter the local IP
    address manually.
-3. **RPC and Stream port numbers**: These need to be set to port numbers that are available on your
-   machine. In most cases, they can just be left as the default.
+3. **Port**: This needs to be set to a port number that is available on your machine. In most
+   cases, it can just be left as the default.
 
 There are also several advanced settings, which are hidden by default, but can be revealed by
 checking "Show advanced settings":
 
 1. **Auto-start server**: When enabled, the server will start automatically when the game loads.
-2. **Auto-accept new clients**: When enabled, new client connections are automatically allowed. When
-   disabled, a pop-up is displayed asking whether the new client connection should be allowed.
+2. **Auto-accept new clients**: Enabled by default. When enabled, new client connections are
+   automatically allowed. When disabled, a pop-up is displayed asking whether the new client
+   connection should be allowed. A connection fails after the client's handshake timeout, 5 seconds
+   by default, so connect with no handshake timeout to leave time to answer.
 
 The other advanced settings control the :ref:`performance of the server
 <server-performance-settings>`.

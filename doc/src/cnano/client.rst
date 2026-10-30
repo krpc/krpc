@@ -145,18 +145,13 @@ argument to the compiler.
     against winsock.
   * ``KRPC_COMMUNICATION_LOCALSOCKET`` -- Specifies that the library should be built to
     communicate over a unix domain socket, with a server running on the same machine. The
-    connection is opened with the path of the server's RPC socket in place of a serial port
+    connection is opened with the path of the server's socket in place of a serial port
     name. A serial port is the usual choice on the platforms providing both, so this is
     specified rather than auto-detected. Use ``-DKRPC_COMMUNICATION_LOCALSOCKET=ON`` for a
     CMake build and the ``localsocket`` feature for a vcpkg install, so that a program linking
     the library is built for the same transport.
   * ``KRPC_COMMUNICATION_CUSTOM`` -- Allows you to provide your own implementation for the
     communication mechanism.
-  * ``KRPC_SINGLE_CONNECTION`` -- Only meaningful alongside ``KRPC_COMMUNICATION_CUSTOM``. A serial
-    port carries the RPC and stream connections over one link, so each message is wrapped in a
-    multiplexed message naming the connection it belongs to. Define this when a custom
-    communication mechanism opens a connection to each server, as a socket does, and sends
-    messages unwrapped.
 
 * Memory allocation
 
@@ -231,10 +226,10 @@ for its version and prints it out:
 
 .. literalinclude:: /scripts/cnano/client/Basic.c
 
-The :func:`krpc_connect` function is used to open a connection to a server. It takes as its first
-argument a connection object into which the connection information is written. This is passed to
-subsequent calls to interact with the server. The second argument is a name for the connection
-(displayed in game) and the third is the name of the serial port to connect over.
+The :func:`krpc_open` function opens the serial port named by its second argument, and writes the
+connection into its first. This is passed to subsequent calls to interact with the server.
+:func:`krpc_connect` then starts a session, with a name for the connection that is displayed in
+game. :func:`krpc_disconnect` ends the session and closes the connection.
 
 Arduino
 ^^^^^^^
@@ -294,7 +289,7 @@ Client API Reference
 
    When the library is built using ``KRPC_COMMUNICATION_TCP`` calling this function connects to the
    server over TCP/IP. *arg* is a pointer to a ``krpc_connection_config_t`` holding the address of
-   the machine running the server and the port its RPC server listens on. The address may be a host
+   the machine running the server and the port it listens on. The address may be a host
    name or an address literal, and each endpoint it resolves to is tried in turn. For example:
 
    .. code-block:: c
@@ -347,6 +342,20 @@ Client API Reference
       * **name** (*const char\**) -- A descriptive name for the connection. This is passed to the
         server and appears in the in-game server window.
 
+   Returns :macro:`KRPC_ERROR_CONNECTION_REFUSED`, and closes the connection, if the server
+   denies it or does not support the client's protocol version.
+
+   On a serial port, a client that has reset can find messages from its earlier session on the
+   line, which this skips. Part of a message from that session can garble the connection request
+   or its response. Either way this returns :macro:`KRPC_ERROR_CONNECTION_FAILED` and leaves the
+   port open. Wait more than 3 seconds, so that the server drops the partial message, then call
+   this again.
+
+.. function:: krpc_error_t krpc_disconnect(krpc_connection_t connection)
+
+   Tell the server the connection is ending, then close the communication handle. On a serial port
+   this is how the server learns the session has ended.
+
 .. function:: krpc_error_t krpc_close(krpc_connection_t connection)
 
    Closes the communication handle.
@@ -386,6 +395,15 @@ Client API Reference
    .. macro:: KRPC_ERROR_DECODING_FAILED
 
               The decoder failed to interpret a result sent by the server.
+
+   .. macro:: KRPC_ERROR_BUFFER_TOO_SMALL
+
+              A value did not fit in the buffer given to hold it.
+
+   .. macro:: KRPC_ERROR_CONNECTION_REFUSED
+
+              The server denied the connection, or does not support the client's protocol
+              version.
 
 .. function:: const char * krpc_get_error(krpc_error_t error)
 

@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Sockets;
 using NUnit.Framework;
@@ -20,11 +21,10 @@ namespace KRPC.Client.Test
             return socket;
         }
 
-        protected override Connection Connect (string name)
+        protected override Connection Connect (string name, TimeSpan? stallTimeout = null)
         {
             var endPoint = (IPEndPoint)Server.EndPoint;
-            return new Connection (
-                name, IPAddress.Loopback, endPoint.Port, endPoint.Port);
+            return new Connection (name, IPAddress.Loopback, endPoint.Port, stallTimeout: stallTimeout);
         }
     }
 }

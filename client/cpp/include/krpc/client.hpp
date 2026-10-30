@@ -27,17 +27,22 @@ struct function_type_cache;
 class Client {
  public:
   Client();
-  Client(const std::string& name, const std::string& address, unsigned int rpc_port = 50000,
-         unsigned int stream_port = 50001,
-         std::chrono::milliseconds timeout = std::chrono::milliseconds::zero());
-  /** Perform the connection handshake over the given connections, which have been built
-      but not yet opened. The handshake is the same whatever carries it. */
-  Client(const std::string& name, std::shared_ptr<Connection> rpc_connection,
-         const std::shared_ptr<Connection>& stream_connection);
+  Client(const std::string& name, const std::string& address, unsigned int port = 50000,
+         std::chrono::milliseconds timeout = std::chrono::milliseconds::zero(),
+         std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5),
+         std::chrono::milliseconds stall_timeout = std::chrono::seconds(30));
+  /** Perform the connection handshake over the given connection, which has been built but not
+      yet opened. The handshake is the same whatever carries it. Gives up after
+      handshake_timeout of waiting for the server to accept the connection, or waits
+      indefinitely if it is zero. Fails the connection when a message from the server receives
+      no new byte for stall_timeout once it has started to arrive, or never if it is zero. */
+  Client(const std::string& name, const std::shared_ptr<Connection>& connection,
+         std::chrono::milliseconds handshake_timeout = std::chrono::seconds(5),
+         std::chrono::milliseconds stall_timeout = std::chrono::seconds(30));
 
-  /** Invoke the calls of a request, and return the result of the first. The first call
-      through a client with a stream connection fetches the server's list of services, to find
-      the procedures that return a new stream or event. A failed fetch is not retried. */
+  /** Invoke the calls of a request, and return the result of the first. The first call fetches
+      the server's list of services, to find the procedures that return a new stream or event.
+      A failed fetch is not retried. */
   schema::ProcedureResult invoke(const schema::Request& request);
   /** Invoke a call, as invoke(const schema::Request&) does. */
   schema::ProcedureResult invoke(const schema::ProcedureCall& call);
@@ -49,8 +54,8 @@ class Client {
   /** The kind of value a procedure returns: a new stream as a KRPC.Stream message, a new event
       as a KRPC.Event message, or any other value. */
   enum class Returns : uint8_t { value, stream, event };
-  /** Invoke a procedure that returns what returns says, as generated stubs do. The id of a
-      new stream or event is noted with the stream manager. */
+  /** Invoke a procedure that returns what returns says, as generated stubs do. A new stream or
+      event is registered with the stream manager. */
   schema::ProcedureResult invoke(std::string_view service, std::string_view procedure,
                                  const std::vector<encoder::Value>& args, Returns returns);
 
@@ -70,12 +75,10 @@ class Client {
   void throw_exception(const schema::Error& error) const;
   /** Send a request, whose first call returns what returns says, or whose calls are looked up
       in the server's list of services if returns is null. */
-  schema::ProcedureResult send_request(const schema::Request& request,
-                                       const Returns* returns = nullptr);
+  schema::ProcedureResult send_request(schema::Request request, const Returns* returns = nullptr);
+  using ReturnsByProcedure = std::map<std::pair<std::string, std::string>, Returns>;
   Returns lookup_returns(const std::string& service, const std::string& procedure);
-  void list_returns();
-  void note_stream_id(int index, Returns returns);
-  void note_removed_streams(const schema::Request& request);
+  ReturnsByProcedure list_returns();
   static void add_arguments(schema::ProcedureCall* call, const std::vector<encoder::Value>& args);
   StreamManager& streams() const;
 
@@ -89,11 +92,10 @@ class Client {
   void set_function_parameter_types(uint64_t id, const std::vector<schema::Type>& types);
 
  public:
-  /** Throw a StreamError if the client has no connection to the stream server. */
+  /** Throw a StreamError if the client is not connected to a server. */
   void check_stream_connection() const;
   std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
   std::shared_ptr<StreamImpl> get_stream(uint64_t id);
-  void remove_stream(uint64_t id);
 
   /**
    * Condition variable that is notified when a stream update
@@ -122,21 +124,14 @@ class Client {
   void remove_stream_update_callback(int tag);
 
  private:
-  std::shared_ptr<Connection> rpc_connection;
+  // Guards listed_returns
   std::shared_ptr<std::mutex> lock;
-  // The request a call is built into, the bytes it is written as, and the response it is
-  // answered by. Kept from one call to the next and guarded by lock, so that a call reuses the
-  // allocations of the one before it: clearing a protobuf message keeps the storage its fields
-  // have, and the buffer keeps its capacity.
-  schema::Request request_buffer;
-  std::string request_data;
-  schema::Response response_buffer;
   // The procedures that return a new stream or event, from the server's list of services,
   // keyed by service and procedure name. Shared by every copy of the client and guarded by
   // lock.
   struct ListedReturns {
     bool listed = false;
-    std::map<std::pair<std::string, std::string>, Returns> returns;
+    ReturnsByProcedure returns;
   };
   std::shared_ptr<ListedReturns> listed_returns;
   // Shared by every copy of the client, including the stream manager's own
@@ -144,7 +139,7 @@ class Client {
       exception_throwers;
   // Guards exception_throwers. Services register their throwers as they are constructed,
   // which can happen on any thread and at any time, while errors are turned into exceptions
-  // on both the calling thread and the stream update thread. Held by shared pointer as the
+  // on both the calling thread and the reader. Held by shared pointer as the
   // client is copyable and a mutex is not.
   std::shared_ptr<std::mutex> exception_throwers_lock;
   std::map<uint64_t, schema::Type> function_return_types;

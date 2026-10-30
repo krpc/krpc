@@ -8,7 +8,7 @@
 // installed package. Nothing is listening at either endpoint, so both are expected to fail.
 int main() {
   try {
-    krpc::connect("consumer test", "127.0.0.1", 1, 0);
+    krpc::connect("consumer test", "127.0.0.1", 1);
     std::cout << "opened a connection to a port nothing should be listening on" << std::endl;
     return 1;
   } catch (const std::exception&) {

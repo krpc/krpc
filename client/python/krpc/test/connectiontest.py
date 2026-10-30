@@ -6,7 +6,6 @@ import threading
 import unittest
 from typing import Any
 
-import krpc.schema.KRPC_pb2 as KRPC
 from krpc.connection import Connection
 
 # The unix domain address family, where the socket module has it. It is absent on Windows,
@@ -38,7 +37,7 @@ class EchoServer:
             # far less room than a path named after the test would take, so the socket
             # goes in a short temporary directory of its own
             self._directory = tempfile.mkdtemp()
-            self._address = os.path.join(self._directory, "rpc")
+            self._address = os.path.join(self._directory, "krpc.sock")
             self._listener.bind(self._address)
         else:
             self._listener.bind(("localhost", 0))
@@ -138,7 +137,7 @@ class ConnectionTest(unittest.TestCase):
 
         def run() -> None:
             try:
-                conn.receive_message(KRPC.Response)
+                conn.receive_message_data()
             except OSError as exn:
                 raised.append(exn)
 

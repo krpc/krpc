@@ -10,6 +10,7 @@ namespace KRPC.Test
         Core core;
         bool blockingRecv;
         uint tickHoldTimeout;
+        PinnedUpdateTime updateTime;
         readonly List<ScriptedClient> clients = new List<ScriptedClient> ();
         int beforeCalls;
         int afterCalls;
@@ -22,6 +23,7 @@ namespace KRPC.Test
             blockingRecv = config.BlockingRecv;
             tickHoldTimeout = config.TickHoldTimeout;
             config.BlockingRecv = false;
+            updateTime = new PinnedUpdateTime ();
             beforeCalls = 0;
             afterCalls = 0;
             core.OnBeforeCalls += OnBeforeCalls;
@@ -34,11 +36,12 @@ namespace KRPC.Test
             core.OnBeforeCalls -= OnBeforeCalls;
             core.OnAfterCalls -= OnAfterCalls;
             foreach (var client in clients)
-                core.RPCClientDisconnected (client);
+                core.ClientDisconnected (client);
             clients.Clear ();
             var config = Configuration.Instance;
             config.BlockingRecv = blockingRecv;
             config.TickHoldTimeout = tickHoldTimeout;
+            updateTime.Restore ();
         }
 
         void OnBeforeCalls (object sender, EventArgs args)
@@ -54,7 +57,7 @@ namespace KRPC.Test
         ScriptedClient Connect (int pollsBeforeReady, params string[] procedures)
         {
             var client = new ScriptedClient (pollsBeforeReady, 0, procedures);
-            core.RPCClientConnected (client);
+            core.ClientConnected (client);
             clients.Add (client);
             return client;
         }

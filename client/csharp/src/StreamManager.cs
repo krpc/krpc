@@ -6,84 +6,55 @@ using KRPC.Schema.KRPC;
 
 namespace KRPC.Client
 {
-    sealed class StreamManager : IDisposable
+    /// <summary>
+    /// The streams of a connection. The thread reading the socket registers streams and stores
+    /// their values, and the dispatcher thread wakes their waiters and calls their callbacks.
+    /// </summary>
+    sealed class StreamManager
     {
         readonly Connection connection;
+        readonly Action<Action> dispatch;
         readonly object updateLock = new object ();
         readonly IDictionary<ulong, StreamImpl> streams = new Dictionary<ulong, StreamImpl> ();
         bool closed;
-        // Streams out of the registry and not yet ended, with the ending for each. The
-        // closing thread ends any whose condition the update thread stops trying to take.
-        readonly IDictionary<StreamImpl, System.Exception> toEnd =
-            new Dictionary<StreamImpl, System.Exception> ();
-        // Every registered stream, to find one whose condition the closing thread holds
+        volatile bool closeRequested;
+        // Every registered stream, to wake its waiters when the connection closes
         readonly List<WeakReference<StreamImpl>> registered = new List<WeakReference<StreamImpl>> ();
         int pruneRegisteredAt = 16;
-        // The highest stream id the server has given this client, and those of its ids not
-        // yet registered. A result for one of these, or for a higher id, can arrive before
-        // its stream is registered, and is kept until it is.
-        long issued = -1;
-        readonly HashSet<ulong> unregistered = new HashSet<ulong> ();
-        readonly IDictionary<ulong, Pending> pending = new Dictionary<ulong, Pending> ();
-        readonly UpdateThread updateThreadObject;
-        readonly Thread updateThread;
 
-        public StreamManager (Connection serverConnection, MessageReader reader, Action closeConnection)
+        public StreamManager (Connection serverConnection, Action<Action> dispatchWork)
         {
             connection = serverConnection;
-            updateThreadObject = new UpdateThread (this, reader, closeConnection);
-            updateThread = new Thread (new ThreadStart (updateThreadObject.Main));
-            updateThread.Start ();
+            dispatch = dispatchWork;
         }
 
-        bool disposed;
+        /// <summary>
+        /// Whether the connection has closed and every stream has ended.
+        /// </summary>
+        public bool Closed {
+            get { return closed; }
+        }
 
         /// <summary>
-        /// Whether a thread is disposing the connection, after which the update thread stops.
+        /// Whether a thread is disposing the connection, after which the dispatcher thread stops
+        /// trying to take a stream's condition.
         /// </summary>
         public bool CloseRequested {
-            get { return updateThreadObject.Stopped; }
+            get { return closeRequested; }
         }
 
         /// <summary>
-        /// Whether this thread is the update thread.
+        /// Whether any stream is open. Read without the update lock, by the session deciding
+        /// whether to read between calls.
         /// </summary>
-        public bool OnUpdateThread {
-            get { return Thread.CurrentThread == updateThread; }
-        }
-
-        ~StreamManager ()
-        {
-            Dispose (false);
-        }
-
-        public void Dispose ()
-        {
-            Dispose (true);
-            GC.SuppressFinalize (this);
-        }
-
-        void Dispose (bool disposing)
-        {
-            if (!disposed) {
-                if (disposing) {
-                    updateThreadObject.Stop ();
-                    // A callback on the update thread can wait for a condition this thread holds,
-                    // so we end the streams here, and join only when this thread holds none
-                    var holding = HoldsACondition ();
-                    EndAll (false);
-                    // A callback runs on the update thread, and can dispose the connection
-                    if (Thread.CurrentThread != updateThread && !holding)
-                        updateThread.Join ();
-                }
-                disposed = true;
-            }
+        public bool HasStreams {
+            get { return streams.Count > 0; }
         }
 
         /// <summary>
         /// Whether this thread holds the condition of a stream.
         /// </summary>
-        bool HoldsACondition ()
+        public bool HoldsACondition ()
         {
             lock (updateLock) {
                 foreach (var reference in registered) {
@@ -111,51 +82,27 @@ namespace KRPC.Client
             registered.Add (new WeakReference<StreamImpl> (stream));
         }
 
-        void CheckDisposed ()
-        {
-            if (disposed)
-                throw new ObjectDisposedException (GetType ().Name);
-        }
-
         public StreamImpl AddStream (TypeSpec returnType, ProcedureCall call)
         {
-            CheckDisposed ();
             var id = connection.KRPC ().AddStream (call).Id;
             return GetStream (returnType, id);
         }
 
         /// <summary>
-        /// Note a stream id the server has given this client. Called in the order the
-        /// server's replies arrive.
+        /// Register a stream the server has added for this client. Called by the reader, before
+        /// it reads the stream's first update.
         /// </summary>
-        public void NoteIssued (ulong id)
+        public void Register (ulong id)
         {
-            lock (updateLock) {
-                issued = Math.Max (issued, (long)id);
-                if (!streams.ContainsKey (id))
-                    unregistered.Add (id);
-            }
-        }
-
-        /// <summary>
-        /// Stop keeping results for a stream id the client has removed from the server.
-        /// </summary>
-        public void NoteRemoved (ulong id)
-        {
-            lock (updateLock) {
-                issued = Math.Max (issued, (long)id);
-                unregistered.Remove (id);
-                pending.Remove (id);
-            }
-        }
-
-        /// <summary>
-        /// Whether the id is noted and not registered, or has a kept result.
-        /// </summary>
-        internal bool Keeps (ulong id)
-        {
-            lock (updateLock) {
-                return unregistered.Contains (id) || pending.ContainsKey (id);
+            Session.Enter (updateLock);
+            try {
+                if (closed || streams.ContainsKey (id))
+                    return;
+                var stream = new StreamImpl (connection, id, null, updateLock);
+                streams [id] = stream;
+                NoteRegistered (stream);
+            } finally {
+                Monitor.Exit (updateLock);
             }
         }
 
@@ -171,60 +118,42 @@ namespace KRPC.Client
 
         public StreamImpl GetStream (TypeSpec returnType, ulong id)
         {
-            CheckDisposed ();
+            var added = false;
             StreamImpl stream;
             lock (updateLock) {
-                if (streams.TryGetValue (id, out stream))
-                    return stream;
-            }
-            var created = new StreamImpl (connection, id, returnType, updateLock);
-            System.Exception ending = null;
-            bool undecodable = false;
-            IList<Action<System.Exception>> endCallbacks;
-            // The condition is taken first, as everywhere else. The stream is new, so it has no
-            // waiters or callbacks for its pending results.
-            lock (created.Condition) {
-                lock (updateLock) {
-                    if (streams.TryGetValue (id, out stream))
+                if (streams.TryGetValue (id, out stream)) {
+                    if (stream.ReturnType != null)
                         return stream;
-                    stream = created;
-                    unregistered.Remove (id);
-                    Pending kept;
-                    if (pending.TryGetValue (id, out kept))
-                        pending.Remove (id);
-                    if (closed)
-                        ending = ClosedError ();
-                    else {
-                        NoteRegistered (stream);
-                        if (kept != null) {
-                            bool ended = false;
-                            if (kept.Value != null) {
-                                var value = Decode (stream, kept.Value, out ended, out undecodable);
-                                if (ended)
-                                    ending = (System.Exception)value;
-                                else
-                                    stream.SetValue (value);
-                            }
-                            if (!ended && kept.Ending != null)
-                                ending = (System.Exception)Decode (stream, kept.Ending, out ended, out undecodable);
+                    stream.ReturnType = returnType;
+                    var raw = stream.Raw;
+                    stream.Raw = null;
+                    if (raw != null) {
+                        // No handle has been given out, so there is no waiter to wake or
+                        // callback to call
+                        bool ended;
+                        bool undecodable;
+                        var value = Decode (stream, raw, out ended, out undecodable);
+                        if (undecodable) {
+                        } else if (ended) {
+                            stream.SetEnding ((System.Exception)value);
+                        } else {
+                            stream.SetValue (value);
+                            stream.Announce (value, stream.Version);
                         }
                     }
-                    if (ending == null) {
-                        streams [id] = stream;
+                } else {
+                    stream = new StreamImpl (connection, id, returnType, updateLock);
+                    if (closed) {
+                        stream.SetEnding (ClosedError (null));
                         return stream;
                     }
+                    streams [id] = stream;
+                    NoteRegistered (stream);
+                    added = true;
                 }
-                endCallbacks = stream.End (ending);
             }
-            foreach (var callback in endCallbacks)
-                InvokeEndCallback (callback, ending);
-            if (undecodable) {
-                // Decoding a value can get a stream, for an event, with the update lock held
-                if (Monitor.IsEntered (updateLock) || OnUpdateThread)
-                    RemoveFromServerLater (id);
-                else
-                    RemoveFromServer (id);
-            }
+            if (added)
+                connection.Session.StreamAdded ();
             return stream;
         }
 
@@ -233,156 +162,111 @@ namespace KRPC.Client
         /// </summary>
         public void RemoveStream (StreamImpl stream)
         {
-            bool onServer;
-            System.Exception ending;
             lock (updateLock) {
                 StreamImpl current;
-                onServer = streams.TryGetValue (stream.Id, out current) && current == stream;
-                if (onServer) {
-                    streams.Remove (stream.Id);
-                    ending = new System.InvalidOperationException ("Stream has been removed");
-                } else {
-                    // A stream with a decoded final result, or one the client is closing, is
-                    // ended with that ending. The server has no stream for it to remove.
-                    if (!toEnd.TryGetValue (stream, out ending))
-                        return;
-                }
+                if (!streams.TryGetValue (stream.Id, out current) || current != stream)
+                    // A stream the server or the connection has already ended
+                    return;
+                streams.Remove (stream.Id);
             }
+            var ending = new StreamRemovedException ("Stream has been removed");
             // Ended first, so a value that arrives during the call is dropped
             var endCallbacks = stream.End (ending);
-            lock (updateLock) {
-                toEnd.Remove (stream);
-            }
             foreach (var callback in endCallbacks)
                 InvokeEndCallback (callback, ending);
-            if (onServer)
-                connection.KRPC ().RemoveStream (stream.Id);
+            connection.KRPC ().RemoveStream (stream.Id);
         }
 
         /// <summary>
-        /// End every stream, after the connection has closed and no further update can arrive.
+        /// Note that the connection is closing. The dispatcher thread then stops trying to take a
+        /// stream's condition, and the closing thread wakes the stream's waiters.
         /// </summary>
-        void NotifyClosed ()
+        public void RequestClose ()
         {
-            EndAll (true);
+            closeRequested = true;
         }
 
         /// <summary>
         /// End every stream, once the connection is closing and no further update is applied.
-        /// Called by the disposing thread and by the update thread.
+        /// Called by the closing thread, and by the dispatcher thread when the connection fails.
         /// </summary>
         /// <remarks>
-        /// Each pass ends the streams whose condition it can take, and the passes repeat until
-        /// every stream has ended. A thread can hold one stream's condition while it waits on
-        /// another, and ending the other releases the first. The update thread leaves the
-        /// remaining streams to the disposing thread.
+        /// The waiters of a stream whose condition another thread holds are woken by a thread of
+        /// their own, once the holder lets go of it, such as a thread holding one stream's
+        /// condition while it waits on another.
         /// </remarks>
-        void EndAll (bool onUpdateThread)
+        public void NotifyClosed (System.Exception cause)
         {
+            var endings = new List<KeyValuePair<IList<Action<System.Exception>>, System.Exception>> ();
+            var toWake = new List<StreamImpl> ();
             lock (updateLock) {
                 closed = true;
-                var ending = ClosedError ();
+                var ending = ClosedError (cause);
                 foreach (var stream in streams.Values)
-                    toEnd [stream] = ending;
+                    endings.Add (new KeyValuePair<IList<Action<System.Exception>>, System.Exception> (
+                        stream.SetEnding (ending, true, true), ending));
                 streams.Clear ();
-                pending.Clear ();
-                unregistered.Clear ();
-            }
-            while (true) {
-                IList<KeyValuePair<StreamImpl, System.Exception>> remaining;
-                lock (updateLock) {
-                    foreach (var stream in new List<StreamImpl> (toEnd.Keys)) {
-                        if (stream.Ended)
-                            toEnd.Remove (stream);
-                    }
-                    if (toEnd.Count == 0)
-                        return;
-                    if (onUpdateThread && CloseRequested)
-                        return;
-                    remaining = new List<KeyValuePair<StreamImpl, System.Exception>> (toEnd);
+                foreach (var reference in registered) {
+                    StreamImpl stream;
+                    if (reference.TryGetTarget (out stream))
+                        toWake.Add (stream);
                 }
-                foreach (var entry in remaining)
-                    TryEnd (entry.Key, entry.Value);
+            }
+            toWake.RemoveAll (x => TryWake (x, 0));
+            if (toWake.Count > 0) {
+                var waker = new Thread (() => {
+                    while (toWake.Count > 0)
+                        toWake.RemoveAll (x => TryWake (x, 10));
+                });
+                waker.IsBackground = true;
+                waker.Name = "krpc-waker";
+                waker.Start ();
+            }
+            foreach (var entry in endings) {
+                foreach (var callback in entry.Key)
+                    InvokeEndCallback (callback, entry.Value);
             }
         }
 
-        void TryEnd (StreamImpl stream, System.Exception ending)
+        static bool TryWake (StreamImpl stream, int timeout)
         {
-            if (Monitor.TryEnter (stream.Condition, 10))
-                End (stream, ending);
-        }
-
-        /// <summary>
-        /// End a stream out of the registry, and release its condition.
-        /// </summary>
-        void End (StreamImpl stream, System.Exception ending)
-        {
-            IList<Action<System.Exception>> endCallbacks;
+            if (!Monitor.TryEnter (stream.Condition, timeout))
+                return false;
             try {
-                endCallbacks = stream.End (ending);
-                lock (updateLock) {
-                    toEnd.Remove (stream);
-                }
+                Monitor.PulseAll (stream.Condition);
             } finally {
                 Monitor.Exit (stream.Condition);
             }
-            foreach (var callback in endCallbacks)
-                InvokeEndCallback (callback, ending);
+            return true;
         }
 
         /// <summary>
-        /// Take a stream's condition on the update thread. Returns false, without the condition,
-        /// once the connection is closing, as the disposing thread can hold the condition while
-        /// it joins the update thread.
+        /// Take a stream's condition on the dispatcher thread. Returns false, without the
+        /// condition, once the connection is closing, as the disposing thread can hold the
+        /// condition while it joins the dispatcher thread.
         /// </summary>
         bool EnterCondition (object condition)
         {
             while (!Monitor.TryEnter (condition, 50)) {
-                if (CloseRequested)
+                if (closeRequested)
                     return false;
             }
             return true;
         }
 
         /// <summary>
-        /// End a stream the server has ended. When the update thread stops trying to take its
-        /// condition, the disposing thread ends it.
+        /// The error that ends a stream once the connection closes. Its inner exception is the
+        /// error that closed the connection, if it failed, and it carries that error's
+        /// disconnect reason.
         /// </summary>
-        void EndOnUpdateThread (StreamImpl stream, System.Exception ending)
+        static System.Exception ClosedError (System.Exception cause)
         {
-            if (EnterCondition (stream.Condition))
-                End (stream, ending);
-        }
-
-        /// <summary>
-        /// Remove a stream whose value failed to decode from the server. Best effort, as the
-        /// stream has already ended.
-        /// </summary>
-        void RemoveFromServer (ulong id)
-        {
-            if (CloseRequested)
-                return;
-            try {
-                connection.KRPC ().RemoveStream (id);
-            } catch (System.Exception) {
-                // The connection can be closing, which also removes the stream
-            }
-        }
-
-        /// <summary>
-        /// Remove a stream from the server on another thread, as a call can wait behind a long
-        /// call on another thread.
-        /// </summary>
-        void RemoveFromServerLater (ulong id)
-        {
-            var thread = new Thread (() => RemoveFromServer (id));
-            thread.IsBackground = true;
-            thread.Start ();
-        }
-
-        static System.Exception ClosedError ()
-        {
-            return new ConnectionException ("Connection closed");
+            if (cause == null)
+                return new ConnectionException ("Connection closed");
+            var connectionCause = cause as ConnectionException;
+            return new ConnectionException ("Connection closed", cause) {
+                Reason = connectionCause != null ? connectionCause.Reason : null
+            };
         }
 
         internal static void InvokeEndCallback (Action<System.Exception> callback, System.Exception exn)
@@ -395,101 +279,139 @@ namespace KRPC.Client
         }
 
         /// <summary>
-        /// Decode a result, which is final if it is an error or fails to decode. Called with
-        /// the update lock held.
+        /// Decode a result, which is final if it is an error. A final result removes the stream
+        /// from the registry, as the server has already removed it. A value that fails to decode
+        /// is dropped. Called with the update lock held.
         /// </summary>
         object Decode (StreamImpl stream, ProcedureResult result, out bool ended, out bool undecodable)
         {
             ended = true;
             undecodable = false;
+            object value;
             try {
                 if (result.Error != null)
-                    return connection.GetException (result.Error);
-                var value = result.IsNull ? null : Encoder.Decode (result.Value, stream.ReturnType, connection);
-                ended = false;
-                return value;
-            } catch (System.Exception exn) {
-                // A value that fails to decode ends only its stream
+                    value = connection.GetException (result.Error);
+                else {
+                    value = result.IsNull ? null : Encoder.Decode (result.Value, stream.ReturnType, connection);
+                    ended = false;
+                }
+            } catch (System.Exception) {
                 undecodable = true;
-                return exn;
+                ended = false;
+                value = null;
             }
+            StreamImpl current;
+            if (ended && streams.TryGetValue (stream.Id, out current) && current == stream)
+                streams.Remove (stream.Id);
+            return value;
+        }
+
+        // A stream's notification for the dispatcher: for a value the callbacks, version, firing
+        // count and value to pass, or for an ending the end callbacks and ending
+        sealed class Change
+        {
+            public StreamImpl Stream;
+            public IList<StreamImpl.Callback> Callbacks;
+            public long Version;
+            public long Fired;
+            public object Value;
+            public IList<Action<System.Exception>> EndCallbacks;
+            public System.Exception Ending;
         }
 
         /// <summary>
-        /// Keep a result for a stream not registered yet. Only the latest value and an ending
-        /// are observable once the stream is registered, so only those are kept.
+        /// Store the values and endings of a stream update, and queue the work of waking waiters
+        /// and calling callbacks with the dispatcher. Called by the reader. A result for a stream
+        /// not in the registry is dropped, as the client has removed it.
         /// </summary>
-        void Keep (ulong id, ProcedureResult result)
+        internal void Update (IList<StreamResult> results)
         {
-            Pending kept;
-            if (!pending.TryGetValue (id, out kept)) {
-                kept = new Pending ();
-                pending [id] = kept;
-            }
-            if (kept.Ending != null)
-                return;
-            if (result.Error != null)
-                kept.Ending = result;
-            else
-                kept.Value = result;
-        }
-
-        internal void Update (ulong id, ProcedureResult result)
-        {
-            StreamImpl stream;
-            object value;
-            bool ended;
-            bool undecodable;
-            lock (updateLock) {
-                if (!streams.TryGetValue (id, out stream)) {
-                    // A result for a stream not registered yet is kept. One for an id below
-                    // those is for a stream that has ended.
-                    if (closed)
-                        return;
-                    if ((long)id > issued || unregistered.Contains (id))
-                        Keep (id, result);
-                    return;
-                }
-                value = Decode (stream, result, out ended, out undecodable);
-                if (ended) {
-                    // A final result moves the stream to the streams to end, as the server has
-                    // already removed it, unless the value failed to decode
-                    streams.Remove (id);
-                    toEnd [stream] = (System.Exception)value;
-                }
-            }
-            if (ended) {
-                EndOnUpdateThread (stream, (System.Exception)value);
-                if (undecodable)
-                    RemoveFromServerLater (id);
-                return;
-            }
-            // The stream's condition is always taken before the update lock
-            var condition = stream.Condition;
-            if (!EnterCondition (condition))
-                return;
-            IList<StreamImpl.Callback> callbacks;
-            long version;
-            long fired;
+            var changes = new List<Change> ();
+            Session.Enter (updateLock);
             try {
-                lock (updateLock) {
-                    // The stream can be removed while its new value is being decoded. The ending
-                    // it stored is kept.
-                    if (stream.Ended)
-                        return;
+                foreach (var result in results) {
+                    StreamImpl stream;
+                    if (!streams.TryGetValue (result.Id, out stream))
+                        continue;
+                    if (stream.ReturnType == null) {
+                        // Kept for the first handle, unless an ending is already kept
+                        if (stream.Raw == null || stream.Raw.Error == null)
+                            stream.Raw = result.Result;
+                        continue;
+                    }
+                    bool ended;
+                    bool undecodable;
+                    var value = Decode (stream, result.Result, out ended, out undecodable);
+                    if (undecodable)
+                        continue;
+                    if (ended) {
+                        var ending = (System.Exception)value;
+                        changes.Add (new Change {
+                            Stream = stream, EndCallbacks = stream.SetEnding (ending, false), Ending = ending
+                        });
+                        continue;
+                    }
                     stream.SetValue (value);
                     // Copied with the value stored, so a callback added after this reads the
                     // value itself. The callbacks run with no lock held.
-                    callbacks = new List<StreamImpl.Callback> (stream.Callbacks.Values);
-                    version = stream.Version;
-                    fired = stream.Fired;
+                    changes.Add (new Change {
+                        Stream = stream,
+                        Callbacks = new List<StreamImpl.Callback> (stream.Callbacks.Values),
+                        Version = stream.Version,
+                        Fired = stream.Fired,
+                        Value = value
+                    });
                 }
-                Monitor.PulseAll (condition);
             } finally {
-                Monitor.Exit (condition);
+                Monitor.Exit (updateLock);
             }
-            foreach (var callback in callbacks)
-                stream.Call (callback, callback.Event ? fired : version, value);
+            if (changes.Count > 0)
+                dispatch (() => Apply (changes));
+        }
+
+        /// <summary>
+        /// Store one result and wait for the dispatcher thread to apply it. For the tests, which
+        /// stand in for the reader.
+        /// </summary>
+        internal void Update (ulong id, ProcedureResult result)
+        {
+            Update (new [] { new StreamResult { Id = id, Result = result } });
+            var applied = new ManualResetEvent (false);
+            dispatch (() => applied.Set ());
+            applied.WaitOne (10000);
+        }
+
+        /// <summary>
+        /// Wake the waiters of streams with a new value or an ending, and call their callbacks.
+        /// Runs on the dispatcher thread, with no lock held.
+        /// </summary>
+        void Apply (IList<Change> changes)
+        {
+            foreach (var change in changes) {
+                var stream = change.Stream;
+                var entered = EnterCondition (stream.Condition);
+                if (entered) {
+                    try {
+                        if (change.EndCallbacks == null)
+                            stream.Announce (change.Value, change.Version);
+                        else
+                            stream.AnnounceEnding ();
+                        Monitor.PulseAll (stream.Condition);
+                    } finally {
+                        Monitor.Exit (stream.Condition);
+                    }
+                }
+                // The ending is already stored, so the end callbacks run even once closing
+                if (change.EndCallbacks != null) {
+                    if (!stream.DeferEnding (change.EndCallbacks, change.Ending)) {
+                        foreach (var callback in change.EndCallbacks)
+                            InvokeEndCallback (callback, change.Ending);
+                    }
+                } else if (entered) {
+                    foreach (var callback in change.Callbacks)
+                        stream.Call (callback, callback.Event ? change.Fired : change.Version, change.Value);
+                }
+            }
         }
 
         internal static void InvokeCallback (Action<object> callback, object value)
@@ -497,68 +419,10 @@ namespace KRPC.Client
             try {
                 callback (value);
             } catch (System.Exception exn) {
-                // A callback that throws must not stop the remaining callbacks running,
-                // nor escape and end the update thread, which would silently stop every
-                // stream on the connection. There is no caller to propagate it to, so
-                // report it and carry on.
+                // A callback that throws must not stop the remaining callbacks running, nor
+                // escape and stop the dispatcher thread. There is no caller to propagate it to,
+                // so report it and carry on.
                 Console.Error.WriteLine ("Exception in kRPC stream callback: " + exn);
-            }
-        }
-
-        sealed class Pending
-        {
-            public ProcedureResult Value;
-            public ProcedureResult Ending;
-        }
-
-        sealed class UpdateThread
-        {
-            readonly StreamManager manager;
-            readonly MessageReader reader;
-            readonly Action closeConnection;
-            volatile bool stop;
-            readonly EventWaitHandle stopEvent = new EventWaitHandle (false, EventResetMode.ManualReset);
-
-            public UpdateThread (StreamManager streamManager, MessageReader streamReader, Action close)
-            {
-                manager = streamManager;
-                reader = streamReader;
-                closeConnection = close;
-            }
-
-            public bool Stopped {
-                get { return stop; }
-            }
-
-            public void Stop ()
-            {
-                stop = true;
-                stopEvent.Set ();
-            }
-
-            public void Main ()
-            {
-                try {
-                    while (!stop) {
-                        if (!reader.Read (stopEvent) || stop)
-                            break;
-                        var update = StreamUpdate.Parser.ParseFrom (
-                            reader.Buffer, reader.Offset, reader.Size);
-                        if (stop)
-                            break;
-                        foreach (var result in update.Results) {
-                            manager.Update (result.Id, result.Result);
-                            if (stop)
-                                break;
-                        }
-                    }
-                } catch (System.Exception) {
-                    // The connection closed, or a message that cannot be read left it unusable
-                    if (!stop)
-                        closeConnection ();
-                } finally {
-                    manager.NotifyClosed ();
-                }
             }
         }
     }

@@ -23,8 +23,8 @@ namespace TestServer
         static void Help (OptionSet options)
         {
             Console.WriteLine ("usage: TestServer.exe [-h] [-v] [--type=TYPE]");
-            Console.WriteLine ("                      [--bind=ADDRESS] [--rpc_port=VALUE] [--stream_port=VALUE]");
-            Console.WriteLine ("                      [--port=PATH]");
+            Console.WriteLine ("                      [--bind=ADDRESS] [--tcpip-port=VALUE]");
+            Console.WriteLine ("                      [--localsocket-path=PATH] [--serialio-port=NAME]");
             Console.WriteLine ("                      [--no-frame-pacing]");
             Console.WriteLine ("                      [--debug] [--quiet] [--server-debug]");
             Console.WriteLine ();
@@ -45,11 +45,9 @@ namespace TestServer
             bool framePacing = true;
             string type = "protobuf";
             string bind = "127.0.0.1";
-            ushort rpcPort = 0;
-            ushort streamPort = 0;
-            string portName = string.Empty;
-            string rpcPath = string.Empty;
-            string streamPath = string.Empty;
+            ushort tcpipPort = 0;
+            string serialioPort = string.Empty;
+            string localsocketPath = string.Empty;
             uint baudRate = 9600;
             ushort dataBits = 8;
             SerialPorts.Parity parity = SerialPorts.Parity.None;
@@ -68,20 +66,14 @@ namespace TestServer
                     "bind=", "For TCP based protocols, the address to bind the server to. If unspecified, the loopback address is used (127.0.0.1).",
                     v => bind = v
                 }, {
-                    "rpc-port=", "For TCP based protocols, the port number to use for the RPC server. If unspecified, use an ephemeral port.",
-                    (ushort v) => rpcPort = v
+                    "tcpip-port=", "For TCP based protocols, the port number to use. If unspecified, use an ephemeral port.",
+                    (ushort v) => tcpipPort = v
                 }, {
-                    "stream-port=", "For TCP based protocols, the port number to use for the stream server. If unspecified, use an ephemeral port.",
-                    (ushort v) => streamPort = v
+                    "localsocket-path=", "For local socket protocols, the path of the socket to use.",
+                    v => localsocketPath = v
                 }, {
-                    "rpc-path=", "For local socket protocols, the path of the socket to use for the RPC server.",
-                    v => rpcPath = v
-                }, {
-                    "stream-path=", "For local socket protocols, the path of the socket to use for the stream server.",
-                    v => streamPath = v
-                }, {
-                    "port=", "For SerialIO based protocols, the port name to communicate on.",
-                    v => portName = v
+                    "serialio-port=", "For SerialIO based protocols, the port name to communicate on.",
+                    v => serialioPort = v
                 }, {
                     "baud-rate=", "For SerialIO based protocols, the baud rate.",
                     (uint v) => baudRate = v
@@ -156,44 +148,33 @@ namespace TestServer
                 return;
             }
 
-            TCPServer rpcTcpServer = null;
-            TCPServer streamTcpServer = null;
+            TCPServer tcpServer = null;
             KRPC.Server.SerialIO.ByteServer serialServer = null;
-            KRPC.Server.LocalSocket.LocalSocketServer rpcSocketServer = null;
-            KRPC.Server.LocalSocket.LocalSocketServer streamSocketServer = null;
-            if (type == "protobuf" || type == "websockets" || type == "websockets-echo") {
-                rpcTcpServer = new TCPServer (bindAddress, rpcPort);
-                streamTcpServer = new TCPServer (bindAddress, streamPort);
-            }
+            KRPC.Server.LocalSocket.LocalSocketServer socketServer = null;
+            if (type == "protobuf" || type == "websockets" || type == "websockets-echo")
+                tcpServer = new TCPServer (bindAddress, tcpipPort);
             if (type == "serialio")
                 serialServer = new KRPC.Server.SerialIO.ByteServer (
-                    portName, baudRate, dataBits, parity, stopBits);
-            if (type == "localsocket") {
-                rpcSocketServer = new KRPC.Server.LocalSocket.LocalSocketServer (rpcPath);
-                streamSocketServer = new KRPC.Server.LocalSocket.LocalSocketServer (streamPath);
-            }
+                    serialioPort, baudRate, dataBits, parity, stopBits);
+            if (type == "localsocket")
+                socketServer = new KRPC.Server.LocalSocket.LocalSocketServer (localsocketPath);
 
             Server server;
             if (type == "protobuf") {
-                var rpcServer = new KRPC.Server.ProtocolBuffers.RPCServer (rpcTcpServer);
-                var streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamTcpServer);
-                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverTCP, "TestServer", rpcServer, streamServer);
+                var messageServer = new KRPC.Server.ProtocolBuffers.Server (tcpServer);
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverTCP, "TestServer", messageServer);
             } else if (type == "websockets") {
-                var rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer);
-                var streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
-                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", rpcServer, streamServer);
+                var messageServer = new KRPC.Server.WebSockets.Server (tcpServer);
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
             } else if (type == "websockets-echo") {
-                var rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer, true);
-                var streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
-                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", rpcServer, streamServer);
+                var messageServer = new KRPC.Server.WebSockets.Server (tcpServer, true);
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverWebsockets, "TestServer", messageServer);
             } else if (type == "serialio") {
-                var rpcServer = new KRPC.Server.SerialIO.RPCServer (serialServer);
-                var streamServer = new KRPC.Server.SerialIO.StreamServer ();
-                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverSerialIO, "TestServer", rpcServer, streamServer);
+                var messageServer = new KRPC.Server.SerialIO.Server (serialServer);
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverSerialIO, "TestServer", messageServer);
             } else if (type == "localsocket") {
-                var rpcServer = new KRPC.Server.ProtocolBuffers.RPCServer (rpcSocketServer);
-                var streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamSocketServer);
-                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverLocalSocket, "TestServer", rpcServer, streamServer);
+                var messageServer = new KRPC.Server.ProtocolBuffers.Server (socketServer);
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverLocalSocket, "TestServer", messageServer);
             } else {
                 Logger.WriteLine ("Server type '" + type + "' not supported", Logger.Severity.Error);
                 return;
@@ -204,19 +185,15 @@ namespace TestServer
             core.StartAll ();
             Logger.WriteLine ("type = " + type);
             Logger.WriteLine ("frame pacing = " + (framePacing ? "60 updates/s" : "off"));
-            if (rpcTcpServer != null) {
+            if (tcpServer != null) {
                 Logger.WriteLine ("bind = " + bindAddress);
-                Logger.WriteLine ("rpc_port = " + rpcTcpServer.ActualPort);
-                if (streamTcpServer != null)
-                    Logger.WriteLine ("stream_port = " + streamTcpServer.ActualPort);
+                Logger.WriteLine ("tcpip_port = " + tcpServer.ActualPort);
             }
             if (serialServer != null) {
-                Logger.WriteLine ("port = " + serialServer.Address);
+                Logger.WriteLine ("serialio_port = " + serialServer.Address);
             }
-            if (rpcSocketServer != null) {
-                Logger.WriteLine ("rpc_path = " + rpcSocketServer.Address);
-                Logger.WriteLine ("stream_path = " + streamSocketServer.Address);
-            }
+            if (socketServer != null)
+                Logger.WriteLine ("localsocket_path = " + socketServer.Address);
             Logger.WriteLine ("Server started successfully");
 
             const long targetFPS = 60;

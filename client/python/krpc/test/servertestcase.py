@@ -61,32 +61,21 @@ class ServerTestCase:
     @staticmethod
     def connect(
         name: str = "python_client_test",
-        rpc: str = "rpc",
-        stream: str | None = "stream",
         use_pregenerated_stubs: bool = True,
     ) -> Client:
         """Connect over whichever transport the harness started the server with, which
-        it tells us about by port or by socket path. The rpc and stream arguments name
-        which of the server's two endpoints each connection should go to, so a test can
-        deliberately connect them the wrong way round."""
-        rpc_path = os.getenv("RPC_PATH")
-        if rpc_path:
-            paths = {"rpc": rpc_path, "stream": os.getenv("STREAM_PATH")}
+        it tells us about by port or by socket path."""
+        path = os.getenv("KRPC_TEST_LOCALSOCKET_PATH")
+        if path:
             return krpc.connect_local(
                 name=name,
-                rpc_path=paths[rpc],
-                stream_path=paths[stream] if stream is not None else None,
+                path=path,
                 use_pregenerated_stubs=use_pregenerated_stubs,
             )
-        ports = {
-            "rpc": ServerTestCase.rpc_port(),
-            "stream": ServerTestCase.stream_port(),
-        }
         return krpc.connect(
             name=name,
             address="localhost",
-            rpc_port=ports[rpc],
-            stream_port=ports[stream] if stream is not None else None,
+            port=ServerTestCase.tcpip_port(),
             use_pregenerated_stubs=use_pregenerated_stubs,
         )
 
@@ -102,9 +91,5 @@ class ServerTestCase:
             return int(sock.getsockname()[1])
 
     @staticmethod
-    def rpc_port() -> int:
-        return int(os.getenv("RPC_PORT", "50000"))
-
-    @staticmethod
-    def stream_port() -> int:
-        return int(os.getenv("STREAM_PORT", "50001"))
+    def tcpip_port() -> int:
+        return int(os.getenv("KRPC_TEST_TCPIP_PORT", "50000"))

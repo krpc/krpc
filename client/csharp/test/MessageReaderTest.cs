@@ -79,7 +79,7 @@ namespace KRPC.Client.Test
 
         static string Receive (MessageReader reader)
         {
-            Assert.IsTrue (reader.Read ());
+            reader.Read ();
             var response = Response.Parser.ParseFrom (
                                reader.Buffer, reader.Offset, reader.Size);
             return response.Results [0].Value.ToStringUtf8 ();
@@ -129,8 +129,11 @@ namespace KRPC.Client.Test
             System.Buffer.BlockCopy (first, 0, both, 0, first.Length);
             System.Buffer.BlockCopy (second, 0, both, first.Length, second.Length);
             var reader = new MessageReader (new ScriptedStream (both));
+            Assert.IsFalse (reader.HasMessage);
             Assert.AreEqual ("foo", Receive (reader));
+            Assert.IsTrue (reader.HasMessage);
             Assert.AreEqual ("bar", Receive (reader));
+            Assert.IsFalse (reader.HasMessage);
         }
 
         [Test]
@@ -144,6 +147,7 @@ namespace KRPC.Client.Test
             var reader = new MessageReader (new ScriptedStream (
                 head, Slice (second, 2, second.Length - 2)));
             Assert.AreEqual ("foo", Receive (reader));
+            Assert.IsFalse (reader.HasMessage);
             Assert.AreEqual ("bar", Receive (reader));
         }
 

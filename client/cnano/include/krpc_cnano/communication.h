@@ -19,16 +19,12 @@
 #endif
 #endif
 
-/* A serial link carries the RPC and stream connections over the one link, so each message sent
-   over it is wrapped in a multiplexed message saying which connection it belongs to. A transport
-   that opens a connection of its own per server sends the messages themselves.
-
-   A custom transport is taken to carry both connections over one link, as a serial port does;
-   one that opens a connection per server is built with KRPC_SINGLE_CONNECTION. */
-#if defined(KRPC_COMMUNICATION_POSIX) || defined(KRPC_COMMUNICATION_WINDOWS) || \
-    defined(KRPC_COMMUNICATION_ARDUINO) ||                                      \
-    (defined(KRPC_COMMUNICATION_CUSTOM) && !defined(KRPC_SINGLE_CONNECTION))
-#define KRPC_MULTIPLEXED
+/* A serial link has no connect or disconnect, so a client that resets, such as an Arduino after a
+   power cycle, can find messages from its earlier session on the line. A client on one skips
+   those while it connects. A custom transport is treated as a serial link. TCP/IP and local
+   sockets open a connection per session. */
+#if !defined(KRPC_COMMUNICATION_TCP) && !defined(KRPC_COMMUNICATION_LOCALSOCKET)
+#define KRPC_RESUMABLE
 #endif
 
 #ifdef __cplusplus
@@ -43,8 +39,7 @@ typedef char krpc_connection_config_t;
 /* A unix domain socket, for a server on the same machine. The connection is a socket, held as
    an integer wide enough for both a POSIX file descriptor and a Windows SOCKET so that the
    winsock headers stay out of this one, and the configuration is the path of the socket, named
-   as a serial port is. Like any other socket it opens a connection of its own per server, so it
-   is not multiplexed. */
+   as a serial port is. */
 #ifdef KRPC_COMMUNICATION_LOCALSOCKET
 typedef uintptr_t krpc_connection_t;
 typedef char krpc_connection_config_t;

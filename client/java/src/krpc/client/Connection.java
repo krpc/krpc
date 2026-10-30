@@ -1,8 +1,8 @@
 package krpc.client;
 
 import com.google.protobuf.ByteString;
-import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.CodedOutputStream;
+import com.google.protobuf.InvalidProtocolBufferException;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -10,7 +10,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketTimeoutException;
 import java.net.UnixDomainSocketAddress;
+import java.net.UnknownHostException;
 import java.nio.channels.Channels;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Paths;
@@ -25,16 +27,12 @@ import krpc.schema.KRPC;
 
 /** A connection to a kRPC server. */
 public class Connection implements AutoCloseable {
-  private static final int PROTOCOL_VERSION = 1;
+  private static final int PROTOCOL_VERSION = 2;
 
-  private final Object connectionLock = new Object();
-
-  private SocketChannel rpcChannel;
-  private CodedOutputStream rpcOutputStream;
-  private CodedInputStream rpcInputStream;
+  final Session session;
   StreamManager streamManager;
   // The return type code of each procedure, by service and then procedure name. Accessed with
-  // the connection lock held.
+  // the map's lock held.
   private final Map<String, Map<String, KRPC.Type.TypeCode>> returnTypeCodes =
       new HashMap<String, Map<String, KRPC.Type.TypeCode>>();
   // Whether returnTypeCodes holds every procedure the server lists
@@ -57,40 +55,36 @@ public class Connection implements AutoCloseable {
 
   private static String EMPTY_NAME = "";
   private static InetAddress DEFAULT_ADDRESS = InetAddress.getLoopbackAddress();
-  private static final int DEFAULT_RPC_PORT = 50000;
-  private static final int DEFAULT_STREAM_PORT = 50001;
+  private static final int DEFAULT_PORT = 50000;
   private static Duration DEFAULT_TIMEOUT = Duration.ZERO;
+  private static Duration DEFAULT_HANDSHAKE_TIMEOUT = Duration.ofSeconds(5);
+  private static Duration DEFAULT_STALL_TIMEOUT = Duration.ofSeconds(30);
 
   /**
    * Connect to a kRPC server using a blank client name, on the loopback
-   * address, RPC port number
-   * {@value #DEFAULT_RPC_PORT} and stream port number
-   * {@value #DEFAULT_STREAM_PORT}.
+   * address and port number {@value #DEFAULT_PORT}.
    *
    * @return A connection to the kRPC server.
    */
   public static Connection newInstance() throws IOException {
-    return new Connection(EMPTY_NAME, DEFAULT_ADDRESS, DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT);
+    return newInstance(EMPTY_NAME, DEFAULT_ADDRESS, DEFAULT_PORT);
   }
 
   /**
    * Connect to a kRPC server using the given client name, on the loopback
-   * address, RPC port number
-   * {@value #DEFAULT_RPC_PORT} and stream port number
-   * {@value #DEFAULT_STREAM_PORT}.
+   * address and port number {@value #DEFAULT_PORT}.
    *
    * @param name
    *            The name of the client.
    * @return A connection to the kRPC server.
    */
   public static Connection newInstance(String name) throws IOException {
-    return new Connection(name, DEFAULT_ADDRESS, DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT);
+    return newInstance(name, DEFAULT_ADDRESS, DEFAULT_PORT);
   }
 
   /**
    * Connect to a kRPC server using the given client name, on the given
-   * address, RPC port number {@value #DEFAULT_RPC_PORT} and stream port
-   * number {@value #DEFAULT_STREAM_PORT}.
+   * address and port number {@value #DEFAULT_PORT}.
    *
    * @param name
    *            The name of the client.
@@ -101,58 +95,109 @@ public class Connection implements AutoCloseable {
    */
   public static Connection newInstance(String name, InetAddress address)
       throws IOException {
-    return new Connection(name, address, DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT);
+    return newInstance(name, address, DEFAULT_PORT);
   }
 
   /**
    * Connect to a kRPC server using the given client name, on the given
-   * address, RPC port number and stream port.
+   * address and port number.
    *
    * @param name
    *            The name of the client.
    * @param address
    *            The server address to connect to.
-   * @param rpcPort
-   *            The RPC port to connect to.
-   * @param streamPort
-   *            The stream port to connect to.
+   * @param port
+   *            The port to connect to.
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newInstance(
-      String name, InetAddress address, int rpcPort, int streamPort)
+  public static Connection newInstance(String name, InetAddress address, int port)
       throws IOException {
-    return new Connection(name, address, rpcPort, streamPort);
+    return newInstance(name, address, port, DEFAULT_TIMEOUT);
   }
 
   /**
    * Connect to a kRPC server using the given client name, on the given
-   * address, RPC port number and stream port, waiting no longer than the given
-   * timeout for each connection.
+   * address and port number, waiting no longer than the given timeout for
+   * the connection.
    *
    * @param name
    *            The name of the client.
    * @param address
    *            The server address to connect to.
-   * @param rpcPort
-   *            The RPC port to connect to.
-   * @param streamPort
-   *            The stream port to connect to.
+   * @param port
+   *            The port to connect to.
    * @param timeout
    *            How long to wait for a connection. Zero waits indefinitely.
    *
    * @return A connection to the kRPC server.
    */
   public static Connection newInstance(
-      String name, InetAddress address, int rpcPort, int streamPort, Duration timeout)
+      String name, InetAddress address, int port, Duration timeout)
       throws IOException {
-    return new Connection(name, address, rpcPort, streamPort, timeout);
+    return newInstance(name, address, port, timeout, DEFAULT_HANDSHAKE_TIMEOUT);
   }
 
   /**
    * Connect to a kRPC server using the given client name, on the given
-   * address, RPC port number {@value #DEFAULT_RPC_PORT} and stream port
-   * number {@value #DEFAULT_STREAM_PORT}.
+   * address and port number, waiting no longer than the given timeouts.
+   *
+   * @param name
+   *            The name of the client.
+   * @param address
+   *            The server address to connect to.
+   * @param port
+   *            The port to connect to.
+   * @param timeout
+   *            How long to wait for a connection. Zero waits indefinitely.
+   * @param handshakeTimeout
+   *            How long to wait for the server to accept the connection. Zero
+   *            waits indefinitely, such as for a server that asks the player to
+   *            approve each connection.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newInstance(
+      String name, InetAddress address, int port, Duration timeout,
+      Duration handshakeTimeout)
+      throws IOException {
+    return newInstance(name, address, port, timeout, handshakeTimeout, DEFAULT_STALL_TIMEOUT);
+  }
+
+  /**
+   * Connect to a kRPC server using the given client name, on the given
+   * address and port number, waiting no longer than the given timeouts.
+   *
+   * @param name
+   *            The name of the client.
+   * @param address
+   *            The server address to connect to.
+   * @param port
+   *            The port to connect to.
+   * @param timeout
+   *            How long to wait for a connection. Zero waits indefinitely.
+   * @param handshakeTimeout
+   *            How long to wait for the server to accept the connection. Zero
+   *            waits indefinitely, such as for a server that asks the player to
+   *            approve each connection.
+   * @param stallTimeout
+   *            How long a message from the server may go without a new byte once
+   *            it has started to arrive, before the connection fails. Zero waits
+   *            indefinitely.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newInstance(
+      String name, InetAddress address, int port, Duration timeout,
+      Duration handshakeTimeout, Duration stallTimeout)
+      throws IOException {
+    checkTimeouts(handshakeTimeout, stallTimeout);
+    return new Connection(name, open(address, port, timeout), handshakeTimeout, stallTimeout);
+  }
+
+  /**
+   * Connect to a kRPC server using the given client name, on the given
+   * address and port number {@value #DEFAULT_PORT}.
    *
    * @param name
    *            The name of the client.
@@ -164,60 +209,111 @@ public class Connection implements AutoCloseable {
    */
   public static Connection newInstance(String name, String address)
       throws IOException {
-    return new Connection(
-        name, InetAddress.getByName(address), DEFAULT_RPC_PORT, DEFAULT_STREAM_PORT);
+    return newInstance(name, resolve(address));
   }
 
   /**
    * Connect to a kRPC server using the given client name, on the given
-   * address, RPC port number and stream port.
+   * address and port number.
    *
    * @param name
    *            The name of the client.
    * @param address
    *            The server address to connect to. Can be either the name of
    *            the host or a textual representation of its IP address.
-   * @param rpcPort
-   *            The RPC port to connect to.
-   * @param streamPort
-   *            The stream port to connect to.
+   * @param port
+   *            The port to connect to.
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newInstance(
-      String name, String address, int rpcPort, int streamPort)
+  public static Connection newInstance(String name, String address, int port)
       throws IOException {
-    return new Connection(name, InetAddress.getByName(address), rpcPort, streamPort);
+    return newInstance(name, resolve(address), port);
   }
 
   /**
    * Connect to a kRPC server using the given client name, on the given
-   * address, RPC port number and stream port, waiting no longer than the given
-   * timeout for each connection.
+   * address and port number, waiting no longer than the given timeout for
+   * the connection.
    *
    * @param name
    *            The name of the client.
    * @param address
    *            The server address to connect to. Can be either the name of
    *            the host or a textual representation of its IP address.
-   * @param rpcPort
-   *            The RPC port to connect to.
-   * @param streamPort
-   *            The stream port to connect to.
+   * @param port
+   *            The port to connect to.
    * @param timeout
    *            How long to wait for a connection. Zero waits indefinitely.
    *
    * @return A connection to the kRPC server.
    */
   public static Connection newInstance(
-      String name, String address, int rpcPort, int streamPort, Duration timeout)
+      String name, String address, int port, Duration timeout)
       throws IOException {
-    return new Connection(name, InetAddress.getByName(address), rpcPort, streamPort, timeout);
+    return newInstance(name, resolve(address), port, timeout);
   }
 
   /**
-   * Connect to a kRPC server on the same machine, over unix domain sockets rather than
-   * TCP/IP, using a blank client name and the default socket paths.
+   * Connect to a kRPC server using the given client name, on the given
+   * address and port number, waiting no longer than the given timeouts.
+   * See {@link #newInstance(String, InetAddress, int, Duration, Duration)}.
+   *
+   * @param name
+   *            The name of the client.
+   * @param address
+   *            The server address to connect to. Can be either the name of
+   *            the host or a textual representation of its IP address.
+   * @param port
+   *            The port to connect to.
+   * @param timeout
+   *            How long to wait for a connection. Zero waits indefinitely.
+   * @param handshakeTimeout
+   *            How long to wait for the server to accept the connection. Zero
+   *            waits indefinitely.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newInstance(
+      String name, String address, int port, Duration timeout, Duration handshakeTimeout)
+      throws IOException {
+    return newInstance(name, resolve(address), port, timeout, handshakeTimeout);
+  }
+
+  /**
+   * Connect to a kRPC server using the given client name, on the given
+   * address and port number, waiting no longer than the given timeouts.
+   * See {@link #newInstance(String, InetAddress, int, Duration, Duration, Duration)}.
+   *
+   * @param name
+   *            The name of the client.
+   * @param address
+   *            The server address to connect to. Can be either the name of
+   *            the host or a textual representation of its IP address.
+   * @param port
+   *            The port to connect to.
+   * @param timeout
+   *            How long to wait for a connection. Zero waits indefinitely.
+   * @param handshakeTimeout
+   *            How long to wait for the server to accept the connection. Zero
+   *            waits indefinitely.
+   * @param stallTimeout
+   *            How long a message from the server may go without a new byte once
+   *            it has started to arrive. Zero waits indefinitely.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newInstance(
+      String name, String address, int port, Duration timeout, Duration handshakeTimeout,
+      Duration stallTimeout)
+      throws IOException {
+    return newInstance(
+        name, resolve(address), port, timeout, handshakeTimeout, stallTimeout);
+  }
+
+  /**
+   * Connect to a kRPC server on the same machine, over a unix domain socket rather than
+   * TCP/IP, using a blank client name and the default socket path.
    *
    * @return A connection to the kRPC server.
    */
@@ -226,8 +322,8 @@ public class Connection implements AutoCloseable {
   }
 
   /**
-   * Connect to a kRPC server on the same machine, over unix domain sockets rather than
-   * TCP/IP, using the given client name and the default socket paths.
+   * Connect to a kRPC server on the same machine, over a unix domain socket rather than
+   * TCP/IP, using the given client name and the default socket path.
    *
    * @param name
    *            The name of the client.
@@ -235,34 +331,100 @@ public class Connection implements AutoCloseable {
    * @return A connection to the kRPC server.
    */
   public static Connection newLocalInstance(String name) throws IOException {
-    return newLocalInstance(name, defaultPath("rpc"), defaultPath("stream"));
+    return newLocalInstance(name, defaultPath());
   }
 
   /**
-   * Connect to a kRPC server on the same machine, over the unix domain sockets named by
-   * the given paths rather than over TCP/IP. The connection behaves identically once
+   * Connect to a kRPC server on the same machine, over the unix domain socket named by
+   * the given path rather than over TCP/IP. The connection behaves identically once
    * established.
    *
    * @param name
    *            The name of the client.
-   * @param rpcPath
-   *            The path of the socket the RPC server is listening on.
-   * @param streamPath
-   *            The path of the socket the stream server is listening on.
+   * @param path
+   *            The path of the socket the server is listening on.
    *
    * @return A connection to the kRPC server.
    */
-  public static Connection newLocalInstance(String name, String rpcPath, String streamPath)
-      throws IOException {
-    return new Connection(name, openLocal(rpcPath), () -> openLocal(streamPath));
+  public static Connection newLocalInstance(String name, String path) throws IOException {
+    return newLocalInstance(name, path, DEFAULT_HANDSHAKE_TIMEOUT);
   }
 
-  /** Opens the connection to the stream server. */
-  private interface StreamOpener {
-    SocketChannel open() throws IOException;
+  /**
+   * Connect to a kRPC server on the same machine, over the unix domain socket named by
+   * the given path, waiting no longer than the given timeout for the server to accept
+   * the connection.
+   *
+   * @param name
+   *            The name of the client.
+   * @param path
+   *            The path of the socket the server is listening on.
+   * @param handshakeTimeout
+   *            How long to wait for the server to accept the connection. Zero
+   *            waits indefinitely.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newLocalInstance(
+      String name, String path, Duration handshakeTimeout) throws IOException {
+    return newLocalInstance(name, path, handshakeTimeout, DEFAULT_STALL_TIMEOUT);
+  }
+
+  /**
+   * Connect to a kRPC server on the same machine, over the unix domain socket named by
+   * the given path, waiting no longer than the given timeouts.
+   *
+   * @param name
+   *            The name of the client.
+   * @param path
+   *            The path of the socket the server is listening on.
+   * @param handshakeTimeout
+   *            How long to wait for the server to accept the connection. Zero
+   *            waits indefinitely.
+   * @param stallTimeout
+   *            How long a message from the server may go without a new byte once
+   *            it has started to arrive. Zero waits indefinitely.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newLocalInstance(
+      String name, String path, Duration handshakeTimeout, Duration stallTimeout)
+      throws IOException {
+    checkTimeouts(handshakeTimeout, stallTimeout);
+    return new Connection(name, openLocal(path), handshakeTimeout, stallTimeout);
+  }
+
+  /** The address of a host name or a textual IP address. */
+  private static InetAddress resolve(String address) throws ConnectionException {
+    try {
+      return InetAddress.getByName(address);
+    } catch (UnknownHostException exn) {
+      throw new ConnectionException("Failed to resolve " + address + ": " + exn.getMessage(), exn);
+    }
+  }
+
+  /** Throws IllegalArgumentException for a negative handshake or stall timeout. */
+  private static void checkTimeouts(Duration handshakeTimeout, Duration stallTimeout) {
+    if (handshakeTimeout.isNegative()) {
+      throw new IllegalArgumentException("The handshake timeout must not be negative");
+    }
+    if (stallTimeout.isNegative()) {
+      throw new IllegalArgumentException("The stall timeout must not be negative");
+    }
   }
 
   private static SocketChannel open(InetAddress address, int port, Duration timeout)
+      throws IOException {
+    try {
+      return openChannel(address, port, timeout);
+    } catch (ConnectionException exn) {
+      throw exn;
+    } catch (IOException exn) {
+      throw new ConnectionException("Failed to connect to the server: " + exn.getMessage(), exn);
+    }
+  }
+
+  private static SocketChannel openChannel(InetAddress address, int port, Duration timeout)
       throws IOException {
     if (timeout.isZero()) {
       return SocketChannel.open(new InetSocketAddress(address, port));
@@ -280,99 +442,122 @@ public class Connection implements AutoCloseable {
   }
 
   private static SocketChannel openLocal(String path) throws IOException {
-    return SocketChannel.open(UnixDomainSocketAddress.of(path));
+    try {
+      return SocketChannel.open(UnixDomainSocketAddress.of(path));
+    } catch (IOException exn) {
+      throw new ConnectionException("Failed to connect to the server: " + exn.getMessage(), exn);
+    }
   }
 
   /**
-   * A default path for a socket of the given name, matching the one the server uses unless
-   * it was configured with another. The fallback names a fixed directory rather than asking
-   * for the temporary one, which java.io.tmpdir and TMPDIR move for the client and not the
-   * server.
+   * The default socket path, matching the one the server uses unless it was configured with
+   * another. The fallback sits in a fixed directory rather than the temporary one, which
+   * java.io.tmpdir and TMPDIR move for the client and not the server.
    */
-  private static String defaultPath(String name) {
+  private static String defaultPath() {
     boolean windows = System.getProperty("os.name", "").startsWith("Windows");
     String directory = System.getenv(windows ? "LOCALAPPDATA" : "XDG_RUNTIME_DIR");
     if (directory == null || directory.isEmpty()) {
       String temporary = windows ? System.getProperty("java.io.tmpdir") : "/tmp";
-      return Paths.get(temporary, "krpc-" + System.getProperty("user.name"), name).toString();
+      return Paths.get(temporary, "krpc-" + System.getProperty("user.name") + ".sock").toString();
     }
-    return Paths.get(directory, "krpc", name).toString();
-  }
-
-  private Connection(String name, InetAddress address, int rpcPort, int streamPort)
-      throws IOException {
-    this(name, address, rpcPort, streamPort, DEFAULT_TIMEOUT);
-  }
-
-  private Connection(
-      String name, InetAddress address, int rpcPort, int streamPort, Duration timeout)
-      throws IOException {
-    this(name, open(address, rpcPort, timeout), () -> open(address, streamPort, timeout));
+    return Paths.get(directory, "krpc.sock").toString();
   }
 
   /**
-   * Perform the connection handshake over an already opened rpc socket. The handshake is the
-   * same whatever carries it. The stream socket is opened only once the rpc connection has
-   * been accepted, so that a rejected connection does not leave a second one behind.
+   * Perform the connection handshake over an already opened socket. The handshake is the same
+   * whatever carries it.
    */
-  private Connection(String name, SocketChannel rpc, StreamOpener openStreamChannel)
+  private Connection(
+      String name, SocketChannel channel, Duration handshakeTimeout, Duration stallTimeout)
       throws IOException {
-    rpcChannel = rpc;
-    rpcOutputStream = CodedOutputStream.newInstance(Channels.newOutputStream(rpcChannel));
-    rpcInputStream = CodedInputStream.newInstance(Channels.newInputStream(rpcChannel));
+    MessageReader reader = new MessageReader(channel);
+    try {
+      handshake(name, channel, reader, handshakeTimeout);
+    } catch (IOException | RuntimeException exn) {
+      channel.close();
+      throw exn;
+    }
+    session = new Session(channel, reader, this::removeStreamRequest, stallTimeout);
+    streamManager = new StreamManager(this, session);
+    session.start(streamManager);
+  }
 
-    KRPC.ConnectionRequest request = KRPC.ConnectionRequest.newBuilder()
-        .setType(KRPC.ConnectionRequest.Type.RPC)
-        .setClientName(name)
-        .setProtocolVersion(PROTOCOL_VERSION)
-        .build();
-    rpcOutputStream.writeMessageNoTag(request);
-    rpcOutputStream.flush();
-
-    int size = rpcInputStream.readRawVarint32();
-    byte[] data = rpcInputStream.readRawBytes(size);
-    KRPC.ConnectionResponse response = KRPC.ConnectionResponse.parseFrom(data);
+  /** Sends the connection request, and checks the server's response to it. */
+  private static void handshake(
+      String name, SocketChannel channel, MessageReader reader, Duration timeout)
+      throws IOException {
+    CodedOutputStream output = CodedOutputStream.newInstance(Channels.newOutputStream(channel));
+    output.writeMessageNoTag(KRPC.Message.newBuilder()
+        .setConnectionRequest(KRPC.ConnectionRequest.newBuilder()
+            .setClientName(name)
+            .setProtocolVersion(PROTOCOL_VERSION))
+        .build());
+    output.flush();
+    KRPC.Message message;
+    try {
+      message = KRPC.Message.parseFrom(reader.read(timeout));
+    } catch (SocketTimeoutException exn) {
+      throw new ConnectionException(
+          "The server did not answer the connection request within "
+          + timeout.toMillis() / 1000.0 + " seconds", exn);
+    } catch (InvalidProtocolBufferException exn) {
+      throw new ConnectionException(
+          "Failed to parse the server's response to the connection request", exn);
+    }
+    if (message.hasDisconnect()) {
+      KRPC.Disconnect disconnect = message.getDisconnect();
+      String text = "The server ended the connection (" + disconnect.getReason() + ")";
+      if (!disconnect.getMessage().isEmpty()) {
+        text += ": " + disconnect.getMessage();
+      }
+      throw new ConnectionException(text, null, disconnect.getReason());
+    }
+    if (!message.hasConnectionResponse()) {
+      throw new ConnectionException(
+          "Expected a response to the connection request, got "
+          + (message.getContentCase() == KRPC.Message.ContentCase.CONTENT_NOT_SET
+             ? "a message of an unknown kind" : message.getContentCase().toString()));
+    }
+    KRPC.ConnectionResponse response = message.getConnectionResponse();
     if (response.getStatus() != KRPC.ConnectionResponse.Status.OK) {
-      throw new ConnectionException(response.getMessage());
+      String text = "The server refused the connection (" + response.getStatus() + ")";
+      if (!response.getMessage().isEmpty()) {
+        text += ": " + response.getMessage();
+      }
+      throw new ConnectionException(text, response.getStatus(), null);
     }
     if (response.getProtocolVersion() != PROTOCOL_VERSION) {
       throw new ConnectionException(
           "The server does not support protocol version " + PROTOCOL_VERSION
           + ". Use a client from the same kRPC release as the server.");
     }
-    ByteString clientIdentifier = response.getClientIdentifier();
-
-    SocketChannel streamChannel = openStreamChannel.open();
-    CodedOutputStream streamOutputStream =
-        CodedOutputStream.newInstance(Channels.newOutputStream(streamChannel));
-    final CodedInputStream streamInputStream =
-        CodedInputStream.newInstance(Channels.newInputStream(streamChannel));
-
-    request = KRPC.ConnectionRequest.newBuilder()
-        .setType(KRPC.ConnectionRequest.Type.STREAM)
-        .setProtocolVersion(PROTOCOL_VERSION)
-        .setClientIdentifier(clientIdentifier)
-        .build();
-    streamOutputStream.writeMessageNoTag(request);
-    streamOutputStream.flush();
-
-    size = streamInputStream.readRawVarint32();
-    data = streamInputStream.readRawBytes(size);
-    response = KRPC.ConnectionResponse.parseFrom(data);
-    if (response.getStatus() != KRPC.ConnectionResponse.Status.OK) {
-      throw new ConnectionException(response.getMessage());
-    }
-
-    streamManager = new StreamManager(this, streamChannel);
   }
 
-  /** Close the connection. */
+  /** A request to remove a stream on the server. */
+  private KRPC.Request removeStreamRequest(long id) {
+    KRPC.Type uint64 = KRPC.Type.newBuilder().setCode(KRPC.Type.TypeCode.UINT64).build();
+    return KRPC.Request.newBuilder()
+        .addCalls(buildCall("KRPC", "RemoveStream", Encoder.encode(id, uint64)))
+        .build();
+  }
+
+  /** Close the connection. Sends the server a disconnect first. */
   @Override
   public void close() throws IOException {
-    synchronized (connectionLock) {
-      rpcChannel.close();
+    // The dispatcher thread stops trying to take a callback's lock this thread can hold
+    streamManager.requestClose();
+    session.close();
+    // Streams end before the join, so a thread waiting on one is woken. A callback runs on the
+    // dispatcher thread, so a connection closed from one does not join it. A callback can also
+    // wait for a condition this thread holds, so the dispatcher thread then ends once this thread
+    // releases it.
+    boolean holding = streamManager.holdsCondition();
+    try {
+      streamManager.notifyClosed(session.failure());
+    } finally {
+      session.join(!holding);
     }
-    streamManager.close();
   }
 
   /**
@@ -395,80 +580,59 @@ public class Connection implements AutoCloseable {
 
   KRPC.Response invokeInternal(KRPC.ProcedureCall call) throws RPCException {
     try {
-      synchronized (connectionLock) {
-        KRPC.Response response = exchange(call);
-        noteStreamId(call, response);
-        return response;
-      }
+      // The reader registers a stream or an event the call adds before it reads the stream's
+      // first update
+      KRPC.Type.TypeCode code = getReturnTypeCode(call.getService(), call.getProcedure());
+      KRPC.Type.TypeCode streamCode =
+          code == KRPC.Type.TypeCode.STREAM || code == KRPC.Type.TypeCode.EVENT ? code : null;
+      return session.call(KRPC.Request.newBuilder().addCalls(call), streamCode);
     } catch (IOException exn) {
       throw new RPCException("Failed to invoke call", exn);
     }
   }
 
-  /** Sends a call and reads its reply. Called with the connection lock held. */
-  private KRPC.Response exchange(KRPC.ProcedureCall call) throws IOException {
-    KRPC.Request request = KRPC.Request.newBuilder().addCalls(call).build();
-    rpcOutputStream.writeMessageNoTag(request);
-    rpcOutputStream.flush();
-    int size = rpcInputStream.readRawVarint32();
-    return KRPC.Response.parseFrom(rpcInputStream.readRawBytes(size));
-  }
-
-  /**
-   * Notes the id of a stream or event the server returned, or of a stream the call removed.
-   * Called with the connection lock held, in the order the replies arrive, so the stream manager
-   * keeps the latest value and any ending sent for the stream before it is registered. Best
-   * effort, as the call itself has succeeded.
-   */
-  private void noteStreamId(KRPC.ProcedureCall call, KRPC.Response response) {
-    try {
-      noteStreamIdOrThrow(call, response);
-    } catch (IOException exn) {
-      // An id not noted keeps its early results only while it is above every noted id
-    }
-  }
-
-  private void noteStreamIdOrThrow(KRPC.ProcedureCall call, KRPC.Response response)
-      throws IOException {
-    if (call.getService().equals("KRPC") && call.getProcedure().equals("RemoveStream")) {
-      if (response.hasError() || response.getResultsCount() == 0
-          || response.getResults(0).hasError()) {
-        return;
-      }
-      for (KRPC.Argument argument : call.getArgumentsList()) {
-        if (argument.getPosition() == 0) {
-          streamManager.noteRemoved(Encoder.decodeUint64(argument.getValue()));
-        }
-      }
-      return;
-    }
-    KRPC.Type.TypeCode code = getReturnTypeCode(call.getService(), call.getProcedure());
-    if (code != KRPC.Type.TypeCode.STREAM && code != KRPC.Type.TypeCode.EVENT) {
-      return;
-    }
-    if (response.hasError() || response.getResultsCount() == 0) {
-      return;
-    }
-    KRPC.ProcedureResult result = response.getResults(0);
-    if (result.hasError() || result.getIsNull()) {
-      return;
-    }
-    KRPC.Stream stream;
-    if (code == KRPC.Type.TypeCode.STREAM) {
-      stream = KRPC.Stream.parseFrom(result.getValue());
-    } else {
-      stream = KRPC.Event.parseFrom(result.getValue()).getStream();
-    }
-    streamManager.noteIssued(stream.getId());
-  }
-
   /**
    * The return type code of a procedure, looked up in its service's generated stubs, or in the
    * server's list of services if the stubs are not loaded. NONE if the procedure returns nothing.
-   * Called with the connection lock held.
    */
   private KRPC.Type.TypeCode getReturnTypeCode(String service, String procedure)
       throws IOException {
+    synchronized (returnTypeCodes) {
+      KRPC.Type.TypeCode code = findReturnTypeCode(service, procedure);
+      if (code != null) {
+        return code;
+      }
+      if (listedReturnTypeCodes) {
+        return returnTypeCodes.get(service).computeIfAbsent(
+            procedure, key -> KRPC.Type.TypeCode.NONE);
+      }
+    }
+    // Listed without the lock, as no lock is held across a call. Threads that race here each
+    // list the services.
+    KRPC.Services services = null;
+    try {
+      services = listServices();
+    } finally {
+      synchronized (returnTypeCodes) {
+        // Listed once, even if the listing fails
+        listedReturnTypeCodes = true;
+        if (services != null) {
+          storeReturnTypeCodes(services);
+        }
+      }
+    }
+    synchronized (returnTypeCodes) {
+      return returnTypeCodes.get(service).computeIfAbsent(
+          procedure, key -> KRPC.Type.TypeCode.NONE);
+    }
+  }
+
+  /**
+   * The return type code of a procedure, from the codes already stored or its service's
+   * generated stubs, or null if neither has it. Called with the lock on the return type codes
+   * held.
+   */
+  private KRPC.Type.TypeCode findReturnTypeCode(String service, String procedure) {
     Map<String, KRPC.Type.TypeCode> codes =
         returnTypeCodes.computeIfAbsent(service, key -> new HashMap<String, KRPC.Type.TypeCode>());
     KRPC.Type.TypeCode code = codes.get(procedure);
@@ -485,25 +649,25 @@ public class Connection implements AutoCloseable {
       return code;
     } catch (ReflectiveOperationException | LinkageError exn) {
       // The stubs for the service or procedure are not loaded, or do not link
+      return null;
     }
-    if (!listedReturnTypeCodes) {
-      // Listed once, even if the listing fails
-      listedReturnTypeCodes = true;
-      listReturnTypeCodes();
+  }
+
+  /** The services the server lists, or null if the call fails. */
+  private KRPC.Services listServices() throws IOException {
+    KRPC.Response response =
+        session.call(KRPC.Request.newBuilder().addCalls(buildCall("KRPC", "GetServices")), null);
+    if (getErrorFromResponse(response) != null) {
+      return null;
     }
-    return codes.computeIfAbsent(procedure, key -> KRPC.Type.TypeCode.NONE);
+    return KRPC.Services.parseFrom(getResultFromResponse(response).getValue());
   }
 
   /**
-   * Stores the return type code of every procedure the server lists. Called with the connection
-   * lock held.
+   * Stores the return type code of every procedure in the given services. Called with the lock
+   * on the return type codes held.
    */
-  private void listReturnTypeCodes() throws IOException {
-    KRPC.Response response = exchange(buildCall("KRPC", "GetServices"));
-    if (getErrorFromResponse(response) != null) {
-      return;
-    }
-    KRPC.Services services = KRPC.Services.parseFrom(getResultFromResponse(response).getValue());
+  private void storeReturnTypeCodes(KRPC.Services services) {
     for (KRPC.Service service : services.getServicesList()) {
       Map<String, KRPC.Type.TypeCode> codes = returnTypeCodes.computeIfAbsent(
           service.getName(), key -> new HashMap<String, KRPC.Type.TypeCode>());
@@ -554,7 +718,7 @@ public class Connection implements AutoCloseable {
     return buildCall(service, procedure, args);
   }
 
-  // Read on the stream update thread too
+  // Read by the reader too
   private Map<String, Class<?>> exceptionTypes = new ConcurrentHashMap<String, Class<?>>();
 
   /**

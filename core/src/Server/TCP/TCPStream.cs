@@ -4,13 +4,15 @@ using System.Net.Sockets;
 
 namespace KRPC.Server.TCP
 {
-    sealed class TCPStream : IStream<byte,byte>
+    sealed class TCPStream : IStream<byte,byte>, IHalfClosableStream
     {
         readonly NetworkStream stream;
+        readonly Socket socket;
 
-        public TCPStream (NetworkStream innerStream)
+        public TCPStream (NetworkStream innerStream, Socket innerSocket)
         {
             stream = innerStream;
+            socket = innerSocket;
         }
 
         public bool DataAvailable {
@@ -88,6 +90,23 @@ namespace KRPC.Server.TCP
         {
             BytesRead = 0;
             BytesWritten = 0;
+        }
+
+        /// <summary>
+        /// Whether the write side has been closed. The socket then reports itself disconnected.
+        /// </summary>
+        public bool HalfClosed { get; private set; }
+
+        public void HalfClose ()
+        {
+            try {
+                HalfClosed = true;
+                socket.Shutdown (SocketShutdown.Send);
+            } catch (SocketException e) {
+                throw new ServerException (e.Message);
+            } catch (ObjectDisposedException) {
+                throw new ClientDisconnectedException ();
+            }
         }
 
         public void Close ()

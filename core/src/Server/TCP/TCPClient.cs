@@ -39,7 +39,7 @@ namespace KRPC.Server.TCP
         public IStream<byte,byte> Stream {
             get {
                 if (stream == null)
-                    stream = new TCPStream (client.GetStream ());
+                    stream = new TCPStream (client.GetStream (), client.Client);
                 return stream;
             }
         }
@@ -49,10 +49,12 @@ namespace KRPC.Server.TCP
         public bool Connected {
             get {
                 try {
-                    if (!client.Client.Connected)
+                    // A closed client has no socket
+                    var socket = client.Client;
+                    if (socket == null || !(socket.Connected || (stream != null && stream.HalfClosed)))
                         return false;
-                    if (client.Client.Poll (0, SelectMode.SelectRead))
-                        return client.Client.Receive (connectedTestBuffer, SocketFlags.Peek) != 0;
+                    if (socket.Poll (0, SelectMode.SelectRead))
+                        return socket.Receive (connectedTestBuffer, SocketFlags.Peek) != 0;
                     return true;
                 } catch (SocketException) {
                     return false;

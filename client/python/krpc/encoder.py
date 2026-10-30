@@ -42,6 +42,23 @@ _pb_zigzag_encode: Callable[[int], int] = protobuf_wire_format.ZigZagEncode
 _SINGLE_BYTE_VARINTS = tuple(bytes((value,)) for value in range(128))
 
 
+def encode_request_message(request: KRPC.Request) -> bytes:
+    """Encode a Message holding a request, prepended with its size. The Message is
+    written around the encoded request, which saves building one."""
+    data = request.SerializeToString()
+    length = len(data)
+    if length < 126:
+        return (
+            _SINGLE_BYTE_VARINTS[length + 2]
+            + b"\x0a"
+            + _SINGLE_BYTE_VARINTS[length]
+            + data
+        )
+    size: bytes = protobuf_encoder._VarintBytes(length)
+    outer: bytes = protobuf_encoder._VarintBytes(1 + len(size) + length)
+    return outer + b"\x0a" + size + data
+
+
 class Encoder:
     """Routines for encoding messages and values in
     the protocol buffer serialization format"""

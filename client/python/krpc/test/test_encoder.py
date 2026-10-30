@@ -1,6 +1,7 @@
 import unittest
 
-from krpc.encoder import Encoder
+import krpc.schema.KRPC_pb2 as KRPC
+from krpc.encoder import Encoder, encode_request_message
 from krpc.error import EncodingError
 from krpc.platform import hexlify
 from krpc.types import ClassBase, Types
@@ -50,6 +51,15 @@ class TestEncoder(unittest.TestCase):
         )
         value = (0, 1)
         self.assertRaises(EncodingError, Encoder.encode, value, typ)
+
+    def test_encode_request_message(self) -> None:
+        # Short and long requests, whose lengths take one and two bytes
+        for length in (0, 10, 125, 126, 200, 20000):
+            request = KRPC.Request(id=7)
+            if length:
+                request.calls.add(service="x" * length)
+            expected = Encoder.encode_message_with_size(KRPC.Message(request=request))
+            self.assertEqual(expected, encode_request_message(request))
 
 
 if __name__ == "__main__":

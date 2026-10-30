@@ -56,7 +56,7 @@ namespace KRPC.Service.KRPC
             status.StreamRpcsExecuted = core.StreamRPCsExecuted;
             status.StreamRpcRate = core.StreamRPCRate;
             status.TimePerStreamUpdate = core.TimePerStreamUpdate;
-            var client = CallContext.Client as Server.Message.RPCClient;
+            var client = CallContext.Client as Server.Message.Client;
             if (client != null)
                 status.ProtocolVersion = client.ProtocolVersion;
             return status;
@@ -149,11 +149,11 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// The RPC clients that are currently connected to the server.
+        /// The clients that are currently connected to the server.
         /// </summary>
         [KRPCProperty]
         public static IList<ClientInfo> Clients {
-            get { return Core.Instance.RPCClients.Select (x => new ClientInfo (x)).ToList (); }
+            get { return Core.Instance.Clients.Select (x => new ClientInfo (x)).ToList (); }
         }
 
         /// <summary>
