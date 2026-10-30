@@ -745,9 +745,9 @@ def test_wait_timeout(connected, control, request, case):
     stream = watched(connected, name(request))
     stream.get()
     if case == "elapses":
-        start = time.monotonic()
+        start = time.perf_counter()
         assert not stream.wait(SHORT_WAIT)
-        assert time.monotonic() - start >= SHORT_WAIT
+        assert time.perf_counter() - start >= SHORT_WAIT
         return
     testee = connected.testee
     waiting = testee.send(wait=pb.Wait(stream=stream.handle, timeout=REPLY_TIMEOUT))
@@ -766,9 +766,9 @@ def test_wait_timeout_values(connected, control, request, timeout):
     stream = watched(connected, name(request))
     stream.get()
     if timeout == "zero":
-        start = time.monotonic()
+        start = time.perf_counter()
         assert stream.wait(0) is False
-        assert time.monotonic() - start < AT_ONCE
+        assert time.perf_counter() - start < AT_ONCE
         return
     testee = connected.testee
     if timeout in ("negative", "nan"):

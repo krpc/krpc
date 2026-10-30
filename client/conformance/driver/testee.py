@@ -799,9 +799,9 @@ def _value(x: values.Object | pb.Value) -> pb.Value:
 
 def wait_until(condition: Any, timeout: float = REPLY_TIMEOUT) -> bool:
     """Poll a condition until it holds or the timeout elapses."""
-    deadline = time.monotonic() + timeout
+    deadline = time.perf_counter() + timeout
     while not condition():
-        if time.monotonic() > deadline:
+        if time.perf_counter() > deadline:
             return False
         time.sleep(0.01)
     return True
@@ -823,9 +823,9 @@ def wait_for_control(
     stream: Any, condition: Callable[[Any], bool], timeout: float = REPLY_TIMEOUT
 ) -> None:
     """Wait until the value of a stream on the control connection meets a condition."""
-    deadline = time.monotonic() + timeout
+    deadline = time.perf_counter() + timeout
     with stream.condition:
         while not condition(stream()):
-            remaining = deadline - time.monotonic()
+            remaining = deadline - time.perf_counter()
             assert remaining > 0, "The control stream's value is %r" % (stream(),)
             stream.wait(remaining)

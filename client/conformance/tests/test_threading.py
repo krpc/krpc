@@ -135,11 +135,11 @@ def test_close_with_a_call_in_flight(connected):
     waiting call raises the connection error."""
     slow = connected.start("slow", invoke=block(5000))
     time.sleep(SETTLE)
-    start = time.monotonic()
+    start = time.perf_counter()
     connected.start("closer", close=pb.Close()).reply()
     assert slow.error().kind == pb.Error.CONNECTION
     # Well short of the 5 s the blocked call takes
-    assert time.monotonic() - start < 4
+    assert time.perf_counter() - start < 4
 
 
 @profile("threads")

@@ -126,7 +126,7 @@ def receive_retry(scripted, start):
     if message is None:
         return None
     assert message.WhichOneof("content") == "connection_request"
-    early = time.monotonic() - start < STALL_TIMEOUT
+    early = time.perf_counter() - start < STALL_TIMEOUT
     assert not early, "The client sent the request again early"
     return message
 
@@ -137,7 +137,7 @@ def no_answer(status):
 
     def script(scripted):
         scripted.refuse(status, "The request was not read")
-        if receive_retry(scripted, time.monotonic()) is None:
+        if receive_retry(scripted, time.perf_counter()) is None:
             return
         scripted.send(OK)
         scripted.serve()
@@ -150,7 +150,7 @@ def disconnect_is_no_answer(scripted):
     earlier session's message, which a resuming client reads as no answer. The request the
     client sends again is accepted."""
     scripted.receive_connection_request()
-    start = time.monotonic()
+    start = time.perf_counter()
     scripted.send(
         KRPC.Message(disconnect=KRPC.Disconnect(reason=KRPC.Disconnect.TIMEOUT))
     )
@@ -605,13 +605,13 @@ def test_handshake_timeout(client, server, scripted_server, response):
             pass
 
     scripted = scripted_server(script)
-    start = time.monotonic()
+    start = time.perf_counter()
     connection_error(
         lambda: client.connect(
             scripted.endpoint(), handshake_timeout=1, stall_timeout=0.25
         )
     )
-    assert 0.75 <= time.monotonic() - start < 5
+    assert 0.75 <= time.perf_counter() - start < 5
 
 
 @should
@@ -892,13 +892,13 @@ def test_close(client, server, scripted_server):
         # The client closes its write side, then reads until the server closes
         assert server.receive() is None
         time.sleep(DELAY)
-        closed.append(time.monotonic())
+        closed.append(time.perf_counter())
         server.close()
 
     scripted = scripted_server(script)
     client.connect(scripted.endpoint())
     client.close()
-    returned = time.monotonic()
+    returned = time.perf_counter()
     scripted.join()
     assert closed, "The server did not see the client close its write side"
     assert returned >= closed[0], "Close returned before the server closed"
@@ -920,13 +920,13 @@ def test_websockets_close(client, scripted_server):
         assert scripted.receive() is None
         assert scripted.websocket.close_received
         time.sleep(DELAY)
-        closed.append(time.monotonic())
+        closed.append(time.perf_counter())
         scripted.websocket.send_close()
 
     scripted = scripted_server(script)
     client.connect(scripted.endpoint())
     client.close()
-    returned = time.monotonic()
+    returned = time.perf_counter()
     scripted.join()
     assert closed, "The server did not see the client's close frame"
     assert returned >= closed[0], "Close returned before the server's close frame"
@@ -949,13 +949,13 @@ def test_close_wait_limit(client, server, scripted_server):
 
     scripted = scripted_server(script)
     client.connect(scripted.endpoint())
-    start = time.monotonic()
+    start = time.perf_counter()
     try:
         client.close()
     finally:
         returned.set()
     # The limit, and a margin for the testee
-    assert time.monotonic() - start < 1.5
+    assert time.perf_counter() - start < 1.5
 
 
 @profile("threads")
@@ -1055,9 +1055,9 @@ def test_failed_write(connected):
     connected.fail_write("Failed by the test")
     error = connection_error(lambda: get_client_name(connected))
     assert "Failed by the test" in error.message + error.cause
-    start = time.monotonic()
+    start = time.perf_counter()
     connection_error(lambda: get_client_name(connected))
-    assert time.monotonic() - start < AT_ONCE
+    assert time.perf_counter() - start < AT_ONCE
 
 
 @pytest.mark.parametrize("ending", ["close", "disconnect"])
@@ -1071,9 +1071,9 @@ def test_call_after_end(client, server, scripted_server, ending):
             client.close()
         else:
             connection_error(lambda: get_client_name(client))
-        start = time.monotonic()
+        start = time.perf_counter()
         connection_error(lambda: get_client_name(client))
-        assert time.monotonic() - start < AT_ONCE
+        assert time.perf_counter() - start < AT_ONCE
     finally:
         client.close_quietly()
 

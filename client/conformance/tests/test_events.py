@@ -298,9 +298,9 @@ def test_remove(fixture, firing, through):
         fixture.event.remove()
     else:
         fixture.event.stream.remove()
-    start = time.monotonic()
+    start = time.perf_counter()
     assert is_removed_error(fixture.client, raised(fixture.event.wait))
-    assert time.monotonic() - start < AT_ONCE
+    assert time.perf_counter() - start < AT_ONCE
 
 
 @profile("events", "callbacks")
@@ -365,9 +365,9 @@ def test_wait_timeout(fixture, case):
     """Waiting with a timeout returns false when the timeout elapses before a firing, and
     true on a firing."""
     if case == "elapses":
-        start = time.monotonic()
+        start = time.perf_counter()
         assert not fixture.event.wait(SHORT_WAIT)
-        assert time.monotonic() - start >= SHORT_WAIT
+        assert time.perf_counter() - start >= SHORT_WAIT
         return
     testee = fixture.client.testee
     waiting = testee.send(
@@ -385,9 +385,9 @@ def test_wait_timeout_values(fixture, timeout):
     timeout waits with no deadline, as a wait without a timeout does. A negative or NaN
     timeout raises the argument error."""
     if timeout == "zero":
-        start = time.monotonic()
+        start = time.perf_counter()
         assert fixture.event.wait(0) is False
-        assert time.monotonic() - start < AT_ONCE
+        assert time.perf_counter() - start < AT_ONCE
         fixture.trigger()
         assert fixture.event.wait(0) is True
         return

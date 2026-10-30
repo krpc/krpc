@@ -795,8 +795,8 @@ def test_slow_call(client, server, scripted_server):
     scripted = scripted_server(script)
     client.connect(scripted.endpoint(), handshake_timeout=0.5)
     try:
-        start = time.monotonic()
+        start = time.perf_counter()
         assert client.invoke("KRPC", "GetClientName") == ""
-        assert time.monotonic() - start >= 1.4
+        assert time.perf_counter() - start >= 1.4
     finally:
         client.close()
