@@ -4,7 +4,7 @@ load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_sdist", 
 
 exports_files(["CHANGELOG.md"])
 
-license_text = """This license (GPL v3) applies to all parts of krpctools except for the following:
+license_text = """This license (LGPL v3) applies to all parts of krpctools except for the following:
 
   - krpctools/bin/Newtonsoft.Json.dll is under the MIT license.
     See https://www.nuget.org/packages/Newtonsoft.Json/
@@ -18,9 +18,7 @@ license_text = """This license (GPL v3) applies to all parts of krpctools except
   - krpctools/bin/System.IO.Ports.dll is from the .NET project.
     See https://github.com/dotnet/runtime
 
-  - krpctools/bin/KRPC.Core.dll and the kRPC DLLs in krpctools/bin/TestServer/ are
-    under the LGPLv3 license. See COPYING.LESSER. The other DLLs in
-    krpctools/bin/TestServer/ are the third-party DLLs listed above.
+  - The other DLLs in krpctools/bin/TestServer/ are the third-party DLLs listed above.
 
   - As an additional permission under section 7 of the GNU GPL v3, code that krpctools
     generates for a client is under the license of that client, whatever the license of
@@ -29,16 +27,16 @@ license_text = """This license (GPL v3) applies to all parts of krpctools except
 Copyright 2015-2026 kRPC Org
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
+it under the terms of the Lesser GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+Lesser GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
+You should have received a copy of the Lesser GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 

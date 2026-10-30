@@ -8,10 +8,6 @@ This license (LGPL v3) applies to all parts of kRPC except for the following:
 
   - service/InfernalRobotics/* is under the GPLv3 license.
 
-  - tools/krpctools/* is under the GPLv3 license.
-
-  - tools/ServiceDefinitions/* is under the GPLv3 license.
-
   - experimental/ksa/release/ holds the license files of the kRPC for KSA release,
     which cover the third-party binaries it ships.
 
@@ -22,7 +18,7 @@ This license (LGPL v3) applies to all parts of kRPC except for the following:
 
 Why the parts are licensed this way:
 
-  - The server, core and clients are under the LGPL. Any program can use the
+  - The server, core, clients and tools are under the LGPL. Any program can use the
     clients, including closed source and commercial ones, and changes to kRPC itself
     stay open. Scripts talk to the server over a connection, so the server's license
     does not extend to them.
@@ -32,8 +28,6 @@ Why the parts are licensed this way:
 
   - The SpaceCenter, Debug and InfernalRobotics services contain code adapted from
     GPLv3 mods, listed below, so they are under the GPLv3.
-
-  - krpctools and ServiceDefinitions are under the GPLv3 for historical reasons.
 
 Code adapted from other projects:
 
