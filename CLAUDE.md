@@ -285,15 +285,15 @@ request takes the next open milestone of its train:
  * Until the trains split, clients release with KSP and have no milestone of their own. Client and
    `core` changes take the KSP milestone.
 
-An issue or pull request takes one kind, at least one component, and the game and language labels
-that apply:
+An issue or pull request takes one kind, at least one component, and the other labels that apply:
 
 | Group | Labels | Rule |
 | --- | --- | --- |
-| Kind | `bug`, `feature`, `question`, `mod-compatibility`, `dependencies` | Exactly one |
+| Kind | `bug`, `feature`, `question`, `dependencies` | Exactly one |
 | Component | `server`, `protocol`, `service`, `client`, `tools`, `build`, `docs` | `server` covers `core` and each mod's server plugin. `client` covers any client change |
-| Game | `ksp`, `ksa` | The game a change is specific to. A `core` change takes both. Client and tool changes take neither |
+| Game | `ksp`, `ksa` | The game a change is specific to. `core`, client and tool changes take neither |
 | Language | `python`, `cpp`, `cnano`, `csharp`, `java`, `lua` | The client a change is specific to, with `client` |
+| Mods | `mod-compatibility` | Added to the kind for a change that concerns another mod |
 | Triage | `needs-triage` | Set by the issue templates, removed once triaged |
 
 For example, `gh pr edit N --milestone ksp-v0.8.0 --add-label bug --add-label service --add-label ksp`.
