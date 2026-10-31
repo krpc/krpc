@@ -37,6 +37,12 @@ Core
   * Report the .NET exception each kRPC exception stands for, as ``mapped_type`` in ``KRPC.Exception`` (:issue:`1172`)
   * Allow a ``<see cref>`` in service documentation to link to an exception, including a .NET exception that a kRPC exception maps (:issue:`1185`)
 
+* Logging
+
+  * Log the transport connection lines and object store sweeps at the debug level (:issue:`1235`)
+  * Log the address and settings of a server when it starts (:issue:`1235`)
+  * Leave the time out of log lines, which the game log adds (:issue:`1235`)
+
 
 
 Server
@@ -46,11 +52,15 @@ Server
 * :breaking:`Breaking` Reset each existing server's settings to their defaults, so a TCP/IP and a WebSockets server both use port 50000 until one is changed (:issue:`1219`)
 * :breaking:`Breaking` Turn on "Auto-accept new clients" for new installs. An existing settings file keeps its value (:issue:`1219`)
 * Name the TCP/IP protocol "Protobuf over TCP/IP" in the server window (:issue:`1225`)
+* Log a connection the player is asked to allow once, naming the client, and an auto-accepted connection at the debug level (:issue:`1235`)
+* Log auto-starting the servers only when one is stopped (:issue:`1235`)
+* Fix the game scene in log lines reading ``Inherit, Flight`` (:issue:`1235`)
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
+* Log an auto-pilot failure once, naming the vessel and client, in place of on every physics tick (:issue:`1235`)
 * Typeset units and formulas in the API documentation, and write them as Unicode text in client documentation, e.g. ``m/s²`` (:issue:`1169`)
 * Allow the rails warp rates the game allows the player, which ignore the altitude limits when the periapsis is clear of the atmosphere and terrain (:issue:`1167`)
 * Fix the ``MomentOfInertia`` and ``InertiaTensor`` of ``Vessel`` and ``EditorVessel`` measuring each part from its origin instead of its center of mass (:issue:`1191`)
@@ -66,6 +76,12 @@ InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Relicense the InfernalRobotics service under the GPLv3 (:issue:`1221`)
+
+
+DockingCamera service
+^^^^^^^^^^^^^^^^^^^^^
+
+* Stop logging each read of ``Camera.Image`` (:issue:`1235`)
 
 
 C-nano client
