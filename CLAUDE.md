@@ -266,9 +266,37 @@ cannot.
    omit otherwise.
  * **No AI-attribution or "Generated with" footer**, in PR bodies and commit messages alike.
  * One paragraph per line; GitHub renders single newlines literally. Reflow wrapped text.
- * Assign the current milestone (`tools/krpc-version.sh`) + label by type (`bug`/`enhancement`/`docs`)
-   and component (`server`, `client:python`, `service:space-center`, `tools`, …), e.g.
-   `gh pr edit N --milestone "0.6.0" --add-label bug --add-label server`.
+ * Assign a milestone and labels, as below.
+
+## Milestones and labels
+
+Each release train has one milestone per release, named as its tag, e.g. `ksp-v0.8.0`. A pull
+request takes the next open milestone of its train:
+
+| Pull request touches | Milestone |
+| --- | --- |
+| A client, `krpctools`, `krpctest`, `TestServer` | `clients-vX.Y.Z` |
+| KSP services, the KSP mod | `ksp-vX.Y.Z` |
+| KSA services, the KSA mod | `ksa-vX.Y.Z` |
+| `core`, CI, build rules, repo tooling | none |
+
+ * A pull request has one milestone. One spanning trains is split where it can be. A breaking
+   protocol change takes the clients milestone.
+ * Until the trains split, clients release with KSP and have no milestone of their own. Client and
+   `core` changes take the KSP milestone.
+
+An issue or pull request takes one kind, at least one component, and the game and language labels
+that apply:
+
+| Group | Labels | Rule |
+| --- | --- | --- |
+| Kind | `bug`, `feature`, `question`, `mod-compatibility`, `dependencies` | Exactly one |
+| Component | `server`, `protocol`, `service`, `client`, `tools`, `build`, `docs` | `server` covers `core` and each mod's server plugin. `client` covers any client change |
+| Game | `ksp`, `ksa` | The game a change is specific to. A `core` change takes both. Client and tool changes take neither |
+| Language | `python`, `cpp`, `cnano`, `csharp`, `java`, `lua` | The client a change is specific to, with `client` |
+| Triage | `needs-triage` | Set by the issue templates, removed once triaged |
+
+For example, `gh pr edit N --milestone ksp-v0.8.0 --add-label bug --add-label service --add-label ksp`.
 
 ## Changelogs
 
