@@ -16,15 +16,21 @@ runs:
         prefix="vcpkg-linux-$(printf '%s' "$PACKAGES" | sed -E 's/[^A-Za-z0-9]+/-/g')-"
         echo "prefix=$prefix" >> "$GITHUB_OUTPUT"
         echo "image-prefix=$prefix$ImageOS-$ImageVersion-" >> "$GITHUB_OUTPUT"
-    - name: restore-vcpkg
-      id: restore-vcpkg
+    - name: restore-vcpkg-image
+      id: restore-vcpkg-image
       uses: actions/cache/restore@v6
       with:
         path: ~/.cache/vcpkg/archives
         key: ${{ steps.cache-prefix.outputs.image-prefix }}${{ github.run_id }}
-        restore-keys: |
-          ${{ steps.cache-prefix.outputs.image-prefix }}
-          ${{ steps.cache-prefix.outputs.prefix }}
+        restore-keys: ${{ steps.cache-prefix.outputs.image-prefix }}
+    - name: restore-vcpkg
+      id: restore-vcpkg
+      if: steps.restore-vcpkg-image.outputs.cache-matched-key == ''
+      uses: actions/cache/restore@v6
+      with:
+        path: ~/.cache/vcpkg/archives
+        key: ${{ steps.cache-prefix.outputs.prefix }}${{ github.run_id }}
+        restore-keys: ${{ steps.cache-prefix.outputs.prefix }}
     - name: install-deps
       shell: bash
       run: |
@@ -58,7 +64,9 @@ runs:
         echo "cache key: $PREFIX$hash"
         echo "key=$PREFIX$hash" >> "$GITHUB_OUTPUT"
     - name: save-vcpkg
-      if: steps.cache-key.outputs.key != steps.restore-vcpkg.outputs.cache-matched-key
+      if: >-
+        steps.cache-key.outputs.key != (steps.restore-vcpkg-image.outputs.cache-matched-key ||
+        steps.restore-vcpkg.outputs.cache-matched-key)
       uses: actions/cache/save@v6
       with:
         path: ~/.cache/vcpkg/archives
