@@ -99,6 +99,9 @@ common:system-llvm --extra_toolchains=@llvm_system//:all
 # turns this on from ~/.bazelrc, so every bazel command in the job picks it up.
 common:ci --config=system-llvm
 test:ci --test_output=errors
+# Run every test, even one whose result the disk cache holds, so CI keeps
+# catching flaky tests
+test:ci --nocache_test_results
 
 # Abseil turns on parse_headers for its own packages, which compiles each of its
 # headers on its own as a check. With the system LLVM that is a third of the
