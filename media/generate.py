@@ -33,7 +33,7 @@ MEDIA = Path(__file__).resolve().parent
 BUILD = MEDIA / "build"
 PUBLISHED = ["logo-mark.svg", "logo-on-light.svg", "logo-on-dark.svg"]
 # The icon for mod listings that take only a raster image, such as Borea
-PUBLISHED_PNG = ["logo-mark.png"]
+PUBLISHED_PNG = ["logo-mark.png", "logo-square.png"]
 
 # Fonts: (file name, URL, member of a zip archive or None, sha256 of the font file)
 FONTS = {
@@ -322,6 +322,21 @@ def lockup(word, orbit, ink, uid=""):
     return body, TILE_SIZE + WORD_GAP + (x1 - x0) * WORD_SCALE + 1
 
 
+def square(word):
+    """The logo on a navy rounded square, the mod listing icon, and the square's side."""
+    body, width = lockup(word, LARGE, INK["on-dark"])
+    # The logo spans the square but for a margin of a twentieth of its side
+    side = width / 0.9
+    y = (side - TILE_SIZE) / 2
+    radius = side * 14 / 64
+    return (
+        f'<defs><linearGradient id="square" x1="0" y1="0" x2="0" y2="1">'
+        f'<stop offset="0" stop-color="{TILE_TOP}"/><stop offset="1" stop-color="{TILE_BOTTOM}"/></linearGradient></defs>'
+        f'<rect width="{side:.2f}" height="{side:.2f}" rx="{radius:.2f}" fill="url(#square)"/>'
+        f'<g transform="translate({side * 0.05:.2f} {y:.2f})">{body}</g>'
+    ), side
+
+
 def svg(width, height, body, scale=1.0):
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.1f} {height:.1f}" '
@@ -605,6 +620,8 @@ def main():
         for prefix, orbit in (("logo", LARGE), ("logo-small", SMALL)):
             body, width = lockup(word, orbit, ink)
             outputs[f"{prefix}-{variant}.svg"] = svg(width, TILE_SIZE, body, scale=2.5)
+    body, side = square(word)
+    outputs["logo-square.svg"] = svg(side, side, body)
     for game in GAMES:
         outputs[f"banner-{game}.svg"] = banner(fonts, word, game)
         outputs[f"spacedock-{game}.svg"] = spacedock(fonts, word, game)
@@ -621,7 +638,7 @@ def main():
         print("rsvg-convert not found, skipping the PNGs")
         return
     # PNG sizes, by default the SVG's own
-    sizes = {"logo-mark.svg": ["-w", "512"]}
+    sizes = {"logo-mark.svg": ["-w", "512"], "logo-square.svg": ["-w", "512"]}
     for variant in INK:
         sizes[f"logo-{variant}.svg"] = ["-h", "256"]
         sizes[f"logo-small-{variant}.svg"] = ["-h", "64"]

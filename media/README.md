@@ -6,6 +6,7 @@ The kRPC logos and banners. `generate.py` writes them into `build/`, from the ga
 The generated files, each as an SVG and a PNG:
 
  * `build/logo-mark` - the tile, for icons and avatars.
+ * `build/logo-square` - the logo on a navy square, the icon of the Borea mod listing.
  * `build/logo-on-light`, `build/logo-on-dark` - the logo, for light and dark backgrounds.
  * `build/logo-small-on-light`, `build/logo-small-on-dark` - the logo with a thicker orbit, for
    small sizes.
@@ -17,8 +18,8 @@ The generated files, each as an SVG and a PNG:
 
 `build/` is not committed. The script also copies `logo-mark.svg`, `logo-on-light.svg` and
 `logo-on-dark.svg` into this directory, where they are committed for the README and the
-documentation. It copies `logo-mark.png` too, for mod listings that take only a raster image,
-such as Borea.
+documentation. It copies `logo-mark.png` and `logo-square.png` too, for mod listings that take
+only a raster image, such as Borea.
 
 `generate.sh` installs the Python dependencies into a virtualenv and runs `generate.py`. The script
 downloads the fonts into `build/fonts`, as Nasalization's license does not allow redistributing
