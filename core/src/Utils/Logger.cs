@@ -8,12 +8,13 @@ namespace KRPC.Utils
     /// </summary>
     public static class Logger
     {
-        static string format = "[kRPC] {0} - {1:G} - {2}";
+        static string format = "[kRPC] {1:G} - {2}";
         static bool enabled = true;
         static Severity level = Severity.Info;
 
         /// <summary>
-        /// Format string for log messages.
+        /// Format string for log messages, given the time, the severity and the message. The
+        /// default leaves out the time, which the game's log adds.
         /// </summary>
         public static string Format {
             get { return format; }
@@ -77,7 +78,10 @@ namespace KRPC.Utils
                 Writer (string.Format (CultureInfo.InvariantCulture, format, DateTime.Now, severity, message), severity);
         }
 
-        internal static bool ShouldLog (Severity severity)
+        /// <summary>
+        /// Whether a message of the given severity is written, to skip building one that is not.
+        /// </summary>
+        public static bool ShouldLog (Severity severity)
         {
             return Enabled && severity >= Level;
         }

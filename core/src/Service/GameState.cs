@@ -94,7 +94,7 @@ namespace KRPC.Service
             settled = true;
             var removed = ObjectStore.Instance.Sweep ();
             if (removed > 0)
-                Logger.WriteLine ("Removed " + removed + " destroyed object(s) from the object store");
+                Logger.WriteLine ("Removed " + removed + " destroyed object(s) from the object store", Logger.Severity.Debug);
         }
     }
 }

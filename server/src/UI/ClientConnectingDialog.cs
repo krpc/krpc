@@ -44,7 +44,7 @@ namespace KRPC.UI
         void Update ()
         {
             if (Visible && !args.Client.Connected) {
-                Logger.WriteLine ("Client disconnected before the player allowed or denied it");
+                Logger.WriteLine ("Client " + args.Client.Label () + " disconnected before the player allowed or denied it");
                 Close ();
             }
         }
@@ -53,7 +53,7 @@ namespace KRPC.UI
         {
             // Not open, so open the dialog
             if (!Visible) {
-                Logger.WriteLine ("Asking player to allow/deny connection attempt...");
+                Logger.WriteLine ("Asking the player to allow the connection from client " + eventArgs.Client.Label () + " ('" + eventArgs.Client.Name + "')");
                 args = eventArgs;
                 Open ();
                 return;

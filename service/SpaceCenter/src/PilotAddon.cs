@@ -295,6 +295,9 @@ namespace KRPC.SpaceCenter
         /// allocating an enumerator over the dictionary every tick.
         /// </summary>
         static List<AttitudeController> controllers = new List<AttitudeController> ();
+        // The controllers whose last step failed, so that a failure is logged once rather than
+        // on every tick
+        static HashSet<AttitudeController> failedControllers = new HashSet<AttitudeController> ();
 
         /// <summary>
         /// Wake the addon
@@ -346,11 +349,16 @@ namespace KRPC.SpaceCenter
             for (int i = 0; i < controllers.Count; i++) {
                 if (controllers [i].UpdateMode != mode)
                     continue;
+                var controller = controllers [i];
                 try {
-                    controllers [i].Step ();
+                    controller.Step ();
+                    failedControllers.Remove (controller);
                 } catch (Exception exn) {
-                    KRPC.Utils.Logger.WriteLine (
-                        "Auto-pilot failed: " + exn, KRPC.Utils.Logger.Severity.Error);
+                    if (failedControllers.Add (controller))
+                        KRPC.Utils.Logger.WriteLine (
+                            "Auto-pilot of " + controller.Label + " failed, and further failures " +
+                            "are not logged until it next succeeds: " + exn,
+                            KRPC.Utils.Logger.Severity.Error);
                 }
             }
         }
@@ -368,6 +376,7 @@ namespace KRPC.SpaceCenter
             registerSanctionedPilots = false;
             attitudeControllers.Clear ();
             controllers.Clear ();
+            failedControllers.Clear ();
         }
 
         /// <summary>
@@ -395,6 +404,7 @@ namespace KRPC.SpaceCenter
             AttitudeController controller;
             if (attitudeControllers.TryGetValue (vessel.id, out controller)) {
                 controllers.Remove (controller);
+                failedControllers.Remove (controller);
                 attitudeControllers.Remove (vessel.id);
             }
         }

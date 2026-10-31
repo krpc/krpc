@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using KRPC.Server;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using UnityEngine;
@@ -97,19 +99,17 @@ namespace KRPC.DockingCamera
                 {
                     try
                     {
-                        var image = API.GetImage(InternalPart);
-                        Debug.Log("CAMERA IMAGE: OK");
-                        return image;
+                        return API.GetImage(InternalPart);
                     }
                     catch(System.Exception e)
                     {
-                        Debug.Log("CAMERA IMAGE: " + e.Message + Environment.NewLine + e.StackTrace);
+                        if (KRPC.Utils.Logger.ShouldLog(KRPC.Utils.Logger.Severity.Debug))
+                            KRPC.Utils.Logger.WriteLine("Failed to get a docking camera image for client " + CallContext.Client.Label() + ": " + e, KRPC.Utils.Logger.Severity.Debug);
                         return Array.Empty<byte>();
                     }
                 }
                 else
                 {
-                    Debug.Log("CAMERA IMAGE: FAILED");
                     return Array.Empty<byte>();
                 }
             }

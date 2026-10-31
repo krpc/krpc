@@ -174,7 +174,7 @@ namespace KRPC
                     if (server.Running)
                         server.Stop ();
                     Servers.RemoveAt (i);
-                    Logger.WriteLine ("Removed server '" + server.Name);
+                    Logger.WriteLine ("Removed server '" + server.Name + "'");
                     return;
                 }
             }
@@ -193,17 +193,51 @@ namespace KRPC
                         server.Stop ();
                     Servers [i] = newServer;
                     Configure (newServer);
-                    Logger.WriteLine ("Updated server '" + server.Name + " to '" + newServer.Name);
+                    Logger.WriteLine ("Updated server '" + server.Name + "' to '" + newServer.Name + "'");
                     return;
                 }
             }
             throw new KeyNotFoundException (newServer.Id.ToString ());
         }
 
+        /// <summary>
+        /// The settings a server runs with, its own and those every server shares, for a log
+        /// line. The shared settings are named as in the settings file.
+        /// </summary>
+        static string SettingsText (Server.Server server)
+        {
+            var config = Configuration.Instance;
+            var text = new StringBuilder ();
+            text.Append ("protocol = ").Append (server.Protocol);
+            text.Append (", address = ").Append (server.Address);
+            // The serial line parameters, which the address leaves out
+            var messageServer = server.InnerServer as Server.Message.Server;
+            var serial = messageServer != null ? messageServer.InnerServer as Server.SerialIO.ByteServer : null;
+            if (serial != null) {
+                text.Append (", serialio_baud_rate = ").Append (serial.BaudRate.ToString (CultureInfo.InvariantCulture));
+                text.Append (", serialio_data_bits = ").Append (serial.DataBits.ToString (CultureInfo.InvariantCulture));
+                text.Append (", serialio_parity = ").Append (serial.Parity);
+                text.Append (", serialio_stop_bits = ").Append (serial.StopBits);
+            }
+            text.Append (", logLevel = ").Append (Logger.Level);
+            text.Append (", autoStartServers = ").Append (config.AutoStartServers);
+            text.Append (", autoAcceptConnections = ").Append (config.AutoAcceptConnections);
+            text.Append (", pauseServerWithGame = ").Append (config.PauseServerWithGame);
+            text.Append (", verboseErrors = ").Append (config.VerboseErrors);
+            text.Append (", oneRPCPerUpdate = ").Append (config.OneRPCPerUpdate);
+            text.Append (", maxTimePerUpdate = ").Append (config.MaxTimePerUpdate.ToString (CultureInfo.InvariantCulture));
+            text.Append (", adaptiveRateControl = ").Append (config.AdaptiveRateControl);
+            text.Append (", blockingRecv = ").Append (config.BlockingRecv);
+            text.Append (", recvTimeout = ").Append (config.RecvTimeout.ToString (CultureInfo.InvariantCulture));
+            text.Append (", tickHoldTimeout = ").Append (config.TickHoldTimeout.ToString (CultureInfo.InvariantCulture));
+            return text.ToString ();
+        }
+
         void Configure (IServer server)
         {
             server.OnStarted += (s, e) => {
-                Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' started");
+                Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' started on " + ((Server.Server)s).Address);
+                Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' settings: " + SettingsText ((Server.Server)s));
                 AnyRunning = true;
                 EventHandlerExtensions.Invoke (OnServerStarted, this, new ServerStartedEventArgs ((Server.Server)s));
             };

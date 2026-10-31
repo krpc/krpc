@@ -428,7 +428,7 @@ namespace KRPC.KSA
         void OnClientRequestingConnection (object sender, ClientRequestingConnectionEventArgs e)
         {
             if (config.Configuration.AutoAcceptConnections) {
-                Logger.WriteLine ("Accepting client connection (" + e.Client.Address + ")");
+                Logger.WriteLine ("Accepting client connection (" + e.Client.Address + ")", Logger.Severity.Debug);
                 e.Request.Allow ();
                 return;
             }
