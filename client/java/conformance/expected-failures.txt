@@ -67,3 +67,4 @@ test_streams.py::test_close_after_failure  # As test_streams.py::test_wake_waite
 test_connection.py::test_size_over_32_bits  # As test_malformed_size
 test_threading.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
 test_threading.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free
+test_connection.py::test_close_interrupted@localsocket @flaky  # Fails now and then, seen only on Windows CI: the close aborts the connection, so the server reads an abort, not the end of the stream

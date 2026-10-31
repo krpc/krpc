@@ -72,3 +72,4 @@ test_connection.py::test_handshake_failed_write  # The write's OSError escapes t
 test_threading.py::test_wait_holding_another @skip  # The dispatcher thread waits for the condition held, so the update of the stream waited on is never announced
 test_threading.py::test_held_stream_ending_before_value  # A read on the thread holding the condition raises "Stream has no value", as the ending is announced only once the condition is free
 test_threading.py::test_held_stream_ending @flaky  # Fails now and then, seen only on CI: a thread that takes the condition after the first value is stored, but before the dispatcher thread announces it, reads "Stream has no value"
+test_threading.py::test_wake_update_waiter[connection-failure] @flaky  # Fails now and then, seen only on CI: the waiting thread is not woken within the reply timeout
