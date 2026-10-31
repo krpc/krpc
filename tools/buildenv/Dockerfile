@@ -30,12 +30,14 @@ RUN apt-get update && \
 # which uses this system toolchain via toolchains_llvm's path mode. Pinned to 23
 # to match the default hermetic clang 23.x, so clang-format/clang-tidy do not skew
 # between dev and CI. Installs a self-contained toolchain at /usr/lib/llvm-23.
+# toolchains_llvm links clangd into the toolchain, and a Bazel disk cache needs
+# every file the toolchain links to exist.
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key -o /usr/share/keyrings/llvm.asc && \
     echo "deb [signed-by=/usr/share/keyrings/llvm.asc] http://apt.llvm.org/noble/ llvm-toolchain-noble-23 main" \
       > /etc/apt/sources.list.d/llvm.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-    clang-23 clang-tidy-23 clang-format-23 lld-23 llvm-23 \
+    clang-23 clangd-23 clang-tidy-23 clang-format-23 lld-23 llvm-23 \
     libc++-23-dev libc++abi-23-dev libclang-rt-23-dev libunwind-23-dev && \
     apt-get clean
 
