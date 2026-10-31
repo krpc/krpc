@@ -1105,7 +1105,7 @@
 and <a class="reference external" href="https://github.com/arxila/javatuples">javatuples</a> libraries. A prebuilt jar for protobuf is
 available from <a class="reference external" href="https://central.sonatype.com/artifact/com.google.protobuf/protobuf-java">Maven</a>.</p>
 <p>To compile a program with javac, add the three jars to the class path:</p>
-<pre class="literal-block">javac -cp krpc-java-0.8.0-280-g26df1af.jar:protobuf-java-4.36.2.jar:javatuples-1.2.jar Example.java</pre>
+<pre class="literal-block">javac -cp krpc-java-0.8.0-282-gaa1e993.jar:protobuf-java-4.36.2.jar:javatuples-1.2.jar Example.java</pre>
 <p>The paths are those of the jars on your machine.</p>
 </section>
 <section id="connecting-to-the-server">
@@ -1779,6 +1779,8 @@ vessel’s altitude exceeds 1000 meters:</p>
 <p><a class="reference internal" href="#krpc.client.Connection.addEvent(KRPC.Expression)" title="krpc.client.Connection.addEvent(KRPC.Expression)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">addEvent</span></code></a> creates the event, and <a class="reference internal" href="#krpc.client.Event.waitFor()" title="krpc.client.Event.waitFor()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">waitFor</span></code></a> waits for it to fire. The
 server checks the condition every physics tick, so the event catches a condition that holds for only
 a moment, which a loop of calls can miss.</p>
+<p>The event fires again each time the condition becomes true after being false. Call
+<a class="reference internal" href="#krpc.client.Event.remove()" title="krpc.client.Event.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">remove</span></code></a> to stop it.</p>
 <p>As with a stream, hold the event’s condition when you call <a class="reference internal" href="#krpc.client.Event.waitFor()" title="krpc.client.Event.waitFor()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">waitFor</span></code></a>. A wait returns
 straight away if the event has fired since your last wait, so a firing between two waits is not
 missed.</p>

@@ -1264,9 +1264,10 @@ using a client library has undefined behavior.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Client libraries call this procedure to implement events. Use the events of your
-client library instead. Calling this directly while using a client library has
-undefined behavior.</p>
+<p>The event fires when the function becomes true, and again each time it becomes true
+after being false. Client libraries call this procedure to implement events. Use the
+events of your client library instead. Calling this directly while using a client
+library has undefined behavior.</p>
 </div>
 </dd></dl>
 

@@ -18,6 +18,7 @@ Core
 * :breaking:`Breaking` Refuse a service whose parameter defaults to a value its enumeration does not declare (:issue:`1192`)
 * Close a WebSockets connection whose frame is too large to buffer, which threw ``OverflowException`` (:issue:`1193`)
 * Update a stream when its value changes between 0.0 and -0.0, or a collection it returns changes in place (:issue:`1199`)
+* :breaking:`Breaking` Fire a ``KRPC.AddEvent`` event once each time its function becomes true (:issue:`1234`)
 * Connections
 
   * :breaking:`Breaking` Carry each client on one connection, as protocol version 2, where every message is a ``Message``. Clients from earlier releases cannot connect (:issue:`1219`)

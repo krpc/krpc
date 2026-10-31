@@ -1535,6 +1535,8 @@ until the vessel’s altitude exceeds 1000 meters:</p>
 <p><a class="reference internal" href="#krpc.client.Client.add_event" title="krpc.client.Client.add_event"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_event()</span></code></a> creates the event, and <a class="reference internal" href="#krpc.event.Event.wait" title="krpc.event.Event.wait"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code></a> waits
 for it to fire. The server checks the condition every physics tick, so the event catches a
 condition that holds for only a moment, which a loop of calls can miss.</p>
+<p>The event fires again each time the condition becomes true after being false. Call
+<a class="reference internal" href="#krpc.event.Event.remove" title="krpc.event.Event.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">remove()</span></code></a> to stop it.</p>
 <p>As with a stream, hold the event’s condition when you call <a class="reference internal" href="#krpc.event.Event.wait" title="krpc.event.Event.wait"><code class="xref py py-meth docutils literal notranslate"><span class="pre">wait()</span></code></a>. A wait
 returns straight away if the event has fired since your last wait, so a firing between two waits is
 not missed.</p>

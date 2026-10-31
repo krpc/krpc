@@ -491,6 +491,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Refuse a service whose parameter defaults to a value its enumeration does not declare (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1192">#1192</a>)</p></li>
 <li><p>Close a WebSockets connection whose frame is too large to buffer, which threw <code class="docutils literal notranslate"><span class="pre">OverflowException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1193">#1193</a>)</p></li>
 <li><p>Update a stream when its value changes between 0.0 and -0.0, or a collection it returns changes in place (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1199">#1199</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Fire a <code class="docutils literal notranslate"><span class="pre">KRPC.AddEvent</span></code> event once each time its function becomes true (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1234">#1234</a>)</p></li>
 <li><p>Connections</p>
 <ul>
 <li><p><span class="changelog-marker breaking">Breaking</span> Carry each client on one connection, as protocol version 2, where every message is a <code class="docutils literal notranslate"><span class="pre">Message</span></code>. Clients from earlier releases cannot connect (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
