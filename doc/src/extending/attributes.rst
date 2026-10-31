@@ -15,7 +15,8 @@ to add functionality to the kRPC server.
 
     * **Id** -- Optional integer identifier for the service, used by clients that call procedures
       by id rather than by name. If omitted or set to 0, an identifier is generated from a hash of
-      the service name.
+      the service name. Identifiers 1 to 255 are reserved for the services that ship with kRPC.
+      Set it only to resolve a clash with another service.
 
     * **GameScene** -- The game scenes in which the services procedures are available. Defaults to
       all game scenes. If this is set to :cs:value:`KRPC.Service.GameScene.Inherit` the service
@@ -74,7 +75,7 @@ to add functionality to the kRPC server.
         :end-before: [/docs]
         :dedent:
 
-.. cs:attribute:: KRPCProcedure (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
+.. cs:attribute:: KRPCProcedure (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit, uint Id = 0)
 
    :parameters:
 
@@ -82,6 +83,10 @@ to add functionality to the kRPC server.
 
     * **GameScene** -- The game scenes in which the procedure is available. Defaults to inherit this
       setting from the service the procedure is defined in.
+
+    * **Id** -- Optional integer identifier for the procedure, used by clients that call
+      procedures by id. If omitted or set to 0, an identifier is generated from a hash of the
+      procedure name. Set it only to resolve a clash with another procedure in the service.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to static
    methods, to add them to the server as procedures.
@@ -176,7 +181,7 @@ to add functionality to the kRPC server.
         :end-before: [/docs]
         :dedent:
 
-.. cs:attribute:: KRPCMethod (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
+.. cs:attribute:: KRPCMethod (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit, uint Id = 0)
 
    :parameters:
 
@@ -184,6 +189,10 @@ to add functionality to the kRPC server.
 
     * **GameScene** -- The game scenes in which the method is available. Defaults to inherit this
       setting from the class the method is defined in.
+
+    * **Id** -- Optional integer identifier for the method, as for :cs:attr:`KRPCProcedure`. On a
+      method that a subclass inherits, it applies only to the class that declares the method. See
+      :cs:attr:`KRPCProcedureId`.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to methods
    inside a :cs:attr:`KRPCClass`. This allows a client to call methods on an instance, or static
@@ -218,7 +227,7 @@ to add functionality to the kRPC server.
       :end-before: [/docs]
       :dedent:
 
-.. cs:attribute:: KRPCProperty (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit)
+.. cs:attribute:: KRPCProperty (bool Nullable = false, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.Inherit, uint GetterId = 0, uint SetterId = 0)
 
    :parameters:
 
@@ -228,6 +237,11 @@ to add functionality to the kRPC server.
 
     * **GameScene** -- The game scenes in which the property is available. Defaults to inherit this
       setting from the class the property is defined in.
+
+    * **GetterId**, **SetterId** -- Optional integer identifiers for the getter and the setter,
+      as for :cs:attr:`KRPCProcedure`, and applying only to the class that declares the property.
+      Each can only be set if the property has that getter or setter. A field of a
+      :cs:attr:`KRPCStruct` sets neither.
 
    This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to class
    properties, and comes in three flavors:
@@ -283,6 +297,36 @@ to add functionality to the kRPC server.
         :start-after: [docs]
         :end-before: [/docs]
         :dedent:
+
+.. cs:attribute:: KRPCProcedureId (string Member, uint Id = 0, uint GetterId = 0, uint SetterId = 0)
+
+   :parameters:
+
+    * **Member** -- The name of the inherited method or property. Pass it with ``nameof`` so the
+      compiler checks it.
+
+    * **Id** -- The integer identifier for a method.
+
+    * **GetterId**, **SetterId** -- The integer identifiers for the getter and the setter of a
+      property.
+
+   This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to a
+   :cs:attr:`KRPCClass`. It sets the ids of a member the class inherits from a base class, as
+   :cs:attr:`KRPCMethod` and :cs:attr:`KRPCProperty` do for a member the class declares. It can be
+   applied once per member.
+
+   **Example**
+
+   The ``Flag`` class inherits the ``Label`` property, and sets the id of its getter:
+
+   .. literalinclude:: /scripts/extending/attributes/ProcedureId.lib.cs
+      :language: csharp
+      :start-after: [docs]
+      :end-before: [/docs]
+      :dedent:
+
+   An id set on a member of ``Marker`` applies only to the ``Marker`` procedure. A base class that is
+   not a :cs:attr:`KRPCClass` sets no ids, on its members or with this attribute.
 
 .. cs:attribute:: KRPCEnum (string Service)
 
