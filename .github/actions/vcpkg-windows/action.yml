@@ -2,10 +2,12 @@ inputs:
   packages:
     required: true
 # vcpkg names each archive in its binary cache after the ABI hash of the
-# package it holds, and rebuilds any package whose archive is missing. So we
-# restore the newest cache for these packages, whatever it was built with, and
-# key the saved cache on the ABI hashes the install used. The key then changes
-# only when a package is rebuilt, not on every runner image update.
+# package it holds, and rebuilds any package whose archive is missing. The ABI
+# hashes cover tools the runner image ships, such as CMake and PowerShell. So
+# we restore the newest cache built on this runner image, or failing that the
+# newest for these packages, and key the saved cache on the image and the ABI
+# hashes the install used. A gradual image rollout then keeps a cache for each
+# image, and an image update that leaves the hashes alone rebuilds nothing.
 runs:
   using: composite
   steps:
@@ -17,13 +19,16 @@ runs:
       run: |
         $prefix = 'vcpkg-windows-' + ($env:PACKAGES -replace '[^A-Za-z0-9]+', '-') + '-'
         echo "prefix=$prefix" >> $env:GITHUB_OUTPUT
+        echo "image-prefix=$prefix$env:ImageOS-$env:ImageVersion-" >> $env:GITHUB_OUTPUT
     - name: restore-vcpkg
       id: restore-vcpkg
       uses: actions/cache/restore@v6
       with:
         path: C:\vcpkg-binary-cache
-        key: ${{ steps.cache-prefix.outputs.prefix }}${{ github.run_id }}
-        restore-keys: ${{ steps.cache-prefix.outputs.prefix }}
+        key: ${{ steps.cache-prefix.outputs.image-prefix }}${{ github.run_id }}
+        restore-keys: |
+          ${{ steps.cache-prefix.outputs.image-prefix }}
+          ${{ steps.cache-prefix.outputs.prefix }}
     - name: install-deps
       shell: pwsh
       env:
@@ -37,7 +42,7 @@ runs:
       id: cache-key
       shell: pwsh
       env:
-        PREFIX: ${{ steps.cache-prefix.outputs.prefix }}
+        PREFIX: ${{ steps.cache-prefix.outputs.image-prefix }}
       run: |
         $abis = Get-ChildItem "$env:VCPKG_INSTALLATION_ROOT\installed\*\share\*\vcpkg_abi_info.txt" |
           ForEach-Object {
