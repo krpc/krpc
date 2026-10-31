@@ -146,6 +146,34 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void FunctionEventFiresWhenTheFunctionBecomesTrue ()
+        {
+            var value = "on";
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns (() => value);
+            TestService.Service = mock.Object;
+            var call = new ProcedureCall ("TestService", "ProcedureNoArgsReturns");
+            var stream = new EventStream (global::KRPC.Service.KRPC.KRPC.EventCondition (
+                Expression.Equal (Expression.Call (call), Expression.ConstantString ("on"))));
+            // True at the first update
+            stream.UpdateInternal ();
+            Assert.IsTrue (stream.Changed);
+            Assert.AreEqual (true, stream.Result.Value);
+            stream.Sent ();
+            // Still true
+            stream.UpdateInternal ();
+            Assert.IsFalse (stream.Changed);
+            value = "off";
+            stream.UpdateInternal ();
+            Assert.IsFalse (stream.Changed);
+            // True again after being false
+            value = "on";
+            stream.UpdateInternal ();
+            Assert.IsTrue (stream.Changed);
+            Assert.AreEqual (true, stream.Result.Value);
+        }
+
+        [Test]
         public void FunctionEventFromALambdaWithNoParameters ()
         {
             var stream = new EventStream (global::KRPC.Service.KRPC.KRPC.EventCondition (

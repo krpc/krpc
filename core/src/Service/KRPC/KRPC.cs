@@ -357,9 +357,10 @@ namespace KRPC.Service.KRPC
         /// Create an event from a server side function that evaluates to a boolean value.
         /// </summary>
         /// <remarks>
-        /// Client libraries call this procedure to implement events. Use the events of your
-        /// client library instead. Calling this directly while using a client library has
-        /// undefined behavior.
+        /// The event fires when the function becomes true, and again each time it becomes true
+        /// after being false. Client libraries call this procedure to implement events. Use the
+        /// events of your client library instead. Calling this directly while using a client
+        /// library has undefined behavior.
         /// </remarks>
         [KRPCProcedure]
         public static Messages.Event AddEvent(Expression function)
@@ -369,7 +370,8 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// The condition an event created by <see cref="AddEvent"/> checks on each update.
+        /// The condition an event created by <see cref="AddEvent"/> checks on each update. It
+        /// holds on the update where the function becomes true.
         /// </summary>
         internal static Func<bool> EventCondition (Expression function)
         {
@@ -381,11 +383,15 @@ namespace KRPC.Service.KRPC
                 throw new ArgumentException ("The function must evaluate to a boolean value");
             function.Check ();
             function.Compile ();
+            var wasTrue = false;
             return () => {
                 var value = function.Evaluate ();
                 if (ReferenceEquals (value, null))
                     throw new NullReferenceException (Expression.NullResultMessage);
-                return (bool)value;
+                var isTrue = (bool)value;
+                var becameTrue = isTrue && !wasTrue;
+                wasTrue = isTrue;
+                return becameTrue;
             };
         }
 

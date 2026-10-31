@@ -299,6 +299,9 @@ until the vessel's altitude exceeds 1000 meters:
 for it to fire. The server checks the condition every physics tick, so the event catches a
 condition that holds for only a moment, which a loop of calls can miss.
 
+The event fires again each time the condition becomes true after being false. Call
+:meth:`~krpc.event.Event.remove` to stop it.
+
 As with a stream, hold the event's condition when you call :meth:`~krpc.event.Event.wait`. A wait
 returns straight away if the event has fired since your last wait, so a firing between two waits is
 not missed.

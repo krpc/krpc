@@ -6,6 +6,7 @@
   `OverflowException` (#1193)
 - Update a stream when its value changes between 0.0 and -0.0, or a collection it returns
   changes in place (#1199)
+- **Breaking:** Fire a `KRPC.AddEvent` event once each time its function becomes true (#1234)
 - Connections
   - **Breaking:** Carry each client on one connection, as protocol version 2, where every
     message is a `Message`. Clients from earlier releases cannot connect (#1219)
