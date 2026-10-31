@@ -41,6 +41,7 @@ cp -r "$here/doc" "$src"
 rm "$src/requirements.txt"
 mkdir -p "$src/scripts"
 cp "$here"/examples/*.py "$src/scripts/"
+cp "$repo"/media/logo-{mark,on-light,on-dark}.svg "$src/_static/"
 # One API page per template, under each language's api folder
 for language in python csharp cpp cnano java lua; do
   (cd "$here/doc/api" && find . -name '*.tmpl') | while read -r template; do
