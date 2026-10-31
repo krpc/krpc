@@ -99,3 +99,8 @@ common:system-llvm --extra_toolchains=@llvm_system//:all
 # turns this on from ~/.bazelrc, so every bazel command in the job picks it up.
 common:ci --config=system-llvm
 test:ci --test_output=errors
+
+# Abseil turns on parse_headers for its own packages, which compiles each of its
+# headers on its own as a check. With the system LLVM that is a third of the
+# compile actions a client's conformance testee needs.
+build:ci --features=-parse_headers --host_features=-parse_headers
