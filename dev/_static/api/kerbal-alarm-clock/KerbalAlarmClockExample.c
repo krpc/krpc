@@ -4,8 +4,10 @@
 
 int main() {
   krpc_connection_t conn;
-  krpc_open(&conn, "COM0");
-  krpc_connect(conn, "Kerbal Alarm Clock Example");
+  if (krpc_open(&conn, "COM0") != KRPC_OK)
+    return 1;
+  if (krpc_connect(conn, "Kerbal Alarm Clock Example") != KRPC_OK)
+    return 1;
 
   double ut;
   krpc_SpaceCenter_UT(conn, &ut);

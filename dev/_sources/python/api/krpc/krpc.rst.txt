@@ -6,15 +6,6 @@ KRPC
 ====
 
 
-
-
-
-
-
-
-
-
-
 .. module:: KRPC
 
 Main kRPC service, used by clients to interact with basic server functionality.
@@ -69,24 +60,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
    :rtype: :class:`krpc.schema.KRPC.Services`
    
-
-
-
-
-.. staticmethod:: add_function_stream(function)
-
-   Add a stream of the value a server side function computes on each update.
-
-   :param Expression function:
-   :rtype: :class:`krpc.schema.KRPC.Stream`
-   
-
-   .. note::
-
-      Each call adds a new stream, with values of the type given by
-      :attr:`Expression.return_type`. Any exception from the function ends the
-      stream, including :class:`ObjectNotLoadedException`. A procedure that pauses
-      execution to resume on a later tick produces an error on the stream.
 
 
 
@@ -150,42 +123,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. staticmethod:: compile_function(function)
-
-   Compile a server side function, so that running, streaming or adding it as an
-   event does not compile it.
-
-   :param Expression function:
-   
-
-   .. note::
-
-      Compiling a large function takes time on the game's main thread. Compiling it
-      in advance keeps that time out of its first run.
-
-
-
-
-.. staticmethod:: run_function(function, [arguments = []])
-
-   Run a server side function once, within a single physics tick, and return
-   the value it produces.
-
-   :param Expression function: The function to run.
-   :param list arguments: The encoded arguments, one per parameter.
-   :returns: The encoded value of the function, or no bytes for a function with no value.
-   :rtype: bytes or None
-   
-
-   .. note::
-
-      The arguments are encoded at the types given by :attr:`Expression.parameter_types`.
-      Throws an exception if a procedure the function calls pauses execution, and the
-      effects up to the pause remain.
-
-
-
-
 .. attribute:: game_scene
 
    The current game scene. Setting this switches the game to the given
@@ -228,6 +165,127 @@ Main kRPC service, used by clients to interact with basic server functionality.
    .. note::
 
       Increases once a game load, quickload, revert or scene change has finished.
+
+
+
+
+.. staticmethod:: add_stream(call)
+
+   Add a streaming request and return its identifier.
+
+   :param krpc.schema.KRPC.ProcedureCall call:
+   :rtype: :class:`krpc.schema.KRPC.Stream`
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement streams. Use the streams of your
+      client library instead. Calling this directly while using a client library has
+      undefined behavior.
+
+
+
+
+.. staticmethod:: add_function_stream(function)
+
+   Add a stream of the value a server side function computes on each update.
+
+   :param Expression function:
+   :rtype: :class:`krpc.schema.KRPC.Stream`
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement server side functions. Use the
+      server side functions of your client library instead. Calling this directly while
+      using a client library has undefined behavior.
+
+
+
+
+.. staticmethod:: add_event(function)
+
+   Create an event from a server side function that evaluates to a boolean value.
+
+   :param Expression function:
+   :rtype: :class:`krpc.event.Event`
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement events. Use the events of your
+      client library instead. Calling this directly while using a client library has
+      undefined behavior.
+
+
+
+
+.. staticmethod:: run_function(function, [arguments = []])
+
+   Run a server side function once, within a single physics tick, and return
+   the value it produces.
+
+   :param Expression function: The function to run.
+   :param list arguments: The encoded arguments, one per parameter.
+   :returns: The encoded value of the function, or no bytes for a function with no value.
+   :rtype: bytes or None
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement server side functions. Use the
+      server side functions of your client library instead. Calling this directly while
+      using a client library has undefined behavior.
+
+
+
+
+.. staticmethod:: compile_function(function)
+
+   Compile a server side function, so that running, streaming or adding it as an
+   event does not compile it.
+
+   :param Expression function:
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement server side functions. Use the
+      server side functions of your client library instead. Calling this directly while
+      using a client library has undefined behavior.
+
+
+
+
+.. staticmethod:: set_stream_rate(id, rate)
+
+   Set the update rate for a stream in Hz.
+
+   :param int id:
+   :param float rate:
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement streams. Use the streams of your
+      client library instead. Calling this directly while using a client library has
+      undefined behavior.
+
+
+
+
+.. staticmethod:: remove_stream(id)
+
+   Remove a streaming request.
+
+   :param int id:
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement streams. Use the streams of your
+      client library instead. Calling this directly while using a client library has
+      undefined behavior.
 
 
 

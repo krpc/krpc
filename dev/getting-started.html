@@ -487,7 +487,7 @@
 <p>This short guide explains the basics for getting the kRPC server set up and running, and writing a
 basic Python script to interact with the game.</p>
 <section id="the-server-plugin">
-<h2>The Server Plugin<a class="headerlink" href="#the-server-plugin" title="Link to this heading">#</a></h2>
+<span id="getting-started-server"></span><h2>The Server Plugin<a class="headerlink" href="#the-server-plugin" title="Link to this heading">#</a></h2>
 <section id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h3>
 <ol class="arabic">
@@ -518,7 +518,7 @@ shown/hidden by clicking on the icon in the top right:</p>
 <ol class="arabic simple">
 <li><p><strong>Protocol</strong>: this is the protocol used by the server. This affects type of client can connect to
 the server. For Python, and most other clients that communicate over TCP/IP, you want to select
-“Protobuf over TCP”.</p></li>
+“Protobuf over TCP/IP”.</p></li>
 <li><p><strong>Address</strong>: this is the IP address that the server will listen on. To only allow connections
 from the local machine, select ‘localhost’ (the default). To allow connections over a network,
 either select the local IP address of your machine, or choose ‘Manual’ and enter the local IP
@@ -584,9 +584,8 @@ prints out the name of the vessel. You should see something like the following:<
 <ul class="simple">
 <li><p>For some more interesting examples of what you can do with kRPC, check out the
 <a class="reference internal" href="tutorials.html"><span class="doc">tutorials</span></a>.</p></li>
-<li><p>Client libraries are available for other languages too, including <a class="reference internal" href="csharp/client.html"><span class="doc">C#</span></a>,
-<a class="reference internal" href="cpp/client.html"><span class="doc">C++</span></a>, <a class="reference internal" href="cnano/client.html"><span class="doc">C</span></a>, <a class="reference internal" href="java/client.html"><span class="doc">Java</span></a> and
-<a class="reference internal" href="lua/client.html"><span class="doc">Lua</span></a>.</p></li>
+<li><p>Client libraries are available for other languages too, including <a class="reference internal" href="csharp.html"><span class="doc">C#</span></a>,
+<a class="reference internal" href="cpp.html"><span class="doc">C++</span></a>, <a class="reference internal" href="cnano.html"><span class="doc">C</span></a>, <a class="reference internal" href="java.html"><span class="doc">Java</span></a> and <a class="reference internal" href="lua.html"><span class="doc">Lua</span></a>.</p></li>
 <li><p>It is also possible to <a class="reference internal" href="communication-protocols.html"><span class="doc">communicate with the server manually</span></a> from
 any language you like.</p></li>
 </ul>

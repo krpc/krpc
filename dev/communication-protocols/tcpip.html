@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Protocol Buffers over TCP/IP &#8212; kRPC vdev documentation</title>
+    <title>TCP/IP &#8212; kRPC vdev documentation</title>
   
   
   
@@ -59,7 +59,7 @@
     <link rel="icon" href="../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Protocol Buffers over a Local Socket" href="localsocket.html" />
+    <link rel="next" title="Local Socket" href="localsocket.html" />
     <link rel="prev" title="Communication Protocols" href="../communication-protocols.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
@@ -427,31 +427,48 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../extending.html">Extending kRPC</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../extending.html">Extending kRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../extending/attributes.html">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/multi-tick.html">Multi-Tick RPCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/game-scenes.html">Game Scenes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/deprecation.html">Deprecating Service Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/extending-other-services.html">Extending Other Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Protocol Buffers over TCP/IP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="localsocket.html">Protocol Buffers over a Local Socket</a></li>
-<li class="toctree-l2"><a class="reference internal" href="websockets.html">Protocol Buffers over WebSockets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="serialio.html">Protocol Buffers over Serial IO</a></li>
-<li class="toctree-l2"><a class="reference internal" href="messages.html">Messaging Protocol</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/connection.html">Connection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/calls.html">Calls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/values.html">Values</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/codec.html">Codec</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/errors.html">Errors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/objects.html">Objects</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/streams.html">Streams</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/events.html">Events</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/threading.html">Threading</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/functions.html">Server Side Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/coverage.html">Client Coverage</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">TCP/IP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="localsocket.html">Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="websockets.html">WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialio.html">Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="messages.html">Messaging</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/connection.html">Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/calls.html">Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/codec.html">Codec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/objects.html">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/streams.html">Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/threading.html">Threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/functions.html">Server Side Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/coverage.html">Client Coverage</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../compiling.html">Compiling kRPC</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/code-structure.html">Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/building.html">Building from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/benchmarks.html">Benchmarks</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -498,7 +515,7 @@
     
     <li class="breadcrumb-item"><a href="../communication-protocols.html" class="nav-link">Communication Protocols</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Protocol Buffers over TCP/IP</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">TCP/IP</span></li>
   </ul>
 </nav>
 </div>
@@ -515,69 +532,77 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="protocol-buffers-over-tcp-ip">
-<h1>Protocol Buffers over TCP/IP<a class="headerlink" href="#protocol-buffers-over-tcp-ip" title="Link to this heading">#</a></h1>
-<p>This communication protocol allows languages that can communicate over a TCP/IP connection to
-interact with a kRPC server.</p>
+  <section id="tcp-ip">
+<h1>TCP/IP<a class="headerlink" href="#tcp-ip" title="Link to this heading">#</a></h1>
+<p>This protocol carries the <a class="reference internal" href="messages.html"><span class="doc">messages</span></a> over a TCP/IP connection.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If a client library is available for your language, you do not need to implement this
 protocol.</p>
 </div>
-<section id="sending-and-receiving-messages">
-<h2>Sending and Receiving Messages<a class="headerlink" href="#sending-and-receiving-messages" title="Link to this heading">#</a></h2>
-<p>Communication with the server is performed via Protocol Buffer messages, encoded according to the
-protobuf binary format. When sending messages to and from the server, they are prefixed with their
-size, in bytes, encoded as a Protocol Buffers varint.</p>
-<p>To send a message to the server:</p>
-<ol class="arabic simple">
-<li><p>Encode the message using the Protocol Buffers format.</p></li>
-<li><p>Get the length of the encoded message data (in bytes) and encode that as a Protocol Buffers
-varint.</p></li>
-<li><p>Send the encoded length followed by the encoded message data.</p></li>
-</ol>
-<p>To receive a message from the server, do the reverse:</p>
-<ol class="arabic simple">
-<li><p>Receive the size of the message as a Protocol Buffers encoded varint.</p></li>
-<li><p>Decode the message size.</p></li>
-<li><p>Receive message size bytes of message data.</p></li>
-<li><p>Decode the message data.</p></li>
-</ol>
-<p>Every message is a <code class="docutils literal notranslate"><span class="pre">Message</span></code>. See <a class="reference internal" href="messages.html#communication-protocol-message"><span class="std std-ref">Messages</span></a>.</p>
+<section id="framing">
+<h2>Framing<a class="headerlink" href="#framing" title="Link to this heading">#</a></h2>
+<p>Each message is a <code class="docutils literal notranslate"><span class="pre">Message</span></code>, encoded according to the Protocol Buffers binary format and
+prefixed with its size in bytes, encoded as a varint. The following Python functions send and
+receive a message:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">encode_varint</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Encode an int as a protobuf varint"""</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">_VarintEncoder</span><span class="p">()(</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">b</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">decode_varint</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Decode a protobuf varint to an int"""</span>
+    <span class="k">return</span> <span class="n">_DecodeVarint</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Send a message, prefixed with its size, to a TCP/IP socket"""</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">()</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">encode_varint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="n">data</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">recv_message</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Receive a Message, prefixed with its size, from a TCP/IP socket"""</span>
+    <span class="c1"># Receive the size of the message data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">+=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">decode_varint</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="c1"># Receive the message data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">""</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">+=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">size</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="c1"># Decode the message</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">()</span>
+    <span class="n">msg</span><span class="o">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">msg</span>
+</pre></div>
+</div>
 </section>
-<section id="connecting-to-the-server">
-<h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
-<p>To establish a connection, a client must do the following:</p>
-<ol class="arabic simple">
-<li><p>Open a TCP socket to the server on its port (which defaults to 50000).</p></li>
-<li><p>Send a <code class="docutils literal notranslate"><span class="pre">Message</span></code> holding a <code class="docutils literal notranslate"><span class="pre">connection_request</span></code>, with its <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> field set to
-2. See <a class="reference internal" href="messages.html#communication-protocol-handshake"><span class="std std-ref">Connecting</span></a>.</p></li>
-<li><p>Receive a <code class="docutils literal notranslate"><span class="pre">Message</span></code> holding the server’s <code class="docutils literal notranslate"><span class="pre">connection_response</span></code>, and check that its
-<code class="docutils literal notranslate"><span class="pre">status</span></code> field is <code class="docutils literal notranslate"><span class="pre">ConnectionResponse.OK</span></code> and its <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> is 2. If not, the
-<code class="docutils literal notranslate"><span class="pre">message</span></code> field contains a description of what went wrong.</p></li>
-</ol>
-<p>The connection then carries the client’s requests and their responses, and the updates for its
-<a class="reference internal" href="messages.html#communication-protocol-streams"><span class="std std-ref">Streams</span></a>. To end it, see <a class="reference internal" href="messages.html#communication-protocol-disconnect"><span class="std std-ref">Ending a Connection</span></a>.</p>
-</section>
-<section id="invoking-remote-procedures">
-<h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
-<p>See <a class="reference internal" href="messages.html"><span class="doc">Messaging Protocol</span></a>.</p>
+<section id="connecting">
+<h2>Connecting<a class="headerlink" href="#connecting" title="Link to this heading">#</a></h2>
+<p>Open a TCP socket to the server’s address and port, which default to <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and <code class="docutils literal notranslate"><span class="pre">50000</span></code>.
+Then send the <a class="reference internal" href="messages.html#communication-protocol-handshake"><span class="std std-ref">connection handshake</span></a>. The connection
+carries the requests, the responses and the stream updates until either side sends a
+<a class="reference internal" href="messages.html#communication-protocol-disconnect"><span class="std std-ref">disconnect</span></a>.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
-<p>The following Python code connects to the server at address 127.0.0.1 and port 50000 using the
-name “Jeb”. It then invokes the <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> RPC, receives and decodes the result and prints
-out the server version number from the response. Finally it ends the connection.</p>
-<p>To send and receive messages to the server, they need to be encoded and decoded from their binary
-format:</p>
-<ul class="simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">encode_varint</span></code> and <code class="docutils literal notranslate"><span class="pre">decode_varint</span></code> functions convert between Python integers and
-Protocol Buffer varint encoded integers.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">send_message</span></code> encodes a message, sends the length of the message to the server as a Protocol
-Buffer varint encoded integer, and then sends the message data.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">recv_message</span></code> receives the size of a message, decodes it, receives the message data, and
-decodes it as a <code class="docutils literal notranslate"><span class="pre">Message</span></code>.</p></li>
-</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These examples show the protocol, and omit much of the behavior a client library needs, such as
+handling errors and failed connections. A client library should
+implement the <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a> in its entirety.</p>
+</div>
+<p>The following script connects to the server with the name “Example”, calls <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> and
+prints the result. It then ends the connection:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.decoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_DecodeVarint</span>
@@ -633,7 +658,7 @@ decodes it as a <code class="docutils literal notranslate"><span class="pre">Mes
 <span class="c1"># Send a connection request</span>
 <span class="n">message</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">()</span>
 <span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Jeb"</span>
+<span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Example"</span>
 <span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
 <span class="c1"># Receive the connection response</span>
@@ -679,7 +704,7 @@ decodes it as a <code class="docutils literal notranslate"><span class="pre">Mes
 <span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span><span class="n">disconnect</span><span class="o">=</span><span class="n">disconnect</span><span class="p">))</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_WR</span><span class="p">)</span>
 
-<span class="c1"># Discard anything still arriving until the server closes its side, for up to a second</span>
+<span class="c1"># Discard anything still arriving until the server closes its side, or a second passes with nothing</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="k">while</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">):</span>
@@ -689,7 +714,7 @@ decodes it as a <code class="docutils literal notranslate"><span class="pre">Mes
 <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The following example adds a stream, then receives its updates on the same connection:</p>
+<p>The following script adds a stream, then receives its updates on the same connection:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.decoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_DecodeVarint</span>
@@ -745,7 +770,7 @@ decodes it as a <code class="docutils literal notranslate"><span class="pre">Mes
 <span class="c1"># Send a connection request</span>
 <span class="n">message</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">()</span>
 <span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Jeb"</span>
+<span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Example"</span>
 <span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
 <span class="c1"># Receive the connection response</span>
@@ -828,7 +853,7 @@ decodes it as a <code class="docutils literal notranslate"><span class="pre">Mes
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Protocol Buffers over a Local Socket</p>
+        <p class="prev-next-title">Local Socket</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -851,9 +876,8 @@ decodes it as a <code class="docutils literal notranslate"><span class="pre">Mes
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sending-and-receiving-messages">Sending and Receiving Messages</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#invoking-remote-procedures">Invoking Remote Procedures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#framing">Framing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting">Connecting</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
 </ul>
   </nav></div>

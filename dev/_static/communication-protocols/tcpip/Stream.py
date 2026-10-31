@@ -53,7 +53,7 @@ conn.connect(("127.0.0.1", 50000))
 # Send a connection request
 message = KRPC.Message()
 message.connection_request.protocol_version = 2
-message.connection_request.client_name = "Jeb"
+message.connection_request.client_name = "Example"
 send_message(conn, message)
 
 # Receive the connection response

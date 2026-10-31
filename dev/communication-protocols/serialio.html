@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Protocol Buffers over Serial IO &#8212; kRPC vdev documentation</title>
+    <title>Serial IO &#8212; kRPC vdev documentation</title>
   
   
   
@@ -59,8 +59,8 @@
     <link rel="icon" href="../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Messaging Protocol" href="messages.html" />
-    <link rel="prev" title="Protocol Buffers over WebSockets" href="websockets.html" />
+    <link rel="next" title="Messaging" href="messages.html" />
+    <link rel="prev" title="WebSockets" href="websockets.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -427,31 +427,48 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../extending.html">Extending kRPC</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../extending.html">Extending kRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../extending/attributes.html">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/multi-tick.html">Multi-Tick RPCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/game-scenes.html">Game Scenes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/deprecation.html">Deprecating Service Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/extending-other-services.html">Extending Other Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="tcpip.html">Protocol Buffers over TCP/IP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="localsocket.html">Protocol Buffers over a Local Socket</a></li>
-<li class="toctree-l2"><a class="reference internal" href="websockets.html">Protocol Buffers over WebSockets</a></li>
-<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Protocol Buffers over Serial IO</a></li>
-<li class="toctree-l2"><a class="reference internal" href="messages.html">Messaging Protocol</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/connection.html">Connection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/calls.html">Calls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/values.html">Values</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/codec.html">Codec</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/errors.html">Errors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/objects.html">Objects</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/streams.html">Streams</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/events.html">Events</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/threading.html">Threading</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/functions.html">Server Side Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/coverage.html">Client Coverage</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tcpip.html">TCP/IP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="localsocket.html">Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="websockets.html">WebSockets</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="messages.html">Messaging</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/connection.html">Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/calls.html">Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/codec.html">Codec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/objects.html">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/streams.html">Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/threading.html">Threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/functions.html">Server Side Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/coverage.html">Client Coverage</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../compiling.html">Compiling kRPC</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/code-structure.html">Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/building.html">Building from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/benchmarks.html">Benchmarks</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -498,7 +515,7 @@
     
     <li class="breadcrumb-item"><a href="../communication-protocols.html" class="nav-link">Communication Protocols</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Protocol Buffers over Serial IO</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Serial IO</span></li>
   </ul>
 </nav>
 </div>
@@ -515,10 +532,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="protocol-buffers-over-serial-io">
-<h1>Protocol Buffers over Serial IO<a class="headerlink" href="#protocol-buffers-over-serial-io" title="Link to this heading">#</a></h1>
-<p>This communication protocol allows microcontrollers and other devices that communicate over a serial
-port to interact with a kRPC server, for example an Arduino.</p>
+  <section id="serial-io">
+<h1>Serial IO<a class="headerlink" href="#serial-io" title="Link to this heading">#</a></h1>
+<p>This protocol carries the <a class="reference internal" href="messages.html"><span class="doc">messages</span></a> over a serial port, for a microcontroller such
+as an Arduino.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If a client library is available for your language, you do not need to implement this protocol.</p>
@@ -531,95 +548,59 @@ RPCs, but their updates have no flow control and can fill its write buffer, as d
 </div>
 <section id="configuring-the-server">
 <h2>Configuring the Server<a class="headerlink" href="#configuring-the-server" title="Link to this heading">#</a></h2>
-<p>Unlike the TCP/IP and WebSockets protocols, the serial IO protocol is not enabled by default. To use
-it, add a new server from the in-game server configuration window and select
-<em>Protobuf over SerialIO</em> as the protocol. The configuration window allows the serial port name and
-baud rate (which defaults to 9600) to be set.</p>
+<p>To use this protocol, add a server in the server window and select <em>Protobuf over SerialIO</em> as its
+protocol. The window sets the serial port name and the baud rate, which defaults to 9600.</p>
 </section>
-<section id="sending-and-receiving-messages">
-<h2>Sending and Receiving Messages<a class="headerlink" href="#sending-and-receiving-messages" title="Link to this heading">#</a></h2>
-<p>Communication with the server is performed via Protocol Buffer messages, encoded according to the
-protobuf binary format. When sending messages to and from the server, they are prefixed with their
-size, in bytes, encoded as a Protocol Buffers varint.</p>
-<p>To send a message to the server:</p>
-<ol class="arabic simple">
-<li><p>Encode the message using the Protocol Buffers format.</p></li>
-<li><p>Get the length of the encoded message data (in bytes) and encode that as a Protocol Buffers
-varint.</p></li>
-<li><p>Write the encoded length followed by the encoded message data to the serial port.</p></li>
-</ol>
-<p>To receive a message from the server, do the reverse:</p>
-<ol class="arabic simple">
-<li><p>Read the size of the message as a Protocol Buffers encoded varint from the serial port.</p></li>
-<li><p>Decode the message size.</p></li>
-<li><p>Read message size bytes of message data from the serial port.</p></li>
-<li><p>Decode the message data.</p></li>
-</ol>
-<p>Every message is a <code class="docutils literal notranslate"><span class="pre">Message</span></code>. See <a class="reference internal" href="messages.html#communication-protocol-message"><span class="std std-ref">Messages</span></a>.</p>
+<section id="framing">
+<h2>Framing<a class="headerlink" href="#framing" title="Link to this heading">#</a></h2>
+<p>The framing is the same as for <a class="reference internal" href="tcpip.html"><span class="doc">TCP/IP</span></a>. Each message is a <code class="docutils literal notranslate"><span class="pre">Message</span></code>, prefixed with its size
+in bytes, encoded as a varint.</p>
 </section>
-<section id="connecting-to-the-server">
-<h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
-<p>There is a single serial port connection. To establish a connection, a client must do the
-following:</p>
-<ol class="arabic simple">
-<li><p>Open a connection to the serial port.</p></li>
-<li><p>Send a <code class="docutils literal notranslate"><span class="pre">Message</span></code> holding a <code class="docutils literal notranslate"><span class="pre">connection_request</span></code>, with its <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> field set to
-2. See <a class="reference internal" href="messages.html#communication-protocol-handshake"><span class="std std-ref">Connecting</span></a>.</p></li>
-<li><p>Receive a <code class="docutils literal notranslate"><span class="pre">Message</span></code> holding the server’s <code class="docutils literal notranslate"><span class="pre">connection_response</span></code>, and check that its
-<code class="docutils literal notranslate"><span class="pre">status</span></code> field is <code class="docutils literal notranslate"><span class="pre">ConnectionResponse.OK</span></code> and its <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> is 2.</p></li>
-</ol>
-<p>A serial line has no connect or disconnect. A client ends its session by sending a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code>,
-after which the server reads the next message as a <code class="docutils literal notranslate"><span class="pre">connection_request</span></code>. A
-<code class="docutils literal notranslate"><span class="pre">connection_request</span></code> sent during a session also starts a new one, as a client does when it
-resets.</p>
+<section id="sessions">
+<h2>Sessions<a class="headerlink" href="#sessions" title="Link to this heading">#</a></h2>
+<p>Open the serial port, then send the
+<a class="reference internal" href="messages.html#communication-protocol-handshake"><span class="std std-ref">connection handshake</span></a>. The server serves one session on
+the port at a time.</p>
+<p>A serial line has no connect or disconnect. A session ends with a
+<a class="reference internal" href="messages.html#communication-protocol-disconnect"><span class="std std-ref">disconnect</span></a>, after which the server reads the next
+message as a <code class="docutils literal notranslate"><span class="pre">connection_request</span></code>. A <code class="docutils literal notranslate"><span class="pre">connection_request</span></code> sent during a session also starts a
+new one.</p>
 </section>
 <section id="resetting-clients">
 <span id="communication-protocol-serialio-resetting"></span><h2>Resetting Clients<a class="headerlink" href="#resetting-clients" title="Link to this heading">#</a></h2>
 <p>A client that resets, such as an Arduino after a power cycle, can find the line in the state its
-earlier session left it in. The server ends a session whose message stalls for 3 seconds partway
-through, and drops the partial message. A client that may be resuming a line follows these rules,
-so that it can start a new session:</p>
-<ul class="simple">
-<li><p>It skips a <code class="docutils literal notranslate"><span class="pre">response</span></code> or <code class="docutils literal notranslate"><span class="pre">stream_update</span></code> while it waits for its <code class="docutils literal notranslate"><span class="pre">connection_response</span></code>, as
-those can be left over from the earlier session.</p></li>
-<li><p>It treats a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code> and the statuses <code class="docutils literal notranslate"><span class="pre">MALFORMED_MESSAGE</span></code> and <code class="docutils literal notranslate"><span class="pre">TIMEOUT</span></code> like no answer,
-as each can follow a request that landed in a stale partial message. It stays silent until its
-handshake timeout, which is more than 3 seconds, then sends the request again.</p></li>
-<li><p>It never retries after <code class="docutils literal notranslate"><span class="pre">DENIED</span></code> or <code class="docutils literal notranslate"><span class="pre">WRONG_PROTOCOL_VERSION</span></code>.</p></li>
-<li><p>It keeps reading <code class="docutils literal notranslate"><span class="pre">connection_response</span></code> messages until the first <code class="docutils literal notranslate"><span class="pre">response</span></code> of the session.
-Retries queue on the line while the server is not reading, such as during a scene load, and the
-server answers each with a new session.</p></li>
-</ul>
+earlier session left it in. The server ends a session whose message stalls for 3 seconds partway,
+and drops the partial message. The client specification states how a client resumes a line. See
+<a class="reference internal" href="../client-spec/connection.html"><span class="doc">Connection</span></a>.</p>
 <p>A server with “Auto-accept new clients” turned off answers a connection request only once the player
 approves it. A client of such a server connects with no handshake timeout, so it recovers from a
 stale partial message only by a manual reset.</p>
 </section>
-<section id="invoking-remote-procedures">
-<h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
-<p>See <a class="reference internal" href="messages.html"><span class="doc">Messaging Protocol</span></a>.</p>
-</section>
 <section id="buffering-and-data-rates">
 <span id="communication-protocol-serialio-buffering"></span><h2>Buffering and Data Rates<a class="headerlink" href="#buffering-and-data-rates" title="Link to this heading">#</a></h2>
 <p>A serial port carries data far more slowly than the game produces it. At the default 9600 baud it
-carries roughly a thousand bytes per second. The server therefore buffers up to a megabyte of data
-in each direction, and the two directions behave differently when their buffer fills:</p>
+carries roughly a thousand bytes per second. The server buffers up to a megabyte of data in each
+direction:</p>
 <ul class="simple">
-<li><p>Data received from the port is buffered until the game reads it. When the buffer fills, the
-server stops reading from the port until the game catches up. The data is kept, and the port
-carries it more slowly.</p></li>
-<li><p>Data written by the game is buffered until the port has sent it. Apart from the start and end
-of each session, the game writes responses. This buffer fills when a client sends requests faster
-than it reads their responses. The server then drops the connection and stops. It can be started
-again from the in-game configuration window.</p></li>
+<li><p>Data received from the port waits in its buffer until the game reads it. A full buffer pauses
+reading from the port, and no data is lost.</p></li>
+<li><p>Data written by the game waits in its buffer until the port has sent it. The buffer fills when a
+client sends requests faster than it reads their responses. The server then drops the session
+and stops, and is started again from the server window.</p></li>
 </ul>
-<p>To keep the write buffer from filling, read each response before sending the next request. A higher
-baud rate moves more data through the port.</p>
+<p>To keep the write buffer from filling, read each response before sending the next request.</p>
 </section>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
-<p>The following Python code connects to a server on serial port <code class="docutils literal notranslate"><span class="pre">/dev/ttyUSB0</span></code> using the name
-“Jeb”. It then invokes the <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> RPC, receives and decodes the result, and prints out
-the server version number from the response. Finally it ends the session with a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code>.</p>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This example shows the protocol, and omits much of the behavior a client library needs, such as
+handling errors and failed connections. A client library should
+implement the <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a> in its entirety.</p>
+</div>
+<p>The following script connects to a server on the serial port <code class="docutils literal notranslate"><span class="pre">/dev/ttyUSB0</span></code> with the name
+“Example”, calls <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> and prints the result. It then ends the session with a
+<code class="docutils literal notranslate"><span class="pre">disconnect</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">serial</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.decoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_DecodeVarint</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.encoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_VarintEncoder</span>
@@ -671,7 +652,7 @@ the server version number from the response. Finally it ends the session with a 
 <span class="c1"># Send a connection request</span>
 <span class="n">message</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">()</span>
 <span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Jeb"</span>
+<span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Example"</span>
 <span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
 <span class="c1"># Receive the connection response</span>
@@ -712,7 +693,7 @@ the server version number from the response. Finally it ends the session with a 
 <span class="c1"># Print out the Status message</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
 
-<span class="c1"># End the session with a disconnect, which is how the server sees it end on a serial port</span>
+<span class="c1"># End the session with a disconnect, as a serial line has no close</span>
 <span class="n">disconnect</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Disconnect</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="n">KRPC</span><span class="o">.</span><span class="n">Disconnect</span><span class="o">.</span><span class="n">CLOSED</span><span class="p">)</span>
 <span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span><span class="n">disconnect</span><span class="o">=</span><span class="n">disconnect</span><span class="p">))</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -737,7 +718,7 @@ the server version number from the response. Finally it ends the session with a 
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Protocol Buffers over WebSockets</p>
+        <p class="prev-next-title">WebSockets</p>
       </div>
     </a>
     <a class="right-next"
@@ -745,7 +726,7 @@ the server version number from the response. Finally it ends the session with a 
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Messaging Protocol</p>
+        <p class="prev-next-title">Messaging</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -769,12 +750,11 @@ the server version number from the response. Finally it ends the session with a 
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-server">Configuring the Server</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sending-and-receiving-messages">Sending and Receiving Messages</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#framing">Framing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sessions">Sessions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#resetting-clients">Resetting Clients</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#invoking-remote-procedures">Invoking Remote Procedures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#buffering-and-data-rates">Buffering and Data Rates</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
 </ul>
   </nav></div>
 

@@ -6,15 +6,6 @@ KRPC
 ====
 
 
-
-
-
-
-
-
-
-
-
 Main kRPC service, used by clients to interact with basic server functionality.
 
 
@@ -65,26 +56,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
    
-
-
-
-
-.. function:: krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, krpc_KRPC_Expression_t function)
-
-   Add a stream of the value a server side function computes on each update.
-
-   :Parameters:
-
-
-
-   
-
-   .. note::
-
-      Each call adds a new stream, with values of the type given by
-      :func:`krpc_KRPC_Expression_ReturnType`. Any exception from the function ends the
-      stream, including ``KRPC.ObjectNotLoadedException``. A procedure that pauses
-      execution to resume on a later tick produces an error on the stream.
 
 
 
@@ -151,47 +122,6 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 
 
-.. function:: krpc_error_t krpc_KRPC_CompileFunction(krpc_connection_t connection, krpc_KRPC_Expression_t function)
-
-   Compile a server side function, so that running, streaming or adding it as an
-   event does not compile it.
-
-   :Parameters:
-
-
-
-   
-
-   .. note::
-
-      Compiling a large function takes time on the game's main thread. Compiling it
-      in advance keeps that time out of its first run.
-
-
-
-
-.. function:: krpc_error_t krpc_KRPC_RunFunction(krpc_connection_t connection, krpc_bytes_t * returnValue, bool * returnValueIsNull, krpc_KRPC_Expression_t function, const krpc_list_nullable_bytes_t * arguments)
-
-   Run a server side function once, within a single physics tick, and return
-   the value it produces.
-
-   :Parameters:
-
-    * **function** -- The function to run.
-    * **arguments** -- The encoded arguments, one per parameter.
-
-   :returns: The encoded value of the function, or no bytes for a function with no value.
-   
-
-   .. note::
-
-      The arguments are encoded at the types given by :func:`krpc_KRPC_Expression_ParameterTypes`.
-      Throws an exception if a procedure the function calls pauses execution, and the
-      effects up to the pause remain.
-
-
-
-
 .. function:: krpc_error_t krpc_KRPC_GameScene(krpc_connection_t connection, krpc_KRPC_GameScene_t * returnValue)
 .. function:: krpc_error_t krpc_KRPC_set_GameScene(krpc_connection_t connection, krpc_KRPC_GameScene_t value)
 
@@ -230,6 +160,144 @@ Main kRPC service, used by clients to interact with basic server functionality.
    .. note::
 
       Increases once a game load, quickload, revert or scene change has finished.
+
+
+
+
+.. function:: krpc_error_t krpc_KRPC_AddStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, const krpc_schema_ProcedureCall * call)
+
+   Add a streaming request and return its identifier.
+
+   :Parameters:
+
+
+
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement streams. Use the streams of your
+      client library instead. Calling this directly while using a client library has
+      undefined behavior.
+
+
+
+
+.. function:: krpc_error_t krpc_KRPC_AddFunctionStream(krpc_connection_t connection, krpc_schema_Stream * returnValue, krpc_KRPC_Expression_t function)
+
+   Add a stream of the value a server side function computes on each update.
+
+   :Parameters:
+
+
+
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement server side functions. Use the
+      server side functions of your client library instead. Calling this directly while
+      using a client library has undefined behavior.
+
+
+
+
+.. function:: krpc_error_t krpc_KRPC_AddEvent(krpc_connection_t connection, krpc_schema_Event * returnValue, krpc_KRPC_Expression_t function)
+
+   Create an event from a server side function that evaluates to a boolean value.
+
+   :Parameters:
+
+
+
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement events. Use the events of your
+      client library instead. Calling this directly while using a client library has
+      undefined behavior.
+
+
+
+
+.. function:: krpc_error_t krpc_KRPC_RunFunction(krpc_connection_t connection, krpc_bytes_t * returnValue, bool * returnValueIsNull, krpc_KRPC_Expression_t function, const krpc_list_nullable_bytes_t * arguments)
+
+   Run a server side function once, within a single physics tick, and return
+   the value it produces.
+
+   :Parameters:
+
+    * **function** -- The function to run.
+    * **arguments** -- The encoded arguments, one per parameter.
+
+   :returns: The encoded value of the function, or no bytes for a function with no value.
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement server side functions. Use the
+      server side functions of your client library instead. Calling this directly while
+      using a client library has undefined behavior.
+
+
+
+
+.. function:: krpc_error_t krpc_KRPC_CompileFunction(krpc_connection_t connection, krpc_KRPC_Expression_t function)
+
+   Compile a server side function, so that running, streaming or adding it as an
+   event does not compile it.
+
+   :Parameters:
+
+
+
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement server side functions. Use the
+      server side functions of your client library instead. Calling this directly while
+      using a client library has undefined behavior.
+
+
+
+
+.. function:: krpc_error_t krpc_KRPC_SetStreamRate(krpc_connection_t connection, uint64_t id, float rate)
+
+   Set the update rate for a stream in Hz.
+
+   :Parameters:
+
+
+
+
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement streams. Use the streams of your
+      client library instead. Calling this directly while using a client library has
+      undefined behavior.
+
+
+
+
+.. function:: krpc_error_t krpc_KRPC_RemoveStream(krpc_connection_t connection, uint64_t id)
+
+   Remove a streaming request.
+
+   :Parameters:
+
+
+
+   
+
+   .. note::
+
+      Client libraries call this procedure to implement streams. Use the streams of your
+      client library instead. Calling this directly while using a client library has
+      undefined behavior.
 
 
 

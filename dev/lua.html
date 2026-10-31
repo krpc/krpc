@@ -44,6 +44,7 @@
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'lua';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -59,7 +60,7 @@
     <link rel="icon" href="_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Lua Client" href="lua/client.html" />
+    <link rel="next" title="KRPC API" href="lua/api/krpc.html" />
     <link rel="prev" title="Debug" href="java/api/debug/debug.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
@@ -428,7 +429,6 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="python/client.html">Python Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="python/api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="python/api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="python/api/krpc/expressions.html">Expressions</a></li>
@@ -530,7 +530,6 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="csharp/client.html">C# Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="csharp/api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="csharp/api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="csharp/api/krpc/expressions.html">Expressions</a></li>
@@ -632,7 +631,6 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="cpp/client.html">C++ Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="cpp/api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="cpp/api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp/api/krpc/expressions.html">Expressions</a></li>
@@ -734,7 +732,6 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="cnano.html">C-nano</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/client.html">C-nano Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="cnano/api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="cnano/api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cnano/api/krpc/expressions.html">Expressions</a></li>
@@ -836,7 +833,6 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="java/client.html">Java Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="java/api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="java/api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="java/api/krpc/expressions.html">Expressions</a></li>
@@ -938,7 +934,6 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a aria-current="page" class="current reference internal" href="#">Lua</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/client.html">Lua Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="lua/api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="lua/api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lua/api/krpc/expressions.html">Expressions</a></li>
@@ -1102,120 +1097,343 @@
                   
   <section id="lua">
 <h1>Lua<a class="headerlink" href="#lua" title="Link to this heading">#</a></h1>
+<p>This guide describes how to install the Lua client, and the features it provides. The
+<a class="reference internal" href="#lua-client-reference"><span class="std std-ref">Client API Reference</span></a> describes each function and class.</p>
+<section id="installing-the-library">
+<h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Link to this heading">#</a></h2>
+<p>The library can be found on <a class="reference external" href="https://luarocks.org/modules/djungelorm/krpc">LuaRocks</a> or
+<a class="reference external" href="https://github.com/krpc/krpc/releases">downloaded from GitHub</a>. It runs on Lua 5.1 to 5.4 and
+LuaJIT.</p>
+<p>To install it and its dependencies using luarocks:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>luarocks<span class="w"> </span>install<span class="w"> </span>krpc
+</pre></div>
+</div>
+</section>
+<section id="connecting-to-the-server">
+<h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
+<p>The game must be running with the server started. <a class="reference internal" href="getting-started.html#getting-started-server"><span class="std std-ref">The Server Plugin</span></a> in the
+getting started guide shows how to install and start it.</p>
+<p>The client connects over TCP/IP or over a local socket. Each server in the server window uses one
+protocol, and accepts connections over that protocol only. Pick the protocol when you add the
+server, and connect with the matching function.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A server with “Auto-accept new clients” turned off answers only once the player approves the
+connection in game. The connection fails after 5 seconds by default. Pass <code class="docutils literal notranslate"><span class="pre">false</span></code> as the
+<code class="docutils literal notranslate"><span class="pre">handshake_timeout</span></code> to wait indefinitely for the player.</p>
+</div>
+<section id="over-tcp-ip">
+<h3>Over TCP/IP<a class="headerlink" href="#over-tcp-ip" title="Link to this heading">#</a></h3>
+<p>Select “Protobuf over TCP/IP” as the server’s protocol. <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">connect()</span></code></a> connects to it, and
+returns a <a class="reference internal" href="#krpc.Client" title="krpc.Client"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Client</span></code></a>. You make every call through this object. The following connects to
+a server with the default settings, address <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and port 50000, and prints its version:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="nf">get_status</span><span class="p">().</span><span class="nv">version</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">connect()</span></code></a> also takes a name for the connection, and the address and port of the server.
+These match the address and port shown in the server window. The name appears in the server window
+in the game:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">'My Example Program'</span><span class="p">,</span><span class="w"> </span><span class="s1">'192.168.1.10'</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="nf">get_status</span><span class="p">().</span><span class="nv">version</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>TCP/IP works over a network, so your program can run on a different machine from the game.</p>
+</section>
+<section id="over-a-local-socket">
+<h3>Over a Local Socket<a class="headerlink" href="#over-a-local-socket" title="Link to this heading">#</a></h3>
+<p>Select “Protobuf over local socket” as the server’s protocol. <a class="reference internal" href="#krpc.connect_local" title="krpc.connect_local"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">connect_local()</span></code></a> connects
+to it, and returns a <a class="reference internal" href="#krpc.Client" title="krpc.Client"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Client</span></code></a> as <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">connect()</span></code></a> does. The following connects to
+a server with the default settings, at the default socket path for your platform, and prints its
+version:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect_local</span><span class="p">(</span><span class="s1">'My Example Program'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="nf">get_status</span><span class="p">().</span><span class="nv">version</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#krpc.connect_local" title="krpc.connect_local"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">connect_local()</span></code></a> also takes a <code class="docutils literal notranslate"><span class="pre">path</span></code>, for a server with another socket path. The path
+matches the one shown in the server window.</p>
+<p>A local socket works only on the machine running the game. It has lower overhead than TCP/IP, so
+it is faster.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A local socket needs luasocket’s <code class="docutils literal notranslate"><span class="pre">socket.unix</span></code> module, which luasocket builds on Linux and
+macOS. On Windows, connect with <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">connect()</span></code></a> instead.</p>
+</div>
+</section>
+<section id="closing-the-connection">
+<h3>Closing the Connection<a class="headerlink" href="#closing-the-connection" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="#krpc.Client.close" title="krpc.Client.close"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">close()</span></code></a> closes a connection:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">'My Example Program'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">conn</span><span class="p">.</span><span class="py">krpc</span><span class="p">.</span><span class="nf">get_status</span><span class="p">().</span><span class="nv">version</span><span class="p">)</span>
+<span class="nv">conn</span><span class="p">:</span><span class="nf">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="calling-remote-procedures">
+<h2>Calling Remote Procedures<a class="headerlink" href="#calling-remote-procedures" title="Link to this heading">#</a></h2>
+<p>The server provides <em>procedures</em> for your program to call, grouped into <em>services</em>.</p>
+<p>The following gets the active vessel from <a class="reference internal" href="lua/api/space-center/space-center.html#SpaceCenter.SpaceCenter.active_vessel" title="SpaceCenter.SpaceCenter.active_vessel"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">active_vessel</span></code></a>, an object
+of type <a class="reference internal" href="lua/api/space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Vessel</span></code></a>. It sets the vessel’s name, then prints its altitude:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
+
+<span class="nv">vessel</span><span class="p">.</span><span class="py">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'My Vessel'</span>
+
+<span class="kd">local</span><span class="w"> </span><span class="nv">flight_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">:</span><span class="nf">flight</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">flight_info</span><span class="p">.</span><span class="py">mean_altitude</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Each service is a field of the connection, such as <code class="docutils literal notranslate"><span class="pre">conn.space_center</span></code> for the <a class="reference internal" href="lua/api/space-center/space-center.html#module-SpaceCenter" title="SpaceCenter"><code class="xref lua lua-mod docutils literal notranslate"><span class="pre">SpaceCenter</span></code></a>
+service. A property is a field, as in <code class="docutils literal notranslate"><span class="pre">vessel.name</span></code>. Call a method of an object with <code class="docutils literal notranslate"><span class="pre">:</span></code>, as
+in <code class="docutils literal notranslate"><span class="pre">vessel:flight()</span></code>, and a procedure of a service with <code class="docutils literal notranslate"><span class="pre">.</span></code>, as in
+<code class="docutils literal notranslate"><span class="pre">conn.krpc.get_status()</span></code>.</p>
+</section>
+<section id="handling-errors">
+<h2>Handling Errors<a class="headerlink" href="#handling-errors" title="Link to this heading">#</a></h2>
+<p>A procedure that fails on the server raises a Lua error in your program. The following catches the
+error from loading a save that does not exist, using <code class="docutils literal notranslate"><span class="pre">pcall</span></code>:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">ok</span><span class="p">,</span><span class="w"> </span><span class="nv">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">pcall</span><span class="p">(</span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">load</span><span class="p">,</span><span class="w"> </span><span class="s1">'missing'</span><span class="p">)</span>
+<span class="kr">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="nv">ok</span><span class="w"> </span><span class="kr">then</span>
+<span class="w">  </span><span class="nb">print</span><span class="p">(</span><span class="s1">'Failed to load the save: '</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">err</span><span class="p">)</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+<p>The error is a string describing the failure:</p>
+<ul class="simple">
+<li><p>A procedure that fails on the server raises an error whose message starts with the server’s
+exception, as in <code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException:</span> <span class="pre">Failed</span> <span class="pre">to</span> <span class="pre">load</span> <span class="pre">missing</span></code>.</p></li>
+<li><p>A failed connection attempt raises an error. When the server refuses the connection, the message
+names the status it gave, such as <code class="docutils literal notranslate"><span class="pre">DENIED</span></code>. When the server ends the connection, the message
+names the reason, such as <code class="docutils literal notranslate"><span class="pre">SERVER_STOPPED</span></code>.</p></li>
+<li><p>A call made once the connection has closed or failed raises an error.</p></li>
+</ul>
+</section>
+<section id="remote-objects">
+<h2>Remote Objects<a class="headerlink" href="#remote-objects" title="Link to this heading">#</a></h2>
+<p>Many procedures return an object identifying something in the game, such as a vessel or a part.
+The object holds no copy of the game’s state. It is just a reference to it. Each call through it
+reads the game as it is now:</p>
+<div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'krpc'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">socket</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">'socket'</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">flight_info</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">:</span><span class="nf">flight</span><span class="p">()</span>
+
+<span class="c1">-- Each read gets the current altitude from the game</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">flight_info</span><span class="p">.</span><span class="py">mean_altitude</span><span class="p">)</span>
+<span class="nv">socket</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">flight_info</span><span class="p">.</span><span class="py">mean_altitude</span><span class="p">)</span>
+
+<span class="c1">-- Two objects for the same vessel are equal</span>
+<span class="nb">print</span><span class="p">(</span><span class="nv">vessel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Two objects for the same thing in the game compare equal with <code class="docutils literal notranslate"><span class="pre">==</span></code>.</p>
+<p>Once the thing an object identifies is destroyed, such as a part that explodes, each call through
+it raises an error naming <a class="reference internal" href="lua/api/krpc/krpc.html#KRPC.ObjectDestroyedException" title="KRPC.ObjectDestroyedException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code></a>.</p>
+<p>An object for a vessel or a part keeps working when you load a save, quickload or revert, and
+then reads the loaded game. Other objects depend on what they identify. A maneuver node, for
+example, is destroyed by a load.</p>
+<p>A vessel far from the active vessel is <em>unloaded</em>, and the game keeps no parts for it. The vessel
+itself reads normally, but a call on one of its parts raises an error naming
+<a class="reference internal" href="lua/api/krpc/krpc.html#KRPC.ObjectNotLoadedException" title="KRPC.ObjectNotLoadedException"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">KRPC.ObjectNotLoadedException</span></code></a>. The part works again once the vessel comes back into range.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="user-guide/object-lifetime.html"><span class="doc">Object Lifetime</span></a> describes how each kind of object behaves in more
+detail.</p>
+</div>
+</section>
+<section id="streams-and-events">
+<h2>Streams and Events<a class="headerlink" href="#streams-and-events" title="Link to this heading">#</a></h2>
+<p>The Lua client has no streams or events. Read a value by calling its procedure in a loop instead.</p>
+</section>
+<section id="deprecated-members">
+<h2>Deprecated Members<a class="headerlink" href="#deprecated-members" title="Link to this heading">#</a></h2>
+<p>A member of a service can be deprecated, when a newer member replaces it. A deprecated member
+still works, but may be removed in a future release, so move to its replacement.</p>
+<p>The API reference marks it as deprecated, and names the replacement.</p>
+</section>
+<section id="service-stubs">
+<h2>Service Stubs<a class="headerlink" href="#service-stubs" title="Link to this heading">#</a></h2>
+<p>The Lua client has no pre-generated service stubs. When you connect, it builds every service from
+the service definitions the server sends. The services match the server you connect to, whatever
+its version, including services added by other mods.</p>
+</section>
+<section id="client-api-reference">
+<span id="lua-client-reference"></span><h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
+<dl class="lua function" id="module-krpc">
+<dt class="sig sig-object lua" id="krpc.connect">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">name=''</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">address='127.0.0.1'</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">port=50000</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">handshake_timeout=5</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
+<dd><p>Connects to a kRPC server, and returns a <a class="reference internal" href="#krpc.Client" title="krpc.Client"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Client</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – A name for the connection, shown in the server window in the game.</p></li>
+<li><p><strong>address</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The address of the server, as a host name or an IP address. Defaults to
+<code class="docutils literal notranslate"><span class="pre">'127.0.0.1'</span></code>.</p></li>
+<li><p><strong>port</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The port of the server. Defaults to 50000.</p></li>
+<li><p><strong>handshake_timeout</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – How many seconds to wait for the server to accept the
+connection. Defaults to 5. <code class="docutils literal notranslate"><span class="pre">false</span></code> waits indefinitely, such as for a
+server that asks the player to approve each connection.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Raises an error if the connection fails or the server refuses it, and for a timeout that is not
+positive.</p>
+</dd></dl>
+
+<dl class="lua function">
+<dt class="sig sig-object lua" id="krpc.connect_local">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">name=''</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">path</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">handshake_timeout=5</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect_local" title="Link to this definition">#</a></dt>
+<dd><p>Connects to a kRPC server on the same machine over a local socket, and returns a
+<a class="reference internal" href="#krpc.Client" title="krpc.Client"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Client</span></code></a>. The server must use the local socket protocol.</p>
+<p>This needs luasocket’s <code class="docutils literal notranslate"><span class="pre">socket.unix</span></code> module, which luasocket builds on Linux and macOS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – A name for the connection, shown in the server window in the game.</p></li>
+<li><p><strong>path</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The path of the server’s socket, shown in the server window in the game.
+Defaults to the path the server uses unless it was configured with another.</p></li>
+<li><p><strong>handshake_timeout</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – As for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">connect()</span></code></a>.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Raises an error as <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">connect()</span></code></a> does, if <code class="docutils literal notranslate"><span class="pre">socket.unix</span></code> is not available, and if no
+<code class="docutils literal notranslate"><span class="pre">path</span></code> is given and the default path cannot be found.</p>
+</dd></dl>
+
+<dl class="lua function">
+<dt class="sig sig-object lua" id="krpc.get_object_id">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">get_object_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">obj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.get_object_id" title="Link to this definition">#</a></dt>
+<dd><p>The identifier of a remote object on the server, e.g. to pass to
+<a class="reference internal" href="lua/api/krpc/expressions.html#KRPC.Expression.constant_object" title="KRPC.Expression.constant_object"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">constant_object()</span></code></a>. Raises an error if the object is <code class="docutils literal notranslate"><span class="pre">nil</span></code> or
+<a class="reference internal" href="#krpc.Types.none" title="krpc.Types.none"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">Types.none</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> – The remote object.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua class">
+<dt class="sig sig-object lua" id="krpc.Client">
+<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">Client</span></span><a class="headerlink" href="#krpc.Client" title="Link to this definition">#</a></dt>
+<dd><p>A connection to the server, with a field for each of the server’s services. Obtain one by
+calling <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">connect()</span></code></a> or <a class="reference internal" href="#krpc.connect_local" title="krpc.connect_local"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">connect_local()</span></code></a>.</p>
+<dl class="lua method">
+<dt class="sig sig-object lua" id="krpc.Client.close">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.Client.close" title="Link to this definition">#</a></dt>
+<dd><p>Closes the connection. Closing a connection that is already closed does nothing.</p>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="krpc.krpc.Client.krpc">
+<span class="sig-name descname"><span class="pre">krpc</span></span><span class="property"><span class="pre">:</span> </span><a class="headerlink" href="#krpc.krpc.Client.krpc" title="Link to this definition">#</a></dt>
+<dd><p>The <a class="reference internal" href="lua/api/krpc/krpc.html#module-KRPC" title="KRPC"><code class="xref lua lua-mod docutils literal notranslate"><span class="pre">KRPC</span></code></a> service, providing the server’s basic functionality. Each of the server’s
+other services is a field too, such as <code class="docutils literal notranslate"><span class="pre">space_center</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.Types.none">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">Types.</span></span><span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#krpc.Types.none" title="Link to this definition">#</a></dt>
+<dd><p>The value that stands for null, in an argument or a result. Load it with
+<code class="docutils literal notranslate"><span class="pre">local</span> <span class="pre">Types</span> <span class="pre">=</span> <span class="pre">require</span> <span class="pre">'krpc.types'</span></code>. A procedure whose result is null returns it, and <code class="docutils literal notranslate"><span class="pre">==</span></code>
+tests for it.</p>
+</dd></dl>
+
+<section id="numeric-limits">
+<h3>Numeric Limits<a class="headerlink" href="#numeric-limits" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">krpc.limits</span></code> module names the extremes of the numeric types kRPC carries over the wire.
+A service can declare one of these limits as a parameter’s default value, and it is then
+documented as the constant here.</p>
+<p>The minimum of an unsigned type is <code class="docutils literal notranslate"><span class="pre">0</span></code>, so it has no constant.</p>
+<p>From Lua 5.3 on, a 64-bit value is an exact integer. Lua has no unsigned integer type. A
+<code class="docutils literal notranslate"><span class="pre">uint64</span></code> above <span class="math notranslate nohighlight">\(2^{63} - 1\)</span> wraps to a negative integer, so
+<a class="reference internal" href="#krpc.limits.UINT64_MAX" title="krpc.limits.UINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">UINT64_MAX</span></code></a> is <code class="docutils literal notranslate"><span class="pre">-1</span></code>. <code class="docutils literal notranslate"><span class="pre">math.ult</span></code> compares two such values.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In Lua 5.1, 5.2 and LuaJIT every number is a double, which holds an integer exactly up to
+<span class="math notranslate nohighlight">\(2^{53}\)</span>. <a class="reference internal" href="#krpc.limits.SINT64_MAX" title="krpc.limits.SINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">SINT64_MAX</span></code></a> and <a class="reference internal" href="#krpc.limits.UINT64_MAX" title="krpc.limits.UINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">UINT64_MAX</span></code></a> round up
+to <span class="math notranslate nohighlight">\(2^{63}\)</span> and <span class="math notranslate nohighlight">\(2^{64}\)</span>. A 64-bit value from the server arrives as the nearest
+double.</p>
+</div>
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.DOUBLE_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">DOUBLE_MAX</span></span><a class="headerlink" href="#krpc.limits.DOUBLE_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="krpc.limits.DOUBLE_LOWEST">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">DOUBLE_LOWEST</span></span><a class="headerlink" href="#krpc.limits.DOUBLE_LOWEST" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative finite 64-bit float.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.FLOAT_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">FLOAT_MAX</span></span><a class="headerlink" href="#krpc.limits.FLOAT_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="krpc.limits.FLOAT_LOWEST">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">FLOAT_LOWEST</span></span><a class="headerlink" href="#krpc.limits.FLOAT_LOWEST" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative finite 32-bit float.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.SINT32_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">SINT32_MAX</span></span><a class="headerlink" href="#krpc.limits.SINT32_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="krpc.limits.SINT32_MIN">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">SINT32_MIN</span></span><a class="headerlink" href="#krpc.limits.SINT32_MIN" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative 32-bit signed integer.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.SINT64_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">SINT64_MAX</span></span><a class="headerlink" href="#krpc.limits.SINT64_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="krpc.limits.SINT64_MIN">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">SINT64_MIN</span></span><a class="headerlink" href="#krpc.limits.SINT64_MIN" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative 64-bit signed integer.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.UINT32_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">UINT32_MAX</span></span><a class="headerlink" href="#krpc.limits.UINT32_MAX" title="Link to this definition">#</a></dt>
+<dd><p>The largest 32-bit unsigned integer.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.UINT64_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">UINT64_MAX</span></span><a class="headerlink" href="#krpc.limits.UINT64_MAX" title="Link to this definition">#</a></dt>
+<dd><p>The largest 64-bit unsigned integer.</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="lua/client.html">Lua Client</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/client.html#installing">Installing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/client.html#getting-started">Getting Started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/client.html#interacting-with-the-server">Interacting with the Server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/client.html#streams-and-events">Streams and Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/client.html#reference">Reference</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/client.html#numeric-limits">Numeric Limits</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="lua/api/krpc.html">KRPC API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/krpc/krpc.html">KRPC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/krpc/expressions.html">Expressions</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="lua/api/krpc.html">KRPC API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="lua/api/stdlib.html">Standard Library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lua/api/space-center.html">SpaceCenter API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/space-center.html">SpaceCenter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/vessel.html">Vessel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/stage.html">Stage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/editor.html">Editor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/celestial-body.html">CelestialBody</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/flight.html">Flight</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/orbit.html">Orbit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/closest-approach.html">Closest Approach</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/control.html">Control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/comms.html">Communications</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/parts.html">Parts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/resources.html">Resources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/node.html">Node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/reference-frame.html">ReferenceFrame</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/auto-pilot.html">AutoPilot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/camera.html">Camera</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/waypoints.html">Waypoints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/contracts.html">Contracts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/geometry-types.html">Geometry Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/space-center/alarms.html">Alarms</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="lua/api/drawing.html">Drawing API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/drawing.html">Drawing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/arc.html">Arc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/box.html">Box</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/circle.html">Circle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/image.html">Image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/line.html">Line</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/map-marker.html">MapMarker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/navball-marker.html">NavballMarker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/orbit-path.html">OrbitPath</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/point.html">Point</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/polygon.html">Polygon</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/polyline.html">Polyline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/sphere.html">Sphere</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/drawing/text.html">Text</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="lua/api/ui.html">User Interface API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/ui.html">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/canvas.html">Canvas</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/panel.html">Panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/text.html">Text</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/button.html">Button</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/input-field.html">InputField</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/toggle.html">Toggle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/toggle-group.html">Toggle Group</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/slider.html">Slider</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/dropdown.html">Dropdown</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/image.html">Image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/scroll-view.html">Scroll View</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/layout.html">Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/layout-element.html">Layout Element</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/size-fitter.html">Size Fitter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/ui/rect-transform.html">Rect Transform</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="lua/api/infernal-robotics.html">InfernalRobotics API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/infernal-robotics/servo-group.html">ServoGroup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/infernal-robotics/servo.html">Servo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/infernal-robotics.html#example">Example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="lua/api/kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/kerbal-alarm-clock.html#example">Example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="lua/api/remote-tech.html">RemoteTech API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/remote-tech/remote-tech.html">RemoteTech</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/remote-tech/comms.html">Comms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/remote-tech/antenna.html">Antenna</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/remote-tech.html#example">Example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="lua/api/lidar.html">LIDAR API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/lidar/lidar.html">LIDAR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/lidar/laser.html">Laser</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="lua/api/docking-camera.html">Docking Camera API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/docking-camera/docking-camera.html">DockingCamera</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/docking-camera/camera.html">Camera</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="lua/api/debug.html">Debug API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/api/debug/debug.html">Debug</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="lua/api/space-center.html">SpaceCenter API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lua/api/drawing.html">Drawing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lua/api/ui.html">User Interface API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lua/api/infernal-robotics.html">InfernalRobotics API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lua/api/kerbal-alarm-clock.html">Kerbal Alarm Clock API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lua/api/remote-tech.html">RemoteTech API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lua/api/lidar.html">LIDAR API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lua/api/docking-camera.html">Docking Camera API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lua/api/debug.html">Debug API</a></li>
 </ul>
 </div>
+</section>
 </section>
 
 
@@ -1238,11 +1456,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="lua/client.html"
+       href="lua/api/krpc.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Lua Client</p>
+        <p class="prev-next-title">KRPC API</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1256,6 +1474,35 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-library">Installing the Library</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#over-tcp-ip">Over TCP/IP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#over-a-local-socket">Over a Local Socket</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#closing-the-connection">Closing the Connection</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handling-errors">Handling Errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-objects">Remote Objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-and-events">Streams and Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-members">Deprecated Members</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#service-stubs">Service Stubs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numeric-limits">Numeric Limits</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 

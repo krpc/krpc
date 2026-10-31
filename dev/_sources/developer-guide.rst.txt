@@ -1,12 +1,13 @@
 Developer Guide
 ===============
 
-The developer guide covers writing new services, the communication protocols, and building kRPC
-from source.
+The developer guide covers writing new services, the communication protocols, the specification a
+client library follows, and working on kRPC itself.
 
 .. toctree::
    :maxdepth: 1
 
    extending
    communication-protocols
-   compiling
+   client-spec
+   krpc-development

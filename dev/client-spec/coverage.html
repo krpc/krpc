@@ -1,0 +1,3130 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Client Coverage &#8212; kRPC vdev documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=eadf7411" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
+
+    <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'client-spec/coverage';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <script src="../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/client-spec/coverage.html" />
+    <link rel="icon" href="../_static/logo-mark.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="kRPC Development" href="../krpc-development.html" />
+    <link rel="prev" title="Server Side Functions" href="functions.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo-on-light.svg" class="logo__image only-light" alt="kRPC"/>
+    <img src="../_static/logo-on-dark.svg" class="logo__image only-dark pst-js-only" alt="kRPC"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user-guide.html">
+    User Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../clients.html">
+    Clients
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../developer-guide.html">
+    Developer Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../extending.html">Extending kRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../extending/attributes.html">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/multi-tick.html">Multi-Tick RPCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/game-scenes.html">Game Scenes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/deprecation.html">Deprecating Service Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/extending-other-services.html">Extending Other Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/tcpip.html">TCP/IP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/localsocket.html">Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/websockets.html">WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/serialio.html">Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../communication-protocols/messages.html">Messaging</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connection.html">Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="calls.html">Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codec.html">Codec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="objects.html">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streams.html">Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threading.html">Threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functions.html">Server Side Functions</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Client Coverage</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/code-structure.html">Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/building.html">Building from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/benchmarks.html">Benchmarks</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../developer-guide.html" class="nav-link">Developer Guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../client-spec.html" class="nav-link">Client Specification</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Client Coverage</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="client-coverage">
+<h1>Client Coverage<a class="headerlink" href="#client-coverage" title="Link to this heading">#</a></h1>
+<p>The conformance tests run against each client in this repository. Each table below gives the
+result of a client on each requirement of a page:</p>
+<ul class="simple">
+<li><p><span class="coverage-pass">✓</span> The client passes the test.</p></li>
+<li><p><span class="coverage-fail">✗</span> The client fails the test, and the failure is recorded as a known defect.</p></li>
+<li><p><span class="coverage-partial">!</span> The client fails some of the test’s cases, or fails it over some
+protocols.</p></li>
+<li><p><span class="coverage-untested">?</span> The requirement has no test.</p></li>
+<li><p>A blank cell means the requirement does not apply to the client. It belongs to a profile the
+client does not implement, or the client lists its test as unsupported.</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table" id="id1">
+<caption><span class="caption-text">Profiles</span><a class="headerlink" href="#id1" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Client</p></th>
+<th class="head"><p>Profiles</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Python</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">callbacks</span></code>, <code class="docutils literal notranslate"><span class="pre">conditions</span></code>, <code class="docutils literal notranslate"><span class="pre">connections</span></code>, <code class="docutils literal notranslate"><span class="pre">core</span></code>, <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, <code class="docutils literal notranslate"><span class="pre">dynamic</span></code>, <code class="docutils literal notranslate"><span class="pre">error-types</span></code>, <code class="docutils literal notranslate"><span class="pre">events</span></code>, <code class="docutils literal notranslate"><span class="pre">functions</span></code>, <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">named-arguments</span></code>, <code class="docutils literal notranslate"><span class="pre">ordering</span></code>, <code class="docutils literal notranslate"><span class="pre">races</span></code>, <code class="docutils literal notranslate"><span class="pre">streams</span></code>, <code class="docutils literal notranslate"><span class="pre">tcpip</span></code>, <code class="docutils literal notranslate"><span class="pre">threads</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>C#</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">callbacks</span></code>, <code class="docutils literal notranslate"><span class="pre">conditions</span></code>, <code class="docutils literal notranslate"><span class="pre">connections</span></code>, <code class="docutils literal notranslate"><span class="pre">core</span></code>, <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, <code class="docutils literal notranslate"><span class="pre">error-types</span></code>, <code class="docutils literal notranslate"><span class="pre">events</span></code>, <code class="docutils literal notranslate"><span class="pre">function-types</span></code>, <code class="docutils literal notranslate"><span class="pre">functions</span></code>, <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">ordering</span></code>, <code class="docutils literal notranslate"><span class="pre">races</span></code>, <code class="docutils literal notranslate"><span class="pre">streams</span></code>, <code class="docutils literal notranslate"><span class="pre">tcpip</span></code>, <code class="docutils literal notranslate"><span class="pre">threads</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>C++</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">callbacks</span></code>, <code class="docutils literal notranslate"><span class="pre">conditions</span></code>, <code class="docutils literal notranslate"><span class="pre">connections</span></code>, <code class="docutils literal notranslate"><span class="pre">core</span></code>, <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, <code class="docutils literal notranslate"><span class="pre">error-types</span></code>, <code class="docutils literal notranslate"><span class="pre">events</span></code>, <code class="docutils literal notranslate"><span class="pre">function-types</span></code>, <code class="docutils literal notranslate"><span class="pre">functions</span></code>, <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">ordering</span></code>, <code class="docutils literal notranslate"><span class="pre">races</span></code>, <code class="docutils literal notranslate"><span class="pre">streams</span></code>, <code class="docutils literal notranslate"><span class="pre">tcpip</span></code>, <code class="docutils literal notranslate"><span class="pre">threads</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>C</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">core</span></code>, <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">serialio</span></code>, <code class="docutils literal notranslate"><span class="pre">tcpip</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Java</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">callbacks</span></code>, <code class="docutils literal notranslate"><span class="pre">conditions</span></code>, <code class="docutils literal notranslate"><span class="pre">connections</span></code>, <code class="docutils literal notranslate"><span class="pre">core</span></code>, <code class="docutils literal notranslate"><span class="pre">error-types</span></code>, <code class="docutils literal notranslate"><span class="pre">events</span></code>, <code class="docutils literal notranslate"><span class="pre">functions</span></code>, <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">ordering</span></code>, <code class="docutils literal notranslate"><span class="pre">races</span></code>, <code class="docutils literal notranslate"><span class="pre">streams</span></code>, <code class="docutils literal notranslate"><span class="pre">tcpip</span></code>, <code class="docutils literal notranslate"><span class="pre">threads</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Lua</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">connections</span></code>, <code class="docutils literal notranslate"><span class="pre">core</span></code>, <code class="docutils literal notranslate"><span class="pre">defaults</span></code>, <code class="docutils literal notranslate"><span class="pre">dynamic</span></code>, <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>, <code class="docutils literal notranslate"><span class="pre">ordering</span></code>, <code class="docutils literal notranslate"><span class="pre">tcpip</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="coverage table" id="id2">
+<caption><span class="caption-text">Connection</span><a class="headerlink" href="#id2" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Requirement</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>C++</p></th>
+<th class="head"><p>C</p></th>
+<th class="head"><p>Java</p></th>
+<th class="head"><p>Lua</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-tcpip"><span class="std std-ref">connection-tcpip</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-default-address"><span class="std std-ref">connection-default-address</span></a></p></th>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-unreachable"><span class="std std-ref">connection-unreachable</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-unknown-host"><span class="std std-ref">connection-unknown-host</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-localsocket"><span class="std std-ref">connection-localsocket</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-localsocket-default-path"><span class="std std-ref">connection-localsocket-default-path</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-localsocket-fallback-path"><span class="std std-ref">connection-localsocket-fallback-path</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-localsocket-path-too-long"><span class="std std-ref">connection-localsocket-path-too-long</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-serialio"><span class="std std-ref">connection-serialio</span></a></p></th>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-websockets"><span class="std std-ref">connection-websockets</span></a></p></th>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-name"><span class="std std-ref">connection-handshake-name</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-version"><span class="std std-ref">connection-handshake-version</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-wrong-version"><span class="std std-ref">connection-handshake-wrong-version</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-refused"><span class="std std-ref">connection-handshake-refused</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-unknown-status"><span class="std std-ref">connection-handshake-unknown-status</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-disconnect"><span class="std std-ref">connection-handshake-disconnect</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-unexpected-message"><span class="std std-ref">connection-handshake-unexpected-message</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-lost"><span class="std std-ref">connection-handshake-lost</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-failed-write"><span class="std std-ref">connection-handshake-failed-write</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-malformed-size"><span class="std std-ref">connection-handshake-malformed-size</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-timeout"><span class="std std-ref">connection-handshake-timeout</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-handshake-timeout-values"><span class="std std-ref">connection-handshake-timeout-values</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-message-split-across-reads"><span class="std std-ref">connection-message-split-across-reads</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-websockets-fragments"><span class="std std-ref">connection-websockets-fragments</span></a></p></th>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-unknown-message"><span class="std std-ref">connection-unknown-message</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-wrong-direction"><span class="std std-ref">connection-wrong-direction</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-malformed-message"><span class="std std-ref">connection-malformed-message</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-malformed-size"><span class="std std-ref">connection-malformed-size</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-size-over-32-bits"><span class="std std-ref">connection-size-over-32-bits</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-stall"><span class="std std-ref">connection-stall</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-stall-while-idle"><span class="std std-ref">connection-stall-while-idle</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-stall-timeout-values"><span class="std std-ref">connection-stall-timeout-values</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-close"><span class="std std-ref">connection-close</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-websockets-close"><span class="std std-ref">connection-websockets-close</span></a></p></th>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-close-wait-limit"><span class="std std-ref">connection-close-wait-limit</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-close-interrupted"><span class="std std-ref">connection-close-interrupted</span></a></p></th>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-close-twice"><span class="std std-ref">connection-close-twice</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-lost"><span class="std std-ref">connection-lost</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-lost-pending-calls"><span class="std std-ref">connection-lost-pending-calls</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-failed-write"><span class="std std-ref">connection-failed-write</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-call-after-end"><span class="std std-ref">connection-call-after-end</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-serialio-leftovers"><span class="std std-ref">connection-serialio-leftovers</span></a></p></th>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-serialio-no-answer"><span class="std std-ref">connection-serialio-no-answer</span></a></p></th>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-serialio-refusal"><span class="std std-ref">connection-serialio-refusal</span></a></p></th>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="connection.html#spec-connection-serialio-repeated-connection-response"><span class="std std-ref">connection-serialio-repeated-connection-response</span></a></p></th>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="coverage table" id="id3">
+<caption><span class="caption-text">Calls</span><a class="headerlink" href="#id3" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Requirement</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>C++</p></th>
+<th class="head"><p>C</p></th>
+<th class="head"><p>Java</p></th>
+<th class="head"><p>Lua</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-service-procedure"><span class="std std-ref">calls-service-procedure</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-no-return-value"><span class="std std-ref">calls-no-return-value</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-service-property"><span class="std std-ref">calls-service-property</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-class-method"><span class="std std-ref">calls-class-method</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-class-static-method"><span class="std std-ref">calls-class-static-method</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-class-property"><span class="std std-ref">calls-class-property</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-class-extension-members"><span class="std std-ref">calls-class-extension-members</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-deprecated-warning"><span class="std std-ref">calls-deprecated-warning</span></a></p></th>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-exposed-members"><span class="std std-ref">calls-exposed-members</span></a></p></th>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-member-name-case"><span class="std std-ref">calls-member-name-case</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-unknown-type"><span class="std std-ref">calls-unknown-type</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-undefined-type"><span class="std std-ref">calls-undefined-type</span></a></p></th>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-enumeration-default"><span class="std std-ref">calls-enumeration-default</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-structure-default"><span class="std std-ref">calls-structure-default</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-several-arguments"><span class="std std-ref">calls-several-arguments</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-long-request"><span class="std std-ref">calls-long-request</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-omitted-arguments"><span class="std std-ref">calls-omitted-arguments</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-default-values"><span class="std std-ref">calls-default-values</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-named-arguments"><span class="std std-ref">calls-named-arguments</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-too-few-arguments"><span class="std std-ref">calls-too-few-arguments</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-too-many-arguments"><span class="std std-ref">calls-too-many-arguments</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-unique-ids"><span class="std std-ref">calls-unique-ids</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-match-by-id"><span class="std std-ref">calls-match-by-id</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-abandoned-id"><span class="std std-ref">calls-abandoned-id</span></a></p></th>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-unknown-id"><span class="std std-ref">calls-unknown-id</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="calls.html#spec-calls-slow-call"><span class="std std-ref">calls-slow-call</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="coverage table" id="id4">
+<caption><span class="caption-text">Values</span><a class="headerlink" href="#id4" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Requirement</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>C++</p></th>
+<th class="head"><p>C</p></th>
+<th class="head"><p>Java</p></th>
+<th class="head"><p>Lua</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-integers"><span class="std std-ref">values-integers</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-floating-point"><span class="std std-ref">values-floating-point</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-bool"><span class="std std-ref">values-bool</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-enum"><span class="std std-ref">values-enum</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-undeclared-enum-result"><span class="std std-ref">values-undeclared-enum-result</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-string"><span class="std std-ref">values-string</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-bytes"><span class="std std-ref">values-bytes</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-collections"><span class="std std-ref">values-collections</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-collections-of-objects"><span class="std std-ref">values-collections-of-objects</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-structures"><span class="std std-ref">values-structures</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-enum-equality"><span class="std std-ref">values-enum-equality</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-structure-equality"><span class="std std-ref">values-structure-equality</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-structure-hash"><span class="std std-ref">values-structure-hash</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-structure-sorting"><span class="std std-ref">values-structure-sorting</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-message-result"><span class="std std-ref">values-message-result</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-nullable"><span class="std std-ref">values-nullable</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-nullable-object"><span class="std std-ref">values-nullable-object</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-nullable-fields"><span class="std std-ref">values-nullable-fields</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-nullable-elements"><span class="std std-ref">values-nullable-elements</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-null-flag"><span class="std std-ref">values-null-flag</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-null-for-non-nullable"><span class="std std-ref">values-null-for-non-nullable</span></a></p></th>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-null-in-non-nullable-slot"><span class="std std-ref">values-null-in-non-nullable-slot</span></a></p></th>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-null-result-for-non-nullable"><span class="std std-ref">values-null-result-for-non-nullable</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-null-result-with-a-value"><span class="std std-ref">values-null-result-with-a-value</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-integer-to-float"><span class="std std-ref">values-integer-to-float</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-wrong-type"><span class="std std-ref">values-wrong-type</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-out-of-range"><span class="std std-ref">values-out-of-range</span></a></p></th>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-undeclared-enum-value"><span class="std std-ref">values-undeclared-enum-value</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="values.html#spec-values-wrong-collection"><span class="std std-ref">values-wrong-collection</span></a></p></th>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="coverage table" id="id5">
+<caption><span class="caption-text">Codec</span><a class="headerlink" href="#id5" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Requirement</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>C++</p></th>
+<th class="head"><p>C</p></th>
+<th class="head"><p>Java</p></th>
+<th class="head"><p>Lua</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-integers"><span class="std std-ref">codec-integers</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-floating-point"><span class="std std-ref">codec-floating-point</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-bool"><span class="std std-ref">codec-bool</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-enum"><span class="std std-ref">codec-enum</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-out-of-range"><span class="std std-ref">codec-out-of-range</span></a></p></th>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-string"><span class="std std-ref">codec-string</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-bytes"><span class="std std-ref">codec-bytes</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-object"><span class="std std-ref">codec-object</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-collections"><span class="std std-ref">codec-collections</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-dictionary-value-left-out"><span class="std std-ref">codec-dictionary-value-left-out</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-structures"><span class="std std-ref">codec-structures</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-extra-items"><span class="std std-ref">codec-extra-items</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-too-few-items"><span class="std std-ref">codec-too-few-items</span></a></p></th>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-nullable"><span class="std std-ref">codec-nullable</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-malformed-data"><span class="std std-ref">codec-malformed-data</span></a></p></th>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-empty-data"><span class="std std-ref">codec-empty-data</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-invalid-utf8"><span class="std std-ref">codec-invalid-utf8</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="codec.html#spec-codec-message"><span class="std std-ref">codec-message</span></a></p></th>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+<td><p><span class="coverage-untested">?</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="coverage table" id="id6">
+<caption><span class="caption-text">Errors</span><a class="headerlink" href="#id6" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Requirement</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>C++</p></th>
+<th class="head"><p>C</p></th>
+<th class="head"><p>Java</p></th>
+<th class="head"><p>Lua</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-rpc-error"><span class="std std-ref">errors-rpc-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-exception-name"><span class="std std-ref">errors-exception-name</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-setter-error"><span class="std std-ref">errors-setter-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-unknown-exception"><span class="std std-ref">errors-unknown-exception</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-request-error"><span class="std std-ref">errors-request-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-call-after-error"><span class="std std-ref">errors-call-after-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-mapped-exceptions"><span class="std std-ref">errors-mapped-exceptions</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-service-exceptions"><span class="std std-ref">errors-service-exceptions</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-message-prefix"><span class="std std-ref">errors-message-prefix</span></a></p></th>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-message"><span class="std std-ref">errors-message</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-whole-message"><span class="std std-ref">errors-whole-message</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="errors.html#spec-errors-description"><span class="std std-ref">errors-description</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="coverage table" id="id7">
+<caption><span class="caption-text">Objects</span><a class="headerlink" href="#id7" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Requirement</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>C++</p></th>
+<th class="head"><p>C</p></th>
+<th class="head"><p>Java</p></th>
+<th class="head"><p>Lua</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-equality"><span class="std std-ref">objects-equality</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-hash"><span class="std std-ref">objects-hash</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-sorting"><span class="std std-ref">objects-sorting</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-get-object-id"><span class="std std-ref">objects-get-object-id</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-object-id-range"><span class="std std-ref">objects-object-id-range</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-unknown-object-id"><span class="std std-ref">objects-unknown-object-id</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-method-connection"><span class="std std-ref">objects-method-connection</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-static-method-connection"><span class="std std-ref">objects-static-method-connection</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-static-method-through-an-object-connection"><span class="std std-ref">objects-static-method-through-an-object-connection</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-object-from-another-connection"><span class="std std-ref">objects-object-from-another-connection</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-equality-across-connections"><span class="std std-ref">objects-equality-across-connections</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="objects.html#spec-objects-hash-across-connections"><span class="std std-ref">objects-hash-across-connections</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="coverage table" id="id8">
+<caption><span class="caption-text">Streams</span><a class="headerlink" href="#id8" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Requirement</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>C++</p></th>
+<th class="head"><p>C</p></th>
+<th class="head"><p>Java</p></th>
+<th class="head"><p>Lua</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-members"><span class="std std-ref">streams-members</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-procedure-without-a-value"><span class="std std-ref">streams-procedure-without-a-value</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-procedure-returning-an-event"><span class="std std-ref">streams-procedure-returning-an-event</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-add-twice"><span class="std std-ref">streams-add-twice</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-equality"><span class="std std-ref">streams-equality</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-hash"><span class="std std-ref">streams-hash</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-rate"><span class="std std-ref">streams-rate</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-rate-takes-effect"><span class="std std-ref">streams-rate-takes-effect</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-first-value"><span class="std std-ref">streams-first-value</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-value-types"><span class="std std-ref">streams-value-types</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-value-changes"><span class="std std-ref">streams-value-changes</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-independent-streams"><span class="std std-ref">streams-independent-streams</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-current-after-call"><span class="std std-ref">streams-current-after-call</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-update-with-a-response"><span class="std std-ref">streams-update-with-a-response</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-update-with-add-response"><span class="std std-ref">streams-update-with-add-response</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-update-for-an-unknown-id"><span class="std std-ref">streams-update-for-an-unknown-id</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-error-ends-the-stream"><span class="std std-ref">streams-error-ends-the-stream</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-procedure-exception"><span class="std std-ref">streams-procedure-exception</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-undecodable-value"><span class="std std-ref">streams-undecodable-value</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-remove"><span class="std std-ref">streams-remove</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-remove-twice"><span class="std std-ref">streams-remove-twice</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-scoped-removal"><span class="std std-ref">streams-scoped-removal</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-drop-last-handle"><span class="std std-ref">streams-drop-last-handle</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-update-after-remove"><span class="std std-ref">streams-update-after-remove</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-read-after-close"><span class="std std-ref">streams-read-after-close</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-connection-failure-cause"><span class="std std-ref">streams-connection-failure-cause</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-close-after-failure"><span class="std std-ref">streams-close-after-failure</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-wait"><span class="std std-ref">streams-wait</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-wait-timeout"><span class="std std-ref">streams-wait-timeout</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-wait-timeout-values"><span class="std std-ref">streams-wait-timeout-values</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-two-waiters"><span class="std std-ref">streams-two-waiters</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-wake-waiter"><span class="std std-ref">streams-wake-waiter</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback"><span class="std std-ref">streams-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback-order"><span class="std std-ref">streams-callback-order</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback-values-only"><span class="std std-ref">streams-callback-values-only</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-remove-callback"><span class="std std-ref">streams-remove-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback-after-remove"><span class="std std-ref">streams-callback-after-remove</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback-removed-during-update"><span class="std std-ref">streams-callback-removed-during-update</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-update-callback"><span class="std std-ref">streams-update-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-first-call"><span class="std std-ref">streams-first-call</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-first-call-on-add"><span class="std std-ref">streams-first-call-on-add</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-first-call-superseded"><span class="std std-ref">streams-first-call-superseded</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-queued-value-before-ending"><span class="std std-ref">streams-queued-value-before-ending</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-queued-value-dropped-by-remove"><span class="std std-ref">streams-queued-value-dropped-by-remove</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-value-as-first-call-ends"><span class="std std-ref">streams-value-as-first-call-ends</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback-error"><span class="std std-ref">streams-callback-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-callback-fatal-error"><span class="std std-ref">streams-callback-fatal-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-first-call-fatal-error"><span class="std std-ref">streams-first-call-fatal-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-end-callback"><span class="std std-ref">streams-end-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-late-end-callback"><span class="std std-ref">streams-late-end-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-remove-end-callback"><span class="std std-ref">streams-remove-end-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-remove-during-server-ending"><span class="std std-ref">streams-remove-during-server-ending</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-end-callback-fatal-error-on-remove"><span class="std std-ref">streams-end-callback-fatal-error-on-remove</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-end-callback-fatal-error-on-close"><span class="std std-ref">streams-end-callback-fatal-error-on-close</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="streams.html#spec-streams-late-end-callback-fatal-error"><span class="std std-ref">streams-late-end-callback-fatal-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="coverage table" id="id9">
+<caption><span class="caption-text">Events</span><a class="headerlink" href="#id9" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Requirement</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>C++</p></th>
+<th class="head"><p>C</p></th>
+<th class="head"><p>Java</p></th>
+<th class="head"><p>Lua</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-event"><span class="std std-ref">events-event</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-event-stream"><span class="std std-ref">events-event-stream</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-equality"><span class="std std-ref">events-equality</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-hash"><span class="std std-ref">events-hash</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-callback"><span class="std std-ref">events-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-remove-callback"><span class="std std-ref">events-remove-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-callback-after-seen-firing"><span class="std std-ref">events-callback-after-seen-firing</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-callback-after-unseen-firing"><span class="std std-ref">events-callback-after-unseen-firing</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-first-call-on-add"><span class="std std-ref">events-first-call-on-add</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-one-callback-per-unseen-firing"><span class="std std-ref">events-one-callback-per-unseen-firing</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-stream-callback-leaves-firing"><span class="std std-ref">events-stream-callback-leaves-firing</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-removed-callback-leaves-firing"><span class="std std-ref">events-removed-callback-leaves-firing</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-callback-added-during-replay"><span class="std std-ref">events-callback-added-during-replay</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-callback-removed-during-add"><span class="std std-ref">events-callback-removed-during-add</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-callback-removed-during-update"><span class="std std-ref">events-callback-removed-during-update</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-server-end"><span class="std std-ref">events-server-end</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-ended-without-firing"><span class="std std-ref">events-ended-without-firing</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-remove"><span class="std std-ref">events-remove</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-drop-last-handle"><span class="std std-ref">events-drop-last-handle</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-wait-after-close"><span class="std std-ref">events-wait-after-close</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-firing-before-wait"><span class="std std-ref">events-firing-before-wait</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-firings-coalesce"><span class="std std-ref">events-firings-coalesce</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-repeated-waits"><span class="std std-ref">events-repeated-waits</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-wait-timeout"><span class="std std-ref">events-wait-timeout</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-wait-timeout-values"><span class="std std-ref">events-wait-timeout-values</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-two-waiters"><span class="std std-ref">events-two-waiters</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-wake-waiter"><span class="std std-ref">events-wake-waiter</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="events.html#spec-events-end-callback"><span class="std std-ref">events-end-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="coverage table" id="id10">
+<caption><span class="caption-text">Threading</span><a class="headerlink" href="#id10" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Requirement</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>C++</p></th>
+<th class="head"><p>C</p></th>
+<th class="head"><p>Java</p></th>
+<th class="head"><p>Lua</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-calls-on-several-threads"><span class="std std-ref">threading-calls-on-several-threads</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-interleaved-calls"><span class="std std-ref">threading-interleaved-calls</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-streams-added-on-several-threads"><span class="std std-ref">threading-streams-added-on-several-threads</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-close-with-a-call-in-flight"><span class="std std-ref">threading-close-with-a-call-in-flight</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-response-after-close"><span class="std std-ref">threading-response-after-close</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-wait-holding"><span class="std std-ref">threading-wait-holding</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-wait-for-update"><span class="std std-ref">threading-wait-for-update</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-held-value"><span class="std std-ref">threading-held-value</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-held-stream-ending"><span class="std std-ref">threading-held-stream-ending</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-held-stream-ending-before-value"><span class="std std-ref">threading-held-stream-ending-before-value</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-wait-for-unread-value"><span class="std std-ref">threading-wait-for-unread-value</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-value-read-before-wake"><span class="std std-ref">threading-value-read-before-wake</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-call-while-holding"><span class="std std-ref">threading-call-while-holding</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-wait-on-condition-object"><span class="std std-ref">threading-wait-on-condition-object</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-spurious-wake"><span class="std std-ref">threading-spurious-wake</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-hold-twice"><span class="std std-ref">threading-hold-twice</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-wait-holding-twice"><span class="std std-ref">threading-wait-holding-twice</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-copies-share-condition"><span class="std std-ref">threading-copies-share-condition</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-event-shares-condition"><span class="std std-ref">threading-event-shares-condition</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-release-through-another-handle"><span class="std std-ref">threading-release-through-another-handle</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-remove-while-holding"><span class="std std-ref">threading-remove-while-holding</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-remove-event-while-holding"><span class="std std-ref">threading-remove-event-while-holding</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-close-while-holding"><span class="std std-ref">threading-close-while-holding</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-wait-holding-another"><span class="std std-ref">threading-wait-holding-another</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-wake-waiter-holding-another"><span class="std std-ref">threading-wake-waiter-holding-another</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-wake-update-waiter"><span class="std std-ref">threading-wake-update-waiter</span></a></p></th>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-interrupted-wait"><span class="std std-ref">threading-interrupted-wait</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-remove-callback-while-holding"><span class="std std-ref">threading-remove-callback-while-holding</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-close-while-callback-waits"><span class="std std-ref">threading-close-while-callback-waits</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-add-callback-while-callback-waits"><span class="std std-ref">threading-add-callback-while-callback-waits</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-callbacks-run-off-the-caller"><span class="std std-ref">threading-callbacks-run-off-the-caller</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-first-call-waits"><span class="std std-ref">threading-first-call-waits</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-blocked-callback"><span class="std std-ref">threading-blocked-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-callback-one-thread-at-a-time"><span class="std std-ref">threading-callback-one-thread-at-a-time</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-close-during-first-call"><span class="std std-ref">threading-close-during-first-call</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-update-callback-after-close"><span class="std std-ref">threading-update-callback-after-close</span></a></p></th>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-fail">✗</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-call-from-a-callback"><span class="std std-ref">threading-call-from-a-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-remove-stream-from-callback"><span class="std std-ref">threading-remove-stream-from-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-remove-callback-from-itself"><span class="std std-ref">threading-remove-callback-from-itself</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-close-from-a-callback"><span class="std std-ref">threading-close-from-a-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="threading.html#spec-threading-close-from-an-end-callback"><span class="std std-ref">threading-close-from-an-end-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="coverage table" id="id11">
+<caption><span class="caption-text">Functions</span><a class="headerlink" href="#id11" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head stub"><p>Requirement</p></th>
+<th class="head"><p>Python</p></th>
+<th class="head"><p>C#</p></th>
+<th class="head"><p>C++</p></th>
+<th class="head"><p>C</p></th>
+<th class="head"><p>Java</p></th>
+<th class="head"><p>Lua</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-stream"><span class="std std-ref">functions-stream</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-stream-error"><span class="std std-ref">functions-stream-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-two-streams-of-one-function"><span class="std std-ref">functions-two-streams-of-one-function</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-add-event"><span class="std std-ref">functions-add-event</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-two-events-of-one-function"><span class="std std-ref">functions-two-events-of-one-function</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-run"><span class="std std-ref">functions-run</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-argument-types"><span class="std std-ref">functions-argument-types</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-run-a-call"><span class="std std-ref">functions-run-a-call</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-run-error"><span class="std std-ref">functions-run-error</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-run-argument-errors"><span class="std std-ref">functions-run-argument-errors</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-stream-with-parameters"><span class="std std-ref">functions-stream-with-parameters</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-event-with-parameters"><span class="std std-ref">functions-event-with-parameters</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-value-types"><span class="std std-ref">functions-value-types</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-stream-value-types"><span class="std std-ref">functions-stream-value-types</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-mismatched-type"><span class="std std-ref">functions-mismatched-type</span></a></p></th>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-stream-mismatched-type"><span class="std std-ref">functions-stream-mismatched-type</span></a></p></th>
+<td></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-null-for-non-nullable-type"><span class="std std-ref">functions-null-for-non-nullable-type</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-stream-null-for-non-nullable-type"><span class="std std-ref">functions-stream-null-for-non-nullable-type</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td><p><span class="coverage-partial">!</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><th class="stub"><p><a class="reference internal" href="functions.html#spec-functions-null-in-callback"><span class="std std-ref">functions-null-in-callback</span></a></p></th>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+<td><p><span class="coverage-pass">✓</span></p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="functions.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Server Side Functions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../krpc-development.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">kRPC Development</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/client-spec/coverage.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__center">
+      
+        <div class="footer-item">
+<p class="build-info" data-build-info-url="../build-info.json"></p></div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

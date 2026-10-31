@@ -6,15 +6,6 @@ KRPC
 ====
 
 
-
-
-
-
-
-
-
-
-
 .. namespace:: krpc::services
 .. class:: KRPC : public krpc::Service
 
@@ -59,23 +50,6 @@ KRPC
 
 
    
-
-   .. function:: krpc::schema::Stream add_function_stream(Expression function)
-
-      Add a stream of the value a server side function computes on each update.
-
-      :Parameters:
-
-
-
-   
-
-      .. note::
-
-         Each call adds a new stream, with values of the type given by
-         :func:`Expression::return_type`. Any exception from the function ends the
-         stream, including :class:`ObjectNotLoadedException`. A procedure that pauses
-         execution to resume on a later tick produces an error on the stream.
 
    .. function:: void hold_tick()
 
@@ -130,41 +104,6 @@ KRPC
          Every limit of :func:`hold_tick` applies, the timeout included. A hold lost to
          the timeout is not reported, and the next call takes whatever tick it lands on.
 
-   .. function:: void compile_function(Expression function)
-
-      Compile a server side function, so that running, streaming or adding it as an
-      event does not compile it.
-
-      :Parameters:
-
-
-
-   
-
-      .. note::
-
-         Compiling a large function takes time on the game's main thread. Compiling it
-         in advance keeps that time out of its first run.
-
-   .. function:: std::optional<std::string> run_function(Expression function, std::vector<std::optional<std::string>> arguments = std::vector<std::optional<std::string>>{})
-
-      Run a server side function once, within a single physics tick, and return
-      the value it produces.
-
-      :Parameters:
-
-       * **function** -- The function to run.
-       * **arguments** -- The encoded arguments, one per parameter.
-
-      :returns: The encoded value of the function, or no bytes for a function with no value.
-   
-
-      .. note::
-
-         The arguments are encoded at the types given by :func:`Expression::parameter_types`.
-         Throws an exception if a procedure the function calls pauses execution, and the
-         effects up to the pause remain.
-
    .. function:: GameScene game_scene()
    .. function:: void set_game_scene(GameScene value)
 
@@ -197,6 +136,123 @@ KRPC
       .. note::
 
          Increases once a game load, quickload, revert or scene change has finished.
+
+   .. function:: krpc::schema::Stream add_stream(krpc::schema::ProcedureCall call)
+
+      Add a streaming request and return its identifier.
+
+      :Parameters:
+
+
+
+   
+
+      .. note::
+
+         Client libraries call this procedure to implement streams. Use the streams of your
+         client library instead. Calling this directly while using a client library has
+         undefined behavior.
+
+   .. function:: krpc::schema::Stream add_function_stream(Expression function)
+
+      Add a stream of the value a server side function computes on each update.
+
+      :Parameters:
+
+
+
+   
+
+      .. note::
+
+         Client libraries call this procedure to implement server side functions. Use the
+         server side functions of your client library instead. Calling this directly while
+         using a client library has undefined behavior.
+
+   .. function:: krpc::Event add_event(Expression function)
+
+      Create an event from a server side function that evaluates to a boolean value.
+
+      :Parameters:
+
+
+
+   
+
+      .. note::
+
+         Client libraries call this procedure to implement events. Use the events of your
+         client library instead. Calling this directly while using a client library has
+         undefined behavior.
+
+   .. function:: std::optional<std::string> run_function(Expression function, std::vector<std::optional<std::string>> arguments = std::vector<std::optional<std::string>>{})
+
+      Run a server side function once, within a single physics tick, and return
+      the value it produces.
+
+      :Parameters:
+
+       * **function** -- The function to run.
+       * **arguments** -- The encoded arguments, one per parameter.
+
+      :returns: The encoded value of the function, or no bytes for a function with no value.
+   
+
+      .. note::
+
+         Client libraries call this procedure to implement server side functions. Use the
+         server side functions of your client library instead. Calling this directly while
+         using a client library has undefined behavior.
+
+   .. function:: void compile_function(Expression function)
+
+      Compile a server side function, so that running, streaming or adding it as an
+      event does not compile it.
+
+      :Parameters:
+
+
+
+   
+
+      .. note::
+
+         Client libraries call this procedure to implement server side functions. Use the
+         server side functions of your client library instead. Calling this directly while
+         using a client library has undefined behavior.
+
+   .. function:: void set_stream_rate(uint64_t id, float rate)
+
+      Set the update rate for a stream in Hz.
+
+      :Parameters:
+
+
+
+
+   
+
+      .. note::
+
+         Client libraries call this procedure to implement streams. Use the streams of your
+         client library instead. Calling this directly while using a client library has
+         undefined behavior.
+
+   .. function:: void remove_stream(uint64_t id)
+
+      Remove a streaming request.
+
+      :Parameters:
+
+
+
+   
+
+      .. note::
+
+         Client libraries call this procedure to implement streams. Use the streams of your
+         client library instead. Calling this directly while using a client library has
+         undefined behavior.
 
 
 

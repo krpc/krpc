@@ -59,8 +59,8 @@
     <link rel="icon" href="_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Protocol Buffers over TCP/IP" href="communication-protocols/tcpip.html" />
-    <link rel="prev" title="Extending kRPC" href="extending.html" />
+    <link rel="next" title="TCP/IP" href="communication-protocols/tcpip.html" />
+    <link rel="prev" title="Generating Service Code for Static Clients" href="extending/clientgen.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -427,31 +427,48 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending kRPC</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="extending.html">Extending kRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending/attributes.html">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/multi-tick.html">Multi-Tick RPCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/game-scenes.html">Game Scenes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/deprecation.html">Deprecating Service Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/extending-other-services.html">Extending Other Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 current active has-children"><a aria-current="page" class="current reference internal" href="#">Communication Protocols</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="communication-protocols/tcpip.html">Protocol Buffers over TCP/IP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="communication-protocols/localsocket.html">Protocol Buffers over a Local Socket</a></li>
-<li class="toctree-l2"><a class="reference internal" href="communication-protocols/websockets.html">Protocol Buffers over WebSockets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="communication-protocols/serialio.html">Protocol Buffers over Serial IO</a></li>
-<li class="toctree-l2"><a class="reference internal" href="communication-protocols/messages.html">Messaging Protocol</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="communication-protocols/client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/connection.html">Connection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/calls.html">Calls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/values.html">Values</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/codec.html">Codec</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/errors.html">Errors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/objects.html">Objects</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/streams.html">Streams</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/events.html">Events</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/threading.html">Threading</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/functions.html">Server Side Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/coverage.html">Client Coverage</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/tcpip.html">TCP/IP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/localsocket.html">Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/websockets.html">WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/serialio.html">Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/messages.html">Messaging</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/connection.html">Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/calls.html">Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/codec.html">Codec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/objects.html">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/streams.html">Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/threading.html">Threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/functions.html">Server Side Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/coverage.html">Client Coverage</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="compiling.html">Compiling kRPC</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="krpc-development/code-structure.html">Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="krpc-development/building.html">Building from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="krpc-development/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="krpc-development/benchmarks.html">Benchmarks</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -514,17 +531,17 @@
                   
   <section id="communication-protocols">
 <h1>Communication Protocols<a class="headerlink" href="#communication-protocols" title="Link to this heading">#</a></h1>
-<p>kRPC provides four communication protocols:</p>
+<p>kRPC provides various communication protocols:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="communication-protocols/tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a> for languages that can communicate over a
+<li><p><a class="reference internal" href="communication-protocols/tcpip.html"><span class="doc">TCP/IP</span></a> for languages that can communicate over a
 TCP/IP socket.</p></li>
-<li><p><a class="reference internal" href="communication-protocols/localsocket.html"><span class="doc">Protocol Buffers over a Local Socket</span></a> for clients on the same machine as the game,
+<li><p><a class="reference internal" href="communication-protocols/localsocket.html"><span class="doc">Local Socket</span></a> for clients on the same machine as the game,
 which carries the same messages over a cheaper path than TCP/IP.</p></li>
-<li><p><a class="reference internal" href="communication-protocols/websockets.html"><span class="doc">Protocol Buffers over WebSockets</span></a> for web browsers.</p></li>
-<li><p><a class="reference internal" href="communication-protocols/serialio.html"><span class="doc">Protocol Buffers over Serial IO</span></a> for Arduino and similar.</p></li>
+<li><p><a class="reference internal" href="communication-protocols/websockets.html"><span class="doc">WebSockets</span></a> for web browsers.</p></li>
+<li><p><a class="reference internal" href="communication-protocols/serialio.html"><span class="doc">Serial IO</span></a> for microcontrollers like Arduino.</p></li>
 </ul>
 <p>In each protocol, clients invoke remote procedure calls by <a class="reference internal" href="communication-protocols/messages.html"><span class="doc">sending and receiving protobuf
-messages</span></a>. The <a class="reference internal" href="communication-protocols/client-spec.html"><span class="doc">client specification</span></a> states what a client library does on top of the messages.</p>
+messages</span></a>.</p>
 <section id="protocol-version">
 <span id="communication-protocol-version"></span><h2>Protocol Version<a class="headerlink" href="#protocol-version" title="Link to this heading">#</a></h2>
 <p>Each connection handshake carries the version of the protocol, an integer. The client sends the
@@ -552,9 +569,8 @@ version it uses, and the server replies with the version it accepted:</p>
 </tbody>
 </table>
 </div>
-<p>Version 2 puts every message in a <a class="reference internal" href="communication-protocols/messages.html#communication-protocol-message"><span class="std std-ref">Message</span></a>, on every
-transport. A client from an earlier release fails to connect. The server refuses a
-<code class="docutils literal notranslate"><span class="pre">connection_request</span></code> with a version other than 2 with the status <code class="docutils literal notranslate"><span class="pre">WRONG_PROTOCOL_VERSION</span></code>.</p>
+<p>A client that connects with a protocol version the server does not accept may be refused with the
+status <code class="docutils literal notranslate"><span class="pre">WRONG_PROTOCOL_VERSION</span></code> in its connection response, or may fail to connect.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -571,12 +587,12 @@ transport. A client from an earlier release fails to connect. The server refuses
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="extending.html"
+       href="extending/clientgen.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Extending kRPC</p>
+        <p class="prev-next-title">Generating Service Code for Static Clients</p>
       </div>
     </a>
     <a class="right-next"
@@ -584,7 +600,7 @@ transport. A client from an earlier release fails to connect. The server refuses
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Protocol Buffers over TCP/IP</p>
+        <p class="prev-next-title">TCP/IP</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

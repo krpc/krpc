@@ -44,6 +44,7 @@ Server
 * :breaking:`Breaking` Listen on one port or socket path per server, removing the stream port and stream path settings (:issue:`1219`)
 * :breaking:`Breaking` Reset each existing server's settings to their defaults, so a TCP/IP and a WebSockets server both use port 50000 until one is changed (:issue:`1219`)
 * :breaking:`Breaking` Turn on "Auto-accept new clients" for new installs. An existing settings file keeps its value (:issue:`1219`)
+* Name the TCP/IP protocol "Protobuf over TCP/IP" in the server window (:issue:`1225`)
 
 
 SpaceCenter service

@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Protocol Buffers over a Local Socket &#8212; kRPC vdev documentation</title>
+    <title>Local Socket &#8212; kRPC vdev documentation</title>
   
   
   
@@ -59,8 +59,8 @@
     <link rel="icon" href="../_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Protocol Buffers over WebSockets" href="websockets.html" />
-    <link rel="prev" title="Protocol Buffers over TCP/IP" href="tcpip.html" />
+    <link rel="next" title="WebSockets" href="websockets.html" />
+    <link rel="prev" title="TCP/IP" href="tcpip.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -427,31 +427,48 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../extending.html">Extending kRPC</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../extending.html">Extending kRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../extending/attributes.html">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/multi-tick.html">Multi-Tick RPCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/game-scenes.html">Game Scenes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/deprecation.html">Deprecating Service Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/extending-other-services.html">Extending Other Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../communication-protocols.html">Communication Protocols</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="tcpip.html">Protocol Buffers over TCP/IP</a></li>
-<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Protocol Buffers over a Local Socket</a></li>
-<li class="toctree-l2"><a class="reference internal" href="websockets.html">Protocol Buffers over WebSockets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="serialio.html">Protocol Buffers over Serial IO</a></li>
-<li class="toctree-l2"><a class="reference internal" href="messages.html">Messaging Protocol</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/connection.html">Connection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/calls.html">Calls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/values.html">Values</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/codec.html">Codec</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/errors.html">Errors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/objects.html">Objects</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/streams.html">Streams</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/events.html">Events</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/threading.html">Threading</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/functions.html">Server Side Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/coverage.html">Client Coverage</a></li>
-<li class="toctree-l3"><a class="reference internal" href="client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tcpip.html">TCP/IP</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="websockets.html">WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="serialio.html">Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="messages.html">Messaging</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/connection.html">Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/calls.html">Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/codec.html">Codec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/objects.html">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/streams.html">Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/threading.html">Threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/functions.html">Server Side Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../client-spec/coverage.html">Client Coverage</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../compiling.html">Compiling kRPC</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/code-structure.html">Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/building.html">Building from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc-development/benchmarks.html">Benchmarks</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -498,7 +515,7 @@
     
     <li class="breadcrumb-item"><a href="../communication-protocols.html" class="nav-link">Communication Protocols</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Protocol Buffers over a Local Socket</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Local Socket</span></li>
   </ul>
 </nav>
 </div>
@@ -515,14 +532,12 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="protocol-buffers-over-a-local-socket">
-<h1>Protocol Buffers over a Local Socket<a class="headerlink" href="#protocol-buffers-over-a-local-socket" title="Link to this heading">#</a></h1>
-<p>This communication protocol allows a client running on the same machine as the game to interact
-with a kRPC server over a unix domain socket, rather than a TCP/IP connection.</p>
-<p>A local socket carries the same messages as <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a> over a cheaper path, bypassing the
-network stack. A client that makes many calls in quick succession completes more of them per
-physics update. A client that makes one call and then waits runs at the game’s update rate
-either way.</p>
+  <section id="local-socket">
+<h1>Local Socket<a class="headerlink" href="#local-socket" title="Link to this heading">#</a></h1>
+<p>This protocol carries the <a class="reference internal" href="messages.html"><span class="doc">messages</span></a> over a unix domain socket, for a client on
+the same machine as the game. It bypasses the network stack, so a client that makes many calls in
+quick succession completes more of them per physics update. A client that makes one call and then
+waits runs at the game’s update rate either way.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If a client library is available for your language, you do not need to implement this
@@ -533,71 +548,53 @@ protocol.</p>
 <p>Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows
 Server 2019 or later.</p>
 </div>
-<section id="sending-and-receiving-messages">
-<h2>Sending and Receiving Messages<a class="headerlink" href="#sending-and-receiving-messages" title="Link to this heading">#</a></h2>
-<p>Identical to <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a>: messages are encoded according to the protobuf binary format, and are
-prefixed with their size in bytes encoded as a Protocol Buffers varint. Every message is a
-<code class="docutils literal notranslate"><span class="pre">Message</span></code>.</p>
-</section>
-<section id="connecting-to-the-server">
-<h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
-<p>The handshake is identical to <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a>, differing only in how the connection is opened:</p>
-<ol class="arabic simple">
-<li><p>Open a unix domain socket to the path the server is listening on. The server window shows the
-path, which by default is <code class="docutils literal notranslate"><span class="pre">krpc.sock</span></code> inside the directory named by the <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code>
-environment variable, or by <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> on Windows. See <a class="reference internal" href="#default-socket-path">Default Socket Path</a> for the
-whole rule.</p></li>
-<li><p>Send a <code class="docutils literal notranslate"><span class="pre">Message</span></code> holding a <code class="docutils literal notranslate"><span class="pre">connection_request</span></code>, with its <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> field set to
-2, exactly as for TCP/IP.</p></li>
-<li><p>Receive a <code class="docutils literal notranslate"><span class="pre">Message</span></code> holding the server’s <code class="docutils literal notranslate"><span class="pre">connection_response</span></code>, and check that its
-<code class="docutils literal notranslate"><span class="pre">status</span></code> field is <code class="docutils literal notranslate"><span class="pre">ConnectionResponse.OK</span></code> and its <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> is 2.</p></li>
-</ol>
-<p>Ending the connection is also identical to <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a>.</p>
+<section id="connecting">
+<h2>Connecting<a class="headerlink" href="#connecting" title="Link to this heading">#</a></h2>
+<p>To use this protocol, add a server in the server window and select <em>Protobuf over local socket</em> as
+its protocol. The window shows the socket path, which defaults to the path under
+<a class="reference internal" href="#default-socket-path">Default Socket Path</a>.</p>
+<p>Open a unix domain socket to that path. Then send the
+<a class="reference internal" href="messages.html#communication-protocol-handshake"><span class="std std-ref">connection handshake</span></a>. The framing and the rest of the
+connection are the same as for <a class="reference internal" href="tcpip.html"><span class="doc">TCP/IP</span></a>.</p>
 </section>
 <section id="default-socket-path">
 <span id="communication-protocol-localsocket-default-path"></span><h2>Default Socket Path<a class="headerlink" href="#default-socket-path" title="Link to this heading">#</a></h2>
-<p>The server and its clients each compute the default path for themselves. They meet only by
-following the same rule:</p>
+<p>The server and its clients each compute the default path for themselves, by the same rule:</p>
 <ol class="arabic simple">
 <li><p>If <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> is set and not empty, the path is <code class="docutils literal notranslate"><span class="pre">krpc.sock</span></code> inside it. On Windows
 <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> is read instead, as there is no runtime directory there.</p></li>
 <li><p>Otherwise the path is <code class="docutils literal notranslate"><span class="pre">krpc-&lt;user&gt;.sock</span></code> inside <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;user&gt;</span></code> is the name of
-the account running the process. <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> is fixed, as <code class="docutils literal notranslate"><span class="pre">TMPDIR</span></code> is set per process and would
-move the socket for the server or the client alone. Windows always names a directory in
-<code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code>, and so never reaches this step.</p></li>
+the account running the process. <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> is fixed, as <code class="docutils literal notranslate"><span class="pre">TMPDIR</span></code> is set per process. Windows
+always names a directory in <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code>, and so never reaches this step.</p></li>
 </ol>
 <p>The user name comes from the account database, as <code class="docutils literal notranslate"><span class="pre">USER</span></code> is unset in a process started without a
-login shell. A client whose language offers only the environment, and finds nothing there, reports
-an error. A path built without the user name would be shared between accounts.</p>
+login shell. A client whose language offers only the environment, and finds no user name there,
+reports an error.</p>
 </section>
-<section id="socket-paths">
-<h2>Socket Paths<a class="headerlink" href="#socket-paths" title="Link to this heading">#</a></h2>
+<section id="path-length-and-permissions">
+<h2>Path Length and Permissions<a class="headerlink" href="#path-length-and-permissions" title="Link to this heading">#</a></h2>
 <p>A socket path is limited to 100 bytes, as the operating system copies the address into a fixed size
-structure. The limit counts the bytes a path takes rather than its characters, so a path using
-multi-byte characters reaches it sooner. The server reports a path that is too long.</p>
-<p>The socket file is created when the server starts and removed when it stops. A killed server leaves
-the file behind, and the next server to use that path removes it before binding.</p>
-<p>A stale file is indistinguishable from a live one, so the server connects to the path first and
-refuses to start if the connection succeeds. A path holding a file with content is left alone.</p>
+structure. The limit counts bytes rather than characters, so a path using multi-byte characters
+reaches it sooner.</p>
 <p>The permissions on the socket and on the directory holding it control access to the server.
 <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> are private to the account they belong to, so a socket
 placed there is reachable only by that user.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> fallback socket sits directly in <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>. Its permissions follow the process <code class="docutils literal notranslate"><span class="pre">umask</span></code>,
-which can leave the socket open to the user’s group. Set <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> or configure the path
-where that matters.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> fallback socket sits directly in <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>. Its permissions follow the process
+<code class="docutils literal notranslate"><span class="pre">umask</span></code>, which can leave the socket open to the user’s group. Set <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> or configure
+the path where that matters.</p>
 </section>
-<section id="invoking-remote-procedures">
-<h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
-<p>See <a class="reference internal" href="messages.html"><span class="doc">Messaging Protocol</span></a>.</p>
-</section>
-<section id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
-<p>The following Python code connects to the server over a local socket using the name “Jeb”, then
-invokes the <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> RPC. It prints the server version number from the response, and
-ends the connection. The message encoding is identical to the TCP/IP protocol; only the socket differs.</p>
-<p>It is written for the POSIX socket API, so it runs on Linux and macOS. The protocol is the same on
-Windows, where the address family is reached through winsock, as Python’s socket module does not
-expose it.</p>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This example shows the protocol, and omits much of the behavior a client library needs, such as
+handling errors and failed connections. A client library should
+implement the <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a> in its entirety.</p>
+</div>
+<p>The example uses the POSIX socket API, so it runs on Linux and macOS. On Windows, Python’s socket
+module lacks the address family, and the socket is opened through winsock instead.</p>
+<p>The following script connects to the server over a local socket with the name “Example”, calls
+<code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> and prints the result. It then ends the connection:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">getpass</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
@@ -663,7 +660,7 @@ expose it.</p>
 <span class="c1"># Send a connection request</span>
 <span class="n">message</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">()</span>
 <span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">protocol_version</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Jeb"</span>
+<span class="n">message</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">"Example"</span>
 <span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
 <span class="c1"># Receive the connection response</span>
@@ -709,7 +706,7 @@ expose it.</p>
 <span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Message</span><span class="p">(</span><span class="n">disconnect</span><span class="o">=</span><span class="n">disconnect</span><span class="p">))</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_WR</span><span class="p">)</span>
 
-<span class="c1"># Discard anything still arriving until the server closes its side, for up to a second</span>
+<span class="c1"># Discard anything still arriving until the server closes its side, or a second passes with nothing</span>
 <span class="n">conn</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="k">while</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">):</span>
@@ -738,7 +735,7 @@ expose it.</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Protocol Buffers over TCP/IP</p>
+        <p class="prev-next-title">TCP/IP</p>
       </div>
     </a>
     <a class="right-next"
@@ -746,7 +743,7 @@ expose it.</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Protocol Buffers over WebSockets</p>
+        <p class="prev-next-title">WebSockets</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -769,12 +766,10 @@ expose it.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sending-and-receiving-messages">Sending and Receiving Messages</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting">Connecting</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-socket-path">Default Socket Path</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#socket-paths">Socket Paths</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#invoking-remote-procedures">Invoking Remote Procedures</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#path-length-and-permissions">Path Length and Permissions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
 </ul>
   </nav></div>
 

@@ -427,31 +427,48 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="extending.html">Extending kRPC</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="extending.html">Extending kRPC</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending/attributes.html">Attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/types.html">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/multi-tick.html">Multi-Tick RPCs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/game-scenes.html">Game Scenes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/deprecation.html">Deprecating Service Members</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/extending-other-services.html">Extending Other Services</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending/clientgen.html">Generating Service Code for Static Clients</a></li>
+</ul>
+</details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="communication-protocols.html">Communication Protocols</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="communication-protocols/tcpip.html">Protocol Buffers over TCP/IP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="communication-protocols/localsocket.html">Protocol Buffers over a Local Socket</a></li>
-<li class="toctree-l2"><a class="reference internal" href="communication-protocols/websockets.html">Protocol Buffers over WebSockets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="communication-protocols/serialio.html">Protocol Buffers over Serial IO</a></li>
-<li class="toctree-l2"><a class="reference internal" href="communication-protocols/messages.html">Messaging Protocol</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="communication-protocols/client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/connection.html">Connection</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/calls.html">Calls</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/values.html">Values</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/codec.html">Codec</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/errors.html">Errors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/objects.html">Objects</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/streams.html">Streams</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/events.html">Events</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/threading.html">Threading</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/functions.html">Server Side Functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/coverage.html">Client Coverage</a></li>
-<li class="toctree-l3"><a class="reference internal" href="communication-protocols/client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/tcpip.html">TCP/IP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/localsocket.html">Local Socket</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/websockets.html">WebSockets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/serialio.html">Serial IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="communication-protocols/messages.html">Messaging</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="client-spec.html">Client Specification</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/conformance.html">Conformance Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/connection.html">Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/calls.html">Calls</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/values.html">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/codec.html">Codec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/objects.html">Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/streams.html">Streams</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/events.html">Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/threading.html">Threading</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/functions.html">Server Side Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client-spec/coverage.html">Client Coverage</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="compiling.html">Compiling kRPC</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="krpc-development.html">kRPC Development</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="krpc-development/code-structure.html">Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="krpc-development/building.html">Building from Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="krpc-development/testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="krpc-development/benchmarks.html">Benchmarks</a></li>
+</ul>
+</details></li>
 </ul>
 </div>
 </nav></div>
@@ -511,13 +528,14 @@
                   
   <section id="developer-guide">
 <h1>Developer Guide<a class="headerlink" href="#developer-guide" title="Link to this heading">#</a></h1>
-<p>The developer guide covers writing new services, the communication protocols, and building kRPC
-from source.</p>
+<p>The developer guide covers writing new services, the communication protocols, the specification a
+client library follows, and working on kRPC itself.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="extending.html">Extending kRPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="communication-protocols.html">Communication Protocols</a></li>
-<li class="toctree-l1"><a class="reference internal" href="compiling.html">Compiling kRPC</a></li>
+<li class="toctree-l1"><a class="reference internal" href="client-spec.html">Client Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="krpc-development.html">kRPC Development</a></li>
 </ul>
 </div>
 </section>

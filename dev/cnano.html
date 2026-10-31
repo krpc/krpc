@@ -32,6 +32,7 @@
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=a5c4661c" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=eadf7411" />
   
   <!-- So that users can add custom icons -->
@@ -44,6 +45,7 @@
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script src="_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cnano';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
@@ -59,7 +61,7 @@
     <link rel="icon" href="_static/logo-mark.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="C-nano Client" href="cnano/client.html" />
+    <link rel="next" title="KRPC API" href="cnano/api/krpc.html" />
     <link rel="prev" title="Debug" href="cpp/api/debug/debug.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
@@ -428,7 +430,6 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="python.html">Python</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="python/client.html">Python Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="python/api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="python/api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="python/api/krpc/expressions.html">Expressions</a></li>
@@ -530,7 +531,6 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="csharp.html">C#</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="csharp/client.html">C# Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="csharp/api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="csharp/api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="csharp/api/krpc/expressions.html">Expressions</a></li>
@@ -632,7 +632,6 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="cpp.html">C++</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="cpp/client.html">C++ Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="cpp/api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="cpp/api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cpp/api/krpc/expressions.html">Expressions</a></li>
@@ -734,7 +733,6 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a aria-current="page" class="current reference internal" href="#">C-nano</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/client.html">C-nano Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="cnano/api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="cnano/api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cnano/api/krpc/expressions.html">Expressions</a></li>
@@ -836,7 +834,6 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="java.html">Java</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="java/client.html">Java Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="java/api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="java/api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="java/api/krpc/expressions.html">Expressions</a></li>
@@ -938,7 +935,6 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="lua.html">Lua</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="lua/client.html">Lua Client</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="lua/api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="lua/api/krpc/krpc.html">KRPC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="lua/api/krpc/expressions.html">Expressions</a></li>
@@ -1102,119 +1098,776 @@
                   
   <section id="c-nano">
 <h1>C-nano<a class="headerlink" href="#c-nano" title="Link to this heading">#</a></h1>
+<p>This guide describes how to install the C-nano client, and the features it provides. The
+<a class="reference internal" href="#cnano-client-reference"><span class="std std-ref">Client API Reference</span></a> describes each function and type.</p>
+<p>The client is written for microcontrollers and other devices with little memory, hence the “nano”
+in its name. For the full feature set from C, use the <a class="reference internal" href="cpp.html"><span class="doc">C++ client</span></a>.</p>
+<section id="installing-the-library">
+<h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Link to this heading">#</a></h2>
+<section id="source-archive">
+<h3>Source Archive<a class="headerlink" href="#source-archive" title="Link to this heading">#</a></h3>
+<p>Download the source archive from the <a class="reference external" href="https://github.com/krpc/krpc/releases">GitHub release page</a>,
+and add its files to your project. The header files are in the <code class="docutils literal notranslate"><span class="pre">include</span></code> directory, and the
+source files are in <code class="docutils literal notranslate"><span class="pre">src</span></code>.</p>
+</section>
+<section id="arduino-library-manager">
+<h3>Arduino Library Manager<a class="headerlink" href="#arduino-library-manager" title="Link to this heading">#</a></h3>
+<p>For an Arduino sketch, install the library from the Arduino Library Manager by searching for
+“kRPC”.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The Arduino Library Manager installs the source files with names ending in <code class="docutils literal notranslate"><span class="pre">.cpp</span></code>, so that
+they are built with the C++ compiler. The library uses the C++ <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span></code> class to
+communicate.</p>
+</div>
+</section>
+<section id="vcpkg">
+<h3>vcpkg<a class="headerlink" href="#vcpkg" title="Link to this heading">#</a></h3>
+<p>The client is available from <a class="reference external" href="https://vcpkg.io">vcpkg</a>. To install it:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Linux</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Windows</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span>krpc-cnano
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span>krpc-cnano:x64-windows
+</pre></div>
+</div>
+</div></div>
+<p>This builds the library to communicate over a serial port. The <code class="docutils literal notranslate"><span class="pre">tcp</span></code> feature builds it to
+communicate over TCP/IP instead:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Linux</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Windows</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span><span class="s2">"krpc-cnano[tcp]"</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span><span class="s2">"krpc-cnano[tcp]:x64-windows"</span>
+</pre></div>
+</div>
+</div></div>
+<p>The <code class="docutils literal notranslate"><span class="pre">localsocket</span></code> feature builds it to communicate over a local socket:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span><span class="s2">"krpc-cnano[localsocket]"</span>
+</pre></div>
+</div>
+<p>A project in manifest mode lists the client in its <code class="docutils literal notranslate"><span class="pre">vcpkg.json</span></code> instead, with any feature it
+needs, and vcpkg installs it when you configure the project. The following asks for the TCP/IP
+build:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"dependencies"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"krpc-cnano"</span><span class="p">,</span><span class="w"> </span><span class="nt">"features"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"tcp"</span><span class="p">]</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="cmake">
+<h3>CMake<a class="headerlink" href="#cmake" title="Link to this heading">#</a></h3>
+<p>The build requires CMake 3.15 or later, a C99 compiler, <code class="docutils literal notranslate"><span class="pre">protoc</span></code> and Python 3. nanopb uses
+<code class="docutils literal notranslate"><span class="pre">protoc</span></code> and Python to generate its code. <a class="reference external" href="https://github.com/krpc/krpc/releases">Download the source archive</a>, extract it and run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-B<span class="w"> </span>build
+cmake<span class="w"> </span>--build<span class="w"> </span>build
+cmake<span class="w"> </span>--install<span class="w"> </span>build
+</pre></div>
+</div>
+<p>By default, CMake looks for a system-installed nanopb. Pass <code class="docutils literal notranslate"><span class="pre">-DKRPC_FETCH_DEPS=ON</span></code> or
+<code class="docutils literal notranslate"><span class="pre">-DKRPC_FETCH_NANOPB=ON</span></code> to the configure step to download nanopb at build time instead.</p>
+<p>Pass <code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_TCP=ON</span></code> or <code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_LOCALSOCKET=ON</span></code> to build the
+library to communicate over TCP/IP or a local socket. A program that links the library is then
+built for the same protocol.</p>
+<p>To install the client in a directory of your choice, pass <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code> when you
+configure it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>/path/to/install
+cmake<span class="w"> </span>--build<span class="w"> </span>build
+cmake<span class="w"> </span>--install<span class="w"> </span>build
+</pre></div>
+</div>
+</section>
+</section>
+<section id="compiling-a-program">
+<h2>Compiling a Program<a class="headerlink" href="#compiling-a-program" title="Link to this heading">#</a></h2>
+<section id="id2">
+<h3>CMake<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>Find the installed library, and link your program against it, in your <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">find_package</span><span class="p">(</span><span class="s">krpc_cnano</span><span class="w"> </span><span class="s">CONFIG</span><span class="w"> </span><span class="s">REQUIRED</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">my_app</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="s">krpc_cnano::krpc_cnano</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The library’s target carries the protocol it was built for, so your program is built for the
+same one.</p>
+<p>For a client installed with vcpkg, pass the vcpkg toolchain file when you configure your project:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_TOOLCHAIN_FILE<span class="o">=</span>/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
+</pre></div>
+</div>
+<p>For a client installed in a directory of your choice, pass that directory as
+<code class="docutils literal notranslate"><span class="pre">CMAKE_PREFIX_PATH</span></code>, so that <code class="docutils literal notranslate"><span class="pre">find_package</span></code> finds the client there:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DCMAKE_PREFIX_PATH<span class="o">=</span>/path/to/install
+</pre></div>
+</div>
+</section>
+<section id="compiler-command-line">
+<h3>Compiler Command Line<a class="headerlink" href="#compiler-command-line" title="Link to this heading">#</a></h3>
+<p>Link your program against <code class="docutils literal notranslate"><span class="pre">libkrpc_cnano</span></code> and nanopb’s <code class="docutils literal notranslate"><span class="pre">libprotobuf-nanopb</span></code>. For a program
+saved as <code class="docutils literal notranslate"><span class="pre">main.c</span></code>:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">GCC</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">Clang</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcc<span class="w"> </span>main.c<span class="w"> </span>-lkrpc_cnano<span class="w"> </span>-lprotobuf-nanopb
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>clang<span class="w"> </span>main.c<span class="w"> </span>-lkrpc_cnano<span class="w"> </span>-lprotobuf-nanopb
+</pre></div>
+</div>
+</div></div>
+<p>For a library built for TCP/IP or a local socket, also pass <code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_TCP</span></code> or
+<code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_LOCALSOCKET</span></code>, so that your program is built for the same protocol.</p>
+</section>
+<section id="compilation-options">
+<span id="cnano-client-compilation-options"></span><h3>Compilation Options<a class="headerlink" href="#compilation-options" title="Link to this heading">#</a></h3>
+<p>The following macros control how the library works. Define them when compiling, such as with the
+compiler’s <code class="docutils literal notranslate"><span class="pre">-D</span></code> argument.</p>
+<ul class="simple">
+<li><p>Error handling</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_RETURN</span></code>, the default, returns the error code from the function that gets
+the error.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_EXIT</span></code> calls <code class="docutils literal notranslate"><span class="pre">exit()</span></code> when an error occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_ASSERT</span></code> fails an <code class="docutils literal notranslate"><span class="pre">assert()</span></code> when an error occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_FN</span></code> calls <a class="reference internal" href="#c.krpc_error_handler" title="krpc_error_handler"><code class="xref c c-var docutils literal notranslate"><span class="pre">krpc_error_handler</span></code></a> when an error occurs. Set it to a
+pointer to a function that takes a single parameter of type <a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_error_t</span></code></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_PRINT_ERRORS_TO_STDERR</span></code> prints a message describing each error to stderr.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code> stores the message of each error from the server, for
+<a class="reference internal" href="#c.krpc_get_error_message" title="krpc_get_error_message"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_get_error_message()</span></code></a>. It costs <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGE_LENGTH</span></code> bytes of static
+storage.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGE_LENGTH</span></code> is the size of the buffer for that message, 256 bytes by
+default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> disables the error messages of the nanopb library, which kRPC uses to encode
+and decode messages. The Arduino version of the library defines it by default.</p></li>
+</ul>
+</li>
+<li><p>Communication</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_POSIX</span></code> communicates over a serial port with the POSIX <code class="docutils literal notranslate"><span class="pre">read</span></code> and
+<code class="docutils literal notranslate"><span class="pre">write</span></code> functions. This is the default when no other platform is detected.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_WINDOWS</span></code> communicates over a serial port with the Windows API. It is
+detected on Windows.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_ARDUINO</span></code> communicates over an Arduino <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span></code>. It is
+detected on Arduino.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code> communicates over TCP/IP. On Windows, a program that links the
+library also links winsock.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_LOCALSOCKET</span></code> communicates over a local socket, with a server on the same
+machine.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> lets you provide your own implementation of
+<a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a>, <a class="reference internal" href="#c.krpc_close" title="krpc_close"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_close()</span></code></a>, <a class="reference internal" href="#c.krpc_read" title="krpc_read"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_read()</span></code></a> and <a class="reference internal" href="#c.krpc_write" title="krpc_write"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_write()</span></code></a>.</p></li>
+</ul>
+</li>
+<li><p>Memory allocation</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_BUFFER_SIZE</span></code> is how much of a message to hold in memory while it is written to or
+read from the connection. The default is 1024 bytes, and 128 bytes on Arduino. A larger
+message is carried in several passes. A message that fits is cheaper to send. Two buffers of
+this size are used, one for sending and one for receiving, and neither outlives the call.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ALLOC_BLOCK_SIZE</span></code> is how many items the library adds to the capacity of a collection
+it decodes into heap memory, each time the collection runs out of space. The default is 4. A
+value of 1 uses the least memory, and makes one allocation per item.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_CUSTOM_MEMORY_ALLOC</span></code> disables the default implementations of <a class="reference internal" href="#c.krpc_malloc" title="krpc_malloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_malloc()</span></code></a>,
+<a class="reference internal" href="#c.krpc_calloc" title="krpc_calloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_calloc()</span></code></a>, <a class="reference internal" href="#c.krpc_recalloc" title="krpc_recalloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_recalloc()</span></code></a> and <a class="reference internal" href="#c.krpc_free" title="krpc_free"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_free()</span></code></a>, so that you can provide
+your own.</p></li>
+</ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On a microcontroller, leave <code class="docutils literal notranslate"><span class="pre">KRPC_PRINT_ERRORS_TO_STDERR</span></code> undefined and define
+<code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> to minimize the memory kRPC uses.</p>
+</div>
+</section>
+</section>
+<section id="connecting-to-the-server">
+<h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
+<p>The game must be running with the server started. <a class="reference internal" href="getting-started.html#getting-started-server"><span class="std std-ref">The Server Plugin</span></a> in the
+getting started guide shows how to install and start it.</p>
+<p>The client connects over a serial port, TCP/IP or a local socket. The library is built for one of
+them, chosen by the <a class="reference internal" href="#cnano-client-compilation-options"><span class="std std-ref">compilation options</span></a>. Each server in
+the server window uses one protocol, and accepts connections over that protocol only. Pick the
+protocol when you add the server, and build the library for the matching one.</p>
+<section id="over-a-serial-port">
+<h3>Over a Serial Port<a class="headerlink" href="#over-a-serial-port" title="Link to this heading">#</a></h3>
+<p>Select “Protobuf over SerialIO” as the server’s protocol. The server window also sets the port
+name and the baud rate. The following connects to a server, and prints its version:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"My Example Program"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_schema_Status</span><span class="w"> </span><span class="n">status</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_KRPC_GetStatus</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">.</span><span class="n">version</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_disconnect</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> opens the serial port named by its second argument, such as <code class="docutils literal notranslate"><span class="pre">COM3</span></code> on Windows
+or <code class="docutils literal notranslate"><span class="pre">/dev/ttyS0</span></code> on Linux. It writes the connection into its first argument. You pass the
+connection to every call. <a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> then starts a session, with a name for the
+connection that appears in the server window in the game. Both return an error code, and the
+example ends on a failure.</p>
+<p>On an Arduino, <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> takes a pointer to a <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span></code>:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
+
+<span class="n">HardwareSerial</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Serial</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// Open the serial port connection</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// Set up communication with the server, retrying while part of an earlier session's message</span>
+<span class="w">  </span><span class="c1">// is on the line</span>
+<span class="w">  </span><span class="n">krpc_error_t</span><span class="w"> </span><span class="n">error</span><span class="p">;</span>
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">((</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Arduino Example"</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">KRPC_ERROR_CONNECTION_FAILED</span><span class="p">)</span>
+<span class="w">    </span><span class="n">delay</span><span class="p">(</span><span class="mi">3500</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// Indicate successful connection by lighting the on-board LED</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A client that resets can find part of a message from its earlier session on the line. The
+example retries <a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> until the server drops the partial message.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A serial port carries data far more slowly than the game produces it. The server drops a
+connection that sends more data than the port can carry.
+<a class="reference internal" href="communication-protocols/serialio.html#communication-protocol-serialio-buffering"><span class="std std-ref">Buffering and Data Rates</span></a> describes the limits.</p>
+</div>
+</section>
+<section id="over-tcp-ip">
+<h3>Over TCP/IP<a class="headerlink" href="#over-tcp-ip" title="Link to this heading">#</a></h3>
+<p>Select “Protobuf over TCP/IP” as the server’s protocol, and build the library with
+<code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code>. <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> then takes a <a class="reference internal" href="#c.krpc_connection_config_t" title="krpc_connection_config_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code></a> with
+the address and port of the server. The following connects to a server with the default settings,
+address <code class="docutils literal notranslate"><span class="pre">127.0.0.1</span></code> and port 50000, and prints its version:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_connection_config_t</span><span class="w"> </span><span class="n">config</span><span class="p">;</span>
+<span class="w">  </span><span class="n">config</span><span class="p">.</span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"127.0.0.1"</span><span class="p">;</span>
+<span class="w">  </span><span class="n">config</span><span class="p">.</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50000</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">config</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"My Example Program"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_schema_Status</span><span class="w"> </span><span class="n">status</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_KRPC_GetStatus</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">.</span><span class="n">version</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_disconnect</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The address and port match the ones shown in the server window. TCP/IP works over a network, so
+your program can run on a different machine from the game.</p>
+</section>
+<section id="over-a-local-socket">
+<h3>Over a Local Socket<a class="headerlink" href="#over-a-local-socket" title="Link to this heading">#</a></h3>
+<p>Select “Protobuf over local socket” as the server’s protocol, and build the library with
+<code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_LOCALSOCKET</span></code>. <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> then takes the path of the server’s socket,
+shown in the server window. The following connects to a server, and prints its version:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"/run/user/1000/krpc.sock"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"My Example Program"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_schema_Status</span><span class="w"> </span><span class="n">status</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_KRPC_GetStatus</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">.</span><span class="n">version</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_disconnect</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A local socket works only on the machine running the game. It has lower overhead than TCP/IP, so
+it is faster.</p>
+</section>
+<section id="closing-the-connection">
+<h3>Closing the Connection<a class="headerlink" href="#closing-the-connection" title="Link to this heading">#</a></h3>
+<p><a class="reference internal" href="#c.krpc_disconnect" title="krpc_disconnect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_disconnect()</span></code></a> ends the session and closes the connection, as in the examples above. On
+a serial port, this is how the server learns the session has ended.</p>
+</section>
+</section>
+<section id="calling-remote-procedures">
+<h2>Calling Remote Procedures<a class="headerlink" href="#calling-remote-procedures" title="Link to this heading">#</a></h2>
+<p>The server provides <em>procedures</em> for your program to call, grouped into <em>services</em>.</p>
+<p>The following gets the active vessel from <a class="reference internal" href="cnano/api/space-center/space-center.html#c.krpc_SpaceCenter_ActiveVessel" title="krpc_SpaceCenter_ActiveVessel"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ActiveVessel()</span></code></a>, an object of
+type <a class="reference internal" href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t" title="krpc_SpaceCenter_Vessel_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_t</span></code></a>. It sets the vessel’s name, then prints its altitude:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Remote procedures example"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_set_Name</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="s">"My Vessel"</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_t</span><span class="w"> </span><span class="n">flight</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Flight</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_NULL</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">altitude</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_MeanAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%.2f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">altitude</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_disconnect</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Each service has a header, such as <code class="docutils literal notranslate"><span class="pre">krpc_cnano/services/space_center.h</span></code> for the <a class="reference internal" href="cnano/api/space-center.html"><span class="doc">SpaceCenter</span></a> service. Each procedure is a function that takes the connection, then a
+pointer for the result if it has one, then its arguments. It returns a <a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_error_t</span></code></a>.</p>
+<p>A procedure that returns a string, bytes or a collection allocates memory for it on the heap.
+Initialize a string to <code class="docutils literal notranslate"><span class="pre">NULL</span></code>, bytes to <a class="reference internal" href="#c.KRPC_BYTES_NULL" title="KRPC_BYTES_NULL"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_BYTES_NULL</span></code></a> and a collection to
+<a class="reference internal" href="#c.KRPC_NULL_LIST" title="KRPC_NULL_LIST"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_NULL_LIST</span></code></a>, <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_NULL_SET</span></code> or <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_NULL_DICTIONARY</span></code> before each
+call. Free it with <a class="reference internal" href="#c.krpc_free" title="krpc_free"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_free()</span></code></a>, <a class="reference internal" href="#c.KRPC_FREE_BYTES" title="KRPC_FREE_BYTES"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_FREE_BYTES</span></code></a>, <a class="reference internal" href="#c.KRPC_FREE_LIST" title="KRPC_FREE_LIST"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_FREE_LIST</span></code></a>,
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_FREE_SET</span></code> or <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_FREE_DICTIONARY</span></code> when you are done with it. Free the
+strings and collections a collection holds before freeing the collection.</p>
+</section>
+<section id="handling-errors">
+<h2>Handling Errors<a class="headerlink" href="#handling-errors" title="Link to this heading">#</a></h2>
+<p>Each function returns an error code, which is <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_OK</span></code> on success. The following checks
+the error from loading a save that does not exist:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Errors example"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">krpc_error_t</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc_SpaceCenter_Load</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"missing"</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">error</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">"Failed to load the save: %s</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">krpc_get_error</span><span class="p">(</span><span class="n">error</span><span class="p">));</span>
+
+<span class="w">  </span><span class="n">krpc_disconnect</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="#c.krpc_get_error" title="krpc_get_error"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_get_error()</span></code></a> describes an error code. The code depends on the error:</p>
+<ul class="simple">
+<li><p>A procedure that fails on the server returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_RPC_FAILED</span></code>. With
+<code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code> defined, <a class="reference internal" href="#c.krpc_get_error_message" title="krpc_get_error_message"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_get_error_message()</span></code></a> returns the server’s message,
+which names the exception, such as <code class="docutils literal notranslate"><span class="pre">KRPC.ArgumentException</span></code>.</p></li>
+<li><p>A connection that fails to open returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code>.</p></li>
+<li><p>A server that denies the connection, or does not support the client’s protocol version, makes
+<a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> return <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_REFUSED</span></code>.</p></li>
+<li><p>A failed read or write returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> or <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code>.</p></li>
+<li><p>A call made after <a class="reference internal" href="#c.krpc_disconnect" title="krpc_disconnect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_disconnect()</span></code></a>, after a failed write, or after the server sends a
+disconnect, returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_FAILED</span></code>.</p></li>
+</ul>
+<p>The <a class="reference internal" href="#cnano-client-compilation-options"><span class="std std-ref">compilation options</span></a> can instead exit, fail an
+assertion or call a handler on each error from a procedure. <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a>,
+<a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> and <a class="reference internal" href="#c.krpc_disconnect" title="krpc_disconnect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_disconnect()</span></code></a> always return the error code.</p>
+</section>
+<section id="remote-objects">
+<h2>Remote Objects<a class="headerlink" href="#remote-objects" title="Link to this heading">#</a></h2>
+<p>Many procedures return an object identifying something in the game, such as a vessel or a part.
+The object holds no copy of the game’s state. It is just a reference to it, an identifier of type
+<a class="reference internal" href="#c.krpc_object_t" title="krpc_object_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_object_t</span></code></a>. Each call through it reads the game as it is now:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifdef _WIN32</span>
+<span class="cp">#define WIN32_LEAN_AND_MEAN</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;windows.h&gt;</span>
+<span class="cp">#define sleep(seconds) Sleep((seconds) * 1000)</span>
+<span class="cp">#else</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;unistd.h&gt;</span>
+<span class="cp">#endif</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"COM0"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">"Remote objects example"</span><span class="p">)</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">KRPC_OK</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_t</span><span class="w"> </span><span class="n">flight</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Flight</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_NULL</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Each read gets the current altitude from the game</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">altitude</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_MeanAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%.2f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">altitude</span><span class="p">);</span>
+<span class="w">  </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_MeanAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%.2f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">altitude</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Two objects for the same vessel are equal</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">active</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">active</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">"%d</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">active</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_disconnect</span><span class="p">(</span><span class="n">conn</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Two objects for the same thing in the game compare equal with <code class="docutils literal notranslate"><span class="pre">==</span></code>. <a class="reference internal" href="#c.KRPC_NULL" title="KRPC_NULL"><code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_NULL</span></code></a> is the
+null object.</p>
+<p>Once the thing an object identifies is destroyed, such as a part that explodes, each call through
+it fails with <code class="docutils literal notranslate"><span class="pre">KRPC.ObjectDestroyedException</span></code>, and returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_RPC_FAILED</span></code>.</p>
+<p>An object for a vessel or a part keeps working when you load a save, quickload or revert, and
+then reads the loaded game. Other objects depend on what they identify. A maneuver node, for
+example, is destroyed by a load.</p>
+<p>A vessel far from the active vessel is <em>unloaded</em>, and the game keeps no parts for it. The vessel
+itself reads normally, but a call on one of its parts fails with
+<code class="docutils literal notranslate"><span class="pre">KRPC.ObjectNotLoadedException</span></code>. The part works again once the vessel comes back into range.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="user-guide/object-lifetime.html"><span class="doc">Object Lifetime</span></a> describes how each kind of object behaves in more
+detail.</p>
+</div>
+</section>
+<section id="streams-and-events">
+<h2>Streams and Events<a class="headerlink" href="#streams-and-events" title="Link to this heading">#</a></h2>
+<p>The C-nano client has no streams or events. Read a value by calling its procedure in a loop
+instead.</p>
+</section>
+<section id="deprecated-members">
+<h2>Deprecated Members<a class="headerlink" href="#deprecated-members" title="Link to this heading">#</a></h2>
+<p>A member of a service can be deprecated, when a newer member replaces it. A deprecated member
+still works, but may be removed in a future release, so move to its replacement.</p>
+<p>The API reference marks it as deprecated, and names the replacement. The compiler warns when your
+program calls it, naming the replacement too.</p>
+</section>
+<section id="service-stubs">
+<h2>Service Stubs<a class="headerlink" href="#service-stubs" title="Link to this heading">#</a></h2>
+<p>The client includes code for each service that ships with kRPC, generated from the services of
+one kRPC release. These <em>stubs</em> are the headers in <code class="docutils literal notranslate"><span class="pre">krpc_cnano/services</span></code>, such as
+<code class="docutils literal notranslate"><span class="pre">krpc_cnano/services/space_center.h</span></code>.</p>
+<p>The stubs match the server from the same release, so install the client version that matches your
+server. The stubs call each procedure by a number, and another version can give that number to a
+different procedure. A call can then run the wrong procedure, or send or return a wrong value, with
+no error.</p>
+<p>A service with no stub, such as one added by another mod, needs stubs of its own.
+<a class="reference internal" href="extending/clientgen.html#service-api-clientgen"><span class="std std-ref">Generating Service Code for Static Clients</span></a> shows how to generate them.</p>
+</section>
+<section id="client-api-reference">
+<span id="cnano-client-reference"></span><h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_open">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_open</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#c.krpc_connection_config_t" title="krpc_connection_config_t"><span class="n"><span class="pre">krpc_connection_config_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">arg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_open" title="Link to this definition">#</a><br /></dt>
+<dd><p>Opens a connection, and writes it into <em>connection</em>. What <em>arg</em> holds depends on the protocol
+the library is built for:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_POSIX</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_WINDOWS</span></code>: the name of the serial port,
+as a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. For example, <code class="docutils literal notranslate"><span class="pre">krpc_open(&amp;conn,</span> <span class="pre">&quot;/dev/ttyS0&quot;)</span></code> or
+<code class="docutils literal notranslate"><span class="pre">krpc_open(&amp;conn,</span> <span class="pre">&quot;COM3&quot;)</span></code>. The port keeps its baud rate and framing, so set them to match
+the server window, such as with <code class="docutils literal notranslate"><span class="pre">stty</span></code> on Linux.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code>: a pointer to a <a class="reference internal" href="#c.krpc_connection_config_t" title="krpc_connection_config_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code></a> holding the
+address and port of the server. The address is a host name or an IP address, and each
+endpoint it resolves to is tried in turn.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_LOCALSOCKET</span></code>: the path of the server’s socket, as a <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_ARDUINO</span></code>: <em>connection</em> points to a <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span> <span class="pre">*</span></code>, such as
+<code class="docutils literal notranslate"><span class="pre">&amp;Serial</span></code>, set before the call. <em>arg</em> is a pointer to a <a class="reference internal" href="#c.krpc_connection_config_t" title="krpc_connection_config_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code></a>
+holding the baud rate and the data, parity and stop bits, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> for 9600 baud and
+<code class="docutils literal notranslate"><span class="pre">SERIAL_8N1</span></code>.</p></li>
+</ul>
+<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the connection fails to open, such as for an address that
+does not resolve or a socket path that is too long. On Arduino it returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_OK</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A serial port has no end-of-file, so on Arduino a read fails with <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code>
+when the serial timeout elapses without a single byte arriving. The timeout is one second
+by default and applies to each byte. Raise it with <code class="docutils literal notranslate"><span class="pre">Serial.setTimeout</span></code> before calling
+<a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> if the server can take longer to reply.</p>
+</div>
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_connection_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_connection_t</span></span></span><a class="headerlink" href="#c.krpc_connection_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The connection that <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> opens and every call takes. It is a file descriptor on
+POSIX, a <code class="docutils literal notranslate"><span class="pre">HANDLE</span></code> on Windows, a <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span> <span class="pre">*</span></code> on Arduino, and a socket over TCP/IP or
+a local socket. A <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> build defines it, and
+<a class="reference internal" href="#c.krpc_connection_config_t" title="krpc_connection_config_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code></a>, before it includes <code class="docutils literal notranslate"><span class="pre">krpc_cnano.h</span></code>.</p>
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_connection_config_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_connection_config_t</span></span></span><a class="headerlink" href="#c.krpc_connection_config_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The configuration <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a> takes. For <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code>, a structure with the
+fields <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span> <span class="pre">address</span></code> and <code class="docutils literal notranslate"><span class="pre">uint16_t</span> <span class="pre">port</span></code>. For <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_ARDUINO</span></code>, a
+structure with the fields <code class="docutils literal notranslate"><span class="pre">uint32_t</span> <span class="pre">speed</span></code>, the baud rate, and <code class="docutils literal notranslate"><span class="pre">uint8_t</span> <span class="pre">config</span></code>, such as
+<code class="docutils literal notranslate"><span class="pre">SERIAL_8N1</span></code>. For a serial port or a local socket, <code class="docutils literal notranslate"><span class="pre">char</span></code>, so <em>arg</em> is a string.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_connect">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_connect</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_connect" title="Link to this definition">#</a><br /></dt>
+<dd><p>Starts a session on a connection opened with <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a>, and waits for the server to
+accept it. The client supports one session at a time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection</strong> – The connection.</p></li>
+<li><p><strong>name</strong> – A name for the connection, shown in the server window in the game.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_REFUSED</span></code>, and closes the connection, if the server
+denies it or does not support the client’s protocol version. Over TCP/IP or a local socket,
+any other failure closes the connection too.</p>
+<p>On a serial port or a custom transport, part of a message from an earlier session can garble
+the connection request or its response. This then returns
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_CONNECTION_FAILED</span></code> and leaves the port open. Wait more than 3 seconds, so
+that the server drops the partial message, then call this again.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_disconnect">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_disconnect</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_disconnect" title="Link to this definition">#</a><br /></dt>
+<dd><p>Tells the server the session is ending, then closes the connection.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_close">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_close</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_close" title="Link to this definition">#</a><br /></dt>
+<dd><p>Closes the connection, without sending the server a disconnect. A
+<code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> build provides it, as it does <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_error_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_error_t</span></span></span><a class="headerlink" href="#c.krpc_error_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The error code every function returns.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_OK">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_OK</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_OK" title="Link to this definition">#</a><br /></dt>
+<dd><p>The function completed successfully.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_IO">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_IO</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_IO" title="Link to this definition">#</a><br /></dt>
+<dd><p>Opening, reading from or writing to the connection failed.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_EOF">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_EOF</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_EOF" title="Link to this definition">#</a><br /></dt>
+<dd><p>The connection ended while reading from it. On Arduino, no byte arrived within the
+serial timeout.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_CONNECTION_FAILED">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_CONNECTION_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_CONNECTION_FAILED" title="Link to this definition">#</a><br /></dt>
+<dd><p>The session failed to start, or has ended, or the server sent a message that failed
+to decode or was not expected.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_NO_RESULTS">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_NO_RESULTS</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_NO_RESULTS" title="Link to this definition">#</a><br /></dt>
+<dd><p>The response from the server did not hold a single result.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_RPC_FAILED">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_RPC_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_RPC_FAILED" title="Link to this definition">#</a><br /></dt>
+<dd><p>The procedure failed on the server.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_ENCODING_FAILED">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_ENCODING_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_ENCODING_FAILED" title="Link to this definition">#</a><br /></dt>
+<dd><p>A message failed to encode or to send.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_DECODING_FAILED">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_DECODING_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_DECODING_FAILED" title="Link to this definition">#</a><br /></dt>
+<dd><p>The return value from the server failed to decode.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_BUFFER_TOO_SMALL">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_BUFFER_TOO_SMALL</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_BUFFER_TOO_SMALL" title="Link to this definition">#</a><br /></dt>
+<dd><p>A value did not fit in the buffer given to hold it.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_CONNECTION_REFUSED">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_CONNECTION_REFUSED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_CONNECTION_REFUSED" title="Link to this definition">#</a><br /></dt>
+<dd><p>The server denied the connection, or does not support the client’s protocol
+version.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_get_error">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">krpc_get_error</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">error</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_get_error" title="Link to this definition">#</a><br /></dt>
+<dd><p>A short description of an error code, such as <code class="docutils literal notranslate"><span class="pre">rpc</span> <span class="pre">failed</span></code>. Returns an empty string for
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_OK</span></code>.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_get_error_message">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">krpc_get_error_message</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_get_error_message" title="Link to this definition">#</a><br /></dt>
+<dd><p>The message of the most recent error from the server, or an empty string if there has not been
+one. It names the exception and gives its description, as in
+<code class="docutils literal notranslate"><span class="pre">SpaceCenter.InvalidOperationException:</span> <span class="pre">Vessel</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">exist</span></code>. The server stack trace
+follows when the server is configured to send one. The message is truncated to fit a buffer of
+<code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGE_LENGTH</span></code> bytes.</p>
+<p>Only available when the library is built with <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code> defined.</p>
+</dd></dl>
+
+<dl class="c var">
+<dt class="sig sig-object c" id="c.krpc_error_handler">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">krpc_error_handler</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#c.krpc_error_handler" title="Link to this definition">#</a><br /></dt>
+<dd><p>The function a procedure calls on an error, when the library is built with
+<code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_FN</span></code>. Set it before the first call.</p>
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_object_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_object_t</span></span></span><a class="headerlink" href="#c.krpc_object_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>A remote object, as the identifier of the object on the server. Each class of a service is a
+<code class="docutils literal notranslate"><span class="pre">typedef</span></code> of it, such as <a class="reference internal" href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t" title="krpc_SpaceCenter_Vessel_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_t</span></code></a>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.KRPC_NULL">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_NULL</span></span></span><a class="headerlink" href="#c.KRPC_NULL" title="Link to this definition">#</a><br /></dt>
+<dd><p>The null object.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_free">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_free</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">ptr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_free" title="Link to this definition">#</a><br /></dt>
+<dd><p>Frees memory allocated on the heap, such as a string a procedure returned.</p>
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_bytes_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_bytes_t</span></span></span><a class="headerlink" href="#c.krpc_bytes_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>A byte array, with the fields <code class="docutils literal notranslate"><span class="pre">size_t</span> <span class="pre">size</span></code> and <code class="docutils literal notranslate"><span class="pre">uint8_t</span> <span class="pre">*</span> <span class="pre">data</span></code>.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.KRPC_BYTES_NULL">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_BYTES_NULL</span></span></span><a class="headerlink" href="#c.KRPC_BYTES_NULL" title="Link to this definition">#</a><br /></dt>
+<dd><p>An empty byte array. A procedure that returns bytes into it allocates the data on the heap.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.KRPC_BYTES">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_BYTES</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">name</span></span>, <span class="n"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.KRPC_BYTES" title="Link to this definition">#</a><br /></dt>
+<dd><p>Declares a byte array <em>name</em>, backed by a local buffer of <em>size</em> bytes, for passing as an
+argument.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.KRPC_BYTES_FROM_BUFFER">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_BYTES_FROM_BUFFER</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">buffer</span></span>, <span class="n"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.KRPC_BYTES_FROM_BUFFER" title="Link to this definition">#</a><br /></dt>
+<dd><p>A byte array over an existing buffer, for passing as an argument.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.KRPC_FREE_BYTES">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FREE_BYTES</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.KRPC_FREE_BYTES" title="Link to this definition">#</a><br /></dt>
+<dd><p>Frees the data of a byte array allocated on the heap, and empties it.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.KRPC_NULL_LIST">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_NULL_LIST</span></span></span><a class="headerlink" href="#c.KRPC_NULL_LIST" title="Link to this definition">#</a><br /></dt>
+<dd><p>An empty list. Initialize a list to it before a procedure returns into it.
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_NULL_SET</span></code> and <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_NULL_DICTIONARY</span></code> do the same for a set and a
+dictionary.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.KRPC_FREE_LIST">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_FREE_LIST</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">l</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.KRPC_FREE_LIST" title="Link to this definition">#</a><br /></dt>
+<dd><p>Frees the items of a list, and empties it. The memory the items hold, such as strings, is not
+freed. <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_FREE_SET</span></code> and <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_FREE_DICTIONARY</span></code> do the same for a set and a
+dictionary.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_malloc">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">krpc_malloc</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_malloc" title="Link to this definition">#</a><br /></dt>
+<dd><p>Allocates <em>size</em> bytes on the heap. The client allocates the strings, bytes and collections it
+decodes with these functions. Define <code class="docutils literal notranslate"><span class="pre">KRPC_CUSTOM_MEMORY_ALLOC</span></code> to provide your own
+<a class="reference internal" href="#c.krpc_malloc" title="krpc_malloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_malloc()</span></code></a>, <a class="reference internal" href="#c.krpc_calloc" title="krpc_calloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_calloc()</span></code></a>, <a class="reference internal" href="#c.krpc_recalloc" title="krpc_recalloc"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_recalloc()</span></code></a> and <a class="reference internal" href="#c.krpc_free" title="krpc_free"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_free()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_calloc">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">krpc_calloc</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n"><span class="pre">num</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_calloc" title="Link to this definition">#</a><br /></dt>
+<dd><p>Allocates an array of <em>num</em> elements of <em>size</em> bytes on the heap, and zeroes it.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_recalloc">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">krpc_recalloc</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">ptr</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n"><span class="pre">num</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n"><span class="pre">inc</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n"><span class="pre">size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_recalloc" title="Link to this definition">#</a><br /></dt>
+<dd><p>Grows the array <em>ptr</em> from <em>num</em> to <em>num</em> + <em>inc</em> elements of <em>size</em> bytes, and zeroes the new
+elements. <em>inc</em> must be greater than zero.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_read">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_read</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">buf</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n"><span class="pre">count</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_read" title="Link to this definition">#</a><br /></dt>
+<dd><p>Reads exactly <em>count</em> bytes from the connection into <em>buf</em>, waiting until they arrive. Returns
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code> if the connection ends first, or <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the read
+fails. A <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> build provides it.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_write">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_write</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">buf</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n"><span class="pre">count</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_write" title="Link to this definition">#</a><br /></dt>
+<dd><p>Writes all <em>count</em> bytes from <em>buf</em> to the connection. Returns <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_IO</span></code> if the
+write fails. A <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> build provides it.</p>
+</dd></dl>
+
+</section>
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="cnano/client.html">C-nano Client</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/client.html#installing">Installing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/client.html#getting-started">Getting Started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/client.html#calling-remote-procedures">Calling Remote Procedures</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/client.html#streams-and-events">Streams and Events</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/client.html#client-api-reference">Client API Reference</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cnano/api/krpc.html">KRPC API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/krpc/krpc.html">KRPC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/krpc/expressions.html">Expressions</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="cnano/api/krpc.html">KRPC API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="cnano/api/stdlib.html">Standard Library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cnano/api/space-center.html">SpaceCenter API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/space-center.html">SpaceCenter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/vessel.html">Vessel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/stage.html">Stage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/editor.html">Editor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/celestial-body.html">CelestialBody</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/flight.html">Flight</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/orbit.html">Orbit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/closest-approach.html">Closest Approach</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/control.html">Control</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/comms.html">Communications</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/parts.html">Parts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/resources.html">Resources</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/node.html">Node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/reference-frame.html">ReferenceFrame</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/auto-pilot.html">AutoPilot</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/camera.html">Camera</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/waypoints.html">Waypoints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/contracts.html">Contracts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/geometry-types.html">Geometry Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/space-center/alarms.html">Alarms</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cnano/api/drawing.html">Drawing API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/drawing.html">Drawing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/arc.html">Arc</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/box.html">Box</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/circle.html">Circle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/image.html">Image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/line.html">Line</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/map-marker.html">MapMarker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/navball-marker.html">NavballMarker</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/orbit-path.html">OrbitPath</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/point.html">Point</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/polygon.html">Polygon</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/polyline.html">Polyline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/sphere.html">Sphere</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/drawing/text.html">Text</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cnano/api/ui.html">User Interface API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/ui.html">UI</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/canvas.html">Canvas</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/panel.html">Panel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/text.html">Text</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/button.html">Button</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/input-field.html">InputField</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/toggle.html">Toggle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/toggle-group.html">Toggle Group</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/slider.html">Slider</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/dropdown.html">Dropdown</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/image.html">Image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/scroll-view.html">Scroll View</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/layout.html">Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/layout-element.html">Layout Element</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/size-fitter.html">Size Fitter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/ui/rect-transform.html">Rect Transform</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cnano/api/infernal-robotics.html">InfernalRobotics API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/infernal-robotics/servo-group.html">ServoGroup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/infernal-robotics/servo.html">Servo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/infernal-robotics.html#example">Example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cnano/api/kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/kerbal-alarm-clock.html#example">Example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cnano/api/remote-tech.html">RemoteTech API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/remote-tech/remote-tech.html">RemoteTech</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/remote-tech/comms.html">Comms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/remote-tech/antenna.html">Antenna</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/remote-tech.html#example">Example</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cnano/api/lidar.html">LIDAR API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/lidar/lidar.html">LIDAR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/lidar/laser.html">Laser</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cnano/api/docking-camera.html">Docking Camera API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/docking-camera/docking-camera.html">DockingCamera</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/docking-camera/camera.html">Camera</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="cnano/api/debug.html">Debug API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cnano/api/debug/debug.html">Debug</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="cnano/api/space-center.html">SpaceCenter API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cnano/api/drawing.html">Drawing API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cnano/api/ui.html">User Interface API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cnano/api/infernal-robotics.html">InfernalRobotics API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cnano/api/kerbal-alarm-clock.html">Kerbal Alarm Clock API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cnano/api/remote-tech.html">RemoteTech API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cnano/api/lidar.html">LIDAR API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cnano/api/docking-camera.html">Docking Camera API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cnano/api/debug.html">Debug API</a></li>
 </ul>
 </div>
+</section>
 </section>
 
 
@@ -1237,11 +1890,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="cnano/client.html"
+       href="cnano/api/krpc.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">C-nano Client</p>
+        <p class="prev-next-title">KRPC API</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1255,6 +1908,45 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-library">Installing the Library</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#source-archive">Source Archive</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arduino-library-manager">Arduino Library Manager</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vcpkg">vcpkg</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cmake">CMake</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compiling-a-program">Compiling a Program</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">CMake</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compiler-command-line">Compiler Command Line</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compilation-options">Compilation Options</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#over-a-serial-port">Over a Serial Port</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#over-tcp-ip">Over TCP/IP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#over-a-local-socket">Over a Local Socket</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#closing-the-connection">Closing the Connection</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#handling-errors">Handling Errors</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-objects">Remote Objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-and-events">Streams and Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-members">Deprecated Members</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#service-stubs">Service Stubs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 
