@@ -1,6 +1,6 @@
 name: "🚀 Feature Request"
 description: Suggest a new feature for kRPC!
-labels: ['enhancement', 'needs-triage']
+labels: ['feature', 'needs-triage']
 body:
   - type: textarea
     id: feature

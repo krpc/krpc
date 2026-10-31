@@ -289,11 +289,12 @@ An issue or pull request takes one kind, at least one component, and the other l
 
 | Group | Labels | Rule |
 | --- | --- | --- |
-| Kind | `bug`, `feature`, `question`, `dependencies` | Exactly one |
+| Kind | `bug`, `feature`, `enhancement`, `question` | Exactly one. `feature` is a new capability. `enhancement` improves what exists, and covers dependency updates, refactoring, cleanup and maintenance |
 | Component | `server`, `protocol`, `service`, `client`, `tools`, `build`, `docs` | `server` covers `core` and each mod's server plugin. `client` covers any client change |
 | Game | `ksp`, `ksa` | The game a change is specific to. `core`, client and tool changes take neither |
 | Language | `python`, `cpp`, `cnano`, `csharp`, `java`, `lua` | The client a change is specific to, with `client` |
 | Mods | `mod-compatibility` | Added to the kind for a change that concerns another mod |
+| Dependencies | `dependencies` | Added to the kind for a dependency update. Dependabot sets it |
 | Triage | `needs-triage` | Set by the issue templates, removed once triaged |
 
 For example, `gh pr edit N --milestone ksp-v0.8.0 --add-label bug --add-label service --add-label ksp`.
