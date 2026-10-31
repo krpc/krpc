@@ -20,15 +20,24 @@ runs:
         $prefix = 'vcpkg-windows-' + ($env:PACKAGES -replace '[^A-Za-z0-9]+', '-') + '-'
         echo "prefix=$prefix" >> $env:GITHUB_OUTPUT
         echo "image-prefix=$prefix$env:ImageOS-$env:ImageVersion-" >> $env:GITHUB_OUTPUT
-    - name: restore-vcpkg
-      id: restore-vcpkg
+    # Two restores, as a restore searches this branch's caches before those of
+    # the default branch. A cache on this branch from another image would
+    # otherwise win over one on the default branch from this image.
+    - name: restore-vcpkg-image
+      id: restore-vcpkg-image
       uses: actions/cache/restore@v6
       with:
         path: C:\vcpkg-binary-cache
         key: ${{ steps.cache-prefix.outputs.image-prefix }}${{ github.run_id }}
-        restore-keys: |
-          ${{ steps.cache-prefix.outputs.image-prefix }}
-          ${{ steps.cache-prefix.outputs.prefix }}
+        restore-keys: ${{ steps.cache-prefix.outputs.image-prefix }}
+    - name: restore-vcpkg
+      id: restore-vcpkg
+      if: steps.restore-vcpkg-image.outputs.cache-matched-key == ''
+      uses: actions/cache/restore@v6
+      with:
+        path: C:\vcpkg-binary-cache
+        key: ${{ steps.cache-prefix.outputs.prefix }}${{ github.run_id }}
+        restore-keys: ${{ steps.cache-prefix.outputs.prefix }}
     - name: install-deps
       shell: pwsh
       env:
@@ -65,7 +74,9 @@ runs:
     # Saved here rather than at the end of the job, which installs the kRPC
     # package into the same directory
     - name: save-vcpkg
-      if: steps.cache-key.outputs.key != steps.restore-vcpkg.outputs.cache-matched-key
+      if: >-
+        steps.cache-key.outputs.key != (steps.restore-vcpkg-image.outputs.cache-matched-key ||
+        steps.restore-vcpkg.outputs.cache-matched-key)
       uses: actions/cache/save@v6
       with:
         path: C:\vcpkg-binary-cache
