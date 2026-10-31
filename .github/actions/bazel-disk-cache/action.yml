@@ -1,0 +1,48 @@
+inputs:
+  bazel:
+    description: The command that runs Bazel
+    default: bazel
+  flags:
+    description: The flags the job's Bazel commands pass
+    default: ""
+  bazelrc:
+    description: The rc file every later Bazel command in the job reads
+    required: true
+outputs:
+  key:
+    value: ${{ steps.cache-key.outputs.key }}
+  path:
+    value: ${{ steps.cache-key.outputs.path }}
+  cache-hit:
+    value: ${{ steps.restore.outputs.cache-hit }}
+# A Bazel disk cache holding the third-party C++ libraries the clients build
+# against: protobuf, abseil, zlib and googletest. These take most of a C++ job's
+# compile time. A job using JSON builds them twice, the second time for the
+# protoc plugin that generates the well-known types. The C++ test job saves the
+# cache, as its build covers every library the other jobs use.
+#
+# The key is a hash of the libraries' actions, as aquery prints them. It
+# changes with their versions, the build flags and, on Windows, the MSVC paths
+# in the command lines. The Linux system LLVM is pinned by the buildenv image.
+runs:
+  using: composite
+  steps:
+    - name: cache-key
+      id: cache-key
+      shell: bash
+      run: |
+        actions=$(${{ inputs.bazel }} aquery ${{ inputs.flags }} --output=text \
+          'deps(@protobuf//src/google/protobuf/util:json_util + @cpp_googletest//:gmock)' |
+          sha256sum | cut -d' ' -f1)
+        echo "key=bazel-disk-cache-${{ runner.os }}-$actions" >> "$GITHUB_OUTPUT"
+        # Bazel reads backslashes in an rc file as escapes. RUNNER_TEMP is the
+        # path inside the container, where runner.temp is the host's.
+        path="${RUNNER_TEMP//\\//}/bazel-disk-cache"
+        echo "path=$path" >> "$GITHUB_OUTPUT"
+        echo "common --disk_cache=$path" >> "${{ inputs.bazelrc }}"
+    - name: restore
+      id: restore
+      uses: actions/cache/restore@v6
+      with:
+        path: ${{ steps.cache-key.outputs.path }}
+        key: ${{ steps.cache-key.outputs.key }}

@@ -28,9 +28,11 @@ concurrency:
 jobs:
   # One entry per thing built or tested. `build` and `test` hold Bazel target
   # patterns and either may be left out; `artifact` and `path` upload the
-  # result. The jobs further down stay out of the matrix because they produce
-  # more than one artifact, run something other than Bazel, or are named by
-  # another job's `needs`, which cannot address a single entry of a matrix.
+  # result. `cpp-cache` restores, or for `save` also saves, the cache of the
+  # third-party C++ libraries. The jobs further down stay out of the matrix
+  # because they produce more than one artifact, run something other than
+  # Bazel, or are named by another job's `needs`, which cannot address a single
+  # entry of a matrix.
   linux:
     name: linux-${{ matrix.name }}
     strategy:
@@ -47,8 +49,10 @@ jobs:
             path: bazel-bin/doc/krpc-*.pdf
           - name: build-docs-examples
             build: //doc:compile-scripts
+            cpp-cache: restore
           - name: build-benchmarks
             build: //tools/benchmarks/...
+            cpp-cache: restore
           - name: test-docs
             test: //doc:test
           - name: test-core
@@ -100,6 +104,11 @@ jobs:
         uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
+      - name: cpp-cache
+        if: matrix.cpp-cache
+        uses: ./.github/actions/bazel-disk-cache
+        with:
+          bazelrc: $HOME/.bazelrc
       - name: build
         if: matrix.build
         run: bazel build ${{ matrix.build }}
@@ -127,8 +136,10 @@ jobs:
             build: //:krpc //:csproj //tools/krpctools //tools/TestServer:archive
           - name: build-docs-examples
             build: //doc:compile-scripts
+            cpp-cache: restore
           - name: build-benchmarks
             build: //tools/benchmarks/...
+            cpp-cache: restore
           - name: test-core
             test: //core:test
           - name: test-service
@@ -136,9 +147,11 @@ jobs:
           - name: test-client-cnano
             build: //client/cnano:cnano
             test: //client/cnano:test
+            cpp-cache: restore
           - name: test-client-cpp
             build: //client/cpp:cpp
             test: //client/cpp:test
+            cpp-cache: save
           - name: test-client-csharp
             build: //client/csharp
             test: //client/csharp:test
@@ -169,6 +182,14 @@ jobs:
         uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/bazel-fetch-windows
+      - name: cpp-cache
+        id: cpp-cache
+        if: matrix.cpp-cache
+        uses: ./.github/actions/bazel-disk-cache
+        with:
+          bazel: bazelisk
+          flags: --config=windows
+          bazelrc: C:/ProgramData/bazel.bazelrc
       - name: build
         if: matrix.build
         shell: bash
@@ -177,6 +198,12 @@ jobs:
         if: matrix.test
         shell: bash
         run: bazelisk test --config=windows ${{ matrix.test }}
+      - name: save-cpp-cache
+        if: matrix.cpp-cache == 'save' && steps.cpp-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ steps.cpp-cache.outputs.path }}
+          key: ${{ steps.cpp-cache.outputs.key }}
 
   linux-build-krpc:
     runs-on: ubuntu-latest
@@ -317,6 +344,10 @@ jobs:
         uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
+      - name: cpp-cache
+        uses: ./.github/actions/bazel-disk-cache
+        with:
+          bazelrc: $HOME/.bazelrc
       - name: build
         run: bazel build //client/cnano:cnano
       - name: test
@@ -476,10 +507,21 @@ jobs:
         uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
+      - name: cpp-cache
+        id: cpp-cache
+        uses: ./.github/actions/bazel-disk-cache
+        with:
+          bazelrc: $HOME/.bazelrc
       - name: build
         run: bazel build //client/cpp:cpp
       - name: test
         run: bazel test //client/cpp:test
+      - name: save-cpp-cache
+        if: steps.cpp-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: ${{ steps.cpp-cache.outputs.path }}
+          key: ${{ steps.cpp-cache.outputs.key }}
       - name: upload-artifact
         uses: ./.github/actions/upload-artifact
         with:
@@ -625,9 +667,9 @@ jobs:
 
   # Each push to main deletes the caches that a newer one saved on main
   # supersedes: the Bazel repository caches of each OS, across Bazel versions,
-  # and the vcpkg caches of each package set. Runs on other refs only ever
-  # restore what main saved or save copies for themselves, so those copies go
-  # once main moves past them.
+  # the Bazel disk caches of each OS, and the vcpkg caches of each package set.
+  # Runs on other refs only ever restore what main saved or save copies for
+  # themselves, so those copies go once main moves past them.
   prune-caches:
     if: always() && github.event_name == 'push'
     needs: all-checks-passed
@@ -651,7 +693,7 @@ jobs:
               check=True, capture_output=True, text=True).stdout)
 
           def family(key):
-              match = (re.match(r"(bazel-repo-cache-[^-]+)-", key) or
+              match = (re.match(r"(bazel-(?:repo|disk)-cache-[^-]+)-", key) or
                        re.match(r"(vcpkg-.+)-[0-9a-f]{64}$", key))
               return match.group(1) if match else None
 
