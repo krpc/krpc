@@ -1,3 +1,6 @@
+## [v3.15.0]
+- Add clangd, which the system LLVM toolchain links to
+
 ## [v3.14.0]
 - Remove the Bazel configuration and repository cache (CI configures Bazel from the repository)
 - Remove the .NET SDK (CI installs it with `actions/setup-dotnet`)
