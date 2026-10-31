@@ -5,6 +5,7 @@
   WebSockets server both use port 50000 until one is changed (#1219)
 - **Breaking:** Turn on "Auto-accept new clients" for new installs. An existing settings file
   keeps its value (#1219)
+- Name the TCP/IP protocol "Protobuf over TCP/IP" in the server window (#1225)
 
 ## [v0.7.0]
 - **Breaking:** KSP 1.12.5 is the minimum supported version, matching the maximum (#1048)

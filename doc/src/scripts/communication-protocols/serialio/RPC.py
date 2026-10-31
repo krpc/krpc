@@ -49,7 +49,7 @@ conn = serial.Serial("/dev/ttyUSB0")
 # Send a connection request
 message = KRPC.Message()
 message.connection_request.protocol_version = 2
-message.connection_request.client_name = "Jeb"
+message.connection_request.client_name = "Example"
 send_message(conn, message)
 
 # Receive the connection response
@@ -90,7 +90,7 @@ status.ParseFromString(response.results[0].value)
 # Print out the Status message
 print(status)
 
-# End the session with a disconnect, which is how the server sees it end on a serial port
+# End the session with a disconnect, as a serial line has no close
 disconnect = KRPC.Disconnect(reason=KRPC.Disconnect.CLOSED)
 send_message(conn, KRPC.Message(disconnect=disconnect))
 conn.close()

@@ -15,8 +15,10 @@
 
 int main() {
   krpc_connection_t conn;
-  krpc_open(&conn, "COM0");
-  krpc_connect(conn, "Drawing Example");
+  if (krpc_open(&conn, "COM0") != KRPC_OK)
+    return 1;
+  if (krpc_connect(conn, "Drawing Example") != KRPC_OK)
+    return 1;
 
   krpc_SpaceCenter_Vessel_t vessel;
   krpc_SpaceCenter_ActiveVessel(conn, &vessel);

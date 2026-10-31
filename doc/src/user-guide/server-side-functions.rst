@@ -689,19 +689,19 @@ and a comparison:
 
    .. group-tab:: Python
 
-      .. literalinclude:: /scripts/python/client/Event.py
+      .. literalinclude:: /scripts/python/Event.py
 
    .. group-tab:: C#
 
-      .. literalinclude:: /scripts/csharp/client/Event.cs
+      .. literalinclude:: /scripts/csharp/Event.cs
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/cpp/client/Event.cpp
+      .. literalinclude:: /scripts/cpp/Event.cpp
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/java/client/CustomEvent.java
+      .. literalinclude:: /scripts/java/CustomEvent.java
 
 Two kinds of object appear here:
 
@@ -786,11 +786,11 @@ A function whose value can be sent to a client can be streamed:
 
    .. group-tab:: C++
 
-      .. literalinclude:: /scripts/cpp/client/FunctionStream.cpp
+      .. literalinclude:: /scripts/cpp/FunctionStream.cpp
 
    .. group-tab:: Java
 
-      .. literalinclude:: /scripts/java/client/FunctionStream.java
+      .. literalinclude:: /scripts/java/FunctionStream.java
 
 Some clients take the type of the stream's values as a type argument, and others read the
 function's return type from the server. A function stream behaves like any other stream, and its

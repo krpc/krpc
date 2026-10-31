@@ -1,70 +1,51 @@
-Protocol Buffers over WebSockets
-================================
+WebSockets
+==========
 
-This communication protocol allows web browsers to communicate with kRPC over a websockets
-connection, for example from Javascript in a web browser.
+This protocol carries the :doc:`messages <messages>` over a websockets connection, for a client in
+a web browser.
 
 .. note:: If a client library is available for your language, you do not need to implement this
           protocol.
 
-Sending and Receiving Messages
-------------------------------
+Framing
+-------
 
-Communication with the server is performed via ``Message`` Protocol Buffer messages, encoded
-according to the protobuf binary format. Each one is carried in one binary websockets message,
-which a client may split across fragments.
+Each message is a ``Message``, encoded according to the Protocol Buffers binary format and carried
+in one binary websockets message. The websockets message may be split across fragments.
 
-To send a message to the server:
+Connecting
+----------
 
-1. Encode the message using the Protocol Buffers format.
-2. Send a binary websockets message to the server, with payload containing the encoded message
-   data.
+To use this protocol, add a server in the server window and select *Protobuf over WebSockets* as
+its protocol. Its address and port default to ``127.0.0.1`` and ``50000``.
 
-To receive a message from the server, do the reverse:
+Open a websockets connection to the server with the path ``/``, for example
+``ws://127.0.0.1:50000/``. The upgrade request names no subprotocol. Then send the
+:ref:`connection handshake <communication-protocol-handshake>`. The upgrade and the
+``connection_request`` together have 3 seconds to arrive, timed from the TCP connection.
 
-1. Receive a binary websockets message from the server.
-2. Decode the message's payload using the Protocol Buffers format.
-
-Connecting to the Server
-------------------------
-
-To establish a connection, a client must do the following:
-
-1. Open a websockets connection to the server on its port (which defaults to 50000), for example
-   ``ws://localhost:50000/``. The path must be ``/``, and the server answers any other path with
-   HTTP 404. The upgrade carries no kRPC parameters: the server ignores a query string and a
-   subprotocol, and names no subprotocol in its response.
-
-2. Send a binary websockets message holding a ``Message`` with a ``connection_request``, with its
-   ``protocol_version`` field set to 2. See :ref:`communication-protocol-handshake`.
-
-3. Receive a binary websockets message holding the server's ``connection_response``, and check
-   that its ``status`` field is ``ConnectionResponse.OK`` and its ``protocol_version`` is 2.
-
-The server times the handshake from the moment it accepts the TCP connection, so the upgrade and the
-``connection_request`` have 3 seconds between them to arrive. The server closes a connection
-whose upgrade has not completed by then, with no response.
-
-The connection then carries the client's requests and their responses, and the updates for its
-:ref:`communication-protocol-streams`. To end it, send a ``disconnect`` and then a close frame. See
-:ref:`communication-protocol-disconnect`.
-
-Invoking Remote Procedures
---------------------------
-
-See :doc:`messages`.
+The connection carries the requests, the responses and the stream updates. To end it, send a
+:ref:`disconnect <communication-protocol-disconnect>` and then a close frame.
 
 Examples
 --------
 
-The following code connects to the server at address 127.0.0.1 and port 50000 using the name "Jeb".
-It then invokes the ``KRPC.GetStatus`` RPC, receives and decodes the result and prints out the
-server version number from the response. Finally it ends the connection.
+.. note::
+
+   These examples show the protocol, and omit much of the behavior a client library needs, such as
+   handling errors and failed connections. A client library should
+   implement the :doc:`client specification </client-spec>` in its entirety.
+
+The examples run in Node.js, using the ``ws`` and ``protobufjs`` packages. A web browser provides
+the same ``WebSocket`` interface.
+
+The following script connects to the server with the name "Example", calls ``KRPC.GetStatus`` and
+prints the result. It then ends the connection:
 
 .. literalinclude:: /scripts/communication-protocols/websockets/RPC.js
    :language: javascript
 
-The following example adds a stream, then receives its updates on the same connection:
+The following script adds a stream, then receives its updates on the same connection:
 
 .. literalinclude:: /scripts/communication-protocols/websockets/Stream.js
    :language: javascript

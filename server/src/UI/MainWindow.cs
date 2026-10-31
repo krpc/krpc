@@ -63,7 +63,7 @@ namespace KRPC.UI
         const string serverOfflineText = "Server offline";
         const string protocolText = "Protocol";
         const string addressText = "Address";
-        internal const string protobufOverTcpText = "Protobuf over TCP";
+        internal const string protobufOverTcpText = "Protobuf over TCP/IP";
         internal const string protobufOverWebSocketsText = "Protobuf over WebSockets";
         internal const string protobufOverSerialIOText = "Protobuf over SerialIO";
         internal const string protobufOverLocalSocketText = "Protobuf over local socket";

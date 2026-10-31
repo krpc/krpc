@@ -1,3 +1,4 @@
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ClassType,
     DictionaryType,
@@ -50,11 +51,18 @@ class CppDomain(Domain[CppLanguage]):
     def enumeration_name(self, name):
         return self.language.parse_name(name)
 
+    def type(self, typ):
+        if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
+            return "krpc::Event"
+        return super().type(typ)
+
     def type_description(self, typ):
         if typ is None:
             return "void"
         if isinstance(typ, ValueType):
             return self.language.type_map[typ.protobuf_type.code]
+        if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
+            return ":class:`krpc::Event`"
         if isinstance(typ, MessageType):
             return ":class:`krpc::schema::%s`" % typ.python_type.__name__
         if isinstance(typ, ClassType):

@@ -299,10 +299,9 @@ public class KRPC {
     /**
      * Create an event from a server side function that evaluates to a boolean value.
      *
-     * The function is evaluated on each update, and each call adds a new event. Any
-     * exception from the function ends the event, including
-     * {@link KRPC.ObjectNotLoadedException}. A procedure that pauses execution to resume
-     * on a later tick produces an error on the event's stream.
+     * Client libraries call this procedure to implement events. Use the events of your
+     * client library instead. Calling this directly while using a client library has
+     * undefined behavior.
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "KRPC", procedure = "AddEvent", types = _Types.class)
@@ -317,10 +316,9 @@ public class KRPC {
     /**
      * Add a stream of the value a server side function computes on each update.
      *
-     * Each call adds a new stream, with values of the type given by
-     * {@link KRPC.Expression#getReturnType()}. Any exception from the function ends the
-     * stream, including {@link KRPC.ObjectNotLoadedException}. A procedure that pauses
-     * execution to resume on a later tick produces an error on the stream.
+     * Client libraries call this procedure to implement server side functions. Use the
+     * server side functions of your client library instead. Calling this directly while
+     * using a client library has undefined behavior.
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "KRPC", procedure = "AddFunctionStream", types = _Types.class)
@@ -335,7 +333,9 @@ public class KRPC {
     /**
      * Add a streaming request and return its identifier.
      *
-     * The stream starts sending results from the next update.
+     * Client libraries call this procedure to implement streams. Use the streams of your
+     * client library instead. Calling this directly while using a client library has
+     * undefined behavior.
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "KRPC", procedure = "AddStream", types = _Types.class)
@@ -351,8 +351,9 @@ public class KRPC {
      * Compile a server side function, so that running, streaming or adding it as an
      * event does not compile it.
      *
-     * Compiling a large function takes time on the game's main thread. Compiling it
-     * in advance keeps that time out of its first run.
+     * Client libraries call this procedure to implement server side functions. Use the
+     * server side functions of your client library instead. Calling this directly while
+     * using a client library has undefined behavior.
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "KRPC", procedure = "CompileFunction", types = _Types.class)
@@ -463,8 +464,9 @@ public class KRPC {
     /**
      * Remove a streaming request.
      *
-     * Does nothing for a stream that has ended. Throws an exception if the id has never
-     * been issued.
+     * Client libraries call this procedure to implement streams. Use the streams of your
+     * client library instead. Calling this directly while using a client library has
+     * undefined behavior.
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "KRPC", procedure = "RemoveStream", types = _Types.class)
@@ -479,9 +481,9 @@ public class KRPC {
      * Run a server side function once, within a single physics tick, and return
      * the value it produces.
      *
-     * The arguments are encoded at the types given by {@link KRPC.Expression#getParameterTypes()}.
-     * Throws an exception if a procedure the function calls pauses execution, and the
-     * effects up to the pause remain.
+     * Client libraries call this procedure to implement server side functions. Use the
+     * server side functions of your client library instead. Calling this directly while
+     * using a client library has undefined behavior.
      * @return The encoded value of the function, or no bytes for a function with no
      * value.
      * @param function The function to run.
@@ -504,8 +506,9 @@ public class KRPC {
     /**
      * Set the update rate for a stream in Hz.
      *
-     * Does nothing for a stream that has ended. Throws an exception if the id has never
-     * been issued.
+     * Client libraries call this procedure to implement streams. Use the streams of your
+     * client library instead. Calling this directly while using a client library has
+     * undefined behavior.
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "KRPC", procedure = "SetStreamRate", types = _Types.class)

@@ -8,6 +8,6 @@ Raspberry Pi.
 See INSTALL.txt for build and installation instructions.
 
 Documentation:
- * C-nano client documentation: https://krpc.github.io/krpc/latest/cnano/client.html
+ * C-nano client documentation: https://krpc.github.io/krpc/latest/cnano.html
  * kRPC documentation:          https://krpc.github.io/krpc
  * Source and issue tracker:    https://github.com/krpc/krpc

@@ -33,7 +33,7 @@ ALLOWED = {
 }
 
 # The extending examples call launch_control and eva, the fictional services
-# from extending.rst, which have no generated stubs
+# from the extending pages, which have no generated stubs
 FICTIONAL_SERVICE = re.compile(
     r'^Cannot access attribute "(launch_control|eva)" for class "Client"'
 )

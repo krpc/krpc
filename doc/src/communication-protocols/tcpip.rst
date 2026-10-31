@@ -1,78 +1,47 @@
-Protocol Buffers over TCP/IP
-============================
+TCP/IP
+======
 
-This communication protocol allows languages that can communicate over a TCP/IP connection to
-interact with a kRPC server.
+This protocol carries the :doc:`messages <messages>` over a TCP/IP connection.
 
 .. note:: If a client library is available for your language, you do not need to implement this
           protocol.
 
-Sending and Receiving Messages
-------------------------------
+Framing
+-------
 
-Communication with the server is performed via Protocol Buffer messages, encoded according to the
-protobuf binary format. When sending messages to and from the server, they are prefixed with their
-size, in bytes, encoded as a Protocol Buffers varint.
+Each message is a ``Message``, encoded according to the Protocol Buffers binary format and
+prefixed with its size in bytes, encoded as a varint. The following Python functions send and
+receive a message:
 
-To send a message to the server:
+.. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
+   :language: python
+   :start-at: def encode_varint
+   :end-at: return msg
 
-1. Encode the message using the Protocol Buffers format.
-2. Get the length of the encoded message data (in bytes) and encode that as a Protocol Buffers
-   varint.
-3. Send the encoded length followed by the encoded message data.
+Connecting
+----------
 
-To receive a message from the server, do the reverse:
-
-1. Receive the size of the message as a Protocol Buffers encoded varint.
-2. Decode the message size.
-3. Receive message size bytes of message data.
-4. Decode the message data.
-
-Every message is a ``Message``. See :ref:`communication-protocol-message`.
-
-Connecting to the Server
-------------------------
-
-To establish a connection, a client must do the following:
-
-1. Open a TCP socket to the server on its port (which defaults to 50000).
-
-2. Send a ``Message`` holding a ``connection_request``, with its ``protocol_version`` field set to
-   2. See :ref:`communication-protocol-handshake`.
-
-3. Receive a ``Message`` holding the server's ``connection_response``, and check that its
-   ``status`` field is ``ConnectionResponse.OK`` and its ``protocol_version`` is 2. If not, the
-   ``message`` field contains a description of what went wrong.
-
-The connection then carries the client's requests and their responses, and the updates for its
-:ref:`communication-protocol-streams`. To end it, see :ref:`communication-protocol-disconnect`.
-
-Invoking Remote Procedures
---------------------------
-
-See :doc:`messages`.
+Open a TCP socket to the server's address and port, which default to ``127.0.0.1`` and ``50000``.
+Then send the :ref:`connection handshake <communication-protocol-handshake>`. The connection
+carries the requests, the responses and the stream updates until either side sends a
+:ref:`disconnect <communication-protocol-disconnect>`.
 
 Examples
 --------
 
-The following Python code connects to the server at address 127.0.0.1 and port 50000 using the
-name "Jeb". It then invokes the ``KRPC.GetStatus`` RPC, receives and decodes the result and prints
-out the server version number from the response. Finally it ends the connection.
+.. note::
 
-To send and receive messages to the server, they need to be encoded and decoded from their binary
-format:
+   These examples show the protocol, and omit much of the behavior a client library needs, such as
+   handling errors and failed connections. A client library should
+   implement the :doc:`client specification </client-spec>` in its entirety.
 
-* The ``encode_varint`` and ``decode_varint`` functions convert between Python integers and
-  Protocol Buffer varint encoded integers.
-* ``send_message`` encodes a message, sends the length of the message to the server as a Protocol
-  Buffer varint encoded integer, and then sends the message data.
-* ``recv_message`` receives the size of a message, decodes it, receives the message data, and
-  decodes it as a ``Message``.
+The following script connects to the server with the name "Example", calls ``KRPC.GetStatus`` and
+prints the result. It then ends the connection:
 
 .. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
    :language: python
 
-The following example adds a stream, then receives its updates on the same connection:
+The following script adds a stream, then receives its updates on the same connection:
 
 .. literalinclude:: /scripts/communication-protocols/tcpip/Stream.py
    :language: python

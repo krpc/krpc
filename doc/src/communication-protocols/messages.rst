@@ -1,12 +1,10 @@
-Messaging Protocol
-==================
+Messaging
+=========
 
-Communication with a kRPC server is performed via Protocol Buffer messages. The `kRPC download
-<https://github.com/krpc/krpc/releases/latest>`_ comes with a protocol buffer message definitions
-file (:github-blob:`schema/krpc.proto <protobuf/krpc.proto>`)
-that defines the structure of these messages. It also contains versions of this file for Python, C#,
-C++, Java and Lua, compiled using `Google's protocol buffers compiler
-<https://github.com/google/protobuf>`_.
+A client and the server exchange Protocol Buffers messages. The file
+:download:`krpc.proto </communication-protocols/krpc.proto>` defines them. This page describes the
+messages and what they mean. The :doc:`client specification </client-spec>` states the precise
+behavior of a client, such as how it handles a refused connection or a failed one.
 
 .. _communication-protocol-message:
 
@@ -21,21 +19,24 @@ Every message sent to or from the server is a ``Message``, which holds one of th
    :end-before: message Disconnect {
 
 A client sends ``request``, ``connection_request`` and ``disconnect`` messages, and the server sends
-``response``, ``stream_update``, ``connection_response`` and ``disconnect`` messages. A connection
-carries all of them, including the stream updates for the client's streams. Each transport frames
-the messages in its own way, as its page describes.
+``response``, ``stream_update``, ``connection_response`` and ``disconnect`` messages.
 
-A ``Message`` holding a case the receiver does not know is skipped, once the connection has been
-established. A newer server can add cases this way. A case received in the wrong direction is a
-protocol error, and ends the connection.
+Each protocol frames the messages in its own way, as its page describes. For example,
+:doc:`tcpip` sends the length of each encoded message as a varint, followed by the message bytes.
 
 .. _communication-protocol-handshake:
 
-Connecting
-^^^^^^^^^^
+Connection Handshake
+^^^^^^^^^^^^^^^^^^^^
 
 A client connects by sending a ``connection_request`` as its first ``Message``, and reading the
-server's ``connection_response``:
+server's ``connection_response``. The following Python code connects over TCP/IP:
+
+.. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
+   :start-at: # Send a connection request
+   :end-at: print("Connected to the server")
+
+The two messages are:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
@@ -43,7 +44,7 @@ server's ``connection_response``:
    :end-before: // Messages for calling remote procedures
 
 Set ``protocol_version`` to 2. The ``client_name`` field can be set to the name of the client to
-display on the in-game UI. The server answers with one of the following statuses:
+display on the in-game UI. The ``connection_response`` holds one of the following statuses:
 
 .. list-table::
    :header-rows: 1
@@ -55,36 +56,25 @@ display on the in-game UI. The server answers with one of the following statuses
    * - ``MALFORMED_MESSAGE``
      - The first message failed to parse, or was not a ``connection_request``.
    * - ``TIMEOUT``
-     - No complete first message arrived within 3 seconds, or the first message stalled partway.
-       Over serial IO only the stall applies. The stall limit is given under
-       :ref:`communication-protocol-disconnect`. Over WebSockets the 3 seconds include the
-       upgrade, and the server closes a connection without a response if the upgrade has not
-       completed.
+     - The ``connection_request`` did not arrive in time.
    * - ``WRONG_PROTOCOL_VERSION``
      - The server does not support the protocol version. See :ref:`communication-protocol-version`.
    * - ``DENIED``
-     - The player, or a mod, denied the connection. A client does not retry it.
+     - The player, or a mod, denied the connection.
 
-The ``message`` field describes a refusal. When the connection is established, ``protocol_version``
-holds the version the server accepted, and ``client_identifier`` holds 16 bytes identifying the
-client. The identifier is the one ``KRPC.GetClientID`` returns, and the server's log names a client
-by its first 4 bytes, in hex.
+The ``message`` field describes a refusal. On success, ``protocol_version`` holds the version the
+server accepted, and ``client_identifier`` holds 16 bytes identifying the client. The identifier is
+the value that procedure ``KRPC.GetClientID`` returns.
 
-The server writes nothing while the player decides whether to accept a connection. A client waits
-for the ``connection_response`` for up to its handshake timeout, and sends nothing else until it
-arrives.
-
-A ``connection_request`` sent during a session starts a new session on the same connection. The
-server reads it once the call before it has completed, ends the current session, and asks for the
-new one to be approved. A new session gets a new client identifier, and its request ids start
-again from 1.
+The client specification states how a client connects, and how it reports a refused connection.
+See :doc:`/client-spec/connection`.
 
 .. _communication-protocol-disconnect:
 
-Ending a Connection
-^^^^^^^^^^^^^^^^^^^
+Disconnecting
+^^^^^^^^^^^^^
 
-Either side ends a connection by sending a ``disconnect``, then closing the connection:
+Either side ends a connection by sending a ``disconnect``:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
@@ -105,242 +95,231 @@ The reasons are:
    * - ``REMOVED``
      - The player removes the client from the server window.
    * - ``MALFORMED_MESSAGE``
-     - A message fails to parse, or a request fails to read.
+     - A message fails to parse.
    * - ``PROTOCOL_ERROR``
-     - A message arrives that the receiver did not expect, or a response has an id that matches no
+     - A message arrives in the wrong direction, or a response carries an id that matches no
        waiting or abandoned request.
    * - ``TIMEOUT``
-     - A partial message stalls.
+     - A message stops arriving partway.
 
-The reason and the ``message`` field are informational. A program that crashes sends no
-``disconnect``, so both sides also handle a connection that ends without one.
-
-Over a socket, closing it with unread data can discard a ``disconnect`` still in flight. The
-sender of a ``disconnect`` therefore closes its write side first. It discards what arrives until
-the other side closes, for up to a second, then closes the socket. A client that receives a
-``disconnect`` closes at once. The server closes its write side, and closes once the client does,
-for up to a second. The following Python code ends a connection over TCP/IP this way:
+The reason and the ``message`` field are informational. The following Python code closes a
+connection over TCP/IP:
 
 .. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
    :start-at: # End the connection
 
-Over WebSockets the close frame takes the place of closing the write side.
-
-A message that stops arriving partway ends the connection with the reason ``TIMEOUT``. The limit
-is 3 seconds without a new byte on a serial port, and 30 seconds over the other transports. No
-limit applies between messages, so an idle connection stays open.
+The client specification states the closing sequence, and how a client handles a connection that
+ends. See :doc:`/client-spec/connection`.
 
 Invoking Remote Procedures
 --------------------------
 
-Remote procedures are arranged into groups called *services*. These act as a single-level
-namespacing to keep things organized. Each service has a unique name used to identify it, and within
-a service :ref:`each procedure has a unique name <communication-protocol-procedure-names>`.
+Remote procedures are grouped into *services*. Each service has a unique name, and each procedure
+has a :ref:`unique name <communication-protocol-procedure-names>` within its service.
 
-Remote procedures are invoked by sending a request message to the server, and waiting for a
-response message.
+A client sends a ``Request`` holding one or more procedure calls. The server replies with a
+``Response`` holding each call's return value or error.
 
-The request message contains one or more procedure calls to run, which include the names of the
-procedures and the values of their arguments. The response message contains the value(s) returned by
-the procedure(s) and any errors that were encountered.
-
-Each request carries an ``id``, which the server copies onto the response to it. A client matches a
-response to its request by this id. The clients number the requests of a session from 1. An id is
-nonzero, and unique among the requests waiting for a response. A client discards the response to
-a request it has abandoned, such as an interrupted call.
-
-Requests are processed in order of receipt. The server reads the next request from a client once the
-previous one has completed and its response has been written. When there are multiple clients,
-requests are processed in round-robin order.
-
-Within a single request, the procedure calls are also processed in order of receipt. The results
-list in the response is also ordered so that the results match the calls.
+Each request carries an ``id``, which the server copies onto the response to it. The procedure
+calls in a request run in order, and the results in the response are in the same order as the calls.
+The client specification states how a client numbers and matches requests. See
+:doc:`/client-spec/calls`.
 
 .. _communication-protocol-anatomy-of-a-request:
 
 Anatomy of a Request
 ^^^^^^^^^^^^^^^^^^^^
 
-A request is sent to the server using a ``Request`` Protocol Buffer message with the following
-format:
+A request is a ``Request`` message:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
    :start-at: message Request {
    :end-before: message Response {
 
-A request message contains an id, and one or more procedure calls. This allows efficient batching
-of multiple calls in a single message, if desired.
-
 The fields of a procedure call are:
 
-* ``service`` - The name of the service in which the remote procedure is defined.
+* ``service`` - The name of the service that defines the procedure.
 
-* ``procedure`` - The name of the remote procedure to invoke.
+* ``procedure`` - The name of the procedure.
 
-* ``service_id`` - The integer identifier of the service in which the remote procedure is defined.
+* ``service_id`` - The integer identifier of the service that defines the procedure.
 
-* ``procedure_id`` - The integer identifier of the remote procedure to invoke.
+* ``procedure_id`` - The integer identifier of the procedure.
 
-* ``arguments`` - A sequence of ``Argument`` messages containing the values of the procedure's
-  arguments. The fields of an argument message are:
+* ``arguments`` - A list of ``Argument`` messages holding the values of the procedure's
+  arguments. The fields of an argument are:
 
-  * ``position`` - The zero-indexed position of the of the argument in the procedure's
-    signature.
+  * ``position`` - The zero-indexed position of the argument in the procedure's signature.
 
-  * ``value`` - The value of the argument, encoded in Protocol Buffer format. Ignored when
-    ``is_null`` is set.
+  * ``value`` - The value of the argument, :ref:`encoded <communication-protocol-protobuf-encoding>`
+    according to the parameter's type. Ignored when ``is_null`` is set.
 
-  * ``is_null`` - Whether the argument's value is null. When set, the argument is null and
-    ``value`` is unset. Only permitted for parameters that accept null.
+  * ``is_null`` - Whether the argument's value is null. When set, ``value`` is unset. Only
+    permitted for parameters that accept null. See :ref:`why null has a flag of its own
+    <communication-protocol-null-values>`.
 
-The service containing the procedure to call is specified by setting either ``service`` or
-``service_id``. The procedure to call is specified by setting either ``procedure`` or
-``procedure_id``. Use of ``service`` and ``procedure`` (i.e. descriptive strings) should be
-preferred as these will not change between server versions. For clients where code size or
-communication overhead must be kept to an absolute minimum, ``service_id`` and ``procedure_id``
-can be used. However, note that the identifiers may change between server versions.
+A call names its service with ``service`` or ``service_id``, and its procedure with ``procedure``
+or ``procedure_id``. The names are the same in every server version. The integer identifiers make
+both the messages and the client code smaller, which suits a client on a microcontroller. They can
+change between server versions.
 
-The ``Argument`` messages have a position field to allow values for default arguments to be
-omitted. See :ref:`communication-protocol-protobuf-encoding` for details on how to encode the
-argument values.
+A parameter can have a default value, listed in the procedure's
+:ref:`description <communication-protocol-service-description-message>`. A call can leave out the
+``Argument`` for such a parameter, and the procedure runs with the default. The ``position`` field
+says which parameter each of the remaining arguments is for.
 
 .. _communication-protocol-anatomy-of-a-response:
 
 Anatomy of a Response
 ^^^^^^^^^^^^^^^^^^^^^
 
-A response is sent to the client using a ``Response`` Protocol Buffer message with the following
-format:
+A response is a ``Response`` message:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
    :start-at: message Response {
    :end-before: // Messages for receiving stream updates
 
-A response message contains the id of the request it answers, and one or more results,
-corresponding to the procedure calls made in that request.
+A response holds the id of the request it answers, and one result per call. The ``value`` field of
+a result holds the procedure's return value,
+:ref:`encoded <communication-protocol-protobuf-encoding>` according to its return type.
 
-The ``value`` field of a procedure result message contains the value of the return value of the
-remote procedure, if any, encoded in protocol buffer format. See
-:ref:`communication-protocol-protobuf-encoding` for details on how to decode the return value.
+The ``is_null`` field marks a null return value. When it is set, ``value`` is unset. It is only
+set for procedures whose return value is nullable. See :ref:`null values
+<communication-protocol-null-values>`.
 
-The ``is_null`` field indicates that the return value is null. When it is set, the ``value`` field
-is unset and must be ignored. This is only permitted for procedures whose return value is nullable.
+A call that fails sets the ``error`` field of its result. A request that fails as a whole sets the
+``error`` field of the response, and the response holds no results.
 
-If the request as a whole fails, such as one naming an object the server no longer has, the
-``error`` field in the response message will contain a description of the error. If an individual
-procedure call encounters an error, the ``error`` field in the corresponding procedure result
-message will contain a description of the error.
+The fields of an error are:
 
-The fields of an error message are:
+* ``service`` - The service that defines the exception type, when the error is one of the
+  exceptions a service lists. Empty otherwise.
 
-* ``service`` - If the error was caused by an exception, this is the name of the service in which the
-  exception type is defined.
+* ``name`` - The name of that exception type. Empty otherwise.
 
-* ``name`` - If the error was caused by an exception, this is the name of the exception type.
+* ``description`` - A description of the error.
 
-* ``description`` - A human readable description of the error
+* ``stack_trace`` - The stack trace on the server. Empty unless the server's verbose errors
+  setting is on.
 
-* ``stack_trace`` - If the error was caused by an exception, this is a server-side stack trace for
-  the exception.
+Example Invocation
+^^^^^^^^^^^^^^^^^^
 
-Example RPC invocation
-^^^^^^^^^^^^^^^^^^^^^^
-
-The following Python code invokes the ``GetStatus`` procedure from the :ref:`KRPC service
-<communication-protocol-krpc-service>` using an already established connection to the server (the
-``conn`` variable).
-
-The ``krpc.schema.KRPC`` package contains the various Protocol Buffer message formats compiled to
-python code using the Protocol Buffer compiler. The ``send_message`` and ``recv_message`` are helper
-functions used to send/receive messages from the server.
+The following Python code invokes ``KRPC.GetStatus`` over an open connection ``conn``:
 
 .. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
    :start-at: # Invoke the KRPC.GetStatus RPC
    :end-before: # End the connection
 
+``KRPC`` is the module the Protocol Buffers compiler generates from ``krpc.proto``, imported from
+``krpc.schema.KRPC_pb2``. The ``send_message`` and ``recv_message`` helpers are defined earlier in
+the script, shown under :doc:`tcpip`.
+
 .. _communication-protocol-protobuf-encoding:
 
-Protocol Buffer Encoding
-^^^^^^^^^^^^^^^^^^^^^^^^
+Protocol Buffers Encoding
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Values passed as arguments or received as return values are encoded using the
-Protocol Buffer version 3 serialization format:
+An argument or a return value is encoded according to its
+:ref:`type <communication-protocol-type>`, using the `Protocol Buffers encoding
+<https://protobuf.dev/programming-guides/encoding/>`_ of a single value with no field tag:
 
-* Documentation for this encoding can be found here:
-  https://developers.google.com/protocol-buffers/docs/encoding
+.. list-table::
+   :header-rows: 1
 
-* Protocol Buffer libraries in many languages are available here:
-  https://github.com/google/protobuf/releases
+   * - Type code
+     - Encoding
+   * - ``DOUBLE``, ``FLOAT``
+     - Little-endian IEEE 754, in 8 and 4 bytes.
+   * - ``SINT32``, ``SINT64``
+     - A zigzag encoded varint.
+   * - ``UINT32``, ``UINT64``, ``BOOL``
+     - A varint.
+   * - ``STRING``
+     - The length of its UTF-8 bytes as a varint, then the bytes.
+   * - ``BYTES``
+     - The length as a varint, then the bytes.
+   * - ``ENUMERATION``
+     - The value, encoded as a ``SINT32``.
+   * - ``CLASS``
+     - The object's identifier, encoded as a ``UINT64``. See
+       :ref:`communication-protocol-proxy-objects`.
+   * - ``STRUCT``
+     - A ``Tuple`` message. See :ref:`communication-protocol-structures`.
+   * - ``TUPLE``, ``LIST``, ``SET``, ``DICTIONARY``
+     - The ``Tuple``, ``List``, ``Set`` or ``Dictionary`` message, with each item encoded according
+       to its own type.
+   * - ``EVENT``, ``PROCEDURE_CALL``, ``STREAM``, ``STATUS``, ``SERVICES``
+     - The serialized message of the same name.
 
-The ``is_null`` field on the ``Argument`` or ``ProcedureResult`` message signals a null value of
-any type. When it is set, the ``value`` field is unset and carries no encoded value. Null is
-signaled this way because the encoding of every type assigns a meaning to all byte sequences,
-leaving no spare value for null. A zero-length ``value``, an empty collection for example, is a
-valid encoding and is distinct from null.
+.. _communication-protocol-null-values:
+
+Null Values
+^^^^^^^^^^^
+
+The ``is_null`` field on the ``Argument`` or ``ProcedureResult`` message marks a null value of any
+type. When it is set, the ``value`` field is unset.
+
+A separate flag lets every type carry null in the same way. A zero-length ``value`` cannot stand
+for null, as it is already the encoding of an empty collection. Reserving a value of each type for
+null would take that value away from the type.
+
+A value nested inside another value has no flag of its own. A nullable list element, tuple item,
+dictionary value or structure field carries a presence bool before its value instead. For example,
+a ``LIST`` of nullable ``SINT32`` holding 42 and null::
+
+   List.items[0] = 01 54         present, then the SINT32 42
+   List.items[1] = 00            null
+
+The bool is one byte, encoded as a ``BOOL`` value. The value's encoding follows it when the bool is
+true. A position that is not nullable is encoded as its value alone, and a null in one is an error.
 
 .. _communication-protocol-streams:
 
 Streams
 -------
 
-Streams allow the client to repeatedly execute an RPC on the server and receive its results, without
-needing to repeatedly call the RPC directly, avoiding the communication overhead that this would
-involve.
+A stream runs a remote procedure on every update, and sends its result to the client. The client
+receives the values without a call for each one.
 
-A client can create a stream on the server by calling :ref:`communication-protocol-add-stream`, or
-stream the value of a server side function by calling
-:ref:`communication-protocol-add-function-stream`. An :ref:`event <communication-protocol-events>`
-is also a stream. Each call creates a new stream with a new identifier, including a call for the
-same RPC or function as an existing stream. The stream sends its first result in the update after it
-is added.
+:ref:`communication-protocol-add-stream` adds a stream of a remote procedure, and
+:ref:`communication-protocol-add-function-stream` adds a stream of a server side function. Both
+return a ``Stream`` message, holding the stream's identifier:
 
-A stream over a game object that is not loaded sends no result until the object loads. A stream over
-a procedure that is not available in the current game scene sends no result until the game returns
-to a scene where it is. An event still sends its first result, which says whether it has fired.
+.. literalinclude:: /communication-protocols/krpc.proto
+   :language: protobuf
+   :start-at: message Stream {
+   :end-before: message Event {
 
-Once the client is finished with the stream, it can remove it from the server by calling
-:ref:`communication-protocol-remove-stream`. Streams are automatically removed when the
-client that created it disconnects from the server. Streams are local to each client and there is no
-way to share a stream between clients.
+An :ref:`event <communication-protocol-events>` is also a stream.
 
-The RPC for each stream is invoked every `fixed update
-<https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html>`_ and the return values
-for all of these RPCs are collected together into a stream update message. This is then sent to the
-client on its connection, in a ``Message`` holding ``stream_update``. If the value returned by a
-streams RPC does not change since the last update that was sent, its value is omitted from the
-update message in order to minimize network traffic. A client can also control the rate of the
-stream, by specifying a target number of Hertz with :ref:`communication-protocol-set-stream-rate`. The server computes a time delay
-from the target rate, and only updates the stream if at least that time has passed since the last
-time the stream was updated.
+Each stream belongs to the client that created it. :ref:`communication-protocol-remove-stream`
+removes a stream, and the server removes a client's streams when the client disconnects.
+Removing a stream, or setting its rate, does nothing once the stream has ended. An identifier the
+server never issued is an error.
 
-Responses and stream updates travel on the one connection, in order, which guarantees the
-following:
+A stream runs on every physics tick, unless :ref:`communication-protocol-set-stream-rate` gives it
+a lower target rate. The results of a tick's streams are sent in one ``stream_update``. A stream's
+first result is sent in the update after it is added. A later result that has not changed since
+the last update is left out.
 
-1. The first update for a stream follows the response to the call that added it.
-2. No update for a stream follows the response to the call that removed it.
-3. A response follows every update the server wrote before it.
-
-A client registers a stream when it reads the response that added it, before it reads the next
-message. A result for a stream the client has no record of is for a stream it removed, and is
-dropped. The first guarantee does not hold for a request batching a call that adds a stream with a
-call that takes more than one update to complete.
+The client specification states how a client delivers stream values, and how updates are ordered
+relative to responses. See :doc:`/client-spec/streams`.
 
 Anatomy of a Stream Update
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Stream updates are sent to the client using a ``StreamUpdate`` Protocol Buffer message with the
-following format:
+A stream update is a ``StreamUpdate`` message:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
    :start-at: message StreamUpdate {
    :end-before: message StreamResult {
 
-This contains a list of ``StreamResult`` messages, one for each stream that exists on the server for
-that client, and whose return value changed since the last update was sent. It has the following
-format:
+A ``StreamUpdate`` holds one ``StreamResult`` for each of the client's streams whose result
+changed:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
@@ -349,33 +328,24 @@ format:
 
 The fields are:
 
-* ``id`` - The identifier of the stream. This is the value returned by
-  :ref:`communication-protocol-add-stream` or :ref:`communication-protocol-add-function-stream`
-  when the stream is created, or the stream identifier in an ``Event`` message.
+* ``id`` - The identifier of the stream, from the ``Stream`` message that added it.
 
-* ``result`` - A ``ProcedureResult`` message containing the result of the streams RPC. This is
-  identical to the ``ProcedureResult`` message returned when calling the RPC directly. See
-  :ref:`communication-protocol-anatomy-of-a-response` for details on the format and contents of this
-  message.
+* ``result`` - The result of the stream's procedure, as the same ``ProcedureResult`` a call to it
+  returns. See :ref:`communication-protocol-anatomy-of-a-response`.
 
-A result with its ``error`` field set is the last result for that stream. The server removes the
-stream after sending it, and sends nothing more for its identifier. When the server removes a stream
-itself, for example an event that has finished, the error is a ``StreamRemovedException`` from the
-``KRPC`` service. A stream removed by the client with :ref:`communication-protocol-remove-stream`
-gets no final result.
+A result with its ``error`` field set is the last result for that stream. See
+:ref:`streams-error-ends-the-stream <spec-streams-error-ends-the-stream>` in the client
+specification.
 
 .. _communication-protocol-events:
 
 Events
 ------
 
-Events are a wrapper over a stream that returns a boolean value. The event is triggered when the
-stream returns true. An event is created by :ref:`communication-protocol-add-event` or by another
-remote procedure with an event return type. The procedure returns an ``Event`` message, which
-contains a ``Stream`` message describing the underlying stream for the event. The stream starts when
-the event is created, and its first result says whether it has fired.
-
-The format for an ``Event`` message is simply the following:
+An event is a stream of a ``bool``, and fires when the stream's value is true. An event is created
+by :ref:`communication-protocol-add-event`, or by another procedure with an event return type. The
+procedure returns an ``Event`` message, holding the ``Stream`` of the event. After its first
+value, the stream holds only firings, as the server sends a value only when the event fires:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
@@ -387,57 +357,49 @@ The format for an ``Event`` message is simply the following:
 KRPC Service
 ------------
 
-The server provides a service called ``KRPC`` containing procedures that are
-used to retrieve information about the server and to manage streams.
+The server provides a core service called ``KRPC``. Its procedures give clients the basic
+functionality they build on: the server's status, the definitions of its services, and streams and
+server side functions. A client library calls these procedures for the program using it. They are
+described below.
 
-The service has other members, such as the ``GameScene``, ``Paused`` and ``Clients`` properties
-and the ``HoldTick`` procedure. They are called like the members of any other service, so the
-getter for ``GameScene`` is the procedure ``get_GameScene``. See
-:ref:`communication-protocol-procedure-names` for the naming rules, and the
-:ref:`communication-protocol-service-description-message` for the full list of members.
+The service also has members for programs to use directly, such as the ``GameScene``, ``Paused``
+and ``Clients`` properties and the ``HoldTick`` procedure. A program calls them through its client
+library, like the members of any other service. They are listed in each client's API reference,
+such as the :doc:`Python one </python/api/krpc/krpc>`.
 
 GetStatus
 ^^^^^^^^^
 
-The ``GetStatus`` procedure returns status information about the server. It
-returns a Protocol Buffer message with the format:
+The ``GetStatus`` procedure returns status information about the server, as a ``Status`` message:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
    :start-at: message Status {
    :end-at: uint32 protocol_version = 20;
+   :append: }
 
-The ``version`` field contains the version string of the server. The
-``protocol_version`` field contains the protocol version of the connection. The remaining
-fields contain performance information about the server.
+The ``version`` field holds the version of the server, and ``protocol_version`` the protocol
+version of the connection. The remaining fields hold performance statistics and the server's
+configuration settings.
 
 .. _communication-protocol-get-services:
 
 GetServices
 ^^^^^^^^^^^
 
-The ``GetServices`` procedure returns a Protocol Buffer message containing information about all of
-the services and procedures provided by the server. The format of the message is:
-
-.. literalinclude:: /communication-protocols/krpc.proto
-   :language: protobuf
-   :start-at: message Services {
-   :end-before: message Service {
-
-This contains a single field, which is a list of ``Service`` messages with information about each
-service provided by the server. The content of these ``Service`` messages are :ref:`documented below
-<communication-protocol-service-description-message>`.
+The ``GetServices`` procedure describes every service the server provides. A client can use it to
+introspect the services, as the Python and Lua clients do to build their API when they connect. It
+returns a ``Services`` message, described under
+:ref:`communication-protocol-service-description-message`.
 
 .. _communication-protocol-add-stream:
 
 AddStream
 ^^^^^^^^^
 
-The ``AddStream`` procedure adds a new stream to the server. Its argument is the RPC to invoke,
-encoded as a ``ProcedureCall`` message. The procedure returns a
-``Stream`` message describing the stream that was added. See
-:ref:`communication-protocol-anatomy-of-a-request` for the format and contents of this message. See
-:ref:`communication-protocol-streams` for more information on working with streams.
+The ``AddStream`` procedure adds a stream of a remote procedure. Its argument is the call, as a
+``ProcedureCall`` message. See :ref:`communication-protocol-anatomy-of-a-request`. It returns a
+``Stream`` message, described under :ref:`communication-protocol-streams`.
 
 .. _communication-protocol-add-function-stream:
 
@@ -447,10 +409,9 @@ AddFunctionStream
 The ``AddFunctionStream`` procedure adds a stream that evaluates a server side function on
 each update. Its argument is the function, built using the ``KRPC.Expression`` class.
 
-The procedure returns a ``Stream`` message describing the stream that was added. The stream's
-values have the type given by the function's ``ReturnType`` property. The function must take no
-parameters. Any exception from the function ends the stream with that error, including one for a
-game object that is not loaded.
+The procedure returns a ``Stream`` message. The stream's values have the type given by the
+function's ``ReturnType`` property. The function must take no parameters. Any exception from the
+function ends the stream with that error.
 
 .. _communication-protocol-add-event:
 
@@ -461,85 +422,70 @@ The ``AddEvent`` procedure adds an event that fires when a server side function 
 Its argument is the function, built using the ``KRPC.Expression`` class. The function must take no
 parameters and return a ``bool``.
 
-The procedure returns an ``Event`` message describing the event's stream. See
-:ref:`communication-protocol-events` for the format of this message. The function is evaluated on
-each stream update, and the event fires on every update it returns true. A rate set with
-:ref:`communication-protocol-set-stream-rate` limits how often the function is evaluated. Any
-exception from the function ends the event's stream with that error, including one for a game object
-that is not loaded.
+The procedure returns an ``Event`` message. The function is evaluated on each stream update, and
+the event fires on every update it returns true. Any exception from the function ends the event's
+stream with that error.
 
 .. _communication-protocol-run-function:
 
 RunFunction
 ^^^^^^^^^^^
 
-The ``RunFunction`` procedure evaluates a server side function once, within a single physics
-tick, and returns the value it produces. Its first argument is the function, built using the
-``KRPC.Expression`` class. The value is returned as a ``bytes`` result holding the value's
-ordinary encoding, at the function's return type.
+The ``RunFunction`` procedure evaluates a server side function once, within a single physics tick.
+Its first argument is the function, built using the ``KRPC.Expression`` class.
 
 The second argument is a list of the function's arguments, one per parameter of a function built
-with ``Expression.Lambda``. Each holds the value's ordinary encoding at the type given by the
-function's ``ParameterTypes`` property, and is null for a null value. A function that is not a
-lambda takes no arguments, and the list defaults to empty.
+with ``Expression.Lambda``. Each is :ref:`encoded <communication-protocol-protobuf-encoding>`
+according to the type given by the function's ``ParameterTypes`` property, and is null for a null
+value. A function that is not a lambda takes no arguments, and the list defaults to empty.
 
-A client decodes the result at the type given by the function's ``ReturnType`` property. A
-function that produces no value returns an empty result, and a function whose value is null sets
-``is_null`` on the result, the same flag any nullable return value uses. The function's
-``HasReturnType`` property distinguishes no value from an empty collection, as both give an
-empty result.
+The result is a ``bytes`` value, holding the function's value encoded according to its
+``ReturnType``. A null value sets ``is_null``. A function with no value returns empty bytes, which
+``HasReturnType`` tells apart from an empty collection.
+
+The client specification states how a client builds and runs functions. See
+:doc:`/client-spec/functions`.
 
 .. _communication-protocol-compile-function:
 
 CompileFunction
 ^^^^^^^^^^^^^^^
 
-The ``CompileFunction`` procedure compiles a server side function, and returns nothing. The
-server otherwise compiles a function when it is first run, streamed or added as an event, on the
-game's main thread. Compiling a large function in advance keeps that time out of its first run.
+The ``CompileFunction`` procedure compiles a server side function in advance, and returns nothing.
+This keeps the compile time of a large function out of its first run.
 
 .. _communication-protocol-set-stream-rate:
 
 SetStreamRate
 ^^^^^^^^^^^^^
 
-The ``SetStreamRate`` procedure sets the target update rate of a stream, in Hertz. Its arguments are
-the identifier of the stream and the rate, as a ``float``. A rate of zero, the default, updates the
-stream on every fixed update. While the game is paused with the server setting "Pause the server
-when the game pauses" turned off, the server updates once per rendered frame.
-
-Setting the rate of a stream that has already ended does nothing. An identifier the server never
-issued raises ``KRPC.ArgumentException``.
+The ``SetStreamRate`` procedure sets the target update rate of a stream, in hertz. Its arguments
+are the identifier of the stream and the rate, as a ``float``. A rate of zero, the default, updates
+the stream on every physics tick.
 
 .. _communication-protocol-remove-stream:
 
 RemoveStream
 ^^^^^^^^^^^^
 
-The ``RemoveStream`` procedure removes a stream from the server. It takes a single argument -- the
-identifier of the stream to be removed. This is the identifier returned when the stream was added by
-calling :ref:`communication-protocol-add-stream` or
-:ref:`communication-protocol-add-function-stream`, or the stream identifier in an ``Event`` message.
-See :ref:`communication-protocol-streams` for more information on working with streams.
-
-Removing a stream that has already ended does nothing. An identifier the server never issued raises
-``KRPC.ArgumentException``.
+The ``RemoveStream`` procedure removes a stream. Its argument is the stream's identifier, from
+:ref:`communication-protocol-add-stream`, :ref:`communication-protocol-add-function-stream` or an
+``Event`` message.
 
 .. _communication-protocol-service-description-message:
 
 Service Description Message
 ---------------------------
 
-The :ref:`GetServices procedure <communication-protocol-get-services>` returns information about all
-of the services provided by the server. Details about a service are given by a ``Service`` message,
-with the format:
+The :ref:`GetServices procedure <communication-protocol-get-services>` returns a ``Services``
+message, holding a ``Service`` message for each service the server provides:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
-   :start-at: message Service {
+   :start-at: message Services {
    :end-before: message Procedure {
 
-The fields are:
+The fields of a ``Service`` are:
 
 * ``name`` - The name of the service.
 
@@ -551,21 +497,25 @@ The fields are:
 * ``enumerations`` - A list of ``Enumeration`` messages, one for each :cs:attr:`KRPCEnum`
   defined by the service.
 
-* ``exceptions`` - A list of ``Exception`` messages, one for each :cs:attr:`KRPCException`
-  defined by the service.
-
 * ``structs`` - A list of ``Struct`` messages, one for each :cs:attr:`KRPCStruct`
   defined by the service.
 
-* ``documentation`` - Documentation for the service, as `C# XML documentation`_.
+* ``exceptions`` - A list of ``Exception`` messages, one for each :cs:attr:`KRPCException`
+  defined by the service.
 
-* ``deprecated`` - Whether the service is deprecated. Deprecated services remain fully functional;
-  this field is informational.
+* ``documentation`` - Documentation for the service.
 
-* ``deprecated_reason`` - If the service is deprecated, the reason for its deprecation. May be empty.
+* ``deprecated`` - Whether the service is deprecated.
 
-.. note:: See the :ref:`extending` documentation for more details about :cs:attr:`KRPCClass`,
-          :cs:attr:`KRPCEnum`, :cs:attr:`KRPCStruct` and :cs:attr:`KRPCException`.
+* ``deprecated_reason`` - The reason for the deprecation.
+
+The ``documentation`` field of each description message holds `C# XML documentation
+<https://learn.microsoft.com/dotnet/csharp/language-reference/xmldoc/>`_, with the markup described
+under :ref:`service-api-documentation`. A member marked ``deprecated`` still works, and its
+``deprecated_reason`` may be empty.
+
+.. seealso:: :ref:`extending`, for :cs:attr:`KRPCClass`, :cs:attr:`KRPCEnum`, :cs:attr:`KRPCStruct`
+   and :cs:attr:`KRPCException`.
 
 Procedures
 ^^^^^^^^^^
@@ -599,10 +549,10 @@ The fields are:
   * ``has_default_value`` - Whether the parameter has a default value. When it is not set, the
     parameter is required and ``default_value`` and ``default_value_is_null`` are unset.
 
-  * ``default_value`` - The default value of the parameter, :ref:`encoded using Protocol Buffer
-    format <communication-protocol-protobuf-encoding>`. Set only when ``has_default_value`` is set
-    and ``default_value_is_null`` is not. A zero-length value is a valid default, for example an
-    empty collection.
+  * ``default_value`` - The default value of the parameter, :ref:`encoded
+    <communication-protocol-protobuf-encoding>` according to the parameter's type. Set only when
+    ``has_default_value`` is set and ``default_value_is_null`` is not. A zero-length value is a
+    valid default, for example an empty collection.
 
   * ``default_value_is_null`` - Whether the default value is null. Set only when ``has_default_value``
     is set, in which case ``default_value`` is unset.
@@ -630,19 +580,18 @@ The fields are:
        - unset
 
 * ``return_type`` - The :ref:`return type <communication-protocol-type>` of the procedure. If the
-  procedure does not return anything its type is set to ``NONE``. Its ``nullable`` field says
+  procedure does not return anything the field is unset, so its ``code`` reads as ``NONE``. Its
+  ``nullable`` field says
   whether the procedure can return null.
 
 * ``game_scenes`` - The :ref:`game scenes <communication-protocol-game-scene>` that the procedure is
   available in. If this repeated field is empty, the procedure is available in all game scenes.
 
-* ``documentation`` - Documentation for the procedure, as `C# XML documentation`_.
+* ``documentation`` - Documentation for the procedure.
 
-* ``deprecated`` - Whether the procedure is deprecated. Deprecated procedures remain fully
-  functional; this field is informational.
+* ``deprecated`` - Whether the procedure is deprecated.
 
-* ``deprecated_reason`` - If the procedure is deprecated, the reason for its deprecation. May be
-  empty.
+* ``deprecated_reason`` - The reason for the deprecation.
 
 Classes
 ^^^^^^^
@@ -658,12 +607,11 @@ The fields are:
 
 * ``name`` - The name of the class.
 
-* ``documentation`` - Documentation for the class, as `C# XML documentation`_.
+* ``documentation`` - Documentation for the class.
 
-* ``deprecated`` - Whether the class is deprecated. Deprecated classes remain fully functional;
-  this field is informational.
+* ``deprecated`` - Whether the class is deprecated.
 
-* ``deprecated_reason`` - If the class is deprecated, the reason for its deprecation. May be empty.
+* ``deprecated_reason`` - The reason for the deprecation.
 
 Enumerations
 ^^^^^^^^^^^^
@@ -687,30 +635,25 @@ The fields are:
 
   * ``value`` - The possible value for the enumeration as a 32-bit integer.
 
-  * ``documentation`` - Documentation for the enumeration value, as `C# XML documentation`_.
+  * ``documentation`` - Documentation for the enumeration value.
 
-  * ``deprecated`` - Whether the enumeration value is deprecated. Deprecated values remain fully
-    functional; this field is informational.
+  * ``deprecated`` - Whether the enumeration value is deprecated.
 
-  * ``deprecated_reason`` - If the enumeration value is deprecated, the reason for its deprecation.
-    May be empty.
+  * ``deprecated_reason`` - The reason for the deprecation.
 
-* ``documentation`` - Documentation for the enumeration, as `C# XML documentation`_.
+* ``documentation`` - Documentation for the enumeration.
 
-* ``deprecated`` - Whether the enumeration is deprecated. Deprecated enumerations remain fully
-  functional; this field is informational.
+* ``deprecated`` - Whether the enumeration is deprecated.
 
-* ``deprecated_reason`` - If the enumeration is deprecated, the reason for its deprecation. May be
-  empty.
+* ``deprecated_reason`` - The reason for the deprecation.
 
 .. _communication-protocol-structures:
 
 Structures
 ^^^^^^^^^^
 
-A structure is a compound value with named fields, whose value on the wire is the values of those
-fields sent inline. A class sends an identifier for an object held on the server instead. Details
-about each :cs:attr:`KRPCStruct` are specified in a ``Struct`` message, with the format:
+A structure is a compound value with named fields, sent as the values of its fields. Details about
+each :cs:attr:`KRPCStruct` are specified in a ``Struct`` message, with the format:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
@@ -731,45 +674,25 @@ The fields are:
     have, including a class, a collection or another structure. Its ``nullable`` field says
     whether the field can be null.
 
-  * ``documentation`` - Documentation for the field, as `C# XML documentation`_.
+  * ``documentation`` - Documentation for the field.
 
-  * ``deprecated`` - Whether the field is deprecated. Deprecated fields remain fully functional;
-    this field is informational.
+  * ``deprecated`` - Whether the field is deprecated.
 
-  * ``deprecated_reason`` - If the field is deprecated, the reason for its deprecation. May be
-    empty.
+  * ``deprecated_reason`` - The reason for the deprecation.
 
-* ``documentation`` - Documentation for the structure, as `C# XML documentation`_.
+* ``documentation`` - Documentation for the structure.
 
-* ``deprecated`` - Whether the structure is deprecated. Deprecated structures remain fully
-  functional; this field is informational.
+* ``deprecated`` - Whether the structure is deprecated.
 
-* ``deprecated_reason`` - If the structure is deprecated, the reason for its deprecation. May be
-  empty.
+* ``deprecated_reason`` - The reason for the deprecation.
 
 A value of a structure type is encoded as a ``Tuple`` message whose items are the encoded values of
 the structure's fields, in the order the ``fields`` list gives them. This is the encoding of a tuple
-of the field types, so a client can use the codec it already has for tuples. The field names appear
-only in the definition above.
+of the field types. The field names appear only in the definition above.
 
-One rule follows from that encoding: fields are only ever appended to a structure. A client
-generated against an older definition may receive more items than it has fields for, and ignores
-the extra items. Fewer items than its fields means the definitions do not match, and is an error.
-
-A field whose type is nullable carries a presence bool before its value. The bool is one byte,
-encoded as a ``BOOL`` value. The field's ordinary encoding follows it when the bool is true. A
-list element, a tuple item and a dictionary value carry the same bool, in the item of the
-``List``, ``Tuple`` or ``DictionaryEntry`` message that holds them. For example, a structure
-whose first field is an ``SINT32`` and whose second is a nullable ``CLASS``::
-
-   Tuple.items[0] = 54           the first field, unchanged
-   Tuple.items[1] = 01 07        present, then object id 7
-   Tuple.items[1] = 00           null
-
-A field that is not nullable is encoded as its value alone, and a null in one is an error. The
-presence bool is what separates a null field from a null structure: ``is_null`` on the enclosing
-``Argument`` or ``ProcedureResult`` message applies to the structure value as a whole, and carries
-nothing about its fields.
+A nullable field carries a presence bool, as described under
+:ref:`communication-protocol-null-values`. ``is_null`` on the enclosing ``Argument`` or
+``ProcedureResult`` applies to the whole structure.
 
 Exceptions
 ^^^^^^^^^^
@@ -786,24 +709,21 @@ The fields are:
 
 * ``name`` - The name of the exception type.
 
-* ``documentation`` - Documentation for the exception, as `C# XML documentation`_.
+* ``documentation`` - Documentation for the exception.
 
-* ``deprecated`` - Whether the exception is deprecated. Deprecated exceptions remain fully
-  functional; this field is informational.
+* ``deprecated`` - Whether the exception is deprecated.
 
-* ``deprecated_reason`` - If the exception is deprecated, the reason for its deprecation. May be
-  empty.
+* ``deprecated_reason`` - The reason for the deprecation.
 
 * ``mapped_type`` - The full name of the .NET exception the server reports as this exception, for
-  example ``System.ArgumentException``. A client can raise its own equivalent of it. Empty if
-  there is none.
+  example ``System.ArgumentException``. Empty if there is none.
 
 .. _communication-protocol-procedure-names:
 
 Procedure Names
 ---------------
 
-Procedures names are CamelCase. Whether a procedure is a service procedure, class method, class
+Procedure names are CamelCase. Whether a procedure is a service procedure, class method, class
 property, and what class (if any) it belongs to is determined by its name:
 
 * ``ProcedureName`` - a standard procedure that is just part of a service.
@@ -830,44 +750,42 @@ The ``GetServices`` procedure returns type information about parameters, return 
    :start-at: message Type {
    :end-before: // Collection data structures
 
-The ``code`` field specifies the type. ``NONE`` is used as the return type for procedures that do
-not return a value.
+The ``code`` field specifies the type. ``NONE`` is the code of an unset type, such as the return
+type of a procedure that returns no value.
 
 For ``CLASS``, ``ENUMERATION`` and ``STRUCT`` types the ``service`` and ``name`` fields specify the
 service that defines the class, enumeration or structure and its name. For all other types these
-fields are empty. The fields of a structure are read from the :ref:`Struct message
-<communication-protocol-structures>` in the definition of the service that names it.
+fields are empty.
 
 For collection types the ``types`` repeated field will contain the sub-types:
 
-* ``TUPLE`` types contain 1 or more types in the ``types`` field.
+* ``TUPLE`` types contain one or more types in the ``types`` field.
 * ``LIST`` and ``SET`` types contain a single type in the ``types`` field.
-* ``DICTIONARY`` types contain a 2 types in the ``types`` field - the key and value types, in that
-  order.
+* ``DICTIONARY`` types contain two types in the ``types`` field: the key type, then the value type.
 
-For all other types the ``types`` field is empty.
+For all other types the ``types`` field is empty. A ``STRUCT`` type carries only the name of its
+structure, and its field types are in the :ref:`Struct message <communication-protocol-structures>`
+of the service that defines it.
 
 The ``nullable`` field says whether the position the type describes can hold null. It is a
 property of that position rather than of the type, so the same type is nullable in one place and
-not in another. The positions that can be nullable are a parameter, a return value, a default
-value, a :ref:`structure field <communication-protocol-structures>`, a list element, a tuple item
-and a dictionary value. A dictionary key and a set element cannot.
+not in another. The positions that can be nullable are a parameter, a return value, a
+:ref:`structure field <communication-protocol-structures>`, a list element, a tuple item and a
+dictionary value. A dictionary key and a set element cannot.
 
 How the null itself is carried depends on the position. An argument, a result and a default value
 each have a flag of their own, ``Argument.is_null``, ``ProcedureResult.is_null`` and
 ``Parameter.default_value_is_null``. A value nested inside another value has no such flag, and
-carries a leading presence bool instead, in the form the :ref:`Structures
-<communication-protocol-structures>` section shows.
+carries a leading presence bool instead, as described under
+:ref:`communication-protocol-null-values`.
 
 .. _communication-protocol-game-scene:
 
 GameScene
 ---------
 
-The ``GetServices`` procedure returns information about which game scenes a procedure can be called
-from. These are returned as a repeated field containing ``GameScene`` enumeration values. If the
-procedure is available in all game scenes, this field is empty. The enumeration is defined as
-follows:
+A procedure's ``game_scenes`` field lists the ``GameScene`` values it is available in. An empty
+list means every scene:
 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
@@ -875,8 +793,7 @@ follows:
    :end-at: };
    :dedent:
 
-The astronaut complex, mission control, research and development and administration scenes are
-facilities that open within the space center scene.
+``ASTRONAUT_COMPLEX`` through ``ADMINISTRATION`` each name a facility open within ``SPACE_CENTER``.
 
 .. _communication-protocol-proxy-objects:
 
@@ -887,11 +804,8 @@ kRPC allows procedures to create objects on the server, and pass a unique identi
 client. This allows the client to create a *proxy* object for the actual object, whose methods and
 properties make remote procedure calls to the server. Object identifiers have type ``uint64``.
 
-When a procedure returns a proxy object or takes one as a parameter, the type code will be set to
-``CLASS``.
+When a procedure returns a proxy object or takes one as a parameter, the type code is ``CLASS``.
 
 The ``is_null`` field of the ``ProcedureResult`` or ``Argument`` message signals a null object
 reference, as it does a null value of any other type. The object identifier is never used to
 represent null on the wire.
-
-.. _C# XML documentation: https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx

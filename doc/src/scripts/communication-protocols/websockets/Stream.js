@@ -1,38 +1,68 @@
-'use strict'
+'use strict';
 
-var websocket = require('ws');
-var protobufjs = require('protobufjs')
-var proto = protobufjs.loadProtoFile('krpc.proto').build();
-var schema = proto.krpc.schema;
+const WebSocket = require('ws');
+const protobuf = require('protobufjs');
 
-console.log('Connecting to the server')
-let conn = new websocket('ws://127.0.0.1:50000')
-conn.binaryType = 'arraybuffer'
+const root = protobuf.loadSync('krpc.proto');
+const Message = root.lookupType('krpc.schema.Message');
+const ProcedureCall = root.lookupType('krpc.schema.ProcedureCall');
+const Stream = root.lookupType('krpc.schema.Stream');
+const Status = root.lookupType('krpc.schema.Status');
 
-conn.onopen = (evnt) => {
-  // The handshake is the first binary message
-  let request = new schema.ConnectionRequest({client_name: 'Jeb', protocol_version: 2});
-  conn.send(new schema.Message({connection_request: request}).toArrayBuffer());
+function send(conn, message) {
+  conn.send(Message.encode(Message.fromObject(message)).finish());
+}
+
+function receive(event) {
+  const message = Message.decode(new Uint8Array(event.data));
+  return Message.toObject(message, {enums: String, longs: Number, defaults: true});
+}
+
+// Open a websockets connection to the server
+const conn = new WebSocket('ws://127.0.0.1:50000/');
+conn.binaryType = 'arraybuffer';
+
+conn.onopen = () => {
+  // Send a connection request
+  send(conn, {connectionRequest: {clientName: 'Example', protocolVersion: 2}});
 };
 
-conn.onmessage = (evnt) => {
-  let message = schema.Message.decode(evnt.data);
-  if (message.connection_response) {
-    if (message.connection_response.status !== schema.ConnectionResponse.Status.OK)
-      throw new Error('Connection failed: ' + message.connection_response.message);
-    console.log('Successfully connected');
+let stream = null;
 
-    // Call KRPC.AddStream to stream KRPC.GetStatus, in a request with the id 1
-    let call_to_stream = new schema.ProcedureCall('KRPC', 'GetStatus');
-    let arg = new schema.Argument(0, call_to_stream.toArrayBuffer());
-    let call = new schema.ProcedureCall('KRPC', 'AddStream', [arg]);
-    conn.send(new schema.Message({request: new schema.Request({id: 1, calls: [call]})}).toArrayBuffer());
+conn.onmessage = (event) => {
+  const message = receive(event);
+  if (message.connectionResponse) {
+    // Check the connection was successful
+    const response = message.connectionResponse;
+    if (response.status !== 'OK')
+      throw new Error('Connection failed: ' + response.message);
+    if (response.protocolVersion !== 2)
+      throw new Error('The server does not support protocol version 2');
+    console.log('Connected to the server');
+
+    // Build a KRPC.GetStatus call to be streamed
+    const streamCall = ProcedureCall.encode({service: 'KRPC', procedure: 'GetStatus'}).finish();
+
+    // Call KRPC.AddStream to add the stream, in a request with the id 1
+    const call = {service: 'KRPC', procedure: 'AddStream', arguments: [{position: 0, value: streamCall}]};
+    send(conn, {request: {id: 1, calls: [call]}});
   } else if (message.response) {
-    let stream = schema.Stream.decode(message.response.results[0].value);
-    console.log('added stream id =', stream.id.toString());
-  } else if (message.stream_update) {
-    // Stream updates arrive on the same connection as the responses
-    let status = schema.Status.decode(message.stream_update.results[0].result.value);
-    console.log(status);
+    // Check for an error in the response, and in the results
+    const response = message.response;
+    if (response.error)
+      throw new Error('ERROR: ' + response.error.description);
+    if (response.results[0].error)
+      throw new Error('ERROR: ' + response.results[0].error.description);
+
+    // Decode the return value as a Stream message. The stream's first update follows it.
+    stream = Stream.toObject(Stream.decode(response.results[0].value), {longs: Number});
+  } else if (message.streamUpdate) {
+    // Decode and print the return value of each stream update
+    for (const result of message.streamUpdate.results) {
+      if (result.id === stream.id) {
+        const status = Status.decode(result.result.value);
+        console.log(Status.toObject(status, {longs: Number}));
+      }
+    }
   }
 };
