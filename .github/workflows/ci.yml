@@ -188,16 +188,15 @@ jobs:
         uses: ./.github/actions/bazel-disk-cache
         with:
           bazel: bazelisk
-          flags: --config=windows
           bazelrc: C:/ProgramData/bazel.bazelrc
       - name: build
         if: matrix.build
         shell: bash
-        run: bazelisk build --config=windows ${{ matrix.build }}
+        run: bazelisk build ${{ matrix.build }}
       - name: test
         if: matrix.test
         shell: bash
-        run: bazelisk test --config=windows ${{ matrix.test }}
+        run: bazelisk test ${{ matrix.test }}
       - name: save-cpp-cache
         if: matrix.cpp-cache == 'save' && steps.cpp-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6
@@ -328,7 +327,7 @@ jobs:
           dotnet build KRPC.sln -c Release -warnaserror
       - name: test
         shell: bash
-        run: bazelisk test //:csproj-test --config=windows
+        run: bazelisk test //:csproj-test
 
   linux-test-client-cnano:
     runs-on: ubuntu-latest

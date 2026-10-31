@@ -75,7 +75,7 @@ test --test_env=LC_ALL=C.UTF-8
 
 # Windows: rules_dotnet (and the symlink-based staging rules) need real symlinks
 # and runfiles trees. The startup flag is a no-op off Windows; the windows config
-# group is auto-selected on Windows hosts (and CI also passes --config=windows).
+# group is auto-selected on Windows hosts.
 startup --windows_enable_symlinks
 common:windows --enable_runfiles
 
@@ -91,19 +91,26 @@ build:windows --compilation_mode=dbg
 # flag) and the system C++ compiler toolchain (via --extra_toolchains, which
 # outranks the registered hermetic toolchain). Requires an LLVM install at the
 # path in MODULE.bazel's llvm.toolchain_root (present in the buildenv image).
-# CI turns this on through the ci config below; dev can pass it to reproduce CI.
+# CI turns this on through the ci-linux config below; dev can pass it to
+# reproduce CI.
 common:system-llvm --//tools/build/llvm:toolchain=system
 common:system-llvm --extra_toolchains=@llvm_system//:all
 
-# The Linux CI jobs, which run in the buildenv container. The bazel-fetch action
-# turns this on from ~/.bazelrc, so every bazel command in the job picks it up.
-common:ci --config=system-llvm
+# The CI jobs. The bazel-fetch actions turn on ci-linux or ci-windows from a
+# user or system rc file, so every bazel command in the job picks it up.
 test:ci --test_output=errors
 # Run every test, even one whose result the disk cache holds, so CI keeps
 # catching flaky tests
 test:ci --nocache_test_results
+# Skip the Linux-only targets in a pattern a Windows job names
+build:ci --skip_incompatible_explicit_targets
 
+# The Linux CI jobs, which run in the buildenv container
+common:ci-linux --config=ci --config=system-llvm
 # Abseil turns on parse_headers for its own packages, which compiles each of its
 # headers on its own as a check. With the system LLVM that is a third of the
 # compile actions a client's conformance testee needs.
-build:ci --features=-parse_headers --host_features=-parse_headers
+build:ci-linux --features=-parse_headers --host_features=-parse_headers
+
+# The Windows CI jobs. D: is the workspace disk of a GitHub Windows runner.
+common:ci-windows --config=ci --repository_cache=D:/bazel-repo

@@ -2,9 +2,6 @@ inputs:
   bazel:
     description: The command that runs Bazel
     default: bazel
-  flags:
-    description: The flags the job's Bazel commands pass
-    default: ""
   bazelrc:
     description: The rc file every later Bazel command in the job reads
     required: true
@@ -31,7 +28,7 @@ runs:
       id: cache-key
       shell: bash
       run: |
-        actions=$(${{ inputs.bazel }} aquery ${{ inputs.flags }} --output=text \
+        actions=$(${{ inputs.bazel }} aquery --output=text \
           'deps(@protobuf//src/google/protobuf/util:json_util + @cpp_googletest//:gmock)' |
           sha256sum | cut -d' ' -f1)
         echo "key=bazel-disk-cache-${{ runner.os }}-$actions" >> "$GITHUB_OUTPUT"

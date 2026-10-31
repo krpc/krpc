@@ -4,8 +4,8 @@ runs:
     - name: get-bazel-info
       shell: bash
       run: |
-        # Turn on the ci config for every later bazel command in the job
-        echo "common --config=ci" >> ~/.bazelrc
+        # Turn on the ci-linux config for every later bazel command in the job
+        echo "common --config=ci-linux" >> ~/.bazelrc
         echo "BAZEL_VERSION=$(bazel --version | cut -d' ' -f2)" >> "$GITHUB_ENV"
         # Cache only the download archives, in the content_addressable subdir of the
         # repository cache. Bazel 9 also keeps a "repo contents cache" of extracted
