@@ -31,6 +31,25 @@ namespace KRPC.Test.Server.TCP
         }
 
         [Test]
+        public void NotConnectedAfterClose ()
+        {
+            var listener = new System.Net.Sockets.TcpListener (System.Net.IPAddress.Loopback, 0);
+            listener.Start ();
+            try {
+                var port = ((System.Net.IPEndPoint)listener.LocalEndpoint).Port;
+                using (var peer = new System.Net.Sockets.TcpClient ()) {
+                    peer.Connect (System.Net.IPAddress.Loopback, port);
+                    var client = new TCPClient (listener.AcceptTcpClient ());
+                    Assert.IsTrue (client.Connected);
+                    client.Close ();
+                    Assert.IsFalse (client.Connected);
+                }
+            } finally {
+                listener.Stop ();
+            }
+        }
+
+        [Test]
         public void ConnectedUntilThePeerClosesAfterAHalfClose ()
         {
             var listener = new System.Net.Sockets.TcpListener (System.Net.IPAddress.Loopback, 0);
