@@ -796,7 +796,8 @@ public class Connection implements AutoCloseable {
   }
 
   /**
-   * Create a stream for a static method call.
+   * Create a stream for a static method call. A method with no return value runs on each update
+   * for its effects, and the stream's value is null, as a {@code Stream<Void>}.
    *
    * @param clazz
    *            The class containing the static method.
@@ -810,11 +811,12 @@ public class Connection implements AutoCloseable {
   public <T> Stream<T> addStream(Class<?> clazz, String method, Object... args)
       throws StreamException, RPCException {
     Method methodInfo = getMethodByName(clazz, method, args);
-    return new Stream<T>(this, getReturnType(methodInfo), getCall(methodInfo, null, args));
+    return new Stream<T>(this, streamedType(methodInfo), getCall(methodInfo, null, args));
   }
 
   /**
-   * Create a stream for a method call on an object.
+   * Create a stream for a method call on an object. A method with no return value runs on each
+   * update for its effects, and the stream's value is null, as a {@code Stream<Void>}.
    *
    * @param instance
    *            An instance of the object.
@@ -828,15 +830,16 @@ public class Connection implements AutoCloseable {
   public <T> Stream<T> addStream(RemoteObject instance, String method, Object... args)
       throws StreamException, RPCException {
     Method methodInfo = getMethodByName(instance.getClass(), method, args);
-    return new Stream<T>(this, getReturnType(methodInfo), getCall(methodInfo, instance, args));
+    return new Stream<T>(this, streamedType(methodInfo), getCall(methodInfo, instance, args));
   }
 
   /**
    * Create a stream from a server side function, evaluated on each update. Each call creates a
    * new stream. Values are decoded at the type the server reports for the function. A type
    * parameter that cannot hold that type throws a ClassCastException where a
-   * value is assigned. Throws a StreamException if the function has no value, and an
-   * IllegalArgumentException if it has parameters.
+   * value is assigned. A function with no value runs on each update for its effects, and the
+   * stream's value is null, as a {@code Stream<Void>}. Throws an IllegalArgumentException if
+   * the function has parameters.
    *
    * @param function
    *            The function to evaluate on each stream update.
@@ -846,11 +849,8 @@ public class Connection implements AutoCloseable {
   public <T> Stream<T> addStream(krpc.client.services.KRPC.Expression function)
       throws StreamException, RPCException {
     KRPC.Type returnType = expressionReturnType(function);
-    if (returnType == null) {
-      throw new StreamException("The function does not evaluate to a value");
-    }
     long streamId = InternalProcedures.addFunctionStream(this, function);
-    return new Stream<T>(this, returnType, streamId);
+    return new Stream<T>(this, returnType == null ? Stream.NO_VALUE : returnType, streamId);
   }
 
   /**
@@ -1129,6 +1129,12 @@ public class Connection implements AutoCloseable {
       encodedArgs[i] = Encoder.encode(args[i], parameterTypes[i]);
     }
     return buildCall(method, encodedArgs);
+  }
+
+  /** The type of a stream's values, for a stream of a call to a remote procedure. */
+  private KRPC.Type streamedType(Method method) throws RPCException {
+    KRPC.Type returnType = getReturnType(method);
+    return returnType == null ? Stream.NO_VALUE : returnType;
   }
 
   private KRPC.Type getReturnType(Method method)

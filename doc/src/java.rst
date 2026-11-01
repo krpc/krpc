@@ -179,8 +179,9 @@ A property is streamed with the name of its getter:
 A procedure of a service is streamed with the service's class in place of an object, such as
 ``connection.addStream(SpaceCenter.class, "getUT")``.
 
-A stream can be made of any procedure or property that returns a value. Each call to
-:meth:`~Connection.addStream` creates another stream.
+Each call to :meth:`~Connection.addStream` creates another stream. A stream of a procedure with no
+return value runs the call on each update for its effects. Its value is ``null``, as a
+``Stream<Void>``.
 
 A stream runs until you remove it with :meth:`~Stream.remove`, your program drops its last
 reference to it, or the connection closes. Keep a reference to a stream for as long as you need its
@@ -496,8 +497,9 @@ Client API Reference
       :type:`Stream`. Each call creates a new stream. The type parameter must hold the function's
       value, or assigning a value throws a :type:`~java.lang.ClassCastException`.
 
-      Throws a :type:`StreamException` if the function has no value, and an
-      :type:`~java.lang.IllegalArgumentException` if it has parameters.
+      A function with no value runs on each update for its effects, and the stream's value is
+      ``null``, as a ``Stream<Void>``. Throws an :type:`~java.lang.IllegalArgumentException` if
+      the function has parameters.
 
    .. method:: <T> T run(KRPC.Expression function, Object... args)
 
