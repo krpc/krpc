@@ -7,7 +7,7 @@ const root = protobuf.loadSync('krpc.proto');
 const Message = root.lookupType('krpc.schema.Message');
 const ProcedureCall = root.lookupType('krpc.schema.ProcedureCall');
 const Stream = root.lookupType('krpc.schema.Stream');
-const Status = root.lookupType('krpc.schema.Status');
+const Tuple = root.lookupType('krpc.schema.Tuple');
 
 function send(conn, message) {
   conn.send(Message.encode(Message.fromObject(message)).finish());
@@ -60,8 +60,12 @@ conn.onmessage = (event) => {
     // Decode and print the return value of each stream update
     for (const result of message.streamUpdate.results) {
       if (result.id === stream.id) {
-        const status = Status.decode(result.result.value);
-        console.log(Status.toObject(status, {longs: Number}));
+        // The value is a ServerStatus structure sent as a Tuple of its fields. Its fourth field
+        // is the server statistics, another structure, whose second field is the number of
+        // bytes the server has written.
+        const status = Tuple.decode(result.result.value);
+        const statistics = Tuple.decode(status.items[3]);
+        console.log(protobuf.Reader.create(statistics.items[1]).uint64().toString());
       }
     }
   }

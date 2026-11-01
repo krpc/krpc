@@ -17,6 +17,8 @@ namespace KRPC.Service.KRPC
             Id = client.Guid.ToByteArray ();
             Name = client.Name;
             Address = client.Address;
+            var messageClient = client as Server.Message.Client;
+            ProtocolVersion = messageClient != null ? messageClient.ProtocolVersion : 0;
         }
 
         /// <summary>
@@ -36,5 +38,11 @@ namespace KRPC.Service.KRPC
         /// </summary>
         [KRPCProperty]
         public string Address { get; set; }
+
+        /// <summary>
+        /// The protocol version of the client's connection.
+        /// </summary>
+        [KRPCProperty]
+        public uint ProtocolVersion { get; set; }
     }
 }

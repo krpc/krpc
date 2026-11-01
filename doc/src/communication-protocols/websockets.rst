@@ -40,7 +40,7 @@ The examples run in Node.js, using the ``ws`` and ``protobufjs`` packages. A web
 the same ``WebSocket`` interface.
 
 The following script connects to the server with the name "Example", calls ``KRPC.GetStatus`` and
-prints the result. It then ends the connection:
+prints the server version. It then ends the connection:
 
 .. literalinclude:: /scripts/communication-protocols/websockets/RPC.js
    :language: javascript

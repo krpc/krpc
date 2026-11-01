@@ -17,8 +17,6 @@ namespace KRPC.Server.ProtocolBuffers
                 return ((Service.Messages.Services)message).ToProtobufMessage ();
             if (type == typeof(Service.Messages.Stream))
                 return ((Service.Messages.Stream)message).ToProtobufMessage ();
-            if (type == typeof(Status))
-                return ((Status)message).ToProtobufMessage ();
             throw new ArgumentException ("Cannot convert a " + type + " to a protobuf message");
         }
 
@@ -251,8 +249,6 @@ namespace KRPC.Server.ProtocolBuffers
                     result.Code = Schema.KRPC.Type.Types.TypeCode.ProcedureCall;
                 else if (type == typeof(Service.Messages.Stream))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Stream;
-                else if (type == typeof(Status))
-                    result.Code = Schema.KRPC.Type.Types.TypeCode.Status;
                 else if (type == typeof(Service.Messages.Services))
                     result.Code = Schema.KRPC.Type.Types.TypeCode.Services;
                 else
@@ -296,32 +292,6 @@ namespace KRPC.Server.ProtocolBuffers
         {
             var result = new Schema.KRPC.Stream ();
             result.Id = stream.Id;
-            return result;
-        }
-
-        public static Schema.KRPC.Status ToProtobufMessage (this Status status)
-        {
-            var result = new Schema.KRPC.Status ();
-            result.Version = status.Version;
-            result.BytesRead = status.BytesRead;
-            result.BytesWritten = status.BytesWritten;
-            result.BytesReadRate = status.BytesReadRate;
-            result.BytesWrittenRate = status.BytesWrittenRate;
-            result.RpcsExecuted = status.RpcsExecuted;
-            result.RpcRate = status.RpcRate;
-            result.OneRpcPerUpdate = status.OneRpcPerUpdate;
-            result.MaxTimePerUpdate = status.MaxTimePerUpdate;
-            result.AdaptiveRateControl = status.AdaptiveRateControl;
-            result.BlockingRecv = status.BlockingRecv;
-            result.RecvTimeout = status.RecvTimeout;
-            result.TimePerRpcUpdate = status.TimePerRpcUpdate;
-            result.PollTimePerRpcUpdate = status.PollTimePerRpcUpdate;
-            result.ExecTimePerRpcUpdate = status.ExecTimePerRpcUpdate;
-            result.StreamRpcs = status.StreamRpcs;
-            result.StreamRpcsExecuted = status.StreamRpcsExecuted;
-            result.StreamRpcRate = status.StreamRpcRate;
-            result.TimePerStreamUpdate = status.TimePerStreamUpdate;
-            result.ProtocolVersion = status.ProtocolVersion;
             return result;
         }
 

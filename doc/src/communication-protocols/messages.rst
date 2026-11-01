@@ -251,7 +251,7 @@ An argument or a return value is encoded according to its
    * - ``TUPLE``, ``LIST``, ``SET``, ``DICTIONARY``
      - The ``Tuple``, ``List``, ``Set`` or ``Dictionary`` message, with each item encoded according
        to its own type.
-   * - ``EVENT``, ``PROCEDURE_CALL``, ``STREAM``, ``STATUS``, ``SERVICES``
+   * - ``EVENT``, ``PROCEDURE_CALL``, ``STREAM``, ``SERVICES``
      - The serialized message of the same name.
 
 .. _communication-protocol-null-values:
@@ -350,7 +350,7 @@ value, the stream holds only firings, as the server sends a value only when the 
 .. literalinclude:: /communication-protocols/krpc.proto
    :language: protobuf
    :start-at: message Event {
-   :end-before: message Status {
+   :end-at: }
 
 .. _communication-protocol-krpc-service:
 
@@ -358,29 +358,14 @@ KRPC Service
 ------------
 
 The server provides a core service called ``KRPC``. Its procedures give clients the basic
-functionality they build on: the server's status, the definitions of its services, and streams and
-server side functions. A client library calls these procedures for the program using it. They are
-described below.
+functionality they build on: the definitions of the server's services, and streams and server side
+functions. A client library calls these procedures for the program using it. They are described
+below.
 
-The service also has members for programs to use directly, such as the ``GameScene``, ``Paused``
-and ``Clients`` properties and the ``HoldTick`` procedure. A program calls them through its client
-library, like the members of any other service. They are listed in each client's API reference,
-such as the :doc:`Python one </python/api/krpc/krpc>`.
-
-GetStatus
-^^^^^^^^^
-
-The ``GetStatus`` procedure returns status information about the server, as a ``Status`` message:
-
-.. literalinclude:: /communication-protocols/krpc.proto
-   :language: protobuf
-   :start-at: message Status {
-   :end-at: uint32 protocol_version = 20;
-   :append: }
-
-The ``version`` field holds the version of the server, and ``protocol_version`` the protocol
-version of the connection. The remaining fields hold performance statistics and the server's
-configuration settings.
+The service also has members for programs to use directly, such as the ``GetStatus`` and
+``HoldTick`` procedures and the ``GameScene``, ``Paused`` and ``Clients`` properties. A program
+calls them through its client library, like the members of any other service. They are listed in
+each client's API reference, such as the :doc:`Python one </python/api/krpc/krpc>`.
 
 .. _communication-protocol-get-services:
 

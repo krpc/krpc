@@ -107,6 +107,16 @@ namespace KRPC.Test
         }
 
         [Test]
+        public void OnlyAChangedValueSendsAnUpdate ()
+        {
+            var sent = core.StreamUpdatesSent;
+            Add (new ConstantStream (42));
+            Assert.AreEqual (1, Update ().Count);
+            Assert.AreEqual (0, Update ().Count);
+            Assert.AreEqual (sent + 1, core.StreamUpdatesSent);
+        }
+
+        [Test]
         public void AThrowingStreamFailsOnlyItself ()
         {
             var failing = Add (new ThrowingStream ());

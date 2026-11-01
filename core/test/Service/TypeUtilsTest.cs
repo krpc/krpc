@@ -32,7 +32,7 @@ namespace KRPC.Test.Service
 
         [TestCase (typeof(string))]
         [TestCase (typeof(long))]
-        [TestCase (typeof(Status))]
+        [TestCase (typeof(global::KRPC.Service.Messages.Stream))]
         [TestCase (typeof(TestService.TestClass))]
         [TestCase (typeof(TestService.TestEnum))]
         [TestCase (typeof(IList<string>))]
@@ -88,7 +88,7 @@ namespace KRPC.Test.Service
 
         [TestCase (typeof(float))]
         [TestCase (typeof(double))]
-        [TestCase (typeof(Status))]
+        [TestCase (typeof(global::KRPC.Service.Messages.Stream))]
         [TestCase (typeof(TestService.TestClass))]
         [TestCase (typeof(TestService.TestEnum))]
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
@@ -119,7 +119,7 @@ namespace KRPC.Test.Service
 
         [TestCase (typeof(string))]
         [TestCase (typeof(long))]
-        [TestCase (typeof(Status))]
+        [TestCase (typeof(global::KRPC.Service.Messages.Stream))]
         [TestCase (typeof(TestService.TestEnum))]
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
         [TestCase (typeof(TestService))]
@@ -142,7 +142,7 @@ namespace KRPC.Test.Service
 
         [TestCase (typeof(string))]
         [TestCase (typeof(long))]
-        [TestCase (typeof(Status))]
+        [TestCase (typeof(global::KRPC.Service.Messages.Stream))]
         [TestCase (typeof(TestService.TestClass))]
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
         [TestCase (typeof(TestService))]
@@ -173,7 +173,7 @@ namespace KRPC.Test.Service
 
         [TestCase (typeof(string))]
         [TestCase (typeof(long))]
-        [TestCase (typeof(Status))]
+        [TestCase (typeof(global::KRPC.Service.Messages.Stream))]
         [TestCase (typeof(TestService.TestClass))]
         [TestCase (typeof(TestService.TestEnum))]
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
@@ -198,7 +198,7 @@ namespace KRPC.Test.Service
 
         [TestCase (typeof(string))]
         [TestCase (typeof(long))]
-        [TestCase (typeof(Status))]
+        [TestCase (typeof(global::KRPC.Service.Messages.Stream))]
         [TestCase (typeof(TestService.TestClass))]
         [TestCase (typeof(TestService.TestEnum))]
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
@@ -225,7 +225,7 @@ namespace KRPC.Test.Service
 
         [TestCase (typeof(string))]
         [TestCase (typeof(long))]
-        [TestCase (typeof(Status))]
+        [TestCase (typeof(global::KRPC.Service.Messages.Stream))]
         [TestCase (typeof(TestService.TestClass))]
         [TestCase (typeof(TestService.TestEnum))]
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
@@ -257,7 +257,7 @@ namespace KRPC.Test.Service
 
         [TestCase (typeof(string))]
         [TestCase (typeof(long))]
-        [TestCase (typeof(Status))]
+        [TestCase (typeof(global::KRPC.Service.Messages.Stream))]
         [TestCase (typeof(TestService.TestClass))]
         [TestCase (typeof(TestService.TestEnum))]
         [TestCase (typeof(TestService.TestEnumWithoutAttribute))]
@@ -370,7 +370,7 @@ namespace KRPC.Test.Service
 
         [TestCase (typeof(string))]
         [TestCase (typeof(long))]
-        [TestCase (typeof(Status))]
+        [TestCase (typeof(global::KRPC.Service.Messages.Stream))]
         [TestCase (typeof(TestService.TestClass))]
         [TestCase (typeof(TestService.TestEnum))]
         [TestCase (typeof(StructWithoutFields))]
@@ -563,7 +563,7 @@ namespace KRPC.Test.Service
 
         [TestCase ("{\"code\":\"STRING\"}", typeof(string))]
         [TestCase ("{\"code\":\"SINT64\"}", typeof(long))]
-        [TestCase ("{\"code\":\"STATUS\"}", typeof(Status))]
+        [TestCase ("{\"code\":\"STREAM\"}", typeof(global::KRPC.Service.Messages.Stream))]
         [TestCase ("{\"code\":\"CLASS\",\"service\":\"TestService\",\"name\":\"TestClass\"}",
                    typeof(TestService.TestClass))]
         [TestCase ("{\"code\":\"ENUMERATION\",\"service\":\"TestService\",\"name\":\"TestEnum\"}",

@@ -36,7 +36,7 @@ Examples
    implement the :doc:`client specification </client-spec>` in its entirety.
 
 The following script connects to the server with the name "Example", calls ``KRPC.GetStatus`` and
-prints the result. It then ends the connection:
+prints the server version. It then ends the connection:
 
 .. literalinclude:: /scripts/communication-protocols/tcpip/RPC.py
    :language: python

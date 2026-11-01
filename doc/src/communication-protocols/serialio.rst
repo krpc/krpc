@@ -80,8 +80,8 @@ Example
    implement the :doc:`client specification </client-spec>` in its entirety.
 
 The following script connects to a server on the serial port ``/dev/ttyUSB0`` with the name
-"Example", calls ``KRPC.GetStatus`` and prints the result. It then ends the session with a
-``disconnect``:
+"Example", calls ``KRPC.GetStatus`` and prints the server version. It then ends the session with
+a ``disconnect``:
 
 .. literalinclude:: /scripts/communication-protocols/serialio/RPC.py
    :language: python

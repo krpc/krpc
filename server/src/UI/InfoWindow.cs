@@ -28,14 +28,17 @@ namespace KRPC.UI
         const string blockingModeText = "Blocking";
         const string nonBlockingModeText = "Non-blocking";
         const string recvTimeoutText = "Receive timeout";
+        const string tickHoldTimeoutText = "Tick hold timeout";
         const string timePerRPCUpdateText = "Time per update";
         const string pollTimePerRPCUpdateText = "Poll time per update";
         const string execTimePerRPCUpdateText = "Exec time per update";
+        const string deferredCallsText = "Deferred calls";
 
         const string streamInfoText = "Stream Execution Info";
-        const string streamingRPCsText = "Current Streams";
-        const string streamingRPCsExecutedText = "Stream RPCs Executed";
-        const string streamingRPCRateText = "Stream RPC Rate";
+        const string streamsText = "Current Streams";
+        const string streamEvaluationsText = "Stream Evaluations";
+        const string streamEvaluationRateText = "Stream Evaluation Rate";
+        const string streamUpdatesSentText = "Stream Updates Sent";
         const string timePerStreamUpdateText = "Time per update";
 
         const string notApplicableText = "n/a";
@@ -73,17 +76,21 @@ namespace KRPC.UI
         const float updateTime = 0.2f;
         DateTime lastUpdate = DateTime.Now;
         bool update = true;
-        IDictionary<string, string> values = new Dictionary<string, string> ();
+        // The value shown in each row, by position, as two sections have a "Time per update" row
+        readonly IList<string> values = new List<string> ();
+        int row;
 
         void DrawInfo (string label, string value)
         {
-            if (update || !values.ContainsKey (label)) {
-                values [label] = value;
-            }
+            if (row == values.Count)
+                values.Add (value);
+            else if (update)
+                values [row] = value;
             GUILayout.BeginHorizontal ();
             GUILayout.Label (label, nameLabelStyle);
-            GUILayout.Label (values [label], valueLabelStyle);
+            GUILayout.Label (values [row], valueLabelStyle);
             GUILayout.EndHorizontal ();
+            row++;
         }
 
         protected override void Draw (bool needRescale)
@@ -103,6 +110,7 @@ namespace KRPC.UI
             }
 
             update = ((DateTime.Now - lastUpdate).TotalSeconds > updateTime);
+            row = 0;
             if (update)
                 lastUpdate = DateTime.Now;
             var core = Core.Instance;
@@ -125,16 +133,19 @@ namespace KRPC.UI
             DrawInfo (maxTimePerUpdateText, config.OneRPCPerUpdate ? notApplicableText : config.MaxTimePerUpdate + " us");
             DrawInfo (rpcReceiveModeText, config.BlockingRecv ? blockingModeText : nonBlockingModeText);
             DrawInfo (recvTimeoutText, config.BlockingRecv ? config.RecvTimeout + " us" : notApplicableText);
+            DrawInfo (tickHoldTimeoutText, config.TickHoldTimeout + " us");
             DrawInfo (timePerRPCUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.TimePerRPCUpdate));
             DrawInfo (pollTimePerRPCUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.PollTimePerRPCUpdate));
             DrawInfo (execTimePerRPCUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.ExecTimePerRPCUpdate));
+            DrawInfo (deferredCallsText, core.DeferredCalls.ToString (CultureInfo.CurrentCulture));
 
             GUILayoutExtensions.Separator (separatorStyle);
 
             GUILayout.Label (streamInfoText, labelStyle);
-            DrawInfo (streamingRPCsText, core.StreamRPCs.ToString (CultureInfo.CurrentCulture));
-            DrawInfo (streamingRPCsExecutedText, core.StreamRPCsExecuted.ToString (CultureInfo.CurrentCulture));
-            DrawInfo (streamingRPCRateText, Math.Round (core.StreamRPCRate) + " RPC/s");
+            DrawInfo (streamsText, core.Streams.ToString (CultureInfo.CurrentCulture));
+            DrawInfo (streamEvaluationsText, core.StreamEvaluations.ToString (CultureInfo.CurrentCulture));
+            DrawInfo (streamEvaluationRateText, Math.Round (core.StreamEvaluationRate) + "/s");
+            DrawInfo (streamUpdatesSentText, core.StreamUpdatesSent.ToString (CultureInfo.CurrentCulture));
             DrawInfo (timePerStreamUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.TimePerStreamUpdate));
 
             GUILayoutExtensions.Separator (separatorStyle);

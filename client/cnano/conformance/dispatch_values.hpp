@@ -3,6 +3,7 @@
 #pragma once
 
 #include <krpc_cnano.h>
+#include <krpc_cnano/pb_common.h>
 #include <krpc_cnano/pb_encode.h>
 
 #include <cstdint>
@@ -179,6 +180,15 @@ template <typename T, const pb_msgdesc_t* Fields>
 struct Message {
   using type = T;
   static Value result(const type& x) {
+    // A repeated field with no max_count decodes only through a callback the caller sets,
+    // which the testee has no way to set
+    pb_field_iter_t field;
+    if (pb_field_iter_begin_const(&field, Fields, &x)) {
+      do {
+        if (PB_ATYPE(field.type) == PB_ATYPE_CALLBACK)
+          throw Unsupported("The message has a field that decodes only through a callback");
+      } while (pb_field_iter_next(&field));
+    }
     size_t size = 0;
     if (!pb_get_encoded_size(&size, Fields, &x))
       throw std::runtime_error("The message cannot be encoded");

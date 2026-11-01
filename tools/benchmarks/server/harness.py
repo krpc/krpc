@@ -143,11 +143,13 @@ class BenchmarkTestCase(krpctest.TestCase):
             # A scene check, not a measurement: each stream is evaluated every fixed update,
             # so the rate is a large multiple of the number of streams. Anything less means
             # they are not all running, and the timing below is an empty loop.
-            self.assertEqual(len(streams), status.stream_rpcs)
-            self.assertGreater(status.stream_rpc_rate, len(streams))
+            self.assertEqual(len(streams), status.statistics.streams)
+            self.assertGreater(status.statistics.stream_evaluation_rate, len(streams))
             samples = []
             for _ in range(self.stream_samples):
-                samples.append(conn.krpc.get_status().time_per_stream_update * 1e3)
+                samples.append(
+                    conn.krpc.get_status().statistics.time_per_stream_update * 1e3
+                )
                 self.wait(self.stream_sample_interval)
         finally:
             for stream in streams:

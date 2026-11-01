@@ -26,6 +26,85 @@ typedef krpc_object_t krpc_KRPC_Expression_t;
  */
 typedef krpc_object_t krpc_KRPC_Type_t;
 
+#ifndef KRPC_TYPE_KRPC_SERVERSETTINGS
+#define KRPC_TYPE_KRPC_SERVERSETTINGS
+
+typedef struct krpc_KRPC_ServerSettings_s krpc_KRPC_ServerSettings_t;
+struct krpc_KRPC_ServerSettings_s {
+  bool one_rpc_per_update;
+  uint32_t max_time_per_update;
+  bool adaptive_rate_control;
+  bool blocking_recv;
+  uint32_t recv_timeout;
+  uint32_t tick_hold_timeout;
+};
+
+static inline krpc_error_t krpc_encode_KRPC_ServerSettings(
+  pb_ostream_t * stream, const krpc_KRPC_ServerSettings_t * value);
+static inline krpc_error_t krpc_encode_size_KRPC_ServerSettings(
+  size_t * size, const krpc_KRPC_ServerSettings_t * value);
+static inline bool krpc_encode_callback_KRPC_ServerSettings(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
+static inline krpc_error_t krpc_decode_KRPC_ServerSettings(
+  pb_istream_t * stream, krpc_KRPC_ServerSettings_t * value);
+
+#endif  // KRPC_TYPE_KRPC_SERVERSETTINGS
+
+#ifndef KRPC_TYPE_KRPC_SERVERSTATISTICS
+#define KRPC_TYPE_KRPC_SERVERSTATISTICS
+
+typedef struct krpc_KRPC_ServerStatistics_s krpc_KRPC_ServerStatistics_t;
+struct krpc_KRPC_ServerStatistics_s {
+  uint64_t bytes_read;
+  uint64_t bytes_written;
+  float bytes_read_rate;
+  float bytes_written_rate;
+  uint64_t rpcs_executed;
+  float rpc_rate;
+  float time_per_rpc_update;
+  float poll_time_per_rpc_update;
+  float exec_time_per_rpc_update;
+  uint32_t deferred_calls;
+  uint32_t streams;
+  uint64_t stream_evaluations;
+  float stream_evaluation_rate;
+  uint64_t stream_updates_sent;
+  float time_per_stream_update;
+};
+
+static inline krpc_error_t krpc_encode_KRPC_ServerStatistics(
+  pb_ostream_t * stream, const krpc_KRPC_ServerStatistics_t * value);
+static inline krpc_error_t krpc_encode_size_KRPC_ServerStatistics(
+  size_t * size, const krpc_KRPC_ServerStatistics_t * value);
+static inline bool krpc_encode_callback_KRPC_ServerStatistics(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
+static inline krpc_error_t krpc_decode_KRPC_ServerStatistics(
+  pb_istream_t * stream, krpc_KRPC_ServerStatistics_t * value);
+
+#endif  // KRPC_TYPE_KRPC_SERVERSTATISTICS
+
+#ifndef KRPC_TYPE_KRPC_SERVERSTATUS
+#define KRPC_TYPE_KRPC_SERVERSTATUS
+
+typedef struct krpc_KRPC_ServerStatus_s krpc_KRPC_ServerStatus_t;
+struct krpc_KRPC_ServerStatus_s {
+  char * version;
+  uint32_t protocol_version;
+  krpc_KRPC_ServerSettings_t settings;
+  krpc_KRPC_ServerStatistics_t statistics;
+};
+
+static inline krpc_error_t krpc_encode_KRPC_ServerStatus(
+  pb_ostream_t * stream, const krpc_KRPC_ServerStatus_t * value);
+static inline krpc_error_t krpc_encode_size_KRPC_ServerStatus(
+  size_t * size, const krpc_KRPC_ServerStatus_t * value);
+static inline bool krpc_encode_callback_KRPC_ServerStatus(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
+static inline krpc_error_t krpc_decode_KRPC_ServerStatus(
+  pb_istream_t * stream, krpc_KRPC_ServerStatus_t * value);
+
+#endif  // KRPC_TYPE_KRPC_SERVERSTATUS
+
 #ifndef KRPC_TYPE_DICTIONARY_INT32_OBJECT
 #define KRPC_TYPE_DICTIONARY_INT32_OBJECT
 
@@ -86,6 +165,7 @@ struct krpc_KRPC_ClientInfo_s {
   krpc_bytes_t id;
   char * name;
   char * address;
+  uint32_t protocol_version;
 };
 
 static inline krpc_error_t krpc_encode_KRPC_ClientInfo(
@@ -375,9 +455,9 @@ static inline krpc_error_t krpc_KRPC_GetClientName(krpc_connection_t connection,
 static inline krpc_error_t krpc_KRPC_GetServices(krpc_connection_t connection, krpc_schema_Services * returnValue);
 
 /**
- * Returns some information about the server, such as the version.
+ * Returns the status of the server, with its version, settings and performance statistics.
  */
-static inline krpc_error_t krpc_KRPC_GetStatus(krpc_connection_t connection, krpc_schema_Status * returnValue);
+static inline krpc_error_t krpc_KRPC_GetStatus(krpc_connection_t connection, krpc_KRPC_ServerStatus_t * returnValue);
 
 /**
  * Hold the game on its current physics tick until krpc_KRPC_ReleaseTick() is called
@@ -1928,6 +2008,519 @@ static inline krpc_error_t krpc_KRPC_Type_Types(krpc_connection_t connection, kr
 
 // Implementation
 
+#ifndef KRPC_IMPL_TYPE_KRPC_SERVERSETTINGS
+#define KRPC_IMPL_TYPE_KRPC_SERVERSETTINGS
+
+static inline bool krpc_encode_callback_items_KRPC_ServerSettings(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const krpc_KRPC_ServerSettings_t * value = (const krpc_KRPC_ServerSettings_t*)(*arg);
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_bool(&size, value->one_rpc_per_update));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_bool(stream, value->one_rpc_per_update));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint32(&size, value->max_time_per_update));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint32(stream, value->max_time_per_update));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_bool(&size, value->adaptive_rate_control));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_bool(stream, value->adaptive_rate_control));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_bool(&size, value->blocking_recv));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_bool(stream, value->blocking_recv));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint32(&size, value->recv_timeout));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint32(stream, value->recv_timeout));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint32(&size, value->tick_hold_timeout));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint32(stream, value->tick_hold_timeout));
+  }
+  return true;
+}
+
+static inline krpc_error_t krpc_encode_KRPC_ServerSettings(
+  pb_ostream_t * stream, const krpc_KRPC_ServerSettings_t * value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.encode = &krpc_encode_callback_items_KRPC_ServerSettings;
+  message.items.arg = (krpc_KRPC_ServerSettings_t*)value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_Tuple(stream, &message));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_encode_size_KRPC_ServerSettings(
+  size_t * size, const krpc_KRPC_ServerSettings_t * value) {
+  pb_ostream_t stream = PB_OSTREAM_SIZING;
+  KRPC_RETURN_ON_ERROR(krpc_encode_KRPC_ServerSettings(&stream, value));
+  *size = stream.bytes_written;
+  return KRPC_OK;
+}
+
+static inline bool krpc_encode_callback_KRPC_ServerSettings(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+    KRPC_CALLBACK_RETURN_ERROR("encoding tag for KRPC_ServerSettings");
+  krpc_KRPC_ServerSettings_t * value = (krpc_KRPC_ServerSettings_t*)(*arg);
+  size_t size;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_KRPC_ServerSettings(&size, value));
+  if (!pb_encode_varint(stream, size))
+    KRPC_CALLBACK_RETURN_ERROR("encoding size for KRPC_ServerSettings");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_KRPC_ServerSettings(stream, value));
+  return true;
+}
+
+static inline bool krpc_decode_callback_item_KRPC_ServerSettings(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  typedef struct State {size_t pos; krpc_KRPC_ServerSettings_t * value;} State;
+  State * state = (State*)(*arg);
+  krpc_KRPC_ServerSettings_t * value = state->value;
+  switch (state->pos) {
+  case 0:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_bool(stream, &value->one_rpc_per_update));
+    break;
+  case 1:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->max_time_per_update));
+    break;
+  case 2:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_bool(stream, &value->adaptive_rate_control));
+    break;
+  case 3:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_bool(stream, &value->blocking_recv));
+    break;
+  case 4:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->recv_timeout));
+    break;
+  case 5:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->tick_hold_timeout));
+    break;
+  default:
+    // Fields are only ever appended to a structure, so a value from a newer server may
+    // carry more items than this client knows about, and those are skipped
+    if (!pb_read(stream, NULL, stream->bytes_left))
+      KRPC_CALLBACK_RETURN_ERROR("skipping an appended struct field");
+    break;
+  }
+  state->pos++;
+  return true;
+}
+
+static inline krpc_error_t krpc_decode_KRPC_ServerSettings(
+  pb_istream_t * stream, krpc_KRPC_ServerSettings_t * value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.decode = &krpc_decode_callback_item_KRPC_ServerSettings;
+  typedef struct State { size_t pos; krpc_KRPC_ServerSettings_t * value; } State;
+  State state = { 0, value };
+  message.items.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
+  if (state.pos < 6)
+    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a KRPC_ServerSettings");
+  return KRPC_OK;
+}
+
+#endif  // KRPC_IMPL_TYPE_KRPC_SERVERSETTINGS
+
+#ifndef KRPC_IMPL_TYPE_KRPC_SERVERSTATISTICS
+#define KRPC_IMPL_TYPE_KRPC_SERVERSTATISTICS
+
+static inline bool krpc_encode_callback_items_KRPC_ServerStatistics(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const krpc_KRPC_ServerStatistics_t * value = (const krpc_KRPC_ServerStatistics_t*)(*arg);
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint64(&size, value->bytes_read));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint64(stream, value->bytes_read));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint64(&size, value->bytes_written));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint64(stream, value->bytes_written));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_float(&size, value->bytes_read_rate));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_float(stream, value->bytes_read_rate));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_float(&size, value->bytes_written_rate));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_float(stream, value->bytes_written_rate));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint64(&size, value->rpcs_executed));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint64(stream, value->rpcs_executed));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_float(&size, value->rpc_rate));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_float(stream, value->rpc_rate));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_float(&size, value->time_per_rpc_update));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_float(stream, value->time_per_rpc_update));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_float(&size, value->poll_time_per_rpc_update));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_float(stream, value->poll_time_per_rpc_update));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_float(&size, value->exec_time_per_rpc_update));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_float(stream, value->exec_time_per_rpc_update));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint32(&size, value->deferred_calls));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint32(stream, value->deferred_calls));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint32(&size, value->streams));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint32(stream, value->streams));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint64(&size, value->stream_evaluations));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint64(stream, value->stream_evaluations));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_float(&size, value->stream_evaluation_rate));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_float(stream, value->stream_evaluation_rate));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint64(&size, value->stream_updates_sent));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint64(stream, value->stream_updates_sent));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_float(&size, value->time_per_stream_update));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_float(stream, value->time_per_stream_update));
+  }
+  return true;
+}
+
+static inline krpc_error_t krpc_encode_KRPC_ServerStatistics(
+  pb_ostream_t * stream, const krpc_KRPC_ServerStatistics_t * value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.encode = &krpc_encode_callback_items_KRPC_ServerStatistics;
+  message.items.arg = (krpc_KRPC_ServerStatistics_t*)value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_Tuple(stream, &message));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_encode_size_KRPC_ServerStatistics(
+  size_t * size, const krpc_KRPC_ServerStatistics_t * value) {
+  pb_ostream_t stream = PB_OSTREAM_SIZING;
+  KRPC_RETURN_ON_ERROR(krpc_encode_KRPC_ServerStatistics(&stream, value));
+  *size = stream.bytes_written;
+  return KRPC_OK;
+}
+
+static inline bool krpc_encode_callback_KRPC_ServerStatistics(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+    KRPC_CALLBACK_RETURN_ERROR("encoding tag for KRPC_ServerStatistics");
+  krpc_KRPC_ServerStatistics_t * value = (krpc_KRPC_ServerStatistics_t*)(*arg);
+  size_t size;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_KRPC_ServerStatistics(&size, value));
+  if (!pb_encode_varint(stream, size))
+    KRPC_CALLBACK_RETURN_ERROR("encoding size for KRPC_ServerStatistics");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_KRPC_ServerStatistics(stream, value));
+  return true;
+}
+
+static inline bool krpc_decode_callback_item_KRPC_ServerStatistics(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  typedef struct State {size_t pos; krpc_KRPC_ServerStatistics_t * value;} State;
+  State * state = (State*)(*arg);
+  krpc_KRPC_ServerStatistics_t * value = state->value;
+  switch (state->pos) {
+  case 0:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint64(stream, &value->bytes_read));
+    break;
+  case 1:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint64(stream, &value->bytes_written));
+    break;
+  case 2:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_float(stream, &value->bytes_read_rate));
+    break;
+  case 3:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_float(stream, &value->bytes_written_rate));
+    break;
+  case 4:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint64(stream, &value->rpcs_executed));
+    break;
+  case 5:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_float(stream, &value->rpc_rate));
+    break;
+  case 6:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_float(stream, &value->time_per_rpc_update));
+    break;
+  case 7:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_float(stream, &value->poll_time_per_rpc_update));
+    break;
+  case 8:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_float(stream, &value->exec_time_per_rpc_update));
+    break;
+  case 9:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->deferred_calls));
+    break;
+  case 10:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->streams));
+    break;
+  case 11:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint64(stream, &value->stream_evaluations));
+    break;
+  case 12:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_float(stream, &value->stream_evaluation_rate));
+    break;
+  case 13:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint64(stream, &value->stream_updates_sent));
+    break;
+  case 14:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_float(stream, &value->time_per_stream_update));
+    break;
+  default:
+    // Fields are only ever appended to a structure, so a value from a newer server may
+    // carry more items than this client knows about, and those are skipped
+    if (!pb_read(stream, NULL, stream->bytes_left))
+      KRPC_CALLBACK_RETURN_ERROR("skipping an appended struct field");
+    break;
+  }
+  state->pos++;
+  return true;
+}
+
+static inline krpc_error_t krpc_decode_KRPC_ServerStatistics(
+  pb_istream_t * stream, krpc_KRPC_ServerStatistics_t * value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.decode = &krpc_decode_callback_item_KRPC_ServerStatistics;
+  typedef struct State { size_t pos; krpc_KRPC_ServerStatistics_t * value; } State;
+  State state = { 0, value };
+  message.items.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
+  if (state.pos < 15)
+    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a KRPC_ServerStatistics");
+  return KRPC_OK;
+}
+
+#endif  // KRPC_IMPL_TYPE_KRPC_SERVERSTATISTICS
+
+#ifndef KRPC_IMPL_TYPE_KRPC_SERVERSTATUS
+#define KRPC_IMPL_TYPE_KRPC_SERVERSTATUS
+
+static inline bool krpc_encode_callback_items_KRPC_ServerStatus(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const krpc_KRPC_ServerStatus_t * value = (const krpc_KRPC_ServerStatus_t*)(*arg);
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_string(&size, value->version));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_string(stream, value->version));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint32(&size, value->protocol_version));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint32(stream, value->protocol_version));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_KRPC_ServerSettings(&size, &value->settings));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_KRPC_ServerSettings(stream, &value->settings));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_KRPC_ServerStatistics(&size, &value->statistics));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_KRPC_ServerStatistics(stream, &value->statistics));
+  }
+  return true;
+}
+
+static inline krpc_error_t krpc_encode_KRPC_ServerStatus(
+  pb_ostream_t * stream, const krpc_KRPC_ServerStatus_t * value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.encode = &krpc_encode_callback_items_KRPC_ServerStatus;
+  message.items.arg = (krpc_KRPC_ServerStatus_t*)value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_Tuple(stream, &message));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_encode_size_KRPC_ServerStatus(
+  size_t * size, const krpc_KRPC_ServerStatus_t * value) {
+  pb_ostream_t stream = PB_OSTREAM_SIZING;
+  KRPC_RETURN_ON_ERROR(krpc_encode_KRPC_ServerStatus(&stream, value));
+  *size = stream.bytes_written;
+  return KRPC_OK;
+}
+
+static inline bool krpc_encode_callback_KRPC_ServerStatus(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+    KRPC_CALLBACK_RETURN_ERROR("encoding tag for KRPC_ServerStatus");
+  krpc_KRPC_ServerStatus_t * value = (krpc_KRPC_ServerStatus_t*)(*arg);
+  size_t size;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_KRPC_ServerStatus(&size, value));
+  if (!pb_encode_varint(stream, size))
+    KRPC_CALLBACK_RETURN_ERROR("encoding size for KRPC_ServerStatus");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_KRPC_ServerStatus(stream, value));
+  return true;
+}
+
+static inline bool krpc_decode_callback_item_KRPC_ServerStatus(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  typedef struct State {size_t pos; krpc_KRPC_ServerStatus_t * value;} State;
+  State * state = (State*)(*arg);
+  krpc_KRPC_ServerStatus_t * value = state->value;
+  switch (state->pos) {
+  case 0:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_string(stream, &value->version));
+    break;
+  case 1:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->protocol_version));
+    break;
+  case 2:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_KRPC_ServerSettings(stream, &value->settings));
+    break;
+  case 3:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_KRPC_ServerStatistics(stream, &value->statistics));
+    break;
+  default:
+    // Fields are only ever appended to a structure, so a value from a newer server may
+    // carry more items than this client knows about, and those are skipped
+    if (!pb_read(stream, NULL, stream->bytes_left))
+      KRPC_CALLBACK_RETURN_ERROR("skipping an appended struct field");
+    break;
+  }
+  state->pos++;
+  return true;
+}
+
+static inline krpc_error_t krpc_decode_KRPC_ServerStatus(
+  pb_istream_t * stream, krpc_KRPC_ServerStatus_t * value) {
+  krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
+  message.items.funcs.decode = &krpc_decode_callback_item_KRPC_ServerStatus;
+  typedef struct State { size_t pos; krpc_KRPC_ServerStatus_t * value; } State;
+  State state = { 0, value };
+  message.items.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
+  if (state.pos < 4)
+    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a KRPC_ServerStatus");
+  return KRPC_OK;
+}
+
+#endif  // KRPC_IMPL_TYPE_KRPC_SERVERSTATUS
+
 #ifndef KRPC_IMPL_TYPE_DICTIONARY_INT32_OBJECT
 #define KRPC_IMPL_TYPE_DICTIONARY_INT32_OBJECT
 
@@ -2225,6 +2818,15 @@ static inline bool krpc_encode_callback_items_KRPC_ClientInfo(
       KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_string(stream, value->address));
   }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint32(&size, value->protocol_version));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint32(stream, value->protocol_version));
+  }
   return true;
 }
 
@@ -2273,6 +2875,9 @@ static inline bool krpc_decode_callback_item_KRPC_ClientInfo(
   case 2:
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_string(stream, &value->address));
     break;
+  case 3:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->protocol_version));
+    break;
   default:
     // Fields are only ever appended to a structure, so a value from a newer server may
     // carry more items than this client knows about, and those are skipped
@@ -2292,7 +2897,7 @@ static inline krpc_error_t krpc_decode_KRPC_ClientInfo(
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
-  if (state.pos < 3)
+  if (state.pos < 4)
     KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a KRPC_ClientInfo");
   return KRPC_OK;
 }
@@ -2779,7 +3384,7 @@ static inline krpc_error_t krpc_KRPC_GetServices(krpc_connection_t connection, k
   return KRPC_OK;
 }
 
-static inline krpc_error_t krpc_KRPC_GetStatus(krpc_connection_t connection, krpc_schema_Status * returnValue) {
+static inline krpc_error_t krpc_KRPC_GetStatus(krpc_connection_t connection, krpc_KRPC_ServerStatus_t * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 1, 3, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -2788,7 +3393,7 @@ static inline krpc_error_t krpc_KRPC_GetStatus(krpc_connection_t connection, krp
   if (returnValue) {
     pb_istream_t _stream;
     KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_message_Status(&_stream, returnValue));
+    KRPC_CHECK(krpc_decode_KRPC_ServerStatus(&_stream, returnValue));
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;

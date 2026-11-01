@@ -329,7 +329,7 @@ namespace KRPC
         ExponentialMovingAverage timePerRPCUpdate = new ExponentialMovingAverage (0.25);
         ExponentialMovingAverage pollTimePerRPCUpdate = new ExponentialMovingAverage (0.25);
         ExponentialMovingAverage execTimePerRPCUpdate = new ExponentialMovingAverage (0.25);
-        ExponentialMovingAverage streamRPCRate = new ExponentialMovingAverage (0.25);
+        ExponentialMovingAverage streamEvaluationRate = new ExponentialMovingAverage (0.25);
         ExponentialMovingAverage timePerStreamUpdate = new ExponentialMovingAverage (0.25);
 
         /// <summary>
@@ -370,21 +370,32 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Number of currently active streaming RPCs.
+        /// Number of calls left for the next update, because the update ran out of time or
+        /// the call yielded.
         /// </summary>
-        public uint StreamRPCs { get; private set; }
+        public uint DeferredCalls { get; private set; }
 
         /// <summary>
-        /// Total number of streaming RPCs executed.
+        /// Number of open streams, events included.
         /// </summary>
-        public ulong StreamRPCsExecuted { get; private set; }
+        public uint Streams { get; private set; }
 
         /// <summary>
-        /// Number of streaming RPCs processed per second.
+        /// Total number of stream evaluations, one per stream per update.
         /// </summary>
-        public float StreamRPCRate {
-            get { return streamRPCRate.Value; }
-            set { streamRPCRate.Update (value); }
+        public ulong StreamEvaluations { get; private set; }
+
+        /// <summary>
+        /// Total number of stream update messages sent to clients.
+        /// </summary>
+        public ulong StreamUpdatesSent { get; private set; }
+
+        /// <summary>
+        /// Number of stream evaluations per second.
+        /// </summary>
+        public float StreamEvaluationRate {
+            get { return streamEvaluationRate.Value; }
+            set { streamEvaluationRate.Update (value); }
         }
 
         /// <summary>
@@ -405,7 +416,8 @@ namespace KRPC
             TimePerRPCUpdate = 0;
             ExecTimePerRPCUpdate = 0;
             PollTimePerRPCUpdate = 0;
-            StreamRPCsExecuted = 0;
+            StreamEvaluations = 0;
+            StreamUpdatesSent = 0;
             TimePerStreamUpdate = 0;
         }
 
@@ -417,7 +429,7 @@ namespace KRPC
         public void Update ()
         {
             ulong startRPCsExecuted = RPCsExecuted;
-            ulong startStreamRPCsExecuted = StreamRPCsExecuted;
+            ulong startStreamEvaluations = StreamEvaluations;
             ulong startBytesRead = BytesRead;
             ulong startBytesWritten = BytesWritten;
 
@@ -435,7 +447,7 @@ namespace KRPC
             updateTimer.Start ();
 
             RPCRate = (float)((RPCsExecuted - startRPCsExecuted) / timeElapsed);
-            StreamRPCRate = (float)((StreamRPCsExecuted - startStreamRPCsExecuted) / timeElapsed);
+            StreamEvaluationRate = (float)((StreamEvaluations - startStreamEvaluations) / timeElapsed);
             BytesReadRate = (float)((BytesRead - startBytesRead) / timeElapsed);
             BytesWrittenRate = (float)((BytesWritten - startBytesWritten) / timeElapsed);
 
@@ -602,6 +614,7 @@ namespace KRPC
             rpcTimer.Stop ();
 
             RPCsExecuted += rpcsExecuted;
+            DeferredCalls = (uint)rpcContinuations.Count;
             TimePerRPCUpdate = (float)rpcTimer.ElapsedSeconds ();
             PollTimePerRPCUpdate = (float)rpcPollTimer.ElapsedSeconds ();
             ExecTimePerRPCUpdate = (float)rpcExecTimer.ElapsedSeconds ();
@@ -617,7 +630,7 @@ namespace KRPC
         {
             streamTimer.Reset ();
             streamTimer.Start ();
-            uint rpcsExecuted = 0;
+            uint evaluations = 0;
 
             if (removeStreams.Count > 0) {
                 foreach (var entry in removeStreams) {
@@ -644,7 +657,7 @@ namespace KRPC
                         } catch (System.Exception exn) {
                             stream.SetError (exn);
                         }
-                        rpcsExecuted++;
+                        evaluations++;
                         changed |= stream.Changed;
                     }
                     // If anything changed, produce an update
@@ -665,6 +678,7 @@ namespace KRPC
                         var messageStream = client.Stream as IMessageStream;
                         if (messageStream != null) {
                             messageStream.Write (streamUpdate);
+                            StreamUpdatesSent++;
                         }
                         foreach (var stream in clientStreams)
                             if (stream.Changed)
@@ -680,7 +694,7 @@ namespace KRPC
             }
 
             streamTimer.Stop ();
-            StreamRPCsExecuted += rpcsExecuted;
+            StreamEvaluations += evaluations;
             TimePerStreamUpdate = (float)streamTimer.ElapsedSeconds ();
         }
 
@@ -833,7 +847,7 @@ namespace KRPC
             var streamId = stream.Id;
             streams [client] [streamId] = stream;
             Logger.WriteLine ("Added stream " + streamId + " for client " + client.Label (), Logger.Severity.Debug);
-            StreamRPCs++;
+            Streams++;
             return streamId;
         }
 
@@ -889,7 +903,7 @@ namespace KRPC
             var stream = client.Stream as IMessageStream;
             if (stream != null)
                 stream.StreamRemoved (id);
-            StreamRPCs--;
+            Streams--;
             return true;
         }
 

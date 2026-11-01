@@ -195,10 +195,12 @@ namespace KRPC.Test
             // The hold has been answered and the tick released again, but the call that asked
             // for the next tick is waiting in the server rather than on the wire.
             Assert.AreEqual (1, client.Written.Count);
+            Assert.AreEqual (1, core.DeferredCalls);
             core.Update ();
             // Carried on at the start of this update, ahead of any polling, so the tick after
             // the one that was released is held rather than missed.
             Assert.AreEqual (3, client.Written.Count);
+            Assert.AreEqual (0, core.DeferredCalls);
             AssertNoErrors (client.Written);
         }
 

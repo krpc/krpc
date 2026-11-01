@@ -20,6 +20,12 @@ def decode_varint(data):
     return _DecodeVarint(data, 0)[0]
 
 
+def decode_string(data):
+    """Decode a string value: its length as a varint, then its UTF-8 bytes"""
+    size, position = _DecodeVarint(data, 0)
+    return data[position : position + size].decode("utf-8")
+
+
 def send_message(conn, msg):
     """Send a message, prefixed with its size, to a unix domain socket"""
     data = msg.SerializeToString()
@@ -97,12 +103,11 @@ assert len(response.results) == 1
 if response.results[0].HasField("error"):
     raise RuntimeError("ERROR: " + str(response.results[0].error))
 
-# Decode the return value as a Status message
-status = KRPC.Status()
-status.ParseFromString(response.results[0].value)
+# Decode the return value, a ServerStatus structure sent as a Tuple of its fields
+status = KRPC.Tuple.FromString(response.results[0].value)
 
-# Print out the Status message
-print(status)
+# Print out the server version, the first field
+print(decode_string(status.items[0]))
 
 # End the connection with a disconnect, then close the write side
 disconnect = KRPC.Disconnect(reason=KRPC.Disconnect.CLOSED)

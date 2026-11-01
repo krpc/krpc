@@ -69,7 +69,7 @@ The example uses the POSIX socket API, so it runs on Linux and macOS. On Windows
 module lacks the address family, and the socket is opened through winsock instead.
 
 The following script connects to the server over a local socket with the name "Example", calls
-``KRPC.GetStatus`` and prints the result. It then ends the connection:
+``KRPC.GetStatus`` and prints the server version. It then ends the connection:
 
 .. literalinclude:: /scripts/communication-protocols/localsocket/RPC.py
    :language: python

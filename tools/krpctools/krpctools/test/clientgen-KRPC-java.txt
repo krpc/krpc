@@ -398,13 +398,13 @@ public class KRPC {
     }
 
     /**
-     * Returns some information about the server, such as the version.
+     * Returns the status of the server, with its version, settings and performance statistics.
      */
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "KRPC", procedure = "GetStatus", types = _Types.class)
-    public krpc.schema.KRPC.Status getStatus() throws RPCException {
+    public krpc.client.services.KRPC.ServerStatus getStatus() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("KRPC", "GetStatus");
-        return (krpc.schema.KRPC.Status) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.STATUS), this.connection);
+        return (krpc.client.services.KRPC.ServerStatus) Encoder.decode(_data.getValue(), krpc.client.Types.createStruct("KRPC", "ServerStatus"), this.connection);
     }
 
     /**
@@ -844,11 +844,13 @@ public class KRPC {
         private final byte[] id;
         private final String name;
         private final String address;
+        private final int protocolVersion;
 
-        public ClientInfo(byte[] id, String name, String address) {
+        public ClientInfo(byte[] id, String name, String address, int protocolVersion) {
             this.id = id;
             this.name = name;
             this.address = address;
+            this.protocolVersion = protocolVersion;
         }
 
         /**
@@ -872,11 +874,19 @@ public class KRPC {
             return address;
         }
 
+        /**
+         * The protocol version of the client's connection.
+         */
+        public int getProtocolVersion() {
+            return protocolVersion;
+        }
+
         private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
             java.util.Collections.unmodifiableList(java.util.Arrays.asList(
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)
             ));
 
         /** The types of the fields, in the order they are encoded in. */
@@ -890,7 +900,8 @@ public class KRPC {
             return new ClientInfo(
                 (byte[]) values[0],
                 (String) values[1],
-                (String) values[2]
+                (String) values[2],
+                (int) values[3]
             );
         }
 
@@ -899,7 +910,8 @@ public class KRPC {
             return new Object[] {
                 id,
                 name,
-                address
+                address,
+                protocolVersion
             };
         }
 
@@ -909,12 +921,12 @@ public class KRPC {
                 return false;
             }
             ClientInfo other = (ClientInfo) obj;
-            return java.util.Objects.deepEquals(this.id, other.id)                && java.util.Objects.deepEquals(this.name, other.name)                && java.util.Objects.deepEquals(this.address, other.address);
+            return java.util.Objects.deepEquals(this.id, other.id)                && java.util.Objects.deepEquals(this.name, other.name)                && java.util.Objects.deepEquals(this.address, other.address)                && java.util.Objects.deepEquals(this.protocolVersion, other.protocolVersion);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {id, name, address});
+            return java.util.Arrays.deepHashCode(new Object[] {id, name, address, protocolVersion});
         }
 
         /**
@@ -933,6 +945,584 @@ public class KRPC {
                 return result;
             }
             result = RemoteStruct.compareFields(address, other.address);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(protocolVersion, other.protocolVersion);
+            if (result != 0) {
+                return result;
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * The settings that control how the server executes calls.
+     *
+     * See {@link KRPC.ServerStatus#getSettings()}.
+     */
+    public static class ServerSettings implements RemoteStruct, Comparable<ServerSettings> {
+        private final boolean oneRpcPerUpdate;
+        private final int maxTimePerUpdate;
+        private final boolean adaptiveRateControl;
+        private final boolean blockingRecv;
+        private final int recvTimeout;
+        private final int tickHoldTimeout;
+
+        public ServerSettings(boolean oneRpcPerUpdate, int maxTimePerUpdate, boolean adaptiveRateControl, boolean blockingRecv, int recvTimeout, int tickHoldTimeout) {
+            this.oneRpcPerUpdate = oneRpcPerUpdate;
+            this.maxTimePerUpdate = maxTimePerUpdate;
+            this.adaptiveRateControl = adaptiveRateControl;
+            this.blockingRecv = blockingRecv;
+            this.recvTimeout = recvTimeout;
+            this.tickHoldTimeout = tickHoldTimeout;
+        }
+
+        /**
+         * Whether the server executes one call per update.
+         */
+        public boolean getOneRpcPerUpdate() {
+            return oneRpcPerUpdate;
+        }
+
+        /**
+         * The maximum time spent executing calls per update, in microseconds.
+         */
+        public int getMaxTimePerUpdate() {
+            return maxTimePerUpdate;
+        }
+
+        /**
+         * Whether the server adjusts {@link KRPC.ServerSettings#getMaxTimePerUpdate()} to hold the frame rate.
+         */
+        public boolean getAdaptiveRateControl() {
+            return adaptiveRateControl;
+        }
+
+        /**
+         * Whether the server waits for the next call in an update.
+         */
+        public boolean getBlockingRecv() {
+            return blockingRecv;
+        }
+
+        /**
+         * The time the server waits for the next call, in microseconds.
+         */
+        public int getRecvTimeout() {
+            return recvTimeout;
+        }
+
+        /**
+         * The longest time a client may hold the game on one physics tick, in microseconds.
+         *
+         * See {@link KRPC#holdTick}.
+         */
+        public int getTickHoldTimeout() {
+            return tickHoldTimeout;
+        }
+
+        private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
+            java.util.Collections.unmodifiableList(java.util.Arrays.asList(
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)
+            ));
+
+        /** The types of the fields, in the order they are encoded in. */
+        public static java.util.List<krpc.schema.KRPC.Type> fieldTypes() {
+            return FIELD_TYPES;
+        }
+
+        /** Build a ServerSettings from the values of its fields. */
+        @SuppressWarnings("unchecked")
+        public static ServerSettings fromFieldValues(Object[] values) {
+            return new ServerSettings(
+                (boolean) values[0],
+                (int) values[1],
+                (boolean) values[2],
+                (boolean) values[3],
+                (int) values[4],
+                (int) values[5]
+            );
+        }
+
+        @Override
+        public Object[] fieldValues() {
+            return new Object[] {
+                oneRpcPerUpdate,
+                maxTimePerUpdate,
+                adaptiveRateControl,
+                blockingRecv,
+                recvTimeout,
+                tickHoldTimeout
+            };
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ServerSettings)) {
+                return false;
+            }
+            ServerSettings other = (ServerSettings) obj;
+            return java.util.Objects.deepEquals(this.oneRpcPerUpdate, other.oneRpcPerUpdate)                && java.util.Objects.deepEquals(this.maxTimePerUpdate, other.maxTimePerUpdate)                && java.util.Objects.deepEquals(this.adaptiveRateControl, other.adaptiveRateControl)                && java.util.Objects.deepEquals(this.blockingRecv, other.blockingRecv)                && java.util.Objects.deepEquals(this.recvTimeout, other.recvTimeout)                && java.util.Objects.deepEquals(this.tickHoldTimeout, other.tickHoldTimeout);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Arrays.deepHashCode(new Object[] {oneRpcPerUpdate, maxTimePerUpdate, adaptiveRateControl, blockingRecv, recvTimeout, tickHoldTimeout});
+        }
+
+        /**
+         * Compares this ServerSettings with the given one, by its fields in turn, which is
+         * how a tuple of the same values compares.
+         */
+        @Override
+        public int compareTo(ServerSettings other) {
+            int result;
+            result = RemoteStruct.compareFields(oneRpcPerUpdate, other.oneRpcPerUpdate);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(maxTimePerUpdate, other.maxTimePerUpdate);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(adaptiveRateControl, other.adaptiveRateControl);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(blockingRecv, other.blockingRecv);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(recvTimeout, other.recvTimeout);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(tickHoldTimeout, other.tickHoldTimeout);
+            if (result != 0) {
+                return result;
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * The performance statistics of the server.
+     *
+     * See {@link KRPC.ServerStatus#getStatistics()}.
+     */
+    public static class ServerStatistics implements RemoteStruct, Comparable<ServerStatistics> {
+        private final long bytesRead;
+        private final long bytesWritten;
+        private final float bytesReadRate;
+        private final float bytesWrittenRate;
+        private final long rpcsExecuted;
+        private final float rpcRate;
+        private final float timePerRpcUpdate;
+        private final float pollTimePerRpcUpdate;
+        private final float execTimePerRpcUpdate;
+        private final int deferredCalls;
+        private final int streams;
+        private final long streamEvaluations;
+        private final float streamEvaluationRate;
+        private final long streamUpdatesSent;
+        private final float timePerStreamUpdate;
+
+        public ServerStatistics(long bytesRead, long bytesWritten, float bytesReadRate, float bytesWrittenRate, long rpcsExecuted, float rpcRate, float timePerRpcUpdate, float pollTimePerRpcUpdate, float execTimePerRpcUpdate, int deferredCalls, int streams, long streamEvaluations, float streamEvaluationRate, long streamUpdatesSent, float timePerStreamUpdate) {
+            this.bytesRead = bytesRead;
+            this.bytesWritten = bytesWritten;
+            this.bytesReadRate = bytesReadRate;
+            this.bytesWrittenRate = bytesWrittenRate;
+            this.rpcsExecuted = rpcsExecuted;
+            this.rpcRate = rpcRate;
+            this.timePerRpcUpdate = timePerRpcUpdate;
+            this.pollTimePerRpcUpdate = pollTimePerRpcUpdate;
+            this.execTimePerRpcUpdate = execTimePerRpcUpdate;
+            this.deferredCalls = deferredCalls;
+            this.streams = streams;
+            this.streamEvaluations = streamEvaluations;
+            this.streamEvaluationRate = streamEvaluationRate;
+            this.streamUpdatesSent = streamUpdatesSent;
+            this.timePerStreamUpdate = timePerStreamUpdate;
+        }
+
+        /**
+         * The number of bytes received from clients.
+         */
+        public long getBytesRead() {
+            return bytesRead;
+        }
+
+        /**
+         * The number of bytes sent to clients.
+         */
+        public long getBytesWritten() {
+            return bytesWritten;
+        }
+
+        /**
+         * The rate bytes are received from clients, in bytes per second.
+         */
+        public float getBytesReadRate() {
+            return bytesReadRate;
+        }
+
+        /**
+         * The rate bytes are sent to clients, in bytes per second.
+         */
+        public float getBytesWrittenRate() {
+            return bytesWrittenRate;
+        }
+
+        /**
+         * The number of calls executed.
+         */
+        public long getRpcsExecuted() {
+            return rpcsExecuted;
+        }
+
+        /**
+         * The number of calls executed per second.
+         */
+        public float getRpcRate() {
+            return rpcRate;
+        }
+
+        /**
+         * The time spent receiving and executing calls per update, in seconds.
+         */
+        public float getTimePerRpcUpdate() {
+            return timePerRpcUpdate;
+        }
+
+        /**
+         * The time spent receiving calls per update, in seconds.
+         */
+        public float getPollTimePerRpcUpdate() {
+            return pollTimePerRpcUpdate;
+        }
+
+        /**
+         * The time spent executing calls per update, in seconds.
+         */
+        public float getExecTimePerRpcUpdate() {
+            return execTimePerRpcUpdate;
+        }
+
+        /**
+         * The number of calls left for the next update, because the update ran out of time
+         * or the call yielded.
+         */
+        public int getDeferredCalls() {
+            return deferredCalls;
+        }
+
+        /**
+         * The number of open streams, events included.
+         */
+        public int getStreams() {
+            return streams;
+        }
+
+        /**
+         * The number of stream evaluations, one per stream per update.
+         */
+        public long getStreamEvaluations() {
+            return streamEvaluations;
+        }
+
+        /**
+         * The number of stream evaluations per second.
+         */
+        public float getStreamEvaluationRate() {
+            return streamEvaluationRate;
+        }
+
+        /**
+         * The number of stream updates sent to clients.
+         */
+        public long getStreamUpdatesSent() {
+            return streamUpdatesSent;
+        }
+
+        /**
+         * The time spent updating streams per update, in seconds.
+         */
+        public float getTimePerStreamUpdate() {
+            return timePerStreamUpdate;
+        }
+
+        private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
+            java.util.Collections.unmodifiableList(java.util.Arrays.asList(
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)
+            ));
+
+        /** The types of the fields, in the order they are encoded in. */
+        public static java.util.List<krpc.schema.KRPC.Type> fieldTypes() {
+            return FIELD_TYPES;
+        }
+
+        /** Build a ServerStatistics from the values of its fields. */
+        @SuppressWarnings("unchecked")
+        public static ServerStatistics fromFieldValues(Object[] values) {
+            return new ServerStatistics(
+                (long) values[0],
+                (long) values[1],
+                (float) values[2],
+                (float) values[3],
+                (long) values[4],
+                (float) values[5],
+                (float) values[6],
+                (float) values[7],
+                (float) values[8],
+                (int) values[9],
+                (int) values[10],
+                (long) values[11],
+                (float) values[12],
+                (long) values[13],
+                (float) values[14]
+            );
+        }
+
+        @Override
+        public Object[] fieldValues() {
+            return new Object[] {
+                bytesRead,
+                bytesWritten,
+                bytesReadRate,
+                bytesWrittenRate,
+                rpcsExecuted,
+                rpcRate,
+                timePerRpcUpdate,
+                pollTimePerRpcUpdate,
+                execTimePerRpcUpdate,
+                deferredCalls,
+                streams,
+                streamEvaluations,
+                streamEvaluationRate,
+                streamUpdatesSent,
+                timePerStreamUpdate
+            };
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ServerStatistics)) {
+                return false;
+            }
+            ServerStatistics other = (ServerStatistics) obj;
+            return java.util.Objects.deepEquals(this.bytesRead, other.bytesRead)                && java.util.Objects.deepEquals(this.bytesWritten, other.bytesWritten)                && java.util.Objects.deepEquals(this.bytesReadRate, other.bytesReadRate)                && java.util.Objects.deepEquals(this.bytesWrittenRate, other.bytesWrittenRate)                && java.util.Objects.deepEquals(this.rpcsExecuted, other.rpcsExecuted)                && java.util.Objects.deepEquals(this.rpcRate, other.rpcRate)                && java.util.Objects.deepEquals(this.timePerRpcUpdate, other.timePerRpcUpdate)                && java.util.Objects.deepEquals(this.pollTimePerRpcUpdate, other.pollTimePerRpcUpdate)                && java.util.Objects.deepEquals(this.execTimePerRpcUpdate, other.execTimePerRpcUpdate)                && java.util.Objects.deepEquals(this.deferredCalls, other.deferredCalls)                && java.util.Objects.deepEquals(this.streams, other.streams)                && java.util.Objects.deepEquals(this.streamEvaluations, other.streamEvaluations)                && java.util.Objects.deepEquals(this.streamEvaluationRate, other.streamEvaluationRate)                && java.util.Objects.deepEquals(this.streamUpdatesSent, other.streamUpdatesSent)                && java.util.Objects.deepEquals(this.timePerStreamUpdate, other.timePerStreamUpdate);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Arrays.deepHashCode(new Object[] {bytesRead, bytesWritten, bytesReadRate, bytesWrittenRate, rpcsExecuted, rpcRate, timePerRpcUpdate, pollTimePerRpcUpdate, execTimePerRpcUpdate, deferredCalls, streams, streamEvaluations, streamEvaluationRate, streamUpdatesSent, timePerStreamUpdate});
+        }
+
+        /**
+         * Compares this ServerStatistics with the given one, by its fields in turn, which is
+         * how a tuple of the same values compares.
+         */
+        @Override
+        public int compareTo(ServerStatistics other) {
+            int result;
+            result = RemoteStruct.compareFields(bytesRead, other.bytesRead);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(bytesWritten, other.bytesWritten);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(bytesReadRate, other.bytesReadRate);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(bytesWrittenRate, other.bytesWrittenRate);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(rpcsExecuted, other.rpcsExecuted);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(rpcRate, other.rpcRate);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(timePerRpcUpdate, other.timePerRpcUpdate);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(pollTimePerRpcUpdate, other.pollTimePerRpcUpdate);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(execTimePerRpcUpdate, other.execTimePerRpcUpdate);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(deferredCalls, other.deferredCalls);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(streams, other.streams);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(streamEvaluations, other.streamEvaluations);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(streamEvaluationRate, other.streamEvaluationRate);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(streamUpdatesSent, other.streamUpdatesSent);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(timePerStreamUpdate, other.timePerStreamUpdate);
+            if (result != 0) {
+                return result;
+            }
+            return 0;
+        }
+    }
+
+    /**
+     * The status of the server.
+     *
+     * See {@link KRPC#getStatus}.
+     */
+    public static class ServerStatus implements RemoteStruct, Comparable<ServerStatus> {
+        private final String version;
+        private final int protocolVersion;
+        private final krpc.client.services.KRPC.ServerSettings settings;
+        private final krpc.client.services.KRPC.ServerStatistics statistics;
+
+        public ServerStatus(String version, int protocolVersion, krpc.client.services.KRPC.ServerSettings settings, krpc.client.services.KRPC.ServerStatistics statistics) {
+            this.version = version;
+            this.protocolVersion = protocolVersion;
+            this.settings = settings;
+            this.statistics = statistics;
+        }
+
+        /**
+         * The version of the server, or {@code unknown}.
+         */
+        public String getVersion() {
+            return version;
+        }
+
+        /**
+         * The protocol version of the connection.
+         */
+        public int getProtocolVersion() {
+            return protocolVersion;
+        }
+
+        /**
+         * The settings of the server.
+         */
+        public krpc.client.services.KRPC.ServerSettings getSettings() {
+            return settings;
+        }
+
+        /**
+         * The performance statistics of the server.
+         */
+        public krpc.client.services.KRPC.ServerStatistics getStatistics() {
+            return statistics;
+        }
+
+        private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
+            java.util.Collections.unmodifiableList(java.util.Arrays.asList(
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
+                krpc.client.Types.createStruct("KRPC", "ServerSettings"),
+                krpc.client.Types.createStruct("KRPC", "ServerStatistics")
+            ));
+
+        /** The types of the fields, in the order they are encoded in. */
+        public static java.util.List<krpc.schema.KRPC.Type> fieldTypes() {
+            return FIELD_TYPES;
+        }
+
+        /** Build a ServerStatus from the values of its fields. */
+        @SuppressWarnings("unchecked")
+        public static ServerStatus fromFieldValues(Object[] values) {
+            return new ServerStatus(
+                (String) values[0],
+                (int) values[1],
+                (krpc.client.services.KRPC.ServerSettings) values[2],
+                (krpc.client.services.KRPC.ServerStatistics) values[3]
+            );
+        }
+
+        @Override
+        public Object[] fieldValues() {
+            return new Object[] {
+                version,
+                protocolVersion,
+                settings,
+                statistics
+            };
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ServerStatus)) {
+                return false;
+            }
+            ServerStatus other = (ServerStatus) obj;
+            return java.util.Objects.deepEquals(this.version, other.version)                && java.util.Objects.deepEquals(this.protocolVersion, other.protocolVersion)                && java.util.Objects.deepEquals(this.settings, other.settings)                && java.util.Objects.deepEquals(this.statistics, other.statistics);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Arrays.deepHashCode(new Object[] {version, protocolVersion, settings, statistics});
+        }
+
+        /**
+         * Compares this ServerStatus with the given one, by its fields in turn, which is
+         * how a tuple of the same values compares.
+         */
+        @Override
+        public int compareTo(ServerStatus other) {
+            int result;
+            result = RemoteStruct.compareFields(version, other.version);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(protocolVersion, other.protocolVersion);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(settings, other.settings);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(statistics, other.statistics);
             if (result != 0) {
                 return result;
             }
@@ -3639,7 +4229,7 @@ public class KRPC {
             PARAMETER_TYPES.put("GetClientName", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("GetServices", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.SERVICES));
             PARAMETER_TYPES.put("GetServices", new krpc.schema.KRPC.Type[] {  });
-            RETURN_TYPES.put("GetStatus", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.STATUS));
+            RETURN_TYPES.put("GetStatus", krpc.client.Types.createStruct("KRPC", "ServerStatus"));
             PARAMETER_TYPES.put("GetStatus", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("HoldTick", null);
             PARAMETER_TYPES.put("HoldTick", new krpc.schema.KRPC.Type[] {  });

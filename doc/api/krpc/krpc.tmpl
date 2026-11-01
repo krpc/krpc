@@ -9,6 +9,9 @@ KRPC
 {{ macros.service(services['KRPC']) }}
 {{ macros.enumeration(services['KRPC'].enumerations['GameScene']) }}
 {{ macros.struct(services['KRPC'].structs['ClientInfo']) }}
+{{ macros.struct(services['KRPC'].structs['ServerStatus']) }}
+{{ macros.struct(services['KRPC'].structs['ServerSettings']) }}
+{{ macros.struct(services['KRPC'].structs['ServerStatistics']) }}
 {{ macros.exception(services['KRPC'].exceptions['InvalidOperationException']) }}
 {{ macros.exception(services['KRPC'].exceptions['ArgumentException']) }}
 {{ macros.exception(services['KRPC'].exceptions['ArgumentNullException']) }}

@@ -35,7 +35,6 @@ Types.EVENT = _type_code('EVENT')
 Types.PROCEDURE_CALL = _type_code('PROCEDURE_CALL')
 Types.STREAM = _type_code('STREAM')
 Types.SERVICES = _type_code('SERVICES')
-Types.STATUS = _type_code('STATUS')
 
 local VALUE_TYPES = Map{}
 VALUE_TYPES:set(Types.DOUBLE, 'number')
@@ -54,7 +53,6 @@ MESSAGE_TYPES:set(Types.EVENT, 'Event')
 MESSAGE_TYPES:set(Types.PROCEDURE_CALL, 'ProcedureCall')
 MESSAGE_TYPES:set(Types.STREAM, 'Stream')
 MESSAGE_TYPES:set(Types.SERVICES, 'Services')
-MESSAGE_TYPES:set(Types.STATUS, 'Status')
 
 -- Every type code a type object can be built for. A definition from a newer server may name a
 -- type code that is not among them, which is what makes a definition partly unusable rather
@@ -88,7 +86,6 @@ CODE_TO_STRING:set(Types.EVENT, 'Event')
 CODE_TO_STRING:set(Types.PROCEDURE_CALL, 'ProcedureCall')
 CODE_TO_STRING:set(Types.STREAM, 'Stream')
 CODE_TO_STRING:set(Types.SERVICES, 'Services')
-CODE_TO_STRING:set(Types.STATUS, 'Status')
 
 function Types:_init()
   self._types = Map{}
@@ -268,18 +265,13 @@ function Types:procedure_call_type()
 end
 
 function Types:stream_type()
-  -- Get a Status message type
+  -- Get a Stream message type
   return self:as_type(_protobuf_type(Types.STREAM))
 end
 
 function Types:services_type()
   -- Get a Services message type
   return self:as_type(_protobuf_type(Types.SERVICES))
-end
-
-function Types:status_type()
-  -- Get a Status message type
-  return self:as_type(_protobuf_type(Types.STATUS))
 end
 
 function Types:nullable(typ)

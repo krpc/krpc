@@ -43,7 +43,6 @@ MESSAGE_TYPES = {
     KRPC.Type.PROCEDURE_CALL: KRPC.ProcedureCall,
     KRPC.Type.SERVICES: KRPC.Services,
     KRPC.Type.STREAM: KRPC.Stream,
-    KRPC.Type.STATUS: KRPC.Status,
 }
 
 # The builtin each .NET exception a server maps onto a kRPC exception stands for, keyed by the
@@ -343,11 +342,6 @@ class Types:
     def stream_type(self) -> MessageType:
         """Get a Stream message type"""
         return cast(MessageType, self.as_type(_protobuf_type(KRPC.Type.STREAM)))
-
-    @property
-    def status_type(self) -> MessageType:
-        """Get a Status message type"""
-        return cast(MessageType, self.as_type(_protobuf_type(KRPC.Type.STATUS)))
 
     def coerce_to(self, value: object, typ: TypeBase) -> object:
         """Coerce a value to the specified type (specified by a type object).

@@ -525,13 +525,12 @@ section("Messages")
 
 
 def test_message_result(connected, server):
-    """A procedure that returns a kRPC protocol message, such as ``KRPC.GetStatus``,
+    """A procedure that returns a kRPC protocol message, such as ``KRPC.GetServices``,
     returns the decoded message."""
-    status = KRPC.Status.FromString(connected.invoke("KRPC", "GetStatus"))
-    expected = KRPC.Status.FromString(raw.call(server, "KRPC", "GetStatus").value)
-    assert status.version == expected.version
-    assert status.protocol_version == expected.protocol_version
-    assert status.bytes_read > 0
+    services = KRPC.Services.FromString(connected.invoke("KRPC", "GetServices"))
+    expected = KRPC.Services.FromString(raw.call(server, "KRPC", "GetServices").value)
+    assert [s.name for s in services.services] == [s.name for s in expected.services]
+    assert "KRPC" in [s.name for s in services.services]
 
 
 section("Null")
