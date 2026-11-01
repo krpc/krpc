@@ -328,6 +328,10 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
  * The docs page and release notes merge the fragments into each component's unreleased section. A
    topic merges with the topic of the same text. `//:changelog-fragments-test` checks the format.
  * Commit the fragment with the change it describes. A PR with no user-facing change adds none.
+ * The `changelog-hints` workflow comments on a PR whose fragment looks incomplete
+   (`tools/ci/changelog_hints.py`). A hint never fails CI. The `no-changelog` label removes them.
+   A failed run is a GitHub API failure, and re-running it is the fix. The hints check only the
+   entries a PR adds, so a PR may edit an earlier fragment.
  * The release preparation PR folds the fragments into `CHANGELOG.md` (`01-fold-changelogs.py`).
  * Be concise and high level. Size the entry to the diff. Keep your audience in mind: these are read by
    the end user, not a developer. The PR/issue link provides the detail, not the changelog text.
