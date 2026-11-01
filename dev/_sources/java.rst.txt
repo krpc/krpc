@@ -19,9 +19,9 @@ available from `Maven <https://central.sonatype.com/artifact/com.google.protobuf
 
 To compile a program with javac, add the three jars to the class path:
 
-.. parsed-literal::
+.. code-block:: bash
 
-   javac -cp krpc-java-|jar-version|.jar:protobuf-java-4.36.2.jar:javatuples-1.2.jar Example.java
+   javac -cp krpc-java.jar:protobuf-java.jar:javatuples.jar Example.java
 
 The paths are those of the jars on your machine.
 
