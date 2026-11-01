@@ -1,30 +1,22 @@
 #!/usr/bin/env python3
-"""Tags HEAD as vx.x.x and pushes the branch and tag to GitHub.
+"""Tags HEAD as vx.x.x and pushes the tag to GitHub.
 
-Pushing the version tag triggers the docs workflow, which freezes the release
-documentation under /<version>/ and regenerates the version dropdown.
+HEAD is the fold commit of the release preparation pull request, checked out
+once the pull request has merged. Pushing the version tag triggers the docs
+workflow, which freezes the release documentation under /<version>/ and
+regenerates the version dropdown.
 """
 
 import lib
 
 
-def finalize_changelogs():
-    """Turn the current version's '## [X.Y.Z] - unreleased' headers into plain
-    '## [X.Y.Z]' and commit, so the tagged tree records it as released.
-
-    Idempotent: on a re-run the suffix is already gone and nothing is committed,
-    leaving the tree clean for the tag.
-    """
-    changed = lib.strip_unreleased()
-    if changed:
-        lib.banner(f"Finalizing changelogs for {lib.TAG}")
-        lib.run("git", "commit", "-m", f"Finalize changelog for {lib.TAG}", *changed)
-
-
 def main():
     lib.require("git")
-    finalize_changelogs()
     lib.require_clean_tree()
+    if lib.unreleased_changelogs() or not lib.released_changelogs():
+        raise lib.ReleaseError(
+            f"HEAD does not release {lib.TAG}; check out the fold commit"
+        )
 
     if lib.succeeds("git", "rev-parse", "-q", "--verify", f"refs/tags/{lib.TAG}"):
         if lib.capture("git", "rev-parse", f"{lib.TAG}^{{commit}}") != lib.capture(
@@ -37,16 +29,10 @@ def main():
         lib.run("git", "tag", "-a", lib.TAG, "-m", f"kRPC {lib.TAG}")
 
     lib.banner("Pushing to GitHub")
-    lib.confirm(f"Push main and {lib.TAG} to origin?")
-    lib.run("git", "push", "origin", "main")
+    lib.confirm(f"Push {lib.TAG} to origin?")
     lib.run("git", "push", "origin", lib.TAG)
 
     lib.banner("Done")
-    print("Wait for the CI workflow to pass before continuing:")
-    print(
-        "  gh run watch $(gh run list --branch main --workflow ci "
-        "--limit 1 --json databaseId --jq '.[0].databaseId')"
-    )
     print("Next: tools/release/40-build-assets.py")
 
 

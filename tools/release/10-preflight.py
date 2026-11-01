@@ -8,6 +8,7 @@ import os
 import shutil
 from pathlib import Path
 
+import changelog
 import lib
 
 # Reported as a failure if either is missing: the first to create the release,
@@ -47,22 +48,16 @@ def check_repository(report):
     else:
         report.ok("working tree is clean")
 
-    branch = lib.capture("git", "rev-parse", "--abbrev-ref", "HEAD")
-    if branch == "main":
-        report.ok("on branch main")
-    else:
-        report.fail(f"on branch '{branch}', expected main")
-
+    # The commit to tag is the fold commit of the release preparation pull
+    # request, below its version bump. It is checked out, often detached.
     # Quietly, and reporting a failure rather than raising: a check that
     # cannot be carried out is one line of the report, not the end of it
     if not lib.succeeds("git", "fetch", "-q", "origin", "main"):
         report.fail("could not fetch origin/main to compare against")
-    elif lib.capture("git", "rev-parse", "HEAD") == lib.capture(
-        "git", "rev-parse", "origin/main"
-    ):
-        report.ok("HEAD matches origin/main")
+    elif lib.succeeds("git", "merge-base", "--is-ancestor", "HEAD", "origin/main"):
+        report.ok("HEAD is on origin/main")
     else:
-        report.fail("HEAD does not match origin/main (unpushed or missing commits)")
+        report.fail("HEAD is not on origin/main (unpushed or missing commits)")
 
     if lib.succeeds("git", "rev-parse", "-q", "--verify", f"refs/tags/{lib.TAG}"):
         if lib.capture("git", "rev-parse", f"{lib.TAG}^{{commit}}") == lib.capture(
@@ -76,20 +71,49 @@ def check_repository(report):
 
 
 def check_changelogs(report):
+    lib.banner("Changelog fold")
+    paths = changelog.fragment_paths(lib.ROOT)
+    if paths:
+        report.fail(
+            f"{changelog.FRAGMENT_DIR}/ holds {len(paths)} file(s); "
+            f"fold them with 01-fold-changelogs.py"
+        )
+    else:
+        report.ok(f"{changelog.FRAGMENT_DIR}/ holds no fragment")
+    unreleased = lib.unreleased_changelogs()
+    if unreleased:
+        report.fail(f"still marked unreleased: {', '.join(unreleased)}")
+    else:
+        report.ok("no changelog is marked unreleased")
+    if lib.released_changelogs():
+        report.ok(f"the changelogs have {lib.TAG} sections")
+    else:
+        report.fail(
+            f"no changelog has a {lib.TAG} section; check out the fold commit, "
+            f"below the version bump"
+        )
+
+    # The component list is written out for the Bazel actions, which cannot
+    # glob the tree
+    found = {str(path.parent) for path in Path().glob("service/*/CHANGELOG.md")}
+    found |= {str(path.parent) for path in Path().glob("client/*/CHANGELOG.md")}
+    missing = sorted(found - set(changelog.COMPONENTS))
+    if missing:
+        report.fail(f"missing from changelog.COMPONENTS: {', '.join(missing)}")
+    else:
+        report.ok("changelog.COMPONENTS lists every service and client")
+
     lib.banner(
         f"Changelogs (a component with no user-facing changes has no "
         f"{lib.TAG} section and is omitted from the release notes)"
     )
-    # Matches '## [vX.Y.Z]' with or without the ' - unreleased' suffix.
-    header = f"## [v{lib.VERSION}]"
-    for changelog in lib.changelogs():
-        if any(
-            line.startswith(header) for line in Path(changelog).read_text().splitlines()
-        ):
-            report.ok(changelog)
+    released = set(lib.released_changelogs())
+    for path in lib.changelogs():
+        if path in released:
+            report.ok(path)
         else:
             print(
-                f" - {changelog} has no {lib.TAG} section "
+                f" - {path} has no {lib.TAG} section "
                 f"(omitted; intentional if it has no user-facing changes)"
             )
 

@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 """Sets the version in config.bzl to the one to work towards next.
 
-Run once the release is out. Between releases config.bzl names the version
-being worked towards rather than the last one released, so that a build from
-main is a pre-release of it: CI stamps such a build as x.y.z-<commits>-<sha>,
-which orders after the release just made and below the one set here.
+The second commit of the release preparation branch, above the fold commit.
+Between releases config.bzl names the version being worked towards rather than
+the last one released, so that a build from main is a pre-release of it: CI
+stamps such a build as x.y.z-<commits>-<sha>, which orders after the release
+being made and below the one set here.
 """
 
 import re
 from pathlib import Path
 
+import changelog
 import lib
 
 CONFIG = Path("config.bzl")
@@ -49,14 +51,18 @@ def main():
         )
 
     branch = lib.capture("git", "rev-parse", "--abbrev-ref", "HEAD")
-    if branch != "main":
-        raise lib.ReleaseError(f"on branch '{branch}', expected main")
+    if branch in ("main", "HEAD"):
+        raise lib.ReleaseError("bump on the release preparation branch")
 
-    # Guards against bumping past a release that was never made: the tag is
-    # created by 30-tag.py, so its absence means this is being run too early
-    if not lib.succeeds("git", "rev-parse", "-q", "--verify", f"refs/tags/{lib.TAG}"):
+    # The bump goes above the fold commit, which 30-tag.py tags
+    if changelog.fragment_paths(lib.ROOT) or lib.unreleased_changelogs():
         raise lib.ReleaseError(
-            f"tag {lib.TAG} does not exist; release {lib.VERSION} first"
+            "the changelogs are not folded; run 01-fold-changelogs.py and commit first"
+        )
+    if not lib.released_changelogs():
+        raise lib.ReleaseError(
+            f"no changelog has a {lib.TAG} section; fold the changelogs first, "
+            "and bump only once"
         )
 
     version = ask(current)
@@ -71,14 +77,11 @@ def main():
     CONFIG.write_text(bumped)
     lib.run("git", "commit", "-m", f"Work towards {version}", str(CONFIG))
 
-    lib.banner("Pushing to GitHub")
-    lib.confirm("Push main to origin?")
-    lib.run("git", "push", "origin", "main")
-
     lib.banner("Done")
     print(
-        f"main is working towards {version}. Changelog entries for it go "
-        f"under a v{version} header."
+        f"Push {branch} and open the release preparation pull request. Once it "
+        f"merges, check out the fold commit below 'Work towards {version}' and "
+        f"run tools/release/10-preflight.py."
     )
 
 
