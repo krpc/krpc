@@ -63,6 +63,7 @@ Server
 * Log a connection the player is asked to allow once, naming the client, and an auto-accepted connection at the debug level (:issue:`1235`)
 * Log auto-starting the servers only when one is stopped (:issue:`1235`)
 * Fix the game scene in log lines reading ``Inherit, Flight`` (:issue:`1235`)
+* Fix the server window keeping its height after clients disconnect (:issue:`1186`)
 * Show the tick hold timeout, deferred calls and stream updates in the info window, and name the stream counters as evaluations (:issue:`1244`)
 * Fix the two "Time per update" rows in the info window showing each other's value (:issue:`1244`)
 
