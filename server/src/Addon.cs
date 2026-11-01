@@ -1,3 +1,4 @@
+// Test change for the changelog hints workflow
 using System.Linq;
 using KRPC.Server;
 using KRPC.UI;
