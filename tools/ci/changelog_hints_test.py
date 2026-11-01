@@ -41,6 +41,26 @@ class TestHints(unittest.TestCase):
         files = [File("service/SpaceCenter/test/test_vessel.py", "modified")]
         self.assertEqual([], texts(pull_request(files)))
 
+    def test_nested_tests_do_not_count(self):
+        files = [
+            File("tools/krpctools/krpctools/test/clientgen-KRPC-cpp.txt", "modified"),
+            File("client/python/krpc/tests/test_types.py", "modified"),
+        ]
+        self.assertEqual([], texts(pull_request(files)))
+
+    def test_client_entry_for_a_service_change(self):
+        pr = with_fragment(
+            "## service/SpaceCenter\n- Add a vessel property (#1240)\n\n"
+            "## client/cpp\n- Return the property as a member (#1240)\n"
+        )
+        self.assertEqual([], texts(pr))
+
+    def test_client_entry_for_a_test_change(self):
+        files = [File("core/test/KRPCTest.cs", "modified")]
+        found = texts(with_fragment("## client/cpp\n- A change (#1240)\n", files))
+        self.assertEqual(1, len(found))
+        self.assertIn("has an entry under `## client/cpp`", found[0])
+
     def test_fragment_matches(self):
         pr = with_fragment("## service/SpaceCenter\n- Fix a vessel (#1240)\n")
         self.assertEqual([], texts(pr))
@@ -105,8 +125,9 @@ class TestHints(unittest.TestCase):
         ]
         self.assertEqual([], texts(pull_request(files)))
 
-    def test_no_changelog_label(self):
-        self.assertEqual([], texts(pull_request([SOURCE], labels=["no-changelog"])))
+    def test_changelog_checked_label(self):
+        labels = ["changelog-checked"]
+        self.assertEqual([], texts(pull_request([SOURCE], labels=labels)))
 
     def test_unparsable_fragment(self):
         found = texts(with_fragment("## service/SpaceCenter\n- An entry\nstray\n"))
@@ -151,17 +172,17 @@ class TestHints(unittest.TestCase):
         self.assertTrue(body.startswith("<!-- changelog-hints -->\n"))
         self.assertIn("- A hint.", body)
         self.assertIn("krpc/krpc/blob/main/CONTRIBUTING.md#changelog-entries", body)
-        self.assertNotIn("no-changelog", body)
+        self.assertNotIn("changelog-checked", body)
         body = comment_body([Hint("A hint.", needs_entry=True)], "krpc/krpc")
-        self.assertIn("`no-changelog` label", body)
+        self.assertIn("`changelog-checked` label", body)
 
     def test_resolved_comment(self):
         body = comment_body([], "krpc/krpc")
         self.assertEqual(
             "<!-- changelog-hints -->\nThe changelog looks good now. Thanks!", body
         )
-        body = comment_body([], "krpc/krpc", {"no-changelog"})
-        self.assertIn("has the `no-changelog` label", body)
+        body = comment_body([], "krpc/krpc", {"changelog-checked"})
+        self.assertIn("A maintainer has checked the changelog", body)
 
 
 if __name__ == "__main__":

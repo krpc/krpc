@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "release"))
 import changelog  # noqa: E402
 
 MARKER = "<!-- changelog-hints -->"
-NO_CHANGELOG_LABEL = "no-changelog"
+CHECKED_LABEL = "changelog-checked"
 BOT = "github-actions[bot]"
 
 _HUNK_RE = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,\d+)? @@")
@@ -32,7 +32,7 @@ _HUNK_RE = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,\d+)? @@")
 
 @dataclass
 class Hint:
-    """One hint. ``needs_entry`` marks a hint the ``no-changelog`` label answers."""
+    """One hint. ``needs_entry`` marks a hint that asks for an entry."""
 
     text: str
     needs_entry: bool = False
@@ -60,16 +60,32 @@ class PullRequest:
     labels: set[str] = field(default_factory=set)
 
 
+# The directories that hold tests, at any depth in a component
+TEST_DIRS = {"test", "tests"}
+# The sources the clients' generated code comes from. A change to them changes
+# each client's API with no change to the client's own files.
+CLIENT_API_SOURCES = ("core/", "service/", "protobuf/", "tools/krpctools/")
+
+
 def component_of(path):
     """The release component a changed file counts towards, or None. Tests and
     the changelog itself do not count."""
     for component in sorted(changelog.COMPONENTS, key=len, reverse=True):
         if path.startswith(component + "/"):
             rest = path[len(component) + 1 :]
-            if rest.startswith("test/") or rest == "CHANGELOG.md":
+            if TEST_DIRS & set(rest.split("/")[:-1]) or rest == "CHANGELOG.md":
                 return None
             return component
     return None
+
+
+def changes_client_api(files):
+    """Whether the pull request changes the sources of the clients' generated code."""
+    return any(
+        f.filename.startswith(CLIENT_API_SOURCES)
+        and not TEST_DIRS & set(f.filename.split("/")[:-1])
+        for f in files
+    )
 
 
 def is_fragment(path):
@@ -117,7 +133,7 @@ def related_numbers(pr):
 
 def hints(pr):
     """The hints for a pull request, in a stable order."""
-    if NO_CHANGELOG_LABEL in pr.labels:
+    if CHECKED_LABEL in pr.labels:
         return []
     out = []
     changed_components = sorted(
@@ -187,7 +203,10 @@ def hints(pr):
                         needs_entry=True,
                     )
                 )
-        for component in sorted(set(sections) - set(changed_components)):
+        unchanged = set(sections) - set(changed_components)
+        if changes_client_api(pr.files):
+            unchanged = {c for c in unchanged if not c.startswith("client/")}
+        for component in sorted(unchanged):
             out.append(
                 Hint(
                     f"{_names(sections[component])} has an entry under "
@@ -262,11 +281,8 @@ def _code(text):
 def comment_body(found, repo, labels=()):
     """The hints comment. With no hints, it says the earlier hints are resolved."""
     if not found:
-        if NO_CHANGELOG_LABEL in labels:
-            status = (
-                f"This pull request has the `{NO_CHANGELOG_LABEL}` label, so it needs "
-                "no changelog entry."
-            )
+        if CHECKED_LABEL in labels:
+            status = "A maintainer has checked the changelog of this pull request."
         else:
             status = "The changelog looks good now. Thanks!"
         return f"{MARKER}\n{status}"
@@ -282,7 +298,7 @@ def comment_body(found, repo, labels=()):
     if any(hint.needs_entry for hint in found):
         footer += (
             " If the change needs no entry, a maintainer will add the "
-            f"`{NO_CHANGELOG_LABEL}` label."
+            f"`{CHECKED_LABEL}` label."
         )
     lines.append(footer)
     return "\n".join(lines)
