@@ -302,13 +302,11 @@ class Client(krpc.services.Client):
         the stream repeats that call. Given a server side function, a
         KRPC.Expression object, the stream evaluates it on each update. The
         function may also be a Python function or lambda taking no arguments,
-        compiled with compile on every call. Raises a StreamError for a property
-        setter, for arguments to a function, for a function with no value, and
-        for a compiled function that takes parameters. Raises TypeError for any
-        other value."""
-        if func == setattr:
-            raise StreamError("Cannot stream a property setter")
-        if self._is_remote_procedure(func):
+        compiled with compile on every call. A call or function with no value
+        runs on each update for its effects, and the stream's value is None.
+        Raises a StreamError for arguments to a function, and for a compiled
+        function that takes parameters. Raises TypeError for any other value."""
+        if func == setattr or self._is_remote_procedure(func):
             return_type = self._get_return_type(func, *args, **kwargs)
             call = self.get_call(func, *args, **kwargs)
             return krpc.stream.Stream.from_call(self, return_type, call)
@@ -319,12 +317,13 @@ class Client(krpc.services.Client):
         if not callable(func):
             self._check_no_parameters(func)
         function, return_type, _ = self._function_and_type(func, streamed=True)
-        if return_type is None:
-            raise StreamError("The function does not evaluate to a value")
         stream_id = self._internal.add_function_stream(function)
-        return krpc.stream.Stream.from_stream_id(
-            self, stream_id, self._types.as_type(return_type)
+        typ = (
+            self._types.no_value_type
+            if return_type is None
+            else self._types.as_type(return_type)
         )
+        return krpc.stream.Stream.from_stream_id(self, stream_id, typ)
 
     @staticmethod
     def _is_remote_procedure(func: Any) -> bool:
@@ -562,14 +561,19 @@ class Client(krpc.services.Client):
         *args: object,
         **kwargs: object,
     ) -> KRPC.ProcedureCall:
-        """Convert a remote procedure call to a KRPC.ProcedureCall message"""
+        """Convert a remote procedure call to a KRPC.ProcedureCall message. Pass
+        getattr or setattr as the procedure for a property, then the object, the
+        property's name and, for setattr, the value."""
         if func == getattr:
             name = cast(str, args[1])
             builder = getattr(args[0], "_build_call_" + name)
             args = tuple()
             kwargs = {}
         elif func == setattr:
-            raise StreamError("Cannot create a call for a property setter")
+            name = cast(str, args[1])
+            builder = getattr(args[0], "_build_call_set__" + name)
+            args = (args[2],)
+            kwargs = {}
         else:
             builder = getattr(
                 func.__self__,  # pyright: ignore[reportFunctionMemberAccess]
@@ -577,8 +581,8 @@ class Client(krpc.services.Client):
             )
         return cast(KRPC.ProcedureCall, builder(*args, **kwargs))
 
-    @staticmethod
     def _get_return_type(
+        self,
         func: Callable,
         *args: object,
         **kwargs: object,
@@ -588,13 +592,14 @@ class Client(krpc.services.Client):
             name = cast(str, args[1])
             return_type_fn = getattr(args[0], "_return_type_" + name)
         elif func == setattr:
-            raise StreamError("Cannot get return type for a property setter")
+            return self._types.no_value_type
         else:
             return_type_fn = getattr(
                 func.__self__,  # pyright: ignore[reportFunctionMemberAccess]
                 "_return_type_" + func.__name__,
             )
-        return cast(TypeBase, return_type_fn())
+        return_type = cast("TypeBase | None", return_type_fn())
+        return self._types.no_value_type if return_type is None else return_type
 
     def _invoke(
         self,

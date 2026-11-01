@@ -79,7 +79,7 @@ class ServiceA(_ServiceADefinitions):
             None
         )
 
-    def _return_type_frob(self) -> TypeBase:
+    def _return_type_frob(self) -> TypeBase | None:
         return None
 
     def _build_call_frob(self, mode: _service_serviceb.Mode = _service_serviceb.Mode.fast) -> KRPC_pb2.ProcedureCall:
@@ -103,7 +103,7 @@ class ServiceA(_ServiceADefinitions):
             None
         )
 
-    def _return_type_frob_all(self) -> TypeBase:
+    def _return_type_frob_all(self) -> TypeBase | None:
         return None
 
     def _build_call_frob_all(self, modes: List[_service_serviceb.Mode] = [_service_serviceb.Mode.fast]) -> KRPC_pb2.ProcedureCall:

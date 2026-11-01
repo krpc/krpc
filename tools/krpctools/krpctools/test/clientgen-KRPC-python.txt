@@ -5828,6 +5828,15 @@ class KRPC(_KRPCDefinitions):
             None
         )
 
+    def _build_call_set__game_scene(self, value: GameScene) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "KRPC",
+            "set_GameScene",
+            [value],
+            [self._client._types.enumeration_type("KRPC", "GameScene")],
+            None
+        )
+
     def _return_type_game_scene(self) -> TypeBase:
         return self._client._types.enumeration_type("KRPC", "GameScene")
 
@@ -5883,6 +5892,15 @@ class KRPC(_KRPCDefinitions):
     @paused.setter
     def paused(self, value: bool) -> None:
         return self._client._invoke(
+            "KRPC",
+            "set_Paused",
+            [value],
+            [self._client._types.bool_type],
+            None
+        )
+
+    def _build_call_set__paused(self, value: bool) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
             "KRPC",
             "set_Paused",
             [value],
@@ -6027,7 +6045,7 @@ class KRPC(_KRPCDefinitions):
             None
         )
 
-    def _return_type_hold_tick(self) -> TypeBase:
+    def _return_type_hold_tick(self) -> TypeBase | None:
         return None
 
     def _build_call_hold_tick(self) -> KRPC_pb2.ProcedureCall:
@@ -6063,7 +6081,7 @@ class KRPC(_KRPCDefinitions):
             None
         )
 
-    def _return_type_next_tick(self) -> TypeBase:
+    def _return_type_next_tick(self) -> TypeBase | None:
         return None
 
     def _build_call_next_tick(self) -> KRPC_pb2.ProcedureCall:
@@ -6088,7 +6106,7 @@ class KRPC(_KRPCDefinitions):
             None
         )
 
-    def _return_type_release_tick(self) -> TypeBase:
+    def _return_type_release_tick(self) -> TypeBase | None:
         return None
 
     def _build_call_release_tick(self) -> KRPC_pb2.ProcedureCall:

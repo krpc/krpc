@@ -738,6 +738,18 @@ class ServiceBase(DynamicType):
                 setter_fn = _wrap_deprecated(
                     setter_fn, qualified_name, setter.deprecated_reason, cls._name
                 )
+            build_set_call = _construct_func(
+                cls._client._build_call,
+                cls._name,
+                setter.name,
+                ["self"],
+                param_names,
+                param_types,
+                [True],
+                [None],
+                None,
+            )
+            cls._add_method("_build_call_set__" + member_name, build_set_call)
         cls._add_property(member_name, getter_fn, setter_fn, doc=doc)
 
     @classmethod
@@ -904,6 +916,8 @@ class ServiceBase(DynamicType):
             )
         if setter:
             param_names, param_types, _, _, return_type = cls._parse_procedure(setter)
+            if "self" not in param_names:
+                param_names[0] = "self"
             setter_fn = _construct_func(
                 cls._client._invoke,
                 cls._name,
@@ -919,4 +933,16 @@ class ServiceBase(DynamicType):
                 setter_fn = _wrap_deprecated(
                     setter_fn, qualified_name, setter.deprecated_reason, cls._name
                 )
+            build_set_call = _construct_func(
+                cls._client._build_call,
+                cls._name,
+                setter.name,
+                [],
+                param_names,
+                param_types,
+                [True, True],
+                [None, None],
+                None,
+            )
+            class_cls._add_method("_build_call_set__" + member_name, build_set_call)
         class_cls._add_property(member_name, getter_fn, setter_fn, doc=doc)

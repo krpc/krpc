@@ -153,6 +153,7 @@ class Types:
             StreamType, self.as_type(_protobuf_type(KRPC.Type.STREAM))
         )
         self.event_type = cast(EventType, self.as_type(_protobuf_type(KRPC.Type.EVENT)))
+        self.no_value_type = NoValueType()
 
     def _value_type(self, code: KRPC.Type.TypeCode) -> ValueType:
         return cast(ValueType, self.as_type(_protobuf_type(code)))
@@ -636,6 +637,13 @@ class EventType(TypeBase):
         if protobuf_type.code != KRPC.Type.EVENT:
             raise ValueError("Not an event type")
         super().__init__(protobuf_type, int, "Event")
+
+
+class NoValueType(TypeBase):
+    """The type of a stream of a call or function with no value. Its value is None."""
+
+    def __init__(self) -> None:
+        super().__init__(_protobuf_type(KRPC.Type.NONE), type(None), "None")
 
 
 class MessageType(TypeBase):

@@ -92,6 +92,15 @@ class {{class_name}}(ClassBase):
             None
         )
 
+    def _build_call_set__{{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "{{ service_name }}",
+            "{{ prop.setter.remote_name }}",
+            [self, {{ arg_values(prop.setter.parameters) }}],
+            [self._client._types.class_type("{{ service_name }}", "{{ class_name }}"), {{ arg_types(prop.setter.parameters) }}],
+            None
+        )
+
     {% endif %}
     {% if 'getter' in prop %}
     def _return_type_{{prop_name}}(self) -> TypeBase:
@@ -122,7 +131,7 @@ class {{class_name}}(ClassBase):
             {{ procedure.return_type.python_type }}
         )
 
-    def _return_type_{{proc_name}}(self) -> TypeBase:
+    def _return_type_{{proc_name}}(self) -> {% if procedure.return_type.python_type == 'None' %}TypeBase | None{% else %}TypeBase{% endif %}:
         return {{ procedure.return_type.python_type }}
 
     def _build_call_{{proc_name}}({{ arg_list(procedure.parameters) }}) -> KRPC_pb2.ProcedureCall:
@@ -152,7 +161,7 @@ class {{class_name}}(ClassBase):
         )
 
     @StaticMethod
-    def _return_type_{{proc_name}}(cls) -> TypeBase:
+    def _return_type_{{proc_name}}(cls) -> {% if procedure.return_type.python_type == 'None' %}TypeBase | None{% else %}TypeBase{% endif %}:
         self = cls
         return {{ procedure.return_type.python_type }}
 
@@ -280,6 +289,15 @@ class {{ service_name }}(_{{ service_name }}Definitions):
             None
         )
 
+    def _build_call_set__{{prop_name}}({{ arg_list(prop.setter.parameters) }}) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "{{ service_name }}",
+            "{{ prop.setter.remote_name }}",
+            [{{ arg_values(prop.setter.parameters) }}],
+            [{{ arg_types(prop.setter.parameters) }}],
+            None
+        )
+
     {% endif %}
     {% if 'getter' in prop %}
     def _return_type_{{prop_name}}(self) -> TypeBase:
@@ -310,7 +328,7 @@ class {{ service_name }}(_{{ service_name }}Definitions):
             {{ procedure.return_type.python_type }}
         )
 
-    def _return_type_{{proc_name}}(self) -> TypeBase:
+    def _return_type_{{proc_name}}(self) -> {% if procedure.return_type.python_type == 'None' %}TypeBase | None{% else %}TypeBase{% endif %}:
         return {{ procedure.return_type.python_type }}
 
     def _build_call_{{proc_name}}({{ arg_list(procedure.parameters) }}) -> KRPC_pb2.ProcedureCall:

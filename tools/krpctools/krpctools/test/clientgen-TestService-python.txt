@@ -177,6 +177,15 @@ class TestClass(ClassBase):
             None
         )
 
+    def _build_call_set__int_property(self, value: int) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "TestClass_set_IntProperty",
+            [self, value],
+            [self._client._types.class_type("TestService", "TestClass"), self._client._types.sint32_type],
+            None
+        )
+
     def _return_type_int_property(self) -> TypeBase:
         return self._client._types.sint32_type
 
@@ -214,6 +223,15 @@ class TestClass(ClassBase):
             None
         )
 
+    def _build_call_set__object_property(self, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "TestClass_set_ObjectProperty",
+            [self, value],
+            [self._client._types.class_type("TestService", "TestClass"), self._client._types.class_type("TestService", "TestClass")],
+            None
+        )
+
     def _return_type_object_property(self) -> TypeBase:
         return self._client._types.class_type("TestService", "TestClass")
 
@@ -233,6 +251,15 @@ class TestClass(ClassBase):
     @string_property_private_get.setter
     def string_property_private_get(self, value: str) -> None:
         return self._client._invoke(
+            "TestService",
+            "TestClass_set_StringPropertyPrivateGet",
+            [self, value],
+            [self._client._types.class_type("TestService", "TestClass"), self._client._types.string_type],
+            None
+        )
+
+    def _build_call_set__string_property_private_get(self, value: str) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
             "TestService",
             "TestClass_set_StringPropertyPrivateGet",
             [self, value],
@@ -577,6 +604,15 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
+    def _build_call_set__deprecated_property(self, value: str) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "set_DeprecatedProperty",
+            [value],
+            [self._client._types.string_type],
+            None
+        )
+
     def _return_type_deprecated_property(self) -> TypeBase:
         return self._client._types.string_type
 
@@ -602,6 +638,15 @@ class TestService(_TestServiceDefinitions):
     @nullable_object.setter
     def nullable_object(self, value: Optional[TestClass]) -> None:
         return self._client._invoke(
+            "TestService",
+            "set_NullableObject",
+            [value],
+            [self._client._types.class_type("TestService", "TestClass")],
+            None
+        )
+
+    def _build_call_set__nullable_object(self, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
             "TestService",
             "set_NullableObject",
             [value],
@@ -646,6 +691,15 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
+    def _build_call_set__object_property(self, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "set_ObjectProperty",
+            [value],
+            [self._client._types.class_type("TestService", "TestClass")],
+            None
+        )
+
     def _return_type_object_property(self) -> TypeBase:
         return self._client._types.class_type("TestService", "TestClass")
 
@@ -681,6 +735,15 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
+    def _build_call_set__string_property(self, value: str) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "set_StringProperty",
+            [value],
+            [self._client._types.string_type],
+            None
+        )
+
     def _return_type_string_property(self) -> TypeBase:
         return self._client._types.string_type
 
@@ -700,6 +763,15 @@ class TestService(_TestServiceDefinitions):
     @string_property_private_get.setter
     def string_property_private_get(self, value: str) -> None:
         return self._client._invoke(
+            "TestService",
+            "set_StringPropertyPrivateGet",
+            [value],
+            [self._client._types.string_type],
+            None
+        )
+
+    def _build_call_set__string_property_private_get(self, value: str) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
             "TestService",
             "set_StringPropertyPrivateGet",
             [value],
@@ -2179,7 +2251,7 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
-    def _return_type_remove_test_object(self) -> TypeBase:
+    def _return_type_remove_test_object(self) -> TypeBase | None:
         return None
 
     def _build_call_remove_test_object(self, value: TestClass) -> KRPC_pb2.ProcedureCall:
@@ -2200,7 +2272,7 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
-    def _return_type_reset_custom_exception_later(self) -> TypeBase:
+    def _return_type_reset_custom_exception_later(self) -> TypeBase | None:
         return None
 
     def _build_call_reset_custom_exception_later(self) -> KRPC_pb2.ProcedureCall:
@@ -2221,7 +2293,7 @@ class TestService(_TestServiceDefinitions):
             None
         )
 
-    def _return_type_reset_invalid_operation_exception_later(self) -> TypeBase:
+    def _return_type_reset_invalid_operation_exception_later(self) -> TypeBase | None:
         return None
 
     def _build_call_reset_invalid_operation_exception_later(self) -> KRPC_pb2.ProcedureCall:
