@@ -55,6 +55,7 @@ import sys
 import zipfile
 from pathlib import Path
 
+import changelog
 import lib
 
 # The documentation content inputs restored, unchanged in location, from the
@@ -75,30 +76,14 @@ CONTENT_PATHS = (
     "service/DockingCamera/src",
 )
 
-# The per-component CHANGELOG.md files the unified changelog page is merged from,
-# mirroring the changeloggen components in doc/BUILD.bazel. Unlike the API
-# surfaces these are toolchain, not content: the current checkout's files carry
-# entries for versions released since, so trim_changelogs prunes each to the
-# version being built. Other CHANGELOG.md files in the tree (the top-level one,
-# tools/krpctest, tools/buildenv) do not feed the page and are left alone.
-CHANGELOG_PATHS = (
-    "core/CHANGELOG.md",
-    "server/CHANGELOG.md",
-    "service/SpaceCenter/CHANGELOG.md",
-    "service/Drawing/CHANGELOG.md",
-    "service/UI/CHANGELOG.md",
-    "service/InfernalRobotics/CHANGELOG.md",
-    "service/KerbalAlarmClock/CHANGELOG.md",
-    "service/RemoteTech/CHANGELOG.md",
-    "service/LiDAR/CHANGELOG.md",
-    "service/DockingCamera/CHANGELOG.md",
-    "client/cnano/CHANGELOG.md",
-    "client/csharp/CHANGELOG.md",
-    "client/cpp/CHANGELOG.md",
-    "client/java/CHANGELOG.md",
-    "client/lua/CHANGELOG.md",
-    "client/python/CHANGELOG.md",
-    "tools/krpctools/CHANGELOG.md",
+# The per-component CHANGELOG.md files the unified changelog page is merged from.
+# Unlike the API surfaces these are toolchain, not content: the current
+# checkout's files carry entries for versions released since, so trim_changelogs
+# prunes each to the version being built. Other CHANGELOG.md files in the tree
+# (the top-level one, tools/krpctest, tools/buildenv) do not feed the page and
+# are left alone.
+CHANGELOG_PATHS = tuple(
+    f"{component}/CHANGELOG.md" for component, _ in changelog.shown_components()
 )
 
 # A CHANGELOG.md version header: '## [X.Y.Z]', with an optional leading 'v'
@@ -428,22 +413,24 @@ def trim_changelogs(worktree, version):
     after this one. Drop every '## [X.Y.Z]' section newer than the target,
     keeping the preamble and every section at or below it. Because changelog
     entries are frozen once released, what remains is the file this version
-    shipped with, and the page matches the release.
+    shipped with, and the page matches the release. The fragments are removed.
     """
+    # A released version has no unreleased entries
+    shutil.rmtree(worktree / changelog.FRAGMENT_DIR, ignore_errors=True)
     ceiling = version_key(version)
     for path in CHANGELOG_PATHS:
-        changelog = worktree / path
-        if not changelog.exists():
+        file = worktree / path
+        if not file.exists():
             continue
         kept = []
         keeping = True  # the preamble before the first header is kept
-        for line in changelog.read_text(encoding="utf-8").splitlines(keepends=True):
+        for line in file.read_text(encoding="utf-8").splitlines(keepends=True):
             match = CHANGELOG_HEADER_RE.match(line)
             if match:
                 keeping = version_key(match.group(1)) <= ceiling
             if keeping:
                 kept.append(line)
-        changelog.write_text("".join(kept), encoding="utf-8")
+        file.write_text("".join(kept), encoding="utf-8")
 
 
 def pin_version(worktree, version):

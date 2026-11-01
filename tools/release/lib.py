@@ -15,6 +15,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
+import changelog
 import tomllib
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -142,38 +143,50 @@ def require_clean_tree():
 
 
 def changelogs():
-    """Every release-train component's CHANGELOG.md, in a stable order.
-
-    The same set the release notes are built from: server, core, the services,
-    the clients and krpctools. Components on their own version train (buildenv)
-    and ones not shipped in the release notes (krpctest) are deliberately absent.
-    """
-    return (
-        ["server/CHANGELOG.md", "core/CHANGELOG.md"]
-        + sorted(str(path) for path in Path("service").glob("*/CHANGELOG.md"))
-        + sorted(str(path) for path in Path("client").glob("*/CHANGELOG.md"))
-        + ["tools/krpctools/CHANGELOG.md"]
-    )
+    """The CHANGELOG.md of every component the release notes show, in the
+    order shown."""
+    return [
+        f"{component}/CHANGELOG.md" for component, _ in changelog.shown_components()
+    ]
 
 
-def strip_unreleased():
-    """Drop the ' - unreleased' suffix from the current version's header in
-    every component changelog, krpctest's included, returning the paths that
-    changed.
+def fragments():
+    """The changelog fragments, in fragment order."""
+    try:
+        return changelog.load_fragments(changelog.fragment_paths(ROOT))
+    except changelog.ChangelogError as exception:
+        raise ReleaseError(f"bad changelog fragment:\n{exception}") from exception
 
-    While on main the in-development version's header reads
-    ``## [vX.Y.Z] - unreleased``; releasing turns it into ``## [vX.Y.Z]``.
-    """
-    header = f"## [v{VERSION}] - unreleased"
-    replacement = f"## [v{VERSION}]"
-    changed = []
-    for path in [*changelogs(), "tools/krpctest/CHANGELOG.md"]:
-        file = Path(path)
-        text = file.read_text()
-        if header in text:
-            file.write_text(text.replace(header, replacement))
-            changed.append(path)
-    return changed
+
+def _sections():
+    """The sections of every component changelog, by path."""
+    try:
+        return {
+            path: changelog.parse_changelog(Path(path).read_text(), path)
+            for path in (
+                f"{component}/CHANGELOG.md" for component in changelog.COMPONENTS
+            )
+        }
+    except changelog.ChangelogError as exception:
+        raise ReleaseError(str(exception)) from exception
+
+
+def released_changelogs():
+    """The component changelogs with a released section for this version."""
+    return [
+        path
+        for path, sections in _sections().items()
+        if any(s.version == VERSION and not s.unreleased for s in sections)
+    ]
+
+
+def unreleased_changelogs():
+    """The component changelogs with an unreleased section, for any version."""
+    return [
+        path
+        for path, sections in _sections().items()
+        if any(s.unreleased for s in sections)
+    ]
 
 
 # The single file every publish step takes its credentials from, so there is

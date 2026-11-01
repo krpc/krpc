@@ -1,4 +1,4 @@
-load("@rules_python//python:defs.bzl", "py_test")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
 load("//:config.bzl", "avc_version", "ksp_avc_version_max", "ksp_avc_version_min", "python_version", "version")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test")
@@ -249,6 +249,8 @@ test_suite(
     name = "test",
     tests = [
         "//:buildifier",
+        "//:changelog-fragments-test",
+        "//:changelog-test",
         "//:csproj-test",
         "//:pyright-release",
         "//:ruff-release",
@@ -354,6 +356,43 @@ filegroup(
         "//tools/build/ksp:Google.Protobuf.dll",
         "//tools/build/ksp:KRPC.IO.Ports.dll",
     ],
+)
+
+# The changelog parser and fragment merge, shared by the docs changelog page and
+# the release scripts
+py_library(
+    name = "changelog",
+    srcs = ["tools/release/changelog.py"],
+    imports = ["tools/release"],
+    visibility = ["//visibility:public"],
+)
+
+# The unreleased changelog entries, one file per pull request. Absent after a
+# release, until the next fragment is added.
+filegroup(
+    name = "changelog-fragments",
+    srcs = glob(
+        ["changelog.d/**"],
+        allow_empty = True,
+    ),
+    visibility = ["//doc:__pkg__"],
+)
+
+py_test(
+    name = "changelog-test",
+    size = "small",
+    srcs = ["tools/release/changelog_test.py"],
+    main = "tools/release/changelog_test.py",
+    deps = [":changelog"],
+)
+
+py_test(
+    name = "changelog-fragments-test",
+    size = "small",
+    srcs = ["tools/release/check_fragments.py"],
+    data = [":changelog-fragments"],
+    main = "tools/release/check_fragments.py",
+    deps = [":changelog"],
 )
 
 py_ruff_test(

@@ -4,6 +4,10 @@ kRPC is made up of many components, each with its own changelog. Pick the one
 you are interested in below. A combined view of every component is also on the
 [documentation site](https://krpc.github.io/krpc/dev/changelog.html).
 
+The changes since the last release are in `changelog.d/`, one file per pull request, until the next
+release adds them to these changelogs. The documentation site shows them merged into each
+component's unreleased section.
+
 ## Server and core
 
 - [Server](server/CHANGELOG.md)

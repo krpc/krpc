@@ -87,6 +87,7 @@ jobs:
           - name: test-build-scripts
             test: >-
               //:buildifier //tools/build/python:requirements.test
+              //:changelog-test //:changelog-fragments-test
               //:pyright-release //:ruff-release
               //tools/build:pyright //tools/build:ruff
               //tools/build/protobuf:pyright //tools/build/protobuf:ruff
@@ -171,6 +172,7 @@ jobs:
           - name: test-build-scripts
             test: >-
               //:buildifier
+              //:changelog-test //:changelog-fragments-test
               //:pyright-release //:ruff-release
               //tools/build:pyright //tools/build:ruff
               //tools/build/protobuf:pyright //tools/build/protobuf:ruff
