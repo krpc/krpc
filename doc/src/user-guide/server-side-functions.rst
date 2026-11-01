@@ -261,8 +261,8 @@ the client has one.
 
 .. note::
 
-   An event or stream re-runs its function on every stream update, effects included. Keep
-   event and stream functions free of side effects.
+   An event or stream runs its function on every stream update, effects included. See
+   :ref:`server-side-functions-control-loops`.
 
 .. _server-side-functions-arguments:
 
@@ -315,6 +315,26 @@ compiled function advance it twice per update. Compile the function twice for se
 
 A function passed straight to ``Run`` or a stream starts again from the captured value on each
 call. With the expression API, create the variable with :meth:`Expression.state_variable`.
+
+.. _server-side-functions-control-loops:
+
+Control Loops on the Server
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A stream of a function with no value runs the function on every stream update, for its effects.
+The function is a control loop that runs in the game, with no round trip to the client. This one
+throttles back as the vertical speed nears 100 m/s:
+
+.. literalinclude:: /scripts/user-guide/server-side-functions/ThrottleLimit.py
+   :language: python
+   :start-after: [docs]
+   :end-before: [/docs]
+
+The stream's value is the client's null value. The server sends it once, after the first run, so
+a callback is called once. An error from the function ends the stream and stops the loop. Set the
+stream's rate to run the function less often.
+
+A stream of a remote procedure with no return value runs the call in the same way.
 
 Strings
 ^^^^^^^
@@ -771,7 +791,8 @@ operand only when the first does not decide the result.
 Function Streams
 ^^^^^^^^^^^^^^^^
 
-A function whose value can be sent to a client can be streamed:
+A function whose value can be sent to a client can be streamed. A function with no value can be
+streamed too, and runs for its effects, as in :ref:`server-side-functions-control-loops`:
 
 .. tabs::
 
