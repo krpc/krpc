@@ -155,6 +155,14 @@ class TestHints(unittest.TestCase):
         body = comment_body([Hint("A hint.", needs_entry=True)], "krpc/krpc")
         self.assertIn("`no-changelog` label", body)
 
+    def test_resolved_comment(self):
+        body = comment_body([], "krpc/krpc")
+        self.assertEqual(
+            "<!-- changelog-hints -->\nThe changelog looks good now. Thanks!", body
+        )
+        body = comment_body([], "krpc/krpc", {"no-changelog"})
+        self.assertIn("has the `no-changelog` label", body)
+
 
 if __name__ == "__main__":
     unittest.main()

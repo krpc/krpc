@@ -329,7 +329,8 @@ by directory, holding entries in the `CHANGELOG.md` syntax:
    topic merges with the topic of the same text. `//:changelog-fragments-test` checks the format.
  * Commit the fragment with the change it describes. A PR with no user-facing change adds none.
  * The `changelog-hints` workflow comments on a PR whose fragment looks incomplete
-   (`tools/ci/changelog_hints.py`). A hint never fails CI. The `no-changelog` label removes them.
+   (`tools/ci/changelog_hints.py`). A hint never fails CI. Once the hints are fixed, or the
+   `no-changelog` label is added, the comment says so.
    A failed run is a GitHub API failure, and re-running it is the fix. The hints check only the
    entries a PR adds, so a PR may edit an earlier fragment.
  * The release preparation PR folds the fragments into `CHANGELOG.md` (`01-fold-changelogs.py`).

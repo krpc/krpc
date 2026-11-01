@@ -259,7 +259,17 @@ def _code(text):
     return f"{fence} {text} {fence}"
 
 
-def comment_body(found, repo):
+def comment_body(found, repo, labels=()):
+    """The hints comment. With no hints, it says the earlier hints are resolved."""
+    if not found:
+        if NO_CHANGELOG_LABEL in labels:
+            status = (
+                f"This pull request has the `{NO_CHANGELOG_LABEL}` label, so it needs "
+                "no changelog entry."
+            )
+        else:
+            status = "The changelog looks good now. Thanks!"
+        return f"{MARKER}\n{status}"
     guide = f"https://github.com/{repo}/blob/main/CONTRIBUTING.md#changelog-entries"
     lines = [
         MARKER,
@@ -272,7 +282,7 @@ def comment_body(found, repo):
     if any(hint.needs_entry for hint in found):
         footer += (
             " If the change needs no entry, a maintainer will add the "
-            f"`{NO_CHANGELOG_LABEL}` label and this comment will go away."
+            f"`{NO_CHANGELOG_LABEL}` label."
         )
     lines.append(footer)
     return "\n".join(lines)
@@ -366,9 +376,10 @@ def fetch(repo, number):
     )
 
 
-def update_comment(repo, number, found):
-    """Create, edit or delete the hints comment. Runs that race can both create
-    one, so the comments past the first are deleted."""
+def update_comment(repo, number, body, found):
+    """Create or edit the hints comment. A pull request with no hints and no
+    comment gets none. Runs that race can both create a comment, so the comments
+    past the first are deleted."""
     existing = [
         comment["id"]
         for comment in gh_lines(
@@ -380,18 +391,17 @@ def update_comment(repo, number, found):
         )
         if comment["login"] == BOT and comment["body"].startswith(MARKER)
     ]
-    keep = existing[:1] if found else []
-    for comment in existing[len(keep) :]:
+    for comment in existing[1:]:
         gh("api", "-X", "DELETE", f"repos/{repo}/issues/comments/{comment}")
-    if not found:
+    if not found and not existing:
         return
-    body = json.dumps({"body": comment_body(found, repo)})
-    if keep:
+    body = json.dumps({"body": body})
+    if existing:
         gh(
             "api",
             "-X",
             "PATCH",
-            f"repos/{repo}/issues/comments/{keep[0]}",
+            f"repos/{repo}/issues/comments/{existing[0]}",
             "--input",
             "-",
             stdin=body,
@@ -415,10 +425,11 @@ def main():
     parser.add_argument("--repo", required=True, help="OWNER/NAME")
     parser.add_argument("--pr", required=True, type=int, help="pull request number")
     args = parser.parse_args()
-    found = hints(fetch(args.repo, args.pr))
+    pr = fetch(args.repo, args.pr)
+    found = hints(pr)
     for hint in found:
         print(hint.text)
-    update_comment(args.repo, args.pr, found)
+    update_comment(args.repo, args.pr, comment_body(found, args.repo, pr.labels), found)
 
 
 if __name__ == "__main__":
