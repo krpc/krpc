@@ -28,14 +28,17 @@ namespace KRPC.UI
         const string blockingModeText = "Blocking";
         const string nonBlockingModeText = "Non-blocking";
         const string recvTimeoutText = "Receive timeout";
+        const string tickHoldTimeoutText = "Tick hold timeout";
         const string timePerRPCUpdateText = "Time per update";
         const string pollTimePerRPCUpdateText = "Poll time per update";
         const string execTimePerRPCUpdateText = "Exec time per update";
+        const string deferredCallsText = "Deferred calls";
 
         const string streamInfoText = "Stream Execution Info";
-        const string streamingRPCsText = "Current Streams";
-        const string streamingRPCsExecutedText = "Stream RPCs Executed";
-        const string streamingRPCRateText = "Stream RPC Rate";
+        const string streamsText = "Current Streams";
+        const string streamEvaluationsText = "Stream Evaluations";
+        const string streamEvaluationRateText = "Stream Evaluation Rate";
+        const string streamUpdatesSentText = "Stream Updates Sent";
         const string timePerStreamUpdateText = "Time per update";
 
         const string notApplicableText = "n/a";
@@ -125,16 +128,19 @@ namespace KRPC.UI
             DrawInfo (maxTimePerUpdateText, config.OneRPCPerUpdate ? notApplicableText : config.MaxTimePerUpdate + " us");
             DrawInfo (rpcReceiveModeText, config.BlockingRecv ? blockingModeText : nonBlockingModeText);
             DrawInfo (recvTimeoutText, config.BlockingRecv ? config.RecvTimeout + " us" : notApplicableText);
+            DrawInfo (tickHoldTimeoutText, config.TickHoldTimeout + " us");
             DrawInfo (timePerRPCUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.TimePerRPCUpdate));
             DrawInfo (pollTimePerRPCUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.PollTimePerRPCUpdate));
             DrawInfo (execTimePerRPCUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.ExecTimePerRPCUpdate));
+            DrawInfo (deferredCallsText, core.DeferredCalls.ToString (CultureInfo.CurrentCulture));
 
             GUILayoutExtensions.Separator (separatorStyle);
 
             GUILayout.Label (streamInfoText, labelStyle);
-            DrawInfo (streamingRPCsText, core.Streams.ToString (CultureInfo.CurrentCulture));
-            DrawInfo (streamingRPCsExecutedText, core.StreamEvaluations.ToString (CultureInfo.CurrentCulture));
-            DrawInfo (streamingRPCRateText, Math.Round (core.StreamEvaluationRate) + " RPC/s");
+            DrawInfo (streamsText, core.Streams.ToString (CultureInfo.CurrentCulture));
+            DrawInfo (streamEvaluationsText, core.StreamEvaluations.ToString (CultureInfo.CurrentCulture));
+            DrawInfo (streamEvaluationRateText, Math.Round (core.StreamEvaluationRate) + "/s");
+            DrawInfo (streamUpdatesSentText, core.StreamUpdatesSent.ToString (CultureInfo.CurrentCulture));
             DrawInfo (timePerStreamUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.TimePerStreamUpdate));
 
             GUILayoutExtensions.Separator (separatorStyle);
