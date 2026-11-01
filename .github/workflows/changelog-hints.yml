@@ -1,0 +1,39 @@
+name: changelog-hints
+
+# Posts changelog hints on a pull request as one comment. A hint never fails the
+# check, but a GitHub API call that still fails after retries does, so the run
+# can be re-run. The check is not required. Runs on pull_request_target, as the
+# token of a pull_request run from a fork cannot comment. It checks out the base
+# branch, and reads the pull request through the API as data. No code from the
+# pull request runs.
+on:
+  pull_request_target:
+    branches:
+      - main
+    # edited: a new description can change the related numbers
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled]
+
+permissions:
+  contents: read
+  # The issues a pull request links to
+  issues: read
+  pull-requests: write
+
+concurrency:
+  group: changelog-hints-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  hints:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: hints
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+        run: python3 tools/ci/changelog_hints.py --repo "$GITHUB_REPOSITORY" --pr "$PR"
