@@ -333,6 +333,7 @@ SpaceCenter.RaycastDistance
 SpaceCenter.RaycastPart
 SpaceCenter.FARAvailable
 SpaceCenter.RealFuelsAvailable
+SpaceCenter.IndividualRCSAvailable
 SpaceCenter.CreateKerbal
 SpaceCenter.GetKerbal
 SpaceCenter.MapFilter
@@ -1354,6 +1355,7 @@ SpaceCenter.RCS.RightEnabled
 SpaceCenter.RCS.InputOverride
 SpaceCenter.RCS.RotationOverride
 SpaceCenter.RCS.TranslationOverride
+SpaceCenter.RCS.ThrustersOverride
 SpaceCenter.RCS.AvailableTorque
 SpaceCenter.RCS.AvailableForce
 SpaceCenter.RCS.Force
@@ -1486,6 +1488,10 @@ SpaceCenter.SolarPanel.SunExposure
 SpaceCenter.Thruster
 SpaceCenter.Thruster.Part
 SpaceCenter.Thruster.Thrust
+SpaceCenter.Thruster.ThrustLevel
+SpaceCenter.Thruster.MinThrustLevel
+SpaceCenter.Thruster.MinThrust
+SpaceCenter.Thruster.MaxThrust
 SpaceCenter.Thruster.ThrustPosition
 SpaceCenter.Thruster.ThrustDirection
 SpaceCenter.Thruster.ThrustReferenceFrame

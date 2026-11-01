@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -121,6 +122,119 @@ namespace KRPC.SpaceCenter.Services.Parts
                 if (RCS.ThrustAllocationStale || forces == null || transformIndex >= forces.Length)
                     return 0f;
                 return forces [transformIndex] * 1000f;
+            }
+        }
+
+        /// <summary>
+        /// Commanded thruster level, setting it requires <see cref="RCS.ThrustersOverride"/> or
+        /// <see cref="Engine.IndependentThrottle"/> to be enabled.
+        ///
+        /// IndividualRCS (<see cref="SpaceCenter.IndividualRCSAvailable"/>) is required to set on RCS.
+        /// Engine works the same as <see cref="Engine.Throttle"/>.
+        ///
+        /// Reading returns commanded thrust level in the previous physics frame.
+        /// Value is normalized between 0 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float ThrustLevel
+        {
+            get
+            {
+                if (InternalEngine)
+                    return InternalEngine.currentThrottle;
+
+                return Mathf.Clamp(InternalRCS.thrustForces[transformIndex] / InternalRCS.CalculateThrust(1f, out _), 0f, 1f);
+            }
+            set
+            {
+                if (InternalEngine)
+                    InternalEngine.independentThrottlePercentage = value * 100;
+                else
+                    ActuatorControlAddon.SetRCSThruster(InternalRCS, transformIndex, value);
+            }
+        }
+
+        /// <summary>
+        /// Minimum commanded thrust level for it to fire.
+        ///
+        /// Value is normalized between 0 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float MinThrustLevel
+        {
+            get
+            {
+                var engine = InternalEngine;
+
+                // Keeping unimplemented for now, maybe it's useful for RO ?
+                if (engine != null)
+                {
+                    return float.NaN;
+                }
+
+                return InternalRCS.EPSILON;
+            }
+        }
+
+        /// <summary>
+        /// Thrust produced at minimum throttle that produces thrust,
+        /// for RCS this is at <see cref="MinThrustLevel"/>.
+        ///
+        /// Value is normalized between 0 and 1.
+        /// </summary>
+        [KRPCProperty]
+        public float MinThrust
+        {
+            get
+            {
+                var engine = InternalEngine;
+
+                // Keeping unimplemented for now, maybe it's useful for RO ?
+                if (engine != null)
+                {
+                    return float.NaN;
+                }
+
+                return InternalRCS.EPSILON * MaxThrust;
+            }
+        }
+
+        /// <summary>
+        /// Maximum force thruster can produce, in Newtons.
+        ///
+        /// Takes the current atmospheric conditions into account.
+        /// Value may be zero until a thruster has fired.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxThrust
+        {
+            get
+            {
+                var engine = InternalEngine;
+
+                if (engine != null)
+                {
+                    // The engine's thrust is split across its nozzles by these weights
+                    var multipliers = engine.thrustTransformMultipliers;
+                    if (multipliers == null || transformIndex >= multipliers.Count)
+                        return 0f;
+
+                    return engine.MaxThrustOutputAtm() * multipliers[transformIndex] * 1000f;
+                }
+
+                MethodInfo method = InternalRCS.GetType().GetMethod("IsAdjusterBreakingRCS", BindingFlags.NonPublic | BindingFlags.Instance);
+                bool isRCSBroken = (bool)method.Invoke(InternalRCS, new object[] { });
+
+                // Check if capable of producing thrust
+                if (isRCSBroken || (InternalRCS.part.ShieldedFromAirstream && !InternalRCS.shieldedCanThrust))
+                {
+                    return 0f;
+                }
+                else
+                {
+                    // All nozzles produce the same maximum thrust
+                    return InternalRCS.CalculateThrust(1f, out _) * 1000f;
+                }
             }
         }
 

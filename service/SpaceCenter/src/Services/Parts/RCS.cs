@@ -189,6 +189,23 @@ namespace KRPC.SpaceCenter.Services.Parts
             set { ActuatorControlAddon.SetRCSTranslation (InternalRCS, value.ToVector ()); }
         }
 
+		/// <summary>
+		/// Whether individual thrust nozzles are controlled directly, bypassing the vessel's
+		/// normal flight controls and <see cref="InputOverride"/>. When enabled, each nozzle in <see cref="Thrusters"/>
+		/// will be overidden by its <see cref="Thruster.ThrustLevel"/> instead of automatic inputs.
+		///
+		/// The override is automatically released if the
+		/// controlling client disconnects or the vessel changes.
+		///
+		/// Requires IndividualRCS (<see cref="SpaceCenter.IndividualRCSAvailable"/>), otherwise will throw exception.
+		/// </summary>
+		[KRPCProperty]
+        public bool ThrustersOverride
+        {
+            get { return ActuatorControlAddon.GetThrusterOverride(InternalRCS); }
+            set { ActuatorControlAddon.SetThrusterOverride(InternalRCS, value); }
+        }
+
         /// <summary>
         /// The available torque, in <unit>N.m</unit>, that can be produced by this RCS,
         /// in the positive and negative pitch, roll and yaw axes of the vessel. These axes

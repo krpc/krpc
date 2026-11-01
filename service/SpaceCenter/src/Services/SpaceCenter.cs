@@ -1166,6 +1166,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether <a href="https://github.com/xCuri0/IndividualRCS">IndividualRCS</a> is installed.
+        /// </summary>
+        [KRPCProperty]
+        public static bool IndividualRCSAvailable
+        {
+            get
+            {
+                System.Type adjusterType = System.Type.GetType("IndividualRCS.AdjusterIndividualRCS, IndividualRCS");
+                return adjusterType != null;
+            }
+        }
+
+        /// <summary>
         /// Creates a Kerbal.
         /// </summary>
         /// <param name="name"></param>
