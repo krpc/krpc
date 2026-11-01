@@ -84,7 +84,7 @@ namespace KRPC.Client
 
         public StreamImpl AddStream (TypeSpec returnType, ProcedureCall call)
         {
-            var id = connection.KRPC ().AddStream (call).Id;
+            var id = connection.KRPC ().AddStream (call);
             return GetStream (returnType, id);
         }
 

@@ -3,9 +3,11 @@ from krpc.types import (
     ClassType,
     DictionaryType,
     EnumerationType,
+    EventType,
     ListType,
     MessageType,
     SetType,
+    StreamType,
     StructType,
     TupleType,
     ValueType,
@@ -55,6 +57,8 @@ class LuaLanguage(Language):
     def parse_type(self, typ):
         if isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type.code]
+        if isinstance(typ, (StreamType, EventType)):
+            return self.type_map[Type.UINT64]
         if isinstance(typ, MessageType):
             # A table, named by the protobuf message type it holds
             return "krpc.schema.%s" % typ.python_type.__name__

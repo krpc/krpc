@@ -85,7 +85,7 @@ class Stream {
  private:
   friend class Event;
   friend struct function_stream_detail::function_streams;
-  /** The stream with an id the server gave, as an event message carries. */
+  /** The stream with an id the server gave, such as the stream of an event. */
   Stream(Client* client, uint64_t id);
   /** A stream whose value is an error when null, for a template type that cannot hold a null. */
   Stream(Client* client, uint64_t id, bool null_is_an_error);

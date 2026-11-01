@@ -5,7 +5,6 @@ import time
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
-import krpc.schema.KRPC_pb2 as KRPC
 from krpc.stream import Stream, wait_deadline
 
 if TYPE_CHECKING:
@@ -15,10 +14,8 @@ if TYPE_CHECKING:
 class Event:
     """An event."""
 
-    def __init__(self, client: Client, event: KRPC.Event) -> None:
-        self._stream = Stream.from_stream_id(
-            client, event.stream.id, client._types.bool_type
-        )
+    def __init__(self, client: Client, stream_id: int) -> None:
+        self._stream = Stream.from_stream_id(client, stream_id, client._types.bool_type)
         self._client = client
         self._seen = 0
 

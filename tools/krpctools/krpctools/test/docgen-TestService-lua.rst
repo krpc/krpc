@@ -584,7 +584,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: on_timer(milliseconds: number, repeats?: number): krpc.schema.Event
+.. staticmethod:: on_timer(milliseconds: number, repeats?: number): number
 
 
 
@@ -603,7 +603,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: remove_event_after(milliseconds: number): krpc.schema.Event
+.. staticmethod:: remove_event_after(milliseconds: number): number
 
 
 

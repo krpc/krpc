@@ -16,9 +16,11 @@ from krpc.types import (
     ClassType,
     DictionaryType,
     EnumerationType,
+    EventType,
     ListType,
     MessageType,
     SetType,
+    StreamType,
     StructType,
     TupleType,
     ValueType,
@@ -58,9 +60,11 @@ class Unsupported(Exception):
 
 
 def _kind(typ):
-    """The kind of value a scalar, string or bytes type converts as"""
+    """The kind of value a scalar, string, bytes or stream type converts as"""
     if isinstance(typ, ValueType) and typ.protobuf_type.code in VALUE_KINDS:
         return VALUE_KINDS[typ.protobuf_type.code]
+    if isinstance(typ, StreamType):
+        return VALUE_KINDS[Type.UINT64]
     raise Unsupported()
 
 
@@ -113,7 +117,7 @@ class DispatchGenerator(Generator):
             )
         if isinstance(typ, TupleType):
             return self.tuple(typ, [self.convert(t) for t in typ.value_types])
-        if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
+        if isinstance(typ, EventType):
             return self.event(typ)
         if isinstance(typ, MessageType):
             return self.message(typ)
@@ -163,9 +167,11 @@ class DispatchGenerator(Generator):
         result = None
         if return_type is not None:
             result = self.result(return_type)
-        # An event is a handle to a stream, and a procedure that returns one or another
+        # An event or a stream is a handle to a stream, and a procedure that returns one or a
         # message is not streamed
-        streamed = return_type is not None and not isinstance(return_type, MessageType)
+        streamed = return_type is not None and not isinstance(
+            return_type, (MessageType, EventType, StreamType)
+        )
         member_kind, cls, member_name = _classify(name)
         # A call for each number of arguments, where the stub fills in the defaults of the
         # arguments left off the end
@@ -211,7 +217,7 @@ class DispatchGenerator(Generator):
 
     def parameter(self, typ):
         """The conversion of an argument"""
-        if isinstance(typ, MessageType):
+        if isinstance(typ, (MessageType, EventType, StreamType)):
             raise Unsupported()
         return self.convert(typ)
 
@@ -689,7 +695,7 @@ class CnanoDispatchGenerator(DispatchGenerator, CnanoGenerator):
             )
         if isinstance(typ, TupleType):
             return self._tuple_tag(typ)
-        if isinstance(typ, MessageType) and typ.protobuf_type.code != Type.EVENT:
+        if isinstance(typ, MessageType):
             # A nanopb struct, encoded again with its field descriptions
             ctype = self.parse_type(typ)["ctype"]
             return "Message<%s, %s_fields>" % (ctype, ctype)
@@ -711,7 +717,7 @@ class CnanoDispatchGenerator(DispatchGenerator, CnanoGenerator):
     def parameter(self, typ):
         """How the client function takes an argument: a collection, struct or tuple by
         pointer, and a nullable scalar or enum by pointer, which is NULL for null"""
-        if isinstance(typ, MessageType):
+        if isinstance(typ, (MessageType, EventType, StreamType)):
             raise Unsupported()
         conversion = self.convert(typ)
         by_pointer = isinstance(

@@ -1,12 +1,15 @@
 import collections
 
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ClassType,
     DictionaryType,
     EnumerationType,
+    EventType,
     ListType,
     MessageType,
     SetType,
+    StreamType,
     StructType,
     TupleType,
     ValueType,
@@ -68,6 +71,9 @@ class CnanoGenerator(Generator[CnanoLanguage]):
         self._collection_types.add(typ)
         if isinstance(typ, ValueType):
             ctype = self.language.type_map[typ.protobuf_type.code]
+            ptr = False
+        elif isinstance(typ, (StreamType, EventType)):
+            ctype = self.language.type_map[Type.UINT64]
             ptr = False
         elif isinstance(typ, MessageType):
             ctype = "krpc_schema_%s" % typ.python_type.__name__
@@ -195,6 +201,8 @@ class CnanoGenerator(Generator[CnanoLanguage]):
     def parse_type_name(self, typ):
         if isinstance(typ, ValueType):
             return self.language.type_name_map[typ.protobuf_type.code]
+        if isinstance(typ, (StreamType, EventType)):
+            return self.language.type_name_map[Type.UINT64]
         if isinstance(typ, MessageType):
             return "message_%s" % typ.python_type.__name__
         if isinstance(typ, ListType):

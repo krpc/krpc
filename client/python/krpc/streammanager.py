@@ -516,7 +516,7 @@ class StreamManager:
             self._registered.add(stream)
 
     def add_stream(self, return_type: TypeBase, call: KRPC.ProcedureCall) -> StreamImpl:
-        stream_id = self._client.krpc.add_stream(call).id
+        stream_id = self._client.krpc.add_stream(call)
         return self.get_stream(return_type, stream_id)
 
     def get_stream(self, return_type: TypeBase, stream_id: int) -> StreamImpl:

@@ -311,7 +311,7 @@ class KRPC : public Service {
    * server side functions of your client library instead. Calling this directly while
    * using a client library has undefined behavior.
    */
-  krpc::schema::Stream add_function_stream(KRPC::Expression function);
+  uint64_t add_function_stream(KRPC::Expression function);
 
   /**
    * Add a streaming request and return its identifier.
@@ -320,7 +320,7 @@ class KRPC : public Service {
    * client library instead. Calling this directly while using a client library has
    * undefined behavior.
    */
-  krpc::schema::Stream add_stream(krpc::schema::ProcedureCall call);
+  uint64_t add_stream(krpc::schema::ProcedureCall call);
 
   /**
    * Compile a server side function, so that running, streaming or adding it as an
@@ -481,9 +481,9 @@ class KRPC : public Service {
 
   ::krpc::Stream<::krpc::Event> add_event_stream(KRPC::Expression function);
 
-  ::krpc::Stream<krpc::schema::Stream> add_function_stream_stream(KRPC::Expression function);
+  ::krpc::Stream<uint64_t> add_function_stream_stream(KRPC::Expression function);
 
-  ::krpc::Stream<krpc::schema::Stream> add_stream_stream(krpc::schema::ProcedureCall call);
+  ::krpc::Stream<uint64_t> add_stream_stream(krpc::schema::ProcedureCall call);
 
   ::krpc::Stream<std::string> get_client_id_stream();
 
@@ -3179,30 +3179,30 @@ inline ::krpc::Event KRPC::add_event(KRPC::Expression function) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(function));
-  auto _data = this->_client->invoke("KRPC", "AddEvent", _args, ::krpc::Client::Returns::event);
+  auto _data = this->_client->invoke("KRPC", "AddEvent", _args, ::krpc::Client::Returns::stream);
   ::krpc::Event _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
 }
 
-inline krpc::schema::Stream KRPC::add_function_stream(KRPC::Expression function) {
+inline uint64_t KRPC::add_function_stream(KRPC::Expression function) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(function));
   auto _data = this->_client->invoke("KRPC", "AddFunctionStream", _args, ::krpc::Client::Returns::stream);
-  krpc::schema::Stream _result{};
+  uint64_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
 }
 
-inline krpc::schema::Stream KRPC::add_stream(krpc::schema::ProcedureCall call) {
+inline uint64_t KRPC::add_stream(krpc::schema::ProcedureCall call) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(call));
   auto _data = this->_client->invoke("KRPC", "AddStream", _args, ::krpc::Client::Returns::stream);
-  krpc::schema::Stream _result{};
+  uint64_t _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
@@ -3339,18 +3339,18 @@ inline ::krpc::Stream<::krpc::Event> KRPC::add_event_stream(KRPC::Expression fun
   return ::krpc::Stream<::krpc::Event>(this->_client, this->_client->build_call("KRPC", "AddEvent", _args));
 }
 
-inline ::krpc::Stream<krpc::schema::Stream> KRPC::add_function_stream_stream(KRPC::Expression function) {
+inline ::krpc::Stream<uint64_t> KRPC::add_function_stream_stream(KRPC::Expression function) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(function));
-  return ::krpc::Stream<krpc::schema::Stream>(this->_client, this->_client->build_call("KRPC", "AddFunctionStream", _args));
+  return ::krpc::Stream<uint64_t>(this->_client, this->_client->build_call("KRPC", "AddFunctionStream", _args));
 }
 
-inline ::krpc::Stream<krpc::schema::Stream> KRPC::add_stream_stream(krpc::schema::ProcedureCall call) {
+inline ::krpc::Stream<uint64_t> KRPC::add_stream_stream(krpc::schema::ProcedureCall call) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(call));
-  return ::krpc::Stream<krpc::schema::Stream>(this->_client, this->_client->build_call("KRPC", "AddStream", _args));
+  return ::krpc::Stream<uint64_t>(this->_client, this->_client->build_call("KRPC", "AddStream", _args));
 }
 
 inline ::krpc::Stream<std::string> KRPC::get_client_id_stream() {

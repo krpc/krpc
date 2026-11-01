@@ -3,9 +3,11 @@ from krpc.types import (
     ClassType,
     DictionaryType,
     EnumerationType,
+    EventType,
     ListType,
     MessageType,
     SetType,
+    StreamType,
     StructType,
     TupleType,
     ValueType,
@@ -63,7 +65,11 @@ class JavaDomain(Domain[JavaLanguage]):
             return self.language.type_map[typ.protobuf_type.code]
         if generic and isinstance(typ, ValueType):
             return self.language.type_map_classes[typ.protobuf_type.code]
-        if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
+        if isinstance(typ, StreamType):
+            if generic:
+                return self.language.type_map_classes[Type.UINT64]
+            return self.language.type_map[Type.UINT64]
+        if isinstance(typ, EventType):
             return "krpc.client.Event"
         if isinstance(typ, MessageType):
             return "krpc.schema.KRPC.%s" % typ.python_type.__name__
@@ -89,9 +95,9 @@ class JavaDomain(Domain[JavaLanguage]):
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
     def type_description(self, typ):
-        if isinstance(typ, ValueType):
+        if isinstance(typ, (ValueType, StreamType)):
             return self._type(typ)
-        if isinstance(typ, MessageType):
+        if isinstance(typ, (MessageType, EventType)):
             return ":type:`%s`" % self._type(typ)
         if isinstance(typ, ClassType):
             return ":type:`%s`" % self.type(typ)

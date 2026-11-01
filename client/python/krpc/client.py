@@ -32,7 +32,7 @@ from krpc.service import (
 from krpc.session import DEFAULT_STALL_TIMEOUT, Session
 from krpc.stream import Stream
 from krpc.streammanager import StreamManager
-from krpc.types import DefaultArgument, TypeBase, Types
+from krpc.types import DefaultArgument, EventType, StreamType, TypeBase, Types
 from krpc.utils import snake_case
 
 
@@ -317,9 +317,9 @@ class Client(krpc.services.Client):
         function, return_type, _ = self._function_and_type(func, streamed=True)
         if return_type is None:
             raise StreamError("The function does not evaluate to a value")
-        stream = self.krpc.add_function_stream(function)
+        stream_id = self.krpc.add_function_stream(function)
         return krpc.stream.Stream.from_stream_id(
-            self, stream.id, self._types.as_type(return_type)
+            self, stream_id, self._types.as_type(return_type)
         )
 
     @staticmethod
@@ -606,13 +606,8 @@ class Client(krpc.services.Client):
 
         # Send the request, and wait for its response. The reader registers a stream
         # or an event the call adds before it reads the stream's first update
-        stream_type = None
-        if return_type is not None and return_type.python_type in (
-            KRPC.Stream,
-            KRPC.Event,
-        ):
-            stream_type = return_type.python_type
-        response = self._session.call(request, stream_type)
+        adds_stream = isinstance(return_type, (StreamType, EventType))
+        response = self._session.call(request, adds_stream)
 
         # Check for an error response
         if response.HasField("error"):
@@ -626,10 +621,7 @@ class Client(krpc.services.Client):
         # Decode the response and return the (optional) result
         if return_type is None or result.is_null:
             return None
-        value = Decoder.decode(self, result.value, return_type)
-        if isinstance(value, KRPC.Event):
-            value = Event(self, value)
-        return value
+        return Decoder.decode(self, result.value, return_type)
 
     def _remove_stream_request(self, stream_id: int) -> KRPC.Request:
         """A request to remove a stream on the server."""

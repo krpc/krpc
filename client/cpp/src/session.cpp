@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "krpc/connection.hpp"
+#include "krpc/decoder.hpp"
 #include "krpc/encoder.hpp"
 #include "krpc/error.hpp"
 #include "krpc/stream_manager.hpp"
@@ -536,14 +537,11 @@ void Session::handle_response(schema::Response* response) {
       const auto& result = response->results(i);
       if (slot->adds[i] == Adds::nothing || result.has_error() || result.is_null()) continue;
       uint64_t id = 0;
-      if (slot->adds[i] == Adds::event) {
-        schema::Event event;
-        if (!event.ParseFromString(result.value())) continue;
-        id = event.stream().id();
-      } else {
-        schema::Stream stream;
-        if (!stream.ParseFromString(result.value())) continue;
-        id = stream.id();
+      try {
+        decoder::decode(id, result.value());
+      } catch (const EncodingError&) {
+        // The call has succeeded, and its caller decodes the value
+        continue;
       }
       if (abandoned)
         // The server stream would otherwise never be removed

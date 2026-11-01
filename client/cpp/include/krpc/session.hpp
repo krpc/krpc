@@ -38,9 +38,9 @@ class Session {
   /** A message that has started to arrive may go this long without a new byte, by default. */
   static constexpr std::chrono::milliseconds default_stall_timeout = std::chrono::seconds(30);
 
-  /** What each call of a request returns: a new stream, a new event, or another value. The
-      reader registers the stream a call adds. */
-  enum class Adds : uint8_t { nothing, stream, event };
+  /** What each call of a request adds: a new stream, which a call returning a stream or an event
+      adds, or nothing. The reader registers the stream a call adds. */
+  enum class Adds : uint8_t { nothing, stream };
 
   /** A stall timeout of zero waits indefinitely. */
   Session(std::shared_ptr<Connection> connection,

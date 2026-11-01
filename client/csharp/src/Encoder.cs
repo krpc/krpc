@@ -329,11 +329,7 @@ namespace KRPC.Client
                     return message;
                 };
             case TypeKind.Event:
-                return (value, client) => {
-                    var message = new Schema.KRPC.Event ();
-                    message.MergeFrom (value);
-                    return new Event ((Connection)client, message);
-                };
+                return (value, client) => new Event ((Connection)client, value.CreateCodedInput ().ReadUInt64 ());
             default:
                 throw new ArgumentException (type + " is not a serializable type");
             }

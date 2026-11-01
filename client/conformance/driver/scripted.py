@@ -17,7 +17,13 @@ import serverprocess
 
 import krpc.schema.KRPC_pb2 as KRPC
 from driver import localsocket, raw
-from driver.framing import CLIENT_IDENTIFIER, PROTOCOL_VERSION, frame, receive_frame
+from driver.framing import (
+    CLIENT_IDENTIFIER,
+    PROTOCOL_VERSION,
+    encode_size,
+    frame,
+    receive_frame,
+)
 from driver.testee import Endpoint
 from driver.websocket import WebSocket
 
@@ -380,13 +386,13 @@ class ScriptedServer:
         if _is_service_call(call, "KRPC", "AddStream"):
             stream_id = self._next_stream_id
             self._next_stream_id += 1
-            return KRPC.Stream(id=stream_id).SerializeToString()
+            return encode_size(stream_id)
         if _is_service_call(call, "KRPC", "RemoveStream"):
             return b""
         if _is_service_call(call, "TestService", "OnTimer"):
             stream_id = self._next_stream_id
             self._next_stream_id += 1
-            return KRPC.Event(stream=KRPC.Stream(id=stream_id)).SerializeToString()
+            return encode_size(stream_id)
         return b"\x00"
 
     def wait_for_call(self, procedure: str, count: int = 1) -> list[KRPC.ProcedureCall]:

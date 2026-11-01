@@ -80,6 +80,14 @@ namespace KRPC.Service
         /// </summary>
         Dictionary,
         /// <summary>
+        /// A stream, encoded as its identifier.
+        /// </summary>
+        Stream,
+        /// <summary>
+        /// An event, encoded as the identifier of its stream.
+        /// </summary>
+        Event,
+        /// <summary>
         /// A protocol buffer message the protocol itself defines.
         /// </summary>
         Message

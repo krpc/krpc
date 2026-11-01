@@ -99,7 +99,6 @@ public class Encoder {
           return encodeDictionary((Map<?, ?>) value, type.getTypes(0), type.getTypes(1));
         case PROCEDURE_CALL:
         case SERVICES:
-        case STREAM:
           return encodeMessage((Message) value);
         default:
           throw new EncodingException("Failed to encode value");
@@ -269,9 +268,9 @@ public class Encoder {
         case SERVICES:
           return decodeMessage(KRPC.Services.newBuilder(), data);
         case STREAM:
-          return decodeMessage(KRPC.Stream.newBuilder(), data);
+          return decodeUint64(data);
         case EVENT:
-          return new Event(connection, KRPC.Event.newBuilder().mergeFrom(data).build());
+          return new Event(connection, decodeUint64(data));
         default:
           throw new EncodingException("Failed to decode value");
       }

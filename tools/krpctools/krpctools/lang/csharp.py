@@ -3,9 +3,11 @@ from krpc.types import (
     ClassType,
     DictionaryType,
     EnumerationType,
+    EventType,
     ListType,
     MessageType,
     SetType,
+    StreamType,
     StructType,
     TupleType,
     ValueType,
@@ -138,7 +140,9 @@ class CsharpLanguage(Language):
             return "void"
         if isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type.code]
-        if isinstance(typ, MessageType) and typ.protobuf_type.code == Type.EVENT:
+        if isinstance(typ, StreamType):
+            return self.type_map[Type.UINT64]
+        if isinstance(typ, EventType):
             return "global::KRPC.Client.Event"
         if isinstance(typ, MessageType):
             return "global::KRPC.Schema.KRPC.%s" % typ.python_type.__name__
@@ -191,7 +195,7 @@ class CsharpLanguage(Language):
     def takes_the_nullable_form(typ):
         """Whether a value at a nullable position is written T?, which a C# value type is
         and a reference type is not."""
-        if isinstance(typ, (EnumerationType, StructType)):
+        if isinstance(typ, (EnumerationType, StructType, StreamType)):
             return True
         return isinstance(typ, ValueType) and typ.protobuf_type.code not in (
             Type.STRING,

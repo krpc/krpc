@@ -80,6 +80,34 @@ class TestClientGenCsharp(ClientGenTestCase, unittest.TestCase):
         )
         self.assertIn("TypeSpec.Null (typeof(global::KRPC.Client", content)
 
+    def test_nullable_stream(self):
+        # A stream id is a ulong, a value type, so a nullable one takes the nullable form
+        def procedure(pid, typ):
+            return {
+                "id": pid,
+                "parameters": [],
+                "return_type": typ,
+                "documentation": "",
+            }
+
+        nullable_stream = {"code": "STREAM", "nullable": True}
+        service = {
+            "id": 1,
+            "documentation": "",
+            "procedures": {
+                "GetStream": procedure(1, nullable_stream),
+                "GetStreams": procedure(
+                    2, {"code": "LIST", "types": [nullable_stream]}
+                ),
+            },
+            "classes": {},
+            "enumerations": {},
+            "exceptions": {},
+        }
+        content = self.generate("ServiceA", {"ServiceA": service})
+        self.assertIn("public ulong? GetStream ()", content)
+        self.assertIn("IList<ulong?> GetStreams ()", content)
+
 
 if __name__ == "__main__":
     unittest.main()

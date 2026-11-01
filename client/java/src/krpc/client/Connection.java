@@ -584,9 +584,8 @@ public class Connection implements AutoCloseable {
       // The reader registers a stream or an event the call adds before it reads the stream's
       // first update
       KRPC.Type.TypeCode code = getReturnTypeCode(call.getService(), call.getProcedure());
-      KRPC.Type.TypeCode streamCode =
-          code == KRPC.Type.TypeCode.STREAM || code == KRPC.Type.TypeCode.EVENT ? code : null;
-      return session.call(KRPC.Request.newBuilder().addCalls(call), streamCode);
+      boolean addsStream = code == KRPC.Type.TypeCode.STREAM || code == KRPC.Type.TypeCode.EVENT;
+      return session.call(KRPC.Request.newBuilder().addCalls(call), addsStream);
     } catch (IOException exn) {
       throw new RPCException("Failed to invoke call", exn);
     }
@@ -657,7 +656,7 @@ public class Connection implements AutoCloseable {
   /** The services the server lists, or null if the call fails. */
   private KRPC.Services listServices() throws IOException {
     KRPC.Response response =
-        session.call(KRPC.Request.newBuilder().addCalls(buildCall("KRPC", "GetServices")), null);
+        session.call(KRPC.Request.newBuilder().addCalls(buildCall("KRPC", "GetServices")), false);
     if (getErrorFromResponse(response) != null) {
       return null;
     }
@@ -834,8 +833,8 @@ public class Connection implements AutoCloseable {
     if (returnType == null) {
       throw new StreamException("The function does not evaluate to a value");
     }
-    KRPC.Stream stream = krpcService.addFunctionStream(function);
-    return new Stream<T>(this, returnType, stream.getId());
+    long streamId = krpcService.addFunctionStream(function);
+    return new Stream<T>(this, returnType, streamId);
   }
 
   /**

@@ -71,6 +71,8 @@ local _value_decoders = {
     return typ.lua_type(_decode_signed(data))
   end,
   [Types.CLASS] = function(data, typ) return typ.lua_type(_decode_varint(data)) end,
+  [Types.STREAM] = _decode_uint64,
+  [Types.EVENT] = _decode_uint64,
 }
 
 -- The tag every value of a collection is carried under: field number 1, length delimited, for

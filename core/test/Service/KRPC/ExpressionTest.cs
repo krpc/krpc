@@ -353,7 +353,7 @@ namespace KRPC.Test.Service.KRPC
         {
             var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
                 () => Expression.Call (BuildProcedureCall ("CreateEvent")));
-            StringAssert.Contains ("protocol buffer message of type Event", exn.Message);
+            StringAssert.Contains ("returns a value of type Event, which adds a stream", exn.Message);
         }
 
         [Test]

@@ -890,7 +890,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds, uint32_t repeats)
+.. function:: krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, uint64_t * returnValue, uint32_t milliseconds, uint32_t repeats)
 
 
 
@@ -920,7 +920,7 @@ Service documentation string.
 
 
 
-.. function:: krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds)
+.. function:: krpc_error_t krpc_TestService_RemoveEventAfter(krpc_connection_t connection, uint64_t * returnValue, uint32_t milliseconds)
 
 
 

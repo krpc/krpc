@@ -22,12 +22,17 @@ namespace KRPC.Test.Server.ProtocolBuffers
         }
 
         [Test]
-        public void EncodeMessage ()
+        public void EncodeStream ()
         {
-            var message = new KRPC.Service.Messages.Stream (42);
-            var data = Encode (message);
-            const string expected = "082a";
-            Assert.AreEqual (expected, data.ToHexString ());
+            var data = Encode (new KRPC.Service.Messages.Stream (300));
+            Assert.AreEqual ("ac02", data.ToHexString ());
+        }
+
+        [Test]
+        public void EncodeEvent ()
+        {
+            var data = Encode (new KRPC.Service.Messages.Event (new KRPC.Service.Messages.Stream (300)));
+            Assert.AreEqual ("ac02", data.ToHexString ());
         }
 
         [Test]

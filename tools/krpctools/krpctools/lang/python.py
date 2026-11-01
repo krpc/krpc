@@ -6,9 +6,11 @@ from krpc.types import (
     ClassType,
     DictionaryType,
     EnumerationType,
+    EventType,
     ListType,
     MessageType,
     SetType,
+    StreamType,
     StructType,
     TupleType,
     ValueType,
@@ -63,6 +65,10 @@ class PythonLanguage(Language):
             if typ.protobuf_type.code == Type.DOUBLE:
                 return "float"
             return typ.python_type.__name__
+        if isinstance(typ, StreamType):
+            return "int"
+        if isinstance(typ, EventType):
+            return "krpc.event.Event"
         if isinstance(typ, MessageType):
             return "krpc.schema.KRPC.%s" % typ.python_type.__name__
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
