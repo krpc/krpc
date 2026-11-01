@@ -1142,8 +1142,8 @@ This is an empty string if the client has no name.</p>
 
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.KRPC.GetStatus">
-<span id="function-KRPC.Client.Services.KRPC.KRPC.GetStatus()"></span><span class="pre">KRPC.Schema.KRPC.Status</span><span class="w"> </span><span class="sig-name descname"><span class="pre">GetStatus</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.KRPC.GetStatus" title="Link to this definition">#</a></dt>
-<dd><p>Returns some information about the server, such as the version.</p>
+<span id="function-KRPC.Client.Services.KRPC.KRPC.GetStatus()"></span><a class="reference internal" href="#struct-KRPC.Client.Services.KRPC.ServerStatus" title="struct: KRPC.Client.Services.KRPC.ServerStatus"><span class="pre">ServerStatus</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">GetStatus</span></span><span class="w"> </span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.KRPC.GetStatus" title="Link to this definition">#</a></dt>
+<dd><p>Returns the status of the server, with its version, settings and performance statistics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -1495,7 +1495,7 @@ administration facility is open within the space center scene.</p>
 </div>
 <dl class="cs function">
 <dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.ClientInfo.ClientInfo">
-<span id="function-KRPC.Client.Services.KRPC.ClientInfo.ClientInfo(byte[],string,string)"></span><span class="sig-name descname"><span class="pre">ClientInfo</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Byte" title="type: msdn ~&gt; System.Byte"><span class="pre">byte</span></a><span class="p"><span class="pre">[]</span></span><span class="w"> </span><span class="n"><span class="pre">id</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">address</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.ClientInfo.ClientInfo" title="Link to this definition">#</a></dt>
+<span id="function-KRPC.Client.Services.KRPC.ClientInfo.ClientInfo(byte[],string,string,uint)"></span><span class="sig-name descname"><span class="pre">ClientInfo</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Byte" title="type: msdn ~&gt; System.Byte"><span class="pre">byte</span></a><span class="p"><span class="pre">[]</span></span><span class="w"> </span><span class="n"><span class="pre">id</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">name</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">address</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">protocolVersion</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.ClientInfo.ClientInfo" title="Link to this definition">#</a></dt>
 <dd><p>Construct a ClientInfo from the values of its fields.</p>
 </dd></dl>
 
@@ -1515,6 +1515,211 @@ administration facility is open within the space center scene.</p>
 <dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ClientInfo.Address">
 <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Address</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ClientInfo.Address" title="Link to this definition">#</a></dt>
 <dd><p>The address of the client.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ClientInfo.ProtocolVersion">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ProtocolVersion</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ClientInfo.ProtocolVersion" title="Link to this definition">#</a></dt>
+<dd><p>The protocol version of the client’s connection.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs struct">
+<dt class="sig sig-object cs" id="struct-KRPC.Client.Services.KRPC.ServerStatus">
+<span class="property"><span class="k"><span class="pre">struct</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ServerStatus</span></span><a class="headerlink" href="#struct-KRPC.Client.Services.KRPC.ServerStatus" title="Link to this definition">#</a></dt>
+<dd><p>The status of the server.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#function-KRPC.Client.Services.KRPC.KRPC.GetStatus" title="function: KRPC.Client.Services.KRPC.KRPC.GetStatus"><code class="xref cs cs-meth docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code></a>.</p>
+</div>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.ServerStatus.ServerStatus">
+<span id="function-KRPC.Client.Services.KRPC.ServerStatus.ServerStatus(string,uint,ServerSettings,ServerStatistics)"></span><span class="sig-name descname"><span class="pre">ServerStatus</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="n"><span class="pre">version</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">protocolVersion</span></span>, <a class="reference internal" href="#struct-KRPC.Client.Services.KRPC.ServerSettings" title="struct: KRPC.Client.Services.KRPC.ServerSettings"><span class="pre">ServerSettings</span></a><span class="w"> </span><span class="n"><span class="pre">settings</span></span>, <a class="reference internal" href="#struct-KRPC.Client.Services.KRPC.ServerStatistics" title="struct: KRPC.Client.Services.KRPC.ServerStatistics"><span class="pre">ServerStatistics</span></a><span class="w"> </span><span class="n"><span class="pre">statistics</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.ServerStatus.ServerStatus" title="Link to this definition">#</a></dt>
+<dd><p>Construct a ServerStatus from the values of its fields.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatus.Version">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.String" title="type: msdn ~&gt; System.String"><span class="pre">string</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Version</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatus.Version" title="Link to this definition">#</a></dt>
+<dd><p>The version of the server, or <code class="docutils literal notranslate"><span class="pre">unknown</span></code>.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatus.ProtocolVersion">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ProtocolVersion</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatus.ProtocolVersion" title="Link to this definition">#</a></dt>
+<dd><p>The protocol version of the connection.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatus.Settings">
+<a class="reference internal" href="#struct-KRPC.Client.Services.KRPC.ServerSettings" title="struct: KRPC.Client.Services.KRPC.ServerSettings"><span class="pre">ServerSettings</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Settings</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatus.Settings" title="Link to this definition">#</a></dt>
+<dd><p>The settings of the server.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatus.Statistics">
+<a class="reference internal" href="#struct-KRPC.Client.Services.KRPC.ServerStatistics" title="struct: KRPC.Client.Services.KRPC.ServerStatistics"><span class="pre">ServerStatistics</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Statistics</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatus.Statistics" title="Link to this definition">#</a></dt>
+<dd><p>The performance statistics of the server.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs struct">
+<dt class="sig sig-object cs" id="struct-KRPC.Client.Services.KRPC.ServerSettings">
+<span class="property"><span class="k"><span class="pre">struct</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ServerSettings</span></span><a class="headerlink" href="#struct-KRPC.Client.Services.KRPC.ServerSettings" title="Link to this definition">#</a></dt>
+<dd><p>The settings that control how the server executes calls.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#property-KRPC.Client.Services.KRPC.ServerStatus.Settings" title="property: KRPC.Client.Services.KRPC.ServerStatus.Settings"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">ServerStatus.Settings</span></code></a>.</p>
+</div>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.ServerSettings.ServerSettings">
+<span id="function-KRPC.Client.Services.KRPC.ServerSettings.ServerSettings(bool,uint,bool,bool,uint,uint)"></span><span class="sig-name descname"><span class="pre">ServerSettings</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="n"><span class="pre">oneRpcPerUpdate</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">maxTimePerUpdate</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="n"><span class="pre">adaptiveRateControl</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="n"><span class="pre">blockingRecv</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">recvTimeout</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">tickHoldTimeout</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.ServerSettings.ServerSettings" title="Link to this definition">#</a></dt>
+<dd><p>Construct a ServerSettings from the values of its fields.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerSettings.OneRpcPerUpdate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">OneRpcPerUpdate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerSettings.OneRpcPerUpdate" title="Link to this definition">#</a></dt>
+<dd><p>Whether the server executes one call per update.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerSettings.MaxTimePerUpdate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">MaxTimePerUpdate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerSettings.MaxTimePerUpdate" title="Link to this definition">#</a></dt>
+<dd><p>The maximum time spent executing calls per update, in microseconds.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerSettings.AdaptiveRateControl">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">AdaptiveRateControl</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerSettings.AdaptiveRateControl" title="Link to this definition">#</a></dt>
+<dd><p>Whether the server adjusts <a class="reference internal" href="#property-KRPC.Client.Services.KRPC.ServerSettings.MaxTimePerUpdate" title="property: KRPC.Client.Services.KRPC.ServerSettings.MaxTimePerUpdate"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">ServerSettings.MaxTimePerUpdate</span></code></a> to hold the frame rate.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerSettings.BlockingRecv">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Boolean" title="type: msdn ~&gt; System.Boolean"><span class="pre">bool</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">BlockingRecv</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerSettings.BlockingRecv" title="Link to this definition">#</a></dt>
+<dd><p>Whether the server waits for the next call in an update.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerSettings.RecvTimeout">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">RecvTimeout</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerSettings.RecvTimeout" title="Link to this definition">#</a></dt>
+<dd><p>The time the server waits for the next call, in microseconds.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerSettings.TickHoldTimeout">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TickHoldTimeout</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerSettings.TickHoldTimeout" title="Link to this definition">#</a></dt>
+<dd><p>The longest time a client may hold the game on one physics tick, in microseconds.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cs struct">
+<dt class="sig sig-object cs" id="struct-KRPC.Client.Services.KRPC.ServerStatistics">
+<span class="property"><span class="k"><span class="pre">struct</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ServerStatistics</span></span><a class="headerlink" href="#struct-KRPC.Client.Services.KRPC.ServerStatistics" title="Link to this definition">#</a></dt>
+<dd><p>The performance statistics of the server.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#property-KRPC.Client.Services.KRPC.ServerStatus.Statistics" title="property: KRPC.Client.Services.KRPC.ServerStatus.Statistics"><code class="xref cs cs-prop docutils literal notranslate"><span class="pre">ServerStatus.Statistics</span></code></a>.</p>
+</div>
+<dl class="cs function">
+<dt class="sig sig-object cs" id="function-KRPC.Client.Services.KRPC.ServerStatistics.ServerStatistics">
+<span id="function-KRPC.Client.Services.KRPC.ServerStatistics.ServerStatistics(ulong,ulong,float,float,ulong,float,float,float,float,uint,uint,ulong,float,ulong,float)"></span><span class="sig-name descname"><span class="pre">ServerStatistics</span></span><span class="w"> </span><span class="sig-paren">(</span><a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt64" title="type: msdn ~&gt; System.UInt64"><span class="pre">ulong</span></a><span class="w"> </span><span class="n"><span class="pre">bytesRead</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt64" title="type: msdn ~&gt; System.UInt64"><span class="pre">ulong</span></a><span class="w"> </span><span class="n"><span class="pre">bytesWritten</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="n"><span class="pre">bytesReadRate</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="n"><span class="pre">bytesWrittenRate</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt64" title="type: msdn ~&gt; System.UInt64"><span class="pre">ulong</span></a><span class="w"> </span><span class="n"><span class="pre">rpcsExecuted</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="n"><span class="pre">rpcRate</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="n"><span class="pre">timePerRpcUpdate</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="n"><span class="pre">pollTimePerRpcUpdate</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="n"><span class="pre">execTimePerRpcUpdate</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">deferredCalls</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="n"><span class="pre">streams</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt64" title="type: msdn ~&gt; System.UInt64"><span class="pre">ulong</span></a><span class="w"> </span><span class="n"><span class="pre">streamEvaluations</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="n"><span class="pre">streamEvaluationRate</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt64" title="type: msdn ~&gt; System.UInt64"><span class="pre">ulong</span></a><span class="w"> </span><span class="n"><span class="pre">streamUpdatesSent</span></span>, <a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="n"><span class="pre">timePerStreamUpdate</span></span><span class="sig-paren">)</span><a class="headerlink" href="#function-KRPC.Client.Services.KRPC.ServerStatistics.ServerStatistics" title="Link to this definition">#</a></dt>
+<dd><p>Construct a ServerStatistics from the values of its fields.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.BytesRead">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt64" title="type: msdn ~&gt; System.UInt64"><span class="pre">ulong</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">BytesRead</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.BytesRead" title="Link to this definition">#</a></dt>
+<dd><p>The number of bytes received from clients.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.BytesWritten">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt64" title="type: msdn ~&gt; System.UInt64"><span class="pre">ulong</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">BytesWritten</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.BytesWritten" title="Link to this definition">#</a></dt>
+<dd><p>The number of bytes sent to clients.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.BytesReadRate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">BytesReadRate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.BytesReadRate" title="Link to this definition">#</a></dt>
+<dd><p>The rate bytes are received from clients, in bytes per second.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.BytesWrittenRate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">BytesWrittenRate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.BytesWrittenRate" title="Link to this definition">#</a></dt>
+<dd><p>The rate bytes are sent to clients, in bytes per second.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.RpcsExecuted">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt64" title="type: msdn ~&gt; System.UInt64"><span class="pre">ulong</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">RpcsExecuted</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.RpcsExecuted" title="Link to this definition">#</a></dt>
+<dd><p>The number of calls executed.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.RpcRate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">RpcRate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.RpcRate" title="Link to this definition">#</a></dt>
+<dd><p>The number of calls executed per second.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.TimePerRpcUpdate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TimePerRpcUpdate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.TimePerRpcUpdate" title="Link to this definition">#</a></dt>
+<dd><p>The time spent receiving and executing calls per update, in seconds.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.PollTimePerRpcUpdate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">PollTimePerRpcUpdate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.PollTimePerRpcUpdate" title="Link to this definition">#</a></dt>
+<dd><p>The time spent receiving calls per update, in seconds.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.ExecTimePerRpcUpdate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">ExecTimePerRpcUpdate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.ExecTimePerRpcUpdate" title="Link to this definition">#</a></dt>
+<dd><p>The time spent executing calls per update, in seconds.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.DeferredCalls">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">DeferredCalls</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.DeferredCalls" title="Link to this definition">#</a></dt>
+<dd><p>The number of calls left for the next update, because the update ran out of time
+or the call yielded.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.Streams">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt32" title="type: msdn ~&gt; System.UInt32"><span class="pre">uint</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">Streams</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.Streams" title="Link to this definition">#</a></dt>
+<dd><p>The number of open streams, events included.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.StreamEvaluations">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt64" title="type: msdn ~&gt; System.UInt64"><span class="pre">ulong</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">StreamEvaluations</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.StreamEvaluations" title="Link to this definition">#</a></dt>
+<dd><p>The number of stream evaluations, one per stream per update.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.StreamEvaluationRate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">StreamEvaluationRate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.StreamEvaluationRate" title="Link to this definition">#</a></dt>
+<dd><p>The number of stream evaluations per second.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.StreamUpdatesSent">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.UInt64" title="type: msdn ~&gt; System.UInt64"><span class="pre">ulong</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">StreamUpdatesSent</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.StreamUpdatesSent" title="Link to this definition">#</a></dt>
+<dd><p>The number of stream updates sent to clients.</p>
+</dd></dl>
+
+<dl class="cs property">
+<dt class="sig sig-object cs" id="property-KRPC.Client.Services.KRPC.ServerStatistics.TimePerStreamUpdate">
+<a class="reference external" href="https://learn.microsoft.com/en-us/dotnet/api/System.Single" title="type: msdn ~&gt; System.Single"><span class="pre">float</span></a><span class="w"> </span><span class="sig-name descname"><span class="pre">TimePerStreamUpdate</span></span><span class="w"> </span><span class="p"><span class="pre">{</span></span><span class="property"><span class="w"> </span><span class="k"><span class="pre">get</span></span><span class="p"><span class="pre">;</span></span></span><span class="w"> </span><span class="p"><span class="pre">}</span></span><a class="headerlink" href="#property-KRPC.Client.Services.KRPC.ServerStatistics.TimePerStreamUpdate" title="Link to this definition">#</a></dt>
+<dd><p>The time spent updating streams per update, in seconds.</p>
 </dd></dl>
 
 </dd></dl>

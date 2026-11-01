@@ -43,6 +43,13 @@ Core
   * Log the address and settings of a server when it starts (:issue:`1235`)
   * Leave the time out of log lines, which the game log adds (:issue:`1235`)
 
+* Server status
+
+  * :breaking:`Breaking` Return ``KRPC.GetStatus`` as the struct ``KRPC.ServerStatus``, with the settings and statistics in nested structs, and remove the ``Status`` message (:issue:`1244`)
+  * :breaking:`Breaking` Rename the stream counters to ``Streams``, ``StreamEvaluations`` and ``StreamEvaluationRate`` (:issue:`1244`)
+  * Add ``TickHoldTimeout``, ``DeferredCalls`` and ``StreamUpdatesSent`` to the server status (:issue:`1244`)
+  * Add ``ClientInfo.ProtocolVersion``, the protocol version of each client (:issue:`1244`)
+
 
 
 Server
@@ -55,6 +62,8 @@ Server
 * Log a connection the player is asked to allow once, naming the client, and an auto-accepted connection at the debug level (:issue:`1235`)
 * Log auto-starting the servers only when one is stopped (:issue:`1235`)
 * Fix the game scene in log lines reading ``Inherit, Flight`` (:issue:`1235`)
+* Show the tick hold timeout, deferred calls and stream updates in the info window, and name the stream counters as evaluations (:issue:`1244`)
+* Fix the two "Time per update" rows in the info window showing each other's value (:issue:`1244`)
 
 
 SpaceCenter service
@@ -96,6 +105,7 @@ C-nano client
 * Name the references in service documentation by their C names (:issue:`1185`)
 * Document every parameter of a service function, with the value returned under ``returnValue`` (:issue:`1185`)
 * Fix the documentation of the services that Doxygen warns about, such as code holding an ``@`` (:issue:`1185`)
+* :breaking:`Breaking` Return ``krpc_KRPC_GetStatus`` as ``krpc_KRPC_ServerStatus_t``, whose ``version`` is allocated on the heap (:issue:`1244`)
 
 
 C# client
@@ -126,6 +136,7 @@ C# client
 
   * :breaking:`Breaking` Remove the trailing space after ``Server stack trace:`` in an exception's message, and separate its lines with ``\n`` on every platform (:issue:`1172`)
 
+* :breaking:`Breaking` Return ``KRPC.GetStatus`` as the struct ``ServerStatus``, with the settings and statistics under ``Settings`` and ``Statistics`` (:issue:`1244`)
 
 
 C++ client
@@ -154,6 +165,7 @@ C++ client
   * :breaking:`Breaking` Derive the ``KRPC`` exceptions with a standard equivalent from it, e.g. ``ArgumentException`` from ``std::invalid_argument``, in place of ``RPCError`` (:issue:`1172`)
   * :breaking:`Breaking` Add the server stack trace to an exception's message (:issue:`1172`)
 
+* :breaking:`Breaking` Return ``KRPC::get_status`` as the struct ``KRPC::ServerStatus``, whose fields are members, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
 
 
 Java client
@@ -181,6 +193,7 @@ Java client
 
   * :breaking:`Breaking` Throw ``InvalidOperationException`` as ``IllegalStateException``, and ``ArgumentOutOfRangeException`` as ``IllegalArgumentException`` (:issue:`1172`)
 
+* :breaking:`Breaking` Return ``KRPC.getStatus`` as the struct ``KRPC.ServerStatus``, with the settings and statistics under ``getSettings`` and ``getStatistics`` (:issue:`1244`)
 
 
 Lua client
@@ -189,6 +202,7 @@ Lua client
 * :breaking:`Breaking` Connect with protocol version 2, and fail to connect to a server from before 0.8 (:issue:`1219`)
 * Add a ``handshake_timeout`` parameter to ``connect`` and ``connect_local`` (:issue:`1219`)
 * Tell the server when the connection closes (:issue:`1219`)
+* :breaking:`Breaking` Return ``get_status`` as a struct, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
 
 
 Python client
@@ -220,6 +234,7 @@ Python client
 
   * Raise a ``KRPC`` exception as its own class, derived from the builtin it was raised as before, so ``except conn.krpc.ArgumentException`` catches it (:issue:`1172`)
 
+* :breaking:`Breaking` Return ``KRPC.get_status`` as the named tuple ``ServerStatus``, with the settings and statistics under ``settings`` and ``statistics`` (:issue:`1244`)
 
 
 krpctools

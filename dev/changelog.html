@@ -519,6 +519,14 @@
 <li><p>Leave the time out of log lines, which the game log adds (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1235">#1235</a>)</p></li>
 </ul>
 </li>
+<li><p>Server status</p>
+<ul>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> as the struct <code class="docutils literal notranslate"><span class="pre">KRPC.ServerStatus</span></code>, with the settings and statistics in nested structs, and remove the <code class="docutils literal notranslate"><span class="pre">Status</span></code> message (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Rename the stream counters to <code class="docutils literal notranslate"><span class="pre">Streams</span></code>, <code class="docutils literal notranslate"><span class="pre">StreamEvaluations</span></code> and <code class="docutils literal notranslate"><span class="pre">StreamEvaluationRate</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">TickHoldTimeout</span></code>, <code class="docutils literal notranslate"><span class="pre">DeferredCalls</span></code> and <code class="docutils literal notranslate"><span class="pre">StreamUpdatesSent</span></code> to the server status (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">ClientInfo.ProtocolVersion</span></code>, the protocol version of each client (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="server">
@@ -531,6 +539,8 @@
 <li><p>Log a connection the player is asked to allow once, naming the client, and an auto-accepted connection at the debug level (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1235">#1235</a>)</p></li>
 <li><p>Log auto-starting the servers only when one is stopped (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1235">#1235</a>)</p></li>
 <li><p>Fix the game scene in log lines reading <code class="docutils literal notranslate"><span class="pre">Inherit,</span> <span class="pre">Flight</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1235">#1235</a>)</p></li>
+<li><p>Show the tick hold timeout, deferred calls and stream updates in the info window, and name the stream counters as evaluations (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
+<li><p>Fix the two “Time per update” rows in the info window showing each other’s value (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 </ul>
 </section>
 <section id="spacecenter-service">
@@ -572,6 +582,7 @@
 <li><p>Name the references in service documentation by their C names (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
 <li><p>Document every parameter of a service function, with the value returned under <code class="docutils literal notranslate"><span class="pre">returnValue</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
 <li><p>Fix the documentation of the services that Doxygen warns about, such as code holding an <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1185">#1185</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_GetStatus</span></code> as <code class="docutils literal notranslate"><span class="pre">krpc_KRPC_ServerStatus_t</span></code>, whose <code class="docutils literal notranslate"><span class="pre">version</span></code> is allocated on the heap (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 </ul>
 </section>
 <section id="c-client">
@@ -605,6 +616,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Remove the trailing space after <code class="docutils literal notranslate"><span class="pre">Server</span> <span class="pre">stack</span> <span class="pre">trace:</span></code> in an exception’s message, and separate its lines with <code class="docutils literal notranslate"><span class="pre">\n</span></code> on every platform (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1172">#1172</a>)</p></li>
 </ul>
 </li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> as the struct <code class="docutils literal notranslate"><span class="pre">ServerStatus</span></code>, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">Settings</span></code> and <code class="docutils literal notranslate"><span class="pre">Statistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 </ul>
 </section>
 <section id="id1">
@@ -636,6 +648,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Add the server stack trace to an exception’s message (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1172">#1172</a>)</p></li>
 </ul>
 </li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC::get_status</span></code> as the struct <code class="docutils literal notranslate"><span class="pre">KRPC::ServerStatus</span></code>, whose fields are members, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">settings</span></code> and <code class="docutils literal notranslate"><span class="pre">statistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 </ul>
 </section>
 <section id="java-client">
@@ -666,6 +679,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Throw <code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code> as <code class="docutils literal notranslate"><span class="pre">IllegalStateException</span></code>, and <code class="docutils literal notranslate"><span class="pre">ArgumentOutOfRangeException</span></code> as <code class="docutils literal notranslate"><span class="pre">IllegalArgumentException</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1172">#1172</a>)</p></li>
 </ul>
 </li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC.getStatus</span></code> as the struct <code class="docutils literal notranslate"><span class="pre">KRPC.ServerStatus</span></code>, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">getSettings</span></code> and <code class="docutils literal notranslate"><span class="pre">getStatistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 </ul>
 </section>
 <section id="lua-client">
@@ -674,6 +688,7 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> Connect with protocol version 2, and fail to connect to a server from before 0.8 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p>Add a <code class="docutils literal notranslate"><span class="pre">handshake_timeout</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">connect</span></code> and <code class="docutils literal notranslate"><span class="pre">connect_local</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
 <li><p>Tell the server when the connection closes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1219">#1219</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">get_status</span></code> as a struct, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">settings</span></code> and <code class="docutils literal notranslate"><span class="pre">statistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 </ul>
 </section>
 <section id="python-client">
@@ -708,6 +723,7 @@
 <li><p>Raise a <code class="docutils literal notranslate"><span class="pre">KRPC</span></code> exception as its own class, derived from the builtin it was raised as before, so <code class="docutils literal notranslate"><span class="pre">except</span> <span class="pre">conn.krpc.ArgumentException</span></code> catches it (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1172">#1172</a>)</p></li>
 </ul>
 </li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Return <code class="docutils literal notranslate"><span class="pre">KRPC.get_status</span></code> as the named tuple <code class="docutils literal notranslate"><span class="pre">ServerStatus</span></code>, with the settings and statistics under <code class="docutils literal notranslate"><span class="pre">settings</span></code> and <code class="docutils literal notranslate"><span class="pre">statistics</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1244">#1244</a>)</p></li>
 </ul>
 </section>
 <section id="krpctools">

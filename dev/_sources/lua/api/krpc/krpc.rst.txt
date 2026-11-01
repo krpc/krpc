@@ -42,9 +42,9 @@ Main kRPC service, used by clients to interact with basic server functionality.
 
 .. staticmethod:: get_status()
 
-   Returns some information about the server, such as the version.
+   Returns the status of the server, with its version, settings and performance statistics.
 
-   :rtype: :class:`krpc.schema.Status`
+   :rtype: :class:`KRPC.ServerStatus`
 
 
 
@@ -358,6 +358,187 @@ Main kRPC service, used by clients to interact with basic server functionality.
       The address of the client.
 
       :rtype: string
+
+   .. attribute:: protocol_version: number
+
+      The protocol version of the client's connection.
+
+      :rtype: number
+
+
+.. class:: ServerStatus
+
+   The status of the server.
+
+   .. note::
+
+      See :meth:`KRPC.get_status`.
+   .. attribute:: version: string
+
+      The version of the server, or ``unknown``.
+
+      :rtype: string
+
+   .. attribute:: protocol_version: number
+
+      The protocol version of the connection.
+
+      :rtype: number
+
+   .. attribute:: settings: KRPC.ServerSettings
+
+      The settings of the server.
+
+      :rtype: :class:`KRPC.ServerSettings`
+
+   .. attribute:: statistics: KRPC.ServerStatistics
+
+      The performance statistics of the server.
+
+      :rtype: :class:`KRPC.ServerStatistics`
+
+
+.. class:: ServerSettings
+
+   The settings that control how the server executes calls.
+
+   .. note::
+
+      See :attr:`KRPC.ServerStatus.settings`.
+   .. attribute:: one_rpc_per_update: boolean
+
+      Whether the server executes one call per update.
+
+      :rtype: boolean
+
+   .. attribute:: max_time_per_update: number
+
+      The maximum time spent executing calls per update, in microseconds.
+
+      :rtype: number
+
+   .. attribute:: adaptive_rate_control: boolean
+
+      Whether the server adjusts :attr:`KRPC.ServerSettings.max_time_per_update` to hold the frame rate.
+
+      :rtype: boolean
+
+   .. attribute:: blocking_recv: boolean
+
+      Whether the server waits for the next call in an update.
+
+      :rtype: boolean
+
+   .. attribute:: recv_timeout: number
+
+      The time the server waits for the next call, in microseconds.
+
+      :rtype: number
+
+   .. attribute:: tick_hold_timeout: number
+
+      The longest time a client may hold the game on one physics tick, in microseconds.
+
+      :rtype: number
+
+
+.. class:: ServerStatistics
+
+   The performance statistics of the server.
+
+   .. note::
+
+      See :attr:`KRPC.ServerStatus.statistics`.
+   .. attribute:: bytes_read: number
+
+      The number of bytes received from clients.
+
+      :rtype: number
+
+   .. attribute:: bytes_written: number
+
+      The number of bytes sent to clients.
+
+      :rtype: number
+
+   .. attribute:: bytes_read_rate: number
+
+      The rate bytes are received from clients, in bytes per second.
+
+      :rtype: number
+
+   .. attribute:: bytes_written_rate: number
+
+      The rate bytes are sent to clients, in bytes per second.
+
+      :rtype: number
+
+   .. attribute:: rpcs_executed: number
+
+      The number of calls executed.
+
+      :rtype: number
+
+   .. attribute:: rpc_rate: number
+
+      The number of calls executed per second.
+
+      :rtype: number
+
+   .. attribute:: time_per_rpc_update: number
+
+      The time spent receiving and executing calls per update, in seconds.
+
+      :rtype: number
+
+   .. attribute:: poll_time_per_rpc_update: number
+
+      The time spent receiving calls per update, in seconds.
+
+      :rtype: number
+
+   .. attribute:: exec_time_per_rpc_update: number
+
+      The time spent executing calls per update, in seconds.
+
+      :rtype: number
+
+   .. attribute:: deferred_calls: number
+
+      The number of calls left for the next update, because the update ran out of time
+      or the call yielded.
+
+      :rtype: number
+
+   .. attribute:: streams: number
+
+      The number of open streams, events included.
+
+      :rtype: number
+
+   .. attribute:: stream_evaluations: number
+
+      The number of stream evaluations, one per stream per update.
+
+      :rtype: number
+
+   .. attribute:: stream_evaluation_rate: number
+
+      The number of stream evaluations per second.
+
+      :rtype: number
+
+   .. attribute:: stream_updates_sent: number
+
+      The number of stream updates sent to clients.
+
+      :rtype: number
+
+   .. attribute:: time_per_stream_update: number
+
+      The time spent updating streams per update, in seconds.
+
+      :rtype: number
 
 
 .. class:: InvalidOperationException

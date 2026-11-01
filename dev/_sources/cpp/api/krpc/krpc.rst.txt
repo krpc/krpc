@@ -36,9 +36,9 @@ KRPC
 
    
 
-   .. function:: krpc::schema::Status get_status()
+   .. function:: ServerStatus get_status()
 
-      Returns some information about the server, such as the version.
+      Returns the status of the server, with its version, settings and performance statistics.
 
 
    
@@ -337,6 +337,138 @@ KRPC
    .. member:: std::string address
 
       The address of the client.
+
+   .. member:: uint32_t protocol_version
+
+      The protocol version of the client's connection.
+
+
+.. namespace:: krpc::services::KRPC
+.. struct:: ServerStatus
+
+   The status of the server.
+
+   .. note::
+
+      See :func:`get_status`.
+   .. member:: std::string version
+
+      The version of the server, or ``unknown``.
+
+   .. member:: uint32_t protocol_version
+
+      The protocol version of the connection.
+
+   .. member:: ServerSettings settings
+
+      The settings of the server.
+
+   .. member:: ServerStatistics statistics
+
+      The performance statistics of the server.
+
+
+.. namespace:: krpc::services::KRPC
+.. struct:: ServerSettings
+
+   The settings that control how the server executes calls.
+
+   .. note::
+
+      See :member:`ServerStatus::settings`.
+   .. member:: bool one_rpc_per_update
+
+      Whether the server executes one call per update.
+
+   .. member:: uint32_t max_time_per_update
+
+      The maximum time spent executing calls per update, in microseconds.
+
+   .. member:: bool adaptive_rate_control
+
+      Whether the server adjusts :member:`ServerSettings::max_time_per_update` to hold the frame rate.
+
+   .. member:: bool blocking_recv
+
+      Whether the server waits for the next call in an update.
+
+   .. member:: uint32_t recv_timeout
+
+      The time the server waits for the next call, in microseconds.
+
+   .. member:: uint32_t tick_hold_timeout
+
+      The longest time a client may hold the game on one physics tick, in microseconds.
+
+
+.. namespace:: krpc::services::KRPC
+.. struct:: ServerStatistics
+
+   The performance statistics of the server.
+
+   .. note::
+
+      See :member:`ServerStatus::statistics`.
+   .. member:: uint64_t bytes_read
+
+      The number of bytes received from clients.
+
+   .. member:: uint64_t bytes_written
+
+      The number of bytes sent to clients.
+
+   .. member:: float bytes_read_rate
+
+      The rate bytes are received from clients, in bytes per second.
+
+   .. member:: float bytes_written_rate
+
+      The rate bytes are sent to clients, in bytes per second.
+
+   .. member:: uint64_t rpcs_executed
+
+      The number of calls executed.
+
+   .. member:: float rpc_rate
+
+      The number of calls executed per second.
+
+   .. member:: float time_per_rpc_update
+
+      The time spent receiving and executing calls per update, in seconds.
+
+   .. member:: float poll_time_per_rpc_update
+
+      The time spent receiving calls per update, in seconds.
+
+   .. member:: float exec_time_per_rpc_update
+
+      The time spent executing calls per update, in seconds.
+
+   .. member:: uint32_t deferred_calls
+
+      The number of calls left for the next update, because the update ran out of time
+      or the call yielded.
+
+   .. member:: uint32_t streams
+
+      The number of open streams, events included.
+
+   .. member:: uint64_t stream_evaluations
+
+      The number of stream evaluations, one per stream per update.
+
+   .. member:: float stream_evaluation_rate
+
+      The number of stream evaluations per second.
+
+   .. member:: uint64_t stream_updates_sent
+
+      The number of stream updates sent to clients.
+
+   .. member:: float time_per_stream_update
+
+      The time spent updating streams per update, in seconds.
 
 
 .. namespace:: krpc::services::KRPC

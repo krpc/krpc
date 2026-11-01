@@ -593,6 +593,11 @@ subprotocol. Each <code class="docutils literal notranslate"><span class="pre">M
 name can hold any Unicode character. <code class="docutils literal notranslate"><span class="pre">KRPC.GetClientName</span></code> returns that name.</p>
 </dd>
 </dl>
+<dl class="simple" id="spec-connection-handshake-status">
+<dt><code class="docutils literal notranslate"><span class="pre">connection-handshake-status</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p><code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> returns a structure that holds the version of the server, then
+the protocol version of the connection.</p>
+</dd>
+</dl>
 <dl class="simple" id="spec-connection-handshake-version">
 <dt><code class="docutils literal notranslate"><span class="pre">connection-handshake-version</span> <span class="pre">[core]</span> <span class="pre">[MUST]</span></code></dt><dd><p>The client sends protocol version 2.</p>
 </dd>

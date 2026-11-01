@@ -560,6 +560,8 @@
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.ControlSurface.actuator_speed">actuator_speed (ControlSurface attribute)</a>
 </li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerSettings.adaptive_rate_control">adaptive_rate_control (ServerSettings attribute)</a>
+</li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.add">add() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.add">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.add(Connection, Expression, Expression)">add(Connection, Expression, Expression) (Java method)</a>
@@ -1494,6 +1496,8 @@
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.block_with_variables">block_with_variables() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.block_with_variables">[1]</a>
 </li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerSettings.blocking_recv">blocking_recv (ServerSettings attribute)</a>
+</li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.blockWithVariables(Connection, java.util.List, java.util.List)">blockWithVariables(Connection, java.util.List, java.util.List) (Java method)</a>
 </li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.Control.board">board() (Control method)</a>, <a href="python/api/space-center/control.html#SpaceCenter.Control.board">[1]</a>
@@ -1660,6 +1664,14 @@
       <li><a href="lua/api/krpc/expressions.html#KRPC.Type.bytes">bytes() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.bytes">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Type.bytes(Connection)">bytes(Connection) (Java method)</a>
+</li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.bytes_read">bytes_read (ServerStatistics attribute)</a>
+</li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.bytes_read_rate">bytes_read_rate (ServerStatistics attribute)</a>
+</li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.bytes_written">bytes_written (ServerStatistics attribute)</a>
+</li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.bytes_written_rate">bytes_written_rate (ServerStatistics attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1909,7 +1921,7 @@
         <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ClientInfo">(Java class)</a>
 </li>
       </ul></li>
-      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ClientInfo.ClientInfo(byte[], String, String)">ClientInfo(byte[], String, String) (Java constructor)</a>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ClientInfo.ClientInfo(byte[], String, String, int)">ClientInfo(byte[], String, String, int) (Java constructor)</a>
 </li>
       <li><a href="python/api/krpc/krpc.html#KRPC.clients">clients (in module KRPC)</a>
 </li>
@@ -2666,6 +2678,8 @@
 </li>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.default_position">default_position (Servo attribute)</a>
 </li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.deferred_calls">deferred_calls (ServerStatistics attribute)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.ControlSurface.deflection">deflection (ControlSurface attribute)</a>
 
       <ul>
@@ -2929,10 +2943,10 @@
 </li>
       <li><a href="lua/api/docking-camera/camera.html#DockingCamera.DockingCamera.Camera.image">DockingCamera.DockingCamera.Camera.image (attribute)</a>
 </li>
-      <li><a href="lua/api/docking-camera/camera.html#DockingCamera.DockingCamera.Camera.part">DockingCamera.DockingCamera.Camera.part (attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/docking-camera/camera.html#DockingCamera.DockingCamera.Camera.part">DockingCamera.DockingCamera.Camera.part (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.DockingPort">DockingPort (class in SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.DockingPort">[1]</a>
 
       <ul>
@@ -3470,6 +3484,8 @@
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.exclusiveOr(Connection, Expression, Expression)">exclusiveOr(Connection, Expression, Expression) (Java method)</a>
 </li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.exec_time_per_rpc_update">exec_time_per_rpc_update (ServerStatistics attribute)</a>
+</li>
       <li><a href="lua/api/stdlib.html#StdLib.exp">exp() (in module StdLib)</a>, <a href="python/api/stdlib.html#StdLib.exp">[1]</a>
 </li>
       <li><a href="java/api/stdlib.html#krpc.client.services.StdLib.StdLib.exp(double)">exp(double) (Java method)</a>
@@ -3876,6 +3892,8 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.getActuatorSpeed()">getActuatorSpeed() (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerSettings.getAdaptiveRateControl()">getAdaptiveRateControl() (Java method)</a>
+</li>
       <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ClientInfo.getAddress()">getAddress() (Java method)</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getAdvancedMode()">getAdvancedMode() (Java method)</a>
@@ -4028,6 +4046,8 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Light.getBlinkRate()">getBlinkRate() (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerSettings.getBlockingRecv()">getBlockingRecv() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getBodies()">getBodies() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/closest-approach.html#krpc.client.services.SpaceCenter.ClosestApproach.getBody()">getBody() (Java method)</a>, <a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.getBody()">[1]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.LaunchSite.getBody()">[2]</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getBody()">[3]</a>
@@ -4057,6 +4077,14 @@
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getBuoyantTorque()">getBuoyantTorque() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/editor.html#krpc.client.services.SpaceCenter.EditorVessel.getBurnTime()">getBurnTime() (Java method)</a>, <a href="java/api/space-center/stage.html#krpc.client.services.SpaceCenter.Stage.getBurnTime()">[1]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getBurnTime()">[2]</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getBytesRead()">getBytesRead() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getBytesReadRate()">getBytesReadRate() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getBytesWritten()">getBytesWritten() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getBytesWrittenRate()">getBytesWrittenRate() (Java method)</a>
 </li>
       <li><a href="java.html#krpc.client.Connection.getCall(Class, String, Object)">getCall(Class, String, Object) (Java method)</a>
 </li>
@@ -4274,6 +4302,8 @@
 </li>
       <li><a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getDefaultPosition()">getDefaultPosition() (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getDeferredCalls()">getDeferredCalls() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.getDeflection()">getDeflection() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getDeflection()">[1]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.getDeflectionAngle()">getDeflectionAngle() (Java method)</a>
@@ -4393,6 +4423,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Module.getEventList()">getEventList() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.getEventOffset()">getEventOffset() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getExecTimePerRpcUpdate()">getExecTimePerRpcUpdate() (Java method)</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getExpanded()">getExpanded() (Java method)</a>
 </li>
@@ -4724,8 +4756,6 @@
 </li>
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getLimitAngularVelocity()">getLimitAngularVelocity() (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getLineSpacing()">getLineSpacing() (Java method)</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getLineSpacing()">[1]</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getLoaded()">getLoaded() (Java method)</a>
@@ -4736,6 +4766,8 @@
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getLongitude()">getLongitude() (Java method)</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getLongitude()">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.getLongitudeOfAscendingNode()">getLongitudeOfAscendingNode() (Java method)</a>
 </li>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getLowerLeft()">getLowerLeft() (Java method)</a>
@@ -4795,6 +4827,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getMaxTemperature()">getMaxTemperature() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getMaxThrust()">getMaxThrust() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getMaxThrust()">[1]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getMaxThrust()">[2]</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerSettings.getMaxTimePerUpdate()">getMaxTimePerUpdate() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ReactionWheel.getMaxTorque()">getMaxTorque() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotor.getMaxTorque()">[1]</a>
 </li>
@@ -4901,6 +4935,8 @@
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getOceanDensity()">getOceanDensity() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.ContractManager.getOfferedContracts()">getOfferedContracts() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerSettings.getOneRpcPerUpdate()">getOneRpcPerUpdate() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.getOnMission()">getOnMission() (Java method)</a>
 </li>
@@ -5010,6 +5046,8 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticController.getPlaySpeed()">getPlaySpeed() (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getPollTimePerRpcUpdate()">getPollTimePerRpcUpdate() (Java method)</a>
+</li>
       <li><a href="java/api/drawing/map-marker.html#krpc.client.services.Drawing.MapMarker.getPosition()">getPosition() (Java method)</a>, <a href="java/api/drawing/point.html#krpc.client.services.Drawing.Point.getPosition()">[1]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getPosition()">[2]</a>, <a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getPosition()">[3]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Force.getPosition()">[4]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticController.getPosition()">[5]</a>, <a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getPosition()">[6]</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.AxisRange.getPositive()">getPositive() (Java method)</a>
@@ -5041,6 +5079,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getPropellants()">getPropellants() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getPropellants()">[1]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getPropellantStability()">getPropellantStability() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ClientInfo.getProtocolVersion()">getProtocolVersion() (Java method)</a>, <a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatus.getProtocolVersion()">[1]</a>
 </li>
       <li><a href="java/api/stdlib.html#krpc.client.services.StdLib.ColorRGB.getR()">getR() (Java method)</a>, <a href="java/api/stdlib.html#krpc.client.services.StdLib.ColorRGBA.getR()">[1]</a>
 </li>
@@ -5079,6 +5119,8 @@
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getRecoverable()">getRecoverable() (Java method)</a>
 </li>
       <li><a href="java/api/ui/button.html#krpc.client.services.UI.Button.getRectTransform()">getRectTransform() (Java method)</a>, <a href="java/api/ui/canvas.html#krpc.client.services.UI.Canvas.getRectTransform()">[1]</a>, <a href="java/api/ui/dropdown.html#krpc.client.services.UI.Dropdown.getRectTransform()">[2]</a>, <a href="java/api/ui/image.html#krpc.client.services.UI.Image.getRectTransform()">[3]</a>, <a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField.getRectTransform()">[4]</a>, <a href="java/api/ui/panel.html#krpc.client.services.UI.Panel.getRectTransform()">[5]</a>, <a href="java/api/ui/scroll-view.html#krpc.client.services.UI.ScrollView.getRectTransform()">[6]</a>, <a href="java/api/ui/slider.html#krpc.client.services.UI.Slider.getRectTransform()">[7]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getRectTransform()">[8]</a>, <a href="java/api/ui/toggle-group.html#krpc.client.services.UI.ToggleGroup.getRectTransform()">[9]</a>, <a href="java/api/ui/toggle.html#krpc.client.services.UI.Toggle.getRectTransform()">[10]</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerSettings.getRecvTimeout()">getRecvTimeout() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort.getReengageDistance()">getReengageDistance() (Java method)</a>
 </li>
@@ -5198,6 +5240,10 @@
 </li>
       <li><a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getRotorAcceleration()">getRotorAcceleration() (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getRpcRate()">getRpcRate() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getRpcsExecuted()">getRpcsExecuted() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parachute.getSafeState()">getSafeState() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getSAS()">getSAS() (Java method)</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getSAS()">[1]</a>
@@ -5249,6 +5295,8 @@
       <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC.getServices()">getServices() (Java method)</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getServos()">getServos() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatus.getSettings()">getSettings() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort.getShielded()">getShielded() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getShielded()">[1]</a>
 </li>
@@ -5332,6 +5380,8 @@
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getStaticPressureAtMSL()">getStaticPressureAtMSL() (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatus.getStatistics()">getStatistics() (Java method)</a>
+</li>
       <li><a href="java.html#krpc.client.ConnectionException.getStatus()">getStatus() (Java method)</a>, <a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC.getStatus()">[1]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getSteerable()">getSteerable() (Java method)</a>
@@ -5353,6 +5403,14 @@
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getStoppingVelocityThreshold()">getStoppingVelocityThreshold() (Java method)</a>
 </li>
       <li><a href="java.html#krpc.client.Event.getStream()">getStream() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getStreamEvaluationRate()">getStreamEvaluationRate() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getStreamEvaluations()">getStreamEvaluations() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getStreams()">getStreams() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getStreamUpdatesSent()">getStreamUpdatesSent() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getStress()">getStress() (Java method)</a>
 </li>
@@ -5486,7 +5544,13 @@
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getThrustSpecificFuelConsumption()">getThrustSpecificFuelConsumption() (Java method)</a>
 </li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerSettings.getTickHoldTimeout()">getTickHoldTimeout() (Java method)</a>
+</li>
       <li><a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.getTime()">getTime() (Java method)</a>, <a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.getTime()">[1]</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getTimePerRpcUpdate()">getTimePerRpcUpdate() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.getTimePerStreamUpdate()">getTimePerStreamUpdate() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/closest-approach.html#krpc.client.services.SpaceCenter.ClosestApproach.getTimeTo()">getTimeTo() (Java method)</a>, <a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.getTimeTo()">[1]</a>
 </li>
@@ -5573,6 +5637,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ConfigNode.getValues(String)">getValues(String) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getVelocity()">getVelocity() (Java method)</a>
+</li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatus.getVersion()">getVersion() (Java method)</a>
 </li>
       <li><a href="java/api/ui/scroll-view.html#krpc.client.services.UI.ScrollView.getVertical()">getVertical() (Java method)</a>
 </li>
@@ -7165,6 +7231,8 @@
 </li>
       <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ClientInfo.Name">KRPC.Client.Services.KRPC.ClientInfo.Name (C# property)</a>
 </li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ClientInfo.ProtocolVersion">KRPC.Client.Services.KRPC.ClientInfo.ProtocolVersion (C# property)</a>
+</li>
       <li><a href="csharp/api/krpc/krpc.html#class-KRPC.Client.Services.KRPC.DivideByZeroException">KRPC.Client.Services.KRPC.DivideByZeroException (C# class)</a>
 </li>
       <li><a href="csharp/api/krpc/krpc.html#class-KRPC.Client.Services.KRPC.Error">KRPC.Client.Services.KRPC.Error (C# class)</a>
@@ -7502,6 +7570,68 @@
       <li><a href="csharp/api/krpc/krpc.html#class-KRPC.Client.Services.KRPC.ObjectNotLoadedException">KRPC.Client.Services.KRPC.ObjectNotLoadedException (C# class)</a>
 </li>
       <li><a href="csharp/api/krpc/krpc.html#class-KRPC.Client.Services.KRPC.OverflowException">KRPC.Client.Services.KRPC.OverflowException (C# class)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#struct-KRPC.Client.Services.KRPC.ServerSettings">KRPC.Client.Services.KRPC.ServerSettings (C# struct)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerSettings.AdaptiveRateControl">KRPC.Client.Services.KRPC.ServerSettings.AdaptiveRateControl (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerSettings.BlockingRecv">KRPC.Client.Services.KRPC.ServerSettings.BlockingRecv (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerSettings.MaxTimePerUpdate">KRPC.Client.Services.KRPC.ServerSettings.MaxTimePerUpdate (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerSettings.OneRpcPerUpdate">KRPC.Client.Services.KRPC.ServerSettings.OneRpcPerUpdate (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerSettings.RecvTimeout">KRPC.Client.Services.KRPC.ServerSettings.RecvTimeout (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#function-KRPC.Client.Services.KRPC.ServerSettings.ServerSettings">KRPC.Client.Services.KRPC.ServerSettings.ServerSettings (C# function)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerSettings.TickHoldTimeout">KRPC.Client.Services.KRPC.ServerSettings.TickHoldTimeout (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#struct-KRPC.Client.Services.KRPC.ServerStatistics">KRPC.Client.Services.KRPC.ServerStatistics (C# struct)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.BytesRead">KRPC.Client.Services.KRPC.ServerStatistics.BytesRead (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.BytesReadRate">KRPC.Client.Services.KRPC.ServerStatistics.BytesReadRate (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.BytesWritten">KRPC.Client.Services.KRPC.ServerStatistics.BytesWritten (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.BytesWrittenRate">KRPC.Client.Services.KRPC.ServerStatistics.BytesWrittenRate (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.DeferredCalls">KRPC.Client.Services.KRPC.ServerStatistics.DeferredCalls (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.ExecTimePerRpcUpdate">KRPC.Client.Services.KRPC.ServerStatistics.ExecTimePerRpcUpdate (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.PollTimePerRpcUpdate">KRPC.Client.Services.KRPC.ServerStatistics.PollTimePerRpcUpdate (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.RpcRate">KRPC.Client.Services.KRPC.ServerStatistics.RpcRate (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.RpcsExecuted">KRPC.Client.Services.KRPC.ServerStatistics.RpcsExecuted (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#function-KRPC.Client.Services.KRPC.ServerStatistics.ServerStatistics">KRPC.Client.Services.KRPC.ServerStatistics.ServerStatistics (C# function)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.StreamEvaluationRate">KRPC.Client.Services.KRPC.ServerStatistics.StreamEvaluationRate (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.StreamEvaluations">KRPC.Client.Services.KRPC.ServerStatistics.StreamEvaluations (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.Streams">KRPC.Client.Services.KRPC.ServerStatistics.Streams (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.StreamUpdatesSent">KRPC.Client.Services.KRPC.ServerStatistics.StreamUpdatesSent (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.TimePerRpcUpdate">KRPC.Client.Services.KRPC.ServerStatistics.TimePerRpcUpdate (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatistics.TimePerStreamUpdate">KRPC.Client.Services.KRPC.ServerStatistics.TimePerStreamUpdate (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#struct-KRPC.Client.Services.KRPC.ServerStatus">KRPC.Client.Services.KRPC.ServerStatus (C# struct)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatus.ProtocolVersion">KRPC.Client.Services.KRPC.ServerStatus.ProtocolVersion (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#function-KRPC.Client.Services.KRPC.ServerStatus.ServerStatus">KRPC.Client.Services.KRPC.ServerStatus.ServerStatus (C# function)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatus.Settings">KRPC.Client.Services.KRPC.ServerStatus.Settings (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatus.Statistics">KRPC.Client.Services.KRPC.ServerStatus.Statistics (C# property)</a>
+</li>
+      <li><a href="csharp/api/krpc/krpc.html#property-KRPC.Client.Services.KRPC.ServerStatus.Version">KRPC.Client.Services.KRPC.ServerStatus.Version (C# property)</a>
 </li>
       <li><a href="csharp/api/krpc/krpc.html#class-KRPC.Client.Services.KRPC.StreamRemovedException">KRPC.Client.Services.KRPC.StreamRemovedException (C# class)</a>
 </li>
@@ -11410,6 +11540,8 @@
 </li>
       <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ClientInfo.name">KRPC.KRPC.ClientInfo.name (attribute)</a>
 </li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ClientInfo.protocol_version">KRPC.KRPC.ClientInfo.protocol_version (attribute)</a>
+</li>
       <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.clients">KRPC.KRPC.clients (attribute)</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.KRPC.Expression.has_return_type">KRPC.KRPC.Expression.has_return_type (attribute)</a>
@@ -11423,6 +11555,56 @@
       <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.game_state_loads">KRPC.KRPC.game_state_loads (attribute)</a>
 </li>
       <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.paused">KRPC.KRPC.paused (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerSettings.adaptive_rate_control">KRPC.KRPC.ServerSettings.adaptive_rate_control (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerSettings.blocking_recv">KRPC.KRPC.ServerSettings.blocking_recv (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerSettings.max_time_per_update">KRPC.KRPC.ServerSettings.max_time_per_update (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerSettings.one_rpc_per_update">KRPC.KRPC.ServerSettings.one_rpc_per_update (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerSettings.recv_timeout">KRPC.KRPC.ServerSettings.recv_timeout (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerSettings.tick_hold_timeout">KRPC.KRPC.ServerSettings.tick_hold_timeout (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.bytes_read">KRPC.KRPC.ServerStatistics.bytes_read (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.bytes_read_rate">KRPC.KRPC.ServerStatistics.bytes_read_rate (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.bytes_written">KRPC.KRPC.ServerStatistics.bytes_written (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.bytes_written_rate">KRPC.KRPC.ServerStatistics.bytes_written_rate (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.deferred_calls">KRPC.KRPC.ServerStatistics.deferred_calls (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.exec_time_per_rpc_update">KRPC.KRPC.ServerStatistics.exec_time_per_rpc_update (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.poll_time_per_rpc_update">KRPC.KRPC.ServerStatistics.poll_time_per_rpc_update (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.rpc_rate">KRPC.KRPC.ServerStatistics.rpc_rate (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.rpcs_executed">KRPC.KRPC.ServerStatistics.rpcs_executed (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.stream_evaluation_rate">KRPC.KRPC.ServerStatistics.stream_evaluation_rate (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.stream_evaluations">KRPC.KRPC.ServerStatistics.stream_evaluations (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.stream_updates_sent">KRPC.KRPC.ServerStatistics.stream_updates_sent (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.streams">KRPC.KRPC.ServerStatistics.streams (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.time_per_rpc_update">KRPC.KRPC.ServerStatistics.time_per_rpc_update (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatistics.time_per_stream_update">KRPC.KRPC.ServerStatistics.time_per_stream_update (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatus.protocol_version">KRPC.KRPC.ServerStatus.protocol_version (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatus.settings">KRPC.KRPC.ServerStatus.settings (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatus.statistics">KRPC.KRPC.ServerStatus.statistics (attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.KRPC.ServerStatus.version">KRPC.KRPC.ServerStatus.version (attribute)</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.KRPC.Type.code">KRPC.KRPC.Type.code (attribute)</a>
 </li>
@@ -12728,6 +12910,8 @@
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC10ClientInfo4nameE">krpc::services::KRPC::ClientInfo::name (C++ member)</a>
 </li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC10ClientInfo16protocol_versionE">krpc::services::KRPC::ClientInfo::protocol_version (C++ member)</a>
+</li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC7clientsEv">krpc::services::KRPC::clients (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16compile_functionE10Expression">krpc::services::KRPC::compile_function (C++ function)</a>
@@ -13057,6 +13241,62 @@
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC13remove_streamE8uint64_t">krpc::services::KRPC::remove_stream (C++ function)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC12run_functionE10ExpressionNSt6vectorINSt8optionalINSt6stringEEEEE">krpc::services::KRPC::run_function (C++ function)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC14ServerSettingsE">krpc::services::KRPC::ServerSettings (C++ struct)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC14ServerSettings21adaptive_rate_controlE">krpc::services::KRPC::ServerSettings::adaptive_rate_control (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC14ServerSettings13blocking_recvE">krpc::services::KRPC::ServerSettings::blocking_recv (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC14ServerSettings19max_time_per_updateE">krpc::services::KRPC::ServerSettings::max_time_per_update (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC14ServerSettings18one_rpc_per_updateE">krpc::services::KRPC::ServerSettings::one_rpc_per_update (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC14ServerSettings12recv_timeoutE">krpc::services::KRPC::ServerSettings::recv_timeout (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC14ServerSettings17tick_hold_timeoutE">krpc::services::KRPC::ServerSettings::tick_hold_timeout (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatisticsE">krpc::services::KRPC::ServerStatistics (C++ struct)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics10bytes_readE">krpc::services::KRPC::ServerStatistics::bytes_read (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics15bytes_read_rateE">krpc::services::KRPC::ServerStatistics::bytes_read_rate (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics13bytes_writtenE">krpc::services::KRPC::ServerStatistics::bytes_written (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics18bytes_written_rateE">krpc::services::KRPC::ServerStatistics::bytes_written_rate (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics14deferred_callsE">krpc::services::KRPC::ServerStatistics::deferred_calls (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics24exec_time_per_rpc_updateE">krpc::services::KRPC::ServerStatistics::exec_time_per_rpc_update (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics24poll_time_per_rpc_updateE">krpc::services::KRPC::ServerStatistics::poll_time_per_rpc_update (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics8rpc_rateE">krpc::services::KRPC::ServerStatistics::rpc_rate (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics13rpcs_executedE">krpc::services::KRPC::ServerStatistics::rpcs_executed (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics22stream_evaluation_rateE">krpc::services::KRPC::ServerStatistics::stream_evaluation_rate (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics18stream_evaluationsE">krpc::services::KRPC::ServerStatistics::stream_evaluations (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics19stream_updates_sentE">krpc::services::KRPC::ServerStatistics::stream_updates_sent (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics7streamsE">krpc::services::KRPC::ServerStatistics::streams (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics19time_per_rpc_updateE">krpc::services::KRPC::ServerStatistics::time_per_rpc_update (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC16ServerStatistics22time_per_stream_updateE">krpc::services::KRPC::ServerStatistics::time_per_stream_update (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC12ServerStatusE">krpc::services::KRPC::ServerStatus (C++ struct)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC12ServerStatus16protocol_versionE">krpc::services::KRPC::ServerStatus::protocol_version (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC12ServerStatus8settingsE">krpc::services::KRPC::ServerStatus::settings (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC12ServerStatus10statisticsE">krpc::services::KRPC::ServerStatus::statistics (C++ member)</a>
+</li>
+      <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC12ServerStatus7versionE">krpc::services::KRPC::ServerStatus::version (C++ member)</a>
 </li>
       <li><a href="cpp/api/krpc/krpc.html#_CPPv4N4krpc8services4KRPC14set_game_sceneE9GameScene">krpc::services::KRPC::set_game_scene (C++ function)</a>
 </li>
@@ -14860,6 +15100,8 @@
 </li>
       <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight14sideslip_angleEv">krpc::services::SpaceCenter::Flight::sideslip_angle (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight29simulate_aerodynamic_force_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEE">krpc::services::SpaceCenter::Flight::simulate_aerodynamic_force_at (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight30simulate_aerodynamic_torque_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEE">krpc::services::SpaceCenter::Flight::simulate_aerodynamic_torque_at (C++ function)</a>
@@ -14918,8 +15160,6 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter5Force8positionEv">krpc::services::SpaceCenter::Force::position (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter5Force15reference_frameEv">krpc::services::SpaceCenter::Force::reference_frame (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter5Force6removeEv">krpc::services::SpaceCenter::Force::remove (C++ function)</a>
@@ -18764,6 +19004,8 @@
 </li>
       <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ClientInfo_t.name">krpc_KRPC_ClientInfo_t.name (C member)</a>
 </li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ClientInfo_t.protocol_version">krpc_KRPC_ClientInfo_t.protocol_version (C member)</a>
+</li>
       <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_Clients">krpc_KRPC_Clients (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_CompileFunction">krpc_KRPC_CompileFunction (C function)</a>
@@ -19071,6 +19313,62 @@
       <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_RemoveStream">krpc_KRPC_RemoveStream (C function)</a>
 </li>
       <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_RunFunction">krpc_KRPC_RunFunction (C function)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerSettings_t">krpc_KRPC_ServerSettings_t (C type)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerSettings_t.adaptive_rate_control">krpc_KRPC_ServerSettings_t.adaptive_rate_control (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerSettings_t.blocking_recv">krpc_KRPC_ServerSettings_t.blocking_recv (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerSettings_t.max_time_per_update">krpc_KRPC_ServerSettings_t.max_time_per_update (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerSettings_t.one_rpc_per_update">krpc_KRPC_ServerSettings_t.one_rpc_per_update (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerSettings_t.recv_timeout">krpc_KRPC_ServerSettings_t.recv_timeout (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerSettings_t.tick_hold_timeout">krpc_KRPC_ServerSettings_t.tick_hold_timeout (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t">krpc_KRPC_ServerStatistics_t (C type)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.bytes_read">krpc_KRPC_ServerStatistics_t.bytes_read (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.bytes_read_rate">krpc_KRPC_ServerStatistics_t.bytes_read_rate (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.bytes_written">krpc_KRPC_ServerStatistics_t.bytes_written (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.bytes_written_rate">krpc_KRPC_ServerStatistics_t.bytes_written_rate (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.deferred_calls">krpc_KRPC_ServerStatistics_t.deferred_calls (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.exec_time_per_rpc_update">krpc_KRPC_ServerStatistics_t.exec_time_per_rpc_update (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.poll_time_per_rpc_update">krpc_KRPC_ServerStatistics_t.poll_time_per_rpc_update (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.rpc_rate">krpc_KRPC_ServerStatistics_t.rpc_rate (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.rpcs_executed">krpc_KRPC_ServerStatistics_t.rpcs_executed (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.stream_evaluation_rate">krpc_KRPC_ServerStatistics_t.stream_evaluation_rate (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.stream_evaluations">krpc_KRPC_ServerStatistics_t.stream_evaluations (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.stream_updates_sent">krpc_KRPC_ServerStatistics_t.stream_updates_sent (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.streams">krpc_KRPC_ServerStatistics_t.streams (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.time_per_rpc_update">krpc_KRPC_ServerStatistics_t.time_per_rpc_update (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatistics_t.time_per_stream_update">krpc_KRPC_ServerStatistics_t.time_per_stream_update (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatus_t">krpc_KRPC_ServerStatus_t (C type)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatus_t.protocol_version">krpc_KRPC_ServerStatus_t.protocol_version (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatus_t.settings">krpc_KRPC_ServerStatus_t.settings (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatus_t.statistics">krpc_KRPC_ServerStatus_t.statistics (C member)</a>
+</li>
+      <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_ServerStatus_t.version">krpc_KRPC_ServerStatus_t.version (C member)</a>
 </li>
       <li><a href="cnano/api/krpc/krpc.html#c.krpc_KRPC_set_GameScene">krpc_KRPC_set_GameScene (C function)</a>
 </li>
@@ -24151,6 +24449,8 @@
         <li><a href="lua/api/space-center/vessel.html#SpaceCenter.Vessel.max_thrust_at">(Vessel method)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.max_thrust_at">[1]</a>
 </li>
       </ul></li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerSettings.max_time_per_update">max_time_per_update (ServerSettings attribute)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.ReactionWheel.max_torque">max_torque (ReactionWheel attribute)</a>
 
       <ul>
@@ -24706,6 +25006,8 @@
 </li>
       <li><a href="python/api/space-center/vessel.html#SpaceCenter.CrewMember.on_mission">on_mission (CrewMember attribute)</a>
 </li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerSettings.one_rpc_per_update">one_rpc_per_update (ServerSettings attribute)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.CargoBay.open">open (CargoBay attribute)</a>
 
       <ul>
@@ -24748,10 +25050,10 @@
       </ul></li>
       <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.orbit_speed_reference_frame">orbit_speed_reference_frame (Vessel attribute)</a>
 </li>
-      <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.CameraMode.ORBITAL">ORBITAL (Java field)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.CameraMode.ORBITAL">ORBITAL (Java field)</a>
+</li>
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.orbital_energy">orbital_energy (Orbit attribute)</a>
 </li>
       <li><a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.orbital_reference_frame">orbital_reference_frame (CelestialBody attribute)</a>
@@ -25034,12 +25336,12 @@
 </li>
       <li><a href="python/api/debug/debug.html#Debug.pause_on_vessel_unpack">pause_on_vessel_unpack (in module Debug)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/krpc/krpc.html#KRPC.paused">paused (in module KRPC)</a>
 </li>
       <li><a href="java/api/drawing/map-marker.html#krpc.client.services.Drawing.MapMarkerIcon.PERIAPSIS">PERIAPSIS (Java field)</a>, <a href="java/api/kerbal-alarm-clock/alarm-type.html#krpc.client.services.KerbalAlarmClock.AlarmType.PERIAPSIS">[1]</a>, <a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.AlarmType.PERIAPSIS">[2]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.periapsis">periapsis (Orbit attribute)</a>
 </li>
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.periapsis_altitude">periapsis_altitude (Orbit attribute)</a>
@@ -25112,6 +25414,8 @@
         <li><a href="java/api/drawing/point.html#krpc.client.services.Drawing.Point">(Java class)</a>
 </li>
       </ul></li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.poll_time_per_rpc_update">poll_time_per_rpc_update (ServerStatistics attribute)</a>
+</li>
       <li><a href="lua/api/drawing/polygon.html#Drawing.Polygon">Polygon (class in Drawing)</a>, <a href="python/api/drawing/polygon.html#Drawing.Polygon">[1]</a>
 
       <ul>
@@ -25246,6 +25550,12 @@
 
       <ul>
         <li><a href="python/api/space-center/parts.html#SpaceCenter.RCS.propellants">(RCS attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ClientInfo.protocol_version">protocol_version (ClientInfo attribute)</a>
+
+      <ul>
+        <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatus.protocol_version">(ServerStatus attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -25484,6 +25794,8 @@
         <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform">(Java class)</a>
 </li>
       </ul></li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerSettings.recv_timeout">recv_timeout (ServerSettings attribute)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.DockingPort.reengage_distance">reengage_distance (DockingPort attribute)</a>
 </li>
       <li><a href="python/api/drawing/arc.html#Drawing.Arc.reference_frame">reference_frame (Arc attribute)</a>
@@ -26087,7 +26399,11 @@
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.MapFilterType.ROVERS">ROVERS (Java field)</a>
 </li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.rpc_rate">rpc_rate (ServerStatistics attribute)</a>
+</li>
       <li><a href="java.html#krpc.client.RPCException">RPCException (Java class)</a>
+</li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.rpcs_executed">rpcs_executed (ServerStatistics attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Experiment.run">run() (Experiment method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Experiment.run">[1]</a>
 
@@ -26274,6 +26590,30 @@
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.sensor">sensor (Part attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Parts.sensors">sensors (Parts attribute)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.ServerSettings">ServerSettings (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.ServerSettings">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerSettings">(Java class)</a>
+</li>
+      </ul></li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerSettings.ServerSettings(boolean, int, boolean, boolean, int, int)">ServerSettings(boolean, int, boolean, boolean, int, int) (Java constructor)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.ServerStatistics">ServerStatistics (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.ServerStatistics">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics">(Java class)</a>
+</li>
+      </ul></li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatistics.ServerStatistics(long, long, float, float, long, float, float, float, float, int, int, long, float, long, float)">ServerStatistics(long, long, float, float, long, float, float, float, float, int, int, long, float, long, float) (Java constructor)</a>
+</li>
+      <li><a href="lua/api/krpc/krpc.html#KRPC.ServerStatus">ServerStatus (class in KRPC)</a>, <a href="python/api/krpc/krpc.html#KRPC.ServerStatus">[1]</a>
+
+      <ul>
+        <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatus">(Java class)</a>
+</li>
+      </ul></li>
+      <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.ServerStatus.ServerStatus(String, int, ServerSettings, ServerStatistics)">ServerStatus(String, int, ServerSettings, ServerStatistics) (Java constructor)</a>
 </li>
       <li><a href="python/api/krpc/expressions.html#KRPC.Type.service">service (Type attribute)</a>
 </li>
@@ -27000,6 +27340,8 @@
       <li><a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.setTime(double)">setTime(double) (Java method)</a>, <a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.setTime(double)">[1]</a>
 </li>
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.setTimeToPeak(org.javatuples.Triplet)">setTimeToPeak(org.javatuples.Triplet) (Java method)</a>
+</li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatus.settings">settings (ServerStatus attribute)</a>
 </li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.setTitle(String)">setTitle(String) (Java method)</a>
 </li>
@@ -27910,12 +28252,12 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.available_torque">SpaceCenter.SpaceCenter.Engine.available_torque (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.can_restart">SpaceCenter.SpaceCenter.Engine.can_restart (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.can_reverse_thrust">SpaceCenter.SpaceCenter.Engine.can_reverse_thrust (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.can_shutdown">SpaceCenter.SpaceCenter.Engine.can_shutdown (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.flameout">SpaceCenter.SpaceCenter.Engine.flameout (attribute)</a>
@@ -29430,6 +29772,8 @@
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.MapFilterType.STATIONS">STATIONS (Java field)</a>
 </li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatus.statistics">statistics (ServerStatus attribute)</a>
+</li>
       <li><a href="python.html#krpc.error.ConnectionError.status">status (krpc.error.ConnectionError attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.ResourceConverter.status_info">status_info() (ResourceConverter method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.ResourceConverter.status_info">[1]</a>
@@ -29517,7 +29861,13 @@
 </li>
       <li><a href="python.html#krpc.client.Client.stream">stream() (krpc.client.Client method)</a>
 </li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.stream_evaluation_rate">stream_evaluation_rate (ServerStatistics attribute)</a>
+</li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.stream_evaluations">stream_evaluations (ServerStatistics attribute)</a>
+</li>
       <li><a href="python.html#krpc.client.Client.stream_update_condition">stream_update_condition (krpc.client.Client attribute)</a>
+</li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.stream_updates_sent">stream_updates_sent (ServerStatistics attribute)</a>
 </li>
       <li><a href="java.html#krpc.client.StreamException">StreamException (Java class)</a>
 </li>
@@ -29527,6 +29877,8 @@
         <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.StreamRemovedException">(Java class)</a>
 </li>
       </ul></li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.streams">streams (ServerStatistics attribute)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Wheel.stress">stress (Wheel attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Wheel.stress_percentage">stress_percentage (Wheel attribute)</a>
@@ -29973,7 +30325,13 @@
       </ul></li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Thruster.thrustPosition(ReferenceFrame)">thrustPosition(ReferenceFrame) (Java method)</a>
 </li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerSettings.tick_hold_timeout">tick_hold_timeout (ServerSettings attribute)</a>
+</li>
       <li><a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm.time">time (Alarm attribute)</a>, <a href="python/api/space-center/alarms.html#SpaceCenter.Alarm.time">[1]</a>
+</li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.time_per_rpc_update">time_per_rpc_update (ServerStatistics attribute)</a>
+</li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatistics.time_per_stream_update">time_per_stream_update (ServerStatistics attribute)</a>
 </li>
       <li><a href="python/api/space-center/closest-approach.html#SpaceCenter.ClosestApproach.time_to">time_to (ClosestApproach attribute)</a>
 
@@ -29983,10 +30341,10 @@
       </ul></li>
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.time_to_apoapsis">time_to_apoapsis (Orbit attribute)</a>
 </li>
-      <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.time_to_peak">time_to_peak (AutoPilot attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.time_to_peak">time_to_peak (AutoPilot attribute)</a>
+</li>
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.time_to_periapsis">time_to_periapsis (Orbit attribute)</a>
 </li>
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.time_to_soi_change">time_to_soi_change (Orbit attribute)</a>
@@ -30701,6 +31059,8 @@
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.velocityAt(double, ReferenceFrame)">velocityAt(double, ReferenceFrame) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.velocityAtTrueAnomaly(double, ReferenceFrame)">velocityAtTrueAnomaly(double, ReferenceFrame) (Java method)</a>
+</li>
+      <li><a href="python/api/krpc/krpc.html#KRPC.ServerStatus.version">version (ServerStatus attribute)</a>
 </li>
       <li><a href="python/api/ui/scroll-view.html#UI.ScrollView.vertical">vertical (ScrollView attribute)</a>
 </li>

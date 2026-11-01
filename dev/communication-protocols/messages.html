@@ -825,12 +825,11 @@ setting is on.</p></li>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">"error"</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"ERROR: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">error</span><span class="p">))</span>
 
-<span class="c1"># Decode the return value as a Status message</span>
-<span class="n">status</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Status</span><span class="p">()</span>
-<span class="n">status</span><span class="o">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="c1"># Decode the return value, a ServerStatus structure sent as a Tuple of its fields</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Tuple</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-<span class="c1"># Print out the Status message</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+<span class="c1"># Print out the server version, the first field</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">decode_string</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">KRPC</span></code> is the module the Protocol Buffers compiler generates from <code class="docutils literal notranslate"><span class="pre">krpc.proto</span></code>, imported from
@@ -877,7 +876,7 @@ the script, shown under <a class="reference internal" href="tcpip.html"><span cl
 <td><p>The <code class="docutils literal notranslate"><span class="pre">Tuple</span></code>, <code class="docutils literal notranslate"><span class="pre">List</span></code>, <code class="docutils literal notranslate"><span class="pre">Set</span></code> or <code class="docutils literal notranslate"><span class="pre">Dictionary</span></code> message, with each item encoded according
 to its own type.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EVENT</span></code>, <code class="docutils literal notranslate"><span class="pre">PROCEDURE_CALL</span></code>, <code class="docutils literal notranslate"><span class="pre">STREAM</span></code>, <code class="docutils literal notranslate"><span class="pre">STATUS</span></code>, <code class="docutils literal notranslate"><span class="pre">SERVICES</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EVENT</span></code>, <code class="docutils literal notranslate"><span class="pre">PROCEDURE_CALL</span></code>, <code class="docutils literal notranslate"><span class="pre">STREAM</span></code>, <code class="docutils literal notranslate"><span class="pre">SERVICES</span></code></p></td>
 <td><p>The serialized message of the same name.</p></td>
 </tr>
 </tbody>
@@ -967,44 +966,13 @@ value, the stream holds only firings, as the server sends a value only when the 
 <section id="krpc-service">
 <span id="communication-protocol-krpc-service"></span><h2>KRPC Service<a class="headerlink" href="#krpc-service" title="Link to this heading">#</a></h2>
 <p>The server provides a core service called <code class="docutils literal notranslate"><span class="pre">KRPC</span></code>. Its procedures give clients the basic
-functionality they build on: the server’s status, the definitions of its services, and streams and
-server side functions. A client library calls these procedures for the program using it. They are
-described below.</p>
-<p>The service also has members for programs to use directly, such as the <code class="docutils literal notranslate"><span class="pre">GameScene</span></code>, <code class="docutils literal notranslate"><span class="pre">Paused</span></code>
-and <code class="docutils literal notranslate"><span class="pre">Clients</span></code> properties and the <code class="docutils literal notranslate"><span class="pre">HoldTick</span></code> procedure. A program calls them through its client
-library, like the members of any other service. They are listed in each client’s API reference,
-such as the <a class="reference internal" href="../python/api/krpc/krpc.html"><span class="doc">Python one</span></a>.</p>
-<section id="getstatus">
-<h3>GetStatus<a class="headerlink" href="#getstatus" title="Link to this heading">#</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">GetStatus</span></code> procedure returns status information about the server, as a <code class="docutils literal notranslate"><span class="pre">Status</span></code> message:</p>
-<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Status</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">bytes_read</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">bytes_written</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">bytes_read_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">bytes_written_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">rpcs_executed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">rpc_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">one_rpc_per_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">max_time_per_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">adaptive_rate_control</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">blocking_recv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">11</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">recv_timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">time_per_rpc_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">13</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">poll_time_per_rpc_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">14</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">exec_time_per_rpc_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">stream_rpcs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">uint64</span><span class="w"> </span><span class="na">stream_rpcs_executed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">17</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">stream_rpc_rate</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">18</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">float</span><span class="w"> </span><span class="na">time_per_stream_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">19</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">protocol_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">20</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">version</span></code> field holds the version of the server, and <code class="docutils literal notranslate"><span class="pre">protocol_version</span></code> the protocol
-version of the connection. The remaining fields hold performance statistics and the server’s
-configuration settings.</p>
-</section>
+functionality they build on: the definitions of the server’s services, and streams and server side
+functions. A client library calls these procedures for the program using it. They are described
+below.</p>
+<p>The service also has members for programs to use directly, such as the <code class="docutils literal notranslate"><span class="pre">GetStatus</span></code> and
+<code class="docutils literal notranslate"><span class="pre">HoldTick</span></code> procedures and the <code class="docutils literal notranslate"><span class="pre">GameScene</span></code>, <code class="docutils literal notranslate"><span class="pre">Paused</span></code> and <code class="docutils literal notranslate"><span class="pre">Clients</span></code> properties. A program
+calls them through its client library, like the members of any other service. They are listed in
+each client’s API reference, such as the <a class="reference internal" href="../python/api/krpc/krpc.html"><span class="doc">Python one</span></a>.</p>
 <section id="getservices">
 <span id="communication-protocol-get-services"></span><h3>GetServices<a class="headerlink" href="#getservices" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">GetServices</span></code> procedure describes every service the server provides. A client can use it to
@@ -1350,6 +1318,7 @@ therefore be used to split the name into its constituent parts.</p>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">nullable</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 
 <span class="w">  </span><span class="kd">enum</span><span class="w"> </span><span class="n">TypeCode</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">reserved</span><span class="w"> </span><span class="mi">203</span><span class="p">;</span>
 <span class="w">    </span><span class="na">NONE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">// Values</span>
@@ -1372,7 +1341,6 @@ therefore be used to split the name into its constituent parts.</p>
 <span class="w">    </span><span class="na">EVENT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
 <span class="w">    </span><span class="na">PROCEDURE_CALL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">201</span><span class="p">;</span>
 <span class="w">    </span><span class="na">STREAM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">202</span><span class="p">;</span>
-<span class="w">    </span><span class="na">STATUS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">203</span><span class="p">;</span>
 <span class="w">    </span><span class="na">SERVICES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">204</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">// Collections</span>
@@ -1507,7 +1475,6 @@ represent null on the wire.</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#events">Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#krpc-service">KRPC Service</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getstatus">GetStatus</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getservices">GetServices</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#addstream">AddStream</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#addfunctionstream">AddFunctionStream</a></li>

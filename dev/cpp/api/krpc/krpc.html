@@ -1133,8 +1133,8 @@ This is an empty string if the client has no name.</p>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC10get_statusEv">
-<span id="_CPPv3N4krpc8services4KRPC10get_statusEv"></span><span id="_CPPv2N4krpc8services4KRPC10get_statusEv"></span><span id="krpc::services::KRPC::get_status"></span><span class="n"><span class="pre">krpc</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Status</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_status</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC10get_statusEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Returns some information about the server, such as the version.</p>
+<span id="_CPPv3N4krpc8services4KRPC10get_statusEv"></span><span id="_CPPv2N4krpc8services4KRPC10get_statusEv"></span><span id="krpc::services::KRPC::get_status"></span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC12ServerStatusE" title="krpc::services::KRPC::ServerStatus"><span class="n"><span class="pre">ServerStatus</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_status</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC10get_statusEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the status of the server, with its version, settings and performance statistics.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1449,6 +1449,193 @@ administration facility is open within the space center scene.</p>
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC10ClientInfo7addressE">
 <span id="_CPPv3N4krpc8services4KRPC10ClientInfo7addressE"></span><span id="_CPPv2N4krpc8services4KRPC10ClientInfo7addressE"></span><span id="krpc::services::KRPC::ClientInfo::address__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">address</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC10ClientInfo7addressE" title="Link to this definition">#</a><br /></dt>
 <dd><p>The address of the client.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC10ClientInfo16protocol_versionE">
+<span id="_CPPv3N4krpc8services4KRPC10ClientInfo16protocol_versionE"></span><span id="_CPPv2N4krpc8services4KRPC10ClientInfo16protocol_versionE"></span><span id="krpc::services::KRPC::ClientInfo::protocol_version__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">protocol_version</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC10ClientInfo16protocol_versionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The protocol version of the client’s connection.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC12ServerStatusE">
+<span id="_CPPv3N4krpc8services4KRPC12ServerStatusE"></span><span id="_CPPv2N4krpc8services4KRPC12ServerStatusE"></span><span id="krpc::services::KRPC::ServerStatus"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ServerStatus</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC12ServerStatusE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The status of the server.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC10get_statusEv" title="krpc::services::KRPC::get_status"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">get_status()</span></code></a>.</p>
+</div>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC12ServerStatus7versionE">
+<span id="_CPPv3N4krpc8services4KRPC12ServerStatus7versionE"></span><span id="_CPPv2N4krpc8services4KRPC12ServerStatus7versionE"></span><span id="krpc::services::KRPC::ServerStatus::version__ss"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">version</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC12ServerStatus7versionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The version of the server, or <code class="docutils literal notranslate"><span class="pre">unknown</span></code>.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC12ServerStatus16protocol_versionE">
+<span id="_CPPv3N4krpc8services4KRPC12ServerStatus16protocol_versionE"></span><span id="_CPPv2N4krpc8services4KRPC12ServerStatus16protocol_versionE"></span><span id="krpc::services::KRPC::ServerStatus::protocol_version__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">protocol_version</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC12ServerStatus16protocol_versionE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The protocol version of the connection.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC12ServerStatus8settingsE">
+<span id="_CPPv3N4krpc8services4KRPC12ServerStatus8settingsE"></span><span id="_CPPv2N4krpc8services4KRPC12ServerStatus8settingsE"></span><span id="krpc::services::KRPC::ServerStatus::settings__ServerSettings"></span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC14ServerSettingsE" title="krpc::services::KRPC::ServerSettings"><span class="n"><span class="pre">ServerSettings</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">settings</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC12ServerStatus8settingsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The settings of the server.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC12ServerStatus10statisticsE">
+<span id="_CPPv3N4krpc8services4KRPC12ServerStatus10statisticsE"></span><span id="_CPPv2N4krpc8services4KRPC12ServerStatus10statisticsE"></span><span id="krpc::services::KRPC::ServerStatus::statistics__ServerStatistics"></span><a class="reference internal" href="#_CPPv4N4krpc8services4KRPC16ServerStatisticsE" title="krpc::services::KRPC::ServerStatistics"><span class="n"><span class="pre">ServerStatistics</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">statistics</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC12ServerStatus10statisticsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The performance statistics of the server.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC14ServerSettingsE">
+<span id="_CPPv3N4krpc8services4KRPC14ServerSettingsE"></span><span id="_CPPv2N4krpc8services4KRPC14ServerSettingsE"></span><span id="krpc::services::KRPC::ServerSettings"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ServerSettings</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC14ServerSettingsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The settings that control how the server executes calls.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC12ServerStatus8settingsE" title="krpc::services::KRPC::ServerStatus::settings"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">ServerStatus::settings</span></code></a>.</p>
+</div>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC14ServerSettings18one_rpc_per_updateE">
+<span id="_CPPv3N4krpc8services4KRPC14ServerSettings18one_rpc_per_updateE"></span><span id="_CPPv2N4krpc8services4KRPC14ServerSettings18one_rpc_per_updateE"></span><span id="krpc::services::KRPC::ServerSettings::one_rpc_per_update__b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">one_rpc_per_update</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC14ServerSettings18one_rpc_per_updateE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the server executes one call per update.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC14ServerSettings19max_time_per_updateE">
+<span id="_CPPv3N4krpc8services4KRPC14ServerSettings19max_time_per_updateE"></span><span id="_CPPv2N4krpc8services4KRPC14ServerSettings19max_time_per_updateE"></span><span id="krpc::services::KRPC::ServerSettings::max_time_per_update__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_time_per_update</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC14ServerSettings19max_time_per_updateE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum time spent executing calls per update, in microseconds.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC14ServerSettings21adaptive_rate_controlE">
+<span id="_CPPv3N4krpc8services4KRPC14ServerSettings21adaptive_rate_controlE"></span><span id="_CPPv2N4krpc8services4KRPC14ServerSettings21adaptive_rate_controlE"></span><span id="krpc::services::KRPC::ServerSettings::adaptive_rate_control__b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">adaptive_rate_control</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC14ServerSettings21adaptive_rate_controlE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the server adjusts <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC14ServerSettings19max_time_per_updateE" title="krpc::services::KRPC::ServerSettings::max_time_per_update"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">ServerSettings::max_time_per_update</span></code></a> to hold the frame rate.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC14ServerSettings13blocking_recvE">
+<span id="_CPPv3N4krpc8services4KRPC14ServerSettings13blocking_recvE"></span><span id="_CPPv2N4krpc8services4KRPC14ServerSettings13blocking_recvE"></span><span id="krpc::services::KRPC::ServerSettings::blocking_recv__b"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">blocking_recv</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC14ServerSettings13blocking_recvE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the server waits for the next call in an update.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC14ServerSettings12recv_timeoutE">
+<span id="_CPPv3N4krpc8services4KRPC14ServerSettings12recv_timeoutE"></span><span id="_CPPv2N4krpc8services4KRPC14ServerSettings12recv_timeoutE"></span><span id="krpc::services::KRPC::ServerSettings::recv_timeout__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">recv_timeout</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC14ServerSettings12recv_timeoutE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time the server waits for the next call, in microseconds.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC14ServerSettings17tick_hold_timeoutE">
+<span id="_CPPv3N4krpc8services4KRPC14ServerSettings17tick_hold_timeoutE"></span><span id="_CPPv2N4krpc8services4KRPC14ServerSettings17tick_hold_timeoutE"></span><span id="krpc::services::KRPC::ServerSettings::tick_hold_timeout__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tick_hold_timeout</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC14ServerSettings17tick_hold_timeoutE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The longest time a client may hold the game on one physics tick, in microseconds.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatisticsE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatisticsE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatisticsE"></span><span id="krpc::services::KRPC::ServerStatistics"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ServerStatistics</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatisticsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The performance statistics of the server.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#_CPPv4N4krpc8services4KRPC12ServerStatus10statisticsE" title="krpc::services::KRPC::ServerStatus::statistics"><code class="xref cpp cpp-member docutils literal notranslate"><span class="pre">ServerStatus::statistics</span></code></a>.</p>
+</div>
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics10bytes_readE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics10bytes_readE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics10bytes_readE"></span><span id="krpc::services::KRPC::ServerStatistics::bytes_read__uint64_t"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bytes_read</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics10bytes_readE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of bytes received from clients.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics13bytes_writtenE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics13bytes_writtenE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics13bytes_writtenE"></span><span id="krpc::services::KRPC::ServerStatistics::bytes_written__uint64_t"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bytes_written</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics13bytes_writtenE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of bytes sent to clients.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics15bytes_read_rateE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics15bytes_read_rateE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics15bytes_read_rateE"></span><span id="krpc::services::KRPC::ServerStatistics::bytes_read_rate__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bytes_read_rate</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics15bytes_read_rateE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The rate bytes are received from clients, in bytes per second.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics18bytes_written_rateE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics18bytes_written_rateE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics18bytes_written_rateE"></span><span id="krpc::services::KRPC::ServerStatistics::bytes_written_rate__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bytes_written_rate</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics18bytes_written_rateE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The rate bytes are sent to clients, in bytes per second.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics13rpcs_executedE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics13rpcs_executedE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics13rpcs_executedE"></span><span id="krpc::services::KRPC::ServerStatistics::rpcs_executed__uint64_t"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rpcs_executed</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics13rpcs_executedE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of calls executed.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics8rpc_rateE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics8rpc_rateE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics8rpc_rateE"></span><span id="krpc::services::KRPC::ServerStatistics::rpc_rate__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rpc_rate</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics8rpc_rateE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of calls executed per second.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics19time_per_rpc_updateE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics19time_per_rpc_updateE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics19time_per_rpc_updateE"></span><span id="krpc::services::KRPC::ServerStatistics::time_per_rpc_update__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_per_rpc_update</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics19time_per_rpc_updateE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time spent receiving and executing calls per update, in seconds.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics24poll_time_per_rpc_updateE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics24poll_time_per_rpc_updateE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics24poll_time_per_rpc_updateE"></span><span id="krpc::services::KRPC::ServerStatistics::poll_time_per_rpc_update__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">poll_time_per_rpc_update</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics24poll_time_per_rpc_updateE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time spent receiving calls per update, in seconds.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics24exec_time_per_rpc_updateE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics24exec_time_per_rpc_updateE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics24exec_time_per_rpc_updateE"></span><span id="krpc::services::KRPC::ServerStatistics::exec_time_per_rpc_update__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">exec_time_per_rpc_update</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics24exec_time_per_rpc_updateE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time spent executing calls per update, in seconds.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics14deferred_callsE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics14deferred_callsE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics14deferred_callsE"></span><span id="krpc::services::KRPC::ServerStatistics::deferred_calls__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deferred_calls</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics14deferred_callsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of calls left for the next update, because the update ran out of time
+or the call yielded.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics7streamsE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics7streamsE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics7streamsE"></span><span id="krpc::services::KRPC::ServerStatistics::streams__uint32_t"></span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">streams</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics7streamsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of open streams, events included.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics18stream_evaluationsE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics18stream_evaluationsE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics18stream_evaluationsE"></span><span id="krpc::services::KRPC::ServerStatistics::stream_evaluations__uint64_t"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stream_evaluations</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics18stream_evaluationsE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of stream evaluations, one per stream per update.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics22stream_evaluation_rateE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics22stream_evaluation_rateE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics22stream_evaluation_rateE"></span><span id="krpc::services::KRPC::ServerStatistics::stream_evaluation_rate__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stream_evaluation_rate</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics22stream_evaluation_rateE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of stream evaluations per second.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics19stream_updates_sentE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics19stream_updates_sentE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics19stream_updates_sentE"></span><span id="krpc::services::KRPC::ServerStatistics::stream_updates_sent__uint64_t"></span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stream_updates_sent</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics19stream_updates_sentE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of stream updates sent to clients.</p>
+</dd></dl>
+
+<dl class="cpp member">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services4KRPC16ServerStatistics22time_per_stream_updateE">
+<span id="_CPPv3N4krpc8services4KRPC16ServerStatistics22time_per_stream_updateE"></span><span id="_CPPv2N4krpc8services4KRPC16ServerStatistics22time_per_stream_updateE"></span><span id="krpc::services::KRPC::ServerStatistics::time_per_stream_update__float"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_per_stream_update</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services4KRPC16ServerStatistics22time_per_stream_updateE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time spent updating streams per update, in seconds.</p>
 </dd></dl>
 
 </dd></dl>

@@ -1124,8 +1124,8 @@ This is an empty string if the client has no name.</p>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_KRPC_GetStatus">
-<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_GetStatus</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_schema_Status</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_GetStatus" title="Link to this definition">#</a><br /></dt>
-<dd><p>Returns some information about the server, such as the version.</p>
+<a class="reference internal" href="../../../cnano.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_GetStatus</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../../cnano.html#c.krpc_connection_t" title="krpc_connection_t"><span class="n"><span class="pre">krpc_connection_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_KRPC_ServerStatus_t" title="krpc_KRPC_ServerStatus_t"><span class="n"><span class="pre">krpc_KRPC_ServerStatus_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">returnValue</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KRPC_GetStatus" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the status of the server, with its version, settings and performance statistics.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -1438,6 +1438,193 @@ administration facility is open within the space center scene.</p>
 <dt class="sig sig-object c" id="c.krpc_KRPC_ClientInfo_t.address">
 <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">address</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ClientInfo_t.address" title="Link to this definition">#</a><br /></dt>
 <dd><p>The address of the client.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ClientInfo_t.protocol_version">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">protocol_version</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ClientInfo_t.protocol_version" title="Link to this definition">#</a><br /></dt>
+<dd><p>The protocol version of the client’s connection.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatus_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_ServerStatus_t</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatus_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The status of the server.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#c.krpc_KRPC_GetStatus" title="krpc_KRPC_GetStatus"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KRPC_GetStatus()</span></code></a>.</p>
+</div>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatus_t.version">
+<span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">version</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatus_t.version" title="Link to this definition">#</a><br /></dt>
+<dd><p>The version of the server, or <code class="docutils literal notranslate"><span class="pre">unknown</span></code>.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatus_t.protocol_version">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">protocol_version</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatus_t.protocol_version" title="Link to this definition">#</a><br /></dt>
+<dd><p>The protocol version of the connection.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatus_t.settings">
+<a class="reference internal" href="#c.krpc_KRPC_ServerSettings_t" title="krpc_KRPC_ServerSettings_t"><span class="n"><span class="pre">krpc_KRPC_ServerSettings_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">settings</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatus_t.settings" title="Link to this definition">#</a><br /></dt>
+<dd><p>The settings of the server.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatus_t.statistics">
+<a class="reference internal" href="#c.krpc_KRPC_ServerStatistics_t" title="krpc_KRPC_ServerStatistics_t"><span class="n"><span class="pre">krpc_KRPC_ServerStatistics_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">statistics</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatus_t.statistics" title="Link to this definition">#</a><br /></dt>
+<dd><p>The performance statistics of the server.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_ServerSettings_t</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The settings that control how the server executes calls.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#c.krpc_KRPC_ServerStatus_t.settings" title="krpc_KRPC_ServerStatus_t.settings"><code class="xref c c-member docutils literal notranslate"><span class="pre">krpc_KRPC_ServerStatus_t.settings</span></code></a>.</p>
+</div>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.one_rpc_per_update">
+<span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">one_rpc_per_update</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.one_rpc_per_update" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the server executes one call per update.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.max_time_per_update">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_time_per_update</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.max_time_per_update" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum time spent executing calls per update, in microseconds.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.adaptive_rate_control">
+<span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">adaptive_rate_control</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.adaptive_rate_control" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the server adjusts <a class="reference internal" href="#c.krpc_KRPC_ServerSettings_t.max_time_per_update" title="krpc_KRPC_ServerSettings_t.max_time_per_update"><code class="xref c c-member docutils literal notranslate"><span class="pre">krpc_KRPC_ServerSettings_t.max_time_per_update</span></code></a> to hold the frame rate.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.blocking_recv">
+<span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">blocking_recv</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.blocking_recv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the server waits for the next call in an update.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.recv_timeout">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">recv_timeout</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.recv_timeout" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time the server waits for the next call, in microseconds.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerSettings_t.tick_hold_timeout">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tick_hold_timeout</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerSettings_t.tick_hold_timeout" title="Link to this definition">#</a><br /></dt>
+<dd><p>The longest time a client may hold the game on one physics tick, in microseconds.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KRPC_ServerStatistics_t</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The performance statistics of the server.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>See <a class="reference internal" href="#c.krpc_KRPC_ServerStatus_t.statistics" title="krpc_KRPC_ServerStatus_t.statistics"><code class="xref c c-member docutils literal notranslate"><span class="pre">krpc_KRPC_ServerStatus_t.statistics</span></code></a>.</p>
+</div>
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.bytes_read">
+<span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bytes_read</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.bytes_read" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of bytes received from clients.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.bytes_written">
+<span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bytes_written</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.bytes_written" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of bytes sent to clients.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.bytes_read_rate">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bytes_read_rate</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.bytes_read_rate" title="Link to this definition">#</a><br /></dt>
+<dd><p>The rate bytes are received from clients, in bytes per second.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.bytes_written_rate">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bytes_written_rate</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.bytes_written_rate" title="Link to this definition">#</a><br /></dt>
+<dd><p>The rate bytes are sent to clients, in bytes per second.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.rpcs_executed">
+<span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rpcs_executed</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.rpcs_executed" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of calls executed.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.rpc_rate">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rpc_rate</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.rpc_rate" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of calls executed per second.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.time_per_rpc_update">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_per_rpc_update</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.time_per_rpc_update" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time spent receiving and executing calls per update, in seconds.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.poll_time_per_rpc_update">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">poll_time_per_rpc_update</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.poll_time_per_rpc_update" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time spent receiving calls per update, in seconds.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.exec_time_per_rpc_update">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">exec_time_per_rpc_update</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.exec_time_per_rpc_update" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time spent executing calls per update, in seconds.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.deferred_calls">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">deferred_calls</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.deferred_calls" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of calls left for the next update, because the update ran out of time
+or the call yielded.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.streams">
+<span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">streams</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.streams" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of open streams, events included.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.stream_evaluations">
+<span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stream_evaluations</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.stream_evaluations" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of stream evaluations, one per stream per update.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.stream_evaluation_rate">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stream_evaluation_rate</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.stream_evaluation_rate" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of stream evaluations per second.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.stream_updates_sent">
+<span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stream_updates_sent</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.stream_updates_sent" title="Link to this definition">#</a><br /></dt>
+<dd><p>The number of stream updates sent to clients.</p>
+</dd></dl>
+
+<dl class="c member">
+<dt class="sig sig-object c" id="c.krpc_KRPC_ServerStatistics_t.time_per_stream_update">
+<span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">time_per_stream_update</span></span></span><a class="headerlink" href="#c.krpc_KRPC_ServerStatistics_t.time_per_stream_update" title="Link to this definition">#</a><br /></dt>
+<dd><p>The time spent updating streams per update, in seconds.</p>
 </dd></dl>
 
 </dd></dl>

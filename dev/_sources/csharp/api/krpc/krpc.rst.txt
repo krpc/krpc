@@ -31,9 +31,9 @@ KRPC
 
       :Game Scenes: All
 
-   .. function:: KRPC.Schema.KRPC.Status GetStatus()
+   .. function:: ServerStatus GetStatus()
 
-      Returns some information about the server, such as the version.
+      Returns the status of the server, with its version, settings and performance statistics.
 
 
       :Game Scenes: All
@@ -328,7 +328,7 @@ KRPC
 
       See :prop:`KRPC.Clients <KRPC.KRPC.Clients>`.
 
-   .. function:: ClientInfo(byte[] id, string name, string address)
+   .. function:: ClientInfo(byte[] id, string name, string address, uint protocolVersion)
 
       Construct a ClientInfo from the values of its fields.
 
@@ -344,6 +344,153 @@ KRPC
    .. property:: string Address { get; }
 
       The address of the client.
+
+   .. property:: uint ProtocolVersion { get; }
+
+      The protocol version of the client's connection.
+
+
+.. struct:: ServerStatus
+
+   The status of the server.
+
+   .. note::
+
+      See :meth:`KRPC.GetStatus <KRPC.KRPC.GetStatus>`.
+
+   .. function:: ServerStatus(string version, uint protocolVersion, ServerSettings settings, ServerStatistics statistics)
+
+      Construct a ServerStatus from the values of its fields.
+
+
+   .. property:: string Version { get; }
+
+      The version of the server, or ``unknown``.
+
+   .. property:: uint ProtocolVersion { get; }
+
+      The protocol version of the connection.
+
+   .. property:: ServerSettings Settings { get; }
+
+      The settings of the server.
+
+   .. property:: ServerStatistics Statistics { get; }
+
+      The performance statistics of the server.
+
+
+.. struct:: ServerSettings
+
+   The settings that control how the server executes calls.
+
+   .. note::
+
+      See :prop:`ServerStatus.Settings`.
+
+   .. function:: ServerSettings(bool oneRpcPerUpdate, uint maxTimePerUpdate, bool adaptiveRateControl, bool blockingRecv, uint recvTimeout, uint tickHoldTimeout)
+
+      Construct a ServerSettings from the values of its fields.
+
+
+   .. property:: bool OneRpcPerUpdate { get; }
+
+      Whether the server executes one call per update.
+
+   .. property:: uint MaxTimePerUpdate { get; }
+
+      The maximum time spent executing calls per update, in microseconds.
+
+   .. property:: bool AdaptiveRateControl { get; }
+
+      Whether the server adjusts :prop:`ServerSettings.MaxTimePerUpdate` to hold the frame rate.
+
+   .. property:: bool BlockingRecv { get; }
+
+      Whether the server waits for the next call in an update.
+
+   .. property:: uint RecvTimeout { get; }
+
+      The time the server waits for the next call, in microseconds.
+
+   .. property:: uint TickHoldTimeout { get; }
+
+      The longest time a client may hold the game on one physics tick, in microseconds.
+
+
+.. struct:: ServerStatistics
+
+   The performance statistics of the server.
+
+   .. note::
+
+      See :prop:`ServerStatus.Statistics`.
+
+   .. function:: ServerStatistics(ulong bytesRead, ulong bytesWritten, float bytesReadRate, float bytesWrittenRate, ulong rpcsExecuted, float rpcRate, float timePerRpcUpdate, float pollTimePerRpcUpdate, float execTimePerRpcUpdate, uint deferredCalls, uint streams, ulong streamEvaluations, float streamEvaluationRate, ulong streamUpdatesSent, float timePerStreamUpdate)
+
+      Construct a ServerStatistics from the values of its fields.
+
+
+   .. property:: ulong BytesRead { get; }
+
+      The number of bytes received from clients.
+
+   .. property:: ulong BytesWritten { get; }
+
+      The number of bytes sent to clients.
+
+   .. property:: float BytesReadRate { get; }
+
+      The rate bytes are received from clients, in bytes per second.
+
+   .. property:: float BytesWrittenRate { get; }
+
+      The rate bytes are sent to clients, in bytes per second.
+
+   .. property:: ulong RpcsExecuted { get; }
+
+      The number of calls executed.
+
+   .. property:: float RpcRate { get; }
+
+      The number of calls executed per second.
+
+   .. property:: float TimePerRpcUpdate { get; }
+
+      The time spent receiving and executing calls per update, in seconds.
+
+   .. property:: float PollTimePerRpcUpdate { get; }
+
+      The time spent receiving calls per update, in seconds.
+
+   .. property:: float ExecTimePerRpcUpdate { get; }
+
+      The time spent executing calls per update, in seconds.
+
+   .. property:: uint DeferredCalls { get; }
+
+      The number of calls left for the next update, because the update ran out of time
+      or the call yielded.
+
+   .. property:: uint Streams { get; }
+
+      The number of open streams, events included.
+
+   .. property:: ulong StreamEvaluations { get; }
+
+      The number of stream evaluations, one per stream per update.
+
+   .. property:: float StreamEvaluationRate { get; }
+
+      The number of stream evaluations per second.
+
+   .. property:: ulong StreamUpdatesSent { get; }
+
+      The number of stream updates sent to clients.
+
+   .. property:: float TimePerStreamUpdate { get; }
+
+      The time spent updating streams per update, in seconds.
 
 
 .. class:: InvalidOperationException

@@ -30,9 +30,9 @@ KRPC
 
    
 
-   .. method:: krpc.schema.KRPC.Status getStatus()
+   .. method:: ServerStatus getStatus()
 
-      Returns some information about the server, such as the version.
+      Returns the status of the server, with its version, settings and performance statistics.
 
    
 
@@ -296,7 +296,7 @@ KRPC
 
       See :meth:`getClients()`.
 
-   .. constructor:: public ClientInfo(byte[] id, String name, String address)
+   .. constructor:: public ClientInfo(byte[] id, String name, String address, int protocolVersion)
 
       Construct a ClientInfo from the values of its fields.
 
@@ -312,6 +312,153 @@ KRPC
    .. method:: String getAddress()
 
       The address of the client.
+
+   .. method:: int getProtocolVersion()
+
+      The protocol version of the client's connection.
+
+
+.. type:: public class ServerStatus
+
+   The status of the server.
+
+   .. note::
+
+      See :meth:`getStatus()`.
+
+   .. constructor:: public ServerStatus(String version, int protocolVersion, ServerSettings settings, ServerStatistics statistics)
+
+      Construct a ServerStatus from the values of its fields.
+
+
+   .. method:: String getVersion()
+
+      The version of the server, or ``unknown``.
+
+   .. method:: int getProtocolVersion()
+
+      The protocol version of the connection.
+
+   .. method:: ServerSettings getSettings()
+
+      The settings of the server.
+
+   .. method:: ServerStatistics getStatistics()
+
+      The performance statistics of the server.
+
+
+.. type:: public class ServerSettings
+
+   The settings that control how the server executes calls.
+
+   .. note::
+
+      See :meth:`ServerStatus.getSettings()`.
+
+   .. constructor:: public ServerSettings(boolean oneRpcPerUpdate, int maxTimePerUpdate, boolean adaptiveRateControl, boolean blockingRecv, int recvTimeout, int tickHoldTimeout)
+
+      Construct a ServerSettings from the values of its fields.
+
+
+   .. method:: boolean getOneRpcPerUpdate()
+
+      Whether the server executes one call per update.
+
+   .. method:: int getMaxTimePerUpdate()
+
+      The maximum time spent executing calls per update, in microseconds.
+
+   .. method:: boolean getAdaptiveRateControl()
+
+      Whether the server adjusts :meth:`ServerSettings.getMaxTimePerUpdate()` to hold the frame rate.
+
+   .. method:: boolean getBlockingRecv()
+
+      Whether the server waits for the next call in an update.
+
+   .. method:: int getRecvTimeout()
+
+      The time the server waits for the next call, in microseconds.
+
+   .. method:: int getTickHoldTimeout()
+
+      The longest time a client may hold the game on one physics tick, in microseconds.
+
+
+.. type:: public class ServerStatistics
+
+   The performance statistics of the server.
+
+   .. note::
+
+      See :meth:`ServerStatus.getStatistics()`.
+
+   .. constructor:: public ServerStatistics(long bytesRead, long bytesWritten, float bytesReadRate, float bytesWrittenRate, long rpcsExecuted, float rpcRate, float timePerRpcUpdate, float pollTimePerRpcUpdate, float execTimePerRpcUpdate, int deferredCalls, int streams, long streamEvaluations, float streamEvaluationRate, long streamUpdatesSent, float timePerStreamUpdate)
+
+      Construct a ServerStatistics from the values of its fields.
+
+
+   .. method:: long getBytesRead()
+
+      The number of bytes received from clients.
+
+   .. method:: long getBytesWritten()
+
+      The number of bytes sent to clients.
+
+   .. method:: float getBytesReadRate()
+
+      The rate bytes are received from clients, in bytes per second.
+
+   .. method:: float getBytesWrittenRate()
+
+      The rate bytes are sent to clients, in bytes per second.
+
+   .. method:: long getRpcsExecuted()
+
+      The number of calls executed.
+
+   .. method:: float getRpcRate()
+
+      The number of calls executed per second.
+
+   .. method:: float getTimePerRpcUpdate()
+
+      The time spent receiving and executing calls per update, in seconds.
+
+   .. method:: float getPollTimePerRpcUpdate()
+
+      The time spent receiving calls per update, in seconds.
+
+   .. method:: float getExecTimePerRpcUpdate()
+
+      The time spent executing calls per update, in seconds.
+
+   .. method:: int getDeferredCalls()
+
+      The number of calls left for the next update, because the update ran out of time
+      or the call yielded.
+
+   .. method:: int getStreams()
+
+      The number of open streams, events included.
+
+   .. method:: long getStreamEvaluations()
+
+      The number of stream evaluations, one per stream per update.
+
+   .. method:: float getStreamEvaluationRate()
+
+      The number of stream evaluations per second.
+
+   .. method:: long getStreamUpdatesSent()
+
+      The number of stream updates sent to clients.
+
+   .. method:: float getTimePerStreamUpdate()
+
+      The time spent updating streams per update, in seconds.
 
 
 .. type:: public class InvalidOperationException

@@ -599,8 +599,8 @@ handling errors and failed connections. A client library should
 implement the <a class="reference internal" href="../client-spec.html"><span class="doc">client specification</span></a> in its entirety.</p>
 </div>
 <p>The following script connects to a server on the serial port <code class="docutils literal notranslate"><span class="pre">/dev/ttyUSB0</span></code> with the name
-“Example”, calls <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> and prints the result. It then ends the session with a
-<code class="docutils literal notranslate"><span class="pre">disconnect</span></code>:</p>
+“Example”, calls <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> and prints the server version. It then ends the session with
+a <code class="docutils literal notranslate"><span class="pre">disconnect</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">serial</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.decoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_DecodeVarint</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.encoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_VarintEncoder</span>
@@ -618,6 +618,12 @@ implement the <a class="reference internal" href="../client-spec.html"><span cla
 <span class="k">def</span><span class="w"> </span><span class="nf">decode_varint</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Decode a protobuf varint to an int"""</span>
     <span class="k">return</span> <span class="n">_DecodeVarint</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">decode_string</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Decode a string value: its length as a varint, then its UTF-8 bytes"""</span>
+    <span class="n">size</span><span class="p">,</span> <span class="n">position</span> <span class="o">=</span> <span class="n">_DecodeVarint</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">[</span><span class="n">position</span> <span class="p">:</span> <span class="n">position</span> <span class="o">+</span> <span class="n">size</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
@@ -686,12 +692,11 @@ implement the <a class="reference internal" href="../client-spec.html"><span cla
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">"error"</span><span class="p">):</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"ERROR: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">error</span><span class="p">))</span>
 
-<span class="c1"># Decode the return value as a Status message</span>
-<span class="n">status</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Status</span><span class="p">()</span>
-<span class="n">status</span><span class="o">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="c1"># Decode the return value, a ServerStatus structure sent as a Tuple of its fields</span>
+<span class="n">status</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Tuple</span><span class="o">.</span><span class="n">FromString</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-<span class="c1"># Print out the Status message</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">status</span><span class="p">)</span>
+<span class="c1"># Print out the server version, the first field</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">decode_string</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
 <span class="c1"># End the session with a disconnect, as a serial line has no close</span>
 <span class="n">disconnect</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Disconnect</span><span class="p">(</span><span class="n">reason</span><span class="o">=</span><span class="n">KRPC</span><span class="o">.</span><span class="n">Disconnect</span><span class="o">.</span><span class="n">CLOSED</span><span class="p">)</span>

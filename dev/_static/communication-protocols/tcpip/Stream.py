@@ -103,7 +103,9 @@ while True:
     update = recv_message(conn).stream_update
     assert len(update.results) == 1
     assert stream.id == update.results[0].id
-    # Decode and print the return value
-    status = KRPC.Status()
-    status.ParseFromString(update.results[0].result.value)
-    print(status)
+    # Decode the return value, a ServerStatus structure sent as a Tuple of its fields. Its
+    # fourth field is the server statistics, another structure, whose second field is the
+    # number of bytes the server has written.
+    status = KRPC.Tuple.FromString(update.results[0].result.value)
+    statistics = KRPC.Tuple.FromString(status.items[3])
+    print(decode_varint(statistics.items[1]))
