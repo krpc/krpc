@@ -844,11 +844,13 @@ public class KRPC {
         private final byte[] id;
         private final String name;
         private final String address;
+        private final int protocolVersion;
 
-        public ClientInfo(byte[] id, String name, String address) {
+        public ClientInfo(byte[] id, String name, String address, int protocolVersion) {
             this.id = id;
             this.name = name;
             this.address = address;
+            this.protocolVersion = protocolVersion;
         }
 
         /**
@@ -872,11 +874,19 @@ public class KRPC {
             return address;
         }
 
+        /**
+         * The protocol version of the client's connection.
+         */
+        public int getProtocolVersion() {
+            return protocolVersion;
+        }
+
         private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
             java.util.Collections.unmodifiableList(java.util.Arrays.asList(
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)
             ));
 
         /** The types of the fields, in the order they are encoded in. */
@@ -890,7 +900,8 @@ public class KRPC {
             return new ClientInfo(
                 (byte[]) values[0],
                 (String) values[1],
-                (String) values[2]
+                (String) values[2],
+                (int) values[3]
             );
         }
 
@@ -899,7 +910,8 @@ public class KRPC {
             return new Object[] {
                 id,
                 name,
-                address
+                address,
+                protocolVersion
             };
         }
 
@@ -909,12 +921,12 @@ public class KRPC {
                 return false;
             }
             ClientInfo other = (ClientInfo) obj;
-            return java.util.Objects.deepEquals(this.id, other.id)                && java.util.Objects.deepEquals(this.name, other.name)                && java.util.Objects.deepEquals(this.address, other.address);
+            return java.util.Objects.deepEquals(this.id, other.id)                && java.util.Objects.deepEquals(this.name, other.name)                && java.util.Objects.deepEquals(this.address, other.address)                && java.util.Objects.deepEquals(this.protocolVersion, other.protocolVersion);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {id, name, address});
+            return java.util.Arrays.deepHashCode(new Object[] {id, name, address, protocolVersion});
         }
 
         /**
@@ -936,6 +948,10 @@ public class KRPC {
             if (result != 0) {
                 return result;
             }
+            result = RemoteStruct.compareFields(protocolVersion, other.protocolVersion);
+            if (result != 0) {
+                return result;
+            }
             return 0;
         }
     }
@@ -951,13 +967,15 @@ public class KRPC {
         private final boolean adaptiveRateControl;
         private final boolean blockingRecv;
         private final int recvTimeout;
+        private final int tickHoldTimeout;
 
-        public ServerSettings(boolean oneRpcPerUpdate, int maxTimePerUpdate, boolean adaptiveRateControl, boolean blockingRecv, int recvTimeout) {
+        public ServerSettings(boolean oneRpcPerUpdate, int maxTimePerUpdate, boolean adaptiveRateControl, boolean blockingRecv, int recvTimeout, int tickHoldTimeout) {
             this.oneRpcPerUpdate = oneRpcPerUpdate;
             this.maxTimePerUpdate = maxTimePerUpdate;
             this.adaptiveRateControl = adaptiveRateControl;
             this.blockingRecv = blockingRecv;
             this.recvTimeout = recvTimeout;
+            this.tickHoldTimeout = tickHoldTimeout;
         }
 
         /**
@@ -995,12 +1013,22 @@ public class KRPC {
             return recvTimeout;
         }
 
+        /**
+         * The longest time a client may hold the game on one physics tick, in microseconds.
+         *
+         * See {@link KRPC#holdTick}.
+         */
+        public int getTickHoldTimeout() {
+            return tickHoldTimeout;
+        }
+
         private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
             java.util.Collections.unmodifiableList(java.util.Arrays.asList(
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)
             ));
 
@@ -1017,7 +1045,8 @@ public class KRPC {
                 (int) values[1],
                 (boolean) values[2],
                 (boolean) values[3],
-                (int) values[4]
+                (int) values[4],
+                (int) values[5]
             );
         }
 
@@ -1028,7 +1057,8 @@ public class KRPC {
                 maxTimePerUpdate,
                 adaptiveRateControl,
                 blockingRecv,
-                recvTimeout
+                recvTimeout,
+                tickHoldTimeout
             };
         }
 
@@ -1038,12 +1068,12 @@ public class KRPC {
                 return false;
             }
             ServerSettings other = (ServerSettings) obj;
-            return java.util.Objects.deepEquals(this.oneRpcPerUpdate, other.oneRpcPerUpdate)                && java.util.Objects.deepEquals(this.maxTimePerUpdate, other.maxTimePerUpdate)                && java.util.Objects.deepEquals(this.adaptiveRateControl, other.adaptiveRateControl)                && java.util.Objects.deepEquals(this.blockingRecv, other.blockingRecv)                && java.util.Objects.deepEquals(this.recvTimeout, other.recvTimeout);
+            return java.util.Objects.deepEquals(this.oneRpcPerUpdate, other.oneRpcPerUpdate)                && java.util.Objects.deepEquals(this.maxTimePerUpdate, other.maxTimePerUpdate)                && java.util.Objects.deepEquals(this.adaptiveRateControl, other.adaptiveRateControl)                && java.util.Objects.deepEquals(this.blockingRecv, other.blockingRecv)                && java.util.Objects.deepEquals(this.recvTimeout, other.recvTimeout)                && java.util.Objects.deepEquals(this.tickHoldTimeout, other.tickHoldTimeout);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {oneRpcPerUpdate, maxTimePerUpdate, adaptiveRateControl, blockingRecv, recvTimeout});
+            return java.util.Arrays.deepHashCode(new Object[] {oneRpcPerUpdate, maxTimePerUpdate, adaptiveRateControl, blockingRecv, recvTimeout, tickHoldTimeout});
         }
 
         /**
@@ -1073,6 +1103,10 @@ public class KRPC {
             if (result != 0) {
                 return result;
             }
+            result = RemoteStruct.compareFields(tickHoldTimeout, other.tickHoldTimeout);
+            if (result != 0) {
+                return result;
+            }
             return 0;
         }
     }
@@ -1092,12 +1126,14 @@ public class KRPC {
         private final float timePerRpcUpdate;
         private final float pollTimePerRpcUpdate;
         private final float execTimePerRpcUpdate;
+        private final int deferredCalls;
         private final int streams;
         private final long streamEvaluations;
         private final float streamEvaluationRate;
+        private final long streamUpdatesSent;
         private final float timePerStreamUpdate;
 
-        public ServerStatistics(long bytesRead, long bytesWritten, float bytesReadRate, float bytesWrittenRate, long rpcsExecuted, float rpcRate, float timePerRpcUpdate, float pollTimePerRpcUpdate, float execTimePerRpcUpdate, int streams, long streamEvaluations, float streamEvaluationRate, float timePerStreamUpdate) {
+        public ServerStatistics(long bytesRead, long bytesWritten, float bytesReadRate, float bytesWrittenRate, long rpcsExecuted, float rpcRate, float timePerRpcUpdate, float pollTimePerRpcUpdate, float execTimePerRpcUpdate, int deferredCalls, int streams, long streamEvaluations, float streamEvaluationRate, long streamUpdatesSent, float timePerStreamUpdate) {
             this.bytesRead = bytesRead;
             this.bytesWritten = bytesWritten;
             this.bytesReadRate = bytesReadRate;
@@ -1107,9 +1143,11 @@ public class KRPC {
             this.timePerRpcUpdate = timePerRpcUpdate;
             this.pollTimePerRpcUpdate = pollTimePerRpcUpdate;
             this.execTimePerRpcUpdate = execTimePerRpcUpdate;
+            this.deferredCalls = deferredCalls;
             this.streams = streams;
             this.streamEvaluations = streamEvaluations;
             this.streamEvaluationRate = streamEvaluationRate;
+            this.streamUpdatesSent = streamUpdatesSent;
             this.timePerStreamUpdate = timePerStreamUpdate;
         }
 
@@ -1177,6 +1215,14 @@ public class KRPC {
         }
 
         /**
+         * The number of calls left for the next update, because the update ran out of time
+         * or the call yielded.
+         */
+        public int getDeferredCalls() {
+            return deferredCalls;
+        }
+
+        /**
          * The number of open streams, events included.
          */
         public int getStreams() {
@@ -1198,6 +1244,13 @@ public class KRPC {
         }
 
         /**
+         * The number of stream updates sent to clients.
+         */
+        public long getStreamUpdatesSent() {
+            return streamUpdatesSent;
+        }
+
+        /**
          * The time spent updating streams per update, in seconds.
          */
         public float getTimePerStreamUpdate() {
@@ -1216,8 +1269,10 @@ public class KRPC {
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64),
                 krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)
             ));
 
@@ -1240,9 +1295,11 @@ public class KRPC {
                 (float) values[7],
                 (float) values[8],
                 (int) values[9],
-                (long) values[10],
-                (float) values[11],
-                (float) values[12]
+                (int) values[10],
+                (long) values[11],
+                (float) values[12],
+                (long) values[13],
+                (float) values[14]
             );
         }
 
@@ -1258,9 +1315,11 @@ public class KRPC {
                 timePerRpcUpdate,
                 pollTimePerRpcUpdate,
                 execTimePerRpcUpdate,
+                deferredCalls,
                 streams,
                 streamEvaluations,
                 streamEvaluationRate,
+                streamUpdatesSent,
                 timePerStreamUpdate
             };
         }
@@ -1271,12 +1330,12 @@ public class KRPC {
                 return false;
             }
             ServerStatistics other = (ServerStatistics) obj;
-            return java.util.Objects.deepEquals(this.bytesRead, other.bytesRead)                && java.util.Objects.deepEquals(this.bytesWritten, other.bytesWritten)                && java.util.Objects.deepEquals(this.bytesReadRate, other.bytesReadRate)                && java.util.Objects.deepEquals(this.bytesWrittenRate, other.bytesWrittenRate)                && java.util.Objects.deepEquals(this.rpcsExecuted, other.rpcsExecuted)                && java.util.Objects.deepEquals(this.rpcRate, other.rpcRate)                && java.util.Objects.deepEquals(this.timePerRpcUpdate, other.timePerRpcUpdate)                && java.util.Objects.deepEquals(this.pollTimePerRpcUpdate, other.pollTimePerRpcUpdate)                && java.util.Objects.deepEquals(this.execTimePerRpcUpdate, other.execTimePerRpcUpdate)                && java.util.Objects.deepEquals(this.streams, other.streams)                && java.util.Objects.deepEquals(this.streamEvaluations, other.streamEvaluations)                && java.util.Objects.deepEquals(this.streamEvaluationRate, other.streamEvaluationRate)                && java.util.Objects.deepEquals(this.timePerStreamUpdate, other.timePerStreamUpdate);
+            return java.util.Objects.deepEquals(this.bytesRead, other.bytesRead)                && java.util.Objects.deepEquals(this.bytesWritten, other.bytesWritten)                && java.util.Objects.deepEquals(this.bytesReadRate, other.bytesReadRate)                && java.util.Objects.deepEquals(this.bytesWrittenRate, other.bytesWrittenRate)                && java.util.Objects.deepEquals(this.rpcsExecuted, other.rpcsExecuted)                && java.util.Objects.deepEquals(this.rpcRate, other.rpcRate)                && java.util.Objects.deepEquals(this.timePerRpcUpdate, other.timePerRpcUpdate)                && java.util.Objects.deepEquals(this.pollTimePerRpcUpdate, other.pollTimePerRpcUpdate)                && java.util.Objects.deepEquals(this.execTimePerRpcUpdate, other.execTimePerRpcUpdate)                && java.util.Objects.deepEquals(this.deferredCalls, other.deferredCalls)                && java.util.Objects.deepEquals(this.streams, other.streams)                && java.util.Objects.deepEquals(this.streamEvaluations, other.streamEvaluations)                && java.util.Objects.deepEquals(this.streamEvaluationRate, other.streamEvaluationRate)                && java.util.Objects.deepEquals(this.streamUpdatesSent, other.streamUpdatesSent)                && java.util.Objects.deepEquals(this.timePerStreamUpdate, other.timePerStreamUpdate);
         }
 
         @Override
         public int hashCode() {
-            return java.util.Arrays.deepHashCode(new Object[] {bytesRead, bytesWritten, bytesReadRate, bytesWrittenRate, rpcsExecuted, rpcRate, timePerRpcUpdate, pollTimePerRpcUpdate, execTimePerRpcUpdate, streams, streamEvaluations, streamEvaluationRate, timePerStreamUpdate});
+            return java.util.Arrays.deepHashCode(new Object[] {bytesRead, bytesWritten, bytesReadRate, bytesWrittenRate, rpcsExecuted, rpcRate, timePerRpcUpdate, pollTimePerRpcUpdate, execTimePerRpcUpdate, deferredCalls, streams, streamEvaluations, streamEvaluationRate, streamUpdatesSent, timePerStreamUpdate});
         }
 
         /**
@@ -1322,6 +1381,10 @@ public class KRPC {
             if (result != 0) {
                 return result;
             }
+            result = RemoteStruct.compareFields(deferredCalls, other.deferredCalls);
+            if (result != 0) {
+                return result;
+            }
             result = RemoteStruct.compareFields(streams, other.streams);
             if (result != 0) {
                 return result;
@@ -1331,6 +1394,10 @@ public class KRPC {
                 return result;
             }
             result = RemoteStruct.compareFields(streamEvaluationRate, other.streamEvaluationRate);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(streamUpdatesSent, other.streamUpdatesSent);
             if (result != 0) {
                 return result;
             }

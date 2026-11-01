@@ -65,6 +65,8 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (Status.Ok, response.Status);
             Assert.AreEqual (2u, response.ProtocolVersion);
             Assert.AreEqual (16, response.ClientIdentifier.Length);
+            var info = new global::KRPC.Service.KRPC.ClientInfo (harness.Server.Clients.Single ());
+            Assert.AreEqual (2u, info.ProtocolVersion);
         }
 
         [Test]

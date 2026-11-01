@@ -32,6 +32,7 @@ namespace KRPC.Test.Service.KRPC
                 var settings = global::KRPC.Service.KRPC.KRPC.GetStatus ().Settings;
                 Assert.AreEqual (1234, settings.RecvTimeout);
                 Assert.AreEqual (config.MaxTimePerUpdate, settings.MaxTimePerUpdate);
+                Assert.AreEqual (config.TickHoldTimeout, settings.TickHoldTimeout);
             } finally {
                 config.RecvTimeout = recvTimeout;
             }

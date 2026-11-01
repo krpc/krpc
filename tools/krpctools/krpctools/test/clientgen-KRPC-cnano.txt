@@ -36,6 +36,7 @@ struct krpc_KRPC_ServerSettings_s {
   bool adaptive_rate_control;
   bool blocking_recv;
   uint32_t recv_timeout;
+  uint32_t tick_hold_timeout;
 };
 
 static inline krpc_error_t krpc_encode_KRPC_ServerSettings(
@@ -63,9 +64,11 @@ struct krpc_KRPC_ServerStatistics_s {
   float time_per_rpc_update;
   float poll_time_per_rpc_update;
   float exec_time_per_rpc_update;
+  uint32_t deferred_calls;
   uint32_t streams;
   uint64_t stream_evaluations;
   float stream_evaluation_rate;
+  uint64_t stream_updates_sent;
   float time_per_stream_update;
 };
 
@@ -162,6 +165,7 @@ struct krpc_KRPC_ClientInfo_s {
   krpc_bytes_t id;
   char * name;
   char * address;
+  uint32_t protocol_version;
 };
 
 static inline krpc_error_t krpc_encode_KRPC_ClientInfo(
@@ -2055,6 +2059,15 @@ static inline bool krpc_encode_callback_items_KRPC_ServerSettings(
       KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint32(stream, value->recv_timeout));
   }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint32(&size, value->tick_hold_timeout));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint32(stream, value->tick_hold_timeout));
+  }
   return true;
 }
 
@@ -2109,6 +2122,9 @@ static inline bool krpc_decode_callback_item_KRPC_ServerSettings(
   case 4:
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->recv_timeout));
     break;
+  case 5:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->tick_hold_timeout));
+    break;
   default:
     // Fields are only ever appended to a structure, so a value from a newer server may
     // carry more items than this client knows about, and those are skipped
@@ -2128,7 +2144,7 @@ static inline krpc_error_t krpc_decode_KRPC_ServerSettings(
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
-  if (state.pos < 5)
+  if (state.pos < 6)
     KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a KRPC_ServerSettings");
   return KRPC_OK;
 }
@@ -2226,6 +2242,15 @@ static inline bool krpc_encode_callback_items_KRPC_ServerStatistics(
     if (!pb_encode_tag_for_field(stream, field))
       KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
     size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint32(&size, value->deferred_calls));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint32(stream, value->deferred_calls));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint32(&size, value->streams));
     if (!pb_encode_varint(stream, size))
       KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
@@ -2248,6 +2273,15 @@ static inline bool krpc_encode_callback_items_KRPC_ServerStatistics(
     if (!pb_encode_varint(stream, size))
       KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_float(stream, value->stream_evaluation_rate));
+  }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint64(&size, value->stream_updates_sent));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint64(stream, value->stream_updates_sent));
   }
   {
     if (!pb_encode_tag_for_field(stream, field))
@@ -2325,15 +2359,21 @@ static inline bool krpc_decode_callback_item_KRPC_ServerStatistics(
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_float(stream, &value->exec_time_per_rpc_update));
     break;
   case 9:
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->streams));
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->deferred_calls));
     break;
   case 10:
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint64(stream, &value->stream_evaluations));
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->streams));
     break;
   case 11:
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_float(stream, &value->stream_evaluation_rate));
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint64(stream, &value->stream_evaluations));
     break;
   case 12:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_float(stream, &value->stream_evaluation_rate));
+    break;
+  case 13:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint64(stream, &value->stream_updates_sent));
+    break;
+  case 14:
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_float(stream, &value->time_per_stream_update));
     break;
   default:
@@ -2355,7 +2395,7 @@ static inline krpc_error_t krpc_decode_KRPC_ServerStatistics(
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
-  if (state.pos < 13)
+  if (state.pos < 15)
     KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a KRPC_ServerStatistics");
   return KRPC_OK;
 }
@@ -2778,6 +2818,15 @@ static inline bool krpc_encode_callback_items_KRPC_ClientInfo(
       KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_string(stream, value->address));
   }
+  {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_uint32(&size, value->protocol_version));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_uint32(stream, value->protocol_version));
+  }
   return true;
 }
 
@@ -2826,6 +2875,9 @@ static inline bool krpc_decode_callback_item_KRPC_ClientInfo(
   case 2:
     KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_string(stream, &value->address));
     break;
+  case 3:
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_uint32(stream, &value->protocol_version));
+    break;
   default:
     // Fields are only ever appended to a structure, so a value from a newer server may
     // carry more items than this client knows about, and those are skipped
@@ -2845,7 +2897,7 @@ static inline krpc_error_t krpc_decode_KRPC_ClientInfo(
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
-  if (state.pos < 3)
+  if (state.pos < 4)
     KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a KRPC_ClientInfo");
   return KRPC_OK;
 }

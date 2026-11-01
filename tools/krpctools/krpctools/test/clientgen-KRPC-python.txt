@@ -122,6 +122,10 @@ class ClientInfo(NamedTuple):
     """
     The address of the client.
     """
+    protocol_version: int
+    """
+    The protocol version of the client's connection.
+    """
 
 
 class ServerSettings(NamedTuple):
@@ -149,6 +153,12 @@ class ServerSettings(NamedTuple):
     recv_timeout: int
     """
     The time the server waits for the next call, in microseconds.
+    """
+    tick_hold_timeout: int
+    """
+    The longest time a client may hold the game on one physics tick, in microseconds.
+
+    See :meth:`krpc.services.krpc.KRPC.hold_tick`.
     """
 
 
@@ -194,6 +204,11 @@ class ServerStatistics(NamedTuple):
     """
     The time spent executing calls per update, in seconds.
     """
+    deferred_calls: int
+    """
+    The number of calls left for the next update, because the update ran out of time
+    or the call yielded.
+    """
     streams: int
     """
     The number of open streams, events included.
@@ -205,6 +220,10 @@ class ServerStatistics(NamedTuple):
     stream_evaluation_rate: float
     """
     The number of stream evaluations per second.
+    """
+    stream_updates_sent: int
+    """
+    The number of stream updates sent to clients.
     """
     time_per_stream_update: float
     """

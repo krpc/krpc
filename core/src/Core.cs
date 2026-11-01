@@ -370,6 +370,12 @@ namespace KRPC
         }
 
         /// <summary>
+        /// Number of calls left for the next update, because the update ran out of time or
+        /// the call yielded.
+        /// </summary>
+        public uint DeferredCalls { get; private set; }
+
+        /// <summary>
         /// Number of open streams, events included.
         /// </summary>
         public uint Streams { get; private set; }
@@ -378,6 +384,11 @@ namespace KRPC
         /// Total number of stream evaluations, one per stream per update.
         /// </summary>
         public ulong StreamEvaluations { get; private set; }
+
+        /// <summary>
+        /// Total number of stream update messages sent to clients.
+        /// </summary>
+        public ulong StreamUpdatesSent { get; private set; }
 
         /// <summary>
         /// Number of stream evaluations per second.
@@ -406,6 +417,7 @@ namespace KRPC
             ExecTimePerRPCUpdate = 0;
             PollTimePerRPCUpdate = 0;
             StreamEvaluations = 0;
+            StreamUpdatesSent = 0;
             TimePerStreamUpdate = 0;
         }
 
@@ -602,6 +614,7 @@ namespace KRPC
             rpcTimer.Stop ();
 
             RPCsExecuted += rpcsExecuted;
+            DeferredCalls = (uint)rpcContinuations.Count;
             TimePerRPCUpdate = (float)rpcTimer.ElapsedSeconds ();
             PollTimePerRPCUpdate = (float)rpcPollTimer.ElapsedSeconds ();
             ExecTimePerRPCUpdate = (float)rpcExecTimer.ElapsedSeconds ();
@@ -665,6 +678,7 @@ namespace KRPC
                         var messageStream = client.Stream as IMessageStream;
                         if (messageStream != null) {
                             messageStream.Write (streamUpdate);
+                            StreamUpdatesSent++;
                         }
                         foreach (var stream in clientStreams)
                             if (stream.Changed)

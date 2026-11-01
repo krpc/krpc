@@ -2539,14 +2539,18 @@ class KRPC : public Service {
      * The address of the client.
      */
     std::string address;
+    /**
+     * The protocol version of the client's connection.
+     */
+    uint32_t protocol_version;
 
-    ClientInfo() : id(), name(), address() {}
+    ClientInfo() : id(), name(), address(), protocol_version() {}
 
-    ClientInfo(std::string id, std::string name, std::string address) :
-id(id), name(name), address(address) {}
+    ClientInfo(std::string id, std::string name, std::string address, uint32_t protocol_version) :
+id(id), name(name), address(address), protocol_version(protocol_version) {}
 
     bool operator==(const ClientInfo& other) const {
-      return this->id == other.id && this->name == other.name && this->address == other.address;
+      return this->id == other.id && this->name == other.name && this->address == other.address && this->protocol_version == other.protocol_version;
     }
 
     bool operator!=(const ClientInfo& other) const {
@@ -2564,6 +2568,10 @@ id(id), name(name), address(address) {}
       if (other.name < name)
         return false;
       if (address < other.address)
+        return true;
+      if (other.address < address)
+        return false;
+      if (protocol_version < other.protocol_version)
         return true;
       return false;
     }
@@ -2607,14 +2615,20 @@ id(id), name(name), address(address) {}
      * The time the server waits for the next call, in microseconds.
      */
     uint32_t recv_timeout;
+    /**
+     * The longest time a client may hold the game on one physics tick, in microseconds.
+     *
+     * See krpc::services::KRPC::hold_tick().
+     */
+    uint32_t tick_hold_timeout;
 
-    ServerSettings() : one_rpc_per_update(), max_time_per_update(), adaptive_rate_control(), blocking_recv(), recv_timeout() {}
+    ServerSettings() : one_rpc_per_update(), max_time_per_update(), adaptive_rate_control(), blocking_recv(), recv_timeout(), tick_hold_timeout() {}
 
-    ServerSettings(bool one_rpc_per_update, uint32_t max_time_per_update, bool adaptive_rate_control, bool blocking_recv, uint32_t recv_timeout) :
-one_rpc_per_update(one_rpc_per_update), max_time_per_update(max_time_per_update), adaptive_rate_control(adaptive_rate_control), blocking_recv(blocking_recv), recv_timeout(recv_timeout) {}
+    ServerSettings(bool one_rpc_per_update, uint32_t max_time_per_update, bool adaptive_rate_control, bool blocking_recv, uint32_t recv_timeout, uint32_t tick_hold_timeout) :
+one_rpc_per_update(one_rpc_per_update), max_time_per_update(max_time_per_update), adaptive_rate_control(adaptive_rate_control), blocking_recv(blocking_recv), recv_timeout(recv_timeout), tick_hold_timeout(tick_hold_timeout) {}
 
     bool operator==(const ServerSettings& other) const {
-      return this->one_rpc_per_update == other.one_rpc_per_update && this->max_time_per_update == other.max_time_per_update && this->adaptive_rate_control == other.adaptive_rate_control && this->blocking_recv == other.blocking_recv && this->recv_timeout == other.recv_timeout;
+      return this->one_rpc_per_update == other.one_rpc_per_update && this->max_time_per_update == other.max_time_per_update && this->adaptive_rate_control == other.adaptive_rate_control && this->blocking_recv == other.blocking_recv && this->recv_timeout == other.recv_timeout && this->tick_hold_timeout == other.tick_hold_timeout;
     }
 
     bool operator!=(const ServerSettings& other) const {
@@ -2640,6 +2654,10 @@ one_rpc_per_update(one_rpc_per_update), max_time_per_update(max_time_per_update)
       if (other.blocking_recv < blocking_recv)
         return false;
       if (recv_timeout < other.recv_timeout)
+        return true;
+      if (other.recv_timeout < recv_timeout)
+        return false;
+      if (tick_hold_timeout < other.tick_hold_timeout)
         return true;
       return false;
     }
@@ -2700,6 +2718,11 @@ one_rpc_per_update(one_rpc_per_update), max_time_per_update(max_time_per_update)
      */
     float exec_time_per_rpc_update;
     /**
+     * The number of calls left for the next update, because the update ran out of time
+     * or the call yielded.
+     */
+    uint32_t deferred_calls;
+    /**
      * The number of open streams, events included.
      */
     uint32_t streams;
@@ -2712,17 +2735,21 @@ one_rpc_per_update(one_rpc_per_update), max_time_per_update(max_time_per_update)
      */
     float stream_evaluation_rate;
     /**
+     * The number of stream updates sent to clients.
+     */
+    uint64_t stream_updates_sent;
+    /**
      * The time spent updating streams per update, in seconds.
      */
     float time_per_stream_update;
 
-    ServerStatistics() : bytes_read(), bytes_written(), bytes_read_rate(), bytes_written_rate(), rpcs_executed(), rpc_rate(), time_per_rpc_update(), poll_time_per_rpc_update(), exec_time_per_rpc_update(), streams(), stream_evaluations(), stream_evaluation_rate(), time_per_stream_update() {}
+    ServerStatistics() : bytes_read(), bytes_written(), bytes_read_rate(), bytes_written_rate(), rpcs_executed(), rpc_rate(), time_per_rpc_update(), poll_time_per_rpc_update(), exec_time_per_rpc_update(), deferred_calls(), streams(), stream_evaluations(), stream_evaluation_rate(), stream_updates_sent(), time_per_stream_update() {}
 
-    ServerStatistics(uint64_t bytes_read, uint64_t bytes_written, float bytes_read_rate, float bytes_written_rate, uint64_t rpcs_executed, float rpc_rate, float time_per_rpc_update, float poll_time_per_rpc_update, float exec_time_per_rpc_update, uint32_t streams, uint64_t stream_evaluations, float stream_evaluation_rate, float time_per_stream_update) :
-bytes_read(bytes_read), bytes_written(bytes_written), bytes_read_rate(bytes_read_rate), bytes_written_rate(bytes_written_rate), rpcs_executed(rpcs_executed), rpc_rate(rpc_rate), time_per_rpc_update(time_per_rpc_update), poll_time_per_rpc_update(poll_time_per_rpc_update), exec_time_per_rpc_update(exec_time_per_rpc_update), streams(streams), stream_evaluations(stream_evaluations), stream_evaluation_rate(stream_evaluation_rate), time_per_stream_update(time_per_stream_update) {}
+    ServerStatistics(uint64_t bytes_read, uint64_t bytes_written, float bytes_read_rate, float bytes_written_rate, uint64_t rpcs_executed, float rpc_rate, float time_per_rpc_update, float poll_time_per_rpc_update, float exec_time_per_rpc_update, uint32_t deferred_calls, uint32_t streams, uint64_t stream_evaluations, float stream_evaluation_rate, uint64_t stream_updates_sent, float time_per_stream_update) :
+bytes_read(bytes_read), bytes_written(bytes_written), bytes_read_rate(bytes_read_rate), bytes_written_rate(bytes_written_rate), rpcs_executed(rpcs_executed), rpc_rate(rpc_rate), time_per_rpc_update(time_per_rpc_update), poll_time_per_rpc_update(poll_time_per_rpc_update), exec_time_per_rpc_update(exec_time_per_rpc_update), deferred_calls(deferred_calls), streams(streams), stream_evaluations(stream_evaluations), stream_evaluation_rate(stream_evaluation_rate), stream_updates_sent(stream_updates_sent), time_per_stream_update(time_per_stream_update) {}
 
     bool operator==(const ServerStatistics& other) const {
-      return this->bytes_read == other.bytes_read && this->bytes_written == other.bytes_written && this->bytes_read_rate == other.bytes_read_rate && this->bytes_written_rate == other.bytes_written_rate && this->rpcs_executed == other.rpcs_executed && this->rpc_rate == other.rpc_rate && this->time_per_rpc_update == other.time_per_rpc_update && this->poll_time_per_rpc_update == other.poll_time_per_rpc_update && this->exec_time_per_rpc_update == other.exec_time_per_rpc_update && this->streams == other.streams && this->stream_evaluations == other.stream_evaluations && this->stream_evaluation_rate == other.stream_evaluation_rate && this->time_per_stream_update == other.time_per_stream_update;
+      return this->bytes_read == other.bytes_read && this->bytes_written == other.bytes_written && this->bytes_read_rate == other.bytes_read_rate && this->bytes_written_rate == other.bytes_written_rate && this->rpcs_executed == other.rpcs_executed && this->rpc_rate == other.rpc_rate && this->time_per_rpc_update == other.time_per_rpc_update && this->poll_time_per_rpc_update == other.poll_time_per_rpc_update && this->exec_time_per_rpc_update == other.exec_time_per_rpc_update && this->deferred_calls == other.deferred_calls && this->streams == other.streams && this->stream_evaluations == other.stream_evaluations && this->stream_evaluation_rate == other.stream_evaluation_rate && this->stream_updates_sent == other.stream_updates_sent && this->time_per_stream_update == other.time_per_stream_update;
     }
 
     bool operator!=(const ServerStatistics& other) const {
@@ -2767,6 +2794,10 @@ bytes_read(bytes_read), bytes_written(bytes_written), bytes_read_rate(bytes_read
         return true;
       if (other.exec_time_per_rpc_update < exec_time_per_rpc_update)
         return false;
+      if (deferred_calls < other.deferred_calls)
+        return true;
+      if (other.deferred_calls < deferred_calls)
+        return false;
       if (streams < other.streams)
         return true;
       if (other.streams < streams)
@@ -2778,6 +2809,10 @@ bytes_read(bytes_read), bytes_written(bytes_written), bytes_read_rate(bytes_read
       if (stream_evaluation_rate < other.stream_evaluation_rate)
         return true;
       if (other.stream_evaluation_rate < stream_evaluation_rate)
+        return false;
+      if (stream_updates_sent < other.stream_updates_sent)
+        return true;
+      if (other.stream_updates_sent < stream_updates_sent)
         return false;
       if (time_per_stream_update < other.time_per_stream_update)
         return true;
@@ -2887,6 +2922,7 @@ namespace encoder {
     structMessage.add_items(encode_item(value.id));
     structMessage.add_items(encode_item(value.name));
     structMessage.add_items(encode_item(value.address));
+    structMessage.add_items(encode_item(value.protocol_version));
     return krpc::encoder::encode(structMessage);
   }
 
@@ -2901,6 +2937,7 @@ namespace encoder {
     structMessage.add_items(encode_item(value.adaptive_rate_control));
     structMessage.add_items(encode_item(value.blocking_recv));
     structMessage.add_items(encode_item(value.recv_timeout));
+    structMessage.add_items(encode_item(value.tick_hold_timeout));
     return krpc::encoder::encode(structMessage);
   }
 
@@ -2919,9 +2956,11 @@ namespace encoder {
     structMessage.add_items(encode_item(value.time_per_rpc_update));
     structMessage.add_items(encode_item(value.poll_time_per_rpc_update));
     structMessage.add_items(encode_item(value.exec_time_per_rpc_update));
+    structMessage.add_items(encode_item(value.deferred_calls));
     structMessage.add_items(encode_item(value.streams));
     structMessage.add_items(encode_item(value.stream_evaluations));
     structMessage.add_items(encode_item(value.stream_evaluation_rate));
+    structMessage.add_items(encode_item(value.stream_updates_sent));
     structMessage.add_items(encode_item(value.time_per_stream_update));
     return krpc::encoder::encode(structMessage);
   }
@@ -2960,11 +2999,12 @@ namespace decoder {
   inline void decode(services::KRPC::ClientInfo& value, const std::string& data, Client* client) {
     static thread_local krpc::schema::Tuple structMessage;
     if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-    if (structMessage.items_size() < 3)
+    if (structMessage.items_size() < 4)
       throw EncodingError("Value for ClientInfo does not have all of its fields");
     decode_item(value.id, structMessage.items(0), client);
     decode_item(value.name, structMessage.items(1), client);
     decode_item(value.address, structMessage.items(2), client);
+    decode_item(value.protocol_version, structMessage.items(3), client);
   }
 
   // Fields are only ever appended to a structure, so a value from a newer server may carry
@@ -2972,13 +3012,14 @@ namespace decoder {
   inline void decode(services::KRPC::ServerSettings& value, const std::string& data, Client* client) {
     static thread_local krpc::schema::Tuple structMessage;
     if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-    if (structMessage.items_size() < 5)
+    if (structMessage.items_size() < 6)
       throw EncodingError("Value for ServerSettings does not have all of its fields");
     decode_item(value.one_rpc_per_update, structMessage.items(0), client);
     decode_item(value.max_time_per_update, structMessage.items(1), client);
     decode_item(value.adaptive_rate_control, structMessage.items(2), client);
     decode_item(value.blocking_recv, structMessage.items(3), client);
     decode_item(value.recv_timeout, structMessage.items(4), client);
+    decode_item(value.tick_hold_timeout, structMessage.items(5), client);
   }
 
   // Fields are only ever appended to a structure, so a value from a newer server may carry
@@ -2986,7 +3027,7 @@ namespace decoder {
   inline void decode(services::KRPC::ServerStatistics& value, const std::string& data, Client* client) {
     static thread_local krpc::schema::Tuple structMessage;
     if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-    if (structMessage.items_size() < 13)
+    if (structMessage.items_size() < 15)
       throw EncodingError("Value for ServerStatistics does not have all of its fields");
     decode_item(value.bytes_read, structMessage.items(0), client);
     decode_item(value.bytes_written, structMessage.items(1), client);
@@ -2997,10 +3038,12 @@ namespace decoder {
     decode_item(value.time_per_rpc_update, structMessage.items(6), client);
     decode_item(value.poll_time_per_rpc_update, structMessage.items(7), client);
     decode_item(value.exec_time_per_rpc_update, structMessage.items(8), client);
-    decode_item(value.streams, structMessage.items(9), client);
-    decode_item(value.stream_evaluations, structMessage.items(10), client);
-    decode_item(value.stream_evaluation_rate, structMessage.items(11), client);
-    decode_item(value.time_per_stream_update, structMessage.items(12), client);
+    decode_item(value.deferred_calls, structMessage.items(9), client);
+    decode_item(value.streams, structMessage.items(10), client);
+    decode_item(value.stream_evaluations, structMessage.items(11), client);
+    decode_item(value.stream_evaluation_rate, structMessage.items(12), client);
+    decode_item(value.stream_updates_sent, structMessage.items(13), client);
+    decode_item(value.time_per_stream_update, structMessage.items(14), client);
   }
 
   // Fields are only ever appended to a structure, so a value from a newer server may carry
@@ -3023,6 +3066,7 @@ inline std::size_t hash_value(const services::KRPC::ClientInfo& value) {
   hash_combine(&seed, hash_value(value.id));
   hash_combine(&seed, hash_value(value.name));
   hash_combine(&seed, hash_value(value.address));
+  hash_combine(&seed, hash_value(value.protocol_version));
   return seed;
 }
 
@@ -3033,6 +3077,7 @@ inline std::size_t hash_value(const services::KRPC::ServerSettings& value) {
   hash_combine(&seed, hash_value(value.adaptive_rate_control));
   hash_combine(&seed, hash_value(value.blocking_recv));
   hash_combine(&seed, hash_value(value.recv_timeout));
+  hash_combine(&seed, hash_value(value.tick_hold_timeout));
   return seed;
 }
 
@@ -3047,9 +3092,11 @@ inline std::size_t hash_value(const services::KRPC::ServerStatistics& value) {
   hash_combine(&seed, hash_value(value.time_per_rpc_update));
   hash_combine(&seed, hash_value(value.poll_time_per_rpc_update));
   hash_combine(&seed, hash_value(value.exec_time_per_rpc_update));
+  hash_combine(&seed, hash_value(value.deferred_calls));
   hash_combine(&seed, hash_value(value.streams));
   hash_combine(&seed, hash_value(value.stream_evaluations));
   hash_combine(&seed, hash_value(value.stream_evaluation_rate));
+  hash_combine(&seed, hash_value(value.stream_updates_sent));
   hash_combine(&seed, hash_value(value.time_per_stream_update));
   return seed;
 }

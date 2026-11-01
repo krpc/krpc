@@ -46,7 +46,8 @@ namespace KRPC.Service.KRPC
                     MaxTimePerUpdate = config.MaxTimePerUpdate,
                     AdaptiveRateControl = config.AdaptiveRateControl,
                     BlockingRecv = config.BlockingRecv,
-                    RecvTimeout = config.RecvTimeout
+                    RecvTimeout = config.RecvTimeout,
+                    TickHoldTimeout = config.TickHoldTimeout
                 },
                 Statistics = new ServerStatistics {
                     BytesRead = core.BytesRead,
@@ -58,9 +59,11 @@ namespace KRPC.Service.KRPC
                     TimePerRpcUpdate = core.TimePerRPCUpdate,
                     PollTimePerRpcUpdate = core.PollTimePerRPCUpdate,
                     ExecTimePerRpcUpdate = core.ExecTimePerRPCUpdate,
+                    DeferredCalls = core.DeferredCalls,
                     Streams = core.Streams,
                     StreamEvaluations = core.StreamEvaluations,
                     StreamEvaluationRate = core.StreamEvaluationRate,
+                    StreamUpdatesSent = core.StreamUpdatesSent,
                     TimePerStreamUpdate = core.TimePerStreamUpdate
                 }
             };

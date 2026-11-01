@@ -40,5 +40,14 @@ namespace KRPC.Service.KRPC
         /// </summary>
         [KRPCProperty]
         public uint RecvTimeout { get; set; }
+
+        /// <summary>
+        /// The longest time a client may hold the game on one physics tick, in microseconds.
+        /// </summary>
+        /// <remarks>
+        /// See <see cref="KRPC.HoldTick"/>.
+        /// </remarks>
+        [KRPCProperty]
+        public uint TickHoldTimeout { get; set; }
     }
 }

@@ -31,6 +31,7 @@ KRPC.ClientInfo
 KRPC.ClientInfo.Id
 KRPC.ClientInfo.Name
 KRPC.ClientInfo.Address
+KRPC.ClientInfo.ProtocolVersion
 KRPC.ServerStatus
 KRPC.ServerStatus.Version
 KRPC.ServerStatus.ProtocolVersion
@@ -42,6 +43,7 @@ KRPC.ServerSettings.MaxTimePerUpdate
 KRPC.ServerSettings.AdaptiveRateControl
 KRPC.ServerSettings.BlockingRecv
 KRPC.ServerSettings.RecvTimeout
+KRPC.ServerSettings.TickHoldTimeout
 KRPC.ServerStatistics
 KRPC.ServerStatistics.BytesRead
 KRPC.ServerStatistics.BytesWritten
@@ -52,9 +54,11 @@ KRPC.ServerStatistics.RpcRate
 KRPC.ServerStatistics.TimePerRpcUpdate
 KRPC.ServerStatistics.PollTimePerRpcUpdate
 KRPC.ServerStatistics.ExecTimePerRpcUpdate
+KRPC.ServerStatistics.DeferredCalls
 KRPC.ServerStatistics.Streams
 KRPC.ServerStatistics.StreamEvaluations
 KRPC.ServerStatistics.StreamEvaluationRate
+KRPC.ServerStatistics.StreamUpdatesSent
 KRPC.ServerStatistics.TimePerStreamUpdate
 KRPC.Expression
 KRPC.Expression.ReturnType

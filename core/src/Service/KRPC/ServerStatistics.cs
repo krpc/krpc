@@ -66,6 +66,13 @@ namespace KRPC.Service.KRPC
         public float ExecTimePerRpcUpdate { get; set; }
 
         /// <summary>
+        /// The number of calls left for the next update, because the update ran out of time
+        /// or the call yielded.
+        /// </summary>
+        [KRPCProperty]
+        public uint DeferredCalls { get; set; }
+
+        /// <summary>
         /// The number of open streams, events included.
         /// </summary>
         [KRPCProperty]
@@ -82,6 +89,12 @@ namespace KRPC.Service.KRPC
         /// </summary>
         [KRPCProperty]
         public float StreamEvaluationRate { get; set; }
+
+        /// <summary>
+        /// The number of stream updates sent to clients.
+        /// </summary>
+        [KRPCProperty]
+        public ulong StreamUpdatesSent { get; set; }
 
         /// <summary>
         /// The time spent updating streams per update, in seconds.
