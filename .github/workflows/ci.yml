@@ -1,22 +1,32 @@
 name: ci
 
+# A pull request and the merge queue run every job. The queue fast-forwards
+# main to the commit its run tested, so a push to main runs only the jobs that
+# save the caches later runs restore, as a cache saved by a merge_group run is
+# lost with the queue's branch. Each checks its keys without restoring them,
+# and builds only to fill a missing cache. The Bazel repository cache is the
+# exception: it is restored, as computing the C++ disk cache key fetches
+# repositories. copy-artifacts gives the push run the merge queue run's
+# artifacts.
 on:
   pull_request:
     branches:
       - main
+  merge_group:
   push:
     branches:
       - main
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
   packages: read
 
 # One group per pull request, so a new push cancels the runs its commit
-# superseded. Pushes and manual runs have no head ref and fall back to the run
-# id, giving each a group of its own that nothing else can cancel or queue
-# behind.
+# superseded. Merge queue runs, pushes and manual runs have no head ref and
+# fall back to the run id, giving each a group of its own that nothing else can
+# cancel or queue behind.
 concurrency:
   group: ci-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
@@ -28,13 +38,14 @@ concurrency:
 jobs:
   # One entry per thing built or tested. `build` and `test` hold Bazel target
   # patterns and either may be left out; `artifact` and `path` upload the
-  # result. `cpp-cache` restores, or for `save` also saves, the cache of the
-  # third-party C++ libraries. The jobs further down stay out of the matrix
-  # because they produce more than one artifact, run something other than
-  # Bazel, or are named by another job's `needs`, which cannot address a single
+  # result. `cpp-cache` restores the cache of the third-party C++ libraries.
+  # The jobs further down stay out of the matrix because they produce more than
+  # one artifact, run something other than Bazel, save a cache on a push to
+  # main, or are named by another job's `needs`, which cannot address a single
   # entry of a matrix.
   linux:
     name: linux-${{ matrix.name }}
+    if: github.event_name != 'push'
     strategy:
       fail-fast: false
       matrix:
@@ -127,9 +138,11 @@ jobs:
   # The Linux matrix above, for Windows. Windows has no equivalent of the
   # entries whose every target needs a POSIX tool -- the serial transport, the
   # pdf documentation -- because there would be nothing left in them to run.
-  # Nothing here uploads an artifact: the releases are built on Linux.
+  # Nothing here uploads an artifact: the releases are built on Linux. The C++
+  # client is windows-test-client-cpp, which saves the C++ cache.
   windows:
     name: windows-${{ matrix.name }}
+    if: github.event_name != 'push'
     strategy:
       fail-fast: false
       matrix:
@@ -150,10 +163,6 @@ jobs:
             build: //client/cnano:cnano
             test: //client/cnano:test
             cpp-cache: restore
-          - name: test-client-cpp
-            build: //client/cpp:cpp
-            test: //client/cpp:test
-            cpp-cache: save
           - name: test-client-csharp
             build: //client/csharp
             test: //client/csharp:test
@@ -187,7 +196,6 @@ jobs:
       - name: setup
         uses: ./.github/actions/bazel-fetch-windows
       - name: cpp-cache
-        id: cpp-cache
         if: matrix.cpp-cache
         uses: ./.github/actions/bazel-disk-cache
         with:
@@ -201,14 +209,39 @@ jobs:
         if: matrix.test
         shell: bash
         run: bazelisk test ${{ matrix.test }}
+
+  windows-test-client-cpp:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: cpp-cache
+        id: cpp-cache
+        uses: ./.github/actions/bazel-disk-cache
+        with:
+          bazel: bazelisk
+          bazelrc: C:/ProgramData/bazel.bazelrc
+          lookup-only: ${{ github.event_name == 'push' }}
+      - name: build
+        if: github.event_name != 'push' || steps.cpp-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: bazelisk build //client/cpp:cpp
+      - name: test
+        if: github.event_name != 'push' || steps.cpp-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: bazelisk test //client/cpp:test
       - name: save-cpp-cache
-        if: matrix.cpp-cache == 'save' && steps.cpp-cache.outputs.cache-hit != 'true'
+        if: steps.cpp-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@v6
         with:
           path: ${{ steps.cpp-cache.outputs.path }}
           key: ${{ steps.cpp-cache.outputs.key }}
 
   linux-build-krpc:
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
@@ -246,6 +279,7 @@ jobs:
           path: bazel-bin/tools/TestServer/TestServer-*.zip
 
   linux-build-genfiles:
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
@@ -269,6 +303,7 @@ jobs:
 
   linux-build-csharp-sln:
     needs: linux-build-genfiles
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
@@ -305,6 +340,7 @@ jobs:
 
   windows-build-csharp-sln:
     needs: linux-build-genfiles
+    if: github.event_name != 'push'
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
@@ -334,6 +370,7 @@ jobs:
         run: bazelisk test //:csproj-test
 
   linux-test-client-cnano:
+    if: github.event_name != 'push'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     container:
@@ -363,6 +400,8 @@ jobs:
 
   linux-build-client-cnano-cmake:
     needs: linux-test-client-cnano
+    # Also on a push, which skips linux-test-client-cnano
+    if: ${{ !cancelled() && !failure() }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -374,6 +413,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v7
       - name: download-artifact
+        if: github.event_name != 'push'
         uses: actions/download-artifact@v8
         with:
           name: client-cnano
@@ -404,31 +444,54 @@ jobs:
           echo "cache key: ccache-$hash"
           echo "hash=$hash" >> "$GITHUB_OUTPUT"
       - name: ccache-restore
+        id: ccache
         uses: actions/cache@v6
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-${{ steps.cache-key.outputs.hash }}
+          lookup-only: ${{ github.event_name == 'push' }}
+      # On a push, fill a missing cache from the merge queue run's archive
+      - name: merge-group-run
+        id: merge-group-run
+        if: github.event_name == 'push' && steps.ccache.outputs.cache-hit != 'true'
+        uses: ./.github/actions/merge-group-run
+      - name: download-merge-group-artifact
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cnano
+          run-id: ${{ steps.merge-group-run.outputs.run-id }}
+          github-token: ${{ github.token }}
       - name: build-system-serialio
+        if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system-serialio
       - name: build-system-tcpip
+        if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system-tcpip
       - name: build-system-localsocket
+        if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system-localsocket
       - name: build-fetch-serialio
+        if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch-serialio
       - name: build-fetch-tcpip
+        if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch-tcpip
       - name: build-fetch-localsocket
+        if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch-localsocket
 
   windows-build-client-cnano-cmake:
     needs: linux-test-client-cnano
+    # Also on a push, which skips linux-test-client-cnano
+    if: ${{ !cancelled() && !failure() }}
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v7
       - name: download-artifact
+        if: github.event_name != 'push'
         uses: actions/download-artifact@v8
         with:
           name: client-cnano
@@ -437,32 +500,41 @@ jobs:
         with:
           packages: nanopb:x64-windows
       - name: build-system-serialio
+        if: github.event_name != 'push'
         shell: bash
         run: client/cnano/test-cmake-windows.sh system-serialio
       - name: build-system-tcpip
+        if: github.event_name != 'push'
         shell: bash
         run: client/cnano/test-cmake-windows.sh system-tcpip
       - name: build-system-localsocket
+        if: github.event_name != 'push'
         shell: bash
         run: client/cnano/test-cmake-windows.sh system-localsocket
       - name: build-fetch-serialio
+        if: github.event_name != 'push'
         shell: bash
         run: client/cnano/test-cmake-windows.sh fetch-serialio
       - name: build-fetch-tcpip
+        if: github.event_name != 'push'
         shell: bash
         run: client/cnano/test-cmake-windows.sh fetch-tcpip
       - name: build-fetch-localsocket
+        if: github.event_name != 'push'
         shell: bash
         run: client/cnano/test-cmake-windows.sh fetch-localsocket
 
   linux-build-client-cnano-vcpkg:
     needs: linux-test-client-cnano
+    # Also on a push, which skips linux-test-client-cnano
+    if: ${{ !cancelled() && !failure() }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v7
       - name: download-artifact
+        if: github.event_name != 'push'
         uses: actions/download-artifact@v8
         with:
           name: client-cnano
@@ -471,18 +543,22 @@ jobs:
         with:
           packages: nanopb
       - name: test-vcpkg
+        if: github.event_name != 'push'
         env:
           VCPKG_ROOT: /usr/local/share/vcpkg
         run: client/cnano/test-vcpkg-linux.sh krpc-cnano-*.zip
 
   windows-build-client-cnano-vcpkg:
     needs: linux-test-client-cnano
+    # Also on a push, which skips linux-test-client-cnano
+    if: ${{ !cancelled() && !failure() }}
     runs-on: windows-latest
     timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v7
       - name: download-artifact
+        if: github.event_name != 'push'
         uses: actions/download-artifact@v8
         with:
           name: client-cnano
@@ -491,6 +567,7 @@ jobs:
         with:
           packages: nanopb:x64-windows
       - name: test-vcpkg
+        if: github.event_name != 'push'
         shell: bash
         env:
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
@@ -510,14 +587,19 @@ jobs:
         uses: actions/checkout@v7
       - name: setup
         uses: ./.github/actions/build-setup
+        with:
+          long-version: ${{ github.event_name != 'push' }}
       - name: cpp-cache
         id: cpp-cache
         uses: ./.github/actions/bazel-disk-cache
         with:
           bazelrc: $HOME/.bazelrc
+          lookup-only: ${{ github.event_name == 'push' }}
       - name: build
+        if: github.event_name != 'push' || steps.cpp-cache.outputs.cache-hit != 'true'
         run: bazel build //client/cpp:cpp
       - name: test
+        if: github.event_name != 'push' || steps.cpp-cache.outputs.cache-hit != 'true'
         run: bazel test //client/cpp:test
       - name: save-cpp-cache
         if: steps.cpp-cache.outputs.cache-hit != 'true'
@@ -525,7 +607,9 @@ jobs:
         with:
           path: ${{ steps.cpp-cache.outputs.path }}
           key: ${{ steps.cpp-cache.outputs.key }}
+      # On a push, copy-artifacts uploads the merge queue run's archive
       - name: upload-artifact
+        if: github.event_name != 'push'
         uses: ./.github/actions/upload-artifact
         with:
           name: client-cpp
@@ -543,6 +627,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v7
       - name: download-artifact
+        if: github.event_name != 'push'
         uses: actions/download-artifact@v8
         with:
           name: client-cpp
@@ -571,13 +656,29 @@ jobs:
           echo "cache key: ccache-$hash"
           echo "hash=$hash" >> "$GITHUB_OUTPUT"
       - name: ccache-restore
+        id: ccache
         uses: actions/cache@v6
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-${{ steps.cache-key.outputs.hash }}
+          lookup-only: ${{ github.event_name == 'push' }}
+      # On a push, fill a missing cache from the merge queue run's archive
+      - name: merge-group-run
+        id: merge-group-run
+        if: github.event_name == 'push' && steps.ccache.outputs.cache-hit != 'true'
+        uses: ./.github/actions/merge-group-run
+      - name: download-merge-group-artifact
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/download-artifact@v8
+        with:
+          name: client-cpp
+          run-id: ${{ steps.merge-group-run.outputs.run-id }}
+          github-token: ${{ github.token }}
       - name: build-system
+        if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
         run: client/cpp/test-cmake-linux.sh krpc-cpp-*.zip system
       - name: build-fetch
+        if: github.event_name != 'push' || steps.merge-group-run.outputs.run-id
         run: client/cpp/test-cmake-linux.sh krpc-cpp-*.zip fetch
 
   windows-build-client-cpp-cmake:
@@ -588,6 +689,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v7
       - name: download-artifact
+        if: github.event_name != 'push'
         uses: actions/download-artifact@v8
         with:
           name: client-cpp
@@ -596,6 +698,7 @@ jobs:
         with:
           packages: protobuf:x64-windows asio:x64-windows
       - name: test-build
+        if: github.event_name != 'push'
         shell: bash
         run: client/cpp/test-cmake-windows.sh
 
@@ -607,6 +710,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v7
       - name: download-artifact
+        if: github.event_name != 'push'
         uses: actions/download-artifact@v8
         with:
           name: client-cpp
@@ -615,6 +719,7 @@ jobs:
         with:
           packages: protobuf asio
       - name: test-vcpkg
+        if: github.event_name != 'push'
         env:
           VCPKG_ROOT: /usr/local/share/vcpkg
         run: client/cpp/test-vcpkg-linux.sh krpc-cpp-*.zip
@@ -627,6 +732,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v7
       - name: download-artifact
+        if: github.event_name != 'push'
         uses: actions/download-artifact@v8
         with:
           name: client-cpp
@@ -635,10 +741,104 @@ jobs:
         with:
           packages: protobuf:x64-windows asio:x64-windows
       - name: test-vcpkg
+        if: github.event_name != 'push'
         shell: bash
         env:
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
         run: client/cpp/test-vcpkg-windows.sh
+
+  # On a push, gives the run the artifacts of the merge queue run that tested
+  # the same commit, under the same names, in place of building them again.
+  # The list matches the artifacts the jobs above upload.
+  copy-artifacts:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: checkout
+        uses: actions/checkout@v7
+      - name: merge-group-run
+        id: merge-group-run
+        uses: ./.github/actions/merge-group-run
+      - name: download
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+          run-id: ${{ steps.merge-group-run.outputs.run-id }}
+          github-token: ${{ github.token }}
+      - name: upload-docs-html
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: docs-html
+          path: artifacts/docs-html/
+      - name: upload-docs-pdf
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: docs-pdf
+          path: artifacts/docs-pdf/
+      - name: upload-client-csharp-nupkg
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-csharp-nupkg
+          path: artifacts/client-csharp-nupkg/
+      - name: upload-client-java
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-java
+          path: artifacts/client-java/
+      - name: upload-client-python
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-python
+          path: artifacts/client-python/
+      - name: upload-client-lua
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-lua
+          path: artifacts/client-lua/
+      - name: upload-krpc
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: krpc
+          path: artifacts/krpc/
+      - name: upload-krpctools
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: krpctools
+          path: artifacts/krpctools/
+      - name: upload-testserver
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: testserver
+          path: artifacts/testserver/
+      - name: upload-genfiles
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: genfiles
+          path: artifacts/genfiles/
+      - name: upload-client-cnano
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-cnano
+          path: artifacts/client-cnano/
+      - name: upload-client-cpp
+        if: steps.merge-group-run.outputs.run-id
+        uses: actions/upload-artifact@v7
+        with:
+          name: client-cpp
+          path: artifacts/client-cpp/
 
   all-checks-passed:
     runs-on: ubuntu-latest
@@ -647,6 +847,7 @@ jobs:
     needs:
       - linux
       - windows
+      - windows-test-client-cpp
       - linux-build-krpc
       - linux-build-genfiles
       - linux-build-csharp-sln
@@ -661,6 +862,7 @@ jobs:
       - windows-build-client-cpp-cmake
       - linux-build-client-cpp-vcpkg
       - windows-build-client-cpp-vcpkg
+      - copy-artifacts
     steps:
       - name: check
         run: |
