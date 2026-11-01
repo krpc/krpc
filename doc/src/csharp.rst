@@ -173,8 +173,9 @@ on is evaluated once, when the stream is created. Any other lambda is compiled i
 :ref:`server side function <csharp-client-compiling-lambdas>`, which the server evaluates on each
 update.
 
-A stream can be made of any procedure or property that returns a value. Each call to
-:meth:`~KRPC.Client.Connection.AddStream` creates another stream.
+Each call to :meth:`~KRPC.Client.Connection.AddStream` creates another stream. A lambda with no
+value, such as a call to a procedure with no return value, streams as a
+:type:`~KRPC.Client.Stream` with no type parameter. It runs on each update for its effects.
 
 A stream runs until you remove it with :meth:`~KRPC.Client.Stream.Remove`, your program drops its
 last reference to it, or the connection closes. Keep a reference to a stream for as long as you
@@ -657,12 +658,25 @@ Client API Reference
       :type:`~KRPC.Client.FunctionCompilationException` for a lambda with parameters, and an
       :type:`System.ArgumentException` if ``TResult`` cannot hold the lambda's value.
 
+   .. function:: Stream AddStream(Expression<Action> expression)
+
+      Creates a stream from a lambda expression with no value, which runs on each update for its
+      effects. A lambda that makes one remote procedure call with fixed arguments streams that
+      call. Any other lambda is compiled into a server side function on every call. Throws an
+      :type:`System.ArgumentException` if the lambda's body has a value, and
+      :type:`~KRPC.Client.FunctionCompilationException` if the lambda cannot be compiled.
+
    .. function:: Stream<TResult> AddStream<TResult>(KRPC.Client.Services.KRPC.Expression function)
 
       Creates a stream of the value of a server side function, which takes no arguments. Throws
       an :type:`System.InvalidOperationException` if the function has no value. Throws an
       :type:`System.ArgumentException` if the function takes parameters, or ``TResult`` cannot
       hold its value.
+
+   .. function:: Stream AddStream(KRPC.Client.Services.KRPC.Expression function)
+
+      Creates a stream of a server side function with no value, which runs on each update for its
+      effects. Throws an :type:`System.InvalidOperationException` if the function has a value.
 
    .. function:: TResult Run<TResult>(Expression<Func<TResult>> expression)
 
@@ -733,6 +747,11 @@ Client API Reference
       :type:`System.ArgumentException` if the lambda does more than make one call, or calls a
       member that is not a remote procedure.
 
+   .. function:: static KRPC.Schema.KRPC.ProcedureCall GetCall(Expression<Action> expression)
+
+      Converts a lambda expression that makes one call to a procedure with no return value, as
+      the overload above does.
+
    .. function:: static KRPC.Schema.KRPC.ProcedureCall GetCall(LambdaExpression expression)
 
       Converts a lambda expression of any delegate type, as the overload above does.
@@ -748,22 +767,24 @@ Client API Reference
       :meth:`~KRPC.Client.Services.KRPC.Expression.ConstantObject`. Throws an
       :type:`System.ArgumentNullException` if the object is null.
 
-.. class:: Stream<TReturnType>
+.. class:: Stream
 
-   A stream. See :ref:`csharp-client-streams`. Two stream objects are equal if they are bound to the
-   same stream on the server. Each call to :meth:`~KRPC.Client.Connection.AddStream` creates a new
-   stream, so two streams of the same call are not equal.
+   A stream. See :ref:`csharp-client-streams`. A stream of a call or function with no value runs on
+   each update for its effects, and the server sends one update, after the first run. Two stream
+   objects are equal if they are bound to the same stream on the server. Each call to
+   :meth:`~KRPC.Client.Connection.AddStream` creates a new stream, so two streams of the same call
+   are not equal.
 
-   .. function:: TReturnType Get()
+   .. function:: void Get()
 
-      Returns the most recent value of the stream, waiting for the first value if none has
-      arrived yet. Throws the exception that ended the stream, if it has ended.
+      Waits for the stream's first update. Throws the exception that ended the stream, if it has
+      ended.
 
    .. function:: bool Wait(double timeout = double.PositiveInfinity)
 
-      Blocks until the value of the stream changes, or the timeout elapses. Returns ``true`` if the
-      value changed, and ``false`` on a timeout. Lock :prop:`~KRPC.Client.Stream.Condition` when
-      calling this method.
+      Blocks until the stream updates, or the timeout elapses. Returns ``true`` if the stream
+      updated, and ``false`` on a timeout. Lock :prop:`~KRPC.Client.Stream.Condition` when calling
+      this method.
 
       The timeout is in seconds, and an infinite timeout waits indefinitely. Throws an
       :type:`System.ArgumentOutOfRangeException` for a negative or NaN timeout. Throws the exception
@@ -774,17 +795,17 @@ Client API Reference
    .. property:: object Condition { get; }
 
       A condition variable, locked with the ``lock`` statement, pulsed with ``Monitor.PulseAll``
-      when the value of the stream changes.
+      when the stream updates.
 
    .. property:: float Rate { get; set; }
 
       The update rate of the stream, in Hertz. Zero, the default, means no limit.
 
-   .. function:: int AddCallback(Action<TReturnType> callback)
+   .. function:: int AddCallback(Action callback)
 
-      Adds a callback, called with each new value of the stream, and returns a tag for
-      :meth:`~KRPC.Client.Stream.RemoveCallback`. If the stream already has a value, the callback is
-      called with it straight away. The exception that ends a stream goes to its end callbacks.
+      Adds a callback, with no arguments, called each time the stream updates, and returns a tag
+      for :meth:`~KRPC.Client.Stream.RemoveCallback`. It is called straight away if the stream has
+      updated. The exception that ends a stream goes to its end callbacks.
 
    .. function:: void RemoveCallback(int tag)
 
@@ -803,6 +824,22 @@ Client API Reference
    .. function:: void Remove()
 
       Removes the stream from the server. Other streams of the same call are not affected.
+
+.. class:: Stream<TReturnType>
+
+   A stream with a value, derived from :type:`~KRPC.Client.Stream`. The stream updates each time
+   its value changes. It adds:
+
+   .. function:: TReturnType Get()
+
+      Returns the most recent value of the stream, waiting for the first value if none has
+      arrived yet. Throws the exception that ended the stream, if it has ended.
+
+   .. function:: int AddCallback(Action<TReturnType> callback)
+
+      Adds a callback, called with each new value of the stream, and returns a tag for
+      :meth:`~KRPC.Client.Stream.RemoveCallback`. If the stream already has a value, the callback is
+      called with it straight away.
 
 .. class:: Event
 

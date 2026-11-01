@@ -48,7 +48,23 @@ namespace KRPC.Client.Test
                 () => Connection.Run<int> (effect));
             StringAssert.Contains ("without a type parameter", exn.Message);
             exn = Assert.Throws<System.InvalidOperationException> (() => Connection.AddStream<int> (effect));
-            StringAssert.Contains ("cannot be streamed", exn.Message);
+            StringAssert.Contains ("without a type parameter", exn.Message);
+            var value = Connection.Compile (() => testService.FloatToString (1));
+            exn = Assert.Throws<System.InvalidOperationException> (() => Connection.AddStream (value));
+            StringAssert.Contains ("with a type parameter", exn.Message);
+        }
+
+        [Test]
+        public void TestStreamOfAnActionWithAValue ()
+        {
+            var testService = Connection.TestService ();
+            System.Linq.Expressions.Expression<System.Action> call = () => testService.FloatToString (1);
+            var exn = Assert.Throws<System.ArgumentException> (() => Connection.AddStream (call));
+            StringAssert.Contains ("with a type parameter", exn.Message);
+            System.Linq.Expressions.Expression<System.Action> compiled =
+                () => testService.IncrementList (new List<int> { testService.CreateTestObject ("a").IntProperty });
+            exn = Assert.Throws<System.ArgumentException> (() => Connection.AddStream (compiled));
+            StringAssert.Contains ("with a type parameter", exn.Message);
         }
 
         [Test]

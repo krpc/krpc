@@ -29,7 +29,7 @@ namespace KRPC.Client
         // uint32 it is meant to be.
         const int MaximumPrefixLength = 5;
 
-        readonly Stream stream;
+        readonly System.IO.Stream stream;
         readonly Socket socket;
         byte[] buffer = new byte [InitialSize];
 
@@ -38,7 +38,7 @@ namespace KRPC.Client
         int start;
         int end;
 
-        public MessageReader (Stream messageStream, Socket pollSocket = null)
+        public MessageReader (System.IO.Stream messageStream, Socket pollSocket = null)
         {
             stream = messageStream;
             socket = pollSocket;
