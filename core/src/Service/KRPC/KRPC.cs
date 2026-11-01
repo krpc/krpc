@@ -30,36 +30,40 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Returns some information about the server, such as the version.
+        /// Returns the status of the server, with its version, settings and performance statistics.
         /// </summary>
         [KRPCProcedure]
-        public static Status GetStatus ()
+        public static ServerStatus GetStatus ()
         {
             var core = Core.Instance;
             var config = Configuration.Instance;
-            var status = new Status (core.Version ?? "unknown");
-            status.BytesRead = core.BytesRead;
-            status.BytesWritten = core.BytesWritten;
-            status.BytesReadRate = core.BytesReadRate;
-            status.BytesWrittenRate = core.BytesWrittenRate;
-            status.RpcsExecuted = core.RPCsExecuted;
-            status.RpcRate = core.RPCRate;
-            status.OneRpcPerUpdate = config.OneRPCPerUpdate;
-            status.MaxTimePerUpdate = config.MaxTimePerUpdate;
-            status.AdaptiveRateControl = config.AdaptiveRateControl;
-            status.BlockingRecv = config.BlockingRecv;
-            status.RecvTimeout = config.RecvTimeout;
-            status.TimePerRpcUpdate = core.TimePerRPCUpdate;
-            status.PollTimePerRpcUpdate = core.PollTimePerRPCUpdate;
-            status.ExecTimePerRpcUpdate = core.ExecTimePerRPCUpdate;
-            status.StreamRpcs = core.StreamRPCs;
-            status.StreamRpcsExecuted = core.StreamRPCsExecuted;
-            status.StreamRpcRate = core.StreamRPCRate;
-            status.TimePerStreamUpdate = core.TimePerStreamUpdate;
             var client = CallContext.Client as Server.Message.Client;
-            if (client != null)
-                status.ProtocolVersion = client.ProtocolVersion;
-            return status;
+            return new ServerStatus {
+                Version = core.Version ?? "unknown",
+                ProtocolVersion = client != null ? client.ProtocolVersion : 0,
+                Settings = new ServerSettings {
+                    OneRpcPerUpdate = config.OneRPCPerUpdate,
+                    MaxTimePerUpdate = config.MaxTimePerUpdate,
+                    AdaptiveRateControl = config.AdaptiveRateControl,
+                    BlockingRecv = config.BlockingRecv,
+                    RecvTimeout = config.RecvTimeout
+                },
+                Statistics = new ServerStatistics {
+                    BytesRead = core.BytesRead,
+                    BytesWritten = core.BytesWritten,
+                    BytesReadRate = core.BytesReadRate,
+                    BytesWrittenRate = core.BytesWrittenRate,
+                    RpcsExecuted = core.RPCsExecuted,
+                    RpcRate = core.RPCRate,
+                    TimePerRpcUpdate = core.TimePerRPCUpdate,
+                    PollTimePerRpcUpdate = core.PollTimePerRPCUpdate,
+                    ExecTimePerRpcUpdate = core.ExecTimePerRPCUpdate,
+                    Streams = core.Streams,
+                    StreamEvaluations = core.StreamEvaluations,
+                    StreamEvaluationRate = core.StreamEvaluationRate,
+                    TimePerStreamUpdate = core.TimePerStreamUpdate
+                }
+            };
         }
 
         /// <summary>

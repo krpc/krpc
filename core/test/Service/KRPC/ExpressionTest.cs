@@ -636,11 +636,11 @@ namespace KRPC.Test.Service.KRPC
         [Test]
         public void ReturnTypeOfAMessage ()
         {
-            var status = new Expression (
-                System.Linq.Expressions.Expression.Constant (new global::KRPC.Service.Messages.Status ("1.0")));
+            var stream = new Expression (
+                System.Linq.Expressions.Expression.Constant (new global::KRPC.Service.Messages.Stream (1)));
             var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
-                () => { var type = status.ReturnType; });
-            StringAssert.Contains ("protocol buffer message of type Status", exn.Message);
+                () => { var type = stream.ReturnType; });
+            StringAssert.Contains ("protocol buffer message of type Stream", exn.Message);
         }
 
         sealed class EquatableObject : global::KRPC.Utils.Equatable<EquatableObject>

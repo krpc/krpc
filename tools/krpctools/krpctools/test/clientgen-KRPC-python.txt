@@ -124,6 +124,118 @@ class ClientInfo(NamedTuple):
     """
 
 
+class ServerSettings(NamedTuple):
+    """
+    The settings that control how the server executes calls.
+
+    See :attr:`krpc.services.krpc.ServerStatus.settings`.
+    """
+    one_rpc_per_update: bool
+    """
+    Whether the server executes one call per update.
+    """
+    max_time_per_update: int
+    """
+    The maximum time spent executing calls per update, in microseconds.
+    """
+    adaptive_rate_control: bool
+    """
+    Whether the server adjusts :attr:`krpc.services.krpc.ServerSettings.max_time_per_update` to hold the frame rate.
+    """
+    blocking_recv: bool
+    """
+    Whether the server waits for the next call in an update.
+    """
+    recv_timeout: int
+    """
+    The time the server waits for the next call, in microseconds.
+    """
+
+
+class ServerStatistics(NamedTuple):
+    """
+    The performance statistics of the server.
+
+    See :attr:`krpc.services.krpc.ServerStatus.statistics`.
+    """
+    bytes_read: int
+    """
+    The number of bytes received from clients.
+    """
+    bytes_written: int
+    """
+    The number of bytes sent to clients.
+    """
+    bytes_read_rate: float
+    """
+    The rate bytes are received from clients, in bytes per second.
+    """
+    bytes_written_rate: float
+    """
+    The rate bytes are sent to clients, in bytes per second.
+    """
+    rpcs_executed: int
+    """
+    The number of calls executed.
+    """
+    rpc_rate: float
+    """
+    The number of calls executed per second.
+    """
+    time_per_rpc_update: float
+    """
+    The time spent receiving and executing calls per update, in seconds.
+    """
+    poll_time_per_rpc_update: float
+    """
+    The time spent receiving calls per update, in seconds.
+    """
+    exec_time_per_rpc_update: float
+    """
+    The time spent executing calls per update, in seconds.
+    """
+    streams: int
+    """
+    The number of open streams, events included.
+    """
+    stream_evaluations: int
+    """
+    The number of stream evaluations, one per stream per update.
+    """
+    stream_evaluation_rate: float
+    """
+    The number of stream evaluations per second.
+    """
+    time_per_stream_update: float
+    """
+    The time spent updating streams per update, in seconds.
+    """
+
+
+class ServerStatus(NamedTuple):
+    """
+    The status of the server.
+
+    See :meth:`krpc.services.krpc.KRPC.get_status`.
+    """
+    version: str
+    """
+    The version of the server, or ``unknown``.
+    """
+    protocol_version: int
+    """
+    The protocol version of the connection.
+    """
+    settings: ServerSettings
+    """
+    The settings of the server.
+    """
+    statistics: ServerStatistics
+    """
+    The performance statistics of the server.
+    """
+
+
 class ArgumentException(ValueError):
     """
     A method was invoked where at least one of the passed arguments does not
@@ -5521,6 +5633,9 @@ if TYPE_CHECKING:
     _GameScene = GameScene
     _TypeCode = TypeCode
     _ClientInfo = ClientInfo
+    _ServerSettings = ServerSettings
+    _ServerStatistics = ServerStatistics
+    _ServerStatus = ServerStatus
     _ArgumentException = ArgumentException
     _ArgumentNullException = ArgumentNullException
     _ArgumentOutOfRangeException = ArgumentOutOfRangeException
@@ -5544,6 +5659,9 @@ if TYPE_CHECKING:
         GameScene: type[_GameScene]
         TypeCode: type[_TypeCode]
         ClientInfo: type[_ClientInfo]
+        ServerSettings: type[_ServerSettings]
+        ServerStatistics: type[_ServerStatistics]
+        ServerStatus: type[_ServerStatus]
         ArgumentException: type[_ArgumentException]
         ArgumentNullException: type[_ArgumentNullException]
         ArgumentOutOfRangeException: type[_ArgumentOutOfRangeException]
@@ -5611,6 +5729,9 @@ class KRPC(_KRPCDefinitions):
     }
     _structs = {
         "ClientInfo": ClientInfo,
+        "ServerSettings": ServerSettings,
+        "ServerStatistics": ServerStatistics,
+        "ServerStatus": ServerStatus,
     }
     _exceptions = {
         "ArgumentException": ArgumentException,
@@ -5950,20 +6071,20 @@ class KRPC(_KRPCDefinitions):
             self._client._types.services_type
         )
 
-    def get_status(self) -> KRPC_pb2.Status:
+    def get_status(self) -> ServerStatus:
         """
-        Returns some information about the server, such as the version.
+        Returns the status of the server, with its version, settings and performance statistics.
         """
         return self._client._invoke(
             "KRPC",
             "GetStatus",
             [],
             [],
-            self._client._types.status_type
+            self._client._types.struct_type("KRPC", "ServerStatus")
         )
 
     def _return_type_get_status(self) -> TypeBase:
-        return self._client._types.status_type
+        return self._client._types.struct_type("KRPC", "ServerStatus")
 
     def _build_call_get_status(self) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
@@ -5971,7 +6092,7 @@ class KRPC(_KRPCDefinitions):
             "GetStatus",
             [],
             [],
-            self._client._types.status_type
+            self._client._types.struct_type("KRPC", "ServerStatus")
         )
 
     def hold_tick(self) -> None:

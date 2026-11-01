@@ -132,9 +132,9 @@ namespace KRPC.UI
             GUILayoutExtensions.Separator (separatorStyle);
 
             GUILayout.Label (streamInfoText, labelStyle);
-            DrawInfo (streamingRPCsText, core.StreamRPCs.ToString (CultureInfo.CurrentCulture));
-            DrawInfo (streamingRPCsExecutedText, core.StreamRPCsExecuted.ToString (CultureInfo.CurrentCulture));
-            DrawInfo (streamingRPCRateText, Math.Round (core.StreamRPCRate) + " RPC/s");
+            DrawInfo (streamingRPCsText, core.Streams.ToString (CultureInfo.CurrentCulture));
+            DrawInfo (streamingRPCsExecutedText, core.StreamEvaluations.ToString (CultureInfo.CurrentCulture));
+            DrawInfo (streamingRPCRateText, Math.Round (core.StreamEvaluationRate) + " RPC/s");
             DrawInfo (timePerStreamUpdateText, string.Format (CultureInfo.CurrentCulture, "{0:F5} s", core.TimePerStreamUpdate));
 
             GUILayoutExtensions.Separator (separatorStyle);

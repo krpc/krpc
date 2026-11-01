@@ -23,6 +23,21 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void GetStatusSettings ()
+        {
+            var config = Configuration.Instance;
+            var recvTimeout = config.RecvTimeout;
+            try {
+                config.RecvTimeout = 1234;
+                var settings = global::KRPC.Service.KRPC.KRPC.GetStatus ().Settings;
+                Assert.AreEqual (1234, settings.RecvTimeout);
+                Assert.AreEqual (config.MaxTimePerUpdate, settings.MaxTimePerUpdate);
+            } finally {
+                config.RecvTimeout = recvTimeout;
+            }
+        }
+
+        [Test]
         public void GetServices ()
         {
             var services = global::KRPC.Service.KRPC.KRPC.GetServices ();
@@ -45,7 +60,7 @@ namespace KRPC.Test.Service.KRPC
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "GetStatus") {
-                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Service.Messages.Status));
+                    MessageAssert.HasReturnType (proc, typeof(global::KRPC.Service.KRPC.ServerStatus));
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasDocumentation (proc);
                 } else if (proc.Name == "GetServices") {

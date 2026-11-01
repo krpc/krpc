@@ -287,11 +287,11 @@ def environment(conn):
     status = conn.krpc.get_status()
     return {
         "server": status.version,
-        "one rpc per update": str(status.one_rpc_per_update),
-        "adaptive rate control": str(status.adaptive_rate_control),
-        "max time per update": "%d us" % status.max_time_per_update,
-        "blocking recv": str(status.blocking_recv),
-        "recv timeout": "%d us" % status.recv_timeout,
+        "one rpc per update": str(status.settings.one_rpc_per_update),
+        "adaptive rate control": str(status.settings.adaptive_rate_control),
+        "max time per update": "%d us" % status.settings.max_time_per_update,
+        "blocking recv": str(status.settings.blocking_recv),
+        "recv timeout": "%d us" % status.settings.recv_timeout,
     }
 
 
@@ -307,8 +307,8 @@ def settings(conn, frame_pacing):
     return ", ".join(
         [
             "frame pacing %s" % pacing,
-            "adaptive rate control %s" % status.adaptive_rate_control,
-            "max time per update %d us" % status.max_time_per_update,
-            "recv timeout %d us" % status.recv_timeout,
+            "adaptive rate control %s" % status.settings.adaptive_rate_control,
+            "max time per update %d us" % status.settings.max_time_per_update,
+            "recv timeout %d us" % status.settings.recv_timeout,
         ]
     )

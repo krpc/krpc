@@ -210,6 +210,7 @@ message Type {
   bool nullable = 5;
 
   enum TypeCode {
+    reserved 203;
     NONE = 0;
 
     // Values
@@ -232,7 +233,6 @@ message Type {
     EVENT = 200;
     PROCEDURE_CALL = 201;
     STREAM = 202;
-    STATUS = 203;
     SERVICES = 204;
 
     // Collections
@@ -275,27 +275,3 @@ message Stream {
 message Event {
   Stream stream = 1;
 }
-
-message Status {
-  string version = 1;
-  uint64 bytes_read = 2;
-  uint64 bytes_written = 3;
-  float bytes_read_rate = 4;
-  float bytes_written_rate = 5;
-  uint64 rpcs_executed = 6;
-  float rpc_rate = 7;
-  bool one_rpc_per_update = 8;
-  uint32 max_time_per_update = 9;
-  bool adaptive_rate_control = 10;
-  bool blocking_recv = 11;
-  uint32 recv_timeout = 12;
-  float time_per_rpc_update = 13;
-  float poll_time_per_rpc_update = 14;
-  float exec_time_per_rpc_update = 15;
-  uint32 stream_rpcs = 16;
-  uint64 stream_rpcs_executed = 17;
-  float stream_rpc_rate = 18;
-  float time_per_stream_update = 19;
-  uint32 protocol_version = 20;
-}
-

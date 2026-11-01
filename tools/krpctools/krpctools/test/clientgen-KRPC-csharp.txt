@@ -57,7 +57,7 @@ namespace KRPC.Client.Services.KRPC
         internal static readonly global::KRPC.Client.TypeSpec Spec19 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Event));
         internal static readonly global::KRPC.Client.TypeSpec Spec20 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Schema.KRPC.Stream));
         internal static readonly global::KRPC.Client.TypeSpec Spec21 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Schema.KRPC.Services));
-        internal static readonly global::KRPC.Client.TypeSpec Spec22 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Schema.KRPC.Status));
+        internal static readonly global::KRPC.Client.TypeSpec Spec22 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.ServerStatus));
         internal static readonly global::KRPC.Client.TypeSpec Spec23 = global::KRPC.Client.TypeSpec.For (typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.KRPC.ClientInfo>));
         internal static readonly global::KRPC.Client.TypeSpec Spec24 = global::KRPC.Client.TypeSpec.For (typeof(global::KRPC.Client.Services.KRPC.TypeCode));
 
@@ -225,13 +225,13 @@ namespace KRPC.Client.Services.KRPC
         }
 
         /// <summary>
-        /// Returns some information about the server, such as the version.
+        /// Returns the status of the server, with its version, settings and performance statistics.
         /// </summary>
         [global::KRPC.Client.Attributes.RPCAttribute ("KRPC", "GetStatus", typeof(TypeSpecs))]
-        public global::KRPC.Schema.KRPC.Status GetStatus ()
+        public global::KRPC.Client.Services.KRPC.ServerStatus GetStatus ()
         {
             var _result = connection.Invoke ("KRPC", "GetStatus");
-            return (global::KRPC.Schema.KRPC.Status)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec22, connection);
+            return (global::KRPC.Client.Services.KRPC.ServerStatus)global::KRPC.Client.Encoder.Decode (_result.Value, TypeSpecs.Spec22, connection);
         }
 
         /// <summary>
@@ -673,6 +673,535 @@ namespace KRPC.Client.Services.KRPC
         /// Returns true if the first ClientInfo does not order before the second.
         /// </summary>
         public static bool operator >= (ClientInfo lhs, ClientInfo rhs)
+        {
+            return lhs.CompareTo (rhs) >= 0;
+        }
+    }
+
+    /// <summary>
+    /// The settings that control how the server executes calls.
+    /// </summary>
+    /// <remarks>
+    /// See <see cref="global::KRPC.Client.Services.KRPC.ServerStatus.Settings" />.
+    /// </remarks>
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+    public struct ServerSettings : IEquatable<ServerSettings>, IComparable<ServerSettings>
+    {
+        /// <summary>
+        /// Construct a ServerSettings from the values of its fields.
+        /// </summary>
+        public ServerSettings (bool oneRpcPerUpdate, uint maxTimePerUpdate, bool adaptiveRateControl, bool blockingRecv, uint recvTimeout) : this ()
+        {
+            OneRpcPerUpdate = oneRpcPerUpdate;
+            MaxTimePerUpdate = maxTimePerUpdate;
+            AdaptiveRateControl = adaptiveRateControl;
+            BlockingRecv = blockingRecv;
+            RecvTimeout = recvTimeout;
+        }
+
+        /// <summary>
+        /// Whether the server executes one call per update.
+        /// </summary>
+        public bool OneRpcPerUpdate { get; private set; }
+
+        /// <summary>
+        /// The maximum time spent executing calls per update, in microseconds.
+        /// </summary>
+        public uint MaxTimePerUpdate { get; private set; }
+
+        /// <summary>
+        /// Whether the server adjusts <see cref="global::KRPC.Client.Services.KRPC.ServerSettings.MaxTimePerUpdate" /> to hold the frame rate.
+        /// </summary>
+        public bool AdaptiveRateControl { get; private set; }
+
+        /// <summary>
+        /// Whether the server waits for the next call in an update.
+        /// </summary>
+        public bool BlockingRecv { get; private set; }
+
+        /// <summary>
+        /// The time the server waits for the next call, in microseconds.
+        /// </summary>
+        public uint RecvTimeout { get; private set; }
+
+        /// <summary>
+        /// Returns true if this ServerSettings is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is ServerSettings && Equals ((ServerSettings)obj);
+        }
+
+        /// <summary>
+        /// Returns true if this ServerSettings is equal to the given one.
+        /// </summary>
+        public bool Equals (ServerSettings other)
+        {
+            return global::KRPC.Client.ValueUtils.Equal (OneRpcPerUpdate, other.OneRpcPerUpdate) && global::KRPC.Client.ValueUtils.Equal (MaxTimePerUpdate, other.MaxTimePerUpdate) && global::KRPC.Client.ValueUtils.Equal (AdaptiveRateControl, other.AdaptiveRateControl) && global::KRPC.Client.ValueUtils.Equal (BlockingRecv, other.BlockingRecv) && global::KRPC.Client.ValueUtils.Equal (RecvTimeout, other.RecvTimeout);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this ServerSettings.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (OneRpcPerUpdate);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (MaxTimePerUpdate);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (AdaptiveRateControl);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (BlockingRecv);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (RecvTimeout);
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two ServerSettings values are equal.
+        /// </summary>
+        public static bool operator == (ServerSettings lhs, ServerSettings rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two ServerSettings values are not equal.
+        /// </summary>
+        public static bool operator != (ServerSettings lhs, ServerSettings rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Compares this ServerSettings with the given one, by its fields in turn, which is
+        /// how a tuple of the same values compares. A field whose type has no ordering, such as
+        /// a collection, throws unless the two values are the same object, as it does in a
+        /// tuple, so two ServerSettingss that are equal can still throw here.
+        /// </summary>
+        public int CompareTo (ServerSettings other)
+        {
+            int result;
+            result = global::System.Collections.Generic.Comparer<bool>.Default.Compare (OneRpcPerUpdate, other.OneRpcPerUpdate);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (MaxTimePerUpdate, other.MaxTimePerUpdate);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<bool>.Default.Compare (AdaptiveRateControl, other.AdaptiveRateControl);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<bool>.Default.Compare (BlockingRecv, other.BlockingRecv);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (RecvTimeout, other.RecvTimeout);
+            if (result != 0)
+                return result;
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServerSettings orders before the second.
+        /// </summary>
+        public static bool operator < (ServerSettings lhs, ServerSettings rhs)
+        {
+            return lhs.CompareTo (rhs) < 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServerSettings orders after the second.
+        /// </summary>
+        public static bool operator > (ServerSettings lhs, ServerSettings rhs)
+        {
+            return lhs.CompareTo (rhs) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServerSettings does not order after the second.
+        /// </summary>
+        public static bool operator <= (ServerSettings lhs, ServerSettings rhs)
+        {
+            return lhs.CompareTo (rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServerSettings does not order before the second.
+        /// </summary>
+        public static bool operator >= (ServerSettings lhs, ServerSettings rhs)
+        {
+            return lhs.CompareTo (rhs) >= 0;
+        }
+    }
+
+    /// <summary>
+    /// The performance statistics of the server.
+    /// </summary>
+    /// <remarks>
+    /// See <see cref="global::KRPC.Client.Services.KRPC.ServerStatus.Statistics" />.
+    /// </remarks>
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+    public struct ServerStatistics : IEquatable<ServerStatistics>, IComparable<ServerStatistics>
+    {
+        /// <summary>
+        /// Construct a ServerStatistics from the values of its fields.
+        /// </summary>
+        public ServerStatistics (ulong bytesRead, ulong bytesWritten, float bytesReadRate, float bytesWrittenRate, ulong rpcsExecuted, float rpcRate, float timePerRpcUpdate, float pollTimePerRpcUpdate, float execTimePerRpcUpdate, uint streams, ulong streamEvaluations, float streamEvaluationRate, float timePerStreamUpdate) : this ()
+        {
+            BytesRead = bytesRead;
+            BytesWritten = bytesWritten;
+            BytesReadRate = bytesReadRate;
+            BytesWrittenRate = bytesWrittenRate;
+            RpcsExecuted = rpcsExecuted;
+            RpcRate = rpcRate;
+            TimePerRpcUpdate = timePerRpcUpdate;
+            PollTimePerRpcUpdate = pollTimePerRpcUpdate;
+            ExecTimePerRpcUpdate = execTimePerRpcUpdate;
+            Streams = streams;
+            StreamEvaluations = streamEvaluations;
+            StreamEvaluationRate = streamEvaluationRate;
+            TimePerStreamUpdate = timePerStreamUpdate;
+        }
+
+        /// <summary>
+        /// The number of bytes received from clients.
+        /// </summary>
+        public ulong BytesRead { get; private set; }
+
+        /// <summary>
+        /// The number of bytes sent to clients.
+        /// </summary>
+        public ulong BytesWritten { get; private set; }
+
+        /// <summary>
+        /// The rate bytes are received from clients, in bytes per second.
+        /// </summary>
+        public float BytesReadRate { get; private set; }
+
+        /// <summary>
+        /// The rate bytes are sent to clients, in bytes per second.
+        /// </summary>
+        public float BytesWrittenRate { get; private set; }
+
+        /// <summary>
+        /// The number of calls executed.
+        /// </summary>
+        public ulong RpcsExecuted { get; private set; }
+
+        /// <summary>
+        /// The number of calls executed per second.
+        /// </summary>
+        public float RpcRate { get; private set; }
+
+        /// <summary>
+        /// The time spent receiving and executing calls per update, in seconds.
+        /// </summary>
+        public float TimePerRpcUpdate { get; private set; }
+
+        /// <summary>
+        /// The time spent receiving calls per update, in seconds.
+        /// </summary>
+        public float PollTimePerRpcUpdate { get; private set; }
+
+        /// <summary>
+        /// The time spent executing calls per update, in seconds.
+        /// </summary>
+        public float ExecTimePerRpcUpdate { get; private set; }
+
+        /// <summary>
+        /// The number of open streams, events included.
+        /// </summary>
+        public uint Streams { get; private set; }
+
+        /// <summary>
+        /// The number of stream evaluations, one per stream per update.
+        /// </summary>
+        public ulong StreamEvaluations { get; private set; }
+
+        /// <summary>
+        /// The number of stream evaluations per second.
+        /// </summary>
+        public float StreamEvaluationRate { get; private set; }
+
+        /// <summary>
+        /// The time spent updating streams per update, in seconds.
+        /// </summary>
+        public float TimePerStreamUpdate { get; private set; }
+
+        /// <summary>
+        /// Returns true if this ServerStatistics is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is ServerStatistics && Equals ((ServerStatistics)obj);
+        }
+
+        /// <summary>
+        /// Returns true if this ServerStatistics is equal to the given one.
+        /// </summary>
+        public bool Equals (ServerStatistics other)
+        {
+            return global::KRPC.Client.ValueUtils.Equal (BytesRead, other.BytesRead) && global::KRPC.Client.ValueUtils.Equal (BytesWritten, other.BytesWritten) && global::KRPC.Client.ValueUtils.Equal (BytesReadRate, other.BytesReadRate) && global::KRPC.Client.ValueUtils.Equal (BytesWrittenRate, other.BytesWrittenRate) && global::KRPC.Client.ValueUtils.Equal (RpcsExecuted, other.RpcsExecuted) && global::KRPC.Client.ValueUtils.Equal (RpcRate, other.RpcRate) && global::KRPC.Client.ValueUtils.Equal (TimePerRpcUpdate, other.TimePerRpcUpdate) && global::KRPC.Client.ValueUtils.Equal (PollTimePerRpcUpdate, other.PollTimePerRpcUpdate) && global::KRPC.Client.ValueUtils.Equal (ExecTimePerRpcUpdate, other.ExecTimePerRpcUpdate) && global::KRPC.Client.ValueUtils.Equal (Streams, other.Streams) && global::KRPC.Client.ValueUtils.Equal (StreamEvaluations, other.StreamEvaluations) && global::KRPC.Client.ValueUtils.Equal (StreamEvaluationRate, other.StreamEvaluationRate) && global::KRPC.Client.ValueUtils.Equal (TimePerStreamUpdate, other.TimePerStreamUpdate);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this ServerStatistics.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (BytesRead);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (BytesWritten);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (BytesReadRate);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (BytesWrittenRate);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (RpcsExecuted);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (RpcRate);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (TimePerRpcUpdate);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (PollTimePerRpcUpdate);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (ExecTimePerRpcUpdate);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Streams);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StreamEvaluations);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StreamEvaluationRate);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (TimePerStreamUpdate);
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two ServerStatistics values are equal.
+        /// </summary>
+        public static bool operator == (ServerStatistics lhs, ServerStatistics rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two ServerStatistics values are not equal.
+        /// </summary>
+        public static bool operator != (ServerStatistics lhs, ServerStatistics rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Compares this ServerStatistics with the given one, by its fields in turn, which is
+        /// how a tuple of the same values compares. A field whose type has no ordering, such as
+        /// a collection, throws unless the two values are the same object, as it does in a
+        /// tuple, so two ServerStatisticss that are equal can still throw here.
+        /// </summary>
+        public int CompareTo (ServerStatistics other)
+        {
+            int result;
+            result = global::System.Collections.Generic.Comparer<ulong>.Default.Compare (BytesRead, other.BytesRead);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<ulong>.Default.Compare (BytesWritten, other.BytesWritten);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (BytesReadRate, other.BytesReadRate);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (BytesWrittenRate, other.BytesWrittenRate);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<ulong>.Default.Compare (RpcsExecuted, other.RpcsExecuted);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (RpcRate, other.RpcRate);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (TimePerRpcUpdate, other.TimePerRpcUpdate);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (PollTimePerRpcUpdate, other.PollTimePerRpcUpdate);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (ExecTimePerRpcUpdate, other.ExecTimePerRpcUpdate);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (Streams, other.Streams);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<ulong>.Default.Compare (StreamEvaluations, other.StreamEvaluations);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (StreamEvaluationRate, other.StreamEvaluationRate);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<float>.Default.Compare (TimePerStreamUpdate, other.TimePerStreamUpdate);
+            if (result != 0)
+                return result;
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServerStatistics orders before the second.
+        /// </summary>
+        public static bool operator < (ServerStatistics lhs, ServerStatistics rhs)
+        {
+            return lhs.CompareTo (rhs) < 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServerStatistics orders after the second.
+        /// </summary>
+        public static bool operator > (ServerStatistics lhs, ServerStatistics rhs)
+        {
+            return lhs.CompareTo (rhs) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServerStatistics does not order after the second.
+        /// </summary>
+        public static bool operator <= (ServerStatistics lhs, ServerStatistics rhs)
+        {
+            return lhs.CompareTo (rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServerStatistics does not order before the second.
+        /// </summary>
+        public static bool operator >= (ServerStatistics lhs, ServerStatistics rhs)
+        {
+            return lhs.CompareTo (rhs) >= 0;
+        }
+    }
+
+    /// <summary>
+    /// The status of the server.
+    /// </summary>
+    /// <remarks>
+    /// See <see cref="global::KRPC.Client.Services.KRPC.Service.GetStatus" />.
+    /// </remarks>
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+    public struct ServerStatus : IEquatable<ServerStatus>, IComparable<ServerStatus>
+    {
+        /// <summary>
+        /// Construct a ServerStatus from the values of its fields.
+        /// </summary>
+        public ServerStatus (string version, uint protocolVersion, global::KRPC.Client.Services.KRPC.ServerSettings settings, global::KRPC.Client.Services.KRPC.ServerStatistics statistics) : this ()
+        {
+            Version = version;
+            ProtocolVersion = protocolVersion;
+            Settings = settings;
+            Statistics = statistics;
+        }
+
+        /// <summary>
+        /// The version of the server, or <c>unknown</c>.
+        /// </summary>
+        public string Version { get; private set; }
+
+        /// <summary>
+        /// The protocol version of the connection.
+        /// </summary>
+        public uint ProtocolVersion { get; private set; }
+
+        /// <summary>
+        /// The settings of the server.
+        /// </summary>
+        public global::KRPC.Client.Services.KRPC.ServerSettings Settings { get; private set; }
+
+        /// <summary>
+        /// The performance statistics of the server.
+        /// </summary>
+        public global::KRPC.Client.Services.KRPC.ServerStatistics Statistics { get; private set; }
+
+        /// <summary>
+        /// Returns true if this ServerStatus is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is ServerStatus && Equals ((ServerStatus)obj);
+        }
+
+        /// <summary>
+        /// Returns true if this ServerStatus is equal to the given one.
+        /// </summary>
+        public bool Equals (ServerStatus other)
+        {
+            return global::KRPC.Client.ValueUtils.Equal (Version, other.Version) && global::KRPC.Client.ValueUtils.Equal (ProtocolVersion, other.ProtocolVersion) && global::KRPC.Client.ValueUtils.Equal (Settings, other.Settings) && global::KRPC.Client.ValueUtils.Equal (Statistics, other.Statistics);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this ServerStatus.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Version);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (ProtocolVersion);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Settings);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Statistics);
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two ServerStatus values are equal.
+        /// </summary>
+        public static bool operator == (ServerStatus lhs, ServerStatus rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two ServerStatus values are not equal.
+        /// </summary>
+        public static bool operator != (ServerStatus lhs, ServerStatus rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Compares this ServerStatus with the given one, by its fields in turn, which is
+        /// how a tuple of the same values compares. A field whose type has no ordering, such as
+        /// a collection, throws unless the two values are the same object, as it does in a
+        /// tuple, so two ServerStatuss that are equal can still throw here.
+        /// </summary>
+        public int CompareTo (ServerStatus other)
+        {
+            int result;
+            result = global::System.Collections.Generic.Comparer<string>.Default.Compare (Version, other.Version);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<uint>.Default.Compare (ProtocolVersion, other.ProtocolVersion);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<global::KRPC.Client.Services.KRPC.ServerSettings>.Default.Compare (Settings, other.Settings);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<global::KRPC.Client.Services.KRPC.ServerStatistics>.Default.Compare (Statistics, other.Statistics);
+            if (result != 0)
+                return result;
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServerStatus orders before the second.
+        /// </summary>
+        public static bool operator < (ServerStatus lhs, ServerStatus rhs)
+        {
+            return lhs.CompareTo (rhs) < 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServerStatus orders after the second.
+        /// </summary>
+        public static bool operator > (ServerStatus lhs, ServerStatus rhs)
+        {
+            return lhs.CompareTo (rhs) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServerStatus does not order after the second.
+        /// </summary>
+        public static bool operator <= (ServerStatus lhs, ServerStatus rhs)
+        {
+            return lhs.CompareTo (rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first ServerStatus does not order before the second.
+        /// </summary>
+        public static bool operator >= (ServerStatus lhs, ServerStatus rhs)
         {
             return lhs.CompareTo (rhs) >= 0;
         }

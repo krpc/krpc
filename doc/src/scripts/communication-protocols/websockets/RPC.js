@@ -5,7 +5,7 @@ const protobuf = require('protobufjs');
 
 const root = protobuf.loadSync('krpc.proto');
 const Message = root.lookupType('krpc.schema.Message');
-const Status = root.lookupType('krpc.schema.Status');
+const Tuple = root.lookupType('krpc.schema.Tuple');
 
 function send(conn, message) {
   conn.send(Message.encode(Message.fromObject(message)).finish());
@@ -46,8 +46,10 @@ conn.onmessage = (event) => {
     if (response.results[0].error)
       throw new Error('ERROR: ' + response.results[0].error.description);
 
-    // Decode the return value as a Status message, and print it out
-    console.log(Status.toObject(Status.decode(response.results[0].value), {longs: Number}));
+    // Decode the return value, a ServerStatus structure sent as a Tuple of its fields, and
+    // print out the server version, the first field
+    const status = Tuple.decode(response.results[0].value);
+    console.log(protobuf.Reader.create(status.items[0]).string());
 
     // End the connection with a disconnect, then a close frame
     send(conn, {disconnect: {reason: 'CLOSED'}});

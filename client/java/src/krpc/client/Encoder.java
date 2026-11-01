@@ -100,7 +100,6 @@ public class Encoder {
         case PROCEDURE_CALL:
         case SERVICES:
         case STREAM:
-        case STATUS:
           return encodeMessage((Message) value);
         default:
           throw new EncodingException("Failed to encode value");
@@ -273,8 +272,6 @@ public class Encoder {
           return decodeMessage(KRPC.Stream.newBuilder(), data);
         case EVENT:
           return new Event(connection, KRPC.Event.newBuilder().mergeFrom(data).build());
-        case STATUS:
-          return decodeMessage(KRPC.Status.newBuilder(), data);
         default:
           throw new EncodingException("Failed to decode value");
       }

@@ -9,7 +9,16 @@ import time
 
 import pytest
 import testee_pb2 as pb
-from driver import localsocket, profile, protocol, section, should, untested, values
+from driver import (
+    localsocket,
+    profile,
+    protocol,
+    raw,
+    section,
+    should,
+    untested,
+    values,
+)
 from driver.framing import CLIENT_IDENTIFIER, PROTOCOL_VERSION, encode_size, frame
 from driver.scripted import ScriptedServer, definitions, is_call
 from driver.testee import (
@@ -19,6 +28,7 @@ from driver.testee import (
     TesteeError,
     invocation,
 )
+from google.protobuf.internal.decoder import _DecodeVarint
 
 import krpc.schema.KRPC_pb2 as KRPC
 
@@ -436,6 +446,18 @@ def test_handshake_name(client, server):
     name = "Conformance client ü日本"
     client.connect(server, name=name)
     assert client.invoke("KRPC", "GetClientName") == name
+
+
+def test_handshake_status(client, server):
+    """``KRPC.GetStatus`` returns a structure that holds the version of the server, then
+    the protocol version of the connection."""
+    client.connect(server)
+    status = client.invoke("KRPC", "GetStatus")
+    assert isinstance(status, values.Struct)
+    expected = KRPC.Tuple.FromString(raw.call(server, "KRPC", "GetStatus").value)
+    size, start = _DecodeVarint(expected.items[0], 0)
+    assert status.fields[0] == expected.items[0][start : start + size].decode("utf-8")
+    assert status.fields[1] == 2
 
 
 def test_handshake_version(client, scripted_server):

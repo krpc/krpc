@@ -24,3 +24,4 @@ test_connection.py::test_localsocket_default_path  # The client has no default p
 test_connection.py::test_localsocket_fallback_path  # As test_localsocket_default_path
 test_values.py::test_structure_equality  # C has no equality of structures
 test_values.py::test_structure_hash  # The language has no hash of a value
+test_values.py::test_message_result  # nanopb decodes a repeated field with no max_count only through a callback the caller sets, so Services decodes empty

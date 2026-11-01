@@ -192,13 +192,14 @@ class TestClientGenDispatch(unittest.TestCase):
         )
         # A protobuf message is returned serialized
         self.assertIn(
-            "return Result.Message (connection.KRPC ().GetStatus ());", content
+            "return Result.Message (connection.KRPC ().GetServices ());", content
         )
-        content = generate("cnano", CnanoDispatchGenerator, "KRPC")
         self.assertIn(
-            "return Message<krpc_schema_Status, krpc_schema_Status_fields>::result(result);",
+            "return Result_KRPC_ServerStatus (connection.KRPC ().GetStatus ());",
             content,
         )
+        content = generate("cnano", CnanoDispatchGenerator, "KRPC")
+        self.assertIn("return KRPC_ServerStatus::result(result);", content)
         # A protobuf message is never an argument
         self.assertNotIn('"AddStream"', content)
 
