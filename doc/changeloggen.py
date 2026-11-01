@@ -1,14 +1,10 @@
 """Generate a single, unified changelog page (reStructuredText) for the docs
-site from the per-component ``CHANGELOG.md`` files.
+site from the per-component ``CHANGELOG.md`` files and the changelog fragments.
 
-The ``CHANGELOG.md`` files are markdown, but the page is built by parsing them
-rather than passing them through. Each file is a sequence of ``## [X.Y.Z[-pre]]``
-version headers (the in-development version carries an `` - unreleased`` suffix,
-which is ignored) followed by ``- `` bullet items; wrapped continuation lines are
-indented and carry no bullet. A ``  - `` bullet indented under an entry is a
-sub-item, used to group a long version's entries under topic headings. Issue/PR
-references appear inline as ``(#NNN)``, and code identifiers as markdown inline
-``code`` spans.
+The files are parsed by the shared ``changelog`` module, which merges each
+fragment into the unreleased section of its components. Issue/PR references
+appear inline as ``(#NNN)``, and code identifiers as markdown inline ``code``
+spans.
 
 Items may start with an inline ``**Breaking:**`` or ``**Deprecated:**`` marker.
 Such items stay in their component's list, where the marker is rendered as a small
@@ -16,9 +12,12 @@ highlighted label in front of the entry text.
 """
 
 import argparse
+import os
 import re
 import sys
 from dataclasses import dataclass, field
+
+import changelog
 
 
 @dataclass
@@ -49,14 +48,7 @@ _ROLES = "\n".join(
     ".. role:: %s\n   :class: changelog-marker %s\n" % (kind, kind) for kind in _LABELS
 )
 
-# Version header: the bracketed version, then any trailing text (e.g. the
-# ' - unreleased' marker on the in-development version). An optional `v` prefix
-# on the bracketed version is accepted and dropped, so the captured version is
-# bare (older frozen-doc sources predate the prefix); the `v` is re-added when
-# the heading is rendered.
-_VERSION_RE = re.compile(r"^##\s+\[v?(\d[^\]]*)\]\s*(.*)$")
 _RST_SPECIAL_RE = re.compile(r"([\\*`|_])")
-_ISSUE_RE = re.compile(r"#(\d+)")
 _NUM_RE = re.compile(r"^\d+$")
 # Markdown inline code span: `code`.
 _CODE_RE = re.compile(r"`([^`]+)`")
@@ -96,7 +88,7 @@ def escape_rst(text):
 
 def linkify(text):
     """Turn ``#NNN`` issue/PR references into clickable ``:issue:`` roles."""
-    return _ISSUE_RE.sub(r":issue:`\1`", text)
+    return changelog.NUMBER_RE.sub(r":issue:`\1`", text)
 
 
 def split_marker(raw):
@@ -107,76 +99,36 @@ def split_marker(raw):
     return "", raw
 
 
-def _make_item(fragments):
-    """Build an Item from a bullet's raw fragments (its text plus any wrapped
-    continuation lines), stripping and rendering the marker and inline markup."""
-    kind, body = split_marker(" ".join(fragments))
-    return Item(linkify(escape_rst(body)), kind)
+def to_items(nodes):
+    """Convert parsed entries into Items."""
+    items = []
+    for node in nodes:
+        kind, body = split_marker(node.text)
+        items.append(Item(linkify(escape_rst(body)), kind, to_items(node.children)))
+    return items
 
 
-def parse_changes(text):
-    """Parse a ``CHANGELOG.md`` into ``(versions, unreleased)``.
+def parse_component(path, version, fragments):
+    """Parse a component's ``CHANGELOG.md`` into ``(versions, unreleased)``,
+    with its fragment entries merged into the unreleased section of
+    ``version``.
 
     ``versions`` maps each version to its ``[Item, ...]``; ``unreleased`` is the
-    set of versions whose header carried the `` - unreleased`` marker. A ``- ``
-    bullet at the margin is a top-level entry; a ``  - `` bullet indented under
-    it is a sub-item; other indented lines continue the current bullet's text.
-    One level of nesting is supported."""
+    set of versions whose header carried the `` - unreleased`` marker."""
+    with open(path, encoding="utf-8") as fp:
+        sections = changelog.parse_changelog(fp.read(), path)
     versions = {}
     unreleased = set()
-    current = None
-    top = None  # open top-level Item (holds accumulating children)
-    top_fragments = None  # its raw text fragments
-    sub_fragments = None  # open sub-item's raw fragments, or None
-
-    def flush_sub():
-        nonlocal sub_fragments
-        if sub_fragments is not None:
-            assert top is not None
-            top.children.append(_make_item(sub_fragments))
-            sub_fragments = None
-
-    def flush_top():
-        nonlocal top, top_fragments
-        flush_sub()
-        if top is not None:
-            item = _make_item(top_fragments)
-            item.children = top.children
-            versions[current].append(item)
-            top = None
-            top_fragments = None
-
-    for raw_line in text.splitlines():
-        line = raw_line.rstrip()
-        stripped = line.strip()
-        if not stripped:
-            continue
-        match = _VERSION_RE.match(line)
-        if match:
-            flush_top()
-            current = match.group(1)
-            if "unreleased" in match.group(2).lower():
-                unreleased.add(current)
-            versions[current] = []
-            continue
-        if current is None:
-            continue
-        indent = len(line) - len(line.lstrip(" "))
-        if stripped.startswith("- "):
-            body = stripped[2:].strip()
-            if indent == 0 or top is None:
-                flush_top()
-                top = Item("", "")  # placeholder; real text set at flush
-                top_fragments = [body]
-            else:
-                flush_sub()
-                sub_fragments = [body]
-        elif sub_fragments is not None:
-            sub_fragments.append(stripped)
-        elif top_fragments is not None:
-            top_fragments.append(stripped)
-    flush_top()
-    return versions, unreleased
+    for section in sections:
+        versions[section.version] = section.nodes
+        if section.unreleased:
+            unreleased.add(section.version)
+    additions = changelog.additions(fragments, os.path.dirname(path))
+    if additions:
+        section = changelog.unreleased_section(sections, version, path)
+        versions[version] = changelog.merge(section.nodes if section else [], additions)
+        unreleased.add(version)
+    return {v: to_items(nodes) for v, nodes in versions.items()}, unreleased
 
 
 def heading(text, char):
@@ -237,22 +189,41 @@ def main():
     )
     parser.add_argument("output", help="Path to write the changelog .rst to")
     parser.add_argument(
-        "--entry",
+        "--changelog",
         action="append",
-        nargs=2,
-        metavar=("NAME", "PATH"),
         default=[],
-        help="A component display name and the path to its CHANGELOG.md",
+        help="The path to a component's CHANGELOG.md",
+    )
+    parser.add_argument(
+        "--fragment",
+        action="append",
+        default=[],
+        help="A changelog fragment, merged into the unreleased sections",
+    )
+    parser.add_argument(
+        "--version", required=True, help="The version the fragments are for"
     )
     args = parser.parse_args()
 
-    components = []
-    unreleased = set()
-    for name, path in args.entry:
-        with open(path, encoding="utf-8") as fp:
-            versions, marked = parse_changes(fp.read())
-        components.append((name, versions))
-        unreleased |= marked
+    paths = {os.path.dirname(path): path for path in args.changelog}
+    missing = [c for c, _ in changelog.shown_components() if c not in paths]
+    if missing:
+        print(f"no --changelog for {', '.join(missing)}", file=sys.stderr)
+        return 1
+
+    try:
+        fragments = changelog.load_fragments(args.fragment)
+        components = []
+        unreleased = set()
+        for component, name in changelog.shown_components():
+            versions, marked = parse_component(
+                paths[component], args.version, fragments
+            )
+            components.append((name, versions))
+            unreleased |= marked
+    except changelog.ChangelogError as error:
+        print(error, file=sys.stderr)
+        return 1
 
     content = render(components, unreleased)
     with open(args.output, "w", encoding="utf-8") as fp:

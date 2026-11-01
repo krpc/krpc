@@ -75,33 +75,37 @@ py_binary(
     name = "changeloggen",
     srcs = ["changeloggen.py"],
     main = "changeloggen.py",
+    deps = ["//:changelog"],
 )
 
-# Unified changelog page, merged from every component's CHANGELOG.md. The dict
-# order below sets the per-version component order on the rendered page.
+# Unified changelog page, merged from every component's CHANGELOG.md and the
+# changelog fragments
 changeloggen(
     name = "changelog",
     out = "src/changelog.rst",
-    components = {
-        "//core:CHANGELOG.md": "Core",
-        "//server:CHANGELOG.md": "Server",
-        "//service/SpaceCenter:CHANGELOG.md": "SpaceCenter service",
-        "//service/Drawing:CHANGELOG.md": "Drawing service",
-        "//service/UI:CHANGELOG.md": "User Interface service",
-        "//service/InfernalRobotics:CHANGELOG.md": "InfernalRobotics service",
-        "//service/KerbalAlarmClock:CHANGELOG.md": "KerbalAlarmClock service",
-        "//service/RemoteTech:CHANGELOG.md": "RemoteTech service",
-        "//service/LiDAR:CHANGELOG.md": "LIDAR service",
-        "//service/DockingCamera:CHANGELOG.md": "DockingCamera service",
-        "//service/Debug:CHANGELOG.md": "Debug service",
-        "//client/cnano:CHANGELOG.md": "C-nano client",
-        "//client/csharp:CHANGELOG.md": "C# client",
-        "//client/cpp:CHANGELOG.md": "C++ client",
-        "//client/java:CHANGELOG.md": "Java client",
-        "//client/lua:CHANGELOG.md": "Lua client",
-        "//client/python:CHANGELOG.md": "Python client",
-        "//tools/krpctools:CHANGELOG.md": "krpctools",
-    },
+    changelogs = [
+        "//core:CHANGELOG.md",
+        "//server:CHANGELOG.md",
+        "//service/SpaceCenter:CHANGELOG.md",
+        "//service/Drawing:CHANGELOG.md",
+        "//service/UI:CHANGELOG.md",
+        "//service/InfernalRobotics:CHANGELOG.md",
+        "//service/KerbalAlarmClock:CHANGELOG.md",
+        "//service/RemoteTech:CHANGELOG.md",
+        "//service/LiDAR:CHANGELOG.md",
+        "//service/DockingCamera:CHANGELOG.md",
+        "//service/Debug:CHANGELOG.md",
+        "//client/cnano:CHANGELOG.md",
+        "//client/csharp:CHANGELOG.md",
+        "//client/cpp:CHANGELOG.md",
+        "//client/java:CHANGELOG.md",
+        "//client/lua:CHANGELOG.md",
+        "//client/python:CHANGELOG.md",
+        "//tools/krpctools:CHANGELOG.md",
+    ],
+    fragments = ["//:changelog-fragments"],
+    # The release version, without the suffix CI stamps on a dev build
+    version = version.partition("-")[0],
 )
 
 py_console_script_binary(
@@ -492,6 +496,7 @@ py_pyright_test(
     srcs = glob(["*.py"]),
     python_version = "3.12",
     deps = [
+        "//:changelog",
         "//client/python:krpc_lib",
         "@krpc_pypi//cogapp",
         "@krpc_pypi//watchdog",

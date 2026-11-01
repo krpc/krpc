@@ -5,14 +5,15 @@ def _impl(ctx):
 
     args = ctx.actions.args()
     args.add(out.path)
+    args.add("--version", ctx.attr.version)
 
     inputs = []
-    for target, name in ctx.attr.components.items():
-        for f in target.files.to_list():
-            args.add("--entry")
-            args.add(name)
-            args.add(f.path)
-            inputs.append(f)
+    for f in ctx.files.changelogs:
+        args.add("--changelog", f.path)
+        inputs.append(f)
+    for f in ctx.files.fragments:
+        args.add("--fragment", f.path)
+        inputs.append(f)
 
     ctx.actions.run(
         inputs = inputs,
@@ -26,13 +27,16 @@ changeloggen = rule(
     implementation = _impl,
     attrs = {
         "out": attr.output(mandatory = True),
-        # Maps each CHANGELOG.md target to the display name shown on the page.
-        # Insertion order is preserved and becomes the per-version component
-        # order on the rendered page.
-        "components": attr.label_keyed_string_dict(
+        # The CHANGELOG.md of each component, named and ordered on the page by
+        # COMPONENTS in tools/release/changelog.py
+        "changelogs": attr.label_list(
             allow_files = True,
             mandatory = True,
         ),
+        # The changelog fragments, merged into the unreleased sections
+        "fragments": attr.label_list(allow_files = True),
+        # The version the fragments are for, from config.bzl
+        "version": attr.string(mandatory = True),
         "_changeloggen": attr.label(
             default = Label("//doc:changeloggen"),
             executable = True,
