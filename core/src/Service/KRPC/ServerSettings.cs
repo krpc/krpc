@@ -18,7 +18,7 @@ namespace KRPC.Service.KRPC
         public bool OneRpcPerUpdate { get; set; }
 
         /// <summary>
-        /// The maximum time spent executing calls per update, in microseconds.
+        /// The current maximum time spent executing calls per update, in microseconds.
         /// </summary>
         [KRPCProperty]
         public uint MaxTimePerUpdate { get; set; }
