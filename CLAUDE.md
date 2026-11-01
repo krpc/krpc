@@ -303,35 +303,50 @@ For example, `gh pr edit N --milestone ksp-v0.8.0 --add-label bug --add-label se
 
 Per-component `CHANGELOG.md`, markdown in the style of [keepachangelog.com](https://keepachangelog.com)
 but with entries grouped logically rather than by add/change/fix type. Entries are `- ` bullets under a
-`## [X.Y.Z]` version header, newest version first; wrapped lines indent 2 spaces. The current version
-(`tools/krpc-version.sh`) is headed `## [X.Y.Z] - unreleased`; releasing drops the suffix (`30-tag.py`).
-Add entries under that header, creating it if needed, only for components actually modified.
-`doc/src/changelog.rst` is generated from these files.
+`## [vX.Y.Z]` version header, newest version first; wrapped lines indent 2 spaces. A `  - ` sub-item
+under an entry makes it a topic. `doc/src/changelog.rst` is generated from these files.
 
+**A PR adds its entries as a fragment**, `changelog.d/<branch>.md` (`/` in the branch name becomes
+`-`), never by editing `CHANGELOG.md`. One `## <component>` section per component it changes, named
+by directory, holding entries in the `CHANGELOG.md` syntax:
+
+```markdown
+## client/python
+
+- Connections
+  - Add `handshake_timeout` to `connect` (#1219)
+
+## server
+
+- Accept clients over one connection (#1219)
+```
+
+ * The components are listed in `COMPONENTS` in `tools/release/changelog.py`. `tools/buildenv` and
+   the projects under `experimental/` are not among them, and edit their `CHANGELOG.md` directly.
+ * A new component goes in `COMPONENTS`, with its `CHANGELOG.md` in `//doc:changelog`. The docs page
+   and the release notes take their component names and order from `COMPONENTS`.
+ * The docs page and release notes merge the fragments into each component's unreleased section. A
+   topic merges with the topic of the same text. `//:changelog-fragments-test` checks the format.
+ * Commit the fragment with the change it describes. A PR with no user-facing change adds none.
+ * The release preparation PR folds the fragments into `CHANGELOG.md` (`01-fold-changelogs.py`).
  * Be concise and high level. Size the entry to the diff. Keep your audience in mind: these are read by
    the end user, not a developer. The PR/issue link provides the detail, not the changelog text.
  * Verb-first and one clause. An entry over 30 words is nearly always two entries, or one entry
    plus detail that belongs in the PR. No rationale, and no analogy to what the game does.
- * **Before a branch is pushed, consolidate into a dedicated final commit** (single-commit PRs
-   excepted) — every PR touches these files. On an unpushed local branch this is relaxed: you may
-   commit changelog entries freely, e.g. alongside the change they describe. Squash them into that
-   single final commit before the branch is pushed.
  * Relative to the **last release**, not the previous commit. A fix to behavior introduced during the
-   current unreleased dev cycle gets **no entry**.
- * User-facing changes only. No changes since the last release → no version section at all; never add
-   an empty or padding section.
+   current unreleased dev cycle gets **no entry**, and edits the fragment that added it instead. A
+   PR that undoes an unreleased change removes its entry, or deletes the fragment.
+ * User-facing changes only.
  * Code identifiers (RPCs, types, settings, file names) go in backticks for monospace, e.g. `` `SpaceCenter.Camera` ``.
  * At most one marker: `**Breaking:**` (users must react) or `**Deprecated:**` (exists, avoid). Both →
    `**Breaking:**`, mention the deprecation in the text. A marker opens the entry, before the text.
- * Suffix `(#NNN)`. Issues and PRs share one number sequence. The number is only required before the
-   branch is pushed as a PR — on an unpushed local branch you may commit an entry without it and fill
-   it in later. To predict it, take one more than the highest existing number:
+ * Suffix `(#NNN)`, the PR or the issue it fixes. Issues and PRs share one number sequence. On an
+   unpushed local branch you may commit an entry without it and fill it in later. To predict the PR
+   number, take one more than the highest existing number:
 
    ```bash
    gh api repos/:owner/:repo/issues -X GET -f state=all -f per_page=1 --jq '.[0].number'
    ```
 
-   Create the PR right after pushing, then check the number it got. If it matches, nothing to do; if
-   someone else took the number in between, fix the entry and **amend it into the changelog commit**
-   (`git commit --amend`, then `git push --force-with-lease`) rather than adding a second one — the
-   changelog stays a single commit. Only suffix the entries this PR adds; leave existing ones alone.
+   Create the PR right after pushing, then check the number it got. If someone else took the number
+   in between, fix the entry in a follow-up commit. Only suffix the entries this PR adds.

@@ -44,6 +44,23 @@ A few things make a pull request easier to review:
 You do not need to tidy your commits. Before merging, we may push small fixes to your branch,
 such as a missing changelog entry.
 
+## Changelog Entries
+
+A change users will notice gets a changelog entry. Add a new file to `changelog.d/`, named after
+your branch, such as `changelog.d/fix-stream-wait.md`:
+
+```markdown
+## client/python
+
+- Fix `Stream.wait` returning before the timeout on Windows (#1174)
+```
+
+Each `##` heading names the directory of a component you changed, such as `server`,
+`service/SpaceCenter` or `client/python`. Each entry is a `- ` bullet with wrapped lines indented by
+two spaces, ending with the issue it fixes or the pull request number. `bazel test
+//:changelog-fragments-test` checks the file. The entries are added to each component's
+`CHANGELOG.md` when kRPC is released.
+
 ## License
 
 Your contribution is licensed under the license of the part of kRPC you change. See
