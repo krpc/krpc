@@ -31,6 +31,10 @@ namespace KRPC.UI
 
         internal bool Resized { get; set; }
 
+        // Rows whose number changes outside the window, i.e. clients, server info and errors
+        int rows;
+        int previousRows;
+
         bool showAdvancedServerOptions;
         string maxTimePerUpdate;
         string recvTimeout;
@@ -195,6 +199,7 @@ namespace KRPC.UI
                 Resized = false;
             }
 
+            rows = 0;
             GUILayout.BeginVertical();
 
             DrawStartServer();
@@ -210,14 +215,21 @@ namespace KRPC.UI
             GUILayoutExtensions.Separator(separatorStyle);
 
             if (Errors.Any()) {
-                foreach (var error in Errors)
+                foreach (var error in Errors) {
                     GUILayout.Label(error, errorLabelStyle);
+                    rows++;
+                }
                 GUILayoutExtensions.Separator(separatorStyle);
             }
 
             DrawAdvancedServerOptions();
             DrawShowInfoWindow();
             GUILayout.EndVertical();
+
+            // The window grows to fit its content, but only shrinks when its height is reset
+            if (rows < previousRows)
+                Resized = true;
+            previousRows = rows;
 
             GUI.DragWindow ();
         }
@@ -334,6 +346,7 @@ namespace KRPC.UI
         // "table". Matches the style of the info window.
         void DrawServerInfoRow (string name, string value)
         {
+            rows++;
             GUILayout.BeginHorizontal ();
             GUILayout.Label (name, labelStyle, GUILayout.Width (serverInfoLabelWidth * GameSettings.UI_SCALE));
             GUILayout.Label (value, stretchyLabelStyle);
@@ -380,6 +393,7 @@ namespace KRPC.UI
                 foreach (var entry in clientDescriptions) {
                     var client = entry.Key;
                     var description = entry.Value;
+                    rows++;
                     GUILayout.BeginHorizontal ();
                     GUILayoutExtensions.Light (IsClientActive (client), lightStyle);
                     GUILayout.Label (description, stretchyLabelStyle);
