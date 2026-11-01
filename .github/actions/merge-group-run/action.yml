@@ -1,0 +1,45 @@
+outputs:
+  run-id:
+    description: The id of the successful merge queue run of ci for the pushed commit, or empty
+    value: ${{ steps.find.outputs.run-id }}
+# The merge queue fast-forwards main to the commit its run tested, so a push to
+# main has a merge_group run for the same commit. A direct push has none. The
+# queue merges once the required check passes, which can be before the run is
+# marked completed, so a run still in progress is waited for, up to 15 minutes.
+# A run that does not succeed in that time fails the step.
+runs:
+  using: composite
+  steps:
+    - name: find
+      id: find
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        deadline=$((SECONDS + 15 * 60))
+        while true; do
+          run=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci --event merge_group \
+            --commit "$GITHUB_SHA" --limit 1 --json databaseId,status,conclusion \
+            --jq '.[0] | select(.) | "\(.databaseId) \(.status) \(.conclusion)"')
+          if [ -z "$run" ]; then
+            echo "::notice::No merge queue run of ci for $GITHUB_SHA, which was pushed directly"
+            echo "run-id=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          read -r run_id status conclusion <<< "$run"
+          if [ "$status" = completed ] && [ "$conclusion" = success ]; then
+            echo "merge queue run: $run_id"
+            echo "run-id=$run_id" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$status" = completed ]; then
+            echo "::error::Merge queue run $run_id of ci for $GITHUB_SHA concluded $conclusion"
+            exit 1
+          fi
+          if [ "$SECONDS" -ge "$deadline" ]; then
+            echo "::error::Merge queue run $run_id of ci for $GITHUB_SHA is still $status after 15 minutes"
+            exit 1
+          fi
+          echo "merge queue run $run_id is $status; waiting"
+          sleep 20
+        done

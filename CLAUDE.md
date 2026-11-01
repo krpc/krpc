@@ -253,6 +253,9 @@ cannot.
 
 ## Pull requests
 
+ * Pull requests merge through the merge queue, which runs CI on the combined tree. A push to
+   `main` runs only the cache refresh, so a direct push is only for files no build or test reads,
+   such as `README.md` and `CLAUDE.md`.
  * Concise technical prose, proportional to the diff; bullets only for discrete items. Multi-part
    change → lead paragraphs with a short bold phrase (`**Root cause.**`, `**Fix.**`, `**Testing.**`).
  * State the problem, the change, and for a fix how it was verified.

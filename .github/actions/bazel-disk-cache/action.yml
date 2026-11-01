@@ -5,6 +5,9 @@ inputs:
   bazelrc:
     description: The rc file every later Bazel command in the job reads
     required: true
+  lookup-only:
+    description: Check for the cache without restoring it
+    default: "false"
 outputs:
   key:
     value: ${{ steps.cache-key.outputs.key }}
@@ -43,3 +46,4 @@ runs:
       with:
         path: ${{ steps.cache-key.outputs.path }}
         key: ${{ steps.cache-key.outputs.key }}
+        lookup-only: ${{ inputs.lookup-only }}
