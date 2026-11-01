@@ -167,12 +167,14 @@ class DispatchGenerator(Generator):
         result = None
         if return_type is not None:
             result = self.result(return_type)
-        # An event or a stream is a handle to a stream, and a procedure that returns one or a
-        # message is not streamed
-        streamed = return_type is not None and not isinstance(
-            return_type, (MessageType, EventType, StreamType)
-        )
         member_kind, cls, member_name = _classify(name)
+        # An event or a stream is a handle to a stream, and a procedure that returns one or a
+        # message is not streamed. A C# expression tree cannot assign, so a setter is not
+        # streamed either.
+        if return_type is None:
+            streamed = member_kind not in (SETTER, CLASS_SETTER)
+        else:
+            streamed = not isinstance(return_type, (MessageType, EventType, StreamType))
         # A call for each number of arguments, where the stub fills in the defaults of the
         # arguments left off the end
         counts = [len(parameters)]

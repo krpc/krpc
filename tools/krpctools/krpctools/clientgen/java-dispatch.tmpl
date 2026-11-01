@@ -47,7 +47,11 @@ final class {{ service_name }}Dispatch {
           {% for p in variant.parameters %}
           {{ p.boxed }} {{ p.name }} = Values.arg({{ p.arg }}, args.get({{ p.index }}));
           {% endfor %}
+          {% if member.result %}
           return new StreamHandle({{ variant.stream }}, x -> Values.<{{ member.result.boxed }}>result({{ member.result.result }}, ({{ member.result.boxed }}) x));
+          {% else %}
+          return new StreamHandle({{ variant.stream }}, x -> Values.resultNone());
+          {% endif %}
         }
         {% endfor %}
         throw Values.wrongArgumentCount(procedure, args.size());

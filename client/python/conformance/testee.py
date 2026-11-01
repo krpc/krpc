@@ -566,7 +566,7 @@ class Testee:
     def _add_function_stream(self, command: pb.AddFunctionStream) -> int:
         stream = self._connection().add_stream(self._from_value(command.function))
         handle = self._add_handle(self._streams, stream)
-        if not command.type.startswith("nullable "):
+        if command.type and not command.type.startswith("nullable "):
             self._not_nullable.add(handle)
         return handle
 

@@ -223,7 +223,8 @@ message AddStream {
 }
 
 // Builds a server side function that makes a call, with KRPC.Expression.Call over the call the
-// client builds for its stream. Replies with the function as an object Value.
+// client builds for its stream. Replies with the function as an object Value. The call can be of
+// a procedure with no return value, other than a property setter.
 message Call {
   Invoke invoke = 1;
 }
@@ -240,9 +241,10 @@ message CallWithArguments {
 // value type, for a client that names the type of a stream. It is one of "double", "float",
 // "sint32", "sint64", "uint32", "uint64", "bool", "string", "bytes", "TestClass", "TestEnum",
 // "TestStruct", "nullable sint32", "list(sint32)", "set(sint32)", "tuple(sint32,bool)" and
-// "dictionary(string,list(sint32))". A testee for another type replies with an UNSUPPORTED error.
-// A testee whose client gives null for a type named without "nullable", as the client's type can
-// hold null, replies to a Get of the stream with an UNSUPPORTED error.
+// "dictionary(string,list(sint32))", or unset for a function with no value. A testee for another
+// type replies with an UNSUPPORTED error. A testee whose client gives null for a type named
+// without "nullable", as the client's type can hold null, replies to a Get of the stream with an
+// UNSUPPORTED error.
 message AddFunctionStream {
   Value function = 1;
   string type = 2;

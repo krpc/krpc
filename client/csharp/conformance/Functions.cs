@@ -108,6 +108,8 @@ namespace KRPC.Client.Conformance
 
         public static IStreamHandle AddStream (Connection connection, AddFunctionStream command)
         {
+            if (command.Type.Length == 0)
+                return Result.Stream (connection.AddStream (Arg.Object<Expression> (command.Function)));
             var nullable = command.Type.StartsWith ("nullable ", StringComparison.Ordinal);
             return Get (command.Type).AddStream (connection, Arg.Object<Expression> (command.Function), nullable);
         }

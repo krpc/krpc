@@ -17,6 +17,7 @@
 #include <stdexcept>
 #include <string>
 #include <tuple>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -338,7 +339,15 @@ template <typename T, typename F>
 StreamHandle result_stream(krpc::Stream<T> stream, F convert) {
   auto shared = std::make_shared<krpc::Stream<T>>(std::move(stream));
   StreamHandle handle;
-  handle.get = [shared, convert]() { return convert((*shared)()); };
+  handle.get = [shared, convert]() {
+    if constexpr (std::is_void_v<T>) {
+      (void)convert;
+      (*shared)();
+      return result_none();
+    } else {
+      return convert((*shared)());
+    }
+  };
   handle.wait = [shared](double timeout) { return shared->wait(timeout); };
   handle.acquire = [shared]() { shared->acquire(); };
   handle.release = [shared]() { shared->release(); };
@@ -362,7 +371,12 @@ StreamHandle result_stream(krpc::Stream<T> stream, F convert) {
     return other_stream != nullptr && *shared == **other_stream;
   };
   handle.add_callback = [shared, convert](std::function<void(const Value&)> callback) {
-    return shared->add_callback([convert, callback](T x) { callback(convert(x)); });
+    if constexpr (std::is_void_v<T>) {
+      (void)convert;
+      return shared->add_callback([callback]() { callback(result_none()); });
+    } else {
+      return shared->add_callback([convert, callback](T x) { callback(convert(x)); });
+    }
   };
   handle.remove_callback = [shared](int tag) { shared->remove_callback(tag); };
   handle.add_end_callback = [shared](std::function<void(std::exception_ptr)> callback) {
@@ -370,6 +384,11 @@ StreamHandle result_stream(krpc::Stream<T> stream, F convert) {
   };
   handle.remove_end_callback = [shared](int tag) { shared->remove_end_callback(tag); };
   return handle;
+}
+
+/** A stream of a call or function with no value, whose value is none. */
+inline StreamHandle result_stream(krpc::Stream<void> stream) {
+  return result_stream(std::move(stream), [] {});
 }
 
 }  // namespace krpc_conformance

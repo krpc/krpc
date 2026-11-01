@@ -299,6 +299,11 @@ namespace KRPC.Client.Conformance
         {
             return new StreamHandle<T> (stream, convert);
         }
+
+        public static IStreamHandle Stream (global::KRPC.Client.Stream stream)
+        {
+            return new StreamHandle (stream);
+        }
     }
 
     /// <summary>
@@ -330,20 +335,22 @@ namespace KRPC.Client.Conformance
         void RemoveEndCallback (int tag);
     }
 
-    sealed class StreamHandle<T> : IStreamHandle
+    /// <summary>
+    /// A stream of a call or function with no value, whose value is none.
+    /// </summary>
+    class StreamHandle : IStreamHandle
     {
-        readonly Stream<T> stream;
-        readonly Func<T, Value> convert;
+        readonly global::KRPC.Client.Stream stream;
 
-        public StreamHandle (Stream<T> stream, Func<T, Value> convert)
+        public StreamHandle (global::KRPC.Client.Stream stream)
         {
             this.stream = stream;
-            this.convert = convert;
         }
 
-        public Value Get ()
+        public virtual Value Get ()
         {
-            return convert (stream.Get ());
+            stream.Get ();
+            return Result.None ();
         }
 
         public bool Wait (double timeout)
@@ -371,9 +378,9 @@ namespace KRPC.Client.Conformance
             stream.Remove ();
         }
 
-        public int AddCallback (Action<Value> callback)
+        public virtual int AddCallback (Action<Value> callback)
         {
-            return stream.AddCallback (x => callback (convert (x)));
+            return stream.AddCallback (() => callback (Result.None ()));
         }
 
         public void RemoveCallback (int tag)
@@ -389,6 +396,28 @@ namespace KRPC.Client.Conformance
         public void RemoveEndCallback (int tag)
         {
             stream.RemoveEndCallback (tag);
+        }
+    }
+
+    sealed class StreamHandle<T> : StreamHandle
+    {
+        readonly Stream<T> stream;
+        readonly Func<T, Value> convert;
+
+        public StreamHandle (Stream<T> stream, Func<T, Value> convert) : base (stream)
+        {
+            this.stream = stream;
+            this.convert = convert;
+        }
+
+        public override Value Get ()
+        {
+            return convert (stream.Get ());
+        }
+
+        public override int AddCallback (Action<Value> callback)
+        {
+            return stream.AddCallback (x => callback (convert (x)));
         }
     }
 }
