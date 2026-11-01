@@ -114,10 +114,8 @@ class {{ service_name }} : public Service {
   {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
   {% endfor %}
   {% for procedure_name,procedure in procedures.items() %}
-  {% if procedure.return_type != 'void' %}
 
   ::krpc::Stream<{{ procedure.return_type }}> {{ procedure_name }}_stream({{ sig_parameters(procedure.parameters) }});
-  {% endif %}
   {% endfor %}
   {% for property_name,property in properties.items() %}
   {% if property.return_type != 'void' %}
@@ -165,16 +163,12 @@ class {{ service_name }} : public Service {
     {{ property.return_type }} {{ property_name }}({{ sig_parameters(property.parameters) }});
     {% endfor %}
     {% for method_name,method in cls.methods.items() %}
-    {% if method.return_type != 'void' %}
 
     ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters(method.parameters) }});
-    {% endif %}
     {% endfor %}
     {% for method_name,method in cls.static_methods.items() %}
-    {% if method.return_type != 'void' %}
 
     static ::krpc::Stream<{{ method.return_type }}> {{ method_name }}_stream({{ sig_parameters([{'type': 'Client&', 'name': 'client'}] + method.parameters) }});
-    {% endif %}
     {% endfor %}
     {% for property_name,property in cls.properties.items() %}
     {% if property.return_type != 'void' %}
@@ -414,7 +408,7 @@ inline {{ procedure.return_type }} {{ service_name }}::{{ procedure_name }}({{ i
 }
 {% endfor %}
 {% for procedure_name,procedure in procedures.items()|list + properties.items()|list %}
-{% if procedure.return_type != 'void' %}
+{% if procedure_name in procedures or procedure.return_type != 'void' %}
 
 inline ::krpc::Stream<{{ procedure.return_type }}> {{ service_name }}::{{ procedure_name }}_stream({{ impl_parameters(procedure.parameters) }}) {
 {% if procedure.parameters | length > 0 %}{{ args(procedure.parameters) | indent(width=2) }}
@@ -455,7 +449,7 @@ inline {{ method.return_type }} {{ service_name }}::{{ class_name }}::{{ method_
 }
 {% endfor %}
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
-{% if method.return_type != 'void' %}
+{% if method_name in cls.methods or method.return_type != 'void' %}
 
 inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method_name }}_stream({{ impl_parameters(method.parameters) }}) {
 {{ args([{'name': '*this'}] + method.parameters) | indent(width=2) }}
@@ -464,14 +458,12 @@ inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_nam
 {% endif %}
 {% endfor %}
 {% for method_name,method in cls.static_methods.items() %}
-{% if method.return_type != 'void' %}
 
 inline ::krpc::Stream<{{ method.return_type }}> {{ service_name }}::{{ class_name }}::{{ method_name }}_stream({{ impl_parameters([{'type': 'Client&', 'name': '_client'}] + method.parameters) }}) {
 {% if method.parameters | length > 0 %}{{ args(method.parameters) | indent(width=2) }}
 {% endif %}
 {{ stream(service_name, method.remote_name, method.return_type, method.parameters | length > 0, True) | indent(width=2) }}
 }
-{% endif %}
 {% endfor %}
 {% for method_name,method in cls.methods.items()|list + cls.properties.items()|list %}
 

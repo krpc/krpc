@@ -361,17 +361,27 @@ std::vector<std::optional<std::string>> encode_arguments(const services::KRPC::E
   return encoded;
 }
 
-/** Throw unless the template type describes the values the function evaluates to. */
+/**
+ * Throw unless the template type describes the values the function evaluates to. A void
+ * template type describes a function with no value. The name is that of the template that
+ * takes the type, run or add_stream.
+ */
 template <typename T>
-void check_return_type(const services::KRPC::Expression& function) {
+void check_return_type(const services::KRPC::Expression& function, const char* name) {
   auto type = return_type(function);
-  if (type.code() == schema::Type::NONE)
-    throw std::invalid_argument(
-        "The function does not evaluate to a value. Call run without a "
-        "template type");
-  if (!describes(type_tag<T>{}, type))
-    throw std::invalid_argument(
-        "The template type does not match the type of the values the function evaluates to");
+  if constexpr (std::is_void_v<T>) {
+    if (type.code() != schema::Type::NONE)
+      throw std::invalid_argument(std::string("The function evaluates to a value. Call ") + name +
+                                  " with the value's type as its template type");
+    return;
+  } else {
+    if (type.code() == schema::Type::NONE)
+      throw std::invalid_argument(std::string("The function does not evaluate to a value. Call ") +
+                                  name + " with a void template type");
+    if (!describes(type_tag<T>{}, type))
+      throw std::invalid_argument(
+          "The template type does not match the type of the values the function evaluates to");
+  }
 }
 
 // Constructs a function stream, whose constructor is private to Stream
@@ -386,16 +396,16 @@ struct function_streams {
 
 /**
  * Create a stream from a server side function, evaluated on each update. Each call creates a new
- * stream. Throws std::invalid_argument if the template type does not describe the function's
- * value, StreamError if the client is not connected to a server, and
- * services::KRPC::ArgumentException if the function has parameters. Reading a null value throws
- * std::runtime_error unless the template type is a std::optional. In a callback, that error is
- * written to stderr and the callback does not run.
+ * stream. A Stream<void> runs a function with no value for its effects. Throws
+ * std::invalid_argument if the template type does not describe the function's value, StreamError if
+ * the client is not connected to a server, and services::KRPC::ArgumentException if the function
+ * has parameters. Reading a null value throws std::runtime_error unless the template type is a
+ * std::optional. In a callback, that error is written to stderr and the callback does not run.
  */
 template <typename T>
 inline Stream<T> add_stream(const services::KRPC::Expression& function) {
   function._client->check_stream_connection();
-  function_stream_detail::check_return_type<T>(function);
+  function_stream_detail::check_return_type<T>(function, "add_stream");
   uint64_t stream_id = internal_procedures::add_function_stream(function);
   return function_stream_detail::function_streams::create<T>(
       function._client, stream_id, !function_stream_detail::is_optional<T>::value);
@@ -433,7 +443,7 @@ inline Event add_event(const services::KRPC::Expression& function) {
  */
 template <typename T = void, typename... Args>
 inline T run(const services::KRPC::Expression& function, const Args&... args) {
-  if constexpr (!std::is_void_v<T>) function_stream_detail::check_return_type<T>(function);
+  if constexpr (!std::is_void_v<T>) function_stream_detail::check_return_type<T>(function, "run");
   auto arguments = function_stream_detail::encode_arguments(function, args...);
   [[maybe_unused]] auto data = internal_procedures::run_function(function, arguments);
   if constexpr (!std::is_void_v<T>) {

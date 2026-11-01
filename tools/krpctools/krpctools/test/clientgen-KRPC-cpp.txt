@@ -417,6 +417,12 @@ class KRPC : public Service {
 
   ::krpc::Stream<KRPC::ServerStatus> get_status_stream();
 
+  ::krpc::Stream<void> hold_tick_stream();
+
+  ::krpc::Stream<void> next_tick_stream();
+
+  ::krpc::Stream<void> release_tick_stream();
+
   ::krpc::Stream<std::vector<KRPC::ClientInfo>> clients_stream();
 
   ::krpc::Stream<KRPC::GameScene> game_scene_stream();
@@ -3187,6 +3193,18 @@ inline ::krpc::Stream<krpc::schema::Services> KRPC::get_services_stream() {
 
 inline ::krpc::Stream<KRPC::ServerStatus> KRPC::get_status_stream() {
   return ::krpc::Stream<KRPC::ServerStatus>(this->_client, this->_client->build_call("KRPC", "GetStatus"));
+}
+
+inline ::krpc::Stream<void> KRPC::hold_tick_stream() {
+  return ::krpc::Stream<void>(this->_client, this->_client->build_call("KRPC", "HoldTick"));
+}
+
+inline ::krpc::Stream<void> KRPC::next_tick_stream() {
+  return ::krpc::Stream<void>(this->_client, this->_client->build_call("KRPC", "NextTick"));
+}
+
+inline ::krpc::Stream<void> KRPC::release_tick_stream() {
+  return ::krpc::Stream<void>(this->_client, this->_client->build_call("KRPC", "ReleaseTick"));
 }
 
 inline ::krpc::Stream<std::vector<KRPC::ClientInfo>> KRPC::clients_stream() {

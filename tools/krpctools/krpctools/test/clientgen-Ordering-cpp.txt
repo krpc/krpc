@@ -38,6 +38,10 @@ class ServiceA : public Service {
    */
   void frob_all(std::vector<ServiceB::Mode> modes);
 
+  ::krpc::Stream<void> frob_stream(ServiceB::Mode mode);
+
+  ::krpc::Stream<void> frob_all_stream(std::vector<ServiceB::Mode> modes);
+
   ::krpc::schema::ProcedureCall frob_call(ServiceB::Mode mode);
 
   ::krpc::schema::ProcedureCall frob_all_call(std::vector<ServiceB::Mode> modes);
@@ -63,6 +67,20 @@ inline void ServiceA::frob_all(std::vector<ServiceB::Mode> modes = std::vector<S
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(modes));
   this->_client->invoke("ServiceA", "FrobAll", _args, ::krpc::Client::Returns::value);
+}
+
+inline ::krpc::Stream<void> ServiceA::frob_stream(ServiceB::Mode mode = ServiceB::Mode::fast) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(mode));
+  return ::krpc::Stream<void>(this->_client, this->_client->build_call("ServiceA", "Frob", _args));
+}
+
+inline ::krpc::Stream<void> ServiceA::frob_all_stream(std::vector<ServiceB::Mode> modes = std::vector<ServiceB::Mode>{ServiceB::Mode::fast}) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(modes));
+  return ::krpc::Stream<void>(this->_client, this->_client->build_call("ServiceA", "FrobAll", _args));
 }
 
 inline ::krpc::schema::ProcedureCall ServiceA::frob_call(ServiceB::Mode mode = ServiceB::Mode::fast) {

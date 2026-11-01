@@ -533,6 +533,12 @@ class TestService : public Service {
 
   ::krpc::Stream<::krpc::Event> remove_event_after_stream(uint32_t milliseconds);
 
+  ::krpc::Stream<void> remove_test_object_stream(TestService::TestClass value);
+
+  ::krpc::Stream<void> reset_custom_exception_later_stream();
+
+  ::krpc::Stream<void> reset_invalid_operation_exception_later_stream();
+
   ::krpc::Stream<TestService::TestClass> return_null_when_not_allowed_stream();
 
   ::krpc::Stream<int32_t> scalar_default_stream(int32_t x);
@@ -3093,6 +3099,21 @@ inline ::krpc::Stream<::krpc::Event> TestService::remove_event_after_stream(uint
   _args.reserve(1);
   _args.push_back(encoder::encode_arg(milliseconds));
   return ::krpc::Stream<::krpc::Event>(this->_client, this->_client->build_call("TestService", "RemoveEventAfter", _args));
+}
+
+inline ::krpc::Stream<void> TestService::remove_test_object_stream(TestService::TestClass value) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_arg(value));
+  return ::krpc::Stream<void>(this->_client, this->_client->build_call("TestService", "RemoveTestObject", _args));
+}
+
+inline ::krpc::Stream<void> TestService::reset_custom_exception_later_stream() {
+  return ::krpc::Stream<void>(this->_client, this->_client->build_call("TestService", "ResetCustomExceptionLater"));
+}
+
+inline ::krpc::Stream<void> TestService::reset_invalid_operation_exception_later_stream() {
+  return ::krpc::Stream<void>(this->_client, this->_client->build_call("TestService", "ResetInvalidOperationExceptionLater"));
 }
 
 inline ::krpc::Stream<TestService::TestClass> TestService::return_null_when_not_allowed_stream() {
