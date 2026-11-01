@@ -17,6 +17,9 @@ namespace KRPC.Test.Service
         [TestCase ("<see cref=\"T:KRPC.Test.Service.TestService+TestStruct\" />", "<see cref=\"T:TestService.TestStruct\" />")]
         [TestCase ("<see cref=\"P:KRPC.Test.Service.TestService.TestStruct.IntField\" />", "<see cref=\"M:TestService.TestStruct.IntField\" />")]
         [TestCase ("<see cref=\"T:KRPC.Test.Service.TestService+MyException\" />", "<see cref=\"T:TestService.MyException\" />")]
+        [TestCase ("<see cref=\"T:KRPC.Test.Service.TestService3\" />", "<see cref=\"T:TestService3Name\" />")]
+        [TestCase ("<see cref=\"M:KRPC.Test.Service.TestService3.AProcedure\" />", "<see cref=\"M:TestService3Name.AProcedure\" />")]
+        [TestCase ("<see cref=\"P:KRPC.Test.Service.TestService3.AProperty\" />", "<see cref=\"M:TestService3Name.AProperty\" />")]
         [TestCase ("<see cref=\"T:KRPC.Service.KRPC.ObjectNotLoadedException\" />", "<see cref=\"T:KRPC.ObjectNotLoadedException\" />")]
         [TestCase ("<see cref=\"T:System.InvalidOperationException\" />", "<see cref=\"T:KRPC.InvalidOperationException\" />")]
         [TestCase ("<doc>\n<summary>\nThe game scene. See <see cref=\"P:KRPC.Service.KRPC.KRPC.GameScene\" />.\n</summary>\n</doc>",
@@ -93,6 +96,15 @@ namespace KRPC.Test.Service
                 "Use <see cref=\"M:TestService.TestStruct.IntField\" /> instead.",
                 DocumentationUtils.ResolveDeprecationReason (
                     "Use <see cref='IntField'/> instead.", typeof (TestService.TestStruct)));
+        }
+
+        [TestCase ("Use <see cref='AProcedure'/> instead.",
+            "Use <see cref=\"M:TestService3Name.AProcedure\" /> instead.")]
+        [TestCase ("Use <see cref='AProperty'/> instead.",
+            "Use <see cref=\"M:TestService3Name.AProperty\" /> instead.")]
+        public void ResolveDeprecationReasonInRenamedServiceContext (string input, string output)
+        {
+            Assert.AreEqual (output, DocumentationUtils.ResolveDeprecationReason (input, typeof (TestService3)));
         }
 
         [TestCase ("Use <see cref='NonExistent'/> instead.")]

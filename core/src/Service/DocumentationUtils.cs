@@ -237,7 +237,7 @@ namespace KRPC.Service
             var name = type.Name + "." + method.Name;
             if (Reflection.HasAttribute<KRPCProcedureAttribute> (method)) {
                 TypeUtils.ValidateKRPCProcedure (method);
-                return "M:" + name;
+                return "M:" + TypeUtils.GetServiceName (type) + "." + method.Name;
             } else if (Reflection.HasAttribute<KRPCMethodAttribute> (method)) {
                 TypeUtils.ValidateKRPCMethod (type, method);
                 return "M:" + TypeUtils.GetClassServiceName (type) + "." + name;
@@ -258,7 +258,7 @@ namespace KRPC.Service
             if (Reflection.HasAttribute<KRPCServiceAttribute> (type) &&
                 Reflection.HasAttribute<KRPCPropertyAttribute> (property)) {
                 TypeUtils.ValidateKRPCProperty (property);
-                return "M:" + name;
+                return "M:" + TypeUtils.GetServiceName (type) + "." + property.Name;
             } else if (Reflection.HasAttribute<KRPCClassAttribute> (type) &&
                        Reflection.HasAttribute<KRPCPropertyAttribute> (property)) {
                 TypeUtils.ValidateKRPCClassProperty (type, property);
