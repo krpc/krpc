@@ -10,6 +10,11 @@ namespace KRPC.Test.Service
         public static void AProcedure ()
         {
         }
+
+        [KRPCProperty]
+        public static int AProperty {
+            get { return 0; }
+        }
     }
 
     [KRPCClass (Service = "TestService3Name")]
