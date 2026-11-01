@@ -76,17 +76,21 @@ namespace KRPC.UI
         const float updateTime = 0.2f;
         DateTime lastUpdate = DateTime.Now;
         bool update = true;
-        IDictionary<string, string> values = new Dictionary<string, string> ();
+        // The value shown in each row, by position, as two sections have a "Time per update" row
+        readonly IList<string> values = new List<string> ();
+        int row;
 
         void DrawInfo (string label, string value)
         {
-            if (update || !values.ContainsKey (label)) {
-                values [label] = value;
-            }
+            if (row == values.Count)
+                values.Add (value);
+            else if (update)
+                values [row] = value;
             GUILayout.BeginHorizontal ();
             GUILayout.Label (label, nameLabelStyle);
-            GUILayout.Label (values [label], valueLabelStyle);
+            GUILayout.Label (values [row], valueLabelStyle);
             GUILayout.EndHorizontal ();
+            row++;
         }
 
         protected override void Draw (bool needRescale)
@@ -106,6 +110,7 @@ namespace KRPC.UI
             }
 
             update = ((DateTime.Now - lastUpdate).TotalSeconds > updateTime);
+            row = 0;
             if (update)
                 lastUpdate = DateTime.Now;
             var core = Core.Instance;
