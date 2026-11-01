@@ -152,6 +152,65 @@ namespace KRPC.Test
         }
 
         [Test]
+        public void AProcedureWithNoValueRunsOnEachUpdate ()
+        {
+            var calls = 0;
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsNoReturn ()).Callback (() => calls++);
+            TestService.Service = mock.Object;
+            var id = Add (new ProcedureCallStream (new ProcedureCall ("TestService", "ProcedureNoArgsNoReturn")));
+
+            // The first run sends an empty result, and later runs send nothing
+            var result = ResultFor (Update (), id);
+            Assert.IsFalse (result.HasValue);
+            Assert.IsNull (result.Error);
+            Assert.AreEqual (0, Update ().Count);
+            Assert.AreEqual (0, Update ().Count);
+            Assert.AreEqual (3, calls);
+        }
+
+        [Test]
+        public void AProcedureWithNoValueEndsOnAnError ()
+        {
+            var calls = 0;
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsNoReturn ()).Callback (() => {
+                if (++calls == 2)
+                    throw new InvalidOperationException ("the call failed");
+            });
+            TestService.Service = mock.Object;
+            var id = Add (new ProcedureCallStream (new ProcedureCall ("TestService", "ProcedureNoArgsNoReturn")));
+
+            Assert.IsNull (ResultFor (Update (), id).Error);
+            StringAssert.Contains ("the call failed", ResultFor (Update (), id).Error);
+            Assert.AreEqual (new List<ulong> { id }, client.RemovedStreams);
+            Assert.AreEqual (0, Update ().Count);
+            Assert.AreEqual (2, calls);
+        }
+
+        [Test]
+        public void AFunctionWithNoValueRunsOnEachUpdate ()
+        {
+            var calls = 0;
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureNoArgsNoReturn ()).Callback (() => {
+                if (++calls == 3)
+                    throw new InvalidOperationException ("the function failed");
+            });
+            TestService.Service = mock.Object;
+            var function = global::KRPC.Service.KRPC.Expression.Call (
+                new ProcedureCall ("TestService", "ProcedureNoArgsNoReturn"));
+            var id = Add (new FunctionStream (function));
+
+            var result = ResultFor (Update (), id);
+            Assert.IsFalse (result.HasValue);
+            Assert.IsNull (result.Error);
+            Assert.AreEqual (0, Update ().Count);
+            StringAssert.Contains ("the function failed", ResultFor (Update (), id).Error);
+            Assert.AreEqual (new List<ulong> { id }, client.RemovedStreams);
+        }
+
+        [Test]
         public void AChangeToNegativeZeroIsSent ()
         {
             double? value = 0.0;

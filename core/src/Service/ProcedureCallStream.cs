@@ -14,37 +14,22 @@ namespace KRPC.Service
         {
             var services = Services.Instance;
             procedure = services.GetProcedureSignature (call);
-            if (!procedure.HasReturnType)
-                throw new KRPC.InvalidOperationException (
-                    "Cannot create a stream for a procedure that does not return a value.");
-            // Each evaluation would create a stream
-            var created = CreatedStreamKind (procedure);
-            if (created != null)
-                throw new KRPC.InvalidOperationException (
-                    procedure.FullyQualifiedName + " returns " + created + ", and cannot be streamed.");
-            // Evaluating these each update would repeat their effects
             var name = procedure.FullyQualifiedName;
+            // Internal procedures implement streams and functions for the client libraries
+            if (procedure.Internal)
+                throw new KRPC.InvalidOperationException (name + " is internal, and cannot be streamed.");
+            // Each evaluation would create an event
+            if (procedure.HasReturnType && procedure.ReturnSpec.Type == typeof (Messages.Event))
+                throw new KRPC.InvalidOperationException (name + " returns an event, and cannot be streamed.");
+            // Evaluating this each update would repeat its effects
             if (name == "KRPC.Expression_static_StateVariable")
                 throw new KRPC.InvalidOperationException (name + " cannot be streamed.");
-            if (name == "KRPC.RunFunction")
-                throw new KRPC.InvalidOperationException (
-                    name + " cannot be streamed. Use KRPC.AddFunctionStream to stream a function.");
+            // Only a client making a call can hold the tick
+            if (name == "KRPC.HoldTick" || name == "KRPC.NextTick" || name == "KRPC.ReleaseTick")
+                throw new KRPC.InvalidOperationException (name + " cannot be streamed.");
             // Decoded to check them when the stream is added
             services.GetArguments (procedure, call.Arguments);
             continuation = new StreamContinuation (call);
-        }
-
-        /// <summary>
-        /// "a stream" or "an event" if the procedure returns one, or null.
-        /// </summary>
-        internal static string CreatedStreamKind (ProcedureSignature procedure)
-        {
-            var type = procedure.ReturnSpec.Type;
-            if (type == typeof (Messages.Stream))
-                return "a stream";
-            if (type == typeof (Messages.Event))
-                return "an event";
-            return null;
         }
 
         public override void UpdateInternal() {
@@ -73,7 +58,10 @@ namespace KRPC.Service
             }
 
             if (!result.HasValue) {
-                Changed |= result.HasError;
+                if (result.HasError)
+                    Changed = true;
+                else
+                    RanWithNoValue ();
                 return;
             }
             // An encoding error, such as a null element in a list of objects, fails only this

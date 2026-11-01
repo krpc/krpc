@@ -100,28 +100,36 @@ namespace KRPC.Test.Service
             Assert.AreEqual (true, stream.Result.Value);
         }
 
-        [Test]
-        public void AProcedureWithNoReturnValueCannotBeStreamed ()
+        [TestCase ("AddStream")]
+        [TestCase ("AddFunctionStream")]
+        [TestCase ("AddEvent")]
+        [TestCase ("RunFunction")]
+        [TestCase ("RemoveStream")]
+        [TestCase ("SetStreamRate")]
+        [TestCase ("CompileFunction")]
+        public void AnInternalProcedureCannotBeStreamed (string procedure)
         {
             var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
-                () => new ProcedureCallStream (new ProcedureCall ("TestService", "ProcedureNoArgsNoReturn")));
-            StringAssert.Contains ("does not return a value", exn.Message);
-        }
-
-        [Test]
-        public void AProcedureReturningAStreamCannotBeStreamed ()
-        {
-            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
-                () => new ProcedureCallStream (new ProcedureCall ("KRPC", "AddStream")));
-            StringAssert.Contains ("KRPC.AddStream returns a stream, and cannot be streamed", exn.Message);
+                () => new ProcedureCallStream (new ProcedureCall ("KRPC", procedure)));
+            Assert.AreEqual ("KRPC." + procedure + " is internal, and cannot be streamed.", exn.Message);
         }
 
         [Test]
         public void AProcedureReturningAnEventCannotBeStreamed ()
         {
             var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
-                () => new ProcedureCallStream (new ProcedureCall ("KRPC", "AddEvent")));
-            StringAssert.Contains ("KRPC.AddEvent returns an event, and cannot be streamed", exn.Message);
+                () => new ProcedureCallStream (new ProcedureCall ("TestService", "CreateEvent")));
+            Assert.AreEqual ("TestService.CreateEvent returns an event, and cannot be streamed.", exn.Message);
+        }
+
+        [TestCase ("HoldTick")]
+        [TestCase ("NextTick")]
+        [TestCase ("ReleaseTick")]
+        public void ATickProcedureCannotBeStreamed (string procedure)
+        {
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => new ProcedureCallStream (new ProcedureCall ("KRPC", procedure)));
+            Assert.AreEqual ("KRPC." + procedure + " cannot be streamed.", exn.Message);
         }
 
         [Test]
