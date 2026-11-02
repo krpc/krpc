@@ -1,17 +1,33 @@
 runs:
   using: composite
   steps:
-    - name: get-bazel-info
+    - name: get-bazel-version
       shell: bash
       run: |
         # Turn on the ci-linux config for every later bazel command in the job
         echo "common --config=ci-linux" >> ~/.bazelrc
-        echo "BAZEL_VERSION=$(bazel --version | cut -d' ' -f2)" >> "$GITHUB_ENV"
+        echo "BAZEL_VERSION=$(cat .bazelversion)" >> "$GITHUB_ENV"
+    # Bazelisk downloads Bazel itself on the first bazel command in a job
+    - name: restore-bazelisk
+      id: bazelisk-cache
+      uses: actions/cache/restore@v6
+      with:
+        path: ~/.cache/bazelisk
+        key: bazelisk-${{ runner.os }}-${{ env.BAZEL_VERSION }}
+    - name: get-bazel-info
+      shell: bash
+      run: |
         # Cache only the download archives, in the content_addressable subdir of the
         # repository cache. Bazel 9 also keeps a "repo contents cache" of extracted
         # repositories in a sibling contents/ dir, which must stay out of the GitHub
         # cache. CI uses a system LLVM, so no ~2 GB LLVM archive lands here.
         echo "BAZEL_DOWNLOAD_CACHE=$(bazel info repository_cache)/content_addressable" >> "$GITHUB_ENV"
+    - name: save-bazelisk
+      if: steps.bazelisk-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v6
+      with:
+        path: ~/.cache/bazelisk
+        key: bazelisk-${{ runner.os }}-${{ env.BAZEL_VERSION }}
     # A change to the dependencies restores the newest cache for this Bazel
     # version, so the fetch downloads only the archives that changed
     - name: restore-bazel-cache
