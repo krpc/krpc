@@ -104,6 +104,9 @@ test:ci --test_output=errors
 test:ci --nocache_test_results
 # Skip the Linux-only targets in a pattern a Windows job names
 build:ci --skip_incompatible_explicit_targets
+# Retry a failed download for about three and a half minutes, at most 15 seconds
+# apart, to outlast a GitHub release download returning 500
+common:ci --http_connector_attempts=20 --http_connector_retry_max_timeout=15s
 
 # The Linux CI jobs, which run in the buildenv container
 common:ci-linux --config=ci --config=system-llvm
