@@ -18,9 +18,18 @@ runs:
       run: |
         deadline=$((SECONDS + 15 * 60))
         while true; do
-          run=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci --event merge_group \
+          # A failed API call is retried until the deadline
+          if ! run=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci --event merge_group \
             --commit "$GITHUB_SHA" --limit 1 --json databaseId,status,conclusion \
-            --jq '.[0] | select(.) | "\(.databaseId) \(.status) \(.conclusion)"')
+            --jq '.[0] | select(.) | "\(.databaseId) \(.status) \(.conclusion)"'); then
+            if [ "$SECONDS" -ge "$deadline" ]; then
+              echo "::error::Could not list the merge queue runs of ci for $GITHUB_SHA"
+              exit 1
+            fi
+            echo "::warning::Listing the merge queue runs failed; retrying"
+            sleep 20
+            continue
+          fi
           if [ -z "$run" ]; then
             echo "::notice::No merge queue run of ci for $GITHUB_SHA, which was pushed directly"
             echo "run-id=" >> "$GITHUB_OUTPUT"

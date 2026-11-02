@@ -419,8 +419,8 @@ jobs:
           packages: nanopb
       - name: setup-cmake
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ccache
+          sudo apt-get -o Acquire::Retries=5 update
+          sudo apt-get -o Acquire::Retries=5 install -y --no-install-recommends ccache
           # The system scenarios find the packages the vcpkg step installed
           echo "CMAKE_PREFIX_PATH=$RUNNER_TEMP/vcpkg-deps/x64-linux" >> "$GITHUB_ENV"
           # Set after the vcpkg step, which builds and detects its compiler without ccache
@@ -633,8 +633,8 @@ jobs:
           packages: protobuf asio
       - name: setup-cmake
         run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ccache
+          sudo apt-get -o Acquire::Retries=5 update
+          sudo apt-get -o Acquire::Retries=5 install -y --no-install-recommends ccache
           # The system scenarios find the packages the vcpkg step installed
           echo "CMAKE_PREFIX_PATH=$RUNNER_TEMP/vcpkg-deps/x64-linux" >> "$GITHUB_ENV"
           echo "CMAKE_C_COMPILER_LAUNCHER=ccache" >> "$GITHUB_ENV"
