@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Expansions.Serenity;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -82,9 +81,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             get
             {
-                return InternalServo.modelInitialAngle + (float)typeof(ModuleRoboticServoHinge)
-                    .GetMethod("currentTransformAngle", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .Invoke(InternalServo, null);
+                return InternalServo.modelInitialAngle + InternalServo.CurrentTransformAngle ();
             }
         }
 
@@ -167,9 +164,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             get
             {
-                return (bool)typeof(BaseServo)
-                    .GetMethod("IsMoving", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .Invoke(InternalServo, null);
+                return InternalServo.IsMoving ();
             }
         }
 

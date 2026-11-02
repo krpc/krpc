@@ -15,6 +15,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using KRPC.Utils;
 
 namespace KRPC.KerbalAlarmClock
 {
@@ -119,7 +120,7 @@ namespace KRPC.KerbalAlarmClock
             LogFormatted("Got Assembly Types, grabbing Instance");
 
             try {
-                actualKAC = KACType.GetField("APIInstance", BindingFlags.Public | BindingFlags.Static).GetValue(null);
+                actualKAC = Accessor.StaticGetter<Object>(KACType, "APIInstance")();
             } catch (Exception) {
                 NeedUpgrade = true;
                 LogFormatted("No APIInstance found - most likely you have KAC v2 installed");
@@ -153,13 +154,12 @@ namespace KRPC.KerbalAlarmClock
                 //these sections get and store the reflection info and actual objects where required. Later in the properties we then read the values from the actual objects
                 //for events we also add a handler
                 LogFormatted("Getting APIReady Object");
-                APIReadyField = KACType.GetField("APIReady", BindingFlags.Public | BindingFlags.Static);
+                APIReadyField = Accessor.StaticGetter<Boolean>(KACType, "APIReady");
                 LogFormatted("Success: " + (APIReadyField != null).ToString());
 
                 //WORK OUT THE STUFF WE NEED TO HOOK FOR PEOPEL HERE
                 LogFormatted("Getting Alarms Object");
-                AlarmsField = KACType.GetField("alarms", BindingFlags.Public | BindingFlags.Static);
-                actualAlarms = AlarmsField.GetValue(actualKAC);
+                actualAlarms = Accessor.StaticGetter<Object>(KACType, "alarms")();
                 LogFormatted("Success: " + (actualAlarms != null).ToString());
 
                 //Events
@@ -171,15 +171,15 @@ namespace KRPC.KerbalAlarmClock
 
                 //Methods
                 LogFormatted("Getting Create Method");
-                CreateAlarmMethod = KACType.GetMethod("CreateAlarm", BindingFlags.Public | BindingFlags.Instance);
+                CreateAlarmMethod = Accessor.Method<Func<Object, AlarmTypeEnum, String, Double, String>>(KACType, "CreateAlarm");
                 LogFormatted_DebugOnly("Success: " + (CreateAlarmMethod != null).ToString());
 
                 LogFormatted("Getting Delete Method");
-                DeleteAlarmMethod = KACType.GetMethod("DeleteAlarm", BindingFlags.Public | BindingFlags.Instance);
+                DeleteAlarmMethod = Accessor.Method<Func<Object, String, Boolean>>(KACType, "DeleteAlarm");
                 LogFormatted_DebugOnly("Success: " + (DeleteAlarmMethod != null).ToString());
 
                 LogFormatted("Getting DrawAlarmAction");
-                DrawAlarmActionChoiceMethod = KACType.GetMethod("DrawAlarmActionChoiceAPI", BindingFlags.Public | BindingFlags.Instance);
+                DrawAlarmActionChoiceMethod = Accessor.Method<Func<Object, Int32, String, Int32, Int32, Int32>>(KACType, "DrawAlarmActionChoiceAPI");
                 LogFormatted_DebugOnly("Success: " + (DrawAlarmActionChoiceMethod != null).ToString());
 
                 //LogFormatted("Getting DrawTimeEntry");
@@ -196,7 +196,7 @@ namespace KRPC.KerbalAlarmClock
 
             private Object actualKAC;
 
-            private FieldInfo APIReadyField;
+            private Func<Boolean> APIReadyField;
             /// <summary>
             /// Whether the APIReady flag is set in the real KAC
             /// </summary>
@@ -207,13 +207,12 @@ namespace KRPC.KerbalAlarmClock
                     if (APIReadyField == null)
                         return false;
 
-                    return (Boolean)APIReadyField.GetValue(null);
+                    return APIReadyField();
                 }
             }
 
             #region Alarms
             private Object actualAlarms;
-            private FieldInfo AlarmsField;
 
             /// <summary>
             /// The list of Alarms that are currently active in game
@@ -292,10 +291,20 @@ namespace KRPC.KerbalAlarmClock
                 public AlarmStateChangedEventArgs(System.Object actualEvent, KACAPI kac)
                 {
                     Type type = actualEvent.GetType();
-                    this.alarm = new KACAlarm(type.GetField("alarm").GetValue(actualEvent));
-                    this.eventType = (KACAlarm.AlarmStateEventsEnum)type.GetField("eventType").GetValue(actualEvent);
-
+                    if (type != boundEventType)
+                    {
+                        alarmOfEvent = Accessor.Getter<Object, Object>(type, "alarm");
+                        typeOfEvent = Accessor.Getter<Object, KACAlarm.AlarmStateEventsEnum>(type, "eventType");
+                        boundEventType = type;
+                    }
+                    this.alarm = new KACAlarm(alarmOfEvent(actualEvent));
+                    this.eventType = typeOfEvent(actualEvent);
                 }
+
+                // Bound for the mod's event type, which is the same for every event
+                private static Type boundEventType;
+                private static Func<Object, Object> alarmOfEvent;
+                private static Func<Object, KACAlarm.AlarmStateEventsEnum> typeOfEvent;
 
                 /// <summary>
                 /// Alarm that has had the state change
@@ -323,7 +332,7 @@ namespace KRPC.KerbalAlarmClock
 
 
             #region Methods
-            private MethodInfo CreateAlarmMethod;
+            private Func<Object, AlarmTypeEnum, String, Double, String> CreateAlarmMethod;
 
             /// <summary>
             /// Create a new Alarm
@@ -334,11 +343,11 @@ namespace KRPC.KerbalAlarmClock
             /// <returns>ID of the newly created alarm</returns>
             internal String CreateAlarm(AlarmTypeEnum AlarmType, String Name, Double UT)
             {
-                return (String)CreateAlarmMethod.Invoke(actualKAC, new System.Object[] { (Int32)AlarmType, Name, UT });
+                return CreateAlarmMethod(actualKAC, AlarmType, Name, UT);
             }
 
 
-            private MethodInfo DeleteAlarmMethod;
+            private Func<Object, String, Boolean> DeleteAlarmMethod;
             /// <summary>
             /// Delete an Alarm
             /// </summary>
@@ -346,11 +355,11 @@ namespace KRPC.KerbalAlarmClock
             /// <returns>Success of the deletion</returns>
             internal Boolean DeleteAlarm(String AlarmID)
             {
-                return (Boolean)DeleteAlarmMethod.Invoke(actualKAC, new System.Object[] { AlarmID });
+                return DeleteAlarmMethod(actualKAC, AlarmID);
             }
 
 
-            private MethodInfo DrawAlarmActionChoiceMethod;
+            private Func<Object, Int32, String, Int32, Int32, Int32> DrawAlarmActionChoiceMethod;
             /// <summary>
             /// Delete an Alarm
             /// </summary>
@@ -359,7 +368,7 @@ namespace KRPC.KerbalAlarmClock
             internal Boolean DrawAlarmActionChoice(ref AlarmActionEnum Choice, String LabelText, Int32 LabelWidth, Int32 ButtonWidth)
             {
                 Int32 InValue = (Int32)Choice;
-                Int32 OutValue = (Int32)DrawAlarmActionChoiceMethod.Invoke(actualKAC, new System.Object[] { InValue, LabelText, LabelWidth, ButtonWidth });
+                Int32 OutValue = DrawAlarmActionChoiceMethod(actualKAC, InValue, LabelText, LabelWidth, ButtonWidth);
 
                 Choice = (AlarmActionEnum)OutValue;
                 return (InValue != OutValue);
@@ -413,30 +422,29 @@ namespace KRPC.KerbalAlarmClock
 
                 private static void Bind()
                 {
-                    VesselIDField = KACAlarmType.GetField("VesselID");
-                    IDField = KACAlarmType.GetField("ID");
-                    NameField = KACAlarmType.GetField("Name");
-                    NotesField = KACAlarmType.GetField("Notes");
-                    AlarmTypeField = KACAlarmType.GetField("TypeOfAlarm");
-                    AlarmTimeProperty = KACAlarmType.GetProperty("AlarmTimeUT");
-                    AlarmMarginField = KACAlarmType.GetField("AlarmMarginSecs");
-                    RemainingField = KACAlarmType.GetField("Remaining");
+                    VesselIDField = Accessor.Field<Object, String>(KACAlarmType, "VesselID");
+                    IDField = Accessor.Getter<Object, String>(KACAlarmType, "ID");
+                    NameField = Accessor.Field<Object, String>(KACAlarmType, "Name");
+                    NotesField = Accessor.Field<Object, String>(KACAlarmType, "Notes");
+                    AlarmTypeField = Accessor.Getter<Object, AlarmTypeEnum>(KACAlarmType, "TypeOfAlarm");
+                    AlarmTimeProperty = Accessor.Field<Object, Double>(KACAlarmType, "AlarmTimeUT");
+                    AlarmMarginField = Accessor.Field<Object, Double>(KACAlarmType, "AlarmMarginSecs");
+                    RemainingField = Accessor.Getter<Object, Double>(KACAlarmType, "Remaining");
 
-                    AlarmActionField = KACAlarmType.GetField("AlarmAction");
-                    ActionActionProperty = KACAlarmType.GetProperty("AlarmActionConvert");
+                    ActionActionProperty = Accessor.Field<Object, AlarmActionEnum>(KACAlarmType, "AlarmActionConvert");
 
-                    XferOriginBodyNameField = KACAlarmType.GetField("XferOriginBodyName");
+                    XferOriginBodyNameField = Accessor.Field<Object, String>(KACAlarmType, "XferOriginBodyName");
                     //LogFormatted("XFEROrigin:{0}", XferOriginBodyNameField == null);
-                    XferTargetBodyNameField = KACAlarmType.GetField("XferTargetBodyName");
+                    XferTargetBodyNameField = Accessor.Field<Object, String>(KACAlarmType, "XferTargetBodyName");
 
-                    RepeatAlarmField = KACAlarmType.GetField("RepeatAlarm");
-                    RepeatAlarmPeriodProperty = KACAlarmType.GetProperty("RepeatAlarmPeriodUT");
-                    SupportsRepeatProperty = KACAlarmType.GetProperty("SupportsRepeat");
-                    SupportsRepeatPeriodProperty = KACAlarmType.GetProperty("SupportsRepeatPeriod");
+                    RepeatAlarmField = Accessor.Field<Object, Boolean>(KACAlarmType, "RepeatAlarm");
+                    RepeatAlarmPeriodProperty = Accessor.Field<Object, Double>(KACAlarmType, "RepeatAlarmPeriodUT");
+                    SupportsRepeatProperty = Accessor.Getter<Object, Boolean>(KACAlarmType, "SupportsRepeat");
+                    SupportsRepeatPeriodProperty = Accessor.Getter<Object, Boolean>(KACAlarmType, "SupportsRepeatPeriod");
 
-                    EnabledField = KACAlarmType.GetField("Enabled");
-                    PlaySoundField = KACAlarmType.GetField("PlaySound");
-                    TriggeredField = KACAlarmType.GetField("Triggered", BindingFlags.NonPublic | BindingFlags.Instance);
+                    EnabledField = Accessor.Field<Object, Boolean>(KACAlarmType, "Enabled");
+                    PlaySoundField = Accessor.Field<Object, Boolean>(KACAlarmType, "PlaySound");
+                    TriggeredField = Accessor.Getter<Object, Boolean>(KACAlarmType, "Triggered");
 
                     //PropertyInfo[] pis = KACAlarmType.GetProperties();
                     //foreach (PropertyInfo pi in pis)
@@ -451,129 +459,120 @@ namespace KRPC.KerbalAlarmClock
                 }
                 private Object actualAlarm;
 
-                private static FieldInfo VesselIDField;
+                private static Field<Object, String> VesselIDField;
                 /// <summary>
                 /// Unique Identifier of the Vessel that the alarm is attached to
                 /// </summary>
                 public String VesselID
                 {
-                    get { return (String)VesselIDField.GetValue(actualAlarm); }
-                    set { VesselIDField.SetValue(actualAlarm, value); }
+                    get { return VesselIDField.Get(actualAlarm); }
+                    set { VesselIDField.Set(actualAlarm, value); }
                 }
 
-                private static FieldInfo IDField;
+                private static Func<Object, String> IDField;
                 /// <summary>
                 /// Unique Identifier of this alarm
                 /// </summary>
                 public String ID
                 {
-                    get { return (String)IDField.GetValue(actualAlarm); }
+                    get { return IDField(actualAlarm); }
                 }
 
-                private static FieldInfo NameField;
+                private static Field<Object, String> NameField;
                 /// <summary>
                 /// Short Text Name for the Alarm
                 /// </summary>
                 public String Name
                 {
-                    get { return (String)NameField.GetValue(actualAlarm); }
-                    set { NameField.SetValue(actualAlarm, value); }
+                    get { return NameField.Get(actualAlarm); }
+                    set { NameField.Set(actualAlarm, value); }
                 }
 
-                private static FieldInfo NotesField;
+                private static Field<Object, String> NotesField;
                 /// <summary>
                 /// Longer Text Description for the Alarm
                 /// </summary>
                 public String Notes
                 {
-                    get { return (String)NotesField.GetValue(actualAlarm); }
-                    set { NotesField.SetValue(actualAlarm, value); }
+                    get { return NotesField.Get(actualAlarm); }
+                    set { NotesField.Set(actualAlarm, value); }
                 }
 
-                private static FieldInfo XferOriginBodyNameField;
+                private static Field<Object, String> XferOriginBodyNameField;
                 /// <summary>
                 /// Name of the origin body for a transfer
                 /// </summary>
                 public String XferOriginBodyName
                 {
-                    get { return (String)XferOriginBodyNameField.GetValue(actualAlarm); }
-                    set { XferOriginBodyNameField.SetValue(actualAlarm, value); }
+                    get { return XferOriginBodyNameField.Get(actualAlarm); }
+                    set { XferOriginBodyNameField.Set(actualAlarm, value); }
                 }
 
-                private static FieldInfo XferTargetBodyNameField;
+                private static Field<Object, String> XferTargetBodyNameField;
                 /// <summary>
                 /// Name of the destination body for a transfer
                 /// </summary>
                 public String XferTargetBodyName
                 {
-                    get { return (String)XferTargetBodyNameField.GetValue(actualAlarm); }
-                    set { XferTargetBodyNameField.SetValue(actualAlarm, value); }
+                    get { return XferTargetBodyNameField.Get(actualAlarm); }
+                    set { XferTargetBodyNameField.Set(actualAlarm, value); }
                 }
                 
-                private static FieldInfo AlarmTypeField;
+                private static Func<Object, AlarmTypeEnum> AlarmTypeField;
                 /// <summary>
                 /// What type of Alarm is this - affects icon displayed and some calc options
                 /// </summary>
-                public AlarmTypeEnum AlarmType { get { return (AlarmTypeEnum)AlarmTypeField.GetValue(actualAlarm); } }
+                public AlarmTypeEnum AlarmType { get { return AlarmTypeField(actualAlarm); } }
 
-                private static PropertyInfo AlarmTimeProperty;
+                private static Field<Object, Double> AlarmTimeProperty;
                 /// <summary>
                 /// In game UT value of the alarm
                 /// </summary>
                 public Double AlarmTime
                 {
-                    get { return (Double)AlarmTimeProperty.GetValue(actualAlarm,null); }
-                    set { AlarmTimeProperty.SetValue(actualAlarm, value, null); }
+                    get { return AlarmTimeProperty.Get(actualAlarm); }
+                    set { AlarmTimeProperty.Set(actualAlarm, value); }
                 }
 
-                private static FieldInfo AlarmMarginField;
+                private static Field<Object, Double> AlarmMarginField;
                 /// <summary>
                 /// In game seconds the alarm will fire before the event it is for
                 /// </summary>
                 public Double AlarmMargin
                 {
-                    get { return (Double)AlarmMarginField.GetValue(actualAlarm); }
-                    set { AlarmMarginField.SetValue(actualAlarm, value); }
+                    get { return AlarmMarginField.Get(actualAlarm); }
+                    set { AlarmMarginField.Set(actualAlarm, value); }
                 }
 
-                private static FieldInfo AlarmActionField;
-                /// <summary>
-                /// What should the Alarm Clock do when the alarm fires
-                /// </summary>
-                //public AlarmActionEnum AlarmAction
-                //{
-                //    get { return (AlarmActionEnum)AlarmActionField.GetValue(actualAlarm); }
-                //    set { AlarmActionField.SetValue(actualAlarm, (Int32)value); }
-                //}
                 /// <summary>
                 /// What should the Alarm Clock do when the alarm fires
                 /// </summary>
                 public AlarmActionEnum AlarmAction
                 {
-                    get { return (AlarmActionEnum)ActionActionProperty.GetValue(actualAlarm); }
-                    set { ActionActionProperty.SetValue(actualAlarm, (Int32)value); }
+                    get { return ActionActionProperty.Get(actualAlarm); }
+                    set { ActionActionProperty.Set(actualAlarm, value); }
                 }
-                private static PropertyInfo ActionActionProperty;
+                private static Field<Object, AlarmActionEnum> ActionActionProperty;
 
 
 
-                private static FieldInfo RemainingField;
+                private static Func<Object, Double> RemainingField;
                 /// <summary>
                 /// How much Game time is left before the alarm fires
                 /// </summary>
-                public Double Remaining { get { return (Double)RemainingField.GetValue(actualAlarm); } }
+                public Double Remaining { get { return RemainingField(actualAlarm); } }
 
 
-                private static FieldInfo RepeatAlarmField;
+                private static Field<Object, Boolean> RepeatAlarmField;
                 /// <summary>
                 /// Whether the alarm will be repeated after it fires
                 /// </summary>
                 public Boolean RepeatAlarm
                 {
-                    get { return (Boolean)RepeatAlarmField.GetValue(actualAlarm); }
-                    set { RepeatAlarmField.SetValue(actualAlarm, value); }
+                    get { return RepeatAlarmField.Get(actualAlarm); }
+                    set { RepeatAlarmField.Set(actualAlarm, value); }
                 }
-                private static PropertyInfo RepeatAlarmPeriodProperty;
+                private static Field<Object, Double> RepeatAlarmPeriodProperty;
                 /// <summary>
                 /// Value in Seconds after which the alarm will repeat
                 /// </summary>
@@ -581,52 +580,52 @@ namespace KRPC.KerbalAlarmClock
                 {
                     get
                     {
-                        try { return (Double)RepeatAlarmPeriodProperty.GetValue(actualAlarm, null); }
+                        try { return RepeatAlarmPeriodProperty.Get(actualAlarm); }
                         catch (Exception) { return 0; }
                     }
-                    set { RepeatAlarmPeriodProperty.SetValue(actualAlarm, value, null); }
+                    set { RepeatAlarmPeriodProperty.Set(actualAlarm, value); }
                 }
-                private static PropertyInfo SupportsRepeatProperty;
+                private static Func<Object, Boolean> SupportsRepeatProperty;
                 /// <summary>
                 /// Whether this alarm's type supports repeating
                 /// </summary>
                 public Boolean SupportsRepeat
                 {
-                    get { return (Boolean)SupportsRepeatProperty.GetValue(actualAlarm, null); }
+                    get { return SupportsRepeatProperty(actualAlarm); }
                 }
-                private static PropertyInfo SupportsRepeatPeriodProperty;
+                private static Func<Object, Boolean> SupportsRepeatPeriodProperty;
                 /// <summary>
                 /// Whether this alarm's type supports a repeat period
                 /// </summary>
                 public Boolean SupportsRepeatPeriod
                 {
-                    get { return (Boolean)SupportsRepeatPeriodProperty.GetValue(actualAlarm, null); }
+                    get { return SupportsRepeatPeriodProperty(actualAlarm); }
                 }
-                private static FieldInfo EnabledField;
+                private static Field<Object, Boolean> EnabledField;
                 /// <summary>
                 /// Whether the alarm is enabled
                 /// </summary>
                 public Boolean Enabled
                 {
-                    get { return (Boolean)EnabledField.GetValue(actualAlarm); }
-                    set { EnabledField.SetValue(actualAlarm, value); }
+                    get { return EnabledField.Get(actualAlarm); }
+                    set { EnabledField.Set(actualAlarm, value); }
                 }
-                private static FieldInfo PlaySoundField;
+                private static Field<Object, Boolean> PlaySoundField;
                 /// <summary>
                 /// Whether the alarm plays a sound when it fires
                 /// </summary>
                 public Boolean PlaySound
                 {
-                    get { return (Boolean)PlaySoundField.GetValue(actualAlarm); }
-                    set { PlaySoundField.SetValue(actualAlarm, value); }
+                    get { return PlaySoundField.Get(actualAlarm); }
+                    set { PlaySoundField.Set(actualAlarm, value); }
                 }
-                private static FieldInfo TriggeredField;
+                private static Func<Object, Boolean> TriggeredField;
                 /// <summary>
                 /// Whether the alarm has been triggered (the field is internal to the mod)
                 /// </summary>
                 public Boolean Triggered
                 {
-                    get { return (Boolean)TriggeredField.GetValue(actualAlarm); }
+                    get { return TriggeredField(actualAlarm); }
                 }
 
                 public enum AlarmStateEventsEnum

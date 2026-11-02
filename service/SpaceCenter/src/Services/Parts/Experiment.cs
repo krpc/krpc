@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -98,25 +97,31 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new InvalidOperationException ("Experiment already contains data");
             if (Inoperable)
                 throw new InvalidOperationException ("Experiment is inoperable");
+            var run = runners.GetOrAdd (InternalExperiment.GetType (), Runner);
+            if (run == null)
+                throw new InvalidOperationException ("Failed to find a gather data method for this experiment");
+            run (InternalExperiment);
+        }
+
+        // Keyed by module type, as other mods subclass the stock module
+        static readonly Dictionary<Type, Action<ModuleScienceExperiment>> runners =
+            new Dictionary<Type, Action<ModuleScienceExperiment>> ();
+
+        static Action<ModuleScienceExperiment> Runner (Type type)
+        {
             // Stock experiments. KSP has no public method that runs an experiment without
             // also showing the results dialog: DeployExperiment, DeployAction and
             // DeployExperimentExternal all start gatherData(showDialog: true), and the only
             // dialog-free caller, OnActive, is gated on staging configuration. So invoke the
             // private gatherData coroutine directly, mirroring KSP's own staging path.
-            var gatherData = InternalExperiment.GetType ().GetMethod ("gatherData", BindingFlags.NonPublic | BindingFlags.Instance);
+            var gatherData = Accessor.Method<Func<ModuleScienceExperiment, bool, IEnumerator>> (type, "gatherData");
             if (gatherData != null)
-            {
-                var result = (IEnumerator)gatherData.Invoke(InternalExperiment, new object[] { false });
-                InternalExperiment.StartCoroutine(result);
-                return;
-            }
+                return experiment => experiment.StartCoroutine (gatherData (experiment, false));
             // DMagic experiments
-            gatherData = InternalExperiment.GetType().GetMethod("gatherScienceData", BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-            if (gatherData != null) {
-                gatherData.Invoke(InternalExperiment, new object[] { true });
-                return;
-            }
-            throw new InvalidOperationException("Failed to find a gather data method for this experiment");
+            var gatherScienceData = Accessor.Method<Action<ModuleScienceExperiment, bool>> (type, "gatherScienceData");
+            if (gatherScienceData != null)
+                return experiment => gatherScienceData (experiment, true);
+            return null;
         }
 
         /// <summary>

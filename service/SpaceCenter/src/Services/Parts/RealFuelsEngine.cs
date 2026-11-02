@@ -51,7 +51,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The number of ignitions the engine has left, or -1 if it has an unlimited number.
         /// </summary>
         internal int Ignitions {
-            get { return (int)module.Fields ["ignitions"].GetValue (module); }
+            get { return ExternalAPI.RealFuels.Ignitions (module); }
         }
 
         /// <summary>
@@ -74,14 +74,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the engine's propellant is subject to ullage.
         /// </summary>
         internal bool HasUllage {
-            get { return (bool)module.Fields ["ullage"].GetValue (module); }
+            get { return ExternalAPI.RealFuels.HasUllage (module); }
         }
 
         /// <summary>
         /// Whether the engine is fed by tank pressure instead of a pump.
         /// </summary>
         internal bool PressureFed {
-            get { return (bool)module.Fields ["pressureFed"].GetValue (module); }
+            get { return ExternalAPI.RealFuels.PressureFed (module); }
         }
 
         /// <summary>

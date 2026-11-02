@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Expansions.Serenity;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -15,6 +14,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass(Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class RoboticRotor : Equatable<RoboticRotor>, IGameObjectState
     {
+        static readonly Func<ModuleRoboticServoRotor, BaseAxisField> rpmLimitAxisField =
+            Accessor.Getter<ModuleRoboticServoRotor, BaseAxisField> ("rpmLimitAxisField");
+
         ModuleRef servoRef;
 
         internal static bool Is(Part part)
@@ -73,7 +75,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             get { return InternalServo.rpmLimit; }
             set {
-                var axisField = (BaseAxisField)typeof(ModuleRoboticServoRotor).GetField("rpmLimitAxisField", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(InternalServo);
+                var axisField = rpmLimitAxisField (InternalServo);
                 axisField.SetValue(value, axisField.module);
             }
         }
@@ -88,9 +90,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             // live rate of motion directly (this is the value KSP copies into currentRPM).
             get
             {
-                return (float)typeof(BaseServo)
-                    .GetField("transformRateOfMotion", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .GetValue(InternalServo);
+                return InternalServo.TransformRateOfMotion ();
             }
         }
 
@@ -174,9 +174,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             get
             {
-                return (bool)typeof(BaseServo)
-                    .GetMethod("IsMoving", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .Invoke(InternalServo, null);
+                return InternalServo.IsMoving ();
             }
         }
 

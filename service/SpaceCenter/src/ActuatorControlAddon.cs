@@ -1,5 +1,6 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using Expansions.Missions.Adjusters;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -140,10 +141,10 @@ namespace KRPC.SpaceCenter
         // The module's adjuster list is private; AddPartModuleAdjuster (which would
         // populate it) is gated behind the Making History expansion, so add/remove
         // directly by reflection.
-        static readonly FieldInfo gimbalAdjusterCache =
-            typeof (ModuleGimbal).GetField ("adjusterCache", BindingFlags.NonPublic | BindingFlags.Instance);
-        static readonly FieldInfo rcsAdjusterCache =
-            typeof (ModuleRCS).GetField ("adjusterCache", BindingFlags.NonPublic | BindingFlags.Instance);
+        static readonly Func<PartModule, IList> gimbalAdjusterCache =
+            Accessor.Getter<PartModule, IList> (typeof (ModuleGimbal), "adjusterCache");
+        static readonly Func<PartModule, IList> rcsAdjusterCache =
+            Accessor.Getter<PartModule, IList> (typeof (ModuleRCS), "adjusterCache");
 
         /// <summary>
         /// Drop overrides whose controlling client has disconnected or whose part module has been
@@ -160,16 +161,16 @@ namespace KRPC.SpaceCenter
             return module == null;
         }
 
-        static void CacheAdd (FieldInfo cache, PartModule module, object adjuster)
+        static void CacheAdd (Func<PartModule, IList> cache, PartModule module, object adjuster)
         {
-            var list = cache?.GetValue (module) as System.Collections.IList;
+            var list = cache?.Invoke (module);
             if (list != null)
                 list.Add (adjuster);
         }
 
-        static void CacheRemove (FieldInfo cache, PartModule module, object adjuster)
+        static void CacheRemove (Func<PartModule, IList> cache, PartModule module, object adjuster)
         {
-            var list = cache?.GetValue (module) as System.Collections.IList;
+            var list = cache?.Invoke (module);
             if (list != null)
                 list.Remove (adjuster);
         }

@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using KRPC.Utils;
 using UnityEngine;
 
@@ -12,16 +11,16 @@ namespace KRPC.SpaceCenter.ExternalAPI
             var type = APILoader.Load( typeof(FAR), "FerramAerospaceResearch", "FerramAerospaceResearch.FARAPI", new Version (0, 15));
             IsAvailable = (type != null);
             if (IsAvailable) {
-                calculateVesselAeroForces = type.GetMethod(
-                    "CalculateVesselAeroForces",
-                    BindingFlags.Public | BindingFlags.Static, null,
-                    new Type[] {
-                        typeof(Vessel),
-                        typeof(Vector3).MakeByRefType(),
-                        typeof(Vector3).MakeByRefType(),
-                        typeof(Vector3),
-                        typeof(double)
-                    }, null);
+                calculateVesselAeroForces = Accessor.Method<AeroForces> (type, "CalculateVesselAeroForces");
+                vesselAeroType = type.Assembly.GetType ("FerramAerospaceResearch.FARAeroComponents.FARVesselAero");
+                if (vesselAeroType != null) {
+                    machNumber = Accessor.Getter<Component, double> (vesselAeroType, "MachNumber");
+                    reynoldsNumber = Accessor.Getter<Component, double> (vesselAeroType, "ReynoldsNumber");
+                }
+                if (machNumber == null || reynoldsNumber == null)
+                    KRPC.Utils.Logger.WriteLine (
+                        "FAR vessel Mach and Reynolds numbers not found; they are unavailable",
+                        KRPC.Utils.Logger.Severity.Warning);
             }
         }
 
@@ -62,25 +61,27 @@ namespace KRPC.SpaceCenter.ExternalAPI
         /// </summary>
         public static Func<Vessel, Vector3> VesselAerodynamicTorque { get; internal set; }
 
+        static Type vesselAeroType;
+        static Func<Component, double> machNumber;
+        static Func<Component, double> reynoldsNumber;
+
         public static double VesselMachNumber (Vessel vessel)
         {
-            var aero = vessel.GetComponent ("FARVesselAero");
-            return (double)aero.GetType ().GetProperty ("MachNumber").GetValue (aero, null);
+            return machNumber (vessel.GetComponent (vesselAeroType));
         }
 
         public static double VesselReynoldsNumber (Vessel vessel)
         {
-            var aero = vessel.GetComponent ("FARVesselAero");
-            return (double)aero.GetType ().GetProperty ("ReynoldsNumber").GetValue (aero, null);
+            return reynoldsNumber (vessel.GetComponent (vesselAeroType));
         }
 
-        static MethodInfo calculateVesselAeroForces;
+        delegate void AeroForces (
+            Vessel vessel, out Vector3 aeroForce, out Vector3 aeroTorque, Vector3 velocityWorldVector, double altitude);
+
+        static AeroForces calculateVesselAeroForces;
 
         public static void CalculateVesselAeroForces(Vessel vessel, out Vector3 aeroForce, out Vector3 aeroTorque, Vector3 velocityWorldVector, double altitude) {
-            var parameters = new object[] { vessel, Vector3.zero, Vector3.zero, velocityWorldVector, altitude };
-            calculateVesselAeroForces.Invoke(null, parameters);
-            aeroForce = (Vector3)parameters[1];
-            aeroTorque = (Vector3)parameters[2];
+            calculateVesselAeroForces (vessel, out aeroForce, out aeroTorque, velocityWorldVector, altitude);
         }
     }
 }

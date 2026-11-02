@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -91,7 +93,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         static bool FirespitterCanReverse (global::PartModule module)
         {
-            return module.Fields ["isReversed"] != null &&
+            return BoolField (module, "isReversed") != null &&
                 module.Actions ["reverseTTAction"] != null &&
                 module.Actions ["normalTTAction"] != null &&
                 module.Actions ["switchTTAction"] != null;
@@ -105,10 +107,24 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         static bool PropSpinnerCanReverse (global::PartModule module)
         {
-            var canReverseThrust = module.Fields ["canReverseThrust"];
-            return module.Fields ["reverseThrust"] != null &&
-                canReverseThrust != null && (bool)canReverseThrust.GetValue (module) &&
+            var canReverseThrust = BoolField (module, "canReverseThrust");
+            return BoolField (module, "reverseThrust") != null &&
+                canReverseThrust != null && canReverseThrust (module) &&
                 module.Events ["ToggleThrustTransform"] != null;
+        }
+
+        // Keyed by module type and field name, as the modules come from other mods
+        static readonly Dictionary<KeyValuePair<Type, string>, Func<global::PartModule, bool>> boolFields =
+            new Dictionary<KeyValuePair<Type, string>, Func<global::PartModule, bool>> ();
+
+        /// <summary>
+        /// A getter for a boolean field of the module, or <c>null</c> if it has none.
+        /// </summary>
+        internal static Func<global::PartModule, bool> BoolField (global::PartModule module, string name)
+        {
+            return boolFields.GetOrAdd (
+                new KeyValuePair<Type, string> (module.GetType (), name),
+                key => Accessor.Getter<global::PartModule, bool> (key.Key, key.Value));
         }
     }
 
@@ -156,11 +172,13 @@ namespace KRPC.SpaceCenter.Services.Parts
     {
         readonly Part part;
         ModuleRef reference;
+        readonly Func<global::PartModule, bool> isReversed;
 
         internal FirespitterThrustReverser (Part part, global::PartModule module)
         {
             this.part = part;
             reference = ModuleRef.ForModule (module);
+            isReversed = ThrustReverser.BoolField (module, "isReversed");
         }
 
         global::PartModule InternalModule {
@@ -168,7 +186,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         public bool Reversed {
-            get { return (bool)InternalModule.Fields ["isReversed"].GetValue (InternalModule); }
+            get { return isReversed (InternalModule); }
             set {
                 InternalModule.Actions [value ? "reverseTTAction" : "normalTTAction"].Invoke (
                     new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
@@ -190,11 +208,13 @@ namespace KRPC.SpaceCenter.Services.Parts
     {
         readonly Part part;
         ModuleRef reference;
+        readonly Func<global::PartModule, bool> reverseThrust;
 
         internal PropSpinnerThrustReverser (Part part, global::PartModule module)
         {
             this.part = part;
             reference = ModuleRef.ForModule (module);
+            reverseThrust = ThrustReverser.BoolField (module, "reverseThrust");
         }
 
         global::PartModule InternalModule {
@@ -202,7 +222,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         public bool Reversed {
-            get { return (bool)InternalModule.Fields ["reverseThrust"].GetValue (InternalModule); }
+            get { return reverseThrust (InternalModule); }
             // The module only exposes a toggle, so set the desired state by toggling
             // when it differs from the current one.
             set { if (value != Reversed) Toggle (); }

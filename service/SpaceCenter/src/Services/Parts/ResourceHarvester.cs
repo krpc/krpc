@@ -1,6 +1,4 @@
 using System;
-using System.Globalization;
-using System.Reflection;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -144,8 +142,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
-        static readonly FieldInfo resFlowField =
-            typeof (ModuleResourceHarvester).GetField ("_resFlow", BindingFlags.NonPublic | BindingFlags.Instance);
+        static readonly Func<ModuleResourceHarvester, float> resFlow =
+            Accessor.Getter<ModuleResourceHarvester, float> ("_resFlow");
 
         /// <summary>
         /// The rate at which the drill is extracting ore, in <unit>units/s</unit>.
@@ -155,7 +153,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Active)
                     return 0;
-                return Convert.ToSingle (resFlowField.GetValue (InternalHarvester), CultureInfo.InvariantCulture);
+                return resFlow (InternalHarvester);
             }
         }
 

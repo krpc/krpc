@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter
@@ -39,33 +39,33 @@ namespace KRPC.SpaceCenter
         static class Commands
         {
             /// <summary>Direction to move in, in world space. Magnitude is ignored.</summary>
-            public static readonly FieldInfo Move = Find ("tgtRpos");
+            public static readonly Field<KerbalEVA, Vector3> Move = Find<Vector3> ("tgtRpos");
             /// <summary>Direction the kerbal is holding, in world space.</summary>
-            public static readonly FieldInfo Facing = Find ("tgtFwd");
+            public static readonly Field<KerbalEVA, Vector3> Facing = Find<Vector3> ("tgtFwd");
             /// <summary>Up axis the kerbal is holding, in world space.</summary>
-            public static readonly FieldInfo FacingUp = Find ("tgtUp");
+            public static readonly Field<KerbalEVA, Vector3> FacingUp = Find<Vector3> ("tgtUp");
             /// <summary>Climbing direction while on a ladder, in world space.</summary>
-            public static readonly FieldInfo Climb = Find ("ladderTgtRPos");
+            public static readonly Field<KerbalEVA, Vector3> Climb = Find<Vector3> ("ladderTgtRPos");
             /// <summary>Jetpack translation demand, in world space.</summary>
-            public static readonly FieldInfo Translation = Find ("packTgtRPos");
+            public static readonly Field<KerbalEVA, Vector3> Translation = Find<Vector3> ("packTgtRPos");
             /// <summary>Jetpack rotation demand, in world space, applied as torque.</summary>
-            public static readonly FieldInfo Torque = Find ("cmdRot");
+            public static readonly Field<KerbalEVA, Vector3> Torque = Find<Vector3> ("cmdRot");
             /// <summary>
             /// Whether rotation is being commanded directly. Holds off the attitude
             /// controller that would otherwise fly the kerbal back to the orientation it
             /// is holding, and which owns the rotation demand when it runs.
             /// </summary>
-            public static readonly FieldInfo RotatingManually = Find ("manualAxisControl");
+            public static readonly Field<KerbalEVA, bool> RotatingManually = Find<bool> ("manualAxisControl");
             /// <summary>Parachute steering demand; x leans forward, y leans right.</summary>
-            public static readonly FieldInfo ParachuteSteering = Find ("parachuteInput");
+            public static readonly Field<KerbalEVA, Vector3> ParachuteSteering = Find<Vector3> ("parachuteInput");
 
             /// <summary>The states of a kerbal's state machine.</summary>
-            public static readonly FieldInfo States =
-                typeof (KerbalFSM).GetField ("States", BindingFlags.NonPublic | BindingFlags.Instance);
+            public static readonly Func<KerbalFSM, List<KFSMState>> States =
+                Accessor.Getter<KerbalFSM, List<KFSMState>> ("States");
 
-            static FieldInfo Find (string name)
+            static Field<KerbalEVA, T> Find<T> (string name)
             {
-                return typeof (KerbalEVA).GetField (name, BindingFlags.NonPublic | BindingFlags.Instance);
+                return Accessor.Field<KerbalEVA, T> (name);
             }
 
             /// <summary>
@@ -195,7 +195,7 @@ namespace KRPC.SpaceCenter
                 LogUnavailableOnce ();
                 return false;
             }
-            var states = Commands.States.GetValue (eva.fsm) as List<KFSMState>;
+            var states = Commands.States (eva.fsm);
             if (states == null || states.Count == 0)
                 return false;
             KFSMCallback callback = () => Apply (eva);
@@ -238,7 +238,7 @@ namespace KRPC.SpaceCenter
             var translate = transform.forward * inputs.Forward + transform.right * inputs.Right +
                             transform.up * inputs.Up;
             if (translate != Vector3.zero)
-                Set (Commands.Translation, eva, Get (Commands.Translation, eva) + translate);
+                Commands.Translation.Set (eva, Commands.Translation.Get (eva) + translate);
 
             // On foot a kerbal can only turn, and only while walking. On a ladder it is
             // held by its hands and cannot turn at all, so the rotation inputs are the
@@ -256,7 +256,7 @@ namespace KRPC.SpaceCenter
                 ReleaseWalk (eva);
 
             if (inputs.Forward != 0f || inputs.Right != 0f) {
-                Set (Commands.Climb, eva, Get (Commands.Climb, eva) +
+                Commands.Climb.Set (eva, Commands.Climb.Get (eva) +
                      transform.up * inputs.Forward + transform.right * inputs.Right);
                 Steer (eva, inputs.Forward, inputs.Right);
             }
@@ -289,8 +289,8 @@ namespace KRPC.SpaceCenter
                 ReleaseRotation (eva);
                 return;
             }
-            Set (Commands.Torque, eva, Vector3.ClampMagnitude (error, 1f));
-            Commands.RotatingManually.SetValue (eva, true);
+            Commands.Torque.Set (eva, Vector3.ClampMagnitude (error, 1f));
+            Commands.RotatingManually.Set (eva, true);
             rotating.Add (id);
         }
 
@@ -301,9 +301,9 @@ namespace KRPC.SpaceCenter
         {
             if (!rotating.Remove (eva.vessel.id))
                 return;
-            Commands.RotatingManually.SetValue (eva, false);
-            Set (Commands.Facing, eva, eva.transform.forward);
-            Set (Commands.FacingUp, eva, eva.transform.up);
+            Commands.RotatingManually.Set (eva, false);
+            Commands.Facing.Set (eva, eva.transform.forward);
+            Commands.FacingUp.Set (eva, eva.transform.up);
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace KRPC.SpaceCenter
         static void Walk (KerbalEVA eva, float forward, float right, float yaw)
         {
             var up = eva.fUp;
-            var heading = Vector3.ProjectOnPlane (Get (Commands.Facing, eva), up);
+            var heading = Vector3.ProjectOnPlane (Commands.Facing.Get (eva), up);
             if (heading.sqrMagnitude < 1e-6f)
                 heading = Vector3.ProjectOnPlane (eva.transform.forward, up);
             heading = Quaternion.AngleAxis (
@@ -330,9 +330,9 @@ namespace KRPC.SpaceCenter
             // The walking direction is normalized and carries no speed, so the size of the
             // input picks the direction and nothing else.
             var direction = heading * forward + Vector3.Cross (up, heading) * right;
-            Set (Commands.Move, eva, (Get (Commands.Move, eva) + direction).normalized);
-            Set (Commands.Facing, eva, heading);
-            Set (Commands.FacingUp, eva, up);
+            Commands.Move.Set (eva, (Commands.Move.Get (eva) + direction).normalized);
+            Commands.Facing.Set (eva, heading);
+            Commands.FacingUp.Set (eva, up);
             if (!walkedMovementMode.ContainsKey (eva.vessel.id))
                 walkedMovementMode [eva.vessel.id] = eva.CharacterFrameMode;
             eva.CharacterFrameMode = true;
@@ -356,19 +356,9 @@ namespace KRPC.SpaceCenter
         /// </summary>
         static void Steer (KerbalEVA eva, float forward, float right)
         {
-            var steering = Get (Commands.ParachuteSteering, eva) + new Vector3 (forward, right, 0f);
-            Set (Commands.ParachuteSteering, eva, new Vector3 (
+            var steering = Commands.ParachuteSteering.Get (eva) + new Vector3 (forward, right, 0f);
+            Commands.ParachuteSteering.Set (eva, new Vector3 (
                 Mathf.Clamp (steering.x, -1f, 1f), Mathf.Clamp (steering.y, -1f, 1f), 0f));
-        }
-
-        static Vector3 Get (FieldInfo command, KerbalEVA eva)
-        {
-            return (Vector3)command.GetValue (eva);
-        }
-
-        static void Set (FieldInfo command, KerbalEVA eva, Vector3 value)
-        {
-            command.SetValue (eva, value);
         }
     }
 }

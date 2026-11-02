@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -867,10 +866,10 @@ namespace KRPC.SpaceCenter.Services
             get { return RailsWarpLimit (TimeWarpInstance.warpRates.Length - 1); }
         }
 
-        static readonly MethodInfo getMaxOnRailsRateIdx =
-            typeof (TimeWarp).GetMethod (
-                "getMaxOnRailsRateIdx",
-                BindingFlags.NonPublic | BindingFlags.Instance);
+        delegate int MaxOnRailsRateIdx (TimeWarp timeWarp, int factor, bool lookAhead, out ClearToSaveStatus reason);
+
+        static readonly MaxOnRailsRateIdx getMaxOnRailsRateIdx =
+            Accessor.Method<MaxOnRailsRateIdx> (typeof (TimeWarp), "getMaxOnRailsRateIdx");
 
         /// <summary>
         /// The highest rails warp factor, up to <paramref name="factor"/>, that the game allows.
@@ -886,8 +885,8 @@ namespace KRPC.SpaceCenter.Services
                 return 0;
             if (getMaxOnRailsRateIdx == null)
                 throw new InvalidOperationException ("TimeWarp.getMaxOnRailsRateIdx not found");
-            // Parameters are the target factor, whether to look ahead along the orbit, and an out reason
-            return (int)getMaxOnRailsRateIdx.Invoke (TimeWarpInstance, new object [] { factor, true, null });
+            ClearToSaveStatus reason;
+            return getMaxOnRailsRateIdx (TimeWarpInstance, factor, true, out reason);
         }
 
         /// <summary>

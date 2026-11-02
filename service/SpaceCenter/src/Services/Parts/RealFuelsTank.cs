@@ -59,7 +59,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the tank is pressurized enough to feed a pressure-fed engine.
         /// </summary>
         internal bool HighlyPressurized {
-            get { return (bool)module.Fields ["highlyPressurized"].GetValue (module); }
+            get { return ExternalAPI.RealFuels.HighlyPressurized (module); }
         }
 
         /// <summary>

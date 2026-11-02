@@ -1,93 +1,53 @@
 ﻿using System;
-using System.Linq.Expressions;
-using System.Reflection;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
     /// <summary>
-    /// A few small utility functions for getting and setting private members of the internal camera.
+    /// Getters and setters for private members of the internal camera.
     /// </summary>
     public static class InternalCameraExtensions
     {
-        private static readonly Lazy<Action<InternalCamera, object>> _setPitch =
-            new Lazy<Action<InternalCamera, object>>(() => CreateFieldSetter<InternalCamera>("currentPitch"));
-
-        private static readonly Lazy<Func<InternalCamera, object>> _getPitch =
-            new Lazy<Func<InternalCamera, object>>(() => CreateFieldGetter<InternalCamera>("currentPitch"));
-
-        private static readonly Lazy<Action<InternalCamera, object>> _setRot =
-            new Lazy<Action<InternalCamera, object>>(() => CreateFieldSetter<InternalCamera>("currentRot"));
-
-        private static readonly Lazy<Action<InternalCamera, object>> _setZoom =
-            new Lazy<Action<InternalCamera, object>>(() => CreateFieldSetter<InternalCamera>("currentZoom"));
-
-        private static readonly Lazy<Func<InternalCamera, object>> _getRot =
-            new Lazy<Func<InternalCamera, object>>(() => CreateFieldGetter<InternalCamera>("currentRot"));
-
-        private static readonly Lazy<Func<InternalCamera, object>> _getFoV =
-            new Lazy<Func<InternalCamera, object>>(() => CreateFieldGetter<InternalCamera>("currentFoV"));
-
-        private static readonly Lazy<Func<InternalCamera, object>> _getDefaultFoV =
-            new Lazy<Func<InternalCamera, object>>(() => CreateFieldGetter<InternalCamera>("initialZoom"));
-
         /// <summary>
         /// Sets the pitch of the internal camera.
         /// </summary>
-        public static Action<InternalCamera, object> SetPitch => _setPitch.Value;
+        public static readonly Action<InternalCamera, float> SetPitch =
+            Accessor.Setter<InternalCamera, float> ("currentPitch");
 
         /// <summary>
         /// Gets the pitch of the internal camera.
         /// </summary>
-        public static Func<InternalCamera, object> GetPitch => _getPitch.Value;
+        public static readonly Func<InternalCamera, float> GetPitch =
+            Accessor.Getter<InternalCamera, float> ("currentPitch");
 
         /// <summary>
         /// Sets the rotation of the internal camera.
         /// </summary>
-        public static Action<InternalCamera, object> SetRot => _setRot.Value;
+        public static readonly Action<InternalCamera, float> SetRot =
+            Accessor.Setter<InternalCamera, float> ("currentRot");
 
         /// <summary>
         /// Sets the current zoom of the internal camera.
         /// </summary>
-        public static Action<InternalCamera, object> SetZoom => _setZoom.Value;
+        public static readonly Action<InternalCamera, float> SetZoom =
+            Accessor.Setter<InternalCamera, float> ("currentZoom");
 
         /// <summary>
         /// Gets the rotation of the internal camera.
         /// </summary>
-        public static Func<InternalCamera, object> GetRot => _getRot.Value;
+        public static readonly Func<InternalCamera, float> GetRot =
+            Accessor.Getter<InternalCamera, float> ("currentRot");
 
         /// <summary>
         /// Gets the field of view of the internal camera.
         /// </summary>
-        public static Func<InternalCamera, object> GetFoV => _getFoV.Value;
+        public static readonly Func<InternalCamera, float> GetFoV =
+            Accessor.Getter<InternalCamera, float> ("currentFoV");
 
         /// <summary>
         /// Gets the default field of view of the internal camera.
         /// </summary>
-        public static Func<InternalCamera, object> GetDefaultFoV => _getDefaultFoV.Value;
-
-    	private static Action<T, object> CreateFieldSetter<T>(string fieldName)
-        {
-            var parameterExpression = Expression.Parameter(typeof(T), "target");
-            var valueExpression = Expression.Parameter(typeof(object), "value");
-
-            var field = typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
-            var fieldExpression = Expression.Field(parameterExpression, field);
-            var assignExpression = Expression.Assign(fieldExpression, Expression.Convert(valueExpression, field.FieldType));
-
-            var lambdaExpression = Expression.Lambda<Action<T, object>>(assignExpression, parameterExpression, valueExpression);
-            return lambdaExpression.Compile();
-        }
-
-        private static Func<T, object> CreateFieldGetter<T>(string fieldName)
-        {
-            var parameterExpression = Expression.Parameter(typeof(T), "target");
-
-            var field = typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
-            var fieldExpression = Expression.Field(parameterExpression, field);
-            var convertExpression = Expression.Convert(fieldExpression, typeof(object));
-
-            var lambdaExpression = Expression.Lambda<Func<T, object>>(convertExpression, parameterExpression);
-            return lambdaExpression.Compile();
-        }
+        public static readonly Func<InternalCamera, float> GetDefaultFoV =
+            Accessor.Getter<InternalCamera, float> ("initialZoom");
     }
 }

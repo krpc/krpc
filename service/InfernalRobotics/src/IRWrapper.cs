@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using KRPC.Utils;
 
 namespace KRPC.InfernalRobotics
 {
@@ -30,8 +31,8 @@ namespace KRPC.InfernalRobotics
 		// loaded, off-rails vessel's servos can be enumerated and commanded directly.
 		protected internal static Type ServoHelperType { get; set; }
 		protected internal static Type ModuleServoType { get; set; }
-		protected internal static MethodInfo ToServosMethod { get; set; }
-		protected internal static FieldInfo GroupNameField { get; set; }
+		protected internal static Func<Vessel, object> ToServos { get; set; }
+		protected internal static Field<object, string> GroupName { get; set; }
 
 		protected internal static object ActualController { get; set; }
 
@@ -89,11 +90,11 @@ namespace KRPC.InfernalRobotics
 			ModuleServoType = null;
 			AssemblyLoader.loadedAssemblies.TypeOperation (t => {
 				if(t.FullName == "InfernalRobotics_v3.Module.ModuleIRServo_v3") { ModuleServoType = t; } });
-			ToServosMethod = ServoHelperType != null
-				? ServoHelperType.GetMethod ("ToServos", new [] { typeof(Vessel) })
+			ToServos = ServoHelperType != null
+				? Accessor.Method<Func<Vessel, object>> (ServoHelperType, "ToServos")
 				: null;
-			GroupNameField = ModuleServoType != null
-				? ModuleServoType.GetField ("groupName")
+			GroupName = ModuleServoType != null
+				? Accessor.Field<object, string> (ModuleServoType, "groupName")
 				: null;
 
 			// The wrappers bind the mod's members once and keep them for the assembly, so
@@ -105,12 +106,12 @@ namespace KRPC.InfernalRobotics
 
 			try
 			{
-				var propertyInfo = IRControllerType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static);
+				var instance = Accessor.StaticGetter<object> (IRControllerType, "Instance");
 
-				if(propertyInfo == null)
+				if(instance == null)
 					LogFormatted("[IR Wrapper] Cannot find Instance Property");
 				else
-					ActualController = propertyInfo.GetValue(null, null);
+					ActualController = instance ();
 			}
 			catch (Exception e)
 			{
@@ -133,7 +134,8 @@ namespace KRPC.InfernalRobotics
 
 		private class InfernalRoboticsAPI : IRAPI
 		{
-			private PropertyInfo apiReady;
+			private Func<bool> apiReady;
+			private Func<object, object> servoGroups;
 			private object actualServoGroups;
 
 			public InfernalRoboticsAPI()
@@ -144,19 +146,20 @@ namespace KRPC.InfernalRobotics
 
 			private void BuildServoGroups()
 			{
-				var servoGroupsField = IRControllerType.GetField("ServoGroups");
-				if(servoGroupsField == null)
+				if(servoGroups == null)
+					servoGroups = Accessor.Getter<object, object> (IRControllerType, "ServoGroups");
+				if(servoGroups == null)
 					LogFormatted("Failed Getting ServoGroups fieldinfo");
 				else if(IRWrapper.ActualController == null)
 					LogFormatted("ServoController Instance not found");
 				else
-					actualServoGroups = servoGroupsField.GetValue(IRWrapper.ActualController);
+					actualServoGroups = servoGroups (IRWrapper.ActualController);
 			}
 
 			private void DetermineReady()
 			{
 				LogFormatted("Getting APIReady Object");
-				apiReady = IRControllerType.GetProperty("APIReady", BindingFlags.Public | BindingFlags.Static);
+				apiReady = Accessor.StaticGetter<bool> (IRControllerType, "APIReady");
 				LogFormatted("Success: " + (apiReady != null));
 			}
 
@@ -167,7 +170,7 @@ namespace KRPC.InfernalRobotics
 					if(apiReady == null || actualServoGroups == null)
 						return false;
 
-					return (bool)apiReady.GetValue(null, null);
+					return apiReady ();
 				}
 			}
 
@@ -206,32 +209,32 @@ namespace KRPC.InfernalRobotics
 		{
 			private readonly object actualControlGroup;
 
-			private static PropertyInfo nameProperty;
-			private static PropertyInfo vesselProperty;
-			private static PropertyInfo expandedProperty;
-			private static PropertyInfo groupSpeedFactorProperty;
+			private static Field<object, string> nameProperty;
+			private static Func<object, Vessel> vesselProperty;
+			private static Field<object, bool> expandedProperty;
+			private static Field<object, float> groupSpeedFactorProperty;
 
-			private static PropertyInfo forwardKeyProperty;
-			private static PropertyInfo reverseKeyProperty;
+			private static Field<object, string> forwardKeyProperty;
+			private static Field<object, string> reverseKeyProperty;
 
-			private static PropertyInfo movingDirectionProperty;
-			private static PropertyInfo advancedModeProperty;
-			private static PropertyInfo totalElectricChargeRequirementProperty;
-			private static PropertyInfo buildAidProperty;
-			private static PropertyInfo ikActiveProperty;
+			private static Func<object, int> movingDirectionProperty;
+			private static Field<object, bool> advancedModeProperty;
+			private static Func<object, float> totalElectricChargeRequirementProperty;
+			private static Field<object, bool> buildAidProperty;
+			private static Field<object, bool> ikActiveProperty;
 
-			private static MethodInfo moveRightMethod;
-			private static MethodInfo moveLeftMethod;
-			private static MethodInfo moveCenterMethod;
-			private static MethodInfo moveNextPresetMethod;
-			private static MethodInfo movePrevPresetMethod;
-			private static MethodInfo stopMethod;
+			private static Action<object> moveRightMethod;
+			private static Action<object> moveLeftMethod;
+			private static Action<object> moveCenterMethod;
+			private static Action<object> moveNextPresetMethod;
+			private static Action<object> movePrevPresetMethod;
+			private static Action<object> stopMethod;
 
 			public IRServoGroup (object cg)
 			{
 				actualControlGroup = cg;
 				EnsureBound();
-				ActualServos = servosProperty.GetValue(actualControlGroup, null);
+				ActualServos = servosProperty (actualControlGroup);
 			}
 
 			// The lookups below depend on the mod's group type alone, so they are made once
@@ -253,96 +256,96 @@ namespace KRPC.InfernalRobotics
 				bound = true;
 			}
 
-			private static PropertyInfo servosProperty;
+			private static Func<object, object> servosProperty;
 
 			private static void FindProperties()
 			{
-				nameProperty = IRServoGroupType.GetProperty("Name");
-				vesselProperty = IRServoGroupType.GetProperty("Vessel");
-				forwardKeyProperty = IRServoGroupType.GetProperty("ForwardKey");
-				reverseKeyProperty = IRServoGroupType.GetProperty("ReverseKey");
-				groupSpeedFactorProperty = IRServoGroupType.GetProperty("GroupSpeedFactor");
-				expandedProperty = IRServoGroupType.GetProperty("Expanded");
-				movingDirectionProperty = IRServoGroupType.GetProperty("MovingDirection");
-				advancedModeProperty = IRServoGroupType.GetProperty("AdvancedMode");
-				totalElectricChargeRequirementProperty = IRServoGroupType.GetProperty("TotalElectricChargeRequirement");
-				buildAidProperty = IRServoGroupType.GetProperty("BuildAid");
-				ikActiveProperty = IRServoGroupType.GetProperty("IKActive");
+				nameProperty = Accessor.Field<object, string> (IRServoGroupType, "Name");
+				vesselProperty = Accessor.Getter<object, Vessel> (IRServoGroupType, "Vessel");
+				forwardKeyProperty = Accessor.Field<object, string> (IRServoGroupType, "ForwardKey");
+				reverseKeyProperty = Accessor.Field<object, string> (IRServoGroupType, "ReverseKey");
+				groupSpeedFactorProperty = Accessor.Field<object, float> (IRServoGroupType, "GroupSpeedFactor");
+				expandedProperty = Accessor.Field<object, bool> (IRServoGroupType, "Expanded");
+				movingDirectionProperty = Accessor.Getter<object, int> (IRServoGroupType, "MovingDirection");
+				advancedModeProperty = Accessor.Field<object, bool> (IRServoGroupType, "AdvancedMode");
+				totalElectricChargeRequirementProperty = Accessor.Getter<object, float> (IRServoGroupType, "TotalElectricChargeRequirement");
+				buildAidProperty = Accessor.Field<object, bool> (IRServoGroupType, "BuildAid");
+				ikActiveProperty = Accessor.Field<object, bool> (IRServoGroupType, "IKActive");
 
-				servosProperty = IRServoGroupType.GetProperty("Servos");
+				servosProperty = Accessor.Getter<object, object> (IRServoGroupType, "Servos");
 			}
 
 			private static void FindMethods()
 			{
-				moveRightMethod = IRServoGroupType.GetMethod ("MoveRight", BindingFlags.Public | BindingFlags.Instance);
-				moveLeftMethod = IRServoGroupType.GetMethod ("MoveLeft", BindingFlags.Public | BindingFlags.Instance);
-				moveCenterMethod = IRServoGroupType.GetMethod ("MoveCenter", BindingFlags.Public | BindingFlags.Instance);
-				moveNextPresetMethod = IRServoGroupType.GetMethod ("MoveNextPreset", BindingFlags.Public | BindingFlags.Instance);
-				movePrevPresetMethod = IRServoGroupType.GetMethod ("MovePrevPreset", BindingFlags.Public | BindingFlags.Instance);
-				stopMethod = IRServoGroupType.GetMethod ("Stop", BindingFlags.Public | BindingFlags.Instance);
+				moveRightMethod = Accessor.Method<Action<object>> (IRServoGroupType, "MoveRight");
+				moveLeftMethod = Accessor.Method<Action<object>> (IRServoGroupType, "MoveLeft");
+				moveCenterMethod = Accessor.Method<Action<object>> (IRServoGroupType, "MoveCenter");
+				moveNextPresetMethod = Accessor.Method<Action<object>> (IRServoGroupType, "MoveNextPreset");
+				movePrevPresetMethod = Accessor.Method<Action<object>> (IRServoGroupType, "MovePrevPreset");
+				stopMethod = Accessor.Method<Action<object>> (IRServoGroupType, "Stop");
 			}
 
 			public string Name
 			{
-				get { return (string)nameProperty.GetValue(actualControlGroup, null); }
-				set { nameProperty.SetValue (actualControlGroup, value, null); }
+				get { return nameProperty.Get (actualControlGroup); }
+				set { nameProperty.Set (actualControlGroup, value); }
 			}
 
 			public Vessel Vessel
 			{
-				get { return vesselProperty != null ? (Vessel)vesselProperty.GetValue(actualControlGroup, null) : null; }
+				get { return vesselProperty != null ? vesselProperty (actualControlGroup) : null; }
 			}
 
 			public string ForwardKey
 			{
-				get { return (string)forwardKeyProperty.GetValue(actualControlGroup, null); }
-				set { forwardKeyProperty.SetValue (actualControlGroup, value, null); }
+				get { return forwardKeyProperty.Get (actualControlGroup); }
+				set { forwardKeyProperty.Set (actualControlGroup, value); }
 			}
 
 			public string ReverseKey
 			{
-				get { return (string)reverseKeyProperty.GetValue(actualControlGroup, null); }
-				set { reverseKeyProperty.SetValue (actualControlGroup, value, null); }
+				get { return reverseKeyProperty.Get (actualControlGroup); }
+				set { reverseKeyProperty.Set (actualControlGroup, value); }
 			}
 
 			public float GroupSpeedFactor
 			{
-				get { return (float)groupSpeedFactorProperty.GetValue(actualControlGroup, null); }
-				set { groupSpeedFactorProperty.SetValue (actualControlGroup, value, null); }
+				get { return groupSpeedFactorProperty.Get (actualControlGroup); }
+				set { groupSpeedFactorProperty.Set (actualControlGroup, value); }
 			}
 
 			public bool Expanded
 			{
-				get { return (bool)expandedProperty.GetValue(actualControlGroup, null); }
-				set { expandedProperty.SetValue (actualControlGroup, value, null); }
+				get { return expandedProperty.Get (actualControlGroup); }
+				set { expandedProperty.Set (actualControlGroup, value); }
 			}
 
 			public int MovingDirection
 			{
-				get { return (int)movingDirectionProperty.GetValue(actualControlGroup, null); }
+				get { return movingDirectionProperty (actualControlGroup); }
 			}
 
 			public bool AdvancedMode
 			{
-				get { return (bool)advancedModeProperty.GetValue(actualControlGroup, null); }
-				set { advancedModeProperty.SetValue (actualControlGroup, value, null); }
+				get { return advancedModeProperty.Get (actualControlGroup); }
+				set { advancedModeProperty.Set (actualControlGroup, value); }
 			}
 
 			public float TotalElectricChargeRequirement
 			{
-				get { return (float)totalElectricChargeRequirementProperty.GetValue(actualControlGroup, null); }
+				get { return totalElectricChargeRequirementProperty (actualControlGroup); }
 			}
 
 			public bool BuildAid
 			{
-				get { return (bool)buildAidProperty.GetValue(actualControlGroup, null); }
-				set { buildAidProperty.SetValue (actualControlGroup, value, null); }
+				get { return buildAidProperty.Get (actualControlGroup); }
+				set { buildAidProperty.Set (actualControlGroup, value); }
 			}
 
 			public bool IKActive
 			{
-				get { return (bool)ikActiveProperty.GetValue(actualControlGroup, null); }
-				set { ikActiveProperty.SetValue (actualControlGroup, value, null); }
+				get { return ikActiveProperty.Get (actualControlGroup); }
+				set { ikActiveProperty.Set (actualControlGroup, value); }
 			}
 
 			private object ActualServos { get; set; }
@@ -354,32 +357,32 @@ namespace KRPC.InfernalRobotics
 
 			public void MoveRight()
 			{
-				moveRightMethod.Invoke(actualControlGroup, new object [] { });
+				moveRightMethod (actualControlGroup);
 			}
 
 			public void MoveLeft()
 			{
-				moveLeftMethod.Invoke(actualControlGroup, new object [] { });
+				moveLeftMethod (actualControlGroup);
 			}
 
 			public void MoveCenter()
 			{
-				moveCenterMethod.Invoke(actualControlGroup, new object [] { });
+				moveCenterMethod (actualControlGroup);
 			}
 
 			public void MoveNextPreset()
 			{
-				moveNextPresetMethod.Invoke(actualControlGroup, new object [] { });
+				moveNextPresetMethod (actualControlGroup);
 			}
 
 			public void MovePrevPreset()
 			{
-				movePrevPresetMethod.Invoke(actualControlGroup, new object [] { });
+				movePrevPresetMethod (actualControlGroup);
 			}
 
 			public void Stop()
 			{
-				stopMethod.Invoke (actualControlGroup, new object [] { });
+				stopMethod (actualControlGroup);
 			}
 
 			private IList<IServo> ExtractServos (object actualServos)
@@ -412,63 +415,63 @@ namespace KRPC.InfernalRobotics
 
 		public class IRServo : IServo
 		{
-			private static PropertyInfo nameProperty;
-			private static PropertyInfo UIDProperty;
-			private static PropertyInfo HostPartProperty;
-			private static PropertyInfo highlightProperty;
+			private static Field<object, string> nameProperty;
+			private static Func<object, uint> UIDProperty;
+			private static Func<object, Part> HostPartProperty;
+			private static Action<object, bool> highlightProperty;
 
-			private static PropertyInfo minPositionProperty;
-			private static PropertyInfo maxPositionProperty;
-			private static PropertyInfo isFreeMovingProperty;
+			private static Field<object, float> minPositionProperty;
+			private static Field<object, float> maxPositionProperty;
+			private static Func<object, bool> isFreeMovingProperty;
 
-			private static PropertyInfo minPositionLimitProperty;
-			private static PropertyInfo maxPositionLimitProperty;
+			private static Field<object, float> minPositionLimitProperty;
+			private static Field<object, float> maxPositionLimitProperty;
 
-			private static PropertyInfo forceLimitProperty;
-			private static PropertyInfo accelerationLimitProperty;
-			private static PropertyInfo speedLimitProperty;
-			private static PropertyInfo defaultSpeedProperty;
+			private static Field<object, float> forceLimitProperty;
+			private static Field<object, float> accelerationLimitProperty;
+			private static Field<object, float> speedLimitProperty;
+			private static Field<object, float> defaultSpeedProperty;
 
-			private static PropertyInfo isMovingProperty;
-			private static PropertyInfo isLockedProperty;
-			private static PropertyInfo isInvertedProperty;
+			private static Func<object, bool> isMovingProperty;
+			private static Field<object, bool> isLockedProperty;
+			private static Field<object, bool> isInvertedProperty;
 
-			private static PropertyInfo commandedPositionProperty;
-			private static PropertyInfo commandedSpeedProperty;
+			private static Func<object, float> commandedPositionProperty;
+			private static Func<object, float> commandedSpeedProperty;
 
-			private static PropertyInfo positionProperty;
+			private static Func<object, float> positionProperty;
 
-			private static PropertyInfo forwardKeyProperty;
-			private static PropertyInfo reverseKeyProperty;
+			private static Field<object, string> forwardKeyProperty;
+			private static Field<object, string> reverseKeyProperty;
 
-			private static PropertyInfo targetPositionProperty;
-			private static PropertyInfo targetSpeedProperty;
-			private static PropertyInfo defaultPositionProperty;
-			private static PropertyInfo maxForceProperty;
-			private static PropertyInfo maxAccelerationProperty;
-			private static PropertyInfo maxSpeedProperty;
-			private static PropertyInfo electricChargeRequiredProperty;
-			private static PropertyInfo springPowerProperty;
-			private static PropertyInfo dampingPowerProperty;
-			private static PropertyInfo rotorAccelerationProperty;
-			private static PropertyInfo isLimitedProperty;
-			private static PropertyInfo isRotationalProperty;
-			private static PropertyInfo isServoProperty;
-			private static PropertyInfo canHaveLimitsProperty;
-			private static PropertyInfo hasSpringProperty;
-			private static PropertyInfo isRunningProperty;
-			private static PropertyInfo modeProperty;
-			private static PropertyInfo presetPositionsProperty;
-			private static PropertyInfo presetsProperty;
-			private static MethodInfo presetAddMethod;
-			private static MethodInfo presetRemoveAtMethod;
-			private static MethodInfo presetSortMethod;
+			private static Func<object, float> targetPositionProperty;
+			private static Func<object, float> targetSpeedProperty;
+			private static Func<object, float> defaultPositionProperty;
+			private static Func<object, float> maxForceProperty;
+			private static Func<object, float> maxAccelerationProperty;
+			private static Func<object, float> maxSpeedProperty;
+			private static Func<object, float> electricChargeRequiredProperty;
+			private static Field<object, float> springPowerProperty;
+			private static Field<object, float> dampingPowerProperty;
+			private static Field<object, float> rotorAccelerationProperty;
+			private static Field<object, bool> isLimitedProperty;
+			private static Func<object, bool> isRotationalProperty;
+			private static Func<object, bool> isServoProperty;
+			private static Func<object, bool> canHaveLimitsProperty;
+			private static Func<object, bool> hasSpringProperty;
+			private static Func<object, bool> isRunningProperty;
+			private static Func<object, int> modeProperty;
+			private static Func<object, IList<float>> presetPositionsProperty;
+			private static Func<object, object> presetsProperty;
+			private static Action<object, float> presetAddMethod;
+			private static Action<object, int> presetRemoveAtMethod;
+			private static Action<object, IComparer<float>> presetSortMethod;
 
-			private static MethodInfo moveLeftMethod;
-			private static MethodInfo moveCenterMethod;
-			private static MethodInfo moveRightMethod;
-			private static MethodInfo moveToMethod;
-			private static MethodInfo stopMethod;
+			private static Action<object, float> moveLeftMethod;
+			private static Action<object, float> moveCenterMethod;
+			private static Action<object, float> moveRightMethod;
+			private static Action<object, float, float> moveToMethod;
+			private static Action<object> stopMethod;
 
 			public IRServo(object s)
 			{
@@ -497,69 +500,69 @@ namespace KRPC.InfernalRobotics
 
 			private static void FindProperties()
 			{
-				nameProperty = IRServoType.GetProperty("Name");
-				UIDProperty = IRServoType.GetProperty("UID");
-				HostPartProperty = IRServoType.GetProperty("HostPart");
-				highlightProperty = IRServoType.GetProperty("Highlight");
+				nameProperty = Accessor.Field<object, string> (IRServoType, "Name");
+				UIDProperty = Accessor.Getter<object, uint> (IRServoType, "UID");
+				HostPartProperty = Accessor.Getter<object, Part> (IRServoType, "HostPart");
+				highlightProperty = Accessor.Setter<object, bool> (IRServoType, "Highlight");
 
-				minPositionProperty = IRServoType.GetProperty("MinPosition");
-				maxPositionProperty = IRServoType.GetProperty("MaxPosition");
-				isFreeMovingProperty = IRServoType.GetProperty("IsFreeMoving");
+				minPositionProperty = Accessor.Field<object, float> (IRServoType, "MinPosition");
+				maxPositionProperty = Accessor.Field<object, float> (IRServoType, "MaxPosition");
+				isFreeMovingProperty = Accessor.Getter<object, bool> (IRServoType, "IsFreeMoving");
 
-				minPositionLimitProperty = IRServoType.GetProperty("MinPositionLimit");
-				maxPositionLimitProperty = IRServoType.GetProperty("MaxPositionLimit");
+				minPositionLimitProperty = Accessor.Field<object, float> (IRServoType, "MinPositionLimit");
+				maxPositionLimitProperty = Accessor.Field<object, float> (IRServoType, "MaxPositionLimit");
 
-				forceLimitProperty = IRServoType.GetProperty("ForceLimit");
-				accelerationLimitProperty = IRServoType.GetProperty("AccelerationLimit");
-				speedLimitProperty = IRServoType.GetProperty("SpeedLimit");
-				defaultSpeedProperty = IRServoType.GetProperty("DefaultSpeed");
+				forceLimitProperty = Accessor.Field<object, float> (IRServoType, "ForceLimit");
+				accelerationLimitProperty = Accessor.Field<object, float> (IRServoType, "AccelerationLimit");
+				speedLimitProperty = Accessor.Field<object, float> (IRServoType, "SpeedLimit");
+				defaultSpeedProperty = Accessor.Field<object, float> (IRServoType, "DefaultSpeed");
 
-				isMovingProperty = IRServoType.GetProperty("IsMoving");
-				isLockedProperty = IRServoType.GetProperty("IsLocked");
-				isInvertedProperty = IRServoType.GetProperty("IsInverted");
+				isMovingProperty = Accessor.Getter<object, bool> (IRServoType, "IsMoving");
+				isLockedProperty = Accessor.Field<object, bool> (IRServoType, "IsLocked");
+				isInvertedProperty = Accessor.Field<object, bool> (IRServoType, "IsInverted");
 
-				commandedPositionProperty = IRServoType.GetProperty("CommandedPosition");
-				commandedSpeedProperty = IRServoType.GetProperty("CommandedSpeed");
+				commandedPositionProperty = Accessor.Getter<object, float> (IRServoType, "CommandedPosition");
+				commandedSpeedProperty = Accessor.Getter<object, float> (IRServoType, "CommandedSpeed");
 
-				positionProperty = IRServoType.GetProperty("Position");
+				positionProperty = Accessor.Getter<object, float> (IRServoType, "Position");
 
-				forwardKeyProperty = IRServoType.GetProperty("ForwardKey");
-				reverseKeyProperty = IRServoType.GetProperty("ReverseKey");
+				forwardKeyProperty = Accessor.Field<object, string> (IRServoType, "ForwardKey");
+				reverseKeyProperty = Accessor.Field<object, string> (IRServoType, "ReverseKey");
 
-				targetPositionProperty = IRServoType.GetProperty("TargetPosition");
-				targetSpeedProperty = IRServoType.GetProperty("TargetSpeed");
-				defaultPositionProperty = IRServoType.GetProperty("DefaultPosition");
-				maxForceProperty = IRServoType.GetProperty("MaxForce");
-				maxAccelerationProperty = IRServoType.GetProperty("MaxAcceleration");
-				maxSpeedProperty = IRServoType.GetProperty("MaxSpeed");
-				electricChargeRequiredProperty = IRServoType.GetProperty("ElectricChargeRequired");
-				springPowerProperty = IRServoType.GetProperty("SpringPower");
-				dampingPowerProperty = IRServoType.GetProperty("DampingPower");
-				rotorAccelerationProperty = IRServoType.GetProperty("RotorAcceleration");
-				isLimitedProperty = IRServoType.GetProperty("IsLimited");
-				isRotationalProperty = IRServoType.GetProperty("IsRotational");
-				isServoProperty = IRServoType.GetProperty("IsServo");
-				canHaveLimitsProperty = IRServoType.GetProperty("CanHaveLimits");
-				hasSpringProperty = IRServoType.GetProperty("HasSpring");
-				isRunningProperty = IRServoType.GetProperty("IsRunning");
-				modeProperty = IRServoType.GetProperty("Mode");
-				presetPositionsProperty = IRServoType.GetProperty("PresetPositions");
-				presetsProperty = IRServoType.GetProperty("Presets");
-				if (presetsProperty != null) {
-					var presetableType = presetsProperty.PropertyType;
-					presetAddMethod = presetableType.GetMethod("Add");
-					presetRemoveAtMethod = presetableType.GetMethod("RemoveAt");
-					presetSortMethod = presetableType.GetMethod("Sort");
+				targetPositionProperty = Accessor.Getter<object, float> (IRServoType, "TargetPosition");
+				targetSpeedProperty = Accessor.Getter<object, float> (IRServoType, "TargetSpeed");
+				defaultPositionProperty = Accessor.Getter<object, float> (IRServoType, "DefaultPosition");
+				maxForceProperty = Accessor.Getter<object, float> (IRServoType, "MaxForce");
+				maxAccelerationProperty = Accessor.Getter<object, float> (IRServoType, "MaxAcceleration");
+				maxSpeedProperty = Accessor.Getter<object, float> (IRServoType, "MaxSpeed");
+				electricChargeRequiredProperty = Accessor.Getter<object, float> (IRServoType, "ElectricChargeRequired");
+				springPowerProperty = Accessor.Field<object, float> (IRServoType, "SpringPower");
+				dampingPowerProperty = Accessor.Field<object, float> (IRServoType, "DampingPower");
+				rotorAccelerationProperty = Accessor.Field<object, float> (IRServoType, "RotorAcceleration");
+				isLimitedProperty = Accessor.Field<object, bool> (IRServoType, "IsLimited");
+				isRotationalProperty = Accessor.Getter<object, bool> (IRServoType, "IsRotational");
+				isServoProperty = Accessor.Getter<object, bool> (IRServoType, "IsServo");
+				canHaveLimitsProperty = Accessor.Getter<object, bool> (IRServoType, "CanHaveLimits");
+				hasSpringProperty = Accessor.Getter<object, bool> (IRServoType, "HasSpring");
+				isRunningProperty = Accessor.Getter<object, bool> (IRServoType, "IsRunning");
+				modeProperty = Accessor.Getter<object, int> (IRServoType, "Mode");
+				presetPositionsProperty = Accessor.Getter<object, IList<float>> (IRServoType, "PresetPositions");
+				presetsProperty = Accessor.Getter<object, object> (IRServoType, "Presets");
+				var presetableType = IRServoType.Assembly.GetType ("InfernalRobotics_v3.Interfaces.IPresetable");
+				if (presetableType != null) {
+					presetAddMethod = Accessor.Method<Action<object, float>> (presetableType, "Add");
+					presetRemoveAtMethod = Accessor.Method<Action<object, int>> (presetableType, "RemoveAt");
+					presetSortMethod = Accessor.Method<Action<object, IComparer<float>>> (presetableType, "Sort");
 				}
 			}
 
 			private static void FindMethods()
 			{
-				moveLeftMethod = IRServoType.GetMethod("MoveLeft", BindingFlags.Public | BindingFlags.Instance);
-				moveCenterMethod = IRServoType.GetMethod("MoveCenter", BindingFlags.Public | BindingFlags.Instance);
-				moveRightMethod = IRServoType.GetMethod("MoveRight", BindingFlags.Public | BindingFlags.Instance);
-				moveToMethod = IRServoType.GetMethod("MoveTo", new [] { typeof(float), typeof(float) });
-				stopMethod = IRServoType.GetMethod("Stop", BindingFlags.Public | BindingFlags.Instance);
+				moveLeftMethod = Accessor.Method<Action<object, float>> (IRServoType, "MoveLeft");
+				moveCenterMethod = Accessor.Method<Action<object, float>> (IRServoType, "MoveCenter");
+				moveRightMethod = Accessor.Method<Action<object, float>> (IRServoType, "MoveRight");
+				moveToMethod = Accessor.Method<Action<object, float, float>> (IRServoType, "MoveTo");
+				stopMethod = Accessor.Method<Action<object>> (IRServoType, "Stop");
 			}
 
 			private readonly object actualServo;
@@ -567,220 +570,220 @@ namespace KRPC.InfernalRobotics
 
 			public string Name
 			{
-				get { return (string)nameProperty.GetValue(actualServo, null); }
-				set { nameProperty.SetValue(actualServo, value, null); }
+				get { return nameProperty.Get (actualServo); }
+				set { nameProperty.Set (actualServo, value); }
 			}
 
 			public uint UID
 			{
-				get { return (uint)UIDProperty.GetValue(actualServo, null); }
+				get { return UIDProperty (actualServo); }
 			}
 
 			public Part HostPart
 			{
-				get { return (Part)HostPartProperty.GetValue(actualServo, null); }
+				get { return HostPartProperty (actualServo); }
 			}
 
 			public bool Highlight
 			{
 				//get { return (bool)HighlightProperty.GetValue(actualServo, null); }
-				set { highlightProperty.SetValue(actualServo, value, null); }
+				set { highlightProperty (actualServo, value); }
 			}
 
 			public float MinPosition
 			{
-				get { return (float)minPositionProperty.GetValue(actualServo, null); }
-				set { minPositionProperty.SetValue(actualServo, value, null); }
+				get { return minPositionProperty.Get (actualServo); }
+				set { minPositionProperty.Set (actualServo, value); }
 			}
 
 			public float MaxPosition
 			{
-				get { return (float)maxPositionProperty.GetValue(actualServo, null); }
-				set { maxPositionProperty.SetValue(actualServo, value, null); }
+				get { return maxPositionProperty.Get (actualServo); }
+				set { maxPositionProperty.Set (actualServo, value); }
 			}
 
 			public bool IsFreeMoving
 			{
-				get { return (bool)isFreeMovingProperty.GetValue(actualServo, null); }
+				get { return isFreeMovingProperty (actualServo); }
 			}
 
 			public float MinPositionLimit
 			{
-				get { return (float)minPositionLimitProperty.GetValue(actualServo, null); }
-				set { minPositionLimitProperty.SetValue(actualServo, value, null); }
+				get { return minPositionLimitProperty.Get (actualServo); }
+				set { minPositionLimitProperty.Set (actualServo, value); }
 			}
 
 			public float MaxPositionLimit
 			{
-				get { return (float)maxPositionLimitProperty.GetValue(actualServo, null); }
-				set { maxPositionLimitProperty.SetValue(actualServo, value, null); }
+				get { return maxPositionLimitProperty.Get (actualServo); }
+				set { maxPositionLimitProperty.Set (actualServo, value); }
 			}
 
 			public float ForceLimit
 			{
-				get { return (float)forceLimitProperty.GetValue(actualServo, null); }
-				set { forceLimitProperty.SetValue(actualServo, value, null); }
+				get { return forceLimitProperty.Get (actualServo); }
+				set { forceLimitProperty.Set (actualServo, value); }
 			}
 
 			public float AccelerationLimit
 			{
-				get { return (float)accelerationLimitProperty.GetValue(actualServo, null); }
-				set { accelerationLimitProperty.SetValue(actualServo, value, null); }
+				get { return accelerationLimitProperty.Get (actualServo); }
+				set { accelerationLimitProperty.Set (actualServo, value); }
 			}
 
 			public float SpeedLimit
 			{
-				get { return (float)speedLimitProperty.GetValue(actualServo, null); }
-				set { speedLimitProperty.SetValue(actualServo, value, null); }
+				get { return speedLimitProperty.Get (actualServo); }
+				set { speedLimitProperty.Set (actualServo, value); }
 			}
 
 			public float DefaultSpeed
 			{
-				get { return (float)defaultSpeedProperty.GetValue(actualServo, null); }
-				set { defaultSpeedProperty.SetValue(actualServo, value, null); }
+				get { return defaultSpeedProperty.Get (actualServo); }
+				set { defaultSpeedProperty.Set (actualServo, value); }
 			}
 
 			public bool IsMoving
 			{
-				get { return (bool)isMovingProperty.GetValue(actualServo, null); }
+				get { return isMovingProperty (actualServo); }
 			}
 
 			public bool IsLocked
 			{
-				get { return (bool)isLockedProperty.GetValue(actualServo, null); }
-				set { isLockedProperty.SetValue(actualServo, value, null); }
+				get { return isLockedProperty.Get (actualServo); }
+				set { isLockedProperty.Set (actualServo, value); }
 			}
 
 			public bool IsInverted
 			{
-				get { return (bool)isInvertedProperty.GetValue(actualServo, null); }
-				set { isInvertedProperty.SetValue(actualServo, value, null); }
+				get { return isInvertedProperty.Get (actualServo); }
+				set { isInvertedProperty.Set (actualServo, value); }
 			}
 
 			public float CommandedPosition
 			{
-				get { return (float)commandedPositionProperty.GetValue(actualServo, null); }
+				get { return commandedPositionProperty (actualServo); }
 			}
 
 			public float CommandedSpeed
 			{
-				get { return (float)commandedSpeedProperty.GetValue(actualServo, null); }
+				get { return commandedSpeedProperty (actualServo); }
 			}
 
 			public float Position
 			{
-				get { return (float)positionProperty.GetValue(actualServo, null); }
+				get { return positionProperty (actualServo); }
 			}
 
 			public float TargetPosition
 			{
-				get { return (float)targetPositionProperty.GetValue(actualServo, null); }
+				get { return targetPositionProperty (actualServo); }
 			}
 
 			public float TargetSpeed
 			{
-				get { return (float)targetSpeedProperty.GetValue(actualServo, null); }
+				get { return targetSpeedProperty (actualServo); }
 			}
 
 			public float DefaultPosition
 			{
-				get { return (float)defaultPositionProperty.GetValue(actualServo, null); }
+				get { return defaultPositionProperty (actualServo); }
 			}
 
 			public float MaxForce
 			{
-				get { return (float)maxForceProperty.GetValue(actualServo, null); }
+				get { return maxForceProperty (actualServo); }
 			}
 
 			public float MaxAcceleration
 			{
-				get { return (float)maxAccelerationProperty.GetValue(actualServo, null); }
+				get { return maxAccelerationProperty (actualServo); }
 			}
 
 			public float MaxSpeed
 			{
-				get { return (float)maxSpeedProperty.GetValue(actualServo, null); }
+				get { return maxSpeedProperty (actualServo); }
 			}
 
 			public float ElectricChargeRequired
 			{
-				get { return (float)electricChargeRequiredProperty.GetValue(actualServo, null); }
+				get { return electricChargeRequiredProperty (actualServo); }
 			}
 
 			public float SpringPower
 			{
-				get { return (float)springPowerProperty.GetValue(actualServo, null); }
-				set { springPowerProperty.SetValue(actualServo, value, null); }
+				get { return springPowerProperty.Get (actualServo); }
+				set { springPowerProperty.Set (actualServo, value); }
 			}
 
 			public float DampingPower
 			{
-				get { return (float)dampingPowerProperty.GetValue(actualServo, null); }
-				set { dampingPowerProperty.SetValue(actualServo, value, null); }
+				get { return dampingPowerProperty.Get (actualServo); }
+				set { dampingPowerProperty.Set (actualServo, value); }
 			}
 
 			public float RotorAcceleration
 			{
-				get { return (float)rotorAccelerationProperty.GetValue(actualServo, null); }
-				set { rotorAccelerationProperty.SetValue(actualServo, value, null); }
+				get { return rotorAccelerationProperty.Get (actualServo); }
+				set { rotorAccelerationProperty.Set (actualServo, value); }
 			}
 
 			public bool IsLimited
 			{
-				get { return (bool)isLimitedProperty.GetValue(actualServo, null); }
-				set { isLimitedProperty.SetValue(actualServo, value, null); }
+				get { return isLimitedProperty.Get (actualServo); }
+				set { isLimitedProperty.Set (actualServo, value); }
 			}
 
 			public bool IsRotational
 			{
-				get { return (bool)isRotationalProperty.GetValue(actualServo, null); }
+				get { return isRotationalProperty (actualServo); }
 			}
 
 			public bool IsServo
 			{
-				get { return (bool)isServoProperty.GetValue(actualServo, null); }
+				get { return isServoProperty (actualServo); }
 			}
 
 			public bool CanHaveLimits
 			{
-				get { return (bool)canHaveLimitsProperty.GetValue(actualServo, null); }
+				get { return canHaveLimitsProperty (actualServo); }
 			}
 
 			public bool HasSpring
 			{
-				get { return (bool)hasSpringProperty.GetValue(actualServo, null); }
+				get { return hasSpringProperty (actualServo); }
 			}
 
 			public bool IsRunning
 			{
-				get { return (bool)isRunningProperty.GetValue(actualServo, null); }
+				get { return isRunningProperty (actualServo); }
 			}
 
 			// IR-Next's ModeType enum: servo = 1, rotor = 2. Returned as its integer value; the
 			// service maps it to the ServoMode enum.
 			public int Mode
 			{
-				get { return Convert.ToInt32(modeProperty.GetValue(actualServo, null), CultureInfo.InvariantCulture); }
+				get { return modeProperty (actualServo); }
 			}
 
 			public IList<float> PresetPositions
 			{
-				get { return (IList<float>)presetPositionsProperty.GetValue(actualServo, null); }
+				get { return presetPositionsProperty (actualServo); }
 			}
 
 			public void AddPreset(float position)
 			{
-				presetAddMethod.Invoke(presetsProperty.GetValue(actualServo, null), new object [] { position });
+				presetAddMethod (presetsProperty (actualServo), position);
 			}
 
 			public void RemovePresetAt(int index)
 			{
-				presetRemoveAtMethod.Invoke(presetsProperty.GetValue(actualServo, null), new object [] { index });
+				presetRemoveAtMethod (presetsProperty (actualServo), index);
 			}
 
 			public void SortPresets()
 			{
-				presetSortMethod.Invoke(presetsProperty.GetValue(actualServo, null), new object [] { null });
+				presetSortMethod (presetsProperty (actualServo), null);
 			}
 
 			// kRPC-local patch (diverges from the upstream vendored IRWrapper): IR-Next's
@@ -789,38 +792,38 @@ namespace KRPC.InfernalRobotics
 			// no-argument behaviour. The group-level MoveLeft/MoveRight remain parameterless.
 			public void MoveLeft()
 			{
-				moveLeftMethod.Invoke(actualServo, new object [] { DefaultSpeed });
+				moveLeftMethod (actualServo, DefaultSpeed);
 			}
 
 			public void MoveCenter()
 			{
-				moveCenterMethod.Invoke(actualServo, new object [] { DefaultSpeed });
+				moveCenterMethod (actualServo, DefaultSpeed);
 			}
 
 			public void MoveRight()
 			{
-				moveRightMethod.Invoke(actualServo, new object [] { DefaultSpeed });
+				moveRightMethod (actualServo, DefaultSpeed);
 			}
 			public void MoveTo(float position, float speed)
 			{
-				moveToMethod.Invoke(actualServo, new object [] { position, speed });
+				moveToMethod (actualServo, position, speed);
 			}
 
 			public void Stop()
 			{
-				stopMethod.Invoke(actualServo, new object [] { });
+				stopMethod (actualServo);
 			}
 
 			public string ForwardKey
 			{
-				get { return (string)forwardKeyProperty.GetValue(actualServo, null); }
-				set { forwardKeyProperty.SetValue(actualServo, value, null); }
+				get { return forwardKeyProperty.Get (actualServo); }
+				set { forwardKeyProperty.Set (actualServo, value); }
 			}
 
 			public string ReverseKey
 			{
-				get { return (string)reverseKeyProperty.GetValue(actualServo, null); }
-				set { reverseKeyProperty.SetValue(actualServo, value, null); }
+				get { return reverseKeyProperty.Get (actualServo); }
+				set { reverseKeyProperty.Set (actualServo, value); }
 			}
 
 			protected bool Equals (IRServo other)
@@ -939,9 +942,9 @@ namespace KRPC.InfernalRobotics
 		private static IList<object> RawServos (Vessel vessel)
 		{
 			var result = new List<object> ();
-			if (ToServosMethod == null)
+			if (ToServos == null)
 				return result;
-			var servos = ToServosMethod.Invoke (null, new object [] { vessel }) as IEnumerable;
+			var servos = ToServos (vessel) as IEnumerable;
 			if (servos == null)
 				return result;
 			foreach (var servo in servos)
@@ -966,7 +969,7 @@ namespace KRPC.InfernalRobotics
 				// A servo's groupName encodes every group it belongs to, matching IR's own
 				// parsing in Controller.RebuildServoGroupsFlight: memberships are separated
 				// by '|', and each membership is "<group name>;<ordering index>".
-				var raw = GroupNameField != null ? GroupNameField.GetValue (servo) as string : null;
+				var raw = GroupName != null ? GroupName.Get (servo) : null;
 				if (string.IsNullOrEmpty (raw))
 					continue;
 				// IR appends another token to groupName on every vessel activation, without
@@ -1032,9 +1035,9 @@ namespace KRPC.InfernalRobotics
 				set {
 					// Rewrite only this group's membership token on each servo, preserving the
 					// "<name>;<index>" encoding and any other groups the servo belongs to.
-					if (GroupNameField != null) {
+					if (GroupName != null) {
 						foreach (var servo in rawServos) {
-							var raw = GroupNameField.GetValue (servo) as string ?? string.Empty;
+							var raw = GroupName.Get (servo) ?? string.Empty;
 							var memberships = raw.Split ('|');
 							for (int i = 0; i < memberships.Length; i++) {
 								var parts = memberships [i].Split (';');
@@ -1043,7 +1046,7 @@ namespace KRPC.InfernalRobotics
 									memberships [i] = string.Join (";", parts);
 								}
 							}
-							GroupNameField.SetValue (servo, string.Join ("|", memberships));
+							GroupName.Set (servo, string.Join ("|", memberships));
 						}
 					}
 					name = value;

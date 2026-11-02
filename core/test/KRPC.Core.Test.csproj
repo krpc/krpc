@@ -111,6 +111,8 @@
     <Compile Include="Service\TypeSpecTest.cs" />
     <Compile Include="Service\TypeUtilsTest.cs" />
     <Compile Include="TestingTools.cs" />
+    <Compile Include="Utils\AccessorTest.cs" />
+    <Compile Include="Utils\DictionaryExtensionsTest.cs" />
     <Compile Include="Utils\DocumentationExtensionsTest.cs" />
     <Compile Include="Utils\DynamicBufferTest.cs" />
     <Compile Include="Utils\EquatableTest.cs" />
