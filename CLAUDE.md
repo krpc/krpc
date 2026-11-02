@@ -23,7 +23,7 @@ to install before or after. Deps in `MODULE.bazel`; Python deps locked in
 Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
 
  * `//:krpc` — mod release zip. `//server`, `//service/SpaceCenter`, `//client/python`, … — one component.
- * `//doc:html`, `//doc:pdf`; `bazel run //doc:serve` — serve with rebuild-on-edit.
+ * `//doc:html`; `bazel run //doc:serve` — serve with rebuild-on-edit.
  * `//:csproj` — generate the C# sources `kRPC.sln` needs.
 
 ### Tests and lint
