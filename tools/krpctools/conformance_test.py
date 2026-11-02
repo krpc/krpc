@@ -22,7 +22,7 @@ def main() -> int:
         tar.extractall(extract_dir, filter="data")
     pkg_dir = os.path.join(extract_dir, pkg)
 
-    # The bundled TestServer is framework dependent, and runs on the toolchain's .NET runtime.
+    # The bundled TestServer is framework dependent, and runs on the toolchain's dotnet host.
     # DOTNET is its exec path, which names an external repository beside the main one.
     dotnet_root = os.path.abspath(
         os.path.join("..", os.path.dirname(dotnet).removeprefix("external/"))

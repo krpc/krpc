@@ -214,5 +214,8 @@ py_pyright_test(
         "specgen.py",
         "specgen_test.py",
     ],
-    deps = [":driver"],
+    deps = [
+        ":driver",
+        "//tools/krpctools:krpctools_lib",
+    ],
 )

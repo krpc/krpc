@@ -50,15 +50,20 @@ import_dll(
     dll = "@csharp_system_runtime_compilerservices_unsafe//:lib/net462/System.Runtime.CompilerServices.Unsafe.dll",
 )
 
-# System.IO.Ports needs the unix runtime assembly and native shim at runtime;
-# the lib/ assembly is only used at compile time.
-# TODO: select() the win runtime assembly and drop the native lib when
-# building for Windows.
+# The runtime assembly of System.IO.Ports is the build for the target RID, and on Linux needs
+# the native shim. The lib/ assembly throws on every call, and is only compiled against.
 import_library(
     name = "System.IO.Ports",
     library_name = "System.IO.Ports",
-    libs = ["@csharp_system_io_ports//:runtimes/unix/lib/net10.0/System.IO.Ports.dll"],
-    native = ["@csharp_system_io_ports_native_linux_x64//:runtimes/linux-x64/native/libSystem.IO.Ports.Native.so"],
+    libs = select({
+        "@rules_dotnet//dotnet:rid_unix": ["@csharp_system_io_ports//:runtimes/unix/lib/net10.0/System.IO.Ports.dll"],
+        "@rules_dotnet//dotnet:rid_win": ["@csharp_system_io_ports//:runtimes/win/lib/net10.0/System.IO.Ports.dll"],
+        "//conditions:default": ["@csharp_system_io_ports//:lib/net10.0/System.IO.Ports.dll"],
+    }),
+    native = select({
+        "@rules_dotnet//dotnet:rid_linux-x64": ["@csharp_system_io_ports_native_linux_x64//:runtimes/linux-x64/native/libSystem.IO.Ports.Native.so"],
+        "//conditions:default": [],
+    }),
     refs = ["@csharp_system_io_ports//:lib/net10.0/System.IO.Ports.dll"],
     version = "10.0.14",
 )

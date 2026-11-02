@@ -22,11 +22,20 @@ def apply_path_map(path_map, path):
                 matchlen = len(x)
     return match
 
-# buildifier: disable=function-docstring-header
-def _apply_exclude(exclude, path):
-    """ Whether the path matches any of the exclusion patterns. A pattern may be an exact path, a
-        leading '*' (suffix match), a trailing '*' (prefix match), or both (substring match); these
-        are the forms the callers use. Patterns with a '*' elsewhere are not supported. """
+def apply_exclude(exclude, path):
+    """Whether the path matches any of the exclusion patterns.
+
+    A pattern may be an exact path, a leading '*' (suffix match), a trailing '*' (prefix match),
+    or both (substring match); these are the forms the callers use. Patterns with a '*' elsewhere
+    are not supported.
+
+    Args:
+      exclude: the patterns.
+      path: the path to match.
+
+    Returns:
+      Whether any pattern matches the path.
+    """
     for pattern in exclude:
         if "*" not in pattern:
             if path == pattern:
@@ -51,7 +60,7 @@ def _stage_files_impl(ctx):
     executable_outs = []
     for src in ctx.files.srcs:
         mapped = apply_path_map(ctx.attr.path_map, src.short_path)
-        if _apply_exclude(ctx.attr.exclude, src.short_path):
+        if apply_exclude(ctx.attr.exclude, src.short_path):
             continue
         if mapped.startswith(".."):
             fail(("File %s (from an external repository) has no path_map entry; " +

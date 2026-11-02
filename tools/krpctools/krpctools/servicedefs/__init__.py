@@ -4,8 +4,8 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from importlib.resources import files
 
+from ..dotnet import command, servicedefinitions_dir
 from ..version import __version__
 
 
@@ -59,14 +59,17 @@ def servicedefs(ksp, service, assemblies):
         raise RuntimeError("Kerbal Space Program directory does not exist.")
 
     bindir = tempfile.mkdtemp(prefix="krpc-servicedefs-")
-    tmpout = bindir + "/out.json"
+    try:
+        return _servicedefs(bindir, ksp, service, assemblies)
+    finally:
+        shutil.rmtree(bindir)
 
-    # Copy binaries to the tmp dir
-    binpath = str(files("krpctools").joinpath("bin"))
-    for filename in os.listdir(binpath):
-        filename = os.path.join(binpath, filename)
-        if os.path.isfile(filename):
-            shutil.copy(filename, bindir)
+
+def _servicedefs(bindir, ksp, service, assemblies):
+    tmpout = os.path.join(bindir, "out.json")
+
+    # Copy the tool to the tmp dir
+    shutil.copytree(servicedefinitions_dir(), bindir, dirs_exist_ok=True)
 
     # Copy KSP DLLs to the tmp dir
     ksp_dlls = [
@@ -91,20 +94,17 @@ def servicedefs(ksp, service, assemblies):
         shutil.copy(os.path.join(ksp, ksp_data, dll), bindir)
 
     # Generate the service definitions
+    tool = os.path.join(bindir, "ServiceDefinitions.dll")
     try:
         subprocess.check_output(
-            [bindir + "/ServiceDefinitions", "--output=%s" % tmpout, service]
-            + assemblies,
+            command(tool, ["--output=%s" % tmpout, service] + assemblies),
             stderr=subprocess.STDOUT,
         )
     except subprocess.CalledProcessError as ex:
-        shutil.rmtree(bindir)
         raise RuntimeError(ex.output) from ex
 
     with open(tmpout, encoding="utf-8") as fp:
         return fp.read()
-
-    shutil.rmtree(bindir)
 
 
 if __name__ == "__main__":

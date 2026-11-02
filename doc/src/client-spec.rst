@@ -8,7 +8,8 @@ stream values.
 
 The requirements are generated from the :doc:`conformance tests <client-spec/conformance>`. Each
 requirement has a test that checks it, and the text and the test are one source. A change to a
-requirement is a change to its test, so the two cannot drift apart.
+requirement is a change to its test, so the two cannot drift apart. The tests run against the
+:doc:`TestServer <client-spec/testserver>`, a server that runs without the game.
 
 This specification is versioned with kRPC. The conformance tests in the ``krpctools`` package of
 a release check the specification of that release.
@@ -115,6 +116,7 @@ A client implements the ``core`` profile, and any of the others:
    :hidden:
 
    client-spec/conformance
+   client-spec/testserver
    client-spec/connection
    client-spec/calls
    client-spec/values

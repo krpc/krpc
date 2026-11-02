@@ -40,6 +40,16 @@ csharp_library(
     ],
 )
 
+# The XML documentation of the net10.0 build, which krpctools ships beside the assembly for
+# TestServer to read
+genrule(
+    name = "KRPC.Benchmark.net10-xmldoc",
+    srcs = [":KRPC.Benchmark.net10"],
+    outs = ["xmldoc-net10/KRPC.Benchmark.xml"],
+    cmd = 'for f in $(SRCS); do case "$$f" in *.xml) cp "$$f" "$@";; esac; done',
+    visibility = ["//tools/krpctools:__pkg__"],
+)
+
 csharp_assembly_info(
     name = "AssemblyInfo",
     cls_compliant = False,

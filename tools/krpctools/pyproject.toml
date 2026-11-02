@@ -12,6 +12,7 @@ description = "Development tools and scripts for kRPC."
 readme = "README.md"
 license = "LGPL-3.0-or-later"
 requires-python = ">=3.10"
+# The build sets the krpc requirement to the version it builds
 dependencies = ["krpc >= 0.8.0", "jinja2", "pytest >= 9"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -32,6 +33,7 @@ Homepage = "https://krpc.github.io/krpc"
 krpc-clientgen = "krpctools.clientgen:main"
 krpc-docgen = "krpctools.docgen:main"
 krpc-servicedefs = "krpctools.servicedefs:main"
+krpc-testserver = "krpctools.testserver:main"
 krpc-conformance = "krpctools.conformance.driver.main:main"
 
 [tool.hatch.version]
@@ -44,6 +46,7 @@ include = [
     "README.md",
     "CHANGELOG.md",
     "LICENSE",
+    "LICENSE.protobuf",
     "COPYING",
     "COPYING.LESSER",
     "VERSION.txt",

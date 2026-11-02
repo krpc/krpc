@@ -21,8 +21,9 @@ csharp_binary(
     ],
 )
 
-# Published (framework-dependent) layout of the tool, bundled into the
-# krpctools python package; requires the .NET 10 runtime to be installed.
+# Framework-dependent layout of the tool, bundled into the krpctools python package. It runs
+# with `dotnet ServiceDefinitions.dll` on any platform, as it never loads System.IO.Ports, the
+# one part specific to the RID.
 publish_binary(
     name = "publish",
     binary = ":ServiceDefinitions",

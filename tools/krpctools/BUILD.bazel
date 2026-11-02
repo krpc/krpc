@@ -1,24 +1,25 @@
+load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library", native_py_test = "py_test")
 load("//:config.bzl", "python_version", "version")
 load("//tools/build:python.bzl", "py_pyright_test", "py_ruff_test", "py_sdist", "py_test")
+load("//tools/TestServer:rids.bzl", "RIDS")
 
 exports_files(["CHANGELOG.md"])
 
 license_text = """This license (LGPL v3) applies to all parts of krpctools except for the following:
 
-  - krpctools/bin/Newtonsoft.Json.dll is under the MIT license.
+  - Newtonsoft.Json.dll, in krpctools/bin/, is under the MIT license.
     See https://www.nuget.org/packages/Newtonsoft.Json/
 
-  - krpctools/bin/NDesk.Options.dll is under the MIT license.
+  - NDesk.Options.dll, in krpctools/bin/, is under the MIT license.
     See https://www.nuget.org/packages/NDesk.Options/
 
-  - krpctools/bin/Google.Protobuf.dll is from Google's protobuf project.
-    See https://github.com/google/protobuf
+  - Google.Protobuf.dll, in krpctools/bin/, is from Google's protobuf project.
+    See LICENSE.protobuf
 
-  - krpctools/bin/System.IO.Ports.dll is from the .NET project.
+  - System.IO.Ports.dll and libSystem.IO.Ports.Native.so, in krpctools/bin/, are from the
+    .NET project.
     See https://github.com/dotnet/runtime
-
-  - The other DLLs in krpctools/bin/TestServer/ are the third-party DLLs listed above.
 
   - As an additional permission under section 7 of the GNU GPL v3, code that krpctools
     generates for a client is under the license of that client, whatever the license of
@@ -46,41 +47,119 @@ genrule(
     cmd = 'echo "%s" > "$@"' % license_text,
 )
 
+# The server and ServiceDefinitions read API documentation from the XML file next to each
+# assembly, so the package ships one beside each copy of the assemblies
+xmldocs = [("ServiceDefinitions/KRPC.Core.xml", "//core:KRPC.Core.net10-xmldoc")] + [
+    (
+        "TestServer/%s/%s" % (rid, name),
+        src,
+    )
+    for rid in RIDS
+    for name, src in [
+        ("KRPC.Benchmark.xml", "//tools/benchmarks:KRPC.Benchmark.net10-xmldoc"),
+        ("KRPC.Core.xml", "//core:KRPC.Core.net10-xmldoc"),
+        ("TestServer.xml", "//tools/TestServer:TestServer-xmldoc"),
+    ]
+]
+
+[
+    copy_file(
+        name = "xmldoc-%d" % i,
+        src = src,
+        out = "bin/" + path,
+    )
+    for i, (path, src) in enumerate(xmldocs)
+]
+
+# The ServiceDefinitions tool, and the TestServer for each platform, run with dotnet. Their
+# apphosts, debug symbols and runfiles files are left out.
+dotnet_tools = [
+    {
+        "apphost": "ServiceDefinitions",
+        "publish": "tools/ServiceDefinitions/publish/publish/linux-x64/",
+        "target": "//tools/ServiceDefinitions:publish",
+        "path": "krpctools/bin/ServiceDefinitions/",
+    },
+] + [
+    {
+        "apphost": "TestServer",
+        "publish": "tools/TestServer/publish-%s/publish/%s/" % (rid, rid),
+        "target": "//tools/TestServer:publish-" + rid,
+        "path": "krpctools/bin/TestServer/%s/" % rid,
+    }
+    for rid in RIDS
+]
+
+dotnet_publishes = {tool["publish"]: tool["path"] for tool in dotnet_tools}
+
+# A framework-dependent publish puts the native System.IO.Ports library under
+# runtimes/linux-x64/native/, but its deps.json lists the library beside the assemblies
+# (https://github.com/bazel-contrib/rules_dotnet/issues/594). So the library goes there.
+dotnet_native_libs = {
+    directory + "runtimes/linux-x64/native/": dotnet_publishes[directory]
+    for directory in dotnet_publishes
+}
+
+# The krpc requirement is the version built alongside. A dev build, x.y.z.devN, sorts below
+# x.y.z, so it requires x.y.z.dev0.
+krpc_requirement = python_version.partition(".dev")[0] + (".dev0" if ".dev" in python_version else "")
+
+genrule(
+    name = "pyproject",
+    srcs = ["pyproject.toml"],
+    outs = ["generated/pyproject.toml"],
+    cmd = " && ".join([
+        "sed 's/\"krpc >= [^\"]*\"/\"krpc >= %s\"/' $< > $@" % krpc_requirement,
+        "grep -qF '\"krpc >= %s\"' $@ || { echo 'pyproject.toml has no \"krpc >= x.y.z\" dependency to set' >&2; exit 1; }" % krpc_requirement,
+    ]),
+)
+
 py_sdist(
     name = "krpctools",
     out = "krpctools-%s.tar.gz" % version,
+    exclude = [
+        "*.pdb",
+        "*.repo_mapping",
+        "*.runfiles_manifest",
+    ] + [
+        # An apphost takes the .exe extension when built on Windows
+        tool["publish"] + tool["apphost"] + extension
+        for tool in dotnet_tools
+        for extension in [
+            "",
+            ".exe",
+        ]
+    ],
     files = [
         "CHANGELOG.md",
         "README.md",
-        "pyproject.toml",
         ":license",
+        ":pyproject",
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
         "//:version",
         "//client/conformance:dist",
-        "//core:KRPC.Core.net10-xmldoc",
         "//core:ServiceDefinitions",
-        "//tools/ServiceDefinitions:publish",
         "//tools/TestServer:ServiceDefinitions",
-        "//tools/TestServer:publish",
-    ] + glob([
+        "//tools/build/protobuf:LICENSE.Google.Protobuf",
+    ] + [tool["target"] for tool in dotnet_tools] + [":xmldoc-%d" % i for i in range(len(xmldocs))] + glob([
         "krpctools/**/*.py",
         "krpctools/**/*.tmpl",
         "krpctools/test/*.json",
         "krpctools/test/**/*.txt",
         "krpctools/test/**/*.rst",
     ]),
-    path_map = {
+    path_map = dotnet_publishes | dotnet_native_libs | {
         "version.py": "krpctools/version.py",
         "core/KRPC.Core.json": "krpctools/test/KRPC.json",
         "client/conformance/": "krpctools/conformance/",
-        "core/xmldoc-net10/": "krpctools/bin/",
         "tools/krpctools/": "",
-        "tools/ServiceDefinitions/publish/publish/linux-x64/": "krpctools/bin/",
+        "tools/krpctools/generated/": "",
+        "tools/krpctools/bin/": "krpctools/bin/",
         "tools/TestServer/TestService.json": "krpctools/test/TestService.json",
-        "tools/TestServer/publish/publish/linux-x64/": "krpctools/bin/TestServer/",
         "tools/build/serverprocess.py": "krpctools/conformance/serverprocess.py",
+        "tools/build/protobuf/LICENSE.Google.Protobuf": "LICENSE.protobuf",
     },
 )
 
@@ -90,6 +169,8 @@ py_library(
     srcs = glob(["krpctools/**/*.py"]) + [":version-py"],
     data = glob(["krpctools/**/*.tmpl"]),
     imports = ["."],
+    # The conformance driver finds the bundled TestServer through krpctools
+    visibility = ["//client/conformance:__pkg__"],
     deps = [
         "//client/python:krpc_base_lib",
         "@krpc_pypi//jinja2",
@@ -167,8 +248,6 @@ native_py_test(
         "@rules_dotnet//dotnet:resolved_toolchain",
     ],
     main = "conformance_test.py",
-    # The bundled TestServer is built for linux-x64
-    target_compatible_with = ["@platforms//os:linux"],
     toolchains = ["@rules_dotnet//dotnet:resolved_toolchain"],
     deps = [
         "//client/python:krpc_lib",

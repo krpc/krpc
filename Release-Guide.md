@@ -8,7 +8,7 @@ tools of the step being run.
 
 All the credentials live in one git-ignored TOML file at the root of the repository. Copy
 `tools/release/release-credentials.toml.template` to `release-credentials.toml`, fill in every value, and `chmod 600` it; the template says what each one is and where to get it. The scripts pass these to `gh`, `twine`,
-`dotnet`, `luarocks`, `aws` and `docker` explicitly, so none of those tools needs to be configured
+`dotnet`, `luarocks` and `aws` explicitly, so none of those tools needs to be configured
 or logged in beforehand, and whatever account they are already set up with is ignored. Git is the
 exception: pushes to `krpc/krpc`, `krpc-arduino` and your vcpkg fork use your normal git setup.
 
@@ -63,10 +63,9 @@ the component first, and prompts before uploading.
 13. `tools/release/62-release-nuget.py` — C# client to nuget.org.
 14. `tools/release/63-release-arduino.py` — updates and tags the `krpc-arduino` repository.
 15. `tools/release/64-release-lua.py` — Lua client archive to S3 and the rockspec to luarocks.org.
-16. `tools/release/65-release-docker.py` — TestServer image to ghcr.io.
-17. `tools/release/66-release-vcpkg-cpp.py` — C++ client port to `microsoft/vcpkg`.
-18. `tools/release/67-release-vcpkg-cnano.py` — C-nano client port to `microsoft/vcpkg`.
-19. `tools/release/68-release-ckan.py` — confirms the mod reached CKAN.
+16. `tools/release/66-release-vcpkg-cpp.py` — C++ client port to `microsoft/vcpkg`.
+17. `tools/release/67-release-vcpkg-cnano.py` — C-nano client port to `microsoft/vcpkg`.
+18. `tools/release/68-release-ckan.py` — confirms the mod reached CKAN.
 
 The two vcpkg steps hash the archive attached to the published GitHub release and open a pull
 request to `microsoft/vcpkg` from your fork, so run them after step 10's release has been published,
@@ -80,7 +79,7 @@ not landed within the wait (inflation can lag by a few hours), re-run the step l
 
 ## 5. Publish the mod and announce
 
-20. `tools/release/70-announcements.py` — prints the checklist of remaining manual steps:
+19. `tools/release/70-announcements.py` — prints the checklist of remaining manual steps:
     * Upload `assets/krpc-x.x.x.zip` to CurseForge and SpaceDock, linking the changelog at
       `https://krpc.github.io/krpc/<version>/changelog.html`.
     * Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).
